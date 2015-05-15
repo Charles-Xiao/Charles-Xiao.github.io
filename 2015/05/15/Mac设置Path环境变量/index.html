@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="阅读," />
+  <meta name="keywords" content="Android - Mac," />
 
 
 
@@ -33,7 +33,7 @@
 
 
 
-  <title> 读书札记 // CharlesXiao ‘s Blog </title>
+  <title> Mac设置环境变量(adb+NDK+sdk) // CharlesXiao ‘s Blog </title>
 </head>
 
 <body>
@@ -121,7 +121,7 @@
           
           
             
-              读书札记
+              Mac设置环境变量(adb+NDK+sdk)
             
           
         </h1>
@@ -129,9 +129,20 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-05-12
+          发表于 2015-05-15
         </span>
 
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/Mac系统/">Mac系统</a>
+
+              
+              
+
+            
+          </span>
         
 
         
@@ -146,8 +157,22 @@
       
 
       
-        <p>阅读使人明智！</p>
-<h2 id="如何阅读一本书">如何阅读一本书</h2><h3 id="具体步骤">具体步骤</h3>
+        <p>无论是在windows还是mac系统下，对于程序猿而言，在terminal中输入命令进行一些常用操作是比用鼠标更为快捷的方式。那么为了能够打开terminal就可以直接输入并执行命令，就需要进行环境变量的设置，这样就不必进入命令文件所在目录下执行该命令了。windows下配置环境变量较为简单，在此讲一下mac下配置环境变量的方法和注意事项。</p>
+<p><strong>1. 打开terminal，输入<code>cd ~</code>, 进入当前用户home目录</strong></p>
+<p><strong>2. 输入<code>touch .bash_profile</code>, 创建bash_profile文件(如果该文件已经存在则可以直接进入第3步)</strong></p>
+<p><strong>3. 打开记事本编辑bash_profile文件，示例如下</strong></p>
+<pre><code>方式一：用<span class="constant">SDK_HOME指</span>代一个通用路径，一处设置，多处使用，结构明晰，然后设置到<span class="constant">PATH</span>
+
+export <span class="constant">SDK_HOME=</span>“/usr/sdk”             
+export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:</span><span class="variable">${</span><span class="constant">SDK_HOME}</span><span class="symbol">:</span><span class="variable">${</span><span class="constant">SDK_HOME}</span>/<span class="symbol">tools:</span>/usr/ndk
+
+
+方式二：直接将各个命令的路径用<span class="symbol">:</span>连接起来设置到<span class="constant">PATH </span>形如--- export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:</span>路径<span class="number">1</span><span class="symbol">:</span>路径<span class="number">2</span><span class="symbol">:</span>路径<span class="number">3</span>
+
+export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:/usr/sdk</span><span class="symbol">:/usr/sdk/tools</span><span class="symbol">:/usr/ndk</span>
+</code></pre><p><strong>4. 保存修改，输入更新命令<code>source .bash_profile</code>,PATH变量配置完成</strong></p>
+<p><a href="http://blog.csdn.net/zf135792468/article/details/11926995" target="_blank" rel="external">参考链接</a></p>
+
       
     </div>
 
@@ -155,7 +180,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/阅读/"> #阅读 </a>
+            <a href="/tags/Android-Mac/"> #Android - Mac </a>
           
         </div>
       
@@ -164,11 +189,13 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/05/12/hello-world/">Hello World</a>
+              <a href="/2015/05/15/Mac常用快捷键/">Mac常用快捷键</a>
             
           </div>
 
           <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/05/12/hello-world/">Hello World</a>
             
           </div>
         </div>
@@ -266,7 +293,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何阅读一本书"><span class="nav-number">1.</span> <span class="nav-text">如何阅读一本书</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#具体步骤"><span class="nav-number">1.1.</span> <span class="nav-text">具体步骤</span></a></li></ol></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
