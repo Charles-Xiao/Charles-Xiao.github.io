@@ -196,7 +196,8 @@
 <li>if(val == null) 和 if(null == val)的区别：后一种方式的主要优点是防止将==写成=和将!=写成=，因为后一种方式如果出现漏写，编译器会提示报错便于检查出代码错误；而前一种不会报错，造成逻辑bug不能被编译器检查出来</li>
 <li>”abc”.equals(val)和val.equals(“abc”)的区别：前一种可以防止当val=null时编译器报空指针错误</li>
 </ol>
-<h3 id="java生成随机数的方法">java生成随机数的方法</h3><figure class="highlight"><figcaption><span>rand = new Random(); system.out.println(rand.nextInt(6) + 1); ```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;### java&#21453;&#36716;&#23383;&#31526;&#20018;&#26041;&#27861;&#10;``` String reverse(String s) &#123;&#10;&#9;&#9;return new StringBuilder(s).reverse().toString();&#10;&#9;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="java生成随机数的方法">java生成随机数的方法</h3><figure class="highlight"><figcaption><span>rand = new Random(); ``` ``` system.out.println(rand.nextInt(6) + 1);</span><a href="//返回1-6的六个随机数">```</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;### java&#21453;&#36716;&#23383;&#31526;&#20018;&#26041;&#27861;&#10;``` String reverse(String s) &#123;</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><figcaption><span>new StringBuilder(s).reverse().toString();</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="函数参数的预防性检测">函数参数的预防性检测</h3><p>针对传入参数显式检测，throw相应的Exception；包括参数为null，数值溢出以及为负，数组下标越界</p>
 
       
