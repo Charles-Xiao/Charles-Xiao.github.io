@@ -12,10 +12,10 @@
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
 
 
-<link rel="stylesheet" type="text/css" href="../../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2"/>
 
 
     <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
@@ -28,7 +28,7 @@
 
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../../..//favicon.ico?v=0.4.2" />
+  <link rel="shorticon icon" type="image/x-icon" href="../..//favicon.ico?v=0.4.2" />
 
 
 
@@ -43,12 +43,14 @@
   </script>
 
 
-  <title> 归档 // CharlesXiao‘s Blog </title>
+  <title> CharlesXiao‘s Blog </title>
 </head>
 
 <body>
 <!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
-  <div class="container one-column  page-archive ">
+  <div class="container one-column 
+   page-home 
+">
     <div class="headband"></div>
 
     <div id="header" class="header">
@@ -85,7 +87,7 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../../..//">
+        <a href="../..//">
           <i class="menu-item-icon icon-home"></i> <br />
           首页
         </a>
@@ -93,7 +95,7 @@
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../../..//categories">
+        <a href="../..//categories">
           <i class="menu-item-icon icon-categories"></i> <br />
           分类
         </a>
@@ -101,7 +103,7 @@
     
       
       <li class="menu-item menu-item-about">
-        <a href="../../..//about">
+        <a href="../..//about">
           <i class="menu-item-icon icon-about"></i> <br />
           关于
         </a>
@@ -109,7 +111,7 @@
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../../..//archives">
+        <a href="../..//archives">
           <i class="menu-item-icon icon-archives"></i> <br />
           归档
         </a>
@@ -117,7 +119,7 @@
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../../..//tags">
+        <a href="../..//tags">
           <i class="menu-item-icon icon-tags"></i> <br />
           标签
         </a>
@@ -133,187 +135,201 @@
       <div class="main-inner">
         <div id="content" class="content">
           
-
-  <div id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-       
-      
-      嗯..! 目前共计 7 篇日志。 继续努力。
-    </span>
-
+  <div id="posts" class="posts-expand">
     
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
 
       
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/">
+                Mac设置环境变量(adb+NDK+sdk)
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-15
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Mac系统/">Mac系统</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
       
       
 
       
         
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2015">2015</h2>
+          <p>无论是在windows还是mac系统下，对于程序猿而言，在terminal中输入命令进行一些常用操作是比用鼠标更为快捷的方式。那么为了能够打开terminal就可以直接输入并执行命令，就需要进行环境变量的设置，这样就不必进入命令文件所在目录下执行该命令了。windows下配置环境变量较为简单，在此讲一下mac下配置环境变量的方法和注意事项。</p>
+<p><strong>1. 打开terminal，输入<code>cd ~</code>, 进入当前用户home目录</strong></p>
+<p><strong>2. 输入<code>touch .bash_profile</code>, 创建bash_profile文件(如果该文件已经存在则可以直接进入第3步)</strong></p>
+<p><strong>3. 打开记事本编辑bash_profile文件，示例如下</strong></p>
+<pre><code>方式一：用<span class="constant">SDK_HOME指</span>代一个通用路径，一处设置，多处使用，结构明晰，然后设置到<span class="constant">PATH</span>
+
+export <span class="constant">SDK_HOME=</span>“/usr/sdk”             
+export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:</span><span class="variable">${</span><span class="constant">SDK_HOME}</span><span class="symbol">:</span><span class="variable">${</span><span class="constant">SDK_HOME}</span>/<span class="symbol">tools:</span>/usr/ndk
+
+
+方式二：直接将各个命令的路径用<span class="symbol">:</span>连接起来设置到<span class="constant">PATH </span>形如--- export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:</span>路径<span class="number">1</span><span class="symbol">:</span>路径<span class="number">2</span><span class="symbol">:</span>路径<span class="number">3</span>
+
+export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:/usr/sdk</span><span class="symbol">:/usr/sdk/tools</span><span class="symbol">:/usr/ndk</span>
+</code></pre><p><strong>4. 保存修改，输入更新命令<code>source .bash_profile</code>,PATH变量配置完成</strong></p>
+<p><a href="http://blog.csdn.net/zf135792468/article/details/11926995" target="_blank" rel="external">参考链接</a></p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Android/"> #Android </a>
+          
+            <a href="../../tags/Mac/"> #Mac </a>
+          
         </div>
       
-      
 
       
 
-  <div class="post post-type-normal">
-    <div class="post-header">
-
-      <div class="post-title">
-        
-            <a class="post-title-link" href="../../../2015/05/27/java重难点知识集锦/">
-              java重难点知识集锦
-            </a>
-        
-      </div>
-
-      <div class="post-meta">
-        <span class="post-time"> 05-27 </span>
-      </div>
-
+      
+      
+        <div class="post-eof"></div>
+      
     </div>
   </div>
 
 
-
     
-
-      
-      
       
 
-      
-      
-
-      
-
-  <div class="post post-type-normal">
+  <div class="post post-type-normal ">
     <div class="post-header">
 
-      <div class="post-title">
-        
-            <a class="post-title-link" href="../../../2015/05/27/Android开发常见bug解决方法及注意事项/">
-              Android开发常见bug解决方法及注意事项
-            </a>
-        
-      </div>
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/05/12/如何阅读一本书/">
+                如何阅读一本书
+              </a>
+            
+          
+        </h1>
+      
 
       <div class="post-meta">
-        <span class="post-time"> 05-27 </span>
-      </div>
+        <span class="post-time">
+          发表于 2015-05-12
+        </span>
 
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/读书札记/">读书札记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/05/12/如何阅读一本书/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/12/如何阅读一本书/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>书籍使人进步！阅读使人明智！如何阅读一本书也是一门学问，读懂不同类型的书也是一件不容易的事情。美国教育家查尔斯-范多伦还特地写了一本《如何阅读一本书》来讲述读书的“方法论”，此文为部分书摘，闲来无事翻书，翻到哪儿写到哪儿，未完待续……</p>
+<h3 id="阅读一本书的两种层次">阅读一本书的两种层次</h3><p>你是为了获得资讯而读还是说为了提高自己的理解力而读；后者其实是一种不同理解水平的双方之间的对话，如何缩小理解上的差距是在阅读过程中很重要的一件事，即如何从粗浅的了解推进到深入理解的层次，如何把一个模糊的概念具体化成清晰的模型！</p>
+<h3 id="读书是一种自我发现型的学习">读书是一种自我发现型的学习</h3><p>读书是一种自我发现型的学习，不需要第三方（如老师）的辅助；在读一本较为高深的书时，建议一路读下去不做停顿，读你能领会的一部分即可，难理解之处可以留到下次读的时候在注意领会，包括查找资料，请教他人等等。<strong>检索阅读</strong>可以了解书的大致构架（注意书目、说明、注释），<strong>略读</strong>的目的是了解是否需要进一步读下去！</p>
+<h3 id="如何做一个自我要求的读者？">如何做一个自我要求的读者？</h3><p>保持清醒，在阅读过程中，不断提出问题，并通过自己的阅读来加以解决这些问题；那么如何来保持清醒呢？那就是在书上做笔记，写下来你的感想或者作者观点的精彩部分，既可以开动自己的大脑，记录自己的思想，也可以帮助你记录作者的思想，表达你与作者之间相同或者相异的观点；主动的阅读本身便是一种思考，而思考倾向于用语言或文字表达出来。由许多规则中才可以养成一个习惯，清楚了解规则并加以高强度练习，才可以真正意义上地掌握一种技能，因为对初学者而言：任何一个复杂的活动，都必须从单一的方面入手，先熟悉基本步骤，最后加以组合，忘却步骤，和谐地进行某一活动，也就是说到后期就不能再拘泥于单一动作，而是一种习惯和感觉的驱使！</p>
+<h3 id="一本书的分类">一本书的分类</h3><p>首先你的有一个标准，那么你如何来寻找这样一个标准呢？如果你想简单明白地运用一个规则，那么你必须先使这个规则更加简单明白一些！书有理论性和实用性、小说类和论说类之分，那么区别在哪里呢？那就是：我们不应该只是满足于只知道这是怎么回事，而应该明白这个东西应该怎么运用？再举例，如：你质疑某件事的合理性与有效性，这是理论；而你质疑任何事的目的都可以称之为实用。如何判断一本理论书的具体类别呢？它到底是科学or哲学？这就的看它所强调的是否是超现实的！哲学家利用人类共通经验来思考，以便于向他人论证以及灌输自己的观点；而科学家则是利用个人特殊的经验，研究调查得出观点。他们的不同之处在于依托的经验&amp;&amp;思考方式&amp;&amp;论证问题的方式</p>
+<h3 id="透视一本书">透视一本书</h3><p>从架构的寻找到间短归纳主要内容，达到你可以清晰地向他人讲述一本书在讲些什么；再到你可以按照一种顺序来把握意思一本书的重要部分、列出纲要，串联起来；最后一步就是如何提出作者以及你自己的问题，并加以解决！</p>
+<h3 id="To_be_continued……">To be continued……</h3>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/阅读/"> #阅读 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
     </div>
   </div>
 
 
-
     
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <div class="post post-type-normal">
-    <div class="post-header">
-
-      <div class="post-title">
-        
-            <a class="post-title-link" href="../../../2015/05/24/耒阳支教之行有感/">
-              耒阳支教之行有感
-            </a>
-        
-      </div>
-
-      <div class="post-meta">
-        <span class="post-time"> 05-24 </span>
-      </div>
-
-    </div>
-  </div>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <div class="post post-type-normal">
-    <div class="post-header">
-
-      <div class="post-title">
-        
-            <a class="post-title-link" href="../../../2015/05/24/读《1988-我想和这个世界谈谈》/">
-              读《1988-我想和这个世界谈谈》
-            </a>
-        
-      </div>
-
-      <div class="post-meta">
-        <span class="post-time"> 05-24 </span>
-      </div>
-
-    </div>
-  </div>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <div class="post post-type-normal">
-    <div class="post-header">
-
-      <div class="post-title">
-        
-            <a class="post-title-link" href="../../../2015/05/15/Mac常用快捷键/">
-              Mac常用快捷键
-            </a>
-        
-      </div>
-
-      <div class="post-meta">
-        <span class="post-time"> 05-15 </span>
-      </div>
-
-    </div>
-  </div>
-
-
-
-    
-
   </div>
 
   
   <div class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="extend next" rel="next" href="page/2/">&raquo;</a>
+    <a class="extend prev" rel="prev" href="../..//">&laquo;</a><a class="page-number" href="../..//">1</a><span class="page-number current">2</span>
   </div>
-
 
 
         </div>
@@ -345,21 +361,21 @@
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../../..//archives">
+            <a href="../..//archives">
               <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../../..//categories">
+            <a href="../..//categories">
               <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../../..//tags">
+            <a href="../..//tags">
               <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">标签</span>
               </a>
@@ -431,19 +447,13 @@
     <div class="back-to-top"></div>
   </div>
 
-  <script type="text/javascript" src="../../../vendors/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="../../vendors/jquery/index.js?v=2.1.3"></script>
 
   
   
-  
-    <script type="text/javascript">
-      postMotionOptions = {stagger: 100, drag: true};
-    </script>
-  
-
 
   
-  <script type="text/javascript" src="../../../vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="../../vendors/fancybox/source/jquery.fancybox.pack.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
       $('.content img').each(function () {
@@ -494,8 +504,8 @@
 
   
 
-  <script type="text/javascript" src="../../../vendors/velocity/velocity.min.js"></script>
-  <script type="text/javascript" src="../../../vendors/velocity/velocity.ui.min.js"></script>
+  <script type="text/javascript" src="../../vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="../../vendors/velocity/velocity.ui.min.js"></script>
 
   <script type="text/javascript" id="motion.global">
   $(document).ready(function () {
@@ -629,12 +639,6 @@
 
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
-
 
   
 <script type="text/x-mathjax-config">
@@ -660,6 +664,9 @@
 
 
   
+  
+  
+
 
   
 
