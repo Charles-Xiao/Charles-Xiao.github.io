@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="Android,bug," />
+  <meta name="keywords" content="REST,python,服务端开发," />
 
 
 
@@ -43,7 +43,7 @@
   </script>
 
 
-  <title> Android开发常见bug解决方法及注意事项 // CharlesXiao‘s Blog </title>
+  <title> 利用Python框架Flask实现RESTful架构服务端 // CharlesXiao‘s Blog </title>
 </head>
 
 <body>
@@ -146,7 +146,7 @@
           
           
             
-              Android开发常见bug解决方法及注意事项
+              利用Python框架Flask实现RESTful架构服务端
             
           
         </h1>
@@ -154,20 +154,9 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-05-27
+          发表于 2015-07-26
         </span>
 
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../../../categories/Android开发/">Android开发</a>
-
-              
-              
-
-            
-          </span>
         
 
         
@@ -175,7 +164,7 @@
             <span class="post-comments-count">
             &nbsp; | &nbsp;
             <a href="#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/27/Android开发常见bug解决方法及注意事项/"></span>
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/26/利用Python框架Flask实现RESTful架构服务端/"></span>
             </a>
           </span>
           
@@ -189,44 +178,8 @@
       
 
       
-        <h3 id="xml文件出现找不到相应类">xml文件出现找不到相应类</h3><p>例如ViewPager类找不到，应该检查类名单词拼写是否错误，是否写错包名以及是否导入jar包并勾选</p>
-<h3 id="xml文件布局merge标签">xml文件布局merge标签</h3><p><merge>标签能百分百代替<framelayout>这个布局组件， 对于不复杂的其他布局组件如线性布局等组合组件中，可以在继承子类中对其属性进行设置后也可以使用<merge>标 签，<merge>标签不占资源，自然在生成界面时也不会生成对应的组件。另外需要注意一点是<merge>只能作为根元素，对 于需要用inflate生成布局文件时，必须指定一个ViewGroup作为其父元素，并且要设置inflate的attachToRoot参数为 true</merge></merge></merge></framelayout></merge></p>
-<h3 id="DEXpathlist错误">DEXpathlist错误</h3><p>往往是因为重复导入jar或者第三方依赖包</p>
-<h3 id="Fragment使用注意事项">Fragment使用注意事项</h3><p>Fragment尽量使用support-v4包中以便于低版本兼容，可以兼容到1.6版本；同时需要使用getSupportFragmentManager(),Activity需要继承FragmentActivity;Fragment,FragmentManager,FragmentTransaction都要用v4包</p>
-<p>大部分的应用仅仅在onCreate()方法被调用的开始时间提交transactions，或者在相应用户输入的时候，因此将不可能碰到任何问题;避免在异步回调函数中提交transactions。包括常用的方法，比如AsyncTask的onPostExecute方法和LoaderManager.LoaderCallbacks的onLoadFinished方法;如果你的应用要求在除onCreate()函数之外的其他Activity生命周期函数中提交transaction，你可以在FragmentActivity的onResumeFragments()函数或者Activity的onPostResume()函数中提交。这两个函数确保在Activity恢复到原始状态之后才会被调用，从而避免了状态丢失的可能性。使用commitAllowingStateLoss()函数。commit()函数和commitAllowingStateLoss()函数的唯一区别就是当发生状态丢失的时候，后者不会抛出一个异常</p>
-<h3 id="eventBus和android-priority-jobqueue搭配使用的优势"><a href="https://github.com/greenrobot/EventBus" target="_blank" rel="external">eventBus</a>和<a href="https://github.com/path/android-priority-jobqueue" target="_blank" rel="external">android-priority-jobqueue</a>搭配使用的优势</h3><p>对于每一个新的backgroundJob都新建一个继承job类的类，然后在内部重载函数中实现业务逻辑，JobManager类会对所有的job进行管理(注意对job和manager的configuration)；同样地，对每一个的job的执行结果可以相对应一个event，post到eventBus中进行管理，需要相应event的activity自行进行event订阅。</p>
-<h3 id="Android_view的layout参数">Android view的layout参数</h3><p>android View的layout函数四个参数是指该view控件距离其父view的距离，以左上角为坐标原点计算；setMargins函数与具体xml设置有关，Grivaty等属性会导致margin设置无效  </p>
-<p><strong> 关于layout_margin </strong>  </p>
-<p>大量网络资料上都说，layout_margin指view距离父view的距离。这个说法不够严谨，正确的说法是， 距离 view的相对view的距离 才更准确。</p>
-<p>在Linearlayout下，可以认为是距离父view的距离。但在RelativeLayout下则不然，如果view A已经写定在view B的右侧，则view A的layout_marginLeft就是距离view B的距离，与父View无关。另外，这个距离究竟是两个view中心的距离还是相邻两边的距离？可以这样理解，每个view都是一个矩形区域，如果view A已经设定在view B的右侧，<strong><em> 则layout_marginLeft是view B的右边 和view A的左边之间的距离，而非两个view中心之间的距离！</em></strong></p>
-<h3 id="三个导致View重建的原因">三个导致View重建的原因</h3><ol>
-<li><p>视图本身内部状态变化引起重绘；</p>
-</li>
-<li><p>view树内部添加或者删除子view；</p>
-</li>
-<li><p>View本身的大小及可见性发生变化。</p>
-</li>
-</ol>
-<h3 id="MVC和MVP模式的区别和详解以及在Android开发中对MVP模式的应用实践">MVC和MVP模式的区别和详解以及在Android开发中对MVP模式的应用实践</h3><p><a href="http://www.ruanyifeng.com/blog/2015/02/mvcmvp_mvvm.html" target="_blank" rel="external">参考链接1</a><br><a href="http://baike.baidu.com/link?url=UtJm3jt4YBAb2FST5tLPrdmpE982FPFy8LBTJV4JN7nn0mkJIsxtf219-RrNRp_ownU8vIi6_iYjbt6bn9A4u_" target="_blank" rel="external">参考链接2</a><br><a href="http://blog.csdn.net/vector_yi/article/details/24719873" target="_blank" rel="external">参考链接3</a>  </p>
-<h3 id="Android项目反编译得到java源码步骤">Android项目反编译得到java源码步骤</h3><ol>
-<li>下载apk文件，修改文件格式为zip并解压得到classes.dex文件</li>
-<li>利用dex2jar软件将classes.dex文件转化为classes_dex2jar.jar文件</li>
-<li>下载 xjad或者jd-gui软件将该jar文件反编译为java文件并保存</li>
-<li><p>利用apktool反编译得到所有资源文件  </p>
-<p> <a href="http://download.csdn.net/detail/jaysh1029/7081673" target="_blank" rel="external">最新工具Androidfby</a></p>
-</li>
-</ol>
-<h3 id="Android_APK大小压缩方法">Android APK大小压缩方法</h3><p><a href="http://android.jobbole.com/80613/" target="_blank" rel="external">参考链接1</a><br><a href="http://zhuanlan.zhihu.com/zmywly8866/20006066" target="_blank" rel="external">参考链接2</a></p>
-<h3 id="常见bug注意事项">常见bug注意事项</h3><ol>
-<li><strong> 网络请求以及文件存取 </strong>时务必记得加入permission权限！！！</li>
-<li><strong> Mainapplication </strong>为了防止为空对象，务必记得在manifest里面进行全局初始化</li>
-<li><strong> 使用Gson解析json数据 </strong>一定要保持json数据的key和要转换的对应类的成员变量名一致</li>
-<li><a href="http://www.yrom.net/blog/2013/03/10/fragment-switch-not-restart/#" target="_blank" rel="external">fragment切换不用replace的switch方法</a></li>
-<li>xml文件设置background时图片分辨率过大会导致设置无效</li>
-<li>Activity无法开启需要查看manifest是否注册该Activity</li>
-<li>Android Development Toolkit版本低于SDK版本时会导致adb无法启动，建议<a href="http://developer.android.com/sdk/installing/installing-adt.html#Download" target="_blank" rel="external">更新ADT</a>到最新版本</li>
-</ol>
-
+        <p>不管是进行app开发还是web开发，server端的开发都是必不可少的部分，最近打算尝试一下服务端开发；考虑到开发效率以及目前主流的前后端API标准，我打算采用python的flask框架来搭建一个简单server端，API格式采用RESTful标准，本文将讲述RESTful架构服务端的大致实现过程。</p>
+<h2 id="RESTful架构">RESTful架构</h2><h2 id="Flask框架">Flask框架</h2><h2 id="代码实现">代码实现</h2>
       
     </div>
 
@@ -234,9 +187,11 @@
       
         <div class="post-tags">
           
-            <a href="../../../../tags/Android/"> #Android </a>
+            <a href="../../../../tags/REST/"> #REST </a>
           
-            <a href="../../../../tags/bug/"> #bug </a>
+            <a href="../../../../tags/python/"> #python </a>
+          
+            <a href="../../../../tags/服务端开发/"> #服务端开发 </a>
           
         </div>
       
@@ -245,13 +200,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="../java重难点知识集锦/">java重难点知识集锦</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="../../24/耒阳支教之行有感/">耒阳支教之行有感</a>
+              <a href="../../../06/12/五代十国史/">五代十国史</a>
             
           </div>
         </div>
@@ -267,8 +220,8 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/05/27/Android开发常见bug解决方法及注意事项/"
-               data-title="Android开发常见bug解决方法及注意事项" data-url="https://charles-xiao.github.io/2015/05/27/Android开发常见bug解决方法及注意事项/">
+          <div class="ds-thread" data-thread-key="2015/07/26/利用Python框架Flask实现RESTful架构服务端/"
+               data-title="利用Python框架Flask实现RESTful架构服务端" data-url="https://charles-xiao.github.io/2015/07/26/利用Python框架Flask实现RESTful架构服务端/">
           </div>
         
       </div>
@@ -371,7 +324,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#xml文件出现找不到相应类"><span class="nav-number">1.</span> <span class="nav-text">xml文件出现找不到相应类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xml文件布局merge标签"><span class="nav-number">2.</span> <span class="nav-text">xml文件布局merge标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DEXpathlist错误"><span class="nav-number">3.</span> <span class="nav-text">DEXpathlist错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fragment使用注意事项"><span class="nav-number">4.</span> <span class="nav-text">Fragment使用注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#eventBus和android-priority-jobqueue搭配使用的优势"><span class="nav-number">5.</span> <span class="nav-text">eventBus和android-priority-jobqueue搭配使用的优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android_view的layout参数"><span class="nav-number">6.</span> <span class="nav-text">Android view的layout参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三个导致View重建的原因"><span class="nav-number">7.</span> <span class="nav-text">三个导致View重建的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVC和MVP模式的区别和详解以及在Android开发中对MVP模式的应用实践"><span class="nav-number">8.</span> <span class="nav-text">MVC和MVP模式的区别和详解以及在Android开发中对MVP模式的应用实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android项目反编译得到java源码步骤"><span class="nav-number">9.</span> <span class="nav-text">Android项目反编译得到java源码步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android_APK大小压缩方法"><span class="nav-number">10.</span> <span class="nav-text">Android APK大小压缩方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见bug注意事项"><span class="nav-number">11.</span> <span class="nav-text">常见bug注意事项</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RESTful架构"><span class="nav-number">1.</span> <span class="nav-text">RESTful架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Flask框架"><span class="nav-number">2.</span> <span class="nav-text">Flask框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
