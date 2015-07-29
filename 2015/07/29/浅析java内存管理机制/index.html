@@ -201,7 +201,7 @@
 <li><p>java对象内存状态转换图</p>
 <p>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/对象状态转换图.png" class="full-image"></p>
 </li>
-<li><p>java对象的四种引用<br>1）强引用 ：创建一个对象并把这个对象直接赋给一个变量，eg ：Person person = new Person(“sunny”); 不管系统资源有么的紧张，强引用的对象都绝对不会被回收，即使他以后不会再用到。<br>2）软引用 ：通过SoftReference类实现，eg : SoftReference<person> p = new SoftReference<person>(new Person(“Rain”));内存非常紧张的时候会被回收，其他时候不会被回收，所以在使用之前要判断是否为null从而判断他是否已经被回收了。<br>3）弱引用 ：通过WeakReference类实现，eg : WeakReference<person> p = new WeakReference<person>(new Person(“Rain”));不管内存是否足够，系统垃圾回收时必定会回收<br>4）虚引用 ：不能单独使用，主要是用于追踪对象被垃圾回收的状态。通过PhantomReference类和引用队列ReferenceQueue类联合使用实现</person></person></person></person></p>
+<li><p>java对象的四种引用<br>1.<strong>强引用</strong> ：创建一个对象并把这个对象直接赋给一个变量，eg ：Person person = new Person(“sunny”); 不管系统资源有么的紧张，强引用的对象都绝对不会被回收，即使他以后不会再用到。<br>2.<strong>软引用</strong> ：通过SoftReference类实现，eg : SoftReference<person> p = new SoftReference<person>(new Person(“Rain”));内存非常紧张的时候会被回收，其他时候不会被回收，所以在使用之前要判断是否为null从而判断他是否已经被回收了。<br>3.<strong>弱引用</strong> ：通过WeakReference类实现，eg : WeakReference<person> p = new WeakReference<person>(new Person(“Rain”));不管内存是否足够，系统垃圾回收时必定会回收<br>4.<strong>虚引用</strong> ：不能单独使用，主要是用于追踪对象被垃圾回收的状态。通过PhantomReference类和引用队列ReferenceQueue类联合使用实现</person></person></person></person></p>
 </li>
 </ul>
 <h3 id="常见垃圾回收算法">常见垃圾回收算法</h3><ul>
