@@ -190,7 +190,7 @@
 
       
         <h3 id="java中equals，hashcode，==分析"><a href="http://blog.sina.com.cn/s/blog_5671e70e0100bgil.html" target="_blank" rel="external">java中equals，hashcode，==分析</a></h3><p>set在使用add，remove等函数时会调用equals函数去判断两个对象的地址是否相同，而不是比较两个对象的内容是否相同，需要重载hashcode和equals函数，类似于String类一样重载，才能够实现去重的目的！！ HashSet中的元素实际上是作为HashMap中的Key存放在HashMap中的，为了保证HashSet中的对象不会出现重复值，在被存放元素的类中必须要重写hashCode()和equals()这两个方法。</p>
-<h3 id="java深度克隆"><a href="http://www.importnew.com/10761.html" target="_blank" rel="external">java深度克隆</a></h3><p>Java集合的拷贝构造函数只提供浅拷贝而不是深拷贝，这意味着存储在原始List和克隆List中的对象是相同的，指向Java堆内存中相同的位置；深克隆将递归克隆对象直到基本数据类型或者不可变类   ；拷贝构造函数或者List或Set等各种集合类的addAll()方法仅仅创建了集合的浅拷贝，而且原始集合和克隆集合指向相同的对象。为避免这个问题，应该深克隆集合，遍历集合克隆每个元素。尽管这要求集合中的对象必须支持深克隆操作    </p>
+<h3 id="java深度克隆"><a href="http://www.importnew.com/10761.html" target="_blank" rel="external">java深度克隆</a></h3><p>Java集合的拷贝构造函数只提供浅拷贝而不是深拷贝，这意味着存储在原始List和克隆List中的对象是相同的，指向Java堆内存中相同的位置；深克隆将递归克隆对象直到基本数据类型或者不可变类   ；拷贝构造函数或者List或Set等各种集合类的addAll()方法仅仅创建了集合的浅拷贝，而且原始集合和克隆集合指向相同的对象。为避免这个问题，应该深克隆集合，遍历集合克隆每个元素。尽管这要求集合中的对象必须支持深克隆操作 <a id="more"></a>   </p>
 <h3 id="java同步加锁"><a href="http://www.cnblogs.com/devinzhang/archive/2011/12/14/2287675.html" target="_blank" rel="external">java同步加锁</a></h3><p>同步加锁的是对象，而不是代码:如果你的类中有一个同步方法，这个方法可以被两个不同的线程同时执行，只要每个线程自己创建一个的该类的实例即可</p>
 <h3 id="java线程池和队列讲解"><a href="http://www.oschina.net/question/565065_86540" target="_blank" rel="external">java线程池和队列讲解</a></h3><h3 id="null判断将常量写在前面的好处">null判断将常量写在前面的好处</h3><ol>
 <li>if(val == null) 和 if(null == val)的区别：后一种方式的主要优点是防止将==写成=和将!=写成=，因为后一种方式如果出现漏写，编译器会提示报错便于检查出代码错误；而前一种不会报错，造成逻辑bug不能被编译器检查出来</li>
