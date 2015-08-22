@@ -206,7 +206,8 @@
 </li>
 <li><p><strong>Mac安装Flask框架遇到的小bug</strong><br>Pycharm自动安装Flask框架时使用的是”pip install Flask”命令，但是在mac中会因为没有sudo权限导致无法安装成功，Pycharm会提示我们去terminal中输入命令行安装；然而，当我们在命令行中输入”sudo pip install Flask”时却会发现下载安装过程中依然会出现“bad md5 hash mismatch”的报错，解决步骤如下:</p>
 <ul>
-<li>Step1:更新pip到1.3以上，输入命令<figure class="highlight"><figcaption><span>pip install --upgrade pip```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* Step2:&#23433;&#35013;Flask&#19981;&#20351;&#29992;&#32531;&#23384;&#65292;&#36755;&#20837;&#21629;&#20196;```sudo pip install --no-cache-dir Flask</span><br></pre></td></tr></table></figure></li>
+<li>Step1:更新pip到1.3以上，输入命令”sudo pip install —upgrade pip”</li>
+<li>Step2:安装Flask不使用缓存，输入命令”sudo pip install —no-cache-dir Flask”</li>
 </ul>
 </li>
 </ol>
