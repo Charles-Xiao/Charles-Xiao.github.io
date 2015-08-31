@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="Mac," />
+  <meta name="keywords" content="优化," />
 
 
 
@@ -43,7 +43,7 @@
   </script>
 
 
-  <title> Mac常用快捷键 // CharlesXiao‘s Blog </title>
+  <title> Android应用性能优化 // CharlesXiao‘s Blog </title>
 </head>
 
 <body>
@@ -146,7 +146,7 @@
           
           
             
-              Mac常用快捷键
+              Android应用性能优化
             
           
         </h1>
@@ -154,14 +154,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-05-15
+          发表于 2015-08-30
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="../../../../categories/Mac系统/">Mac系统</a>
+              <a href="../../../../categories/Android/">Android</a>
 
               
               
@@ -175,7 +175,7 @@
             <span class="post-comments-count">
             &nbsp; | &nbsp;
             <a href="#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/15/Mac常用快捷键/"></span>
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/30/Android应用性能优化/"></span>
             </a>
           </span>
           
@@ -189,20 +189,45 @@
       
 
       
-        <p>在Mac系统中学会使用常用快捷键可以大大提高效率，以下为Mac系统中常用的快捷键和在Elipse开发中的常用快捷键(包含Mac和Win两个版本)。</p>
-<h3 id="Mac系统中常用快捷键">Mac系统中常用快捷键</h3><pre><code>cmd+alt+<span class="number">1</span>  <span class="comment">--- 自动整理当前文件夹中文件</span>
-ctrl+<span class="constant">space</span> <span class="comment">---  启动spotlight全局搜索</span>
-cmd+<span class="constant">space</span> <span class="comment">--- 切换输入法</span>
-cmd+向上/向下箭头 <span class="comment">--- 返回上级文件夹/打开当前文件夹或文件</span>
-cmd+T <span class="comment">--- 新建各种窗口(包括terminal窗口、finder窗口、chrome tab等)</span>
-cmd+shift+{/} <span class="comment">--- 切换tab(包括finder、terminal等窗口tab)</span>
-cmd+shift+<span class="number">3</span> <span class="comment">--- 屏幕截屏</span>
-cmd+shift+<span class="number">4</span> <span class="comment">---选取区域截图</span>
-cmd+<span class="built_in">delete</span> <span class="comment">--- 删除某个文件</span>
-enter <span class="comment">--- 修改文件名(类似于win中的F2)</span>
-cmd+I <span class="comment">--- 查看文件详细属性</span>
-cmd+option+esc <span class="comment">--- 打开进程管理窗口</span>
-</code></pre><h3 id="Eclipse常用快捷键_—_Mac">Eclipse常用快捷键 — Mac</h3>
+        <p>Android机由于其本身的后台机制和硬件特点，性能上一直被诟病，所以软件开发者对软件本身的性能优化就显得尤为重要；本文将对Android开发过程中性能优化的point做一个总结。</p>
+<h2 id="Layout优化">Layout优化</h2><ul>
+<li><p><strong>include标签</strong>：该标签可以用于将布局文件中的公共部分提取出来给其它布局文件复用，从而使得布局模块化，代码轻量化</p>
+</li>
+<li><p><strong>viewstub标签</strong>：该标签与include一样用于引入布局模块，只是引入的布局默认不会扩张，既不会占用显示也不会占用位置，从而在解析layout时节省cpu和内存，其功能类似于将某个layout属性设置为android:visibility=”gone”</p>
+</li>
+<li><p><strong>merge标签</strong>：该标签在layout中会被自动忽略，从而减少一层布局嵌套，其主要有两种用法：①当布局顶结点是FrameLayout且不需要设置background或padding等属性，可以用merge代替 ②作为子布局被其他布局include时，使用merge当作该布局的顶节点来代替layout顶节点就可以减少一层嵌套</p>
+</li>
+<li><p><strong>hierarchy viewer</strong>：该工具可以方便的查看Activity的布局，各个View的属性、measure、layout、draw的时间，如果耗时较多会用红色标记，否则显示绿色</p>
+</li>
+<li><p>RelativeLayout代替LinearLayout可以减少布局层次和复杂性</p>
+</li>
+<li><p>减少不必要的inflate，尽量使用全局变量缓存View</p>
+</li>
+<li><p>尽可能为不同分辨率创建资源，以减少不必要的硬件缩放，这会降低UI的绘制速度</p>
+</li>
+</ul>
+<h2 id="Cache优化">Cache优化</h2><ul>
+<li><p><strong>ListView缓存</strong>：ListView中有一个回收器，Item滑出界面的时候View会回收到这里，需要显示新的Item的时候，就尽量重用回收器里面的View；每次在getView函数中inflate新的item之前会先判断回收器中是否有缓存的view，即判断convertView是否为null，是则inflate一个新的item View，否则重用回收器中的item。此外，ListView还使用静态的ViewHolder减少findViewById的次数</p>
+</li>
+<li><p><strong>IO缓存</strong>：在文件和网络IO中使用具有缓存策略的输入流，BufferedInputStream替代InputStream，BufferedReader替代Reader，BufferedReader替代BufferedInputStream</p>
+</li>
+<li><p><strong>data缓存(空间换时间)</strong>：①缓存数据库的查询结果，比如缓存数据库表中的数据条数，这样就可以避免多次的select count查询 ②缓存磁盘文件中需要频繁访问的数据到内存中 ③缓存耗时计算的结果</p>
+</li>
+</ul>
+<h2 id="Battery优化">Battery优化</h2><h2 id="网络优化">网络优化</h2><h2 id="数据结构优化">数据结构优化</h2><ul>
+<li><p>ArrayList和LinkedList的选择：ArrayList根据index取值更快，LinkedList更占内存、随机插入删除更快速、扩容效率更高</p>
+</li>
+<li><p>ArrayList、HashMap、LinkedHashMap、HashSet的选择：hash系列数据结构查询速度更优，ArrayList存储有序元素，HashMap为键值对数据结构，LinkedHashMap可以记住加入次序的hashMap，HashSet不允许重复元素</p>
+</li>
+<li><p>HashMap、WeakHashMap选择：WeakHashMap中元素可在适当时候被系统垃圾回收器自动回收，所以适合在内存紧张时使用</p>
+</li>
+<li><p>Collections.synchronizedMap和ConcurrentHashMap的选择：ConcurrentHashMap为细分锁，锁粒度更小，并发性能更优；Collections.synchronizedMap为对象锁，自己添加函数进行锁控制更方便</p>
+</li>
+<li><p>Android中性能更优的数据类型：如SparseArray、SparseBooleanArray、SparseIntArray、Pair；Sparse系列的数据结构是为key为int情况的特殊处理，采用二分查找及简单的数组存储，加上不需要泛型转换的开销，相对Map来说性能更优</p>
+</li>
+</ul>
+<p><a href="http://www.trinea.cn/android/android-performance-demo/" target="_blank" rel="external">参考链接</a> </p>
+
       
     </div>
 
@@ -210,7 +235,7 @@ cmd+option+esc <span class="comment">--- 打开进程管理窗口</span>
       
         <div class="post-tags">
           
-            <a href="../../../../tags/Mac/"> #Mac </a>
+            <a href="../../../../tags/优化/"> #优化 </a>
           
         </div>
       
@@ -219,13 +244,11 @@ cmd+option+esc <span class="comment">--- 打开进程管理窗口</span>
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="../../24/读《1988-我想和这个世界谈谈》/">读《1988-我想和这个世界谈谈》</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="../Mac设置Path环境变量(adb+NDK+sdk)/">Mac设置环境变量(adb+NDK+sdk)</a>
+              <a href="../../29/浅谈MVC、MVP、MVVM三种框架模式/">浅谈MVC、MVP、MVVM三种框架模式</a>
             
           </div>
         </div>
@@ -241,8 +264,8 @@ cmd+option+esc <span class="comment">--- 打开进程管理窗口</span>
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/05/15/Mac常用快捷键/"
-               data-title="Mac常用快捷键" data-url="https://charles-xiao.github.io/2015/05/15/Mac常用快捷键/">
+          <div class="ds-thread" data-thread-key="2015/08/30/Android应用性能优化/"
+               data-title="Android应用性能优化" data-url="https://charles-xiao.github.io/2015/08/30/Android应用性能优化/">
           </div>
         
       </div>
@@ -345,7 +368,7 @@ cmd+option+esc <span class="comment">--- 打开进程管理窗口</span>
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mac系统中常用快捷键"><span class="nav-number">1.</span> <span class="nav-text">Mac系统中常用快捷键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Eclipse常用快捷键_—_Mac"><span class="nav-number">2.</span> <span class="nav-text">Eclipse常用快捷键 — Mac</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Layout优化"><span class="nav-number">1.</span> <span class="nav-text">Layout优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cache优化"><span class="nav-number">2.</span> <span class="nav-text">Cache优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Battery优化"><span class="nav-number">3.</span> <span class="nav-text">Battery优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络优化"><span class="nav-number">4.</span> <span class="nav-text">网络优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据结构优化"><span class="nav-number">5.</span> <span class="nav-text">数据结构优化</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

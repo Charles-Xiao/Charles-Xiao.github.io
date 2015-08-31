@@ -148,6 +148,145 @@
           
           
             
+              <a class="post-title-link" href="../../2015/05/27/java重难点知识集锦/">
+                java重难点知识集锦
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-27
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/java学习笔记/">java学习笔记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/05/27/java重难点知识集锦/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/27/java重难点知识集锦/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="复用类(继承组合)与多态">复用类(继承组合)与多态</h3><ol>
+<li><strong>继承、组合与代理之间的区别与联系</strong>：组合只是将对象引用置于新类中即可，表述的是一种has-a的关系，而继承通过extends关键字实现，自动得到基类中所有域和方法，表述的是一种is-a的关系；而代理是介于两者之间的一种关系，首先将对象引用置于新类中，然后在新类中构建同名方法来暴露该对象的所有方法(类似于继承)</li>
+<li><strong>继承与初始化</strong>：导出类继承自基类，构造器调用顺序是从上至下基类到导出类层层调用，若是默认构造器则不需要在导出类中显式调用基类构造器，否则需要首先在导出类构造器中使用super关键字调用基类构造器。见《Java编程思想P146和P158》</li>
+<li>多态也被称作动态绑定，与向上转型相反，抽象接口编程的重要性</li>
+</ol>
+<h3 id="接口与内部类">接口与内部类</h3><ol>
+<li><p><strong>接口与抽象类的区别联系</strong>：</p>
+<ul>
+<li>一个类可以实现多个接口但是只能实现一个抽象类 </li>
+<li>接口中都是抽象方法，抽象类中可以有实现的方法</li>
+<li>接口中方法和域都是public，抽象类中可以自由定义修饰符</li>
+<li>接口不能有构造器，其所有域都是static和final的</li>
+<li>两者都不能实例化，都能存放子类或者实现类的对象</li>
+</ul>
+</li>
+<li><p><strong>静态内部类(嵌套类)与非静态内部类区别</strong>：</p>
+<ul>
+<li>嵌套类不需要内部类对象与外围类对象之间有联系，而内部类自动拥有其外围类所有成员的访问权(因为内部类对象拥有一个指向其外围类对象的引用)</li>
+<li>创建内部类对象之前需要先创建外围类对象，而创建嵌套类对象则不需要</li>
+<li>普通类不能包含static成员和嵌套类，但是嵌套类可以</li>
+<li>嵌套类对象不可以访问非静态的外围类对象</li>
+</ul>
+</li>
+<li><strong>为什么需要内部类？</strong><ul>
+<li>内部类提供了进入和操作外围类的窗口</li>
+<li>内部类完善了“多重继承”机制，他能提供继承多个具体类或抽象类的能力</li>
+</ul>
+</li>
+<li><strong>内部类的继承与覆盖</strong> —- 见《Java编程思想P212》</li>
+</ol>
+<h3 id="异常处理与类型信息">异常处理与类型信息</h3><ol>
+<li>异常处理是java中唯一正式的错误报告机制，用于解决运行期间遇到的问题；可以用try……catch进行捕获也可以在定义方法或者类时使用throws声明。</li>
+<li><strong>return与finally</strong>：<ul>
+<li>在try里边return会先return再执行finally</li>
+<li>在finally里边return会导致异常丢失，不再抛出异常(另一种异常丢失是因为前一个异常还没处理就抛出下一个异常，前一个异常就丢失了)</li>
+</ul>
+</li>
+<li><strong>RTTI(Run-Time Type Identification)</strong>：在运行时识别对象的类型；其主要限制是在编译时就必须已知对象类型，也就是知道类名，它的三种应用场景：①类型转换 如：Shape s = (Shape)circle　②Shape.class这种类字面常量　③instanceof判断某对象是否是某类或其之类的实例</li>
+<li><strong>反射</strong>：反射机制可以用于使用在编译器为程序生成代码之后很久才会出现的类，比如基于构建编程和远程方法调用，主要是通过Class类和java.lang.reflect类库来实现。</li>
+<li><strong>RTTI和反射之间真正的区别</strong>在于：对RTTI来说，编译器在编译时打开和检查.class文件；对于反射机制来说，.class文件在编译时不可获取，只有等到运行时才能打开和检查。</li>
+</ol>
+<h3 id="枚举、注解与泛型">枚举、注解与泛型</h3><ol>
+<li><a href="http://www.cnblogs.com/happyPawpaw/archive/2013/04/09/3009553.html">Java Enum用法</a></li>
+<li>注解又叫做元数据，一种在代码中添加信息的形式化方法，该信息可以在后期利用反射机制进行使用，我们可以通过编写注解处理器来解析代码中的注解，也可以使用apt来解析。</li>
+<li>泛型主要是用于容器定义。</li>
+</ol>
+<h3 id="字符串与数组">字符串与数组</h3><h3 id="持有对象的容器">持有对象的容器</h3><h3 id="java_I/O系统与并发">java I/O系统与并发</h3><h3 id="final、finally和finalize对比">final、finally和finalize对比</h3><ul>
+<li>final用于声明属性方法和类，分别表示：属性不可变，方法不可覆盖，类不可继承。可以用于关闭方法动态绑定</li>
+<li>finally是异常处理语句的一部分，表示总是执行。一般用于释放除内存之外的资源(例如已打开的文件或者网络连接)</li>
+<li>finalize是Object的一个方法，在垃圾收集器执行的时候会调用被回收对象的此方法。</li>
+</ul>
+<h3 id="java中equals，hashcode，==分析"><a href="http://blog.sina.com.cn/s/blog_5671e70e0100bgil.html">java中equals，hashcode，==分析</a></h3><p>set在使用add，remove等函数时会调用equals函数去判断两个对象的地址是否相同，而不是比较两个对象的内容是否相同，需要重载hashcode和equals函数，类似于String类一样重载，才能够实现去重的目的！！ HashSet中的元素实际上是作为HashMap中的Key存放在HashMap中的，为了保证HashSet中的对象不会出现重复值，在被存放元素的类中必须要重写hashCode()和equals()这两个方法。</p>
+<h3 id="java深度克隆"><a href="http://www.importnew.com/10761.html">java深度克隆</a></h3><p>Java集合的拷贝构造函数只提供浅拷贝而不是深拷贝，这意味着存储在原始List和克隆List中的对象是相同的，指向Java堆内存中相同的位置；深克隆将递归克隆对象直到基本数据类型或者不可变类   ；拷贝构造函数或者List或Set等各种集合类的addAll()方法仅仅创建了集合的浅拷贝，而且原始集合和克隆集合指向相同的对象。为避免这个问题，应该深克隆集合，遍历集合克隆每个元素。尽管这要求集合中的对象必须支持深克隆操作
+          <div class="post-more-link text-center">
+            <a class="btn" href="../../2015/05/27/java重难点知识集锦/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/java/"> #java </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2015/05/27/Android开发常见bug解决方法及注意事项/">
                 Android开发常见bug解决方法及注意事项
               </a>
@@ -723,21 +862,21 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="../..//categories">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-count">24</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
