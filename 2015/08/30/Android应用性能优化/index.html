@@ -233,7 +233,13 @@
 </li>
 <li><p>wifi传输数据比蜂窝数据更省电，所以尽量在wifi下进行数据的预加载</p>
 </li>
-<li><p>使用httpClient优于httpUrlConnection，httpClient自带gzip压缩</p>
+<li><p>httpClient和httpUrlConnection对比： </p>
+<ol>
+<li>httpClient是apache的开源实现，API数量多，非常稳定</li>
+<li>httpUrlConnection是java自带的模块: ①可以直接支持GZIP压缩,而HttpClient虽然也支持GZIP，但要自己写代码处理 ②httpUrlConnection直接在系统层面做了缓存策略处理，加快重复请求的速度 ③API简单，体积较小,而且直接支持系统级连接池，即打开的连接不会直接关闭，在一段时间内所有程序可共用</li>
+<li>HttpURLConnection在Android2.2之前有个重大Bug，调用close()函数会影响连接池，导致连接复用失效，需要关闭keepAlive;因此在2.2之前http请求都是用httpClient，2.2之后则是使用HttpURLConnection</li>
+<li>但是!!!现在!!!Android不再推荐这两种方式！二是直接使用OKHttp这种成熟方案！支持Android 2.3及其以上版本</li>
+</ol>
 </li>
 </ul>
 <h2 id="数据结构优化">数据结构优化</h2><ul>
@@ -266,6 +272,8 @@
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="../../../09/04/OpenWrt/">OpenWrt</a>
             
           </div>
 
@@ -339,7 +347,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">16</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
