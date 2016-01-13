@@ -148,6 +148,136 @@
           
           
             
+              <a class="post-title-link" href="2015/12/24/Google-Compute-Engine配置LAMP环境以及部署Web项目/">
+                Google Compute Engine配置LAMP环境以及部署Web项目
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-12-24
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2015/12/24/Google-Compute-Engine配置LAMP环境以及部署Web项目/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/24/Google-Compute-Engine配置LAMP环境以及部署Web项目/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="2015/10/20/Java中Collections-sort与Arrays-sort两种排序方式讲解/">
+                Java中Collections.sort与Arrays.sort两种排序方式讲解
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-10-20
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2015/10/20/Java中Collections-sort与Arrays-sort两种排序方式讲解/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/20/Java中Collections-sort与Arrays-sort两种排序方式讲解/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="2015/09/04/OpenWrt/">
                 OpenWrt
               </a>
@@ -1030,352 +1160,11 @@ __author__ = <span class="string">'xiaoyong'</span>
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="2015/07/26/利用Python框架Flask实现RESTful架构服务端/">
-                利用Python框架Flask实现RESTful架构服务端
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-07-26
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2015/07/26/利用Python框架Flask实现RESTful架构服务端/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/26/利用Python框架Flask实现RESTful架构服务端/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>不管是进行app开发还是web开发，server端的开发都是必不可少的部分，最近打算尝试一下服务端开发；考虑到开发效率以及目前主流的前后端API标准，我打算采用python的flask框架来搭建一个简单server端作为移动app的Web Service来使用，API格式采用RESTful标准，本文将讲述RESTful架构服务端的大致实现过程。</p>
-<h2 id="RESTful架构">RESTful架构</h2><p><strong>Representational State Transfer 表现层状态转化</strong></p>
-<ul>
-<li>Resoure：资源</li>
-<li>URL：统一资源定位符</li>
-<li>URI：统一资源标识符</li>
-<li>Representation：表现层 —- 资源呈现形式，如json，text，html</li>
-<li>State Trasfer：状态转移 —- http无状态协议中的GET、POST、PUT、DELETE</li>
-</ul>
-<p>REST架构设计六原则</p>
-<ul>
-<li>前后端统一接口</li>
-<li>无状态 —- 每次客户端请求必需包含完整的信息</li>
-<li>可缓存 —- 服务器端必需指定哪些请求是可以缓存的</li>
-<li>服务端客户端业务分离</li>
-<li>分层系统</li>
-<li>按需编码</li>
-</ul>
-<h2 id="Flask框架">Flask框架</h2><p>Flask框架是一个Python编写的基于Werkzeug WSGI工具箱和Jinja2模板引擎的轻量级web开发框架。Flask只保留了简单的核心，但是有着丰富的extension来实现其他功能模块以达到类似于Django这种全栈式框架的功能效果。例如ORM需要使用SQLAlchemy扩展、Oauth需要使用Oauthlib扩展, 此外还有大量的扩展用以支持数据库整合、表单验证、上传处理、缓存、生成后台和各种开放验证等等。</p>
-<h2 id="代码实现">代码实现</h2><p>下面我们将通过具体代码来运用Flask框架实现一个RESTful Web Service返回json数据以及template前端页面。该项目中有两个路由，一个用Flask-RESTful的路由形式返回json数据，另一个用Flask原生路由形式返回一个基于Jinja2模板的Flask-Bootstrap风格的注册登录页面；其中json数据通过SQLAlchemy插件从MySQL数据库中获取，然后显示到浏览器中。</p>
-<h3 id="配置Flask环境">配置Flask环境</h3><ol>
-<li><p><strong>新建一个Flask项目</strong>，步骤如下</p>
-<ul>
-<li>打开PyCharm编辑器(安装教程请Google)，点击File按钮，选择new project</li>
-<li>选择左侧列表中Flask选项，修改Location中的”untitled”为你想要的项目名称，选择合适的interpreter，一般默认即可，Pycharm会自动下载安装Flask框架</li>
-<li>点击Create，可以看到项目结构:static文件夹、templates文件夹、py文件；Flask项目创建成功</li>
-</ul>
-</li>
-<li><p><strong>Mac安装Flask框架遇到的小bug</strong><br>Pycharm自动安装Flask框架时使用的是”pip install Flask”命令，但是在mac中会因为没有sudo权限导致无法安装成功，Pycharm会提示我们去terminal中输入命令行安装；然而，当我们在命令行中输入”sudo pip install Flask”时却会发现下载安装过程中依然会出现“bad md5 hash mismatch”的报错，解决步骤如下:</p>
-<ul>
-<li>Step1:更新pip到1.3以上，输入命令”sudo pip install —upgrade pip”</li>
-<li>Step2:安装Flask不使用缓存，输入命令”sudo pip install —no-cache-dir Flask”</li>
-</ul>
-</li>
-<li><p><strong>部分需要用到的Flask插件pip安装命令</strong>  </p>
-<pre><code><span class="comment"># Flask-RESTful插件: 用于快速开发REST API</span>
-sudo pip <span class="keyword">install</span> flask-restful
-
-<span class="comment"># Flask-Bootstrap插件: 用于构建Bootsrap风格的网页；也可以直接下载引用Bootstrap</span>
-sudo pip <span class="keyword">install</span> flask-bootstrap
-
-<span class="comment"># Flask-Pymysql插件: 一个类似于mysqldb的Python数据库驱动插件</span>
-sudo pip <span class="keyword">install</span> flask-pymysql 
-
-<span class="comment"># Flask-SQLAlchemy插件: 一个用于操作SQL数据库的ORM</span>
-sudo pip <span class="keyword">install</span> flask-sqlalchemy
-</code></pre></li>
-</ol>
-<h3 id="配置MySQL数据库">配置MySQL数据库</h3><p>在该项目中，我们连接MySQL中的test数据库(如果该数据库不存在请自行创建)，然后新建一个user表，包含id和name两个属性，后面要显示到浏览器中的json数据就是从这个表中提取。我们可以通过直接执行MySQL命令来操作数据库，也可以在Python文件中通过SQLAlchemy来执行SQL语句操作数据库；当然这一切的前提是在你的计算机上安装MySQL并开启服务，我们推荐使用xampp集成安装环境，非常方便，而且同时适用于win和mac。下面列出<strong>常用的MySQL命令</strong>：</p>
-<pre><code># 创建表user，包含id(主键)、name两个字段
-<span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">user</span> (
-id <span class="built_in">int</span>(<span class="number">4</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">primary</span> <span class="keyword">key</span>, name <span class="built_in">varchar</span>(<span class="number">20</span>)
-) <span class="keyword">engine</span>=<span class="keyword">innodb</span> <span class="keyword">default</span> <span class="keyword">charset</span>=utf8;</span>
-
-# 创建表book，包含id(主键)、name、user_id三个字段，其中user_id字段为book表的外键字段名
-对应user表中的id字段，一个user可能有一本或多本book
-<span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> book (
-id <span class="built_in">int</span>(<span class="number">4</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">primary</span> <span class="keyword">key</span>, name <span class="built_in">varchar</span>(<span class="number">20</span>), user_id <span class="built_in">varchar</span>(<span class="number">20</span>)
-) <span class="keyword">engine</span>=<span class="keyword">innodb</span> <span class="keyword">default</span> <span class="keyword">charset</span>=utf8;</span>
-
-# 给book表增加一个category字段
-<span class="operator"><span class="keyword">alter</span> <span class="keyword">table</span> book <span class="keyword">add</span> category <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">primary</span> <span class="keyword">key</span>;</span>
-
-# 列出表book的结构
-desc book;
-
-# 列出表book所有数据
-<span class="operator"><span class="keyword">select</span> * <span class="keyword">from</span> book
-
-# 清空表book所有数据
-<span class="keyword">truncate</span> <span class="keyword">table</span> book
-
-# 添加外键
-<span class="keyword">alter</span> <span class="keyword">table</span> book <span class="keyword">add</span> <span class="keyword">constraint</span> FK_ID <span class="keyword">foreign</span> <span class="keyword">key</span>(user_id) <span class="keyword">REFERENCES</span> <span class="keyword">user</span>(id);</span>
-
-# 删除外键, FK_ID为外键名
-<span class="operator"><span class="keyword">alter</span> <span class="keyword">TABLE</span> book <span class="keyword">DROP</span> <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> FK_ID;</span>
-</code></pre><h3 id="app-py">app.py</h3><p>在app.py中:<br>一方面: 我们通过SQLAlchemy连接数据库并查询user表中的用户数据信息，作为json数据返回给浏览器；这一部分采用RESTful插件实现, 通过访问localhost://5000/restful就可以看到返回的json数据<br>另一方面: 我们在flaskTest函数中加载login.html页面，该页面通过采用bootstrap框架实现.</p>
-<pre><code><span class="comment"># coding=utf-8</span>
-__author__ = <span class="string">'xiaoyong'</span>
-
-<span class="keyword">from</span> flask <span class="keyword">import</span> Flask, request, render_template
-<span class="keyword">from</span> flask.ext.bootstrap <span class="keyword">import</span> Bootstrap
-<span class="keyword">from</span> flask_restful <span class="keyword">import</span> fields, marshal_with, Api, Resource
-
-<span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> Column, String, create_engine, ForeignKey
-<span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> sessionmaker, relationship
-<span class="keyword">from</span> sqlalchemy.ext.declarative <span class="keyword">import</span> declarative_base
-
-<span class="keyword">import</span> json
-<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
-
-app = Flask(__name__)
-api = Api(app)
-bootstrap = Bootstrap(app)
-
-<span class="comment"># 初始化MySQL数据库连接引擎</span>
-db_engine = create_engine(<span class="string">'mysql+pymysql://root:@localhost:3306/test'</span>)
-
-Base = declarative_base()
-
-
-<span class="comment"># 数据库表user对应的User对象</span>
-<span class="class"><span class="keyword">class</span> <span class="title">User</span><span class="params">(Base)</span>:</span>
-    __tablename__ = <span class="string">'user'</span>
-
-    id = Column(String(<span class="number">20</span>), primary_key=<span class="keyword">True</span>)
-    name = Column(String(<span class="number">20</span>))
-
-    <span class="comment"># 一对多外键关系</span>
-    books = relationship(<span class="string">'Book'</span>)
-
-
-<span class="class"><span class="keyword">class</span> <span class="title">Book</span><span class="params">(Base)</span>:</span>
-    __tablename__ = <span class="string">'book'</span>
-
-    id = Column(String(<span class="number">20</span>), primary_key=<span class="keyword">True</span>)
-    name = Column(String(<span class="number">20</span>))
-
-    user_id = Column(String(<span class="number">20</span>), ForeignKey(<span class="string">'user.id'</span>))
-
-
-<span class="comment"># 创建DBSession类型</span>
-DBSession = sessionmaker(bind=db_engine)
-<span class="comment"># 创建DBsession对象</span>
-session = DBSession()
-
-<span class="comment"># Query user表中的所有行数据</span>
-db_users = session.query(User).all()
-session.close()
-
-
-<span class="decorator">@app.route('/flask/&lt;user_name&gt;', methods=['GET', 'POST'])</span>
-<span class="function"><span class="keyword">def</span> <span class="title">flaskTest</span><span class="params">(user_name)</span>:</span>
-    <span class="comment"># 访问http://localhost:5000/flask/xy,进入登陆页</span>
-    <span class="keyword">if</span> user_name == <span class="string">'xy'</span> <span class="keyword">and</span> request.method == <span class="string">'GET'</span>:
-        <span class="keyword">return</span> render_template(<span class="string">'login.html'</span>)
-    <span class="comment"># 点击login，返回用户json数据</span>
-    <span class="keyword">if</span> request.method == <span class="string">'POST'</span> <span class="keyword">and</span> request.form[<span class="string">'user'</span>]:
-        u = request.form[<span class="string">'user'</span>]
-        p = request.form[<span class="string">'pw'</span>]
-        dic = {<span class="string">'user'</span>: u, <span class="string">'password'</span>: p}
-        <span class="keyword">return</span> json.dumps(dic)
-    <span class="keyword">else</span>:
-        <span class="keyword">return</span> <span class="string">'error url'</span>
-
-<span class="comment"># 返回的json数据模型</span>
-<span class="class"><span class="keyword">class</span> <span class="title">restfulModel</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, users, state)</span>:</span>
-        self.users = users
-        self.state = state
-
-
-<span class="comment"># marshal-蒙版</span>
-resource_fileds = {
-    <span class="string">'users'</span>: fields.List(fields.String),
-    <span class="string">'state'</span>: fields.String(default=<span class="string">''</span>),
-    <span class="string">'expires'</span>: fields.Float(default=<span class="number">0.0</span>),
-    <span class="string">'date'</span>: fields.DateTime(default=str(datetime.now()))
-
-}
-<span class="comment"># RESTful插件</span>
-<span class="class"><span class="keyword">class</span> <span class="title">restfulTest</span><span class="params">(Resource)</span>:</span>
-    <span class="decorator">@marshal_with(resource_fileds)</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span>
-        user_list = []
-        <span class="keyword">for</span> user <span class="keyword">in</span> db_users:
-            user_dic = {}
-            user_dic[<span class="string">'name'</span>] = user.name
-            user_dic[<span class="string">'id'</span>] = user.id
-            user_list.append(str(user_dic))
-        <span class="keyword">return</span> restfulModel(user_list, <span class="string">'OK'</span>)
-
-api.add_resource(restfulTest, <span class="string">'/restful'</span>)
-<span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:
-    app.run(debug=<span class="keyword">True</span>)
-</code></pre><h3 id="login-html">login.html</h3><p>该注册登录页面是基于Jinja2模板和bootstrap框架实现</p>
-<p>PS：实现该页面注册框居中的css代码:<br>form.form-signin {<br>        width: 20%;<br>        margin-left: auto;<br>        margin-right: auto;<br>    }</p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/login1.png" class="full-image">   </p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/login2.png" class="full-image">  </p>
-<h2 id="结语">结语</h2><p>上述即为通过Flask框架搭建资源服务器的大致过程，涉及到RESTful架构，SQLAlchemy ORM，Bootstrap，json处理等相关知识；我们可以看出利用Python框架搭建服务器的便捷性，很容易上手，如果需要深入学习相关知识请参考flask官网和相关extensions官网教程。</p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/REST/"> #REST </a>
-          
-            <a href="tags/python/"> #python </a>
-          
-            <a href="tags/服务端开发/"> #服务端开发 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="2015/06/12/五代十国史/">
-                五代十国史
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-06-12
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="categories/读书札记/">读书札记</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2015/06/12/五代十国史/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/12/五代十国史/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>在分分合合的中国历史上，除了耳熟能详的三国鼎立之外，五代十国绝对可以称得上是一段动乱不堪的战乱史。在这介于唐宋之间的五十多年里，政权更替，藩镇割据，骄兵悍将，自立弑主，层出不穷；几乎每个政权都逃脱不了短命的轮回。</p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/五代十国/"> #五代十国 </a>
-          
-            <a href="tags/历史/"> #历史 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
   <div class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="extend next" rel="next" href="page/2/">&raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="page-number" href="page/3/">3</a><a class="extend next" rel="next" href="page/2/">&raquo;</a>
   </div>
 
 
@@ -1409,7 +1198,7 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1468,7 +1257,7 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
         <div class="copyright">
   
   &copy; &nbsp;  2015.05.16 - 
-  2015
+  2016
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>
