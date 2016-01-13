@@ -148,6 +148,124 @@
           
           
             
+              <a class="post-title-link" href="2016/01/13/Remove-element问题的简单优化/">
+                Remove element问题的简单优化
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-01-13
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="categories/Leetcode/">Leetcode</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2016/01/13/Remove-element问题的简单优化/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/13/Remove-element问题的简单优化/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>原题链接: <a href="https://leetcode.com/problems/remove-element/" target="_blank" rel="external">Remove Element</a>. 这是一道easy的水题，之所以拿出来讲，主要是其中有一个巧妙的小优化,可以因小见大体会到代码效率优化的无处不在，激励自己写出最优的代码.</p>
+<h3 id="最初解法">最初解法</h3><pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span> {
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> val)</span> </span>{
+        <span class="keyword">int</span> length = nums.length;
+        <span class="keyword">int</span> res = <span class="number">0</span>;
+        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length; ++i) {
+            <span class="keyword">if</span> (nums[i] != val) {
+                 nums[res] = nums[i];
+                 res++;
+            }
+        }
+        <span class="keyword">return</span> res;
+    }
+}
+</code></pre><p>思路讲解: 从头开始遍历数组元素length次，当元素nums[i]与val不相等，重新赋值, 相等则跳过，最终数组中前res个元素都是不等于val的元素</p>
+<p>效率:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/remove_element_0.png" class="full-image">  </p>
+<h3 id="改进解法">改进解法</h3><pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span> {
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> val)</span> </span>{
+        <span class="keyword">int</span> length = nums.length;
+        <span class="keyword">int</span> res = <span class="number">0</span>;
+        <span class="comment">// 减少i++操作引发70%的效率提升</span>
+        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length-res;) {
+            <span class="keyword">if</span> (nums[i] == val) {
+                 nums[i] = nums[length-res-<span class="number">1</span>];
+                 res++;
+            } <span class="keyword">else</span> {
+                i++;
+            }
+        }
+        <span class="keyword">return</span> length-res;
+    }
+}
+</code></pre><p>思路讲解: 从头开始遍历数组元素length-res次，当元素nums[i]与val相等，i不改变, 从末尾取出一个对应的将不再被循环遍历到的元素赋值到当前的nums[i], 再次与val比较；如果nums[i]与val不相等则i++，比较下一元素</p>
+<p>效率:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/remove_element_1.png" class="full-image">  </p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/Array/"> #Array </a>
+          
+            <a href="tags/Leetcode/"> #Leetcode </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="2016/01/13/Roman与Integer之间的相互转换/">
                 Roman与Integer之间的相互转换
               </a>
@@ -760,383 +878,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="2015/08/01/Python基础知识实例讲解/">
-                Python基础知识实例讲解
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-08-01
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="categories/Python开发/">Python开发</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2015/08/01/Python基础知识实例讲解/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/01/Python基础知识实例讲解/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>Python作为一种面向对象、解释型计算机程序设计语言，语法简洁而清晰，具有丰富和强大的类库，在网站开发，数据处理，网络编程，图形处理，网络爬虫、机器学习、科学计算、自动化测试、系统运维等方面应用广泛。也正是由于Python开发简洁、优雅、开发效率高，它能够在很多地方替代java、C++等语言从而提高程序猿编程效率。作为程序猿，掌握这样一门便捷的编程语言来作为工具显得十分必要。本文主要参考了“极客学院”相关Python入门视频教程，对Python基础入门知识进行了整合，采用代码实例展现的方式，语法知识全部体现在代码中，简洁明了易于理解；本文主要包括三个Python module，分别是hellopython.py、mylib.py、stackqueue.py，涵盖了Python数据类型，常量变量，判断循环，函数，类和对象，模块，数据结构等知识(Python开发编辑器为PyCharm)</p>
-<h3 id="hellopython-py">hellopython.py</h3><p>该模块为主模块，负责实现大部分Python基础语法及其测试，从该模块我们看到几乎所有的Python基础句法的使用方法  </p>
-<p>代码：  </p>
-<pre><code><span class="comment"># coding=UTF-8</span>
-__author__ = <span class="string">'xiaoyong'</span>
-
-<span class="keyword">from</span> math <span class="keyword">import</span> *
-<span class="keyword">from</span> stackqueue <span class="keyword">import</span> *
-<span class="keyword">from</span> mylib <span class="keyword">import</span> Hi
-<span class="keyword">from</span> collections <span class="keyword">import</span> Counter
-<span class="keyword">from</span> itertools <span class="keyword">import</span> combinations
-
-<span class="keyword">import</span> mylib
-<span class="keyword">import</span> sys
-
-<span class="class"><span class="keyword">class</span> <span class="title">HelloPy</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">helloPy</span><span class="params">(self, param)</span>:</span>
-        <span class="string">'''文档字符串：该函数用于测试变量定义，判断语句
-
-        循环语句'''</span>
-        <span class="comment"># 定义变量</span>
-        <span class="keyword">global</span> globalVar
-        globalVar = <span class="number">10</span>
-        var1 = <span class="number">10</span>
-        var2 = <span class="number">20</span>
-        var3 = var1 + var2
-        print(var3)
-
-        <span class="comment"># 判断语句</span>
-        <span class="keyword">if</span> param &gt;= <span class="number">60</span>:
-            print(<span class="string">"{0} &gt; 60"</span>.format(param))
-        <span class="keyword">elif</span> param &gt; <span class="number">0</span>:
-            print(<span class="string">"{0} &gt; 0"</span>.format(param))
-        <span class="keyword">else</span>:
-            print(<span class="string">"{0} &lt; 60 &amp;&amp; 0 &gt; {1}"</span>).format(param, <span class="string">"param"</span>)
-
-        <span class="comment"># 循环语句</span>
-        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>):
-            print(i)
-
-        var4 = <span class="number">0</span>
-        <span class="keyword">while</span> var4 &lt; <span class="number">3</span>:
-            print(var4)
-            var4 += <span class="number">1</span>
-        <span class="keyword">else</span>:
-            print(<span class="string">"else var4={0}"</span>.format(var4))
-
-
-<span class="comment"># 形参设置默认初始值</span>
-<span class="function"><span class="keyword">def</span> <span class="title">fuc1</span><span class="params">(a, b=<span class="number">1</span>, c=<span class="number">2</span>)</span>:</span>
-    print(a);print(b);print(c)
-
-
-<span class="function"><span class="keyword">def</span> <span class="title">fuc2</span><span class="params">(a, b=<span class="number">1</span>)</span>:</span>
-    print(a)
-    <span class="keyword">return</span> b
-
-
-<span class="function"><span class="keyword">def</span> <span class="title">fuc3</span><span class="params">()</span>:</span>
-    <span class="keyword">return</span> (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)
-
-<span class="comment"># Python常用tips </span>
-<span class="function"><span class="keyword">def</span> <span class="title">fuc_python_tips</span><span class="params">()</span>:</span>
-    print(<span class="string">'\nPython常用tips: '</span>)
-    <span class="comment"># 交换变量</span>
-    var1 = <span class="number">0</span>
-    var2 = <span class="number">1</span>
-    var1, var2 = var2, var1
-    <span class="keyword">print</span> var1, var2
-    <span class="comment"># if语句在行内</span>
-    print(<span class="string">'hello'</span>) <span class="keyword">if</span> <span class="number">1</span> != <span class="number">1</span> <span class="keyword">else</span> <span class="string">'world'</span>
-    print(<span class="string">'hello'</span> + str(var1))
-    <span class="comment"># 数字技巧</span>
-    <span class="keyword">print</span> <span class="number">5.0</span> // <span class="number">2</span>, <span class="number">5.0</span> / <span class="number">2</span>, <span class="number">2</span> ** <span class="number">5</span>, .<span class="number">3</span> / .<span class="number">1</span>, .<span class="number">3</span> // .<span class="number">1</span>
-    var3 = <span class="number">2</span>
-    <span class="keyword">if</span> <span class="number">1</span> &lt; var3 &lt; <span class="number">3</span>:
-        print(var3)
-    <span class="comment"># 列表迭代</span>
-    list1 = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]
-    list2 = [<span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>]
-    <span class="keyword">for</span> a, b <span class="keyword">in</span> zip(list1, list2):
-        <span class="keyword">print</span> a + <span class="string">" vs "</span> + b
-    <span class="keyword">for</span> index, a <span class="keyword">in</span> enumerate(list1):
-        <span class="keyword">print</span> index, a
-    list3 = [<span class="number">0</span>] * <span class="number">3</span>
-    list3.append(<span class="number">2</span>)
-    print(list3)
-    <span class="comment"># 列表--&gt;字符串</span>
-    print(<span class="string">','</span>.join(list1))
-    <span class="comment"># 获取列表子集</span>
-    x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]
-    <span class="comment"># 前3个</span>
-    <span class="keyword">print</span> x[:<span class="number">3</span>]
-    <span class="comment"># 中间4个</span>
-    <span class="keyword">print</span> x[<span class="number">1</span>:<span class="number">5</span>]
-    <span class="comment"># 最后3个</span>
-    <span class="keyword">print</span> x[-<span class="number">3</span>:]
-    <span class="comment"># 奇数项</span>
-    <span class="keyword">print</span> x[::<span class="number">2</span>]
-    <span class="comment"># 偶数项</span>
-    <span class="keyword">print</span> x[<span class="number">1</span>::<span class="number">2</span>]
-    <span class="comment"># 统计单个字母数目</span>
-    <span class="keyword">print</span> Counter(<span class="string">'hello'</span>)
-    <span class="comment"># 列出所有组合方式</span>
-    <span class="keyword">for</span> t <span class="keyword">in</span> combinations(x, <span class="number">2</span>):
-        print(t)
-
-<span class="comment"># python标识符首字符只能是下划线或者字母，其他部分可以是下划线、字母、数字；标识符对大小写敏感</span>
-
-print(sys.version);
-<span class="keyword">print</span> (<span class="string">"模块名：{0}"</span>).format(__name__)
-print(pi)
-help(HelloPy.helloPy)
-<span class="comment"># 列出模块定义的标识符,标识符有函数、类和变量</span>
-<span class="keyword">print</span> dir(sys)
-print(HelloPy.helloPy.__doc__)
-
-<span class="comment"># 引用mylib.py模块调用函数</span>
-h = mylib.Hello(<span class="string">"mylib"</span>)
-h.sayHello()
-
-h1 = Hi(<span class="string">"mylib"</span>)
-h1.sayHi()
-
-h2 = HelloPy()
-h2.helloPy(<span class="number">15</span>)
-<span class="comment"># 全局变量</span>
-print(globalVar)
-
-fuc1(b=<span class="number">2</span>, a=<span class="number">3</span>)
-var1 = fuc2(<span class="number">2</span>, <span class="number">3</span>)
-print(var1)
-var2 = fuc3()
-print(var2)
-m1, m2, m3 = fuc3()
-print(<span class="string">"{0} {1} {2}"</span>.format(m1, m2, m3))
-
-fuc_python_tips()
-
-<span class="comment"># 引号</span>
-str1 = <span class="string">'It is a "dog"'</span>
-str2 = <span class="string">"It's a dog"</span>
-str3 = <span class="string">'''she
-I
-you'''</span>
-print(<span class="string">"{0}  {1}"</span>.format(str1, str2))
-
-<span class="comment"># 字符串重复输出</span>
-print(str3) * <span class="number">3</span>
-
-<span class="comment"># 转义符</span>
-print(<span class="string">'It\'s a dog\nyou are not'</span>)
-<span class="keyword">print</span><span class="string">"women\
-doushihaohaizi"</span>
-
-<span class="comment"># 自然字符串</span>
-print(<span class="string">r"It's a dog \n you are not"</span>)
-
-<span class="comment"># 子字符串,索引和切片两种方式</span>
-print(str1[<span class="number">1</span>]);print(str1[<span class="number">0</span>:<span class="number">3</span>]);print(str1[:<span class="number">3</span>]);print(str1[<span class="number">3</span>:]);
-
-<span class="comment"># set,求两个set的&amp; | - 重复元素</span>
-print(<span class="string">"\n集合 列表 元组 字典测试:"</span>)
-var3 = set(<span class="string">'aaabbc'</span>)
-<span class="comment"># 集合中不能有重复元素</span>
-newVar = set(var3)
-print(newVar)
-<span class="comment"># 列表，数据可以修改</span>
-students = [<span class="string">"a"</span>, <span class="string">'b'</span>, <span class="string">"c"</span>]
-print(students[<span class="number">1</span>])
-
-<span class="comment"># 元组,数据不可修改</span>
-students = (<span class="string">"a"</span>, <span class="string">'b'</span>, <span class="string">"c"</span>)
-print(students[<span class="number">1</span>])
-
-<span class="comment"># 字典</span>
-dic = {<span class="string">'姓名'</span>: <span class="string">'xiaoyong'</span>, <span class="string">"性别"</span>: <span class="string">"男"</span>}
-dic[<span class="string">'兴趣'</span>] = <span class="string">'音乐'</span>
-print(dic[<span class="string">'兴趣'</span>])
-print(dic.get(<span class="string">'姓名'</span>))
-
-<span class="comment"># 栈测试</span>
-print(<span class="string">"\n栈测试:"</span>)
-stack = Stack()
-stack.push(<span class="number">1</span>)
-stack.push(<span class="number">2</span>)
-stack.push(<span class="number">3</span>)
-print(stack.length())
-print(stack.isEmpty())
-print(stack.top())
-stack.pop()
-print(stack.top())
-
-<span class="comment"># 队列测试</span>
-print(<span class="string">"\n队列测试:"</span>)
-queue = Queue()
-queue.enQueue(<span class="number">1</span>)
-queue.enQueue(<span class="number">2</span>)
-queue.enQueue(<span class="number">3</span>)
-print(queue.length())
-print(queue.isEmpty())
-print(queue.head())
-print(queue.tail())
-queue.deQueue()
-print(queue.head())
-print(queue.tail())
-</code></pre><h3 id="mylib-py">mylib.py</h3><p>该模块为引用模块，实现两个类，Hello为父类，Hi为子类  </p>
-<p>代码：</p>
-<pre><code><span class="comment"># coding=UTF-8</span>
-__author__ = <span class="string">'xiaoyong'</span>
-
-<span class="class"><span class="keyword">class</span> <span class="title">Hello</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span>
-        self._name = name
-
-    <span class="function"><span class="keyword">def</span> <span class="title">sayHello</span><span class="params">(self)</span>:</span>
-        print(<span class="string">"class Hello: sayHello"</span>)
-        <span class="keyword">print</span> (<span class="string">"模块名：{0}"</span>).format(__name__)
-
-<span class="comment"># 类的继承</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Hi</span><span class="params">(Hello)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span>
-        Hello.__init__(self, name)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">sayHi</span><span class="params">(self)</span>:</span>
-        print(<span class="string">"class Hi: sayHi"</span>)
-</code></pre><h3 id="stackqueue-py">stackqueue.py</h3><p>该模块为引用模块，Stack和Queue类分别实现栈和队列两种数据结构  </p>
-<p>代码：</p>
-<pre><code><span class="comment"># coding= utf-8</span>
-__author__ = <span class="string">'xiaoyong'</span>
-
-
-<span class="comment"># 栈实现</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Stack</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
-        self.stack = []
-
-    <span class="function"><span class="keyword">def</span> <span class="title">push</span><span class="params">(self, item)</span>:</span>
-        self.stack.append(item)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">pop</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.stack != []:
-            <span class="keyword">return</span> self.stack.pop(-<span class="number">1</span>)
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">top</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.stack != []:
-            <span class="keyword">return</span> self.stack[-<span class="number">1</span>]
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">length</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> len(self.stack)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">isEmpty</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.stack == []
-
-
-<span class="comment"># 队列实现</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Queue</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
-        self.queue = []
-
-    <span class="function"><span class="keyword">def</span> <span class="title">enQueue</span><span class="params">(self, item)</span>:</span>
-        self.queue.append(item)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">deQueue</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.queue != []:
-            <span class="keyword">return</span> self.queue.pop(<span class="number">0</span>)
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">head</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.queue != []:
-            <span class="keyword">return</span> self.queue[<span class="number">0</span>]
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">tail</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.queue != []:
-            <span class="keyword">return</span> self.queue[-<span class="number">1</span>]
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">length</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> len(self.queue)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">isEmpty</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.queue == []
-</code></pre><h3 id="结语">结语</h3><p>以上三个模块基本涵盖了Python所有基本语法的使用，仅作参考查询之用；如需深入学习Python相关知识，比如RESTful API开发，web2Py，Flask等框架使用，请Google之或参考相关官网。</p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/Python/"> #Python </a>
-          
-            <a href="tags/栈/"> #栈 </a>
-          
-            <a href="tags/队列/"> #队列 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1175,7 +916,7 @@ __author__ = <span class="string">'xiaoyong'</span>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1189,7 +930,7 @@ __author__ = <span class="string">'xiaoyong'</span>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-count">27</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
