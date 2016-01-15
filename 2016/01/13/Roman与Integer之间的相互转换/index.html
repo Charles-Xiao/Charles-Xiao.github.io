@@ -189,8 +189,81 @@
       
 
       
-        <p>罗马数字与阿拉伯数字之间的简单转换方法</p>
-
+        <p>罗马数字与阿拉伯数字之间的简单转换方法,首先需要了解罗马数字计数法，在这两道转换题里我们只用到了前三项规则</p>
+<ol>
+<li><p>罗马数字共有7个，即I（1）、V（5）、X（10）、L（50）、C（100）、D（500）和M（1000）</p>
+</li>
+<li><p>右加左减: 较大的罗马数字的右边记上较小的罗马数字，表示大数字加小数字; 较大的罗马数字的左边记上较小的罗马数字，表示大数字减小数字</p>
+</li>
+<li>左减有一定限制: 只有I, X, C可以放到左边当做减数使用,而且左减不能越位,I的右边只能是VX, X右边只能是LC, C的右边只能是DM; 左减数字必须为一位</li>
+<li>其他规则: 加线乘千、重复数次、右加数字不可连续超过三位、同一数码最多只能连续出现三次</li>
+</ol>
+<h3 id="Roman_to_Integer">Roman to Integer</h3><p>解题思路:  对于每一个roman字符,除了I，X，C三种情况会出现减去对应数值，其他情况都是加上该字符对应的数值; 针对I、X、C，我们可以总结发现只需要考察他们的下一位是否满足减的条件,是则减，否则加。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
+    <span class="keyword">public</span> <span class="function"><span class="keyword">int</span> <span class="title">romanToInt</span><span class="params">(String s)</span> </span>{
+        <span class="keyword">int</span> res = <span class="number">0</span>;
+        <span class="keyword">int</span> len = s.length();
+        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) {
+            <span class="keyword">char</span> tmp = s.charAt(i);
+            <span class="keyword">switch</span> (tmp) {
+                <span class="keyword">case</span> <span class="string">'I'</span>:
+                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'V' || s.charAt(i+1) == 'X')) {
+                        res -= <span class="number">1</span>;
+                        <span class="keyword">break</span>;
+                    }
+                    res += <span class="number">1</span>;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'V'</span>:
+                    res += 5;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'X'</span>:
+                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'L' || s.charAt(i+1) == 'C')) {
+                        res -= <span class="number">10</span>;
+                        <span class="keyword">break</span>;
+                    }
+                    res += <span class="number">10</span>;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'L'</span>:
+                    res += 50;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'C'</span>:
+                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'D' || s.charAt(i+1) == 'M')) {
+                        res -= <span class="number">100</span>;
+                        <span class="keyword">break</span>;
+                    }
+                    res += <span class="number">100</span>;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'D'</span>:
+                    res += 500;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'M'</span>:
+                    res += 1000;
+                    <span class="keyword">break</span>;
+                <span class="keyword">default</span>:
+                    <span class="keyword">break</span>;
+            }
+        }
+        <span class="keyword">return</span> res;
+    }
+}
+</code></pre><h3 id="Integer_To_Roman">Integer To Roman</h3><p>解题思路: 对于输入的数值进行取商处理，从大的计数单位到小的计数单位依次取商, 商则是该计数单位对应的roman字符的个数。</p>
+<pre><code>public <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
+    public <span class="built_in">String</span> intToRoman(<span class="built_in">int</span> <span class="built_in">num</span>) {
+        <span class="comment">// igr存储的是从大到小每一个基本计数单位,与roman一一对应</span>
+        <span class="built_in">String</span>[] roman = {<span class="string">"M"</span>, <span class="string">"CM"</span>, <span class="string">"D"</span>, <span class="string">"CD"</span>, <span class="string">"C"</span>, <span class="string">"XC"</span>, <span class="string">"L"</span>, <span class="string">"XL"</span>, <span class="string">"X"</span>, <span class="string">"IX"</span>, <span class="string">"V"</span>, <span class="string">"IV"</span>, <span class="string">"I"</span>};
+        <span class="built_in">int</span>[] igr = {<span class="number">1000</span>, <span class="number">900</span>, <span class="number">500</span>, <span class="number">400</span>, <span class="number">100</span>, <span class="number">90</span>, <span class="number">50</span>, <span class="number">40</span>, <span class="number">10</span>, <span class="number">9</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">1</span>};
+        StringBuilder res = <span class="keyword">new</span> StringBuilder();
+        <span class="keyword">for</span> (<span class="built_in">int</span> i=<span class="number">0</span>; i&lt;roman.length; i++) {
+            <span class="built_in">int</span> quotient = <span class="built_in">num</span> / igr[i];
+            <span class="keyword">for</span> (<span class="built_in">int</span> j=<span class="number">0</span>; j&lt;quotient; j++) {
+                res.append(roman[i]);
+            }
+            <span class="built_in">num</span> -= quotient * igr[i];
+        }
+        <span class="keyword">return</span> res.toString();
+    }
+}
+</code></pre>
       
     </div>
 
@@ -283,7 +356,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -335,7 +408,7 @@
           <div class="post-toc">
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Roman_to_Integer"><span class="nav-number">1.</span> <span class="nav-text">Roman to Integer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Integer_To_Roman"><span class="nav-number">2.</span> <span class="nav-text">Integer To Roman</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

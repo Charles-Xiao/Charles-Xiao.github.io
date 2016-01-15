@@ -148,6 +148,95 @@
           
           
             
+              <a class="post-title-link" href="../../2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/">
+                Android开发adb无法识别MX手机和部分平板设备的解决方法
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-08-16
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Android开发/">Android开发</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>在Android开发过程中，当我们把移动设备连接到计算机进行真机测试时经常会出现部分设备无法被计算机识别的情况，比如魅族系列手机和部分国产android平板电脑，这种异常情况在mac系统和win系统中都会出现，在此讲述一下解决步骤：</p>
+<p><strong>1. 将移动设备连接到计算机，确保连接无误</strong></p>
+<p><strong>2. 打开terminal窗口，在当前用户home目录下输入<code>system_profiler SPUSBDataType</code>；可以看到该计算机连接的所有usb设备信息</strong></p>
+<p><strong>3. 记录你希望计算机识别的usb设备的Vendor ID参数，例如我的mx3手机Vendor ID参数为0x18d1</strong></p>
+<p><strong>4. 在terminal中输入 <code>echo &quot;0x18d1&quot; &gt;&gt; ~/.android/adb_usb.ini</code>即可(该命令会在adb_usb.ini文件中添加一行0x18d1，使得该usb设备可以被计算机识别)</strong></p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/adb/"> #adb </a>
+          
+            <a href="../../tags/bug/"> #bug </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2015/08/01/Python基础知识实例讲解/">
                 Python基础知识实例讲解
               </a>
@@ -1285,95 +1374,6 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/24/耒阳支教之行有感/">
-                耒阳支教之行有感
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-24
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/生活随笔/">生活随笔</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/24/耒阳支教之行有感/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/24/耒阳支教之行有感/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>　　当我坐在电脑前，开始敲击键盘来记录与回忆这短短7天的支教的日子时，鲜活的记忆一样样蹦出在我的脑海中，一幕幕的上课场景、一张张鲜活的稚嫩面孔、一段段烈日下的家访历程，无一不让我怀念不已，我想，即使是多年后，当我回想起这段日子，我还是会觉得这是一段舒适惬意、欢乐轻松的日子，这是一个值得一提、值得缅怀的人生经历与选择，即便有辛苦有艰难有沮丧，但是却充满欢乐，充满收获。这种收获与欢乐，是一种给予带来的自我满足与自我实现，这种快乐不在乎我得到什么，而只在乎我能够带给孩子们什么。看着孩子们天真的脸庞，无所求，只希望孩子们能够更好；和孩子们一起玩闹嬉戏，玩小时候玩过的游戏，仿佛看见自己儿时的影子，一下子就能把思绪拉回到多年前无忧无虑的童年时光。在短短几天里与孩子们建立起来的单纯的友谊与信任弥足珍贵，这是一种我在成人世界寻找不到的关系，可以让我感动不已。<br>　　这次支教也算是机缘巧合，因为在我的脑海里之前是并没有支教这样一个想法的，而且学院的假期太晚，时间也不怎么允许；而且像我这种经常把时间安排得太满，假期里总是忙于奔波四处的人，对于支教并不具备热情，也并不热衷；况且，在没去支教之前，对于支教，并无深入的了解，反而时常在网上看到有人数落支教的弊端，所以并不认为支教是件对孩子们很有益的事情；可是当我自己切身体验完之后，发现支教并不像我想得那么简单，它的利弊也不是一两句话可以说清，以前见过微博上的各种愤青针砭支教之弊，各种文青抒发支教感想，觉得貌似有道理，却没有切身感受，有句话说“纸上得来终觉浅，绝知此事要躬行”，的确，只有经历过，才有发言权，才会有你自己的看法。利弊从来都是任何事物必备的两面，就好像一个硬币的两面，不会分离。支教要给孩纸们带去什么？我们能帮到孩纸们什么？利是什么？弊是什么？这些问题应该是始终萦绕支教队每个成员心头的头等大问！在支教的过程中，我们慢慢找到这些问题的答案，也仅是我们的答案……
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2015/05/24/耒阳支教之行有感/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/支教/"> #支教 </a>
-          
-            <a href="../../tags/耒阳/"> #耒阳 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1412,7 +1412,7 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
