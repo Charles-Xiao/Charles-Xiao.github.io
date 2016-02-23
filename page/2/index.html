@@ -294,7 +294,8 @@
 
       
         
-          <p>在Android开发过程中，当我们把移动设备连接到计算机进行真机测试时经常会出现部分设备无法被计算机识别的情况，比如魅族系列手机和部分国产android平板电脑，这种异常情况在mac系统和win系统中都会出现，在此讲述一下解决步骤：</p>
+          <h3 id="mac安装adb命令">mac安装adb命令</h3><p><code>brew install android-platform-tools</code></p>
+<h3 id="adb无法识别设备">adb无法识别设备</h3><p>在Android开发过程中，当我们把移动设备连接到计算机进行真机测试时经常会出现部分设备无法被计算机识别的情况，比如魅族系列手机和部分国产android平板电脑，这种异常情况在mac系统和win系统中都会出现，在此讲述一下解决步骤：</p>
 <p><strong>1. 将移动设备连接到计算机，确保连接无误</strong></p>
 <p><strong>2. 打开terminal窗口，在当前用户home目录下输入<code>system_profiler SPUSBDataType</code>；可以看到该计算机连接的所有usb设备信息</strong></p>
 <p><strong>3. 记录你希望计算机识别的usb设备的Vendor ID参数，例如我的mx3手机Vendor ID参数为0x18d1</strong></p>
