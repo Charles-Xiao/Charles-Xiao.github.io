@@ -711,8 +711,8 @@
           
           
             
-              <a class="post-title-link" href="2015/10/20/Java中Collections-sort与Arrays-sort两种排序方式讲解/">
-                Java中Collections.sort与Arrays.sort两种排序方式讲解
+              <a class="post-title-link" href="2015/10/20/Java容器类库的学习研究/">
+                Java容器类库的学习研究
               </a>
             
           
@@ -725,13 +725,24 @@
         </span>
 
         
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="categories/java学习笔记/">java学习笔记</a>
+
+              
+              
+
+            
+          </span>
+        
 
         
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="2015/10/20/Java中Collections-sort与Arrays-sort两种排序方式讲解/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/20/Java中Collections-sort与Arrays-sort两种排序方式讲解/"></span>
+            <a href="2015/10/20/Java容器类库的学习研究/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/20/Java容器类库的学习研究/"></span>
             </a>
           </span>
           
@@ -746,12 +757,95 @@
 
       
         
-          
+          <h3 id="Comparable和Comparator接口区别"><a href="http://fuxueliang.com/tech/2013/05/26/java-sorting-comparator-vs-comparable-tutorial/" target="_blank" rel="external">Comparable和Comparator接口区别</a></h3><ol>
+<li>Comparable &amp; Comparator 都是用来实现集合中元素的比较、排序的，只是 Comparable 是在集合内部定义的方法实现的排序，Comparator 是在集合外部实现的排序，所以，如想实现排序，就需要在集合外定义 Comparator 接口的方法或在集合内实现 Comparable 接口的方法</li>
+<li><p><strong>Comparable</strong>:一个实现了comparable接口的对象的实例可以被用于和相同类的不同实例做对比。它本身必须实现java.lang.Comparable的接口，这样它就拥有了对比的能力;java.util.Collections.sort(List) 和 java.util.Arrays.sort(Object[]) 方法被用来排列使用内在排序（natural ordering）方式的对象.</p>
+</li>
+<li><p><strong>Comparator</strong>:一个实现了comparator接口的对象能够对比不同的对象。它不能用于同一个类的不同实例的对比，但是可以用于其他的类的实例做对比。它必须实现java.util.Comparator的接口;java.util.Collections.sort(List, Comparator) 和 java.util.Arrays.sort(Object[], Comparator)方法在Comparator如果可供比较的时候会被用到.</p>
+</li>
+<li><p>两者的接口实现差异:<br> <strong>java.lang.Comparable: int compareTo(Object o1)</strong></p>
+<p> 当前对象与o1对象做对比，返回int值：  </p>
+<p> positive – 当前对象大于o1  </p>
+<p> zero – 当前对象等于o1  </p>
+<p> negative – 当前对象小于o1  </p>
+<p> <strong>java.util.Comparator: int compare(Object o1, Objecto2)</strong></p>
+<p> 用于o1与o2对象做对比，返回int值：</p>
+<p> positive – o1大于o2  </p>
+<p> zero – o1等于o2  </p>
+<p> negative – o1小于o2</p>
+</li>
+<li><p>实例:<br> 内在ID顺序排序</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Employee</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Employee</span>&gt; </span>{
+    <span class="keyword">private</span> <span class="keyword">int</span> empId;
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> <span class="keyword">int</span> age;
+
+    <span class="comment">/**
+    * Compare a given Employee with this object.
+    * If employee id of this object is 
+    * greater than the received object,
+    * then this object is greater than the other.
+    */</span>
+    <span class="keyword">public</span> <span class="keyword">int</span> compareTo(Employee o) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.empId - o.empId ;
+    }
+….
+}
+</code></pre></li>
+</ol>
+<pre><code>按照name排序
+
+    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EmpSortByName</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Employee</span>&gt;</span>{
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Employee o1, Employee o2)</span> </span>{
+            <span class="keyword">return</span> o1.getName().compareTo(o2.getName());
+        }
+    }     
+</code></pre><h3 id="Collections-sort()与Arrays-sort()">Collections.sort()与Arrays.sort()</h3><ol>
+<li><p>Arrays.sort()在其内部实现上针对数组元素的不同类型采用不同的排序方式: ①基本类型数据(int, short, long, float, double等)采用QuickSort， 而对对象类型采取MergeSort. Why? 我们知道QuickSort在统计意义上效率比MergeSort高，为何不都采用 QuickSort ？<br> Answer: 概括的说，一个是稳定性，一个是移动次数。使用不同类型的排序算法主要是由于 quick sort 是不稳定的，而 merge sort 是 stable 的。这里的 stable 是指比较相等的数据在排序之后仍然按照排序之前的前后顺序排列（保序性）。对于基本数据类型，稳定性没有意义。而对于对象类型，稳定性是比较重要的，因为对象相等的判断可能只是判断关键属性，最好保持相等对象的非关键属性的顺序与排序前一直；另外一个原因是由于合并排序相对而言比较次数比快速排序少，移动（对象引用的移动）次数比快速排序多，而对于对象来说，比较一般比移动耗时。  </p>
+<p> MergeSort:（）1）最坏时间复杂度是 O(nlgn)；（2）平均时间复杂度是 O(nlgn)；（3）空间复杂度是 O(1)。  </p>
+<p> QuickSort: （1）最坏时间复杂度是 O(n^2)；（2）平均时间复杂度是 O(nlgn)；（3）空间复杂度是 O(n)。</p>
+</li>
+</ol>
+<ol>
+<li><p>Collections.sort()主要是针对集合的排序,比如List, 其内部实现如下:</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Comparable&lt;? super T&gt;&gt; <span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(List&lt;T&gt; <span class="built_in">list</span>)</span> </span>{
+    Object[] a = <span class="built_in">list</span>.toArray();
+    Arrays.sort(a);
+    ListIterator&lt;T&gt; i = <span class="built_in">list</span>.listIterator();
+    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;a.length; j++) {
+        i.next();
+        i.<span class="built_in">set</span>((T)a[j]);
+    }
+}
+</code></pre><p> 可以看出其内部实际采用的就是Arrays.sort()</p>
+</li>
+</ol>
+<h3 id="HashMap与LinkedHashMap">HashMap与LinkedHashMap</h3><ol>
+<li><p>HashMap内部对键值对的存储结构使用的是数组+链表的形式,HashMap在存储Entry对象的时候，是根据Key的hash值判定存储到Entry[] table数组的哪一个元素表示的链表上, 也就是说Entry<key,value>对象随机地分配到某个Entry[] table数组的元素表示的链表上, HashMap内部Entry<k,v>的遍历顺序是对Entry[] table 数组，从index=0开始，依次遍历table[i]上的链表上的Entry对象;所以对HashMap遍历Entry对象的顺序和Entry对象的存储顺序之间没有任何关系.  </k,v></key,value></p>
+</li>
+<li><p>LinkedHashMap 是HashMap的子类，它可以实现对容器内Entry的存储顺序和对Entry的遍历顺序保持一致; LinkedHashMap内部使用了一个Entry类型的双向链表，用这个双向链表记录Entry的存储顺序。当需要对该Map进行遍历的时候，实际上是遍历的是这个双向链表。<br>遍历方式:  </p>
+<pre><code><span class="type">Iterator</span>&lt;<span class="type">Map</span>.<span class="type">Entry</span>&gt; <span class="keyword">iterator</span>= linkedHashMap.entrySet().<span class="keyword">iterator</span>();  
+
+<span class="keyword">while</span>(<span class="keyword">iterator</span>.hasNext())  
+{  
+    <span class="type">Map</span>.<span class="type">Entry</span> entry = <span class="keyword">iterator</span>.next();  
+    <span class="type">System</span>.<span class="keyword">out</span>.println(entry.getKey()+<span class="string">":"</span>+entry.getValue());  
+} 
+</code></pre></li>
+</ol>
+
         
       
     </div>
 
     <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/java/"> #java </a>
+          
+        </div>
       
 
       
