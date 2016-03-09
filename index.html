@@ -148,6 +148,92 @@
           
           
             
+              <a class="post-title-link" href="2016/03/09/Java多线程编程总结/">
+                Java多线程编程总结
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-03-09
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="categories/java学习笔记/">java学习笔记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2016/03/09/Java多线程编程总结/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/09/Java多线程编程总结/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>首先我们明确一点，就是我们创建的每一个Java程序都是运行在一个单独的Java虚拟机进程中的，每启动一个java程序就会同时开启一个单独对应的JVM进程(也叫做JVM实例)，然后JVM进程会去寻找main()主线程作为程序执行入口,继续执行其他线程直至结束.(Android应用程序和dalvik虚拟机的关系也一样如此)</p>
+<p><em>*</em> 常见的进程间通信方式</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/java/"> #java </a>
+          
+            <a href="tags/多线程/"> #多线程 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="2016/01/17/Html5、React-Native和Native应用开发方式的对比分析/">
                 Html5、React Native和Native应用开发方式的对比分析
               </a>
@@ -929,155 +1015,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="2015/08/30/Android应用性能优化/">
-                Android应用性能优化
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-08-30
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="categories/Android/">Android</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2015/08/30/Android应用性能优化/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/30/Android应用性能优化/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>Android手机由于其本身的后台机制和硬件特点，性能上一直被诟病，所以软件开发者对软件本身的性能优化就显得尤为重要；本文将对Android开发过程中性能优化的各个方面做一个回顾与总结。</p>
-<h2 id="Layout优化">Layout优化</h2><ul>
-<li><p><strong>include标签</strong>：该标签可以用于将布局文件中的公共部分提取出来给其它布局文件复用，从而使得布局模块化，代码轻量化</p>
-</li>
-<li><p><strong>viewstub标签</strong>：该标签与include一样用于引入布局模块，只是引入的布局默认不会扩张，既不会占用显示也不会占用位置，从而在解析layout时节省cpu和内存，其功能类似于将某个layout属性设置为android:visibility=”gone”</p>
-</li>
-<li><p><strong>merge标签</strong>：该标签在layout中会被自动忽略，从而减少一层布局嵌套，其主要有两种用法：①当布局顶结点是FrameLayout且不需要设置background或padding等属性，可以用merge代替 ②作为子布局被其他布局include时，使用merge当作该布局的顶节点来代替layout顶节点就可以减少一层嵌套</p>
-</li>
-<li><p><strong>hierarchy viewer</strong>：该工具可以方便的查看Activity的布局，各个View的属性、measure、layout、draw的时间，如果耗时较多会用红色标记，否则显示绿色</p>
-</li>
-<li><p>RelativeLayout代替LinearLayout可以减少布局层次和复杂性</p>
-</li>
-<li><p>减少不必要的inflate，尽量使用全局变量缓存View</p>
-</li>
-<li><p>尽可能为不同分辨率创建资源，以减少不必要的硬件缩放，这会降低UI的绘制速度</p>
-</li>
-</ul>
-<h2 id="Cache优化">Cache优化</h2><ul>
-<li><p><strong>ListView缓存</strong>：ListView中有一个回收器，Item滑出界面的时候View会回收到这里，需要显示新的Item的时候，就尽量重用回收器里面的View；每次在getView函数中inflate新的item之前会先判断回收器中是否有缓存的view，即判断convertView是否为null，是则inflate一个新的item View，否则重用回收器中的item。此外，ListView还使用静态的ViewHolder减少findViewById的次数</p>
-</li>
-<li><p><strong>IO缓存</strong>：在文件和网络IO中使用具有缓存策略的输入流，BufferedInputStream替代InputStream，BufferedReader替代Reader，BufferedReader替代BufferedInputStream</p>
-</li>
-<li><p><strong>data缓存(空间换时间)</strong>：①缓存数据库的查询结果，比如缓存数据库表中的数据条数，这样就可以避免多次的select count查询 ②缓存磁盘文件中需要频繁访问的数据到内存中 ③缓存耗时计算的结果</p>
-</li>
-</ul>
-<h2 id="Battery优化">Battery优化</h2><ul>
-<li>cpu的使用率和使用频率将直接或间接的影响电量的分配和使用，<strong>cpu降频</strong>可以节约电量</li>
-<li><p><strong>service优化</strong>  </p>
-<ul>
-<li>service作为一个运行在主线程中的后台服务，应该尽量避免耗时动作，而应该尽量新开线程去处理耗时动作</li>
-<li><p>监听系统广播看service是否存活，否则kill掉；降低service优先级使得系统内存吃紧时会被自动kill掉</p>
-</li>
-<li><p>使用Android提供的IntentService代替service，因为IntentService会在运行完成之后自动停止，而service需要手动调用stopService()才能停止运行</p>
-</li>
-<li><p>定时执行任务的Alarm机制：Android的定时任务有两种实现方式，Timer类和Alarm机制；Timer不适合长期后台运行的定时任务。因为每种手机都会有自己的休眠策略，Android手机就会在长时间不操作的情况下自动让CPU进入到睡眠状态，这就有可能导致Timer中的定时任务无法正常运行。而Alarm机制则不存在这种情况，它具有唤醒CPU的功能，即可以保证每次需要执行定时任务的时候CPU能正常工作。然而从Android4.4之后，Alarm任务的触发时间将会变得不准确，有可能会延迟一段时间后任务才能得到执行。这不是bug，而是系统在耗电性方面进行的优化。系统会自动检测目前有多少Alarm任务存在，然后将触发时间将近的几个任务放在一起执行，这就可以大幅度的减少CPU被唤醒的次数，从而有效延长电池的使用时间</p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="网络优化">网络优化</h2><ul>
-<li><p>异步请求网络数据，避免频繁请求数据，及时缓存数据</p>
-</li>
-<li><p>wifi传输数据比蜂窝数据更省电，所以尽量在wifi下进行数据的预加载</p>
-</li>
-<li><p>httpClient和httpUrlConnection对比： </p>
-<ol>
-<li>httpClient是apache的开源实现，API数量多，非常稳定</li>
-<li>httpUrlConnection是java自带的模块: ①可以直接支持GZIP压缩,而HttpClient虽然也支持GZIP，但要自己写代码处理 ②httpUrlConnection直接在系统层面做了缓存策略处理，加快重复请求的速度 ③API简单，体积较小,而且直接支持系统级连接池，即打开的连接不会直接关闭，在一段时间内所有程序可共用</li>
-<li>HttpURLConnection在Android2.2之前有个重大Bug，调用close()函数会影响连接池，导致连接复用失效，需要关闭keepAlive;因此在2.2之前http请求都是用httpClient，2.2之后则是使用HttpURLConnection</li>
-<li>但是!!!现在!!!Android不再推荐这两种方式！二是直接使用OKHttp这种成熟方案！支持Android 2.3及其以上版本</li>
-</ol>
-</li>
-</ul>
-<h2 id="数据结构优化">数据结构优化</h2><ul>
-<li><p><strong>ArrayList和LinkedList的选择</strong>：ArrayList根据index取值更快，LinkedList更占内存、随机插入删除更快速、扩容效率更高</p>
-</li>
-<li><p><strong>ArrayList、HashMap、LinkedHashMap、HashSet的选择</strong>：hash系列数据结构查询速度更优，ArrayList存储有序元素，HashMap为键值对数据结构，LinkedHashMap可以记住加入次序的hashMap，HashSet不允许重复元素</p>
-</li>
-<li><p><strong>HashMap、WeakHashMap选择</strong>：WeakHashMap中元素可在适当时候被系统垃圾回收器自动回收，所以适合在内存紧张时使用</p>
-</li>
-<li><p><strong>Collections.synchronizedMap和ConcurrentHashMap的选择</strong>：ConcurrentHashMap为细分锁，锁粒度更小，并发性能更优；Collections.synchronizedMap为对象锁，自己添加函数进行锁控制更方便</p>
-</li>
-<li><p><strong>Android中性能更优的数据类型</strong>：如SparseArray、SparseBooleanArray、SparseIntArray、Pair；Sparse系列的数据结构是为key为int情况的特殊处理，采用二分查找及简单的数组存储，加上不需要泛型转换的开销，相对Map来说性能更优</p>
-</li>
-</ul>
-<p><a href="http://www.trinea.cn/android/android-performance-demo/" target="_blank" rel="external">参考链接1</a>   </p>
-<p><a href="http://blog.csdn.net/jdsjlzx/article/details/44600477" target="_blank" rel="external">参考链接2</a></p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/优化/"> #优化 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1116,7 +1053,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-count">23</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1130,7 +1067,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">28</span>
+              <span class="site-state-item-count">29</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
