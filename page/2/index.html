@@ -918,7 +918,7 @@ __author__ = <span class="string">'xiaoyong'</span>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Java对象访问方式.png" class="full-image"></p>
 <p>备注:  </p>
 <ol>
-<li>年轻对象存放在年轻代，采用Minor GC; 年老对象存放在年老代，采用Full GC;JVM维护一个对象的年龄来进行对象的内存区域转移，</li>
+<li>年轻对象存放在年轻代，采用Minor GC; 长期存活的年老对象以及大对象存放在年老代，采用Full GC，回收速度慢;JVM维护一个对象的年龄来进行对象的内存区域转移，从Eden-Survivor-老年代</li>
 <li>新生代包括一个Eden区，两个survivor的from和to区（8:1:1）,负责年轻小对象的回收;Eden区存放新创建的大量对象,回收频繁,所以区域大;Survivor存放每次垃圾回收后存活的对象</li>
 </ol>
 <p>下文中将要提到的内存分配与回收主要是指对象所占据的堆内存的释放与回收。</p>
@@ -932,10 +932,16 @@ __author__ = <span class="string">'xiaoyong'</span>
 
 注意:子类的构造方法，不管这个构造方法带不带参数，默认的它都会先去寻找父类的不带参数的构造方法。如果父类没有不带参数的构造方法，那么子类必须用supper关键子来调用父类带参数的构造方法，否则编译不能通过。
 </code></pre><h2 id="java内存回收">java内存回收</h2><h3 id="垃圾回收器和finalize()方法">垃圾回收器和finalize()方法</h3><p>java中垃圾回收器可以帮助程序猿自动回收无用对象占据的内存，但它只负责释放java中创建的对象所占据的所有内存，通过某种创建对象之外的方式为对象分配的内存空间则无法被垃圾回收器回收；而且垃圾回收本身也有开销，所以如果JVM没有面临内存耗尽，它是不会去浪费资源进行垃圾回收以恢复内存的。最后我们会发现，只要程序没有濒临存储空间用完那一刻，对象占用的空间就总也得不到释放。我们可以通过代码System.gc()来主动启动一个垃圾回收器(虽然JVM不会立刻去回收)，在释放new分配内存空间之前，将会通过finalize()释放用其他方法分配的内存空间。  </p>
-<p>finalize()方法的工作原理是：一旦垃圾回收器准备好释放对象占用的存储空间，将首先调用其finalize()方法，并且在下一次垃圾回收动作发生时，才会真正回收对象占用的内存。所以如果用finalize()就能在垃圾回收时刻做一些重要的清理工作。finalize()方法用于释放用特殊方式分配的内存空间，这是因为我们可能在java中调用非java代码来分配内存，比如Android开发中调用NDK。那么，当我们调用C中的malloc()函数分配了存储空间，我们就只能用free()函数来释放这些内存，这样就需要我们在finalize()函数中用本地方法调用它。</p>
+<p>finalize()方法的工作原理是：一旦垃圾回收器准备好释放对象占用的存储空间，将首先调用并且只能调用一次该对象的finalize()方法(通过代码System.gc()实现)，并且在下一次垃圾回收动作发生时，才会真正回收对象占用的内存。所以如果我们重载finalize()方法就能在垃圾回收时刻做一些重要的清理工作或者自救该对象一次。finalize()方法用于释放用特殊方式分配的内存空间，这是因为我们可能在java中调用非java代码来分配内存，比如Android开发中调用NDK。那么，当我们调用C中的malloc()函数分配了存储空间，我们就只能用free()函数来释放这些内存，这样就需要我们在finalize()函数中用本地方法调用它。</p>
 <h3 id="对象内存状态&amp;&amp;引用形式及回收时机">对象内存状态&amp;&amp;引用形式及回收时机</h3><ul>
 <li><p>java对象内存状态转换图</p>
 <p>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/对象状态转换图.png" class="full-image"></p>
+</li>
+<li><p>如何判断java对象需要被回收？</p>
+<ul>
+<li>引用计数，被引用一次就加一，引用失效就减一；引用计数器为0则说明该对象不再可用</li>
+<li>可达性分析算法：当一个对象不再被任何的GC root对象引用链相连时说明该对象不再可用，GC root对象包括四种：方法区中常量和静态变量引用的对象，虚拟机栈中变量引用的对象，本地方法栈中引用的对象  </li>
+</ul>
 </li>
 <li><p>java对象的四种引用<br>1.<strong>强引用</strong> ：创建一个对象并把这个对象直接赋给一个变量，eg ：Person person = new Person(“sunny”); 不管系统资源有么的紧张，强引用的对象都绝对不会被回收，即使他以后不会再用到。<br>2.<strong>软引用</strong> ：通过SoftReference类实现，eg : SoftReference<person> p = new SoftReference<person>(new Person(“Rain”));内存非常紧张的时候会被回收，其他时候不会被回收，所以在使用之前要判断是否为null从而判断他是否已经被回收了。<br>3.<strong>弱引用</strong> ：通过WeakReference类实现，eg : WeakReference<person> p = new WeakReference<person>(new Person(“Rain”));不管内存是否足够，系统垃圾回收时必定会回收<br>4.<strong>虚引用</strong> ：不能单独使用，主要是用于追踪对象被垃圾回收的状态。通过PhantomReference类和引用队列ReferenceQueue类联合使用实现</person></person></person></person></p>
 </li>
@@ -953,6 +959,8 @@ __author__ = <span class="string">'xiaoyong'</span>
 <li><a href="http://blog.jobbole.com/37273/" target="_blank" rel="external">Java的内存回收机制</a></li>
 <li><a href="http://blog.csdn.net/tutngfei1129287460/article/details/7383473" target="_blank" rel="external">java内存空间详解</a></li>
 <li><a href="http://www.jayfeng.com/2016/03/11/%E7%90%86%E8%A7%A3Java%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" target="_blank" rel="external">理解Java垃圾回收机制</a></li>
+<li><a href="http://howiefh.github.io/2015/04/08/jvm-note-2/" target="_blank" rel="external">深入理解Java虚拟机</a></li>
+<li><a href="http://286.iteye.com/blog/1931174" target="_blank" rel="external">Java堆内存和JVM参数</a></li>
 </ol>
 
         
