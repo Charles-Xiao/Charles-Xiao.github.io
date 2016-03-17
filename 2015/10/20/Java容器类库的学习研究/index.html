@@ -253,10 +253,15 @@
 </code></pre><p> 可以看出其内部实际采用的就是Arrays.sort()</p>
 </li>
 </ol>
-<h3 id="HashMap与LinkedHashMap">HashMap与LinkedHashMap</h3><ol>
-<li><p>HashMap内部对键值对的存储结构使用的是数组+链表的形式,HashMap在存储Entry对象的时候，是根据Key的hash值判定存储到Entry[] table数组的哪一个元素表示的链表上, 也就是说Entry<key,value>对象随机地分配到某个Entry[] table数组的元素表示的链表上, HashMap内部Entry<k,v>的遍历顺序是对Entry[] table 数组，从index=0开始，依次遍历table[i]上的链表上的Entry对象;所以对HashMap遍历Entry对象的顺序和Entry对象的存储顺序之间没有任何关系.  </k,v></key,value></p>
+<h3 id="HashMap与LinkedHashMap，TreeMap">HashMap与LinkedHashMap，TreeMap</h3><ol>
+<li><p>HashMap内部对键值对的存储结构使用的是数组+链表的形式,HashMap在存储Entry对象的时候，首先根据Key的hash值判定存储到Entry[] table数组的哪一个元素对应的链表上O(1),然后调用Equals方法去遍历链表比较key值，如果找到则更新并返回旧址，否则将新的Entry加入到该链表头部；也就是说Entry<key,value>对象随机地分配到某个Entry[] table数组的元素表示的链表上, HashMap内部Entry<k,v>的遍历顺序是对Entry[] table 数组，从index=0开始，依次遍历table[i]上的链表上的Entry对象;所以对HashMap遍历Entry对象的顺序和Entry对象的存储顺序之间没有任何关系.HashMap允许null键插入，其内部会将null存到table[0]中进行处理. 当map中元素达到16*0.75=12时，因为链表长度可能很长导致查找效率降低，hashmap会对原来的所有元素重新进行hash,容量变为原来的2倍，重新hash时链表顺序会被反转，可以避免尾部遍历.<a href="http://www.xuebuyuan.com/2231227.html" target="_blank" rel="external">HashMap</a>; 在HashMap调整大小时会出现条件竞争，也就是多个线程同时来调整大小，出现死循环.Map的key值应该使用不可变对象，以防put和get的时候对象发生变化从而导致hashcode变化，取不到正确的对象</k,v></key,value></p>
+<ul>
+<li>HashMap在迭代器循环遍历时如果其他线程对该map进行结构上的更改(比如进行add和remove元素操作)会导致ConcurrrentModificationEaception</li>
+<li>HashMap也可以声明为同步的，使用Map m = Collections.synchronizeMap(hashMap);</li>
+<li>内部结构图：  </li>
+</ul>
 </li>
-<li><p>LinkedHashMap 是HashMap的子类，它可以实现对容器内Entry的存储顺序和对Entry的遍历顺序保持一致; LinkedHashMap内部使用了一个Entry类型的双向链表，用这个双向链表记录Entry的存储顺序。当需要对该Map进行遍历的时候，实际上是遍历的是这个双向链表。<br>遍历方式:  </p>
+<li><p>LinkedHashMap是HashMap的子类，它可以实现对容器内Entry的存储顺序和对Entry的遍历顺序保持一致; LinkedHashMap内部使用了一个Entry类型的双向链表，用这个双向链表记录Entry的存储顺序。当需要对该Map进行遍历的时候，实际上是遍历的是这个双向链表。<br>遍历方式:  </p>
 <pre><code><span class="type">Iterator</span>&lt;<span class="type">Map</span>.<span class="type">Entry</span>&gt; <span class="keyword">iterator</span>= linkedHashMap.entrySet().<span class="keyword">iterator</span>();  
 
 <span class="keyword">while</span>(<span class="keyword">iterator</span>.hasNext())  
@@ -265,6 +270,18 @@
     <span class="type">System</span>.<span class="keyword">out</span>.println(entry.getKey()+<span class="string">":"</span>+entry.getValue());  
 } 
 </code></pre></li>
+<li>TreeMap也可以保存元素的排列顺序</li>
+</ol>
+<h3 id="HashTable，Hashset和ConcurrentHashMap">HashTable，Hashset和ConcurrentHashMap</h3><ol>
+<li>HashTable实现Map接口(和HashMap一样)不允许null键的存在，他是一个synchronized的map,因为内部的put,get方法进行了同步所以导致效率降低,线程安全性强于ConcurrentHashMap</li>
+<li>HashSet实现set接口，不允许重复元素的存在，每次add之前会先调用hashcode和equals方法去判断该对象是否已经存在，已存在则返回false;存取速度没有HashMap快</li>
+<li>ConcurrentHashMap是一个Java5以后才提供的同步容器,其内部实现采用二次hash,分区同步的方式，内部默认维护一个包含16个segment对象的数组,每个数组对象又对应一个桶数组(相当于一个HashMap)，每个桶数组对象又维护着一个HashEntry链表;对于put的hashcode相同的key会出现同步阻塞，因为它会将当前hashcode对应的segment锁住，但是hashcode不相同的key插入时是不会出现同步阻塞的，这样相对于HashTable(同一时间点，只能有一个线程持有锁，也就是说在同一时间点，只能有一个线程能访问容器)就可以大大提高效率，提高了并发性，相当于16个线程同时操作。<ul>
+<li>ConcurrentHashMap 针对读操作做了大量的优化。通过 HashEntry 对象的不变性和用 volatile 型变量协调线程间的内存可见性，使得 大多数时候，读操作不需要加锁就可以正确获得值</li>
+</ul>
+</li>
+</ol>
+<h3 id="ArrayList，CopyOnWriteArrayList和LinkedList">ArrayList，CopyOnWriteArrayList和LinkedList</h3><ol>
+<li>ArrayList：List list = Collections.synchronizeList(arrayList);</li>
 </ol>
 
       
@@ -409,7 +426,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Comparable和Comparator接口区别"><span class="nav-number">1.</span> <span class="nav-text">Comparable和Comparator接口区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Collections-sort()与Arrays-sort()"><span class="nav-number">2.</span> <span class="nav-text">Collections.sort()与Arrays.sort()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap与LinkedHashMap"><span class="nav-number">3.</span> <span class="nav-text">HashMap与LinkedHashMap</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Comparable和Comparator接口区别"><span class="nav-number">1.</span> <span class="nav-text">Comparable和Comparator接口区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Collections-sort()与Arrays-sort()"><span class="nav-number">2.</span> <span class="nav-text">Collections.sort()与Arrays.sort()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap与LinkedHashMap，TreeMap"><span class="nav-number">3.</span> <span class="nav-text">HashMap与LinkedHashMap，TreeMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HashTable，Hashset和ConcurrentHashMap"><span class="nav-number">4.</span> <span class="nav-text">HashTable，Hashset和ConcurrentHashMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ArrayList，CopyOnWriteArrayList和LinkedList"><span class="nav-number">5.</span> <span class="nav-text">ArrayList，CopyOnWriteArrayList和LinkedList</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
