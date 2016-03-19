@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="Mac," />
+  <meta name="keywords" content="databse," />
 
 
 
@@ -43,7 +43,7 @@
   </script>
 
 
-  <title> Mac常用快捷键和Tips // CharlesXiao‘s Blog </title>
+  <title> 数据库重难点集锦 // CharlesXiao‘s Blog </title>
 </head>
 
 <body>
@@ -146,7 +146,7 @@
           
           
             
-              Mac常用快捷键和Tips
+              数据库重难点集锦
             
           
         </h1>
@@ -154,14 +154,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-05-15
+          发表于 2015-03-19
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="../../../../categories/Mac系统/">Mac系统</a>
+              <a href="../../../../categories/数据库/">数据库</a>
 
               
               
@@ -175,7 +175,7 @@
             <span class="post-comments-count">
             &nbsp; | &nbsp;
             <a href="#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/15/Mac常用快捷键和Tips/"></span>
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/19/数据库重难点集锦/"></span>
             </a>
           </span>
           
@@ -189,25 +189,18 @@
       
 
       
-        <p>在Mac系统中学会使用常用快捷键可以大大提高效率，以下为Mac系统中常用的快捷键和在Elipse开发中的常用快捷键(包含Mac和Win两个版本)。</p>
-<h3 id="Mac系统中常用快捷键">Mac系统中常用快捷键</h3><pre><code>cmd+alt+<span class="number">1</span>  <span class="comment">--- 自动整理当前文件夹中文件</span>
-ctrl+<span class="constant">space</span> <span class="comment">---  启动spotlight全局搜索</span>
-cmd+<span class="constant">space</span> <span class="comment">--- 切换输入法</span>
-cmd+向上/向下箭头 <span class="comment">--- 返回上级文件夹/打开当前文件夹或文件</span>
-cmd+T <span class="comment">--- 新建各种窗口(包括terminal窗口、finder窗口、chrome tab等)</span>
-cmd+shift+{/} <span class="comment">--- 切换tab(包括finder、terminal等窗口tab)</span>
-cmd+shift+<span class="number">3</span> <span class="comment">--- 屏幕截屏</span>
-cmd+shift+<span class="number">4</span> <span class="comment">---选取区域截图</span>
-cmd+<span class="built_in">delete</span> <span class="comment">--- 删除某个文件</span>
-enter <span class="comment">--- 修改文件名(类似于win中的F2)</span>
-cmd+I <span class="comment">--- 查看文件详细属性</span>
-cmd+option+esc <span class="comment">--- 打开进程管理窗口</span>
-</code></pre><h3 id="Mac常用设置方法">Mac常用设置方法</h3><h4 id="设置Eclipse中package_explorer窗口中项目列表字体大小">设置Eclipse中package explorer窗口中项目列表字体大小</h4><ul>
-<li><p>Step1: 下载安装TinkerTool的软件  </p>
+        <h3 id="常见的Hash算法和一致性哈希">常见的Hash算法和一致性哈希</h3><ul>
+<li><p>线性哈希，平方取中法，随机数法，按位分割求和法  </p>
 </li>
-<li><p>Step2: 点击fonts，修改Help tags的字体大小</p>
+<li><p><strong>MD5和SHA</strong>这两种单向加密算法都是基于hash算法，前者产生128位的散列值，后者产生160位的散列值；两者都存在不同输入的散列值相同的情况，但是概率很低，为了防止被彩虹表破解，可以考虑加入Salt  </p>
+</li>
+<li><p>Hash算法主要用于文件校验、数字签名、鉴权协议等  </p>
+</li>
+<li><p><strong>一致性哈希算法</strong>主要应用在cache系统中，常用的hash(object)%N算法会计算object 的hash值，然后对N取模得到余数i，该Object就会被映射到编号为i的cache上;那么当增加或者减少n的值时会导致所有的n个对象的映射全部发生改变，但是一致性哈希算法却只需要重新hash K/n个元素，为什么呢？？？; 因为一致性哈希的内部原理是将Object和cache都使用同一种hash算法hash到同一个数值空间上，该空间为一个首尾相接的圆环；然后如何将Object映射到cache呢？顺着顺时针方向,将每一个Object映射到下一个最邻近的cache,这样当新增一个cache时，只需要将原本映射到下一个cache上的Object部分映射修改到新增的cache上；当减少cache时就将之前映射到该cache的Object都映射到下一个cache上.  </p>
 </li>
 </ul>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_pre.png" class="full-image"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_next.png" class="full-image"></p>
 
       
     </div>
@@ -216,7 +209,7 @@ cmd+option+esc <span class="comment">--- 打开进程管理窗口</span>
       
         <div class="post-tags">
           
-            <a href="../../../../tags/Mac/"> #Mac </a>
+            <a href="../../../../tags/databse/"> #databse </a>
           
         </div>
       
@@ -225,13 +218,11 @@ cmd+option+esc <span class="comment">--- 打开进程管理窗口</span>
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="../../24/读《1988-我想和这个世界谈谈》/">读《1988-我想和这个世界谈谈》</a>
+              <a href="../../../05/12/如何阅读一本书/">如何阅读一本书</a>
             
           </div>
 
           <div class="post-nav-next post-nav-item">
-            
-              <a href="../Mac设置Path环境变量(adb+NDK+sdk)/">Mac设置环境变量(adb+NDK+sdk)</a>
             
           </div>
         </div>
@@ -247,8 +238,8 @@ cmd+option+esc <span class="comment">--- 打开进程管理窗口</span>
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/05/15/Mac常用快捷键和Tips/"
-               data-title="Mac常用快捷键和Tips" data-url="https://charles-xiao.github.io/2015/05/15/Mac常用快捷键和Tips/">
+          <div class="ds-thread" data-thread-key="2015/03/19/数据库重难点集锦/"
+               data-title="数据库重难点集锦" data-url="https://charles-xiao.github.io/2015/03/19/数据库重难点集锦/">
           </div>
         
       </div>
@@ -351,7 +342,7 @@ cmd+option+esc <span class="comment">--- 打开进程管理窗口</span>
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mac系统中常用快捷键"><span class="nav-number">1.</span> <span class="nav-text">Mac系统中常用快捷键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mac常用设置方法"><span class="nav-number">2.</span> <span class="nav-text">Mac常用设置方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#设置Eclipse中package_explorer窗口中项目列表字体大小"><span class="nav-number">2.1.</span> <span class="nav-text">设置Eclipse中package explorer窗口中项目列表字体大小</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的Hash算法和一致性哈希"><span class="nav-number">1.</span> <span class="nav-text">常见的Hash算法和一致性哈希</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
