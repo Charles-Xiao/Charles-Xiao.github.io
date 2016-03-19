@@ -148,95 +148,6 @@
           
           
             
-              <a class="post-title-link" href="../../2015/06/12/彩云之南/">
-                彩云之南
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-06-12
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/在路上/">在路上</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/06/12/彩云之南/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/12/彩云之南/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>筹划已久的毕业旅行终于在6月初拉开帷幕~~~第一站便是为期9天的云南之行(6.3-6.11)。从昆明滇池到大理双廊，登苍山游洱海，沿三十公里洱海线骑行小普陀；夜宿丽江束河，古镇却多喧嚣；颠簸数百里山路只为一睹泸沽湖美貌，深入藏区一探香格里拉峡谷幽深。一路下来，各种奔波，各种惊艳，也遇上各种趣闻趣事趣人，的确不虚此行。
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2015/06/12/彩云之南/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/云南攻略/"> #云南攻略 </a>
-          
-            <a href="../../tags/毕业游记/"> #毕业游记 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
               <a class="post-title-link" href="../../2015/05/27/java重难点知识集锦/">
                 java重难点知识集锦
               </a>
@@ -625,6 +536,100 @@
         <div class="post-tags">
           
             <a href="../../tags/阅读/"> #阅读 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/05/19/数据库重难点集锦/">
+                数据库重难点集锦
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-19
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/数据库/">数据库</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/05/19/数据库重难点集锦/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/19/数据库重难点集锦/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="常见的Hash算法和一致性哈希">常见的Hash算法和一致性哈希</h3><ul>
+<li><p>线性哈希，平方取中法，随机数法，按位分割求和法  </p>
+</li>
+<li><p><strong>MD5和SHA</strong>这两种单向加密算法都是基于hash算法，前者产生128位的散列值，后者产生160位的散列值；两者都存在不同输入的散列值相同的情况，但是概率很低，为了防止被彩虹表破解，可以考虑加入Salt  </p>
+</li>
+<li><p>Hash算法主要用于文件校验、数字签名、鉴权协议等  </p>
+</li>
+<li><p><strong>一致性哈希算法</strong>主要应用在cache系统中，常用的hash(object)%N算法会计算object 的hash值，然后对N取模得到余数i，该Object就会被映射到编号为i的cache上;那么当增加或者减少n的值时会导致所有的n个对象的映射全部发生改变，但是一致性哈希算法却只需要重新hash K/n个元素，为什么呢？？？; 因为一致性哈希的内部原理是将Object和cache都使用同一种hash算法hash到同一个数值空间上，该空间为一个首尾相接的圆环；然后如何将Object映射到cache呢？顺着顺时针方向,将每一个Object映射到下一个最邻近的cache,这样当新增一个cache时，只需要将原本映射到下一个cache上的Object部分映射修改到新增的cache上；当减少cache时就将之前映射到该cache的Object都映射到下一个cache上.  </p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_pre.png" class="full-image"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_next.png" class="full-image"></p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/databse/"> #databse </a>
           
         </div>
       
