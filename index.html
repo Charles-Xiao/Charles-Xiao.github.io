@@ -148,6 +148,92 @@
           
           
             
+              <a class="post-title-link" href="2016/03/10/Linux操作和计算机网络/">
+                Linux操作和计算机网络
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-03-10
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="categories/编程知识/">编程知识</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2016/03/10/Linux操作和计算机网络/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/10/Linux操作和计算机网络/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="Http/Https/UDP/TCP/Socket区别与联系">Http/Https/UDP/TCP/Socket区别与联系</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/http0.png" class="full-image"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/http1.png" class="full-image"></p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/Linux/"> #Linux </a>
+          
+            <a href="tags/Network/"> #Network </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="2016/03/09/Java多线程编程总结/">
                 Java多进程和多线程编程总结
               </a>
@@ -208,7 +294,75 @@
 <li>“共享变量”：</li>
 <li>“管道流”：</li>
 </ol>
-<h3 id="线程的四种创建方式">线程的四种创建方式</h3><h3 id="线程的状态变化">线程的状态变化</h3><h3 id="多线程的同步机制">多线程的同步机制</h3>
+<h3 id="线程的四种创建方式">线程的四种创建方式</h3><ol>
+<li>定义<strong>Thread类</strong>的子类，并重写该类的run()方法；创建Thread子类的实例，即创建了线程对象，调用线程对象的start()方法来启动该线程</li>
+<li>定义<strong>Runnable接口</strong>的实现类，并重写该接口的run()方法，创建Runnable实现类的实例，并以此实例作为Thread的参数来创建Thread对象，该Thread对象才是真正的线程对象；然后调用线程对象的start()方法来启动线程</li>
+<li><p>创建<strong>Callable接口</strong>的实现类，并实现call()方法，该call()方法有返回值；创建Callable实现类的实例，使用FutureTask类来包装Callable对象，该FutureTask对象封装了该Callable对象的call()方法的返回值，使用FutureTask对象作为Thread对象的target创建并启动新线程，调用FutureTask对象的get()方法来获得子线程执行结束后的返回值</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> MyCallableTest <span class="keyword">implements</span> Callable&lt;Integer&gt;{
+    <span class="comment">// 实现call方法，作为线程执行体</span>
+    <span class="keyword">public</span> Integer <span class="keyword">call</span>(){
+        <span class="keyword">int</span> i = <span class="number">0</span>;
+        <span class="keyword">for</span> ( ; i &lt; <span class="number">100</span> ; i++ ){
+            System.out.<span class="keyword">println</span>(Thread.currentThread().getName()+ <span class="string">"\t"</span> + i);
+        }
+        <span class="comment">// call()方法可以有返回值，而且可以抛出异常</span>
+        <span class="keyword">return</span> i;
+    }
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) {
+        <span class="comment">// 创建Callable对象</span>
+        MyCallableTest myCallableTest = <span class="keyword">new</span> MyCallableTest();
+        <span class="comment">// 使用FutureTask来包装Callable对象</span>
+        FutureTask&lt;Integer&gt; <span class="keyword">task</span> = <span class="keyword">new</span> FutureTask&lt;Integer&gt;(myCallableTest);
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">100</span> ; i++){
+            System.out.<span class="keyword">println</span>(Thread.currentThread().getName()+ <span class="string">" \t"</span> + i);
+            <span class="keyword">if</span> (i == <span class="number">20</span>){
+                <span class="comment">// 实质还是以Callable对象来创建、并启动线程</span>
+                <span class="keyword">new</span> Thread(<span class="keyword">task</span> , <span class="string">"callable"</span>).start();
+            }
+        }
+        <span class="keyword">try</span>{
+            <span class="comment">// 获取线程返回值</span>
+            System.out.<span class="keyword">println</span>(<span class="string">"callable返回值："</span> + <span class="keyword">task</span>.get());
+        }
+        <span class="keyword">catch</span> (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+}
+</code></pre></li>
+<li><p><strong>线程池</strong>: </p>
+<ul>
+<li>线程池的好处在于可以更好地控制并发线程数目，提高资源利用率并防止阻塞</li>
+<li>可以更好地重用线程, 减少线程创建和销毁带来的系统开销,可以设置线程定时定期执行</li>
+<li>核心构造函数ThreadPoolExecutor,可以在参数中设置核心池大小，最大线程数等</li>
+<li>ExecutorService接口用于实现和管理线程池,其生命周期包括三种状态：运行、关闭、终止。</li>
+<li><p>四种Executors接口提供的通过ThreadFactory新建的线程池</p>
+<ol>
+<li><p>newFixedThreadPool(): 固定数目线程池，有新任务到达时就创建线程，直到达到线程池最大大小为止，有异常则补充</p>
+<pre><code>ExecutorService threadPool = Executor.newFixedThreadPool(<span class="number">3</span>);
+Runnable r = <span class="keyword">new</span> Runnable() {
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
+
+    }
+};
+<span class="comment">// 参数可以是Thread以及Runnable对象</span>
+threadPool.execute(r);
+</code></pre></li>
+<li><p>newCachedThreadPool：缓存型线程池，新任务到达则新建线程</p>
+</li>
+<li>newSingleThreadExecutor: </li>
+<li>newScheduledThreadPool: </li>
+</ol>
+<ul>
+<li>自定义线程池</li>
+<li>线程池的风险</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="线程的状态变化">线程的状态变化</h3><h3 id="多线程的同步机制">多线程的同步机制</h3>
         
       
     </div>
@@ -935,14 +1089,19 @@
     <span class="type">Map</span>.<span class="type">Entry</span> entry = <span class="keyword">iterator</span>.next();  
     <span class="type">System</span>.<span class="keyword">out</span>.println(entry.getKey()+<span class="string">":"</span>+entry.getValue());  
 } 
+
+<span class="keyword">for</span>(<span class="type">Entry</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; entry : linkedHashMap.entrySet()) {
+    <span class="type">System</span>.<span class="keyword">out</span>.println(entry.getKey() + <span class="string">": "</span> + entry.getValue());
+}
 </code></pre></li>
-<li>TreeMap也可以保存元素的排列顺序</li>
+<li><p>TreeMap也可以保存元素的排列顺序</p>
+</li>
 </ol>
 <h3 id="HashTable，Hashset和ConcurrentHashMap">HashTable，Hashset和ConcurrentHashMap</h3><ol>
 <li>HashTable实现Map接口(和HashMap一样)不允许null键的存在，他是一个synchronized的map,因为内部的put,get方法进行了同步所以导致效率降低,线程安全性强于ConcurrentHashMap</li>
 <li>HashSet实现set接口，不允许重复元素的存在，每次add之前会先调用hashcode和equals方法去判断该对象是否已经存在，已存在则返回false;存取速度没有HashMap快</li>
 <li>ConcurrentHashMap是一个Java5以后才提供的同步容器,其内部实现采用二次hash,分区同步的方式，内部默认维护一个包含16个segment对象的数组,每个数组对象又对应一个桶数组(相当于一个HashMap)，每个桶数组对象又维护着一个HashEntry链表;对于put的hashcode相同的key会出现同步阻塞，因为它会将当前hashcode对应的segment锁住，但是hashcode不相同的key插入时是不会出现同步阻塞的，这样相对于HashTable(同一时间点，只能有一个线程持有锁，也就是说在同一时间点，只能有一个线程能访问容器)就可以大大提高效率，提高了并发性，相当于16个线程同时操作。<ul>
-<li>ConcurrentHashMap 针对读操作做了大量的优化。通过 HashEntry 对象的不变性和用 volatile 型变量协调线程间的内存可见性，使得 大多数时候，读操作不需要加锁就可以正确获得值</li>
+<li>ConcurrentHashMap 针对读操作做了大量的优化。通过 HashEntry 对象的不变性和用 volatile 型变量协调线程间的内存可见性，使得大多数时候，读操作不需要加锁就可以正确获得值</li>
 </ul>
 </li>
 </ol>
@@ -974,81 +1133,11 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="2015/09/04/OpenWrt/">
-                OpenWrt
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-09-04
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2015/09/04/OpenWrt/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/04/OpenWrt/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>Power consumption will be higher if a USB device is attached to its USB port!  </p>
-<p>scp command：  </p>
-<p>scp libmysqlclient_5.1.73-1_ar71xx.ipk root@192.168.1.1:  </p>
-<p><strong>scp error: Host key verification failed</strong></p>
-<p>cd ~/.ssh<br>rm known_hosts</p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
   <div class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="page-number" href="page/3/">3</a><a class="extend next" rel="next" href="page/2/">&raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="page/4/">4</a><a class="extend next" rel="next" href="page/2/">&raquo;</a>
   </div>
 
 
@@ -1082,21 +1171,21 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">24</span>
+              <span class="site-state-item-count">26</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">30</span>
+              <span class="site-state-item-count">33</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

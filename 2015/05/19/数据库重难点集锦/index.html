@@ -201,6 +201,37 @@
 </ul>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_pre.png" class="full-image"></p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_next.png" class="full-image"></p>
+<h3 id="数据库的事务、索引、范式和存储过程概念以及优缺点">数据库的事务、索引、范式和存储过程概念以及优缺点</h3><ol>
+<li><p><strong>事务</strong>：事务是数据库操作中的不可分割的逻辑单元,一个事务中的所有操作语句要么作为一个整体被执行，要么整体不被执行</p>
+<ul>
+<li>原子性：要么操作序列中全部语句都执行，要么全部不被执行,不可分割; 也就是说当事务的执行序列中某个语句执行错误，会回滚到该事务未执行时的状态</li>
+<li>一致性：事务执行之后数据库从一个一致性状态转化到另一个一致性状态</li>
+<li>隔离性：多个事务并行执行时互相之间不会影响</li>
+<li>永久性：事务执行之后会对数据库内容产生永久性影响</li>
+</ul>
+</li>
+<li><p><strong>范式</strong></p>
+<ul>
+<li>第一范式：数据库表里边的每一列都是不可分割的原子性基本数据项</li>
+<li>第二范式：数据库表里边每一个非关键字段都和主键完全依赖，只有表的候选键有多个属性时才会出现部分依赖</li>
+<li>第三范式：数据库里边每一个非关键字段都和主键直接相关，而不能是间接相关(传递依赖)</li>
+<li>BC范式：数据里边每一列既不部分依赖于任何候选键也不传递依赖于任何候选键；一个关系满足BCNF则一定满足第三范式</li>
+</ul>
+</li>
+<li><p><strong>索引</strong></p>
+</li>
+<li><p><strong>存储过程</strong></p>
+<ul>
+<li>它是一组存储在数据库中的编译后的SQL语句集，可以接受参数以及返回值，也可以包括程序流，查询语句等</li>
+<li>正常情况下,我们在code中写好SQL语句,连接数据库，SQL语句会被发送到服务器然后编译优化，数据库引擎执行编译后的查询语句，最后将查询结果返回给客户端；那么如果我们使用存储过程就可以省掉编译优化的过程，而且存储过程存储在database中，可以减少网络流量和传输时间；而且可以对存储过程授予制定权限，从而保证数据库操作安全</li>
+</ul>
+</li>
+<li><p><strong>View</strong></p>
+<ul>
+<li>视图是一种通过自定义查询语句去查询筛选数据库表中的数据然后呈现给用户的一种动态生成的虚拟表,他和表一样包含行列数据，但是来自于其引用的表；其优点主要是可以保证数据库安全性以及筛选隐藏部分重要数据;View与Table之间的关系类似于MVC，在View中对数据进行修改会影响到Table中的数据，在Table中进行数据修改同样会显示到View，因为他们用的是同一份数据。</li>
+</ul>
+</li>
+</ol>
 
       
     </div>
@@ -218,7 +249,7 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="../../24/读《1988-我想和这个世界谈谈》/">读《1988-我想和这个世界谈谈》</a>
+              <a href="../../21/常见设计模式实例讲解/">常见设计模式实例讲解</a>
             
           </div>
 
@@ -292,21 +323,21 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">24</span>
+              <span class="site-state-item-count">26</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="../../../..//categories">
-              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">30</span>
+              <span class="site-state-item-count">33</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -344,7 +375,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的Hash算法和一致性哈希"><span class="nav-number">1.</span> <span class="nav-text">常见的Hash算法和一致性哈希</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的Hash算法和一致性哈希"><span class="nav-number">1.</span> <span class="nav-text">常见的Hash算法和一致性哈希</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库的事务、索引、范式和存储过程概念以及优缺点"><span class="nav-number">2.</span> <span class="nav-text">数据库的事务、索引、范式和存储过程概念以及优缺点</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
