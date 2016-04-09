@@ -235,6 +235,191 @@
           
           
             
+              <a class="post-title-link" href="../../2015/04/08/实习项目总结/">
+                实习项目总结
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-04-08
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/04/08/实习项目总结/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/08/实习项目总结/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="Kactus">Kactus</h3><ol>
+<li>ECO餐厅食用油回收系统<ul>
+<li>Android端缓存机制的实现，采用二级缓存，从LRUcache到DiskCache，分析http请求过程的请求头内容来确定cache-control策略</li>
+<li>http从同步的主线程发送get请求优化为异步的子线程发送post请求, 加强了数据传输的安全性和长度，解决了应用程序无响应的应用体验问题; httpClient和HttpUrlConnection的区别对比</li>
+</ul>
+<ol>
+<li>异步的get和post请求实现过程(HttpUrlConnection)</li>
+</ol>
+</li>
+</ol>
+<ol>
+<li>赛马会XML数据处理系统<ul>
+<li>采用Java WebSocket编程取代传统的非实时http请求连接模式</li>
+<li>整个项目从简单的多线程优化到采用线程池来实现xml数据文件的获取</li>
+<li>多线程引起的资源竞争问题解决过程<ol>
+<li>同时写一个文件时必须加上Synchronized关键字保证读写，写写互斥</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="Baidu">Baidu</h3><ol>
+<li><p>Duwear项目短信管理模块: 目的是将手机短信库的变化情况通知到wear端</p>
+<ol>
+<li><strong>SMSObserver</strong>继承ContentProvider类实现观察者模式，注册了一个短信数据库的观察者，发生变化该类都会被通知；在重载函数onChange中进行操作比对判断数据库变化情况，只知道变化，但是不知道具体操作？如何判断用户是标为已读还是删除，新建短信</li>
+<li><strong>SmsReceivedListener接口</strong>：两个回调函数，作为一个接口参数传到SMSObserver的构造函数中，然后一旦判断是新短信还是短信已读，就调用其回调函数</li>
+<li><strong>SmsRpcService类</strong>：继承自上边的接口，在回调函数中将这个操作判断出来发送给手表</li>
+<li><p><strong>SmsUtils</strong>: 4个函数，查询短信数据库，标为已读的数据库操作函数</p>
+</li>
+<li><p>SMSObserver类中的具体的判断方式和优化过程</p>
+<ul>
+<li>从维护所有信息的set到只维护未读信息的内容，信息实体占用内存很大，内存优化；</li>
+<li>ArrayList到HashSet对比与区别：防止出现重复信息，去重速度很快因为使用HashTable中的hashCode()以及equals进行查找去重；多次读取unreadSet并对两个set进行比对，removeAll和AddAll求补集并集来比对两个未读信息集合，</li>
+<li>SMS短信对象中hashcode和equals方法的同时重载</li>
+<li>java集合中的浅复制和深复制，clone集合不影响原集合</li>
+<li>定时优化从Timer到PendingIntent</li>
+</ul>
+</li>
+<li><p><strong>工厂模式</strong>生产手表View：需要生成许多不同的CardView，利用CardFactory中的BuildPage函数<br>简单工厂模式和工厂方法模式，以及抽象工厂模式</p>
+</li>
+</ol>
+</li>
+<li><p>百度锁屏项目</p>
+<ul>
+<li>View的自定义绘制与组合</li>
+</ul>
+</li>
+</ol>
+<h3 id="佳学">佳学</h3><ol>
+<li><p><strong>网络请求交互</strong>：Volley网络请求以及客户端解析json(两段实习都有用到这个做异步网络请求)；volley的实现原理和优点</p>
+</li>
+<li><p><strong>Android AsynTask实现多任务下载管理</strong>:</p>
+</li>
+</ol>
+<pre><code>    private class <span class="type">DemoAsyncTask</span> extends <span class="type">AsyncTask</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>, <span class="type">Bitmap</span>&gt; {
+        @<span class="type">Override</span>
+        protected <span class="type">void</span> onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @<span class="type">Override</span>
+        protected <span class="type">Bitmap</span> doInBackground(<span class="type">String</span>... params) {
+            <span class="keyword">return</span> null;
+        }   
+
+        @<span class="type">Override</span>
+        protected <span class="type">void</span> onPostExecute(<span class="type">Bitmap</span> <span class="literal">result</span>) {
+            super.onPostExecute(<span class="literal">result</span>);
+        }
+
+        @<span class="type">Override</span>
+        protected <span class="type">void</span> onProgressUpdate(<span class="type">Integer</span>... progress) {
+            super.onProgressUpdate(progress);
+        }
+
+        @<span class="type">Override</span>
+        protected <span class="type">void</span> onCancelled() {
+            super.onCancelled();
+        }
+    }
+
+
+* **<span class="type">AsyncTask</span>&lt;<span class="type">String</span>,<span class="type">Integer</span>,<span class="type">Bitmap</span>&gt;参数解析**
+
+    <span class="number">1</span>. params 启动任务执行的输入参数，比如<span class="type">HTTP</span>请求的<span class="type">URL</span>(doInBackground函数的参数类型)
+
+    <span class="number">2</span>. progress 后台任务执行的百分比（onProgressUpdate函数的参数类型）
+
+    <span class="number">3</span>. <span class="literal">result</span> 后台执行任务最终返回的结果，比如<span class="type">String</span>(doInBackground返回的参数类型)
+
+    <span class="number">4</span>. new <span class="type">AsynTask</span>.execute(url);
+
+* 使用<span class="type">AsyncTask</span>类，以下是几条必须遵守的准则：<span class="type">Task</span>的实例必须在<span class="type">UI</span> thread中创建; execute方法必须在<span class="type">UI</span> thread中调用
+
+
+* **execute方法执行的整个流程**
+    <span class="number">1</span>. <span class="type">AsyncTask</span>的本质是一个静态的线程池，<span class="type">AsyncTask</span>在构造函数中新建一个继承<span class="type">Callable</span>接口的<span class="type">WorkerRunnable</span>类对象，重载call方法，在call方法中封装了doInBackground中的异步任务；然后新建<span class="type">FutureTask</span>接受<span class="type">WorkerRunnable</span>作为参数，提交到线程池执行；在<span class="type">FutureTask</span>的重载done函数中接收线程执行的返回结果并定义任务状态变化后的操作（包括失败和成功），发送message给<span class="type">UI</span>线程
+
+    <span class="number">2</span>. <span class="type">AsyncTask</span>派生出的子类可以实现不同的异步任务，这些任务都是提交到静态的线程池中执行; 线程池中的工作线程执行doInBackground(mParams)方法执行异步任务
+
+    <span class="number">3</span>. 当任务状态改变(例如进度更新，执行成功，取消)之后，线程池中的工作线程会向<span class="type">UI</span>线程发送消息，<span class="type">AsyncTask</span>内部的<span class="type">InternalHandler</span>响应这些消息，并调用相关的回调函数
+
+* **<span class="type">AsyncTask</span>和<span class="type">Handler</span>,<span class="type">Looper</span>之间的区别联系**
+
+    <span class="number">1</span>. <span class="type">AsyncTask</span>是对<span class="type">Handler</span>与<span class="type">Thread</span>的封装。
+    <span class="number">2</span>. <span class="type">AsyncTask</span>在代码上比<span class="type">Handler</span>要轻量级别，但实际上比<span class="type">Handler</span>更耗资源，因为<span class="type">AsyncTask</span>底层是一个线程池，而<span class="type">Handler</span>仅仅就是发送了一个消息队列。但是，如果异步任务的数据特别庞大，<span class="type">AsyncTask</span>线程池比<span class="type">Handler</span>节省开销，因为<span class="type">Handler</span>需要不停的new <span class="type">Thread</span>执行。
+    <span class="number">3</span>. <span class="type">AsyncTask</span>的实例化只能在主线程，<span class="type">Handler</span>可以随意，只和<span class="type">Looper</span>有关系
+</code></pre><ol>
+<li><strong>Handler+Looper</strong></li>
+</ol>
+<h3 id="毕设-WebCrawler项目">毕设-WebCrawler项目</h3><p>java队列；Java多线程处理，线程池，html页面解析等</p>
+<p>单例模式enum实现对MySQL数据库操作的优势</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/实习/"> #实习 </a>
+          
+            <a href="../../tags/项目/"> #项目 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2015/03/10/Linux操作和计算机网络/">
                 Linux操作和计算机网络
               </a>
@@ -348,7 +533,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-count">27</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -362,7 +547,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">35</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

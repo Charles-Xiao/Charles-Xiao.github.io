@@ -209,17 +209,35 @@
 <li>两者都不能实例化，都能存放子类或者实现类的对象</li>
 </ul>
 </li>
-<li><p><strong>静态内部类(嵌套类)与非静态内部类区别</strong>：</p>
+<li><p><strong>静态内部类(嵌套类)与非静态内部类，方法内部类，匿名内部类区别</strong>：</p>
 <ul>
-<li>嵌套类不需要内部类对象与外围类对象之间有联系，而内部类自动拥有其外围类所有成员的访问权(因为内部类对象拥有一个指向其外围类对象的引用)</li>
-<li>创建内部类对象之前需要先创建外围类对象，而创建嵌套类对象则不需要</li>
-<li>普通类不能包含static成员和嵌套类，但是嵌套类可以</li>
-<li>嵌套类对象不可以访问非静态的外围类对象</li>
+<li>嵌套类不需要内部类对象与外围类对象之间有联系，而内部类自动拥有其外围类所有成员的访问权(因为内部类对象拥有一个指向其外围类对象的引用);创建内部类对象之前需要先创建外围类对象，而创建嵌套类对象则不需要</li>
+<li>嵌套类不能访问外围类的非静态属性，但是内部类可以访问外围类的所有属性和方法(包括private)，内部类不能有static变量</li>
+<li>局部内部类: 该类被创建在外围类的方法或者作用域中，局部内部类的访问仅限于方法内或者该作用域内</li>
+<li><p>匿名内部类: 在java Listener中出现的非常多，必须继承某个接口或者父类，在其中只能重写一个方法；没有修饰符;匿名内部类是唯一一种没有构造器的类。正因为其没有构造器，所以匿名内部类的使用范围非常有限，大部分匿名内部类用于接口回调。匿名内部类在编译的时候由系统自动起名为Outter$1.class；多线程的实现也是匿名内部类的一种</p>
+<pre><code>scan_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {
+    @<span class="type">Override</span>
+    public <span class="type">void</span> onClick(<span class="type">View</span> v) {
+        // <span class="type">TODO</span> <span class="type">Auto</span>-generated <span class="keyword">method</span> stub
+
+    }
+});
+
+history_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {       
+    @<span class="type">Override</span>
+    public <span class="type">void</span> onClick(<span class="type">View</span> v) {
+        // <span class="type">TODO</span> <span class="type">Auto</span>-generated <span class="keyword">method</span> stub
+
+    }
+});
+</code></pre></li>
+<li>成员内部类，就是作为外部类的成员，可以直接使用外部类的所有成员和方法，即使是private的。虽然成员内部类可以无条件地访问外部类的成员，而外部类想访问成员内部类的成员却不是这么随心所欲了。在外部类中如果要访问成员内部类的成员，必须先创建一个成员内部类的对象，再通过指向这个对象的引用来访问</li>
 </ul>
 </li>
 <li><strong>为什么需要内部类？</strong><ul>
-<li>内部类提供了进入和操作外围类的窗口</li>
+<li>内部类提供了进入和操作外围类的窗口，可以直接调用外部类的private方法和属性，但是外部类却不可以调用内部类的方法和属性</li>
 <li>内部类完善了“多重继承”机制，他能提供继承多个具体类或抽象类的能力</li>
+<li>内部类可以更好地封装，它被封装在外部类里，不允许同包其他类访问</li>
 </ul>
 </li>
 <li><strong>内部类的继承与覆盖</strong> —- 见《Java编程思想P212》</li>
@@ -227,7 +245,7 @@
 <h3 id="异常处理与类型信息">异常处理与类型信息</h3><ol>
 <li>异常处理是java中唯一正式的错误报告机制，用于解决运行期间遇到的问题；可以用try……catch进行捕获也可以在定义方法或者类时使用throws声明。</li>
 <li><strong>return与finally</strong>：<ul>
-<li>在try里边return会先return再执行finally</li>
+<li>在try里边return会先return再执行finally；在catch里边return则先执行finally再return</li>
 <li>在finally里边return会导致异常丢失，不再抛出异常(另一种异常丢失是因为前一个异常还没处理就抛出下一个异常，前一个异常就丢失了)</li>
 </ul>
 </li>
@@ -246,7 +264,44 @@
 <li>finalize是Object的一个方法，在垃圾收集器执行的时候会调用被回收对象的此方法。</li>
 </ul>
 <h3 id="String、StringBuffer和StringBuilder区别">String、StringBuffer和StringBuilder区别</h3><ul>
-<li>String类对象是不可变对象，其在创建之后不能再改变其所拥有的成员变量；因为String类本身就是final类而且其源码中的char[]数组也是final的,除非使用反射机制去改变char[]引用指向的堆中的数据；而String的replace等函数都是新建一个堆中的String对象然后返回给String的引用，从而使得引用指向了新的String对象，并没有改变原来的String对象。</li>
+<li>如果一个对象，在它创建完成之后，不能再改变它的状态，那么这个对象就是不可变的。不能改变状态的意思是，不能改变对象内的成员变量，包括基本数据类型的值不能改变，引用类型的变量不能指向其他的对象，引用类型指向的对象的状态也不能改变。</li>
+<li>String类对象是不可变对象，其在创建之后不能再改变其所拥有的所有private final成员变量；因为String类本身就是final类而且其源码中的char[]数组引用，offset(记录字符串首字母在value数组中对应的下标),count(记录字符串的长度)，hash等变量也是final的(JDK1.7中只存在hash和char[]数组),除非使用反射机制去改变char[]引用指向的堆中的数组数据；而String的substring， replace， replaceAll， toLowerCase等函数都是新建一个堆中的String对象然后返回给String的引用，从而使得引用指向了新的String对象，并没有改变原来的String对象</li>
+<li><p>用反射可以反射出String对象中的私有 value属性， 进而改变通过获得的char[]引用去改变数组的结构，例如：</p>
+<pre><code><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testReflection</span><span class="params">()</span> throws Exception </span>{  
+
+<span class="comment">//创建字符串"Hello World"， 并赋给引用s  </span>
+String s = <span class="string">"Hello World"</span>;   
+
+System.<span class="keyword">out</span>.println(<span class="string">"s = "</span> + s); <span class="comment">//Hello World  </span>
+
+<span class="comment">//获取String类中的value字段  </span>
+Field valueFieldOfString = String.class.getDeclaredField(<span class="string">"value"</span>);  
+
+<span class="comment">//改变value属性的访问权限  </span>
+valueFieldOfString.setAccessible(<span class="keyword">true</span>);  
+
+<span class="comment">//获取s对象上的value属性的值  </span>
+<span class="keyword">char</span>[] <span class="keyword">value</span> = (<span class="keyword">char</span>[]) valueFieldOfString.<span class="keyword">get</span>(s);  
+
+<span class="comment">//改变value所引用的数组中的第5个字符  </span>
+<span class="keyword">value</span>[<span class="number">5</span>] = <span class="string">'_'</span>;  
+
+System.<span class="keyword">out</span>.println(<span class="string">"s = "</span> + s);  <span class="comment">//Hello_World  </span>
+}
+</code></pre></li>
+<li><p>StringBuilder：非线程安全的可变字符串，单线程时字符串拼接最快</p>
+</li>
+<li><p>StringBuffer：通过调用其append和insert方法来添加字符；线程安全的可变字符串; String 对象的字符串拼接其实是被 JVM 解释成了 StringBuffer 对象的拼接</p>
+<pre><code><span class="comment">// String +操作快</span>
+<span class="built_in">String</span> S1 = “This <span class="keyword">is</span> only a” + “ simple” + “test”; <span class="comment">//其实就是：String S1 = “This is only a simple test”</span>
+
+<span class="comment">// StringBuffer.append()更快</span>
+<span class="built_in">String</span> S2 = “This <span class="keyword">is</span> only a”;
+<span class="built_in">String</span> S3 = “ simple”;
+<span class="built_in">String</span> S4 = “ test”;
+<span class="built_in">String</span> S1 = S2 +S3 + S4;
+</code></pre></li>
+<li>JDK1.7中subString函数改变:String类中不再有offset和count变量;这意味着成员变量char[] value将不会被共享;String.substring方法会为每个子串创建一个新的char[] value（而不是共享母串的char[] value）。这意味着String.substring方法的时间复杂度由常数阶变为线性阶。这种变化的好处是String对象占用的内存稍微少了一些（比以前少8个字节），同时确保String.substring方法不会导致内存泄漏</li>
 </ul>
 <h3 id="[java中equals，hashcode，==分析]">[java中equals，hashcode，==分析]</h3><ul>
 <li>== : 对于基本类型的变量(int, char等), 只有==方法用于判断两者是否相等;==也可用于判断两个引用变量是否相等,但是引用变量相等只是说明两个引用变量引用了同一个对象</li>
@@ -254,7 +309,7 @@
 <li>hashcode(): 哈希函数的作用是把不定长度的输入通过哈希算法将其压缩成固定长度的输出(int整数), 不同的输入可能转换成相同的输出;其在Object类中的默认实现是返回对象的内存地址的哈希码，不同的对象即使内容相同但引用不同也会返回不同的哈希码.主要用于HashMap等容器中的快速定位, 通过哈希值就可以直接定位到Map中数组的某个位置，然后再循环该位置对应的链表用equals判断<key,value>是否都相等。</li>
 <li>set在使用add，remove等函数时会调用equals函数去判断两个自定义对象的地址是否相同，而不是比较两个对象的内容是否相同，需要重载hashcode和equals函数，类似于String类一样重载，才能够实现去重的目的！！ HashSet中的元素实际上是作为HashMap中的Key存放在HashMap中的，为了保证HashSet中的对象不会出现重复值，在被存放元素的类中必须要重写hashCode()和equals()这两个方法。</li>
 </ul>
-<h3 id="java深度克隆"><a href="http://www.importnew.com/10761.html">java深度克隆</a></h3><p>Java集合的拷贝构造函数只提供浅拷贝而不是深拷贝，这意味着存储在原始List和克隆List中的对象是相同的，指向Java堆内存中相同的位置；深克隆将递归克隆对象直到基本数据类型或者不可变类   ；拷贝构造函数或者List或Set等各种集合类的addAll()方法仅仅创建了集合的浅拷贝，而且原始集合和克隆集合指向相同的对象。为避免这个问题，应该深克隆集合，遍历集合克隆每个元素。尽管这要求集合中的对象必须支持深克隆操作
+<h3 id="java深度克隆"><a href="http://www.importnew.com/10761.html">java深度克隆</a></h3><p>Java集合的拷贝构造函数只提供浅拷贝而不是深拷贝，这意味着存储在原始List和克隆List中的对象是相同的，指向Java堆内存中相同的位置；深克隆将递归克隆对象直到基本数据类型或者不可变类；拷贝构造函数或者List或Set等各种集合类的addAll()方法仅仅创建了集合的浅拷贝，而且原始集合和克隆集合指向相同的对象。为避免这个问题，应该深克隆集合，遍历集合克隆每个元素。尽管这要求集合中的对象必须支持深克隆操作
           <div class="post-more-link text-center">
             <a class="btn" href="../../2015/05/27/java重难点知识集锦/#more">
               阅读全文 &raquo;
@@ -608,7 +663,103 @@
 
       
         
-          <h3 id="单例模式的四种实现方式及其优缺点">单例模式的四种实现方式及其优缺点</h3>
+          <h3 id="单例模式的三种实现方式及其优缺点">单例模式的三种实现方式及其优缺点</h3><pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>{
+
+    <span class="javadoc">/**
+     *<span class="javadoctag"> @param</span> args
+     */</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+        SingletonEnum.INSTANCE.setmName(<span class="string">"enum"</span>);
+        SingletonInner.getInstance().setmName(<span class="string">"inner"</span>);
+        SingletonDoubleCheck.getInstance().setmName(<span class="string">"doubleCheck"</span>);
+    }
+
+    <span class="comment">/*
+     * 单例模式考虑点： 
+     * 1. 线程安全：Synchronized关键字，Enum，静态内部类 
+     * 2. 延迟加载：减少负载和消耗 
+     * 3. 自动序列化(Serializable和transient) 
+     * 4. 防止反射强行调用构造器
+     * 3、4点只有枚举可以实现
+     */</span>
+
+    <span class="comment">/*
+     * 枚举实现单例
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">enum</span> SingletonEnum {
+        INSTANCE;
+        <span class="keyword">private</span> String mName;
+
+        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> mName;
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
+            <span class="keyword">this</span>.mName = mName;
+        }
+
+    }
+    <span class="comment">/*
+     * 双重检查锁：单例模式中需要new的情况非常少,第一层锁可以减少锁的次数
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDoubleCheck</span> </span>{
+        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingletonDoubleCheck singleton = <span class="keyword">null</span>;
+
+        <span class="function"><span class="keyword">private</span> <span class="title">SingletonDoubleCheck</span><span class="params">()</span> </span>{
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDoubleCheck <span class="title">getInstance</span><span class="params">()</span> </span>{
+            <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) {
+                <span class="keyword">synchronized</span> (SingletonDoubleCheck.class) {
+                    <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) {
+                        singleton = <span class="keyword">new</span> SingletonDoubleCheck();
+                    }
+                }
+            }
+            <span class="keyword">return</span> singleton;
+        }
+
+        <span class="keyword">private</span> String mName;
+
+        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> mName;
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
+            <span class="keyword">this</span>.mName = mName;
+        }
+    }
+
+    <span class="comment">/*
+     * 内部类方式实现
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonInner</span> </span>{
+
+        <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Holder</span> </span>{
+            <span class="keyword">private</span> <span class="keyword">static</span> SingletonInner singleton = <span class="keyword">new</span> SingletonInner();
+        }
+
+        <span class="function"><span class="keyword">private</span> <span class="title">SingletonInner</span><span class="params">()</span> </span>{
+
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonInner <span class="title">getInstance</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> Holder.singleton;
+        }
+
+        <span class="keyword">private</span> String mName;
+
+        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> mName;
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
+            <span class="keyword">this</span>.mName = mName;
+        }
+    }
+
+}
+</code></pre>
         
       
     </div>
@@ -703,6 +854,13 @@
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_pre.png" class="full-image"></p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_next.png" class="full-image"></p>
 <h3 id="数据库的事务、索引、范式和存储过程概念以及优缺点">数据库的事务、索引、范式和存储过程概念以及优缺点</h3><ol>
+<li><p>主键：数据库表中对储存数据对象予以唯一和完整标识的数据列或属性的组合。一个数据列只能有一个主键，且主键的取值不能缺失，即不能为空值（Null）。  </p>
+<p>超键：在关系中能唯一标识元组的属性集称为关系模式的超键。一个属性可以为作为一个超键，多个属性组合在一起也可以作为一个超键。超键包含候选键和主键。  </p>
+<p>候选键：是最小超键，即没有冗余元素的超键  </p>
+<p>外键：在一个表中存在的另一个表的主键称此表的外键  </p>
+</li>
+</ol>
+<ol>
 <li><p><strong>事务</strong>：事务是数据库操作中的不可分割的逻辑单元,一个事务中的所有操作语句要么作为一个整体被执行，要么整体不被执行</p>
 <ul>
 <li>原子性：要么操作序列中全部语句都执行，要么全部不被执行,不可分割; 也就是说当事务的执行序列中某个语句执行错误，会回滚到该事务未执行时的状态</li>
@@ -719,7 +877,25 @@
 <li>BC范式：数据里边每一列既不部分依赖于任何候选键也不传递依赖于任何候选键；一个关系满足BCNF则一定满足第三范式</li>
 </ul>
 </li>
-<li><p><strong>索引</strong></p>
+<li><p><strong>索引</strong> ：建立在数据库表的某些列上，例如需要搜索或者排序的列，主键列，外键列(用于连接的列),用在where语句中的列；有些列不应该建索引，比如：查询中很少使用或者参考的列， 只有很少数据值的列， 定义为text, image和bit数据类型的列,当修改性能远远大于检索性能时，不应该创建索引；索引的实现通常使用B树及其变种B+树</p>
+<ul>
+<li>参考: 一般来说，应该在这些列上创建索引：在经常需要搜索的列上，可以加快搜索的速度；在作为主键的列上，强制该列的唯一性和组织表中数据的排列结构；在经常用在连接的列上，这些列主要是一些外键，可以加快连接的速度；在经常需要根据范围进行搜索的列上创建索引，因为索引已经排序，其指定的范围是连续的；在经常需要排序的列上创建索引，因为索引已经排序，这样查询可以利用索引的排序，加快排序查询时间；在经常使用在WHERE子句中的列上面创建索引，加快条件的判断速度。</li>
+<li>复合索引就是索引建立在多个列上，唯一索引就是保证索引列中得所有数据都是唯一的，不会存在冗余数据;聚集索引是指表中行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能包含一个聚集索引</li>
+<li><p>当增加索引时，会提高检索性能，但是会降低修改性能 </p>
+<p>优点：</p>
+</li>
+</ul>
+<ol>
+<li>通过创建唯一性索引，可以保证数据库表中每一行数据的唯一性 </li>
+<li>可以大大加快数据的检索速度    </li>
+<li>可以加速表和表之间的连接</li>
+<li>在使用分组和排序子句进行数据检索时，同样可以显著减少查询中分组和排序的时间</li>
+<li><p>通过使用索引，可以在查询的过程中，使用优化隐藏器，提高系统的性能</p>
+<p>缺点：</p>
+</li>
+<li>创建索引和维护索引要耗费时间和大量的物理空间</li>
+<li>对表中的数据进行增加、删除和修改的时候，索引也要动态的维护，这样就降低了数据的维护速度</li>
+</ol>
 </li>
 <li><p><strong>存储过程</strong></p>
 <ul>
@@ -996,7 +1172,7 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-count">27</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1010,7 +1186,7 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">35</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

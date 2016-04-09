@@ -189,7 +189,103 @@
       
 
       
-        <h3 id="单例模式的四种实现方式及其优缺点">单例模式的四种实现方式及其优缺点</h3>
+        <h3 id="单例模式的三种实现方式及其优缺点">单例模式的三种实现方式及其优缺点</h3><pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>{
+
+    <span class="javadoc">/**
+     *<span class="javadoctag"> @param</span> args
+     */</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+        SingletonEnum.INSTANCE.setmName(<span class="string">"enum"</span>);
+        SingletonInner.getInstance().setmName(<span class="string">"inner"</span>);
+        SingletonDoubleCheck.getInstance().setmName(<span class="string">"doubleCheck"</span>);
+    }
+
+    <span class="comment">/*
+     * 单例模式考虑点： 
+     * 1. 线程安全：Synchronized关键字，Enum，静态内部类 
+     * 2. 延迟加载：减少负载和消耗 
+     * 3. 自动序列化(Serializable和transient) 
+     * 4. 防止反射强行调用构造器
+     * 3、4点只有枚举可以实现
+     */</span>
+
+    <span class="comment">/*
+     * 枚举实现单例
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">enum</span> SingletonEnum {
+        INSTANCE;
+        <span class="keyword">private</span> String mName;
+
+        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> mName;
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
+            <span class="keyword">this</span>.mName = mName;
+        }
+
+    }
+    <span class="comment">/*
+     * 双重检查锁：单例模式中需要new的情况非常少,第一层锁可以减少锁的次数
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDoubleCheck</span> </span>{
+        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingletonDoubleCheck singleton = <span class="keyword">null</span>;
+
+        <span class="function"><span class="keyword">private</span> <span class="title">SingletonDoubleCheck</span><span class="params">()</span> </span>{
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDoubleCheck <span class="title">getInstance</span><span class="params">()</span> </span>{
+            <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) {
+                <span class="keyword">synchronized</span> (SingletonDoubleCheck.class) {
+                    <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) {
+                        singleton = <span class="keyword">new</span> SingletonDoubleCheck();
+                    }
+                }
+            }
+            <span class="keyword">return</span> singleton;
+        }
+
+        <span class="keyword">private</span> String mName;
+
+        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> mName;
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
+            <span class="keyword">this</span>.mName = mName;
+        }
+    }
+
+    <span class="comment">/*
+     * 内部类方式实现
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonInner</span> </span>{
+
+        <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Holder</span> </span>{
+            <span class="keyword">private</span> <span class="keyword">static</span> SingletonInner singleton = <span class="keyword">new</span> SingletonInner();
+        }
+
+        <span class="function"><span class="keyword">private</span> <span class="title">SingletonInner</span><span class="params">()</span> </span>{
+
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonInner <span class="title">getInstance</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> Holder.singleton;
+        }
+
+        <span class="keyword">private</span> String mName;
+
+        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> mName;
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
+            <span class="keyword">this</span>.mName = mName;
+        }
+    }
+
+}
+</code></pre>
       
     </div>
 
@@ -280,7 +376,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-count">27</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -294,7 +390,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">35</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -332,7 +428,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#单例模式的四种实现方式及其优缺点"><span class="nav-number">1.</span> <span class="nav-text">单例模式的四种实现方式及其优缺点</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#单例模式的三种实现方式及其优缺点"><span class="nav-number">1.</span> <span class="nav-text">单例模式的三种实现方式及其优缺点</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
