@@ -148,6 +148,105 @@
           
           
             
+              <a class="post-title-link" href="../../2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/">
+                Mac设置环境变量(adb+NDK+sdk)
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-15
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Mac系统/">Mac系统</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>无论是在windows还是mac系统下，对于程序猿而言，在terminal中输入命令进行一些常用操作是比用鼠标更为快捷的方式。那么为了能够打开terminal就可以直接输入并执行命令，就需要进行环境变量的设置，这样就不必进入命令文件所在目录下执行该命令了。windows下配置环境变量较为简单，在此讲一下mac下配置环境变量的方法和注意事项。</p>
+<p><strong>1. 打开terminal，输入<code>cd ~</code>, 进入当前用户home目录</strong></p>
+<p><strong>2. 输入<code>touch .bash_profile</code>, 创建bash_profile文件(如果该文件已经存在则可以直接进入第3步)</strong></p>
+<p><strong>3. 打开记事本编辑bash_profile文件，示例如下</strong></p>
+<pre><code>方式一：用<span class="constant">SDK_HOME指</span>代一个通用路径，一处设置，多处使用，结构明晰，然后设置到<span class="constant">PATH</span>
+
+export <span class="constant">SDK_HOME=</span>“/usr/sdk”             
+export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:</span><span class="variable">${</span><span class="constant">SDK_HOME}</span><span class="symbol">:</span><span class="variable">${</span><span class="constant">SDK_HOME}</span>/<span class="symbol">tools:</span>/usr/ndk
+
+
+方式二：直接将各个命令的路径用<span class="symbol">:</span>连接起来设置到<span class="constant">PATH </span>形如--- export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:</span>路径<span class="number">1</span><span class="symbol">:</span>路径<span class="number">2</span><span class="symbol">:</span>路径<span class="number">3</span>
+
+export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:/usr/sdk</span><span class="symbol">:/usr/sdk/tools</span><span class="symbol">:/usr/ndk</span>
+</code></pre><p><strong>4. 保存修改，输入更新命令<code>source .bash_profile</code>,PATH变量配置完成</strong></p>
+<p><a href="http://blog.csdn.net/zf135792468/article/details/11926995" target="_blank" rel="external">参考链接</a></p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Android/"> #Android </a>
+          
+            <a href="../../tags/Mac/"> #Mac </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2015/05/12/如何阅读一本书/">
                 如何阅读一本书
               </a>
@@ -271,22 +370,75 @@
       
         
           <h3 id="Kactus">Kactus</h3><ol>
-<li>ECO餐厅食用油回收系统<ul>
-<li>Android端缓存机制的实现，采用二级缓存，从LRUcache到DiskCache，分析http请求过程的请求头内容来确定cache-control策略</li>
-<li>http从同步的主线程发送get请求优化为异步的子线程发送post请求, 加强了数据传输的安全性和长度，解决了应用程序无响应的应用体验问题; httpClient和HttpUrlConnection的区别对比</li>
-</ul>
+<li><p>ECO餐厅食用油回收系统</p>
+<ul>
+<li><p>Android端缓存机制的实现，采用二级缓存，从LRUcache到DiskLruCache，同时模拟浏览器缓存机制来分析http请求过程的请求头内容来确定cache-control策略</p>
 <ol>
-<li>异步的get和post请求实现过程(HttpUrlConnection)</li>
+<li>请求流程: 当我们第一次打开应用获取图片时，先到网络去下载图片，然后依次存入内存缓存，磁盘缓存;以后每次加载图片的时候都优先去LRUCache内存缓存当中读取，当读取不到的时候则回去DiskLruCache硬盘缓存中读取，而如果硬盘缓存仍然读取不到的话，就从网络上请求原始数据。</li>
+<li><p><strong>二级缓存</strong>: 变化频繁的小数据都采用LRUCache,稳定的大文件数据采用DiskLruCache;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File；根据请求头里边的expires(缓存过期的时间（绝对时间）),Last-Modified, Cache-Control等内容来确定DiskLruCache中缓存的保留时间以及清理策略；例如用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据时间判断是否过期，从而实现缓存定时清理  </p>
+<p>缓存图片举例：</p>
+<p> // 获取应用可占内存的1/8作为缓存<br> int maxSize = (int) (Runtime.getRuntime().maxMemory() / 8);<br> // 实例化LruCaceh对象<br> mLruCache = new LruCache<string, bitmap="">(maxSize) {</string,></p>
+<pre><code><span class="annotation">@Override</span>
+<span class="keyword">protected</span> <span class="function"><span class="keyword">int</span> <span class="title">sizeOf</span><span class="params">(String key, Bitmap bitmap)</span> </span>{
+    <span class="keyword">return</span> bitmap.getRowBytes() * bitmap.getHeight();
+}
+</code></pre><p> };<br> mDiskLruCache = DiskLruCache.open(getDiskCacheDir(context.getApplicationContext(), “xxxxx”), getAppVersion(context), 1, DISKMAXSIZE);<br> // 缓存操作<br> mLruCache.get(url);<br> mLruCache.put(url, bitmap);<br> bitmap = BitmapFactory.decodeStream(mDiskLruCache.get(url).getInputStream(0));<br> DiskLruCache.Editor editor = mDiskLruCache.edit(key);<br> OutputStream outputStream = editor.newOutputStream(0);<br> editor.commit();</p>
+</li>
 </ol>
+</li>
+</ul>
 </li>
 </ol>
 <ol>
-<li>赛马会XML数据处理系统<ul>
-<li>采用Java WebSocket编程取代传统的非实时http请求连接模式</li>
-<li>整个项目从简单的多线程优化到采用线程池来实现xml数据文件的获取</li>
-<li>多线程引起的资源竞争问题解决过程<ol>
-<li>同时写一个文件时必须加上Synchronized关键字保证读写，写写互斥</li>
-</ol>
+<li><p>采用Java WebSocket编程取代传统的非实时http请求连接模式</p>
+<ul>
+<li><p><strong>实现方法</strong>: WebSocket是一个基于TCP连接的双向通道，Web应用的信息交互过程通常是客户端发出一个请求，服务器端接收和审核完请求后进行处理并返回结果给客户端，然后客户端浏览器将信息呈现出来，但是对于那些实时要求比较高的应用来说，比如说在线游戏、新闻在线播报、RSS 订阅推送等等，当客户端浏览器准备呈现这些信息的时候，这些信息在服务器端可能已经过时了;    <strong>常见的模拟实时应用方法</strong> </p>
+<p>  <strong>轮询</strong>：最早的一种实现实时 Web 应用的方案。客户端以一定的时间间隔向服务端发出请求，以频繁请求的方式来保持客户端和服务器端的同步。服务器端的数据可能并没有更新但是依然请求，会带来很多无谓的网络传输，所以这是一种非常低效的实时方案。  </p>
+<p>  <strong>长轮询</strong>：为了降低无效的网络传输，当服务器端没有数据更新的时候，连接会保持一段时间周期直到数据或状态改变或者时间过期，通过这种机制来减少无效的客户端和服务器间的交互  </p>
+<p>  <strong>流</strong>： 流技术方案通常就是在客户端的页面使用一个隐藏的窗口向服务端发出一个长连接的请求。服务器端接到这个请求后作出回应并不断更新连接状态以保证客户端和服务器端的连接不过期。通过这种机制可以将服务器端的信息源源不断地推向客户端。这种机制需要针对不同的浏览器设计不同的方案来改进用户体验，同时这种机制在并发比较大的情况下，对服务器端的资源是一个极大的考验。</p>
+<p>  <strong>WebSocket</strong>: 为了建立一个 WebSocket 连接，客户端浏览器首先要向服务器发起一个 HTTP 请求，这个请求和通常的 HTTP 请求不同，包含了一些附加头信息，其中附加头信息”Upgrade: WebSocket”表明这是一个申请协议升级的 HTTP 请求，服务器端解析这些附加的头信息然后产生应答信息返回给客户端，客户端和服务器端的 WebSocket 连接就建立起来了，双方就可以通过这个连接通道自由的传递信息，并且这个连接会持续存在直到客户端或者服务器端的某一方主动的关闭连接。    </p>
+<pre><code><span class="annotation">@ServerEndpoint</span>(<span class="string">"/websocket"</span>)
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebSocketTest</span> </span>{
+
+  <span class="annotation">@OnMessage</span>
+  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onMessage</span><span class="params">(String message, Session session)</span>
+    <span class="keyword">throws</span> IOException, InterruptedException </span>{
+
+    System.out.println(<span class="string">"Received: "</span> + message);
+
+    <span class="comment">// Send the first message to the client</span>
+    session.getBasicRemote().sendText(<span class="string">"This is the first server message"</span>);
+
+    <span class="comment">// Send 3 messages to the client every 5 seconds</span>
+    <span class="keyword">int</span> sentMessages = <span class="number">0</span>;
+    <span class="keyword">while</span>(sentMessages &lt; <span class="number">3</span>){
+      Thread.sleep(<span class="number">5000</span>);
+      session.getBasicRemote().
+        sendText(<span class="string">"This is an intermediate server message. Count: "</span>
+          + sentMessages);
+      sentMessages++;
+    }
+
+    <span class="comment">// Send a final message to the client</span>
+    session.getBasicRemote().sendText(<span class="string">"This is the last server message"</span>);
+  }
+
+  <span class="annotation">@OnOpen</span>
+  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onOpen</span><span class="params">()</span> </span>{
+    System.out.println(<span class="string">"Client connected"</span>);
+  }
+
+  <span class="annotation">@OnClose</span>
+  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClose</span><span class="params">()</span> </span>{
+    System.out.println(<span class="string">"Connection closed"</span>);
+  }
+
+}
+</code></pre><p>  <strong>如何使用Encoder和Decoder传输更复杂的数据</strong>：Websocket使用Decoder将文本消息转换成Java对象，然后传给@OnMessage方法处理; 而当对象写入到session中时，Websocket将使用Encoder将Java对象转换成文本，再发送给客户端。</p>
+</li>
+<li><p>整个项目从简单的多线程优化到采用线程池来实现xml数据文件的获取</p>
+</li>
+<li><p>多线程引起的资源竞争问题解决过程: 同时写一个文件时必须加上Synchronized关键字保证读写，写写互斥</p>
 </li>
 </ul>
 </li>
@@ -302,7 +454,7 @@
 <li><p>SMSObserver类中的具体的判断方式和优化过程</p>
 <ul>
 <li>从维护所有信息的set到只维护未读信息的内容，信息实体占用内存很大，内存优化；</li>
-<li>ArrayList到HashSet对比与区别：防止出现重复信息，去重速度很快因为使用HashTable中的hashCode()以及equals进行查找去重；多次读取unreadSet并对两个set进行比对，removeAll和AddAll求补集并集来比对两个未读信息集合，</li>
+<li>ArrayList到HashSet对比与区别：防止出现重复信息，去重速度很快因为使用HashTable中的hashCode()以及equals进行查找去重；多次读取unreadSet并对两个set进行比对，removeAll和AddAll求补集并集来比对两个未读信息集合;直接removeAll新set可以判断出哪些信息被标为已读，AddAll新set再removeAll旧set可以判断得到新增加的短信；比如1，2，3和1，2，4，5</li>
 <li>SMS短信对象中hashcode和equals方法的同时重载</li>
 <li>java集合中的浅复制和深复制，clone集合不影响原集合</li>
 <li>定时优化从Timer到PendingIntent</li>
@@ -314,15 +466,28 @@
 </li>
 <li><p>百度锁屏项目</p>
 <ul>
-<li>View的自定义绘制与组合</li>
+<li>View的自定义绘制与组合原理过程</li>
 </ul>
+</li>
+<li><p><strong>网络通信的优化和实现过程</strong>http从同步的主线程发送get请求优化为异步的子线程发送post请求, 加强了数据传输的安全性和长度，解决了应用程序无响应的应用体验问题; httpClient和HttpUrlConnection的区别对比;最后学习和使用Volley以及OkHttp通信库</p>
+<ol>
+<li><p>异步的get和post请求实现过程(HttpUrlConnection)</p>
+</li>
+<li><p><strong>httpClient和httpUrlConnection, OKHttp对比</strong>：</p>
+<ul>
+<li>httpClient是apache的开源实现，API数量多，非常稳定</li>
+<li>httpUrlConnection是java自带的模块: ①可以直接支持GZIP压缩,而HttpClient虽然也支持GZIP，但要自己写代码处理 ②httpUrlConnection直接在系统层面做了缓存策略处理，加快重复请求的速度 ③API简单，体积较小,而且直接支持系统级连接池，即打开的连接不会直接关闭，在一段时间内所有程序可共用</li>
+<li>HttpURLConnection在Android2.2之前有个重大Bug，调用close()函数会影响连接池，导致连接复用失效，需要关闭keepAlive;因此在2.2之前http请求都是用httpClient，2.2之后则是使用HttpURLConnection</li>
+<li>但是!!!现在!!!Android不再推荐这两种方式！二是直接使用OKHttp这种成熟方案！支持Android 2.3及其以上版本; 什么是OKHttp?</li>
+</ul>
+</li>
+<li>Volley原理和OkHttp实现原理和应用方法以及优缺点</li>
+</ol>
 </li>
 </ol>
 <h3 id="佳学">佳学</h3><ol>
-<li><p><strong>网络请求交互</strong>：Volley网络请求以及客户端解析json(两段实习都有用到这个做异步网络请求)；volley的实现原理和优点</p>
-</li>
-<li><p><strong>Android AsynTask实现多任务下载管理</strong>:</p>
-</li>
+<li><strong>网络请求交互</strong>：参见百度锁屏项目</li>
+<li><strong>Android AsynTask实现多任务下载管理</strong>:</li>
 </ol>
 <pre><code>    private class <span class="type">DemoAsyncTask</span> extends <span class="type">AsyncTask</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>, <span class="type">Bitmap</span>&gt; {
         @<span class="type">Override</span>
@@ -378,9 +543,90 @@
     <span class="number">2</span>. <span class="type">AsyncTask</span>在代码上比<span class="type">Handler</span>要轻量级别，但实际上比<span class="type">Handler</span>更耗资源，因为<span class="type">AsyncTask</span>底层是一个线程池，而<span class="type">Handler</span>仅仅就是发送了一个消息队列。但是，如果异步任务的数据特别庞大，<span class="type">AsyncTask</span>线程池比<span class="type">Handler</span>节省开销，因为<span class="type">Handler</span>需要不停的new <span class="type">Thread</span>执行。
     <span class="number">3</span>. <span class="type">AsyncTask</span>的实例化只能在主线程，<span class="type">Handler</span>可以随意，只和<span class="type">Looper</span>有关系
 </code></pre><ol>
-<li><strong>Handler+Looper</strong></li>
+<li><p><strong>Handler+Looper+MessageQueue异步信息处理系统模型</strong></p>
+<ul>
+<li>Android系统中耗时操作不能放在主线程进行，所以一般放在AsyncTask或者新建子线程进行，然后通过Handler发送消息通知主线程；如果这些耗时操作涉及到UI界面的更新，可以借助于(Android系统UI的更新必须放在主线程进行)Handler发送消息给UI线程更新UI</li>
+<li><p><strong>Handler更新UI实例</strong>：</p>
+<pre><code> <span class="comment">// UI线程新建的Handler，在handleMessage()中更新UI</span>
+ <span class="keyword">private</span> Handler mHandler = <span class="keyword">new</span> Handler() {
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">handleMessage</span> <span class="params">(Message msg)</span> </span>{
+        <span class="keyword">switch</span>(msg.what) {
+        <span class="keyword">case</span> MSG_SUCCESS:
+            mImageView.setImageBitmap((Bitmap) msg.obj);                        <span class="keyword">break</span>;
+        <span class="keyword">case</span> MSG_FAILURE:
+            <span class="keyword">break</span>;
+        }
+    }
+};
+
+<span class="comment">// 子线程中获取网络图片并发送message通知UI线程更新显示图片</span>
+Runnable runnable = <span class="keyword">new</span> Runnable() {
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
+        HttpClient hc = <span class="keyword">new</span> DefaultHttpClient();
+        HttpGet hg = <span class="keyword">new</span> HttpGet(<span class="string">"http://www.oschina.net/img/logo.gif"</span>);                    <span class="keyword">final</span> Bitmap bm;
+        <span class="keyword">try</span> {
+            HttpResponse hr = hc.execute(hg);
+            bm = BitmapFactory.decodeStream(hr.getEntity().getContent());
+        } <span class="keyword">catch</span> (Exception e) {
+            mHandler.obtainMessage(MSG_FAILURE).sendToTarget();
+            <span class="keyword">return</span>;
+        }
+        mHandler.obtainMessage(MSG_SUCCESS,bm).sendToTarget();                }
+};
+
+<span class="keyword">new</span> Thread(runnable).start();
+</code></pre></li>
+</ul>
+</li>
 </ol>
-<h3 id="毕设-WebCrawler项目">毕设-WebCrawler项目</h3><p>java队列；Java多线程处理，线程池，html页面解析等</p>
+<pre><code>* <span class="type">Looper</span>本质是一个<span class="type">ThreadLocal</span>变量，每一个线程调用<span class="type">Looper</span>.prepare时，都会创建为其唯一的<span class="type">Looper</span>，它持有一个<span class="type">MessageQueue</span>消息队列，实现<span class="type">Thread</span>的消息循环和消息派发; <span class="type">Handler</span>负责收发<span class="type">Message</span>以及<span class="type">Runnable</span>对象(post和sendMessage),包括push新消息到<span class="type">MessageQueue</span>或者接收<span class="type">Looper</span>从<span class="type">MessageQueue</span>取出来的消息; <span class="type">MessageQueue</span>是一个<span class="type">FIFO</span>消息队列
+
+    &lt;img src=<span class="string">"https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Looper.jpg"</span> <span class="class"><span class="keyword">class</span>=</span><span class="string">"full-image"</span> /&gt;
+
+        <span class="class"><span class="keyword">class</span> <span class="title">LooperThread</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Thread</span> {</span>
+              public <span class="type">Handler</span> mHandler;
+              public void run() {
+                     <span class="type">Looper</span>.prepare();
+
+                     mHandler = <span class="keyword">new</span> <span class="type">Handler</span>() {
+                              public void handleMessage(<span class="type">Message</span> msg) {
+
+                              }                                                                                                                                                                                                                     };
+
+                     <span class="type">Looper</span>.loop();
+
+              }
+        }
+
+* 一个线程只能拥有一个<span class="type">Looper</span>实例(该<span class="type">Looper</span>对象可以通过<span class="type">Looper</span>.myLooper()来获取)，对应着一个<span class="type">MessageQueue</span>消息队列，但是可以拥有多个<span class="type">Handler</span>; 主线程初始化时默认创建一个<span class="type">Looper</span>对象，可以通过<span class="type">Looper</span>.getMainLooper()来获取他；主线程中可以直接新建<span class="type">Handler</span>，但是子线程中新建<span class="type">Handler</span>需要先调用<span class="type">Looper</span>.prepare()
+
+* **handler可能引发的内存泄露和解决方案**
+    <span class="number">1.</span> 当使用内部类（包括匿名类）来创建<span class="type">Handler</span>的时候，<span class="type">Handler</span>对象会隐式地持有一个外部类对象（通常是一个<span class="type">Activity</span>）的引用。而<span class="type">Handler</span>通常会伴随着一个耗时的后台线程一起出现，这个后台线程在任务执行完毕之后，通过消息机制通知<span class="type">Handler</span>，然后<span class="type">Handler</span>把消息发送到<span class="type">UI</span>线程。然而，如果用户在耗时线程执行过程中关闭了<span class="type">Activity</span>（正常情况下<span class="type">Activity</span>不再被使用，它就有可能在<span class="type">GC</span>检查时被回收掉），由于这时线程尚未执行完，而该线程持有<span class="type">Handler</span>的引用，这个<span class="type">Handler</span>又持有<span class="type">Activity</span>的引用，就导致该<span class="type">Activity</span>暂时无法被回收（即内存泄露）
+    <span class="number">2.</span> 解决方案:
+        * <span class="type">Handler</span>声明为静态内部类,不再持有外部类<span class="type">Activity</span>,在其内部声明一个<span class="type">Activity</span>的弱引用来操作<span class="type">Activity</span>中的对象
+
+                static <span class="class"><span class="keyword">class</span> <span class="title">TestHandler</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Handler</span> {</span>
+                    <span class="type">WeakReference</span>&lt;<span class="type">Activity</span> &gt; mActivityReference;
+
+                    <span class="type">TestHandler</span>(<span class="type">Activity</span> activity) {
+                        mActivityReference= <span class="keyword">new</span> <span class="type">WeakReference</span>&lt;<span class="type">Activity</span>&gt;(activity);
+                    }
+
+                    <span class="annotation">@Override</span>
+                    public void handleMessage(<span class="type">Message</span> msg) {
+                        <span class="keyword">final</span> <span class="type">Activity</span> activity = mActivityReference.get();
+                        <span class="keyword">if</span> (activity != <span class="literal">null</span>) {
+                            mImageView.setImageBitmap(mBitmap);
+                        }
+                    }
+                }
+
+        * ①在关闭<span class="type">Activity</span>的时候停掉你的后台线程。线程停掉了，就相当于切断了<span class="type">Handler</span>和外部连接的线，<span class="type">Activity</span>自然会在合适的时候被回收；②如果你的<span class="type">Handler</span>是被delay的<span class="type">Message</span>持有了引用，那么使用相应的<span class="type">Handler</span>的removeCallbacks()方法，把消息对象从消息队列移除
+
+* <span class="type">HandlerThread</span>是一个<span class="type">Looper</span>,<span class="type">Handler</span>,<span class="type">Thread</span>的组合实现；在其构造函数中对<span class="type">Looper</span>进行初始化，并提供一个<span class="type">Looper</span>对象给新创建的<span class="type">Handler</span>对象，使得<span class="type">Handler</span>处理消息事件在子线程中处理
+</code></pre><h3 id="毕设-WebCrawler项目">毕设-WebCrawler项目</h3><p>java优先级队列；Java多线程处理，线程池，html页面解析等</p>
 <p>单例模式enum实现对MySQL数据库操作的优势</p>
 
         
@@ -468,6 +714,8 @@
         
           <h3 id="Http/Https/UDP/TCP/Socket区别与联系">Http/Https/UDP/TCP/Socket区别与联系</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/http0.png" class="full-image"></p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/http1.png" class="full-image"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HttpRequest.jpeg" class="full-image"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HttpResponse.png" class="full-image"></p>
 
         
       
@@ -533,7 +781,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-count">28</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
