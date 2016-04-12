@@ -253,29 +253,44 @@
 </li>
 </ol>
 <h3 id="Baidu">Baidu</h3><ol>
-<li><p>Duwear项目短信管理模块: 目的是将手机短信库的变化情况通知到wear端</p>
-<ol>
+<li>Duwear项目短信管理模块: 目的是将手机短信库的变化情况通知到wear端<ol>
 <li><strong>SMSObserver</strong>继承ContentProvider类实现观察者模式，注册了一个短信数据库的观察者，发生变化该类都会被通知；在重载函数onChange中进行操作比对判断数据库变化情况，只知道变化，但是不知道具体操作？如何判断用户是标为已读还是删除，新建短信</li>
 <li><strong>SmsReceivedListener接口</strong>：两个回调函数，作为一个接口参数传到SMSObserver的构造函数中，然后一旦判断是新短信还是短信已读，就调用其回调函数</li>
 <li><strong>SmsRpcService类</strong>：继承自上边的接口，在回调函数中将这个操作判断出来发送给手表</li>
-<li><p><strong>SmsUtils</strong>: 4个函数，查询短信数据库，标为已读的数据库操作函数</p>
+<li><strong>SmsUtils</strong>: 4个函数，查询短信数据库，标为已读的数据库操作函数</li>
+</ol>
 </li>
-<li><p>SMSObserver类中的具体的判断方式和优化过程</p>
+</ol>
+<pre><code>5. SMSObserver类中的具体的判断方式和优化过程
+    <span class="keyword">*</span> 从维护所有信息的set到只维护未读信息的内容，信息实体占用内存很大，内存优化；
+    <span class="keyword">*</span> ArrayList到HashSet对比与区别：防止出现重复信息，去重速度很快因为使用HashTable中的hashCode()以及equals进行查找去重；
+
+    <span class="keyword">*</span> 多次读取unreadSet并对两个set进行比对，removeAll和AddAll求补集并集来比对两个未读信息集合;两个方法都用到了hashCode和equals，所以SmsEntity对象中hashcode和equals方法的同时重载；直接removeAll新set可以判断出哪些信息被标为已读，AddAll新set再removeAll旧set可以判断得到新增加的短信；比如1，2，3和1，2，4，5
+    <span class="keyword">*</span> java集合中的浅复制和深复制，clone集合不影响原集合
+
+        1. <span class="keyword">*</span><span class="keyword">*</span>浅复制<span class="keyword">*</span><span class="keyword">*</span>: 复制后的对象与原对象所有变量的值相同，包括引用变量，浅复制时只会复制引用变量本身，不会复制它指向的对象本身
+
+        2. <span class="keyword">*</span><span class="keyword">*</span>深复制<span class="keyword">*</span><span class="keyword">*</span>: 复制后的对象与原对象所有变量的值相同，但是不包括引用变量，深复制时会复制引用变量指向的对象本身，所以引用值发生改变
+
+        3. <span class="keyword">*</span><span class="keyword">*</span>Clone()方法和Cloneable接口<span class="keyword">*</span><span class="keyword">*</span>: Cloneable接口是一个不包含方法的标志接口，一个类必须先继承它才能在其内部调用super.clone()方法，否则会抛出不支持clone的异常;clone()方法是一个native方法，拷贝对象时已经包括一部分原对象信息，效率优于使用新建对象再一一复制变量的方式;重写clone()方法需要先调用super.clone()方法，该方法会开辟一块新的内存用于拷贝原对象，将原对象的内容一一复制到新对象的内存空间中，它是一种浅复制;如果要实现深复制，需要对复制的对象中的所有引用变量对应的对象也进行复制(具体操作:重写引用对象的clone方法，在其中调用super.clone，然后再上层对象中调用该对象的clone方法)
+
+        4. <span class="keyword">*</span><span class="keyword">*</span>序列化实现深复制<span class="keyword">*</span><span class="keyword">*</span>: 
+
+
+
+6. <span class="keyword">*</span><span class="keyword">*</span>工厂模式<span class="keyword">*</span><span class="keyword">*</span>生产手表View：需要生成许多不同的CardView，利用CardFactory中的BuildPage函数
+简单工厂模式和<span class="keyword">*</span><span class="keyword">*</span>工厂方法模式<span class="keyword">*</span><span class="keyword">*</span>，以及抽象工厂模式
+</code></pre><ol>
+<li><p>百度锁屏项目</p>
 <ul>
-<li>从维护所有信息的set到只维护未读信息的内容，信息实体占用内存很大，内存优化；</li>
-<li>ArrayList到HashSet对比与区别：防止出现重复信息，去重速度很快因为使用HashTable中的hashCode()以及equals进行查找去重；多次读取unreadSet并对两个set进行比对，removeAll和AddAll求补集并集来比对两个未读信息集合;直接removeAll新set可以判断出哪些信息被标为已读，AddAll新set再removeAll旧set可以判断得到新增加的短信；比如1，2，3和1，2，4，5</li>
-<li>SMS短信对象中hashcode和equals方法的同时重载</li>
-<li>java集合中的浅复制和深复制，clone集合不影响原集合</li>
-<li>定时优化从Timer到PendingIntent</li>
-</ul>
+<li><p>View的自定义绘制与组合原理过程</p>
+<ol>
+<li><p><strong>KeyguardPacketLayout</strong></p>
 </li>
-<li><p><strong>工厂模式</strong>生产手表View：需要生成许多不同的CardView，利用CardFactory中的BuildPage函数<br>简单工厂模式和工厂方法模式，以及抽象工厂模式</p>
+<li><p><strong>PacketMultiWaveView</strong></p>
 </li>
 </ol>
 </li>
-<li><p>百度锁屏项目</p>
-<ul>
-<li>View的自定义绘制与组合原理过程</li>
 </ul>
 </li>
 <li><p><strong>网络通信的优化和实现过程</strong>http从同步的主线程发送get请求优化为异步的子线程发送post请求, 加强了数据传输的安全性和长度，解决了应用程序无响应的应用体验问题; httpClient和HttpUrlConnection的区别对比;最后学习和使用Volley以及OkHttp通信库</p>
@@ -290,7 +305,16 @@
 <li>但是!!!现在!!!Android不再推荐这两种方式！二是直接使用OKHttp这种成熟方案！支持Android 2.3及其以上版本; 什么是OKHttp?</li>
 </ul>
 </li>
-<li>Volley原理和OkHttp实现原理和应用方法以及优缺点</li>
+<li><p>Volley原理和OkHttp实现原理和应用方法以及优缺点  </p>
+<ul>
+<li><strong>Volley的调用过程</strong>，通过 newRequestQueue(…) 函数新建并启动一个请求队列RequestQueue后，只需要往这个RequestQueue不断 add Request 即可</li>
+<li><strong>Volley</strong>：Volley 对外暴露的 API，通过 newRequestQueue(…) 函数新建并启动一个请求队列RequestQueue。</li>
+<li><strong>Request</strong>：表示一个请求的抽象类。StringRequest、JsonRequest、ImageRequest 都是它的子类，表示某种类型的请求。</li>
+<li><strong>RequestQueue</strong>：表示请求队列，里面包含一个CacheDispatcher(用于处理走缓存请求的调度线程)、NetworkDispatcher数组(用于处理走网络请求的调度线程)，一个ResponseDelivery(返回结果分发接口)，通过 start() 函数启动时会启动CacheDispatcher和NetworkDispatchers。        <em> <em>*HttpStack</em></em>：处理 Http 请求，返回请求结果。目前 Volley 中有基于 HttpURLConnection 的HurlStack和 基于 Apache HttpClient 的HttpClientStack  </li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Volley.png" class="full-image"></p>
+<p><a href="http://a.codekk.com/detail/Android/grumoon/Volley%20%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90" target="_blank" rel="external">Volley源码分析</a></p>
+</li>
 </ol>
 </li>
 </ol>
