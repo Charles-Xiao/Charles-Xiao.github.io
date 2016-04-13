@@ -505,11 +505,55 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 </ul>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Volley.png" class="full-image"></p>
 <p><a href="http://a.codekk.com/detail/Android/grumoon/Volley%20%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90" target="_blank" rel="external">Volley源码分析</a></p>
+<p><strong>Volley用法</strong>  </p>
+<p> RequestQueue mQueue = Volley.newRequestQueue(context);<br> StringRequest stringRequest = new StringRequest(Method.POST, “<a href="http://www.baidu.com" target="_blank" rel="external">http://www.baidu.com</a>“,  </p>
+<pre><code><span class="literal">new</span> Response<span class="built_in">.</span>Listener<span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span>() {  
+    @Override  
+    <span class="keyword">public</span> <span class="literal">void</span> onResponse(<span class="built_in">String</span> response) {  
+        <span class="keyword">Log</span><span class="built_in">.</span>d(<span class="string">"TAG"</span>, response);  
+    }  
+}, <span class="literal">new</span> Response<span class="built_in">.</span>ErrorListener() {  
+    @Override  
+    <span class="keyword">public</span> <span class="literal">void</span> onErrorResponse(VolleyError error) {  
+        <span class="keyword">Log</span><span class="built_in">.</span>e(<span class="string">"TAG"</span>, error<span class="built_in">.</span>getMessage(), error);  
+    }  
+}){
+@Override  
+ <span class="keyword">protected</span> <span class="built_in">Map</span><span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">&gt;</span> getParams() throws AuthFailureError {  
+     <span class="built_in">Map</span><span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">&gt;</span> <span class="built_in">map</span> <span class="subst">=</span> <span class="literal">new</span> HashMap<span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">&gt;</span>();  
+     <span class="built_in">map</span><span class="built_in">.</span>put(<span class="string">"params1"</span>, <span class="string">"value1"</span>);  
+     <span class="built_in">map</span><span class="built_in">.</span>put(<span class="string">"params2"</span>, <span class="string">"value2"</span>);  
+     <span class="keyword">return</span> <span class="built_in">map</span>;  
+ }  
+}; 
+</code></pre><p> mQueue.add(stringRequest); </p>
 </li>
 </ol>
 </li>
 </ol>
-<h3 id="佳学">佳学</h3><ol>
+<p><strong>OkHttp用法</strong><a href="http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0326/2643.html" target="_blank" rel="external">源码分析</a></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/OkHttp.png" class="full-image"></p>
+<pre><code>OkHttpClient mOkHttpClient = <span class="keyword">new</span> OkHttpClient();
+FormEncodingBuilder builder = <span class="keyword">new</span> FormEncodingBuilder();   
+builder.add(<span class="string">"username"</span>,<span class="string">"value"</span>);
+
+Request request = <span class="keyword">new</span> Request.Builder()
+                   .url(url)
+                .post(builder.build())
+                .build();
+mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback(){
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Request request, IOException e)</span>
+    </span>{
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(<span class="keyword">final</span> Response response)</span> <span class="keyword">throws</span> IOException
+    </span>{
+            <span class="comment">//String htmlStr =  response.body().string();</span>
+    }
+});
+</code></pre><h3 id="佳学">佳学</h3><ol>
 <li><strong>网络请求交互</strong>：参见百度锁屏项目</li>
 <li><strong>Android AsynTask实现多任务下载管理</strong>:</li>
 </ol>
@@ -652,6 +696,14 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 * <span class="type">HandlerThread</span>是一个<span class="type">Looper</span>,<span class="type">Handler</span>,<span class="type">Thread</span>的组合实现；在其构造函数中对<span class="type">Looper</span>进行初始化，并提供一个<span class="type">Looper</span>对象给新创建的<span class="type">Handler</span>对象，使得<span class="type">Handler</span>处理消息事件在子线程中处理
 </code></pre><h3 id="毕设-WebCrawler项目">毕设-WebCrawler项目</h3><p>java优先级队列；Java多线程处理，线程池，html页面解析等</p>
 <p>单例模式enum实现对MySQL数据库操作的优势</p>
+<h3 id="QA">QA</h3><ol>
+<li><p>如果在贵司移动开发部门做开发，主要用到哪些技术栈，我需要补充哪些技术站</p>
+</li>
+<li><p>跨平台应用研发，web轻应用和native app的开发前景比较看法</p>
+</li>
+<li><p>面试过程中有没有什么地方讲得太快或者不清楚的地方，我可以补充的，评价一下面试表现</p>
+</li>
+</ol>
 
         
       
