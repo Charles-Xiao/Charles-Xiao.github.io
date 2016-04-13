@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="Array,Leetcode," />
+  <meta name="keywords" content="Java,多线程," />
 
 
 
@@ -43,7 +43,7 @@
   </script>
 
 
-  <title> Remove element问题的简单优化 // CharlesXiao‘s Blog </title>
+  <title> Java多线程同步方法 // CharlesXiao‘s Blog </title>
 </head>
 
 <body>
@@ -146,7 +146,7 @@
           
           
             
-              Remove element问题的简单优化
+              Java多线程同步方法
             
           
         </h1>
@@ -154,14 +154,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2016-01-13
+          发表于 2015-04-13
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="../../../../categories/Leetcode/">Leetcode</a>
+              <a href="../../../../categories/java学习笔记/">java学习笔记</a>
 
               
               
@@ -175,7 +175,7 @@
             <span class="post-comments-count">
             &nbsp; | &nbsp;
             <a href="#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/13/Remove-element问题的简单优化/"></span>
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/13/Java多线程同步方法/"></span>
             </a>
           </span>
           
@@ -189,40 +189,72 @@
       
 
       
-        <p>原题链接: <a href="https://leetcode.com/problems/remove-element/" target="_blank" rel="external">Remove Element</a>. 这是一道easy的水题，之所以拿出来讲，主要是其中有一个巧妙的小优化,可以因小见大体会到代码效率优化的无处不在，激励自己写出最优的代码.</p>
-<h3 id="最初解法">最初解法</h3><pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span> {
-    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> val)</span> </span>{
-        <span class="keyword">int</span> length = nums.length;
-        <span class="keyword">int</span> res = <span class="number">0</span>;
-        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length; ++i) {
-            <span class="keyword">if</span> (nums[i] != val) {
-                 nums[res] = nums[i];
-                 res++;
+        <h3 id="Synchronized代码块和方法">Synchronized代码块和方法</h3><p>同步是一种高开销的操作，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；Synchronized锁住的是对象或者类,对象被锁住时，该对象所有的其他同步方法和代码块不能被执行；类被锁住时，该类所有的其他同步静态方法和代码块不能被执行</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">Bank</span> </span>{
+        <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> account;
+        }
+
+        <span class="javadoc">/**
+         * 用同步方法实现
+         * 
+         *<span class="javadoctag"> @param</span> money
+         */</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+            account += money;
+        }
+
+        <span class="javadoc">/**
+         * 用同步代码块实现
+         * 
+         *<span class="javadoctag"> @param</span> money
+         */</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save1</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+            <span class="keyword">synchronized</span> (<span class="keyword">this</span>) {
+                account += money;
             }
         }
-        <span class="keyword">return</span> res;
     }
-}
-</code></pre><p>思路讲解: 从头开始遍历数组元素length次，当元素nums[i]与val不相等，重新赋值, 相等则跳过，最终数组中前res个元素都是不等于val的元素</p>
-<p>效率:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/remove_element_0.png" class="full-image">  </p>
-<h3 id="改进解法">改进解法</h3><pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span> {
-    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> val)</span> </span>{
-        <span class="keyword">int</span> length = nums.length;
-        <span class="keyword">int</span> res = <span class="number">0</span>;
-        <span class="comment">// 减少i++操作引发70%的效率提升</span>
-        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length-res;) {
-            <span class="keyword">if</span> (nums[i] == val) {
-                 nums[i] = nums[length-res-<span class="number">1</span>];
-                 res++;
-            } <span class="keyword">else</span> {
-                i++;
+</code></pre><h3 id="ReentrantLock可重入锁">ReentrantLock可重入锁</h3><p>ReentrantLock是可重入、互斥、实现了Lock接口的锁，需要自己手动加锁与释放；要注意及时释放锁，否则会出现死锁，通常在finally代码释放锁；如果synchronized关键字能满足用户的需求，就用synchronized，因为它能简化代码</p>
+<pre><code><span class="keyword">class</span> <span class="title">Bank</span> {
+        <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
+        <span class="comment">// 创建一个ReentrantLock锁</span>
+        <span class="keyword">private</span> Lock <span class="keyword">lock</span> = <span class="keyword">new</span> ReentrantLock();
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> account;
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+            <span class="keyword">lock</span>.<span class="keyword">lock</span>();    <span class="comment">// 获得锁 </span>
+            <span class="keyword">try</span> {
+                account += money;
+            } <span class="keyword">finally</span> {
+                <span class="keyword">lock</span>.unlock();    <span class="comment">// 释放锁</span>
             }
         }
-        <span class="keyword">return</span> length-res;
+}
+</code></pre><h3 id="ThreadLocal线程局部变量">ThreadLocal线程局部变量</h3><p><strong>ThreadLocal与同步机制区别</strong>：a.ThreadLocal与同步机制都是为了解决多线程中相同变量的访问冲突问题。b.前者采用以”空间换时间”的方法，后者采用以”时间换空间”的方式<br>每一个使用ThreadLocal变量的线程都获得该变量的副本，副本之间相互独立，这样每一个线程都可以随意修改自己的变量副本，而不会对其他线程产生影响</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Bank</span> {
+    <span class="comment">// 使用ThreadLocal类管理共享变量account</span>
+    <span class="keyword">private</span> ThreadLocal&lt;Integer&gt; account = <span class="keyword">new</span> ThreadLocal&lt;Integer&gt;() {
+        @<span class="function">Override
+        <span class="keyword">protected</span> Integer <span class="title">initialValue</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> <span class="number">100</span>;
+        }
+    };
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+        account.<span class="keyword">set</span>(account.<span class="keyword">get</span>() + money);
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
+        <span class="keyword">return</span> account.<span class="keyword">get</span>();
     }
 }
-</code></pre><p>思路讲解: 从头开始遍历数组元素length-res次，当元素nums[i]与val相等，i不改变, 从末尾取出一个对应的将不再被循环遍历到的元素赋值到当前的nums[i], 再次与val比较；如果nums[i]与val不相等则i++，比较下一元素</p>
-<p>效率:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/remove_element_1.png" class="full-image">  </p>
+</code></pre><h3 id="volatile变量可见性">volatile变量可见性</h3><p>在需要同步的变量上加上修饰符volatile，例如：private volatile int account = 100;volatile可以保证变量的可见性但是不保证原子性，不能用于修饰final常量，线程每一次对volatile变量的修改都会通知到其他线程，也就是说每一次每个线程读取volatile变量时都会从主存中去取而不会从缓存寄存器中获取，以确保变量的值都是最新获取的</p>
 
       
     </div>
@@ -231,9 +263,9 @@
       
         <div class="post-tags">
           
-            <a href="../../../../tags/Array/"> #Array </a>
+            <a href="../../../../tags/Java/"> #Java </a>
           
-            <a href="../../../../tags/Leetcode/"> #Leetcode </a>
+            <a href="../../../../tags/多线程/"> #多线程 </a>
           
         </div>
       
@@ -242,13 +274,13 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="../../14/Palindrome-Reverse-Integer问题/">Palindrome && Reverse Integer问题</a>
+              <a href="../../../05/12/如何阅读一本书/">如何阅读一本书</a>
             
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="../Roman与Integer之间的相互转换/">Roman与Integer之间的相互转换</a>
+              <a href="../../09/Android基础知识总结/">Android基础知识总结</a>
             
           </div>
         </div>
@@ -264,8 +296,8 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2016/01/13/Remove-element问题的简单优化/"
-               data-title="Remove element问题的简单优化" data-url="https://charles-xiao.github.io/2016/01/13/Remove-element问题的简单优化/">
+          <div class="ds-thread" data-thread-key="2015/04/13/Java多线程同步方法/"
+               data-title="Java多线程同步方法" data-url="https://charles-xiao.github.io/2015/04/13/Java多线程同步方法/">
           </div>
         
       </div>
@@ -368,7 +400,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#最初解法"><span class="nav-number">1.</span> <span class="nav-text">最初解法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改进解法"><span class="nav-number">2.</span> <span class="nav-text">改进解法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Synchronized代码块和方法"><span class="nav-number">1.</span> <span class="nav-text">Synchronized代码块和方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReentrantLock可重入锁"><span class="nav-number">2.</span> <span class="nav-text">ReentrantLock可重入锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal线程局部变量"><span class="nav-number">3.</span> <span class="nav-text">ThreadLocal线程局部变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile变量可见性"><span class="nav-number">4.</span> <span class="nav-text">volatile变量可见性</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
