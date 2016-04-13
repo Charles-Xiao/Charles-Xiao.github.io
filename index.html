@@ -148,343 +148,6 @@
           
           
             
-              <a class="post-title-link" href="2016/03/09/Java多线程编程总结/">
-                Java多进程和多线程编程总结
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-03-09
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="categories/java学习笔记/">java学习笔记</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2016/03/09/Java多线程编程总结/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/09/Java多线程编程总结/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="进程与线程之间关系">进程与线程之间关系</h3><p>一个进程对应一个程序的执行，而一个线程则是进程执行过程中的一个单独的执行序列，一个进程可以包含多个线程。线程有时候也被称为轻量级进程.  </p>
-<p>首先我们明确一点，就是我们创建的每一个Java程序都是运行在一个单独的Java虚拟机进程中的，每启动一个java程序就会同时开启一个单独对应的JVM进程(也叫做JVM实例)，然后JVM进程会开始初始化类，包括初始化静态变量和静态代码块，普通变量，构造器等；然后再去寻找main()主线程作为程序执行入口,继续执行其他线程直至结束.(Android应用程序和dalvik虚拟机的关系也一样如此)</p>
-<h3 id="常见的进程间通信方式">常见的进程间通信方式</h3><ol>
-<li>管道与命名管道：管道允许一个进程和另一个与它有共同祖先的进程之间进行通信，命名管道允许无亲缘关系的进程间的通信,命名管道在文件系统中有对应的文件名,通过命令mkfifo或系统调用mkfifo来创建</li>
-<li>套接字：可用于不同机器之间的进程间通信</li>
-<li>共享内存：多个进程可以访问同一块内存空间，是最快的可用IPC形式</li>
-<li>内存映射：内存映射允许任何多个进程间通信，每一个使用该机制的进程通过把一个共享的文件映射到自己的进程地址空间来实现它。</li>
-<li>信号量：主要作为进程间以及同一进程不同线程之间的同步手段</li>
-</ol>
-<h3 id="多线程之间通信方式">多线程之间通信方式</h3><ol>
-<li>“共享变量”：实现Runnable接口实现线程的共享变量或者内部类共享外围类的变量</li>
-<li><p>“管道流”：</p>
-<pre><code><span class="comment">/* 管道输出流和生产者线程绑定, 管道输入流和消费者线程绑定,输入输出流绑定，启动两个线程互相之间通过write和read函数就行通信 */</span>
-<span class="type">PipedOutputStream</span> pos = <span class="keyword">new</span> <span class="type">PipedOutputStream</span>();
-<span class="type">Producer</span> p = <span class="keyword">new</span> <span class="type">Producer</span>(pos);
-<span class="type">PipedInputStream</span> pis = <span class="keyword">new</span> <span class="type">PipedInputStream</span>();
-<span class="type">Consumer</span> c = <span class="keyword">new</span> <span class="type">Consumer</span>(pis);
-pos.connect(pis);
-p.start();
-c.start();
-
-<span class="class"><span class="keyword">class</span> <span class="title">Producer</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Thread</span> {</span>
-    <span class="keyword">private</span> <span class="type">PipedOutputStream</span> pos;
-    public <span class="type">Producer</span>(<span class="type">PipedOutputStream</span> pos) {
-        <span class="keyword">this</span>.pos = pos;
-    }
-    public void run() {
-        int i = <span class="number">8</span>;
-        <span class="keyword">try</span> {
-            pos.write(i);
-            <span class="comment">// pis.read()</span>
-        } <span class="keyword">catch</span> (<span class="type">IOException</span> e) {
-            e.printStackTrace();
-        }
-    }
-}
-</code></pre></li>
-</ol>
-<h3 id="线程的四种创建方式">线程的四种创建方式</h3><ol>
-<li>定义<strong>Thread类</strong>的子类，并重写该类的run()方法；创建Thread子类的实例，即创建了线程对象，调用线程对象的start()方法来启动该线程</li>
-<li>定义<strong>Runnable接口</strong>的实现类，并重写该接口的run()方法，创建Runnable实现类的实例，并以此实例作为Thread的参数来创建Thread对象，该Thread对象才是真正的线程对象；然后调用线程对象的start()方法来启动线程</li>
-<li><p>创建<strong>Callable接口</strong>的实现类，并实现call()方法，该call()方法有返回值；创建Callable实现类的实例，使用FutureTask类来包装Callable对象，该FutureTask对象封装了该Callable对象的call()方法的返回值，使用FutureTask对象作为Thread对象的target创建并启动新线程，调用FutureTask对象的get()方法来获得子线程执行结束后的返回值</p>
-<pre><code><span class="keyword">public</span> <span class="keyword">class</span> MyCallableTest <span class="keyword">implements</span> Callable&lt;Integer&gt;{
-    <span class="comment">// 实现call方法，作为线程执行体</span>
-    <span class="keyword">public</span> Integer <span class="keyword">call</span>(){
-        <span class="keyword">int</span> i = <span class="number">0</span>;
-        <span class="keyword">for</span> ( ; i &lt; <span class="number">100</span> ; i++ ){
-            System.out.<span class="keyword">println</span>(Thread.currentThread().getName()+ <span class="string">"\t"</span> + i);
-        }
-        <span class="comment">// call()方法可以有返回值，而且可以抛出异常</span>
-        <span class="keyword">return</span> i;
-    }
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) {
-        <span class="comment">// 创建Callable对象</span>
-        MyCallableTest myCallableTest = <span class="keyword">new</span> MyCallableTest();
-        <span class="comment">// 使用FutureTask来包装Callable对象</span>
-        FutureTask&lt;Integer&gt; <span class="keyword">task</span> = <span class="keyword">new</span> FutureTask&lt;Integer&gt;(myCallableTest);
-        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">100</span> ; i++){
-            System.out.<span class="keyword">println</span>(Thread.currentThread().getName()+ <span class="string">" \t"</span> + i);
-            <span class="keyword">if</span> (i == <span class="number">20</span>){
-                <span class="comment">// 实质还是以Callable对象来创建、并启动线程</span>
-                <span class="keyword">new</span> Thread(<span class="keyword">task</span> , <span class="string">"callable"</span>).start();
-                <span class="comment">// 线程池执行FutureTask</span>
-                Executor executor = Executors.newSingleThreadExecutor();
-                executor.execute(<span class="keyword">task</span>);
-            }
-        }
-        <span class="keyword">try</span>{
-            <span class="comment">// 获取线程返回值</span>
-            System.out.<span class="keyword">println</span>(<span class="string">"callable返回值："</span> + <span class="keyword">task</span>.get());
-        }
-        <span class="keyword">catch</span> (Exception ex){
-            ex.printStackTrace();
-        }
-    }
-}
-</code></pre></li>
-<li><p><strong>线程池</strong>: </p>
-<ul>
-<li>线程池的好处在于可以更好地控制并发线程数目，提高资源利用率并防止阻塞</li>
-<li>可以更好地重用线程, 减少线程创建和销毁带来的系统开销,可以设置线程定时定期执行</li>
-<li>核心构造函数ThreadPoolExecutor,可以在参数中设置核心池大小，最大线程数等</li>
-<li>ExecutorService接口用于实现和管理线程池,其生命周期包括三种状态：运行、关闭、终止。</li>
-<li><p>四种Executors接口提供的通过ThreadFactory新建的线程池</p>
-<ol>
-<li><p>newFixedThreadPool(): 固定数目线程池，任意时间点，最多只能有固定数目的活动线程存在；有新任务到达时创建线程，只能放在另外的队列中等待，直到达到线程池最大大小为止，有异常则补充    </p>
-<pre><code>ExecutorService threadPool = Executor.newFixedThreadPool(<span class="number">3</span>);
-Runnable r = <span class="keyword">new</span> Runnable() {
-    <span class="annotation">@Override</span>
-    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
-
-    }
-};
-<span class="comment">// 参数可以是Thread以及Runnable对象</span>
-threadPool.execute(r);
-</code></pre></li>
-<li><p>newCachedThreadPool：缓存型线程池，新任务到达则新建线程，线程数目大于处理需要出现闲置则回收，无大小限制</p>
-</li>
-<li>newSingleThreadExecutor: 单线程池，保证任务被顺序执行</li>
-<li>newScheduledThreadPool: 调度型线程池，提供任务被定时和周期性执行的功能</li>
-</ol>
-<ul>
-<li><p>自定义线程池</p>
-<pre><code> ThreadPoolExecutor(<span class="keyword">int</span> corePoolSize, <span class="keyword">int</span> maximumPoolSize, <span class="keyword">long</span> keepAliveTime, TimeUnit unit, BlockingQueue&lt;Runnable&gt; workQueue, ThreadFactory threadFactory, RejectedExecutionHandler <span class="keyword">handler</span>)
-
-<span class="comment">/*
-corePoolSize - 核心池中所保存的线程数，包括空闲线程。
-maximumPoolSize-线程池中允许的最大线程数
-keepAliveTime - 当线程池的工作线程空闲后，保持存活的时间
-unit - keepAliveTime 参数的时间单位
-workQueue - 执行前用于保持任务的队列。此队列仅保持由 execute方法提交的 Runnable任务
-threadFactory - 执行程序创建新线程时使用的工厂
-handler - 由于超出线程范围和队列容量而使新到达的任务被阻塞时采取的处理策略，
-默认为AbortPolicy，表示无法处理新任务时抛出异常；DiscardPolicy：不能执行的任务将被删除
-ThreadPoolExecutor是Executors类的底层实现
-*/</span>
-</code></pre></li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<pre><code>         <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadPoolTest</span></span>{   
-            <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>{   
-                <span class="comment">//创建等待队列   </span>
-                BlockingQueue&lt;Runnable&gt; bqueue = <span class="keyword">new</span> ArrayBlockingQueue&lt;Runnable&gt;(<span class="number">20</span>);   
-                <span class="comment">//创建线程池，池中保存的线程数为3，允许的最大线程数为5  </span>
-                ThreadPoolExecutor pool = <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">3</span>,<span class="number">5</span>,<span class="number">50</span>,TimeUnit.MILLISECONDS,bqueue);   
-                <span class="comment">//创建七个任务   </span>
-                Runnable t1 = <span class="keyword">new</span> MyThread();   
-                Runnable t2 = <span class="keyword">new</span> MyThread();   
-                Runnable t3 = <span class="keyword">new</span> MyThread();   
-                Runnable t4 = <span class="keyword">new</span> MyThread();   
-                Runnable t5 = <span class="keyword">new</span> MyThread();   
-                Runnable t6 = <span class="keyword">new</span> MyThread();   
-                Runnable t7 = <span class="keyword">new</span> MyThread();   
-                <span class="comment">//每个任务会在一个线程上执行  </span>
-                pool.execute(t1);   
-                pool.execute(t2);   
-                pool.execute(t3);   
-                pool.execute(t4);   
-                pool.execute(t5);   
-                pool.execute(t6);   
-                pool.execute(t7);   
-                <span class="comment">//关闭线程池   </span>
-                pool.shutdown();   
-            }   
-        }   
-
-        <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>{   
-            <span class="annotation">@Override</span>   
-            <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>{   
-                System.out.println(Thread.currentThread().getName() + <span class="string">"正在执行。。。"</span>);   
-                <span class="keyword">try</span>{   
-                    Thread.sleep(<span class="number">100</span>);   
-                }<span class="keyword">catch</span>(InterruptedException e){   
-                    e.printStackTrace();   
-                }   
-            }   
-        }  
-
-
- * **线程池工作流程**
-
-     &lt;img src=<span class="string">"https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/threadpool-procedure.jpg"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"full-image"</span> /&gt;
-
- * **线程池的排队策略**
-
- <span class="number">1.</span> 默认选项是SynchronousQueue，它将任务直接提交给线程而不保持它们，一个不存储元素的阻塞队列，每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态
- <span class="number">2.</span> 无界队列。使用无界队列（例如，不具有预定义容量的 LinkedBlockingQueue）将导致在所有 corePoolSize 线程都忙时新任务在队列中等待。这样，创建的线程就不会超过corePoolSize。（因此，maximumPoolSize的值也就无效了。）当每个任务完全独立于其他任务，即任务执行互不影响时，适合于使用无界队列；例如，在 Web页服务器中。这种排队可用于处理瞬态突发请求，当命令以超过队列所能处理的平均数连续到达时，此策略允许无界线程具有增长的可能性。
-<span class="number">3.</span> 有界队列。当使用有限的 maximumPoolSizes时，有界队列（如 ArrayBlockingQueue）有助于防止资源耗尽，但是可能较难调整和控制。队列大小和最大池大小可能需要相互折衷：使用大型队列和小型池可以最大限度地降低 CPU 使用率、操作系统资源和上下文切换开销，但是可能导致人工降低吞吐量。如果任务频繁阻塞（例如，如果它们是 I/O边界），则系统可能为超过您许可的更多线程安排时间。使用小型队列通常要求较大的池大小，CPU使用率较高，但是可能遇到不可接受的调度开销，这样也会降低吞吐量。 
-<span class="number">4.</span> PriorityBlockingQueue: 一个具有优先级的无限阻塞队列
-
- * **线程池的风险**
-     1. 死锁: 死锁的产生是因为一组线程或者进程互相等待资源的释放而永远互相等待;线程池中容易产生一种新的死锁: 当核心池中所有线程都在等待阻塞队列中的某个线程的执行结果，但是该线程却因为池中没有空闲线程而没有办法执行，这样就导致互相等待的死锁.
-     2. 并发错误: 线程池和其它排队机制依靠使用 wait() 和 notify() 方法,易出现问题
-
- * **线程池的关闭**
-
- 1. 通过调用线程池的shutdown或shutdownNow方法来关闭线程池，它们的原理是遍历线程池中的工作线程，然后逐个调用线程的interrupt方法来中断线程，所以无法响应中断的任务可能永远无法终止。但是它们存在一定的区别，shutdownNow首先将线程池的状态设置成STOP，然后尝试停止所有的正在执行或暂停任务的线程，并返回等待执行任务的列表，而shutdown只是将线程池的状态设置成SHUTDOWN状态，然后中断所有没有正在执行任务的线程。
-
-2. 只要调用了这两个关闭方法的其中一个，isShutdown方法就会返回<span class="keyword">true</span>。当所有的任务都已关闭后,才表示线程池关闭成功，这时调用isTerminaed方法会返回<span class="keyword">true</span>。至于我们应该调用哪一种方法来关闭线程池，应该由提交到线程池的任务特性决定，通常调用shutdown来关闭线程池，如果任务不一定要执行完，则可以调用shutdownNow。
-
- * **合理配置线程池** 
-
-     1. 任务的性质：CPU密集型任务，IO密集型任务和混合型任务；CPU密集型任务配置尽可能小的线程，如配置Ncpu+1个线程的线程池。IO密集型任务则由于线程并不是一直在执行任务，则配置尽可能多的线程，如2*Ncpu
-    2. 任务的优先级：高，中和低；PriorityBlockingQueue会导致优先级低得线程永远不被执行
-    3. 任务的执行时间：长，中和短；
-    4. 任务的依赖性：是否依赖其他系统资源，如数据库连接：依赖数据库连接池的任务，因为线程提交SQL后需要等待数据库返回结果，如果等待的时间越长CPU空闲时间就越长，那么线程数应该设置越大，这样才能更好的利用CPU。
-
- * execute和submit两个方法都可以向线程池提交任务， execute()方法的返回类型是<span class="keyword">void</span>，它定义在Executor接口中；submit()方法可以返回持有计算结果的Future对象，它定义在ExecutorService接口中，它扩展了Executor接口 
-</code></pre><h3 id="线程的状态变化">线程的状态变化</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/multiThread.png" class="full-image"></p>
-<h3 id="多线程的同步机制">多线程的同步机制</h3><ol>
-<li><strong>Serializable</strong>: 当一个类声明要实现Serializable接口时，只是表明该类参加序列化协议;Java提供的ObjectInputStream和ObjectOutputStream将数据流功能扩展至可读写对象 。在ObjectInputStream中用readObject()方法可以直接读取一个对象，ObjectOutputStream中用writeObject()方法可以直接将对象保存到输出流中; 序列化只能保存对象的非静态成员变量，不能保存任何的成员方法和静态成员变量，而且序列化保存的只是变量的值，对于变量的任何修饰符都不能保存。</li>
-<li><strong>transient</strong>: 瞬时变量</li>
-<li><strong>volatile</strong>: 保证变量的可见性，每次写修改该变量都会通知到其他线程，也就是说每个线程读取该变量都是从主存读取而不会去工作内存或者寄存器读取缓存，以保证取到的都是最新的值；该关键字在JDK1.6开始可以保证指令不被重排序；但是他不能保证原子性，比如n++操作</li>
-</ol>
-<h3 id="死锁及其解决办法">死锁及其解决办法</h3><pre><code><span class="comment">/**
- * 一个简单的死锁类 当DeadLock类的对象flag==1时（td1），先锁定o1,睡眠500毫秒
- * 而td1在睡眠的时候另一个flag==0的对象（td2）线程启动，先锁定o2,睡眠500毫秒
- * td1睡眠结束后需要锁定o2才能继续执行，而此时o2已被td2锁定； td2睡眠结束后需要锁定o1才能继续执行，而此时o1已被td1锁定；
- * td1、td2相互等待，都需要得到对方锁定的资源才能继续执行，从而死锁
- */</span>
-<span class="keyword">public</span> class DeadLock implements Runnable {
-    <span class="keyword">public</span> <span class="built_in">int</span> flag = <span class="number">1</span>;
-    <span class="comment">// 静态对象是类的所有对象共享的</span>
-    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">Object</span> o1 = <span class="keyword">new</span> <span class="keyword">Object</span>(), o2 = <span class="keyword">new</span> <span class="keyword">Object</span>();
-
-    <span class="keyword">public</span> <span class="keyword">void</span> run() {
-        System.out.<span class="built_in">println</span>(<span class="string">"flag="</span> + flag);
-        <span class="keyword">if</span> (flag == <span class="number">1</span>) {
-            <span class="keyword">synchronized</span> (o1) {
-                System.out.<span class="built_in">println</span>(<span class="string">"thread1锁定 o1"</span>);
-                <span class="keyword">try</span> {
-                    Thread.sleep(<span class="number">500</span>);
-                } <span class="keyword">catch</span> (Exception e) {
-                    e.printStackTrace();
-                }
-                <span class="comment">// thread1等待资源o2释放</span>
-                <span class="keyword">synchronized</span> (o2) {
-                    System.out.<span class="built_in">println</span>(<span class="string">"1"</span>);
-                }
-            }
-        }
-        <span class="keyword">if</span> (flag == <span class="number">2</span>) {
-            <span class="keyword">synchronized</span> (o2) {
-                System.out.<span class="built_in">println</span>(<span class="string">"thread2锁定 o2"</span>);
-                <span class="keyword">try</span> {
-                    Thread.sleep(<span class="number">500</span>);
-                } <span class="keyword">catch</span> (Exception e) {
-                    e.printStackTrace();
-                }
-                <span class="comment">// thread2等待资源o1释放</span>
-                <span class="keyword">synchronized</span> (o1) {
-                    System.out.<span class="built_in">println</span>(<span class="string">"2"</span>);
-                }
-            }
-        }
-    }
-
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) {
-
-        DeadLock td1 = <span class="keyword">new</span> DeadLock();
-        DeadLock td2 = <span class="keyword">new</span> DeadLock();
-        td1.flag = <span class="number">1</span>;
-        td2.flag = <span class="number">2</span>;
-        <span class="comment">// td1,td2都处于可执行状态，但JVM线程调度先执行哪个线程是不确定的。</span>
-        <span class="comment">// td2的run()可能在td1的run()之前运行</span>
-        <span class="keyword">new</span> Thread(td1).start();
-        <span class="keyword">new</span> Thread(td2).start();
-
-    }
-}
-</code></pre>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/java/"> #java </a>
-          
-            <a href="tags/多线程/"> #多线程 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
               <a class="post-title-link" href="2016/01/17/Html5、React-Native和Native应用开发方式的对比分析/">
                 Html5、React Native和Native应用开发方式的对比分析
               </a>
@@ -1285,6 +948,155 @@ ThreadPoolExecutor是Executors类的底层实现
     </div>
 
     <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="2015/08/30/Android应用性能优化/">
+                Android应用性能优化
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-08-30
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="categories/Android/">Android</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2015/08/30/Android应用性能优化/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/30/Android应用性能优化/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>Android手机由于其本身的后台机制和硬件特点，性能上一直被诟病，所以软件开发者对软件本身的性能优化就显得尤为重要；本文将对Android开发过程中性能优化的各个方面做一个回顾与总结。</p>
+<h2 id="Layout优化">Layout优化</h2><ul>
+<li><p><strong>include标签</strong>：该标签可以用于将布局文件中的公共部分提取出来给其它布局文件复用，从而使得布局模块化，代码轻量化</p>
+</li>
+<li><p><strong>viewstub标签</strong>：该标签与include一样用于引入布局模块，只是引入的布局默认不会扩张，既不会占用显示也不会占用位置，从而在解析layout时节省cpu和内存，其功能类似于将某个layout属性设置为android:visibility=”gone”</p>
+</li>
+<li><p><strong>merge标签</strong>：该标签在layout中会被自动忽略，从而减少一层布局嵌套，其主要有两种用法：①当布局顶结点是FrameLayout且不需要设置background或padding等属性，可以用merge代替 ②作为子布局被其他布局include时，使用merge当作该布局的顶节点来代替layout顶节点就可以减少一层嵌套</p>
+</li>
+<li><p><strong>hierarchy viewer</strong>：该工具可以方便的查看Activity的布局，各个View的属性、measure、layout、draw的时间，如果耗时较多会用红色标记，否则显示绿色</p>
+</li>
+<li><p>RelativeLayout代替LinearLayout可以减少布局层次和复杂性</p>
+</li>
+<li><p>减少不必要的inflate，尽量使用全局变量缓存View</p>
+</li>
+<li><p>尽可能为不同分辨率创建资源，以减少不必要的硬件缩放，这会降低UI的绘制速度</p>
+</li>
+</ul>
+<h2 id="Cache优化">Cache优化</h2><ul>
+<li><p><strong>ListView缓存</strong>：ListView中有一个回收器，Item滑出界面的时候View会回收到这里，需要显示新的Item的时候，就尽量重用回收器里面的View；每次在getView函数中inflate新的item之前会先判断回收器中是否有缓存的view，即判断convertView是否为null，是则inflate一个新的item View，否则重用回收器中的item。此外，ListView还使用静态的ViewHolder减少findViewById的次数</p>
+</li>
+<li><p><strong>IO缓存</strong>：在文件和网络IO中使用具有缓存策略的输入流，BufferedInputStream替代InputStream，BufferedReader替代Reader，BufferedReader替代BufferedInputStream</p>
+</li>
+<li><p><strong>data缓存(空间换时间)</strong>：①缓存数据库的查询结果，比如缓存数据库表中的数据条数，这样就可以避免多次的select count查询 ②缓存磁盘文件中需要频繁访问的数据到内存中 ③缓存耗时计算的结果</p>
+</li>
+</ul>
+<h2 id="Battery优化">Battery优化</h2><ul>
+<li>cpu的使用率和使用频率将直接或间接的影响电量的分配和使用，<strong>cpu降频</strong>可以节约电量</li>
+<li><p><strong>service优化</strong>  </p>
+<ul>
+<li>service作为一个运行在主线程中的后台服务，应该尽量避免耗时动作，而应该尽量新开线程去处理耗时动作</li>
+<li><p>监听系统广播看service是否存活，否则kill掉；降低service优先级使得系统内存吃紧时会被自动kill掉</p>
+</li>
+<li><p>使用Android提供的IntentService代替service，因为IntentService会在运行完成之后自动停止，而service需要手动调用stopService()才能停止运行</p>
+</li>
+<li><p>定时执行任务的Alarm机制：Android的定时任务有两种实现方式，Timer类和Alarm机制；Timer不适合长期后台运行的定时任务。因为每种手机都会有自己的休眠策略，Android手机就会在长时间不操作的情况下自动让CPU进入到睡眠状态，这就有可能导致Timer中的定时任务无法正常运行。而Alarm机制则不存在这种情况，它具有唤醒CPU的功能，即可以保证每次需要执行定时任务的时候CPU能正常工作。然而从Android4.4之后，Alarm任务的触发时间将会变得不准确，有可能会延迟一段时间后任务才能得到执行。这不是bug，而是系统在耗电性方面进行的优化。系统会自动检测目前有多少Alarm任务存在，然后将触发时间将近的几个任务放在一起执行，这就可以大幅度的减少CPU被唤醒的次数，从而有效延长电池的使用时间</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="网络优化">网络优化</h2><ul>
+<li><p>异步请求网络数据，避免频繁请求数据，及时缓存数据</p>
+</li>
+<li><p>wifi传输数据比蜂窝数据更省电，所以尽量在wifi下进行数据的预加载</p>
+</li>
+<li><p>httpClient和httpUrlConnection对比： </p>
+<ol>
+<li>httpClient是apache的开源实现，API数量多，非常稳定</li>
+<li>httpUrlConnection是java自带的模块: ①可以直接支持GZIP压缩,而HttpClient虽然也支持GZIP，但要自己写代码处理 ②httpUrlConnection直接在系统层面做了缓存策略处理，加快重复请求的速度 ③API简单，体积较小,而且直接支持系统级连接池，即打开的连接不会直接关闭，在一段时间内所有程序可共用</li>
+<li>HttpURLConnection在Android2.2之前有个重大Bug，调用close()函数会影响连接池，导致连接复用失效，需要关闭keepAlive;因此在2.2之前http请求都是用httpClient，2.2之后则是使用HttpURLConnection</li>
+<li>但是!!!现在!!!Android不再推荐这两种方式！二是直接使用OKHttp这种成熟方案！支持Android 2.3及其以上版本</li>
+</ol>
+</li>
+</ul>
+<h2 id="数据结构优化">数据结构优化</h2><ul>
+<li><p><strong>ArrayList和LinkedList的选择</strong>：ArrayList根据index取值更快，LinkedList更占内存、随机插入删除更快速、扩容效率更高</p>
+</li>
+<li><p><strong>ArrayList、HashMap、LinkedHashMap、HashSet的选择</strong>：hash系列数据结构查询速度更优，ArrayList存储有序元素，HashMap为键值对数据结构，LinkedHashMap可以记住加入次序的hashMap，HashSet不允许重复元素</p>
+</li>
+<li><p><strong>HashMap、WeakHashMap选择</strong>：WeakHashMap中元素可在适当时候被系统垃圾回收器自动回收，所以适合在内存紧张时使用</p>
+</li>
+<li><p><strong>Collections.synchronizedMap和ConcurrentHashMap的选择</strong>：ConcurrentHashMap为细分锁，锁粒度更小，并发性能更优；Collections.synchronizedMap为对象锁，自己添加函数进行锁控制更方便</p>
+</li>
+<li><p><strong>Android中性能更优的数据类型</strong>：如SparseArray、SparseBooleanArray、SparseIntArray、Pair；Sparse系列的数据结构是为key为int情况的特殊处理，采用二分查找及简单的数组存储，加上不需要泛型转换的开销，相对Map来说性能更优</p>
+</li>
+</ul>
+<p><a href="http://www.trinea.cn/android/android-performance-demo/" target="_blank" rel="external">参考链接1</a>   </p>
+<p><a href="http://blog.csdn.net/jdsjlzx/article/details/44600477" target="_blank" rel="external">参考链接2</a></p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/优化/"> #优化 </a>
+          
+        </div>
       
 
       

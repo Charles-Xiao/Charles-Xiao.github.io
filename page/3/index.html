@@ -148,208 +148,6 @@
           
           
             
-              <a class="post-title-link" href="../../2015/05/27/java重难点知识集锦/">
-                java重难点知识集锦
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-27
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/java学习笔记/">java学习笔记</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/27/java重难点知识集锦/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/27/java重难点知识集锦/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="复用类(继承组合)与多态">复用类(继承组合)与多态</h3><ol>
-<li><strong>继承、组合与代理之间的区别与联系</strong>：组合只是将对象引用置于新类中即可，表述的是一种has-a的关系，而继承通过extends关键字实现，自动得到基类中所有域和方法，表述的是一种is-a的关系；而代理是介于两者之间的一种关系，首先将对象引用置于新类中，然后在新类中构建同名方法来暴露该对象的所有方法(类似于继承)</li>
-<li><strong>继承与初始化</strong>：导出类继承自基类，构造器调用顺序是从上至下基类到导出类层层调用，若是默认构造器则不需要在导出类中显式调用基类构造器，否则需要首先在导出类构造器中使用super关键字调用基类构造器。见《Java编程思想P146和P158》</li>
-<li>多态也被称作动态绑定，与向上转型相反，抽象接口编程的重要性</li>
-</ol>
-<h3 id="接口与内部类">接口与内部类</h3><ol>
-<li><p><strong>接口与抽象类的区别联系</strong>：</p>
-<ul>
-<li>一个类可以实现多个接口但是只能实现一个抽象类 </li>
-<li>接口中都是抽象方法，抽象类中可以有实现的方法</li>
-<li>接口中方法和域都是public，抽象类中可以自由定义修饰符</li>
-<li>接口不能有构造器，其所有域都是static和final的</li>
-<li>两者都不能实例化，都能存放子类或者实现类的对象</li>
-</ul>
-</li>
-<li><p><strong>静态内部类(嵌套类)与非静态内部类，方法内部类，匿名内部类区别</strong>：</p>
-<ul>
-<li>嵌套类不需要内部类对象与外围类对象之间有联系，而内部类自动拥有其外围类所有成员的访问权(因为内部类对象拥有一个指向其外围类对象的引用);创建内部类对象之前需要先创建外围类对象，而创建嵌套类对象则不需要</li>
-<li>嵌套类不能访问外围类的非静态属性，但是内部类可以访问外围类的所有属性和方法(包括private)，内部类不能有static变量</li>
-<li>局部内部类: 该类被创建在外围类的方法或者作用域中，局部内部类的访问仅限于方法内或者该作用域内</li>
-<li><p>匿名内部类: 在java Listener中出现的非常多，必须继承某个接口或者父类，在其中只能重写一个方法；没有修饰符;匿名内部类是唯一一种没有构造器的类。正因为其没有构造器，所以匿名内部类的使用范围非常有限，大部分匿名内部类用于接口回调。匿名内部类在编译的时候由系统自动起名为Outter$1.class；多线程的实现也是匿名内部类的一种</p>
-<pre><code>scan_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {
-    @<span class="type">Override</span>
-    public <span class="type">void</span> onClick(<span class="type">View</span> v) {
-        // <span class="type">TODO</span> <span class="type">Auto</span>-generated <span class="keyword">method</span> stub
-
-    }
-});
-
-history_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {       
-    @<span class="type">Override</span>
-    public <span class="type">void</span> onClick(<span class="type">View</span> v) {
-        // <span class="type">TODO</span> <span class="type">Auto</span>-generated <span class="keyword">method</span> stub
-
-    }
-});
-</code></pre></li>
-<li>成员内部类，就是作为外部类的成员，可以直接使用外部类的所有成员和方法，即使是private的。虽然成员内部类可以无条件地访问外部类的成员，而外部类想访问成员内部类的成员却不是这么随心所欲了。在外部类中如果要访问成员内部类的成员，必须先创建一个成员内部类的对象，再通过指向这个对象的引用来访问</li>
-</ul>
-</li>
-<li><strong>为什么需要内部类？</strong><ul>
-<li>内部类提供了进入和操作外围类的窗口，可以直接调用外部类的private方法和属性，但是外部类却不可以调用内部类的方法和属性</li>
-<li>内部类完善了“多重继承”机制，他能提供继承多个具体类或抽象类的能力</li>
-<li>内部类可以更好地封装，它被封装在外部类里，不允许同包其他类访问</li>
-</ul>
-</li>
-<li><strong>内部类的继承与覆盖</strong> —- 见《Java编程思想P212》</li>
-</ol>
-<h3 id="异常处理与类型信息">异常处理与类型信息</h3><ol>
-<li>异常处理是java中唯一正式的错误报告机制，用于解决运行期间遇到的问题；可以用try……catch进行捕获也可以在定义方法或者类时使用throws声明。</li>
-<li><strong>return与finally</strong>：<ul>
-<li>在try里边return会先return再执行finally；在catch里边return则先执行finally再return</li>
-<li>在finally里边return会导致异常丢失，不再抛出异常(另一种异常丢失是因为前一个异常还没处理就抛出下一个异常，前一个异常就丢失了)</li>
-</ul>
-</li>
-<li><strong>RTTI(Run-Time Type Identification)</strong>：在运行时识别对象的类型；其主要限制是在编译时就必须已知对象类型，也就是知道类名，它的三种应用场景：①类型转换 如：Shape s = (Shape)circle　②Shape.class这种类字面常量　③instanceof判断某对象是否是某类或其之类的实例</li>
-<li><strong>反射</strong>：反射机制可以用于使用在编译器为程序生成代码之后很久才会出现的类，比如基于构建编程和远程方法调用，主要是通过Class类和java.lang.reflect类库来实现。</li>
-<li><strong>RTTI和反射之间真正的区别</strong>在于：对RTTI来说，编译器在编译时打开和检查.class文件；对于反射机制来说，.class文件在编译时不可获取，只有等到运行时才能打开和检查。</li>
-</ol>
-<h3 id="枚举、注解与泛型">枚举、注解与泛型</h3><ol>
-<li><a href="http://www.cnblogs.com/happyPawpaw/archive/2013/04/09/3009553.html">Java Enum用法</a></li>
-<li>注解又叫做元数据，一种在代码中添加信息的形式化方法，该信息可以在后期利用反射机制进行使用，我们可以通过编写注解处理器来解析代码中的注解，也可以使用apt来解析。</li>
-<li>泛型主要是用于容器定义。</li>
-</ol>
-<h3 id="字符串与数组">字符串与数组</h3><h3 id="持有对象的容器">持有对象的容器</h3><h3 id="java_I/O系统与并发">java I/O系统与并发</h3><h3 id="final、finally和finalize对比">final、finally和finalize对比</h3><ul>
-<li>final用于声明属性方法和类，分别表示：属性不可变，方法不可覆盖，类不可继承。可以用于关闭方法动态绑定</li>
-<li>finally是异常处理语句的一部分，表示总是执行。一般用于释放除内存之外的资源(例如已打开的文件或者网络连接)</li>
-<li>finalize是Object的一个方法，在垃圾收集器执行的时候会调用被回收对象的此方法。</li>
-</ul>
-<h3 id="String、StringBuffer和StringBuilder区别">String、StringBuffer和StringBuilder区别</h3><ul>
-<li>如果一个对象，在它创建完成之后，不能再改变它的状态，那么这个对象就是不可变的。不能改变状态的意思是，不能改变对象内的成员变量，包括基本数据类型的值不能改变，引用类型的变量不能指向其他的对象，引用类型指向的对象的状态也不能改变。</li>
-<li>String类对象是不可变对象，其在创建之后不能再改变其所拥有的所有private final成员变量；因为String类本身就是final类而且其源码中的char[]数组引用，offset(记录字符串首字母在value数组中对应的下标),count(记录字符串的长度)，hash等变量也是final的(JDK1.7中只存在hash和char[]数组),除非使用反射机制去改变char[]引用指向的堆中的数组数据；而String的substring， replace， replaceAll， toLowerCase等函数都是新建一个堆中的String对象然后返回给String的引用，从而使得引用指向了新的String对象，并没有改变原来的String对象</li>
-<li><p>用反射可以反射出String对象中的私有 value属性， 进而改变通过获得的char[]引用去改变数组的结构，例如：</p>
-<pre><code><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testReflection</span><span class="params">()</span> throws Exception </span>{  
-
-<span class="comment">//创建字符串"Hello World"， 并赋给引用s  </span>
-String s = <span class="string">"Hello World"</span>;   
-
-System.<span class="keyword">out</span>.println(<span class="string">"s = "</span> + s); <span class="comment">//Hello World  </span>
-
-<span class="comment">//获取String类中的value字段  </span>
-Field valueFieldOfString = String.class.getDeclaredField(<span class="string">"value"</span>);  
-
-<span class="comment">//改变value属性的访问权限  </span>
-valueFieldOfString.setAccessible(<span class="keyword">true</span>);  
-
-<span class="comment">//获取s对象上的value属性的值  </span>
-<span class="keyword">char</span>[] <span class="keyword">value</span> = (<span class="keyword">char</span>[]) valueFieldOfString.<span class="keyword">get</span>(s);  
-
-<span class="comment">//改变value所引用的数组中的第5个字符  </span>
-<span class="keyword">value</span>[<span class="number">5</span>] = <span class="string">'_'</span>;  
-
-System.<span class="keyword">out</span>.println(<span class="string">"s = "</span> + s);  <span class="comment">//Hello_World  </span>
-}
-</code></pre></li>
-<li><p>StringBuilder：非线程安全的可变字符串，单线程时字符串拼接最快</p>
-</li>
-<li><p>StringBuffer：通过调用其append和insert方法来添加字符；线程安全的可变字符串; String 对象的字符串拼接其实是被 JVM 解释成了 StringBuffer 对象的拼接</p>
-<pre><code><span class="comment">// String +操作快</span>
-<span class="built_in">String</span> S1 = “This <span class="keyword">is</span> only a” + “ simple” + “test”; <span class="comment">//其实就是：String S1 = “This is only a simple test”</span>
-
-<span class="comment">// StringBuffer.append()更快</span>
-<span class="built_in">String</span> S2 = “This <span class="keyword">is</span> only a”;
-<span class="built_in">String</span> S3 = “ simple”;
-<span class="built_in">String</span> S4 = “ test”;
-<span class="built_in">String</span> S1 = S2 +S3 + S4;
-</code></pre></li>
-<li>JDK1.7中subString函数改变:String类中不再有offset和count变量;这意味着成员变量char[] value将不会被共享;String.substring方法会为每个子串创建一个新的char[] value（而不是共享母串的char[] value）。这意味着String.substring方法的时间复杂度由常数阶变为线性阶。这种变化的好处是String对象占用的内存稍微少了一些（比以前少8个字节），同时确保String.substring方法不会导致内存泄漏</li>
-</ul>
-<h3 id="[java中equals，hashcode，==分析]">[java中equals，hashcode，==分析]</h3><ul>
-<li>== : 对于基本类型的变量(int, char等), 只有==方法用于判断两者是否相等;==也可用于判断两个引用变量是否相等,但是引用变量相等只是说明两个引用变量引用了同一个对象</li>
-<li>equals(): 该方法继承自Object类,它在Object类中是用==实现的，跟==一样默认是比较两个引用是否相等;但是实际应用中它主要用于判断两个String,Integer等对象或者自定义对象在内存中的值是否相等; String等对象重载了equals方法，所以可以用来比较值是否相等;</li>
-<li>hashcode(): 哈希函数的作用是把不定长度的输入通过哈希算法将其压缩成固定长度的输出(int整数), 不同的输入可能转换成相同的输出;其在Object类中的默认实现是返回对象的内存地址的哈希码，不同的对象即使内容相同但引用不同也会返回不同的哈希码.主要用于HashMap等容器中的快速定位, 通过哈希值就可以直接定位到Map中数组的某个位置，然后再循环该位置对应的链表用equals判断<key,value>是否都相等。</li>
-<li>set在使用add，remove等函数时会调用equals函数去判断两个自定义对象的地址是否相同，而不是比较两个对象的内容是否相同，需要重载hashcode和equals函数，类似于String类一样重载，才能够实现去重的目的！！ HashSet中的元素实际上是作为HashMap中的Key存放在HashMap中的，为了保证HashSet中的对象不会出现重复值，在被存放元素的类中必须要重写hashCode()和equals()这两个方法。</li>
-</ul>
-<h3 id="java深度克隆"><a href="http://www.importnew.com/10761.html">java深度克隆</a></h3><p>Java集合的拷贝构造函数只提供浅拷贝而不是深拷贝，这意味着存储在原始List和克隆List中的对象是相同的，指向Java堆内存中相同的位置；深克隆将递归克隆对象直到基本数据类型或者不可变类；拷贝构造函数或者List或Set等各种集合类的addAll()方法仅仅创建了集合的浅拷贝，而且原始集合和克隆集合指向相同的对象。为避免这个问题，应该深克隆集合，遍历集合克隆每个元素。尽管这要求集合中的对象必须支持深克隆操作
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2015/05/27/java重难点知识集锦/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/java/"> #java </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
               <a class="post-title-link" href="../../2015/05/27/Android开发常见bug解决方法及注意事项/">
                 Android开发常见bug解决方法及注意事项
               </a>
@@ -1119,6 +917,93 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
             <a href="../../tags/Android/"> #Android </a>
           
             <a href="../../tags/Mac/"> #Mac </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/05/12/如何阅读一本书/">
+                如何阅读一本书
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-12
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/读书札记/">读书札记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/05/12/如何阅读一本书/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/12/如何阅读一本书/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>书籍使人进步！阅读使人明智！如何阅读一本书也是一门学问，读懂不同类型的书也是一件不容易的事情。美国教育家查尔斯-范多伦还特地写了一本《如何阅读一本书》来讲述读书的“方法论”，此文为部分书摘，闲来无事翻书，翻到哪儿写到哪儿，未完待续……
+          <div class="post-more-link text-center">
+            <a class="btn" href="../../2015/05/12/如何阅读一本书/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/阅读/"> #阅读 </a>
           
         </div>
       
