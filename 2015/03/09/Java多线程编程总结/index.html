@@ -442,7 +442,19 @@ ThreadPoolExecutor是Executors类的底层实现
 
     }
 }
-</code></pre>
+</code></pre><h3 id="多线程相关问题">多线程相关问题</h3><ol>
+<li>yield，表示暂停当前线程，执行其他线程(包括自身线程) 由cpu决定</li>
+<li>join：阻塞所在线程，等调用它的线程执行完毕，再向下执行</li>
+<li>sleep()方法属于Thread类中的，而wait()方法则是属于Object类；sleep()方法导致了程序暂停执行指定的时间，让出cpu给其他线程，但是他的监控状态依然保持，当指定的时间到了又会自动恢复运行状态，线程不会释放对象锁；而当调用wait()方法的时候，线程会放弃对象锁，只有针对此对象调用notify()方法后本线程才进入对象锁定池准备就绪</li>
+</ol>
+<h3 id="多线程同步的方法">多线程同步的方法</h3><ol>
+<li>Synchronized代码块</li>
+<li>Synchronized方法</li>
+<li>RetrantLock可重入锁</li>
+<li>ThreadLocal线程局部变量</li>
+<li>Volatile可见变量</li>
+</ol>
+
       
     </div>
 
@@ -585,7 +597,7 @@ ThreadPoolExecutor是Executors类的底层实现
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程与线程之间关系"><span class="nav-number">1.</span> <span class="nav-text">进程与线程之间关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的进程间通信方式"><span class="nav-number">2.</span> <span class="nav-text">常见的进程间通信方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程之间通信方式"><span class="nav-number">3.</span> <span class="nav-text">多线程之间通信方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的四种创建方式"><span class="nav-number">4.</span> <span class="nav-text">线程的四种创建方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的状态变化"><span class="nav-number">5.</span> <span class="nav-text">线程的状态变化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程的同步机制"><span class="nav-number">6.</span> <span class="nav-text">多线程的同步机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#死锁及其解决办法"><span class="nav-number">7.</span> <span class="nav-text">死锁及其解决办法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程与线程之间关系"><span class="nav-number">1.</span> <span class="nav-text">进程与线程之间关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的进程间通信方式"><span class="nav-number">2.</span> <span class="nav-text">常见的进程间通信方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程之间通信方式"><span class="nav-number">3.</span> <span class="nav-text">多线程之间通信方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的四种创建方式"><span class="nav-number">4.</span> <span class="nav-text">线程的四种创建方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的状态变化"><span class="nav-number">5.</span> <span class="nav-text">线程的状态变化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程的同步机制"><span class="nav-number">6.</span> <span class="nav-text">多线程的同步机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#死锁及其解决办法"><span class="nav-number">7.</span> <span class="nav-text">死锁及其解决办法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程相关问题"><span class="nav-number">8.</span> <span class="nav-text">多线程相关问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程同步的方法"><span class="nav-number">9.</span> <span class="nav-text">多线程同步的方法</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

@@ -194,11 +194,11 @@
 
       
         
-          <p>MVC模式是一种非常经典的复合型软件架构模式，在UI设计思路中扮演着非常重要的角色。它把用户界面交互分拆到不同的三种角色中，应用程序被分成三个核心部件：Model（模型）、View（视图）、Controller（控制器）, 各自处理自己的任务，提高了应用程序的灵活性和复用性。MVC模式不管是在web开发还是Android开发中都被广泛应用，最典型的MVC应用就是JSP + servlet + javabean的模式。</p>
+          <p><strong>MVC模式</strong>是一种非常经典的复合型软件架构模式，在UI设计思路中扮演着非常重要的角色。它把用户界面交互分拆到不同的三种角色中，应用程序被分成三个核心部件：Model（模型）、View（视图）、Controller（控制器）, 各自处理自己的任务，提高了应用程序的灵活性和复用性。MVC模式不管是在web开发还是Android开发中都被广泛应用，最典型的MVC应用就是JSP + servlet + javabean的模式。</p>
 <ul>
-<li><p>Model模型：模型持有所有的数据、状态和程序逻辑，一个模型可以有不同的多个视图表现形式，复用性高。例如数据库记录以及相应增删查改操作。</p>
+<li><p>Model模型：模型持有所有的数据、状态和程序逻辑，一个模型可以有不同的多个视图表现形式，复用性高。例如数据库记录以及相应增删查改操作；Android中对数据库的操作、网络请求、格式转换、文件下载、大数据处理等的耗时操作都在Model里面处理</p>
 </li>
-<li><p>View视图：视图是用户看到并与之交互的页面，通常直接从模型中取得它需要显示的状态与数据，一个视图往往有一个相应的控制器，理论上也可以同不同的模型相关联。例如html、xml页面。</p>
+<li><p>View视图：视图是用户看到并与之交互的页面，通常直接从模型中取得它需要显示的状态与数据，一个视图往往有一个相应的控制器，理论上也可以同不同的模型相关联。例如html、xml页面；Android中主要是layout布局xml文件，webview等</p>
 </li>
 <li><p>Controller控制器：位于视图和模型中间，负责接受用户的输入，将输入进行解析并反馈给模型，例如Android开发中的Activity</p>
 </li>
@@ -206,6 +206,8 @@
 </li>
 </ul>
 <p>　　<img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/MVC.jpeg" class="full-image">  </p>
+<p><strong>MVP模式</strong><br>View不再与model交互，所有的交互通过presenter实现，双方之间的交互都是双向的，view层作为被动视图非常薄，没有任何的业务逻辑，业务逻辑都在presenter里边；Presenter与View的交互是通过接口来进行的</p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/MVP.png" class="full-image">  </p>
 
         
       
@@ -764,7 +766,7 @@ __author__ = <span class="string">'xiaoyong'</span>
           <p>内存管理是计算机编程中的一个重要问题，一般来说，内存管理主要包括<strong>内存分配</strong>和<strong>内存回收</strong>两个部分。不同的编程语言有不同的内存管理机制，本文在对比C++和java语言内存管理机制的不同的基础上，浅析java中的内存分配和内存回收机制，包括java对象初始化及其内存分配，内存回收方法及其注意事项等…… </p>
 <h2 id="java与C++内存管理机制对比">java与C++内存管理机制对比</h2><p><strong>在C++中</strong>，所有的对象都会被销毁，局部对象的销毁发生在以右花括号为界的对象作用域的末尾处，而程序猿new出来的对象则应该主动调用delete操作符从而调用析构函数去回收对象占用的内存。但是C++这种直接操作内存的方式存在很大内存泄露风险，而且人为管理内存复杂且困难。  </p>
 <p><strong>在java中</strong>，内存管理由JVM完全负责，java中的“垃圾回收器”负责自动回收无用对象占据的内存资源，这样可以大大减少程序猿在内存管理上花费的时间，可以更集中于业务逻辑和具体功能实现；但这并不是说java有了垃圾回收器程序猿就可以高枕无忧，将内存管理抛之脑外了！一方面，实际上java中还存在垃圾回收器没法回收以某种“特殊方式”分配的内存的情况(这种特殊方式我们将在下文中进行详细描述)；另一方面，java的垃圾回收是不能保证一定发生的，除非JVM面临内存耗尽的情况。所以java中部分对象内存还是需要程序猿手动进行释放，合理地对部分对象进行管理可以减少内存占用与资源消耗。</p>
-<h2 id="java内存分配">java内存分配</h2><h3 id="java程序执行过程">java程序执行过程</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Java程序执行顺序.jpg" class="full-image"></p>
+<h2 id="java内存分配">java内存分配</h2><h3 id="java程序执行过程">java程序执行过程</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Java程序执行过程.jpg" class="full-image"></p>
 <ol>
 <li><p>首先Java源代码文件(.java后缀)会被Java编译器编译为字节码文件(.class后缀)，然后由JVM中的类加载器加载各个类的字节码文件，加载完毕之后，交由JVM执行引擎执行，JVM执行引擎在执行字节码时首先会扫描四趟class文件来保证定义的类型的安全性，再检查空引用，数据越界，自动垃圾收集等。在整个程序执行过程中，JVM会用一段空间来存储程序执行期间需要用到的数据和相关信息，这段空间一般被称作为Runtime Data Area（运行时数据区），也就是我们常说的JVM内存</p>
 </li>
@@ -780,7 +782,7 @@ __author__ = <span class="string">'xiaoyong'</span>
 <h3 id="java内存模型划分">java内存模型划分</h3><p>一般来讲，我们将java内存划分为以下几个区域, 如图：</p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JVM内存分配与回收.png" class="full-image"></p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Java对象访问方式.png" class="full-image"></p>
-<p>备注:  </p>
+<p><strong>GC备注</strong>:  </p>
 <ol>
 <li>年轻对象存放在年轻代，采用Minor GC; 长期存活的年老对象以及大对象存放在年老代，采用Full GC，回收速度慢;JVM维护一个对象的年龄来进行对象的内存区域转移，从Eden-Survivor-老年代</li>
 <li>新生代包括一个Eden区，两个survivor的from和to区（8:1:1）,负责年轻小对象的回收;Eden区存放新创建的大量对象,回收频繁,所以区域大;Survivor存放每次垃圾回收后存活的对象</li>

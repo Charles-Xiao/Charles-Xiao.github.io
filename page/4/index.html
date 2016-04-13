@@ -378,7 +378,9 @@
 
 
 6. <span class="keyword">*</span><span class="keyword">*</span>工厂模式<span class="keyword">*</span><span class="keyword">*</span>生产手表View：需要生成许多不同的CardView，利用CardFactory中的BuildPage函数
-简单工厂模式和<span class="keyword">*</span><span class="keyword">*</span>工厂方法模式<span class="keyword">*</span><span class="keyword">*</span>，以及抽象工厂模式
+    <span class="keyword">*</span> 简单工厂模式:工程类+抽象产品类+具体产品类；根据参数的不同返回不同类的实例。专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类
+    <span class="keyword">*</span> 工厂方法模式: 抽象产品角色，具体产品角色，抽象工厂角色，具体工厂角色;工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，这样做的目的是将产品类的实例化操作延迟到工厂子类中完成，即通过工厂子类来确定究竟应该实例化哪一个具体产品类;一个抽象产品类，可以派生出多个具体产品类。一个抽象工厂类，可以派生出多个具体工厂类。每个具体工厂类只能创建一个具体产品类的实例。
+    <span class="keyword">*</span> 抽象工厂模式: 多个抽象产品类，每个抽象产品类可以派生出多个具体产品类。一个抽象工厂类，可以派生出多个具体工厂类。每个具体工厂类可以创建多个具体产品类的实例。
 </code></pre><ol>
 <li><p>百度锁屏项目</p>
 <ul>
@@ -387,6 +389,13 @@
 <li><p><strong>KeyguardPacketLayout</strong></p>
 </li>
 <li><p><strong>PacketMultiWaveView</strong></p>
+<ul>
+<li><strong>measure</strong> 过程由measure(int, int)方法发起，从上到下有序的测量 View，在 measure 过程的最后，每个视图存储了自己的尺寸大小和测量规格;measure 过程会为一个 View 及所有子节点的 mMeasuredWidth 和 mMeasuredHeight 变量赋值；onMeasure方法中调用setMeasuredDimension方法来设置自定义视图的尺寸</li>
+<li><strong>layout</strong>子视图的具体位置都是相对于父视图而言的。View 的 onLayout 方法为空实现，而 ViewGroup 的 onLayout 为 abstract 的，因此，如果自定义的 View 要继承 ViewGroup 时，必须实现 onLayout 函数。在 layout 过程中，子视图会调用getMeasuredWidth()和getMeasuredHeight()方法获取到 measure 过程得到的 mMeasuredWidth 和mMeasuredHeight，作为自己的 width 和 height。然后调用每一个子视图的layout(l, t, r, b)函数，来确定每个子视图在父视图中的位置。</li>
+<li><strong>Draw</strong>所有的视图最终都是调用 View 的 draw 方法进行绘制的。在自定义的视图复写onDraw(Canvas) 方法进行绘制;View 的onDraw（Canvas）默认是空实现，复写该方法绘制自身的内容；<br>过程：绘制背景—-绘制自身—-绘制子视图—-绘制Layer和ScrollBar</li>
+<li><strong>invalidate()</strong>请求重绘 View 树，即 draw 过程，假如视图发生大小没有变化就不会调用layout()过程，并且只绘制那些调用了invalidate()方法的 View</li>
+<li><strong>requestLayout()</strong>当布局变化的时候，比如方向变化，尺寸的变化，会调用该方法，在自定义的视图中，如果某些情况下希望重新测量尺寸大小，应该手动去调用该方法，它会触发measure()和layout()过程，但不会进行 draw。</li>
+</ul>
 </li>
 </ol>
 </li>
@@ -1037,7 +1046,19 @@ ThreadPoolExecutor是Executors类的底层实现
 
     }
 }
-</code></pre>
+</code></pre><h3 id="多线程相关问题">多线程相关问题</h3><ol>
+<li>yield，表示暂停当前线程，执行其他线程(包括自身线程) 由cpu决定</li>
+<li>join：阻塞所在线程，等调用它的线程执行完毕，再向下执行</li>
+<li>sleep()方法属于Thread类中的，而wait()方法则是属于Object类；sleep()方法导致了程序暂停执行指定的时间，让出cpu给其他线程，但是他的监控状态依然保持，当指定的时间到了又会自动恢复运行状态，线程不会释放对象锁；而当调用wait()方法的时候，线程会放弃对象锁，只有针对此对象调用notify()方法后本线程才进入对象锁定池准备就绪</li>
+</ol>
+<h3 id="多线程同步的方法">多线程同步的方法</h3><ol>
+<li>Synchronized代码块</li>
+<li>Synchronized方法</li>
+<li>RetrantLock可重入锁</li>
+<li>ThreadLocal线程局部变量</li>
+<li>Volatile可见变量</li>
+</ol>
+
         
       
     </div>
