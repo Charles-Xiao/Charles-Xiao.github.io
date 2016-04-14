@@ -193,10 +193,22 @@
 <h2 id="java与C++内存管理机制对比">java与C++内存管理机制对比</h2><p><strong>在C++中</strong>，所有的对象都会被销毁，局部对象的销毁发生在以右花括号为界的对象作用域的末尾处，而程序猿new出来的对象则应该主动调用delete操作符从而调用析构函数去回收对象占用的内存。但是C++这种直接操作内存的方式存在很大内存泄露风险，而且人为管理内存复杂且困难。  </p>
 <p><strong>在java中</strong>，内存管理由JVM完全负责，java中的“垃圾回收器”负责自动回收无用对象占据的内存资源，这样可以大大减少程序猿在内存管理上花费的时间，可以更集中于业务逻辑和具体功能实现；但这并不是说java有了垃圾回收器程序猿就可以高枕无忧，将内存管理抛之脑外了！一方面，实际上java中还存在垃圾回收器没法回收以某种“特殊方式”分配的内存的情况(这种特殊方式我们将在下文中进行详细描述)；另一方面，java的垃圾回收是不能保证一定发生的，除非JVM面临内存耗尽的情况。所以java中部分对象内存还是需要程序猿手动进行释放，合理地对部分对象进行管理可以减少内存占用与资源消耗。</p>
 <h2 id="java内存分配">java内存分配</h2><h3 id="java程序执行过程">java程序执行过程</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Java程序执行过程.jpg" class="full-image"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JVM编译执行顺序.png" class="full-image"></p>
 <ol>
-<li><p>首先Java源代码文件(.java后缀)会被Java编译器编译为字节码文件(.class后缀)，然后由JVM中的类加载器加载各个类的字节码文件，加载完毕之后，交由JVM执行引擎执行，JVM执行引擎在执行字节码时首先会扫描四趟class文件来保证定义的类型的安全性，再检查空引用，数据越界，自动垃圾收集等。在整个程序执行过程中，JVM会用一段空间来存储程序执行期间需要用到的数据和相关信息，这段空间一般被称作为Runtime Data Area（运行时数据区），也就是我们常说的JVM内存</p>
+<li><p>首先Java源代码文件(.java后缀)会被Java编译器编译为字节码文件(.class后缀)，然后由JVM中的类加载器加载各个类的字节码文件，加载完毕之后，交由JVM执行引擎执行(执行过程还包括将字节码编译成机器码)，JVM执行引擎在执行字节码时首先会扫描四趟class文件来保证定义的类型的安全性，再检查空引用，数据越界，自动垃圾收集等。在整个程序执行过程中，JVM会用一段空间来存储程序执行期间需要用到的数据和相关信息，这段空间一般被称作为Runtime Data Area（运行时数据区），也就是我们常说的JVM内存</p>
 </li>
-<li><p>类加载器分为启动类加载器(不继承classLoader，负责加载原生代码实现的Java核心库)；扩展类加载器(负责在JVM中扩展库目录中去寻找加载Java扩展库)；应用程序类加载器(ClassLoader.getSystemClassLoader()负责加载Java类路径classpath中的类)；类加载器加载过程中需要进行查找装载二进制文件—-连接(验证导入类型，准备类变量内存，解析符号引用为直接引用，初始化类变量)</p>
+<li><p>类加载器分为启动类加载器(不继承classLoader，负责加载原生代码实现的Java核心库,包括加载$JAVA_HOME中jre/lib/rt.jar里所有的 class)；扩展类加载器(负责在JVM中扩展库目录中去寻找加载Java扩展库,包括$JAVA_HOME中jre/lib/*.jar或-Djava.ext.dirs指定目录下的 jar 包)；应用程序类加载器(ClassLoader.getSystemClassLoader()负责加载Java类路径classpath中的类)</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ClassLoader.png" class="full-image"></p>
+<ol>
+<li>类加载机制的流程：包括了加载、验证、准备、解析、初始化五个阶段<ul>
+<li><strong>加载</strong>：查找装载二进制文件，通过一个类的全限定名获取类的二进制字节流，并将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构；在 Java 堆中生成一个代表这个类的 java.lang.Class 对象，作为对方法区中这些数据的访问入口。</li>
+<li><strong>验证</strong>：为了确保Class文件中的字节流包含的信息符合当前虚拟机的要求，完成以下四个阶段的验证：文件格式的验证、元数据的验证、字节码验证和符号引用验证。</li>
+<li><strong>准备</strong>：准备阶段是正式为类变量分配内存并设置类变量初始值的阶段，这些内存都将在方法区中分配</li>
+<li><strong>解析</strong>：解析阶段是虚拟机将常量池中的符号引用转化为直接引用的过程</li>
+<li><strong>初始化</strong>：初始化阶段是根据程序员通过程序指定的主观计划去初始化类变量和其他资源，也就是执行类构造器()方法的过程</li>
+</ul>
 </li>
 </ol>
 <h3 id="现代硬件内存架构">现代硬件内存架构</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/硬件内存架构.png" class="full-image"></p>
@@ -245,10 +257,17 @@
 <li><strong>标记-清扫算法</strong><br>同样是非后台回收算法，该算法从堆栈区和静态域出发，遍历每一个引用去寻找存活对象，对每个找到的存活对象都进行标记。标记结束之后，开始清理工作，没有被标记的对象都会被释放掉，如果需要连续堆空间，则还需要对剩下的存货对象进行整理;否则会产生大量内存碎片</li>
 <li><p><strong>标记-整理算法</strong><br>先标记存活对象，但是不会直接清理那些可回收的对象，而是将存活对象向内存区域的一端移动，然后清理掉端以外的内存。适用于存活对象多。</p>
 </li>
-<li><p><strong>分代算法</strong>  </p>
-<h3 id="参考链接">参考链接</h3></li>
+<li><p><strong>分代算法</strong> </p>
+</li>
 </ul>
-<ol>
+<h3 id="内存相关问题">内存相关问题</h3><ol>
+<li><strong>内存泄露</strong>是指分配出去的内存没有被回收回来，由于失去了对该内存区域的控制，因而造成了资源的浪费。Java 中一般不会产生内存泄露，因为有垃圾回收器自动回收垃圾，但这也不绝对，Java堆内也可能发生内存泄露（Memory Leak; 当我们 new 了对象，并保存了其引用，但是后面一直没用它，而垃圾回收器又不会去回收它，这边会造成内存泄露</li>
+<li><strong>内存溢出</strong>是指程序所需要的内存超出了系统所能分配的内存（包括动态扩展）的上限3. </li>
+<li><strong>符号引用</strong>：符号引用以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可。符号引用与虚拟机实现的内存布局无关，引用的目标并不一定已经加载到了内存中。</li>
+<li><strong>直接引用</strong>：直接引用可以是直接指向目标的指针、相对偏移量或是一个能间接定位到目标的句柄。直接引用是与虚拟机实现的内存布局相关的，同一个符号引用在不同虚拟机实例上翻译出来的直接引用一般不会相同。如果有了直接引用，那说明引用的目标必定已经存在于内存之中了。</li>
+<li><strong>双亲委派模型</strong>：</li>
+</ol>
+<h3 id="参考链接">参考链接</h3><ol>
 <li>《Java编程思想》</li>
 <li><a href="http://blog.jobbole.com/37273/" target="_blank" rel="external">Java的内存回收机制</a></li>
 <li><a href="http://blog.csdn.net/tutngfei1129287460/article/details/7383473" target="_blank" rel="external">java内存空间详解</a></li>
@@ -402,7 +421,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#java与C++内存管理机制对比"><span class="nav-number">1.</span> <span class="nav-text">java与C++内存管理机制对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java内存分配"><span class="nav-number">2.</span> <span class="nav-text">java内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#java程序执行过程"><span class="nav-number">2.1.</span> <span class="nav-text">java程序执行过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#现代硬件内存架构"><span class="nav-number">2.2.</span> <span class="nav-text">现代硬件内存架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java内存模型划分"><span class="nav-number">2.3.</span> <span class="nav-text">java内存模型划分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java对象创建及初始化"><span class="nav-number">2.4.</span> <span class="nav-text">java对象创建及初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java内存回收"><span class="nav-number">3.</span> <span class="nav-text">java内存回收</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾回收器和finalize()方法"><span class="nav-number">3.1.</span> <span class="nav-text">垃圾回收器和finalize()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象内存状态&&引用形式及回收时机"><span class="nav-number">3.2.</span> <span class="nav-text">对象内存状态&&引用形式及回收时机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见垃圾回收算法"><span class="nav-number">3.3.</span> <span class="nav-text">常见垃圾回收算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">3.4.</span> <span class="nav-text">参考链接</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#java与C++内存管理机制对比"><span class="nav-number">1.</span> <span class="nav-text">java与C++内存管理机制对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java内存分配"><span class="nav-number">2.</span> <span class="nav-text">java内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#java程序执行过程"><span class="nav-number">2.1.</span> <span class="nav-text">java程序执行过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#现代硬件内存架构"><span class="nav-number">2.2.</span> <span class="nav-text">现代硬件内存架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java内存模型划分"><span class="nav-number">2.3.</span> <span class="nav-text">java内存模型划分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java对象创建及初始化"><span class="nav-number">2.4.</span> <span class="nav-text">java对象创建及初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java内存回收"><span class="nav-number">3.</span> <span class="nav-text">java内存回收</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾回收器和finalize()方法"><span class="nav-number">3.1.</span> <span class="nav-text">垃圾回收器和finalize()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象内存状态&&引用形式及回收时机"><span class="nav-number">3.2.</span> <span class="nav-text">对象内存状态&&引用形式及回收时机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见垃圾回收算法"><span class="nav-number">3.3.</span> <span class="nav-text">常见垃圾回收算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存相关问题"><span class="nav-number">3.4.</span> <span class="nav-text">内存相关问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">3.5.</span> <span class="nav-text">参考链接</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
