@@ -184,21 +184,31 @@
 <li><p>Android端缓存机制的实现，采用二级缓存，从LRUcache到DiskLruCache，同时模拟浏览器缓存机制来分析http请求过程的请求头内容来确定cache-control策略</p>
 <ol>
 <li>请求流程: 当我们第一次打开应用获取图片时，先到网络去下载图片，然后依次存入内存缓存，磁盘缓存;以后每次加载图片的时候都优先去LRUCache内存缓存当中读取，当读取不到的时候则回去DiskLruCache硬盘缓存中读取，而如果硬盘缓存仍然读取不到的话，就从网络上请求原始数据。</li>
-<li><p><strong>二级缓存</strong>: 变化频繁的小数据都采用LRUCache,稳定的大文件数据采用DiskLruCache;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File；根据请求头里边的expires(缓存过期的时间（绝对时间）),Last-Modified, Cache-Control等内容来确定DiskLruCache中缓存的保留时间以及清理策略；例如用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据时间判断是否过期，从而实现缓存定时清理  </p>
-<p>缓存图片举例：</p>
-<p> // 获取应用可占内存的1/8作为缓存<br> int maxSize = (int) (Runtime.getRuntime().maxMemory() / 8);<br> // 实例化LruCaceh对象<br> mLruCache = new LruCache<string, bitmap="">(maxSize) {</string,></p>
-<pre><code><span class="annotation">@Override</span>
-<span class="keyword">protected</span> <span class="function"><span class="keyword">int</span> <span class="title">sizeOf</span><span class="params">(String key, Bitmap bitmap)</span> </span>{
-    <span class="keyword">return</span> bitmap.getRowBytes() * bitmap.getHeight();
-}
-</code></pre><p> };<br> mDiskLruCache = DiskLruCache.open(getDiskCacheDir(context.getApplicationContext(), “xxxxx”), getAppVersion(context), 1, DISKMAXSIZE);<br> // 缓存操作<br> mLruCache.get(url);<br> mLruCache.put(url, bitmap);<br> bitmap = BitmapFactory.decodeStream(mDiskLruCache.get(url).getInputStream(0));<br> DiskLruCache.Editor editor = mDiskLruCache.edit(key);<br> OutputStream outputStream = editor.newOutputStream(0);<br> editor.commit();</p>
-</li>
+<li><strong>二级缓存</strong>: 变化频繁的小数据都采用LRUCache,稳定的大文件数据采用DiskLruCache;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File；根据请求头里边的expires(缓存过期的时间（绝对时间）),Last-Modified, Cache-Control等内容来确定DiskLruCache中缓存的保留时间以及清理策略；例如用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据时间判断是否过期，从而实现缓存定时清理  </li>
 </ol>
+<p>缓存图片举例：</p>
 </li>
 </ul>
 </li>
 </ol>
-<ol>
+<pre><code><span class="comment">// 获取应用可占内存的1/8作为缓存</span>
+<span class="built_in">int</span> maxSize = (<span class="built_in">int</span>) (Runtime.getRuntime().maxMemory() / <span class="number">8</span>);
+<span class="comment">// 实例化LruCaceh对象</span>
+mLruCache = <span class="keyword">new</span> LruCache&lt;<span class="keyword">String</span>, Bitmap&gt;(maxSize) {
+    @Override
+    <span class="keyword">protected</span> <span class="built_in">int</span> sizeOf(<span class="keyword">String</span> <span class="variable">key</span>, Bitmap bitmap) {
+        <span class="keyword">return</span> bitmap.getRowBytes() * bitmap.getHeight();
+    }
+};
+mDiskLruCache = DiskLruCache.<span class="built_in">open</span>(getDiskCacheDir(context.getApplicationContext(), <span class="string">"xxxxx"</span>), getAppVersion(context), <span class="number">1</span>, DISKMAXSIZE);
+<span class="comment">// 缓存操作</span>
+mLruCache.<span class="built_in">get</span>(url);
+mLruCache.put(url, bitmap);
+bitmap = BitmapFactory.decodeStream(mDiskLruCache.<span class="built_in">get</span>(url).getInputStream(<span class="number">0</span>));
+DiskLruCache.Editor editor = mDiskLruCache.edit(<span class="variable">key</span>);
+OutputStream outputStream = editor.newOutputStream(<span class="number">0</span>);
+editor.commit();
+</code></pre><ol>
 <li><p>采用Java WebSocket编程取代传统的非实时http请求连接模式</p>
 <ul>
 <li><p><strong>实现方法</strong>: WebSocket是一个基于TCP连接的双向通道，Web应用的信息交互过程通常是客户端发出一个请求，服务器端接收和审核完请求后进行处理并返回结果给客户端，然后客户端浏览器将信息呈现出来，但是对于那些实时要求比较高的应用来说，比如说在线游戏、新闻在线播报、RSS 订阅推送等等，当客户端浏览器准备呈现这些信息的时候，这些信息在服务器端可能已经过时了;    <strong>常见的模拟实时应用方法</strong> </p>
@@ -247,38 +257,54 @@
 </li>
 <li><p>整个项目从简单的多线程优化到采用线程池来实现xml数据文件的获取</p>
 </li>
-<li><p>多线程引起的资源竞争问题解决过程: 同时写一个文件时必须加上Synchronized关键字保证读写，写写互斥</p>
-</li>
 </ul>
 </li>
 </ol>
 <h3 id="Baidu">Baidu</h3><ol>
-<li>Duwear项目短信管理模块: 目的是将手机短信库的变化情况通知到wear端<ol>
+<li><p>Duwear项目短信管理模块: 目的是将手机短信库的变化情况通知到wear端</p>
+<ol>
 <li><strong>SMSObserver</strong>继承ContentProvider类实现观察者模式，注册了一个短信数据库的观察者，发生变化该类都会被通知；在重载函数onChange中进行操作比对判断数据库变化情况，只知道变化，但是不知道具体操作？如何判断用户是标为已读还是删除，新建短信</li>
 <li><strong>SmsReceivedListener接口</strong>：两个回调函数，作为一个接口参数传到SMSObserver的构造函数中，然后一旦判断是新短信还是短信已读，就调用其回调函数</li>
 <li><strong>SmsRpcService类</strong>：继承自上边的接口，在回调函数中将这个操作判断出来发送给手表</li>
 <li><strong>SmsUtils</strong>: 4个函数，查询短信数据库，标为已读的数据库操作函数</li>
+<li><p>SMSObserver类中的具体的判断方式和优化过程</p>
+<ul>
+<li>从维护所有信息的set到只维护未读信息的内容，信息实体占用内存很大，内存优化；</li>
+<li><p>ArrayList到HashSet对比与区别：防止出现重复信息，去重速度很快因为使用HashTable中的hashCode()以及equals进行查找去重；</p>
+</li>
+<li><p>多次读取unreadSet并对两个set进行比对，removeAll和AddAll求补集并集来比对两个未读信息集合;两个方法都用到了hashCode和equals，所以SmsEntity对象中hashcode和equals方法的同时重载；直接removeAll新set可以判断出哪些信息被标为已读，AddAll新set再removeAll旧set可以判断得到新增加的短信；比如1，2，3和1，2，4，5</p>
+</li>
+<li><p><strong>java集合中的浅复制和深复制，clone集合不影响原集合</strong></p>
+<ol>
+<li><p><strong>浅复制</strong>: 复制后的对象与原对象所有变量的值相同，包括引用变量，浅复制时只会复制引用变量本身，不会复制它指向的对象本身</p>
+</li>
+<li><p><strong>深复制</strong>: 复制后的对象与原对象所有变量的值相同，但是不包括引用变量，深复制时会复制引用变量指向的对象本身，所以引用值发生改变</p>
+</li>
+<li><p><strong>Clone()方法和Cloneable接口</strong>: Cloneable接口是一个不包含方法的标志接口，一个类必须先继承它才能在其内部调用super.clone()方法，否则会抛出不支持clone的异常;clone()方法是一个native方法，拷贝对象时已经包括一部分原对象信息，效率优于使用新建对象再一一复制变量的方式;重写clone()方法需要先调用super.clone()方法，该方法会开辟一块新的内存用于拷贝原对象，将原对象的内容一一复制到新对象的内存空间中，它是一种浅复制;如果要实现深复制，需要对复制的对象中的所有引用变量对应的对象也进行复制(具体操作:重写引用对象的clone方法，在其中调用super.clone，然后在上层对象的重载clone方法中调用该对象的clone方法)</p>
+</li>
+<li><p><strong>序列化实现深复制</strong>: 序列化主要用于将内存中对象状态写入数据库或者文件，以及利用Socket在网络中传输对象;一个对象要能够被序列化需要该类实现Serializable接口，可序列化类的子类默认也是可以被序列化的，不需要再次实现Serializable接口；利用序列化进行深复制的前提是该对象及其内部的引用到的对象都是可序列化的，这样对对象序列化时才能递归地保存对象及其引用对象的数据</p>
+<pre><code>deepClone() {    
+   <span class="comment">//序列化:将内存中对象状态转化为字节流，写入目标输出流</span>
+   ByteArrayOutoutStream bo=<span class="keyword">new</span> ByteArrayOutputStream();    
+   ObjectOutputStream oo=<span class="keyword">new</span> ObjectOutputStream(bo);
+   <span class="comment">//    </span>
+   oo.writeObject(<span class="keyword">this</span>);    
+   <span class="comment">//反序列化:读取源输入流中的字节流重建一个内存中相同状态的对象     </span>
+   ByteArrayInputStream bi=<span class="keyword">new</span> ByteArrayInputStream(bo.toByteArray());    
+   ObjectInputStream oi=<span class="keyword">new</span> ObjectInputStream(bi);    
+   <span class="keyword">return</span>(oi.readObject());    
+}
+</code></pre></li>
+<li><p>当一个类声明要实现Serializable接口时，只是表明该类参加序列化协议;Java提供的ObjectInputStream和ObjectOutputStream将数据流功能扩展至可读写对象 。在ObjectInputStream中用readObject()方法可以直接读取一个对象，ObjectOutputStream中用writeObject()方法可以直接将对象保存到输出流中; 序列化只能保存对象的非静态成员变量，不能保存任何的成员方法和静态成员变量，而且序列化保存的只是变量的值，对于变量的任何修饰符都不能保存。  </p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
 </ol>
 </li>
 </ol>
-<pre><code>5. SMSObserver类中的具体的判断方式和优化过程
-    <span class="keyword">*</span> 从维护所有信息的set到只维护未读信息的内容，信息实体占用内存很大，内存优化；
-    <span class="keyword">*</span> ArrayList到HashSet对比与区别：防止出现重复信息，去重速度很快因为使用HashTable中的hashCode()以及equals进行查找去重；
-
-    <span class="keyword">*</span> 多次读取unreadSet并对两个set进行比对，removeAll和AddAll求补集并集来比对两个未读信息集合;两个方法都用到了hashCode和equals，所以SmsEntity对象中hashcode和equals方法的同时重载；直接removeAll新set可以判断出哪些信息被标为已读，AddAll新set再removeAll旧set可以判断得到新增加的短信；比如1，2，3和1，2，4，5
-    <span class="keyword">*</span> java集合中的浅复制和深复制，clone集合不影响原集合
-
-        1. <span class="keyword">*</span><span class="keyword">*</span>浅复制<span class="keyword">*</span><span class="keyword">*</span>: 复制后的对象与原对象所有变量的值相同，包括引用变量，浅复制时只会复制引用变量本身，不会复制它指向的对象本身
-
-        2. <span class="keyword">*</span><span class="keyword">*</span>深复制<span class="keyword">*</span><span class="keyword">*</span>: 复制后的对象与原对象所有变量的值相同，但是不包括引用变量，深复制时会复制引用变量指向的对象本身，所以引用值发生改变
-
-        3. <span class="keyword">*</span><span class="keyword">*</span>Clone()方法和Cloneable接口<span class="keyword">*</span><span class="keyword">*</span>: Cloneable接口是一个不包含方法的标志接口，一个类必须先继承它才能在其内部调用super.clone()方法，否则会抛出不支持clone的异常;clone()方法是一个native方法，拷贝对象时已经包括一部分原对象信息，效率优于使用新建对象再一一复制变量的方式;重写clone()方法需要先调用super.clone()方法，该方法会开辟一块新的内存用于拷贝原对象，将原对象的内容一一复制到新对象的内存空间中，它是一种浅复制;如果要实现深复制，需要对复制的对象中的所有引用变量对应的对象也进行复制(具体操作:重写引用对象的clone方法，在其中调用super.clone，然后再上层对象中调用该对象的clone方法)
-
-        4. <span class="keyword">*</span><span class="keyword">*</span>序列化实现深复制<span class="keyword">*</span><span class="keyword">*</span>: 
-
-
-
-6. <span class="keyword">*</span><span class="keyword">*</span>工厂模式<span class="keyword">*</span><span class="keyword">*</span>生产手表View：需要生成许多不同的CardView，利用CardFactory中的BuildPage函数
+<pre><code>6. <span class="keyword">*</span><span class="keyword">*</span>工厂模式<span class="keyword">*</span><span class="keyword">*</span>生产手表View：需要生成许多不同的CardView，利用CardFactory中的BuildPage函数
     <span class="keyword">*</span> 简单工厂模式:工程类+抽象产品类+具体产品类；根据参数的不同返回不同类的实例。专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类
     <span class="keyword">*</span> 工厂方法模式: 抽象产品角色，具体产品角色，抽象工厂角色，具体工厂角色;工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，这样做的目的是将产品类的实例化操作延迟到工厂子类中完成，即通过工厂子类来确定究竟应该实例化哪一个具体产品类;一个抽象产品类，可以派生出多个具体产品类。一个抽象工厂类，可以派生出多个具体工厂类。每个具体工厂类只能创建一个具体产品类的实例。
     <span class="keyword">*</span> 抽象工厂模式: 多个抽象产品类，每个抽象产品类可以派生出多个具体产品类。一个抽象工厂类，可以派生出多个具体工厂类。每个具体工厂类可以创建多个具体产品类的实例。
@@ -291,11 +317,12 @@
 </li>
 <li><p><strong>PacketMultiWaveView</strong></p>
 <ul>
-<li><strong>measure</strong> 过程由measure(int, int)方法发起，从上到下有序的测量 View，在 measure 过程的最后，每个视图存储了自己的尺寸大小和测量规格;measure 过程会为一个 View 及所有子节点的 mMeasuredWidth 和 mMeasuredHeight 变量赋值；onMeasure方法中调用setMeasuredDimension方法来设置自定义视图的尺寸</li>
+<li><strong>measure</strong> 过程由measure(int, int)方法发起，从上到下有序的测量 View，在 measure 过程的最后，每个视图存储了自己的尺寸大小和测量规格(三种测量规格MeasureSpec 类);measure 过程会为一个 View 及所有子节点的 mMeasuredWidth 和 mMeasuredHeight 变量赋值；onMeasure方法中调用setMeasuredDimension方法来设置自定义视图的尺寸</li>
 <li><strong>layout</strong>子视图的具体位置都是相对于父视图而言的。View 的 onLayout 方法为空实现，而 ViewGroup 的 onLayout 为 abstract 的，因此，如果自定义的 View 要继承 ViewGroup 时，必须实现 onLayout 函数。在 layout 过程中，子视图会调用getMeasuredWidth()和getMeasuredHeight()方法获取到 measure 过程得到的 mMeasuredWidth 和mMeasuredHeight，作为自己的 width 和 height。然后调用每一个子视图的layout(l, t, r, b)函数，来确定每个子视图在父视图中的位置。</li>
-<li><strong>Draw</strong>所有的视图最终都是调用 View 的 draw 方法进行绘制的。在自定义的视图复写onDraw(Canvas) 方法进行绘制;View 的onDraw（Canvas）默认是空实现，复写该方法绘制自身的内容；<br>过程：绘制背景—-绘制自身—-绘制子视图—-绘制Layer和ScrollBar</li>
+<li><strong>Draw</strong>所有的视图最终都是调用 View 的 draw 方法进行绘制的。在自定义的视图复写onDraw(Canvas) 方法进行绘制， 操作canvas对象对一个bitmap对象进行绘制;View 的onDraw（Canvas）默认是空实现，复写该方法绘制自身的内容；<br>过程：绘制背景—-绘制自身—-绘制子视图—-绘制Layer和ScrollBar</li>
 <li><strong>invalidate()</strong>请求重绘 View 树，即 draw 过程，假如视图发生大小没有变化就不会调用layout()过程，并且只绘制那些调用了invalidate()方法的 View</li>
-<li><strong>requestLayout()</strong>当布局变化的时候，比如方向变化，尺寸的变化，会调用该方法，在自定义的视图中，如果某些情况下希望重新测量尺寸大小，应该手动去调用该方法，它会触发measure()和layout()过程，但不会进行 draw。  </li>
+<li><strong>requestLayout()</strong>当布局变化的时候，比如方向变化，尺寸的变化，会调用该方法，在自定义的视图中，如果某些情况下希望重新测量尺寸大小，应该手动去调用该方法，它会触发measure()和layout()过程，但不会进行 draw。</li>
+<li><strong>onTouchEvent()</strong>：监听触摸事件的回调  </li>
 </ul>
 </li>
 </ol>

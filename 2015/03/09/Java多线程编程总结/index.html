@@ -381,11 +381,6 @@ ThreadPoolExecutor是Executors类的底层实现
 
  * execute和submit两个方法都可以向线程池提交任务， execute()方法的返回类型是<span class="keyword">void</span>，它定义在Executor接口中；submit()方法可以返回持有计算结果的Future对象，它定义在ExecutorService接口中，它扩展了Executor接口 
 </code></pre><h3 id="线程的状态变化">线程的状态变化</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/multiThread.png" class="full-image"></p>
-<h3 id="多线程的同步机制">多线程的同步机制</h3><ol>
-<li><strong>Serializable</strong>: 当一个类声明要实现Serializable接口时，只是表明该类参加序列化协议;Java提供的ObjectInputStream和ObjectOutputStream将数据流功能扩展至可读写对象 。在ObjectInputStream中用readObject()方法可以直接读取一个对象，ObjectOutputStream中用writeObject()方法可以直接将对象保存到输出流中; 序列化只能保存对象的非静态成员变量，不能保存任何的成员方法和静态成员变量，而且序列化保存的只是变量的值，对于变量的任何修饰符都不能保存。</li>
-<li><strong>transient</strong>: 瞬时变量</li>
-<li><strong>volatile</strong>: 保证变量的可见性，每次写修改该变量都会通知到其他线程，也就是说每个线程读取该变量都是从主存读取而不会去工作内存或者寄存器读取缓存，以保证取到的都是最新的值；该关键字在JDK1.6开始可以保证指令不被重排序；但是他不能保证原子性，比如n++操作</li>
-</ol>
 <h3 id="死锁及其解决办法">死锁及其解决办法</h3><pre><code><span class="comment">/**
  * 一个简单的死锁类 当DeadLock类的对象flag==1时（td1），先锁定o1,睡眠500毫秒
  * 而td1在睡眠的时候另一个flag==0的对象（td2）线程启动，先锁定o2,睡眠500毫秒
@@ -597,7 +592,7 @@ ThreadPoolExecutor是Executors类的底层实现
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程与线程之间关系"><span class="nav-number">1.</span> <span class="nav-text">进程与线程之间关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的进程间通信方式"><span class="nav-number">2.</span> <span class="nav-text">常见的进程间通信方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程之间通信方式"><span class="nav-number">3.</span> <span class="nav-text">多线程之间通信方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的四种创建方式"><span class="nav-number">4.</span> <span class="nav-text">线程的四种创建方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的状态变化"><span class="nav-number">5.</span> <span class="nav-text">线程的状态变化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程的同步机制"><span class="nav-number">6.</span> <span class="nav-text">多线程的同步机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#死锁及其解决办法"><span class="nav-number">7.</span> <span class="nav-text">死锁及其解决办法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程相关问题"><span class="nav-number">8.</span> <span class="nav-text">多线程相关问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程同步的方法"><span class="nav-number">9.</span> <span class="nav-text">多线程同步的方法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程与线程之间关系"><span class="nav-number">1.</span> <span class="nav-text">进程与线程之间关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的进程间通信方式"><span class="nav-number">2.</span> <span class="nav-text">常见的进程间通信方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程之间通信方式"><span class="nav-number">3.</span> <span class="nav-text">多线程之间通信方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的四种创建方式"><span class="nav-number">4.</span> <span class="nav-text">线程的四种创建方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的状态变化"><span class="nav-number">5.</span> <span class="nav-text">线程的状态变化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#死锁及其解决办法"><span class="nav-number">6.</span> <span class="nav-text">死锁及其解决办法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程相关问题"><span class="nav-number">7.</span> <span class="nav-text">多线程相关问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程同步的方法"><span class="nav-number">8.</span> <span class="nav-text">多线程同步的方法</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

@@ -194,7 +194,7 @@
 
       
         
-          <h3 id="Synchronized代码块和方法">Synchronized代码块和方法</h3><p>同步是一种高开销的操作，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；Synchronized锁住的是对象或者类,对象被锁住时，该对象所有的其他同步方法和代码块不能被执行；类被锁住时，该类所有的其他同步静态方法和代码块不能被执行</p>
+          <h3 id="Synchronized代码块和方法">Synchronized代码块和方法</h3><p>synchronized关键字强制实施一个互斥锁，使得被保护的代码块在同一时间只能有一个线程进入并执行，防止多线程访问临界共享资源出现数据不一致性；同步是一种高开销的操作，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；Synchronized锁住的是对象或者类,对象被锁住时，该对象所有的其他同步方法和代码块不能被执行；类被锁住时，该类所有的其他同步静态方法和代码块不能被执行</p>
 <pre><code><span class="class"><span class="keyword">class</span> <span class="title">Bank</span> </span>{
         <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
 
@@ -259,7 +259,11 @@
         <span class="keyword">return</span> account.<span class="keyword">get</span>();
     }
 }
-</code></pre><h3 id="volatile变量可见性">volatile变量可见性</h3><p>在需要同步的变量上加上修饰符volatile，例如：private volatile int account = 100;volatile可以保证变量的可见性但是不保证原子性，不能用于修饰final常量，线程每一次对volatile变量的修改都会通知到其他线程，也就是说每一次每个线程读取volatile变量时都会从主存中去取而不会从缓存寄存器中获取，以确保变量的值都是最新获取的</p>
+</code></pre><h3 id="volatile变量可见性">volatile变量可见性</h3><p><strong>volatile</strong>: 在需要同步的变量上加上修饰符volatile，例如：private volatile int account = 100;volatile可以保证变量的可见性但是不保证原子性，不能用于修饰final常量，线程每一次对volatile变量的修改都会即时刷新到主存和通知到其他线程，也就是说每一次每个线程读取volatile变量时都会从主存中去取而不会从缓存寄存器中获取，以确保变量的值都是最新获取的;该关键字在JDK1.6开始可以保证指令不被重排序；但是他不能保证原子性，比如n++这种复合型操作;java虚拟机规范（jvm spec）中，规定了声明为volatile的long和double变量的get和set操作是原子的,所以将long和double类型的变量用volatile修饰，就可以保证对他们的赋值操作的原子性。  </p>
+<p><strong>CAS比较并交换操作</strong>：CAS 操作包含三个操作数 —— 内存位置（V）、预期原值（A）和新值(B). CAS有效地说明了“我认为位置 V 应该包含值 A；如果包含该值，则将 B 放到这个位置；否则，不要更改该位置，只告诉我这个位置现在的值即可。”   </p>
+<p>例如，有一个变量i=0，Thread-1和Thread-2都对这个变量执行自增操作。 可能会出现Thread-1与Thread-2同时读取i=0到各自的工作内存中，然后各自执行+1，最后将结果赋予i。这样，虽然两个线程都对i执行了自增操作，但是最后i的值为1，而不是2。<br>解决这个问题使用互斥锁自然可以。但是也可以使用CAS来实现，思路如下：<br>自增操作可以分为两步：（1）从内存中读取这个变量的当前值（2）执行（变量=上一步取到的当前值+1）的赋值操作。</p>
+<p>多线程情况下，自增操作出现问题的原因就是执行（2）的时候，变量在主内存中的值已经不等于上一步取到的当前值了，所以赋值时，用CompareAndSet操作代替Set操作：首先比较一下内存中这个变量的值是否等于上一步取到的当前值，如果等于，则说明可以执行+1运算，并赋值；如果不等于，则说明有其他线程在此期间更改了主内存中此变量的值，上一步取出的当前值已经失效，此时，不再执行+1运算及后续的赋值操作，而是返回主内存中此变量的最新值。“比较并交换（CAS）”操作是原子操作，它使用平台提供的用于并发操作的硬件原语。</p>
+<p><strong>原子（atom）</strong>本意是“不能被进一步分割的最小粒子”，而原子操作（atomic operation）意为”不可被中断的一个或一系列操作” </p>
 
         
       
@@ -349,10 +353,42 @@
 </li>
 <li><p><strong>AsyncTask</strong>: 参考“实习项目总结”</p>
 </li>
-<li><p><strong>Activity.runOnUIThread(Runnable)</strong></p>
-</li>
+<li><p><strong>Activity.runOnUIThread(Runnable)</strong>  </p>
+<p> <strong>子线程更新UI</strong>  </p>
+<pre><code><span class="keyword">new</span> Thread() {  
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{  
+        <span class="comment">//这儿是耗时操作，完成之后更新UI；  </span>
+        runOnUiThread(<span class="keyword">new</span> Runnable(){  
+
+            <span class="annotation">@Override</span>  
+            <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{  
+                <span class="comment">//更新UI  </span>
+                imageView.setImageBitmap(bitmap);  
+            }  
+
+        });  
+    }  
+}.start(); 
+</code></pre><p> <strong>非Activity更新UI</strong></p>
+<pre><code>Activity activity = (Activity) imageView.getContext();  
+        activity.runOnUiThread(<span class="keyword">new</span> Runnable() {  
+
+            <span class="annotation">@Override</span>  
+            <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{  
+                imageView.setImageBitmap(bitmap);  
+            }  
+});  
+</code></pre></li>
 <li><p><strong>View.Post(Runnable)</strong></p>
-</li>
+<pre><code>imageView.post(<span class="keyword">new</span> Runnable(){  
+
+            <span class="annotation">@Override</span>  
+            <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{  
+                imageView.setImageBitmap(bitmap);  
+            }  
+
+});  
+</code></pre></li>
 <li><p><strong>View.PostDelayed(Runnabe,long)</strong></p>
 </li>
 </ol>
@@ -433,21 +469,31 @@
 <li><p>Android端缓存机制的实现，采用二级缓存，从LRUcache到DiskLruCache，同时模拟浏览器缓存机制来分析http请求过程的请求头内容来确定cache-control策略</p>
 <ol>
 <li>请求流程: 当我们第一次打开应用获取图片时，先到网络去下载图片，然后依次存入内存缓存，磁盘缓存;以后每次加载图片的时候都优先去LRUCache内存缓存当中读取，当读取不到的时候则回去DiskLruCache硬盘缓存中读取，而如果硬盘缓存仍然读取不到的话，就从网络上请求原始数据。</li>
-<li><p><strong>二级缓存</strong>: 变化频繁的小数据都采用LRUCache,稳定的大文件数据采用DiskLruCache;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File；根据请求头里边的expires(缓存过期的时间（绝对时间）),Last-Modified, Cache-Control等内容来确定DiskLruCache中缓存的保留时间以及清理策略；例如用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据时间判断是否过期，从而实现缓存定时清理  </p>
-<p>缓存图片举例：</p>
-<p> // 获取应用可占内存的1/8作为缓存<br> int maxSize = (int) (Runtime.getRuntime().maxMemory() / 8);<br> // 实例化LruCaceh对象<br> mLruCache = new LruCache<string, bitmap="">(maxSize) {</string,></p>
-<pre><code><span class="annotation">@Override</span>
-<span class="keyword">protected</span> <span class="function"><span class="keyword">int</span> <span class="title">sizeOf</span><span class="params">(String key, Bitmap bitmap)</span> </span>{
-    <span class="keyword">return</span> bitmap.getRowBytes() * bitmap.getHeight();
-}
-</code></pre><p> };<br> mDiskLruCache = DiskLruCache.open(getDiskCacheDir(context.getApplicationContext(), “xxxxx”), getAppVersion(context), 1, DISKMAXSIZE);<br> // 缓存操作<br> mLruCache.get(url);<br> mLruCache.put(url, bitmap);<br> bitmap = BitmapFactory.decodeStream(mDiskLruCache.get(url).getInputStream(0));<br> DiskLruCache.Editor editor = mDiskLruCache.edit(key);<br> OutputStream outputStream = editor.newOutputStream(0);<br> editor.commit();</p>
-</li>
+<li><strong>二级缓存</strong>: 变化频繁的小数据都采用LRUCache,稳定的大文件数据采用DiskLruCache;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File；根据请求头里边的expires(缓存过期的时间（绝对时间）),Last-Modified, Cache-Control等内容来确定DiskLruCache中缓存的保留时间以及清理策略；例如用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据时间判断是否过期，从而实现缓存定时清理  </li>
 </ol>
+<p>缓存图片举例：</p>
 </li>
 </ul>
 </li>
 </ol>
-<ol>
+<pre><code><span class="comment">// 获取应用可占内存的1/8作为缓存</span>
+<span class="built_in">int</span> maxSize = (<span class="built_in">int</span>) (Runtime.getRuntime().maxMemory() / <span class="number">8</span>);
+<span class="comment">// 实例化LruCaceh对象</span>
+mLruCache = <span class="keyword">new</span> LruCache&lt;<span class="keyword">String</span>, Bitmap&gt;(maxSize) {
+    @Override
+    <span class="keyword">protected</span> <span class="built_in">int</span> sizeOf(<span class="keyword">String</span> <span class="variable">key</span>, Bitmap bitmap) {
+        <span class="keyword">return</span> bitmap.getRowBytes() * bitmap.getHeight();
+    }
+};
+mDiskLruCache = DiskLruCache.<span class="built_in">open</span>(getDiskCacheDir(context.getApplicationContext(), <span class="string">"xxxxx"</span>), getAppVersion(context), <span class="number">1</span>, DISKMAXSIZE);
+<span class="comment">// 缓存操作</span>
+mLruCache.<span class="built_in">get</span>(url);
+mLruCache.put(url, bitmap);
+bitmap = BitmapFactory.decodeStream(mDiskLruCache.<span class="built_in">get</span>(url).getInputStream(<span class="number">0</span>));
+DiskLruCache.Editor editor = mDiskLruCache.edit(<span class="variable">key</span>);
+OutputStream outputStream = editor.newOutputStream(<span class="number">0</span>);
+editor.commit();
+</code></pre><ol>
 <li><p>采用Java WebSocket编程取代传统的非实时http请求连接模式</p>
 <ul>
 <li><p><strong>实现方法</strong>: WebSocket是一个基于TCP连接的双向通道，Web应用的信息交互过程通常是客户端发出一个请求，服务器端接收和审核完请求后进行处理并返回结果给客户端，然后客户端浏览器将信息呈现出来，但是对于那些实时要求比较高的应用来说，比如说在线游戏、新闻在线播报、RSS 订阅推送等等，当客户端浏览器准备呈现这些信息的时候，这些信息在服务器端可能已经过时了;    <strong>常见的模拟实时应用方法</strong> </p>
@@ -496,38 +542,54 @@
 </li>
 <li><p>整个项目从简单的多线程优化到采用线程池来实现xml数据文件的获取</p>
 </li>
-<li><p>多线程引起的资源竞争问题解决过程: 同时写一个文件时必须加上Synchronized关键字保证读写，写写互斥</p>
-</li>
 </ul>
 </li>
 </ol>
 <h3 id="Baidu">Baidu</h3><ol>
-<li>Duwear项目短信管理模块: 目的是将手机短信库的变化情况通知到wear端<ol>
+<li><p>Duwear项目短信管理模块: 目的是将手机短信库的变化情况通知到wear端</p>
+<ol>
 <li><strong>SMSObserver</strong>继承ContentProvider类实现观察者模式，注册了一个短信数据库的观察者，发生变化该类都会被通知；在重载函数onChange中进行操作比对判断数据库变化情况，只知道变化，但是不知道具体操作？如何判断用户是标为已读还是删除，新建短信</li>
 <li><strong>SmsReceivedListener接口</strong>：两个回调函数，作为一个接口参数传到SMSObserver的构造函数中，然后一旦判断是新短信还是短信已读，就调用其回调函数</li>
 <li><strong>SmsRpcService类</strong>：继承自上边的接口，在回调函数中将这个操作判断出来发送给手表</li>
 <li><strong>SmsUtils</strong>: 4个函数，查询短信数据库，标为已读的数据库操作函数</li>
+<li><p>SMSObserver类中的具体的判断方式和优化过程</p>
+<ul>
+<li>从维护所有信息的set到只维护未读信息的内容，信息实体占用内存很大，内存优化；</li>
+<li><p>ArrayList到HashSet对比与区别：防止出现重复信息，去重速度很快因为使用HashTable中的hashCode()以及equals进行查找去重；</p>
+</li>
+<li><p>多次读取unreadSet并对两个set进行比对，removeAll和AddAll求补集并集来比对两个未读信息集合;两个方法都用到了hashCode和equals，所以SmsEntity对象中hashcode和equals方法的同时重载；直接removeAll新set可以判断出哪些信息被标为已读，AddAll新set再removeAll旧set可以判断得到新增加的短信；比如1，2，3和1，2，4，5</p>
+</li>
+<li><p><strong>java集合中的浅复制和深复制，clone集合不影响原集合</strong></p>
+<ol>
+<li><p><strong>浅复制</strong>: 复制后的对象与原对象所有变量的值相同，包括引用变量，浅复制时只会复制引用变量本身，不会复制它指向的对象本身</p>
+</li>
+<li><p><strong>深复制</strong>: 复制后的对象与原对象所有变量的值相同，但是不包括引用变量，深复制时会复制引用变量指向的对象本身，所以引用值发生改变</p>
+</li>
+<li><p><strong>Clone()方法和Cloneable接口</strong>: Cloneable接口是一个不包含方法的标志接口，一个类必须先继承它才能在其内部调用super.clone()方法，否则会抛出不支持clone的异常;clone()方法是一个native方法，拷贝对象时已经包括一部分原对象信息，效率优于使用新建对象再一一复制变量的方式;重写clone()方法需要先调用super.clone()方法，该方法会开辟一块新的内存用于拷贝原对象，将原对象的内容一一复制到新对象的内存空间中，它是一种浅复制;如果要实现深复制，需要对复制的对象中的所有引用变量对应的对象也进行复制(具体操作:重写引用对象的clone方法，在其中调用super.clone，然后在上层对象的重载clone方法中调用该对象的clone方法)</p>
+</li>
+<li><p><strong>序列化实现深复制</strong>: 序列化主要用于将内存中对象状态写入数据库或者文件，以及利用Socket在网络中传输对象;一个对象要能够被序列化需要该类实现Serializable接口，可序列化类的子类默认也是可以被序列化的，不需要再次实现Serializable接口；利用序列化进行深复制的前提是该对象及其内部的引用到的对象都是可序列化的，这样对对象序列化时才能递归地保存对象及其引用对象的数据</p>
+<pre><code>deepClone() {    
+   <span class="comment">//序列化:将内存中对象状态转化为字节流，写入目标输出流</span>
+   ByteArrayOutoutStream bo=<span class="keyword">new</span> ByteArrayOutputStream();    
+   ObjectOutputStream oo=<span class="keyword">new</span> ObjectOutputStream(bo);
+   <span class="comment">//    </span>
+   oo.writeObject(<span class="keyword">this</span>);    
+   <span class="comment">//反序列化:读取源输入流中的字节流重建一个内存中相同状态的对象     </span>
+   ByteArrayInputStream bi=<span class="keyword">new</span> ByteArrayInputStream(bo.toByteArray());    
+   ObjectInputStream oi=<span class="keyword">new</span> ObjectInputStream(bi);    
+   <span class="keyword">return</span>(oi.readObject());    
+}
+</code></pre></li>
+<li><p>当一个类声明要实现Serializable接口时，只是表明该类参加序列化协议;Java提供的ObjectInputStream和ObjectOutputStream将数据流功能扩展至可读写对象 。在ObjectInputStream中用readObject()方法可以直接读取一个对象，ObjectOutputStream中用writeObject()方法可以直接将对象保存到输出流中; 序列化只能保存对象的非静态成员变量，不能保存任何的成员方法和静态成员变量，而且序列化保存的只是变量的值，对于变量的任何修饰符都不能保存。  </p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
 </ol>
 </li>
 </ol>
-<pre><code>5. SMSObserver类中的具体的判断方式和优化过程
-    <span class="keyword">*</span> 从维护所有信息的set到只维护未读信息的内容，信息实体占用内存很大，内存优化；
-    <span class="keyword">*</span> ArrayList到HashSet对比与区别：防止出现重复信息，去重速度很快因为使用HashTable中的hashCode()以及equals进行查找去重；
-
-    <span class="keyword">*</span> 多次读取unreadSet并对两个set进行比对，removeAll和AddAll求补集并集来比对两个未读信息集合;两个方法都用到了hashCode和equals，所以SmsEntity对象中hashcode和equals方法的同时重载；直接removeAll新set可以判断出哪些信息被标为已读，AddAll新set再removeAll旧set可以判断得到新增加的短信；比如1，2，3和1，2，4，5
-    <span class="keyword">*</span> java集合中的浅复制和深复制，clone集合不影响原集合
-
-        1. <span class="keyword">*</span><span class="keyword">*</span>浅复制<span class="keyword">*</span><span class="keyword">*</span>: 复制后的对象与原对象所有变量的值相同，包括引用变量，浅复制时只会复制引用变量本身，不会复制它指向的对象本身
-
-        2. <span class="keyword">*</span><span class="keyword">*</span>深复制<span class="keyword">*</span><span class="keyword">*</span>: 复制后的对象与原对象所有变量的值相同，但是不包括引用变量，深复制时会复制引用变量指向的对象本身，所以引用值发生改变
-
-        3. <span class="keyword">*</span><span class="keyword">*</span>Clone()方法和Cloneable接口<span class="keyword">*</span><span class="keyword">*</span>: Cloneable接口是一个不包含方法的标志接口，一个类必须先继承它才能在其内部调用super.clone()方法，否则会抛出不支持clone的异常;clone()方法是一个native方法，拷贝对象时已经包括一部分原对象信息，效率优于使用新建对象再一一复制变量的方式;重写clone()方法需要先调用super.clone()方法，该方法会开辟一块新的内存用于拷贝原对象，将原对象的内容一一复制到新对象的内存空间中，它是一种浅复制;如果要实现深复制，需要对复制的对象中的所有引用变量对应的对象也进行复制(具体操作:重写引用对象的clone方法，在其中调用super.clone，然后再上层对象中调用该对象的clone方法)
-
-        4. <span class="keyword">*</span><span class="keyword">*</span>序列化实现深复制<span class="keyword">*</span><span class="keyword">*</span>: 
-
-
-
-6. <span class="keyword">*</span><span class="keyword">*</span>工厂模式<span class="keyword">*</span><span class="keyword">*</span>生产手表View：需要生成许多不同的CardView，利用CardFactory中的BuildPage函数
+<pre><code>6. <span class="keyword">*</span><span class="keyword">*</span>工厂模式<span class="keyword">*</span><span class="keyword">*</span>生产手表View：需要生成许多不同的CardView，利用CardFactory中的BuildPage函数
     <span class="keyword">*</span> 简单工厂模式:工程类+抽象产品类+具体产品类；根据参数的不同返回不同类的实例。专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类
     <span class="keyword">*</span> 工厂方法模式: 抽象产品角色，具体产品角色，抽象工厂角色，具体工厂角色;工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，这样做的目的是将产品类的实例化操作延迟到工厂子类中完成，即通过工厂子类来确定究竟应该实例化哪一个具体产品类;一个抽象产品类，可以派生出多个具体产品类。一个抽象工厂类，可以派生出多个具体工厂类。每个具体工厂类只能创建一个具体产品类的实例。
     <span class="keyword">*</span> 抽象工厂模式: 多个抽象产品类，每个抽象产品类可以派生出多个具体产品类。一个抽象工厂类，可以派生出多个具体工厂类。每个具体工厂类可以创建多个具体产品类的实例。
@@ -540,11 +602,12 @@
 </li>
 <li><p><strong>PacketMultiWaveView</strong></p>
 <ul>
-<li><strong>measure</strong> 过程由measure(int, int)方法发起，从上到下有序的测量 View，在 measure 过程的最后，每个视图存储了自己的尺寸大小和测量规格;measure 过程会为一个 View 及所有子节点的 mMeasuredWidth 和 mMeasuredHeight 变量赋值；onMeasure方法中调用setMeasuredDimension方法来设置自定义视图的尺寸</li>
+<li><strong>measure</strong> 过程由measure(int, int)方法发起，从上到下有序的测量 View，在 measure 过程的最后，每个视图存储了自己的尺寸大小和测量规格(三种测量规格MeasureSpec 类);measure 过程会为一个 View 及所有子节点的 mMeasuredWidth 和 mMeasuredHeight 变量赋值；onMeasure方法中调用setMeasuredDimension方法来设置自定义视图的尺寸</li>
 <li><strong>layout</strong>子视图的具体位置都是相对于父视图而言的。View 的 onLayout 方法为空实现，而 ViewGroup 的 onLayout 为 abstract 的，因此，如果自定义的 View 要继承 ViewGroup 时，必须实现 onLayout 函数。在 layout 过程中，子视图会调用getMeasuredWidth()和getMeasuredHeight()方法获取到 measure 过程得到的 mMeasuredWidth 和mMeasuredHeight，作为自己的 width 和 height。然后调用每一个子视图的layout(l, t, r, b)函数，来确定每个子视图在父视图中的位置。</li>
-<li><strong>Draw</strong>所有的视图最终都是调用 View 的 draw 方法进行绘制的。在自定义的视图复写onDraw(Canvas) 方法进行绘制;View 的onDraw（Canvas）默认是空实现，复写该方法绘制自身的内容；<br>过程：绘制背景—-绘制自身—-绘制子视图—-绘制Layer和ScrollBar</li>
+<li><strong>Draw</strong>所有的视图最终都是调用 View 的 draw 方法进行绘制的。在自定义的视图复写onDraw(Canvas) 方法进行绘制， 操作canvas对象对一个bitmap对象进行绘制;View 的onDraw（Canvas）默认是空实现，复写该方法绘制自身的内容；<br>过程：绘制背景—-绘制自身—-绘制子视图—-绘制Layer和ScrollBar</li>
 <li><strong>invalidate()</strong>请求重绘 View 树，即 draw 过程，假如视图发生大小没有变化就不会调用layout()过程，并且只绘制那些调用了invalidate()方法的 View</li>
-<li><strong>requestLayout()</strong>当布局变化的时候，比如方向变化，尺寸的变化，会调用该方法，在自定义的视图中，如果某些情况下希望重新测量尺寸大小，应该手动去调用该方法，它会触发measure()和layout()过程，但不会进行 draw。  </li>
+<li><strong>requestLayout()</strong>当布局变化的时候，比如方向变化，尺寸的变化，会调用该方法，在自定义的视图中，如果某些情况下希望重新测量尺寸大小，应该手动去调用该方法，它会触发measure()和layout()过程，但不会进行 draw。</li>
+<li><strong>onTouchEvent()</strong>：监听触摸事件的回调  </li>
 </ul>
 </li>
 </ol>
@@ -1137,11 +1200,6 @@ ThreadPoolExecutor是Executors类的底层实现
 
  * execute和submit两个方法都可以向线程池提交任务， execute()方法的返回类型是<span class="keyword">void</span>，它定义在Executor接口中；submit()方法可以返回持有计算结果的Future对象，它定义在ExecutorService接口中，它扩展了Executor接口 
 </code></pre><h3 id="线程的状态变化">线程的状态变化</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/multiThread.png" class="full-image"></p>
-<h3 id="多线程的同步机制">多线程的同步机制</h3><ol>
-<li><strong>Serializable</strong>: 当一个类声明要实现Serializable接口时，只是表明该类参加序列化协议;Java提供的ObjectInputStream和ObjectOutputStream将数据流功能扩展至可读写对象 。在ObjectInputStream中用readObject()方法可以直接读取一个对象，ObjectOutputStream中用writeObject()方法可以直接将对象保存到输出流中; 序列化只能保存对象的非静态成员变量，不能保存任何的成员方法和静态成员变量，而且序列化保存的只是变量的值，对于变量的任何修饰符都不能保存。</li>
-<li><strong>transient</strong>: 瞬时变量</li>
-<li><strong>volatile</strong>: 保证变量的可见性，每次写修改该变量都会通知到其他线程，也就是说每个线程读取该变量都是从主存读取而不会去工作内存或者寄存器读取缓存，以保证取到的都是最新的值；该关键字在JDK1.6开始可以保证指令不被重排序；但是他不能保证原子性，比如n++操作</li>
-</ol>
 <h3 id="死锁及其解决办法">死锁及其解决办法</h3><pre><code><span class="comment">/**
  * 一个简单的死锁类 当DeadLock类的对象flag==1时（td1），先锁定o1,睡眠500毫秒
  * 而td1在睡眠的时候另一个flag==0的对象（td2）线程启动，先锁定o2,睡眠500毫秒
