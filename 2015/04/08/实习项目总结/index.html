@@ -405,47 +405,55 @@ mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback
 <li><strong>网络请求交互</strong>：参见百度锁屏项目</li>
 <li><strong>Android AsynTask实现多任务下载管理</strong>:</li>
 </ol>
-<pre><code>    private class <span class="type">DemoAsyncTask</span> extends <span class="type">AsyncTask</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>, <span class="type">Bitmap</span>&gt; {
-        @<span class="type">Override</span>
-        protected <span class="type">void</span> onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @<span class="type">Override</span>
-        protected <span class="type">Bitmap</span> doInBackground(<span class="type">String</span>... params) {
-            <span class="keyword">return</span> null;
-        }   
-
-        @<span class="type">Override</span>
-        protected <span class="type">void</span> onPostExecute(<span class="type">Bitmap</span> <span class="literal">result</span>) {
-            super.onPostExecute(<span class="literal">result</span>);
-        }
-
-        @<span class="type">Override</span>
-        protected <span class="type">void</span> onProgressUpdate(<span class="type">Integer</span>... progress) {
-            super.onProgressUpdate(progress);
-        }
-
-        @<span class="type">Override</span>
-        protected <span class="type">void</span> onCancelled() {
-            super.onCancelled();
-        }
+<pre><code><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoAsyncTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">String</span>, <span class="title">Integer</span>, <span class="title">Bitmap</span>&gt; </span>{
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPreExecute</span><span class="params">()</span> </span>{
+        <span class="keyword">super</span>.onPreExecute();
     }
-* **<span class="type">AsyncTask</span>&lt;<span class="type">String</span>,<span class="type">Integer</span>,<span class="type">Bitmap</span>&gt;参数解析**
-    <span class="number">1</span>. params 启动任务执行的输入参数，比如<span class="type">HTTP</span>请求的<span class="type">URL</span>(doInBackground函数的参数类型)
-    <span class="number">2</span>. progress 后台任务执行的百分比（onProgressUpdate函数的参数类型）
-    <span class="number">3</span>. <span class="literal">result</span> 后台执行任务最终返回的结果，比如<span class="type">String</span>(doInBackground返回的参数类型
-    <span class="number">4</span>. new <span class="type">AsynTask</span>.execute(url);
-    <span class="number">5</span>. 使用<span class="type">AsyncTask</span>类，以下是几条必须遵守的准则：<span class="type">Task</span>的实例必须在<span class="type">UI</span> thread中创建; execute方法必须在<span class="type">UI</span> thread中调用
-* **execute方法执行的整个流程**
-    <span class="number">1</span>. <span class="type">AsyncTask</span>的本质是一个静态的线程池，<span class="type">AsyncTask</span>在构造函数中新建一个继承<span class="type">Callable</span>接口的<span class="type">WorkerRunnable</span>类对象，重载call方法，在call方法中封装了doInBackground中的异步任务；然后新建<span class="type">FutureTask</span>接受<span class="type">WorkerRunnable</span>作为参数，提交到线程池执行；在<span class="type">FutureTask</span>的重载done函数中接收线程执行的返回结果并定义任务状态变化后的操作（包括失败和成功），发送message给<span class="type">UI</span> 
-    <span class="number">2</span>. <span class="type">AsyncTask</span>派生出的子类可以实现不同的异步任务，这些任务都是提交到静态的线程池中执行; 线程池中的工作线程执行doInBackground(mParams)方法执行异步任务
-    <span class="number">3</span>. 当任务状态改变(例如进度更新，执行成功，取消)之后，线程池中的工作线程会向<span class="type">UI</span>线程发送消息，<span class="type">AsyncTask</span>内部的<span class="type">InternalHandler</span>响应这些消息，并调用相关的回调函数
-* **<span class="type">AsyncTask</span>和<span class="type">Handler</span>,<span class="type">Looper</span>之间的区别联系**
-    <span class="number">1</span>. <span class="type">AsyncTask</span>是对<span class="type">Handler</span>与<span class="type">Thread</span>的封装。
-    <span class="number">2</span>. <span class="type">AsyncTask</span>在代码上比<span class="type">Handler</span>要轻量级别，但实际上比<span class="type">Handler</span>更耗资源，因为<span class="type">AsyncTask</span>底层是一个线程池，而<span class="type">Handler</span>仅仅就是发送了一个消息队列。但是，如果异步任务的数据特别庞大，<span class="type">AsyncTask</span>线程池比<span class="type">Handler</span>节省开销，因为<span class="type">Handler</span>需要不停的new <span class="type">Thread</span>执行。
-    <span class="number">3</span>. <span class="type">AsyncTask</span>的实例化只能在主线程，<span class="type">Handler</span>可以随意，只和<span class="type">Looper</span>有关系
-</code></pre><ol>
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> Bitmap <span class="title">doInBackground</span><span class="params">(String... params)</span> </span>{
+        <span class="keyword">return</span> <span class="keyword">null</span>;
+    }   
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(Bitmap result)</span> </span>{
+        <span class="keyword">super</span>.onPostExecute(result);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onProgressUpdate</span><span class="params">(Integer... progress)</span> </span>{
+        <span class="keyword">super</span>.onProgressUpdate(progress);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCancelled</span><span class="params">()</span> </span>{
+        <span class="keyword">super</span>.onCancelled();
+    }
+}
+</code></pre><ul>
+<li><strong>AsyncTask<string,integer,bitmap>参数解析</string,integer,bitmap></strong><ol>
+<li>params 启动任务执行的输入参数，比如HTTP请求的URL(doInBackground函数的参数类型)</li>
+<li>progress 后台任务执行的百分比（onProgressUpdate函数的参数类型）</li>
+<li>result 后台执行任务最终返回的结果，比如String(doInBackground返回的参数类型</li>
+<li>new AsynTask.execute(url);</li>
+<li>使用AsyncTask类，以下是几条必须遵守的准则：Task的实例必须在UI thread中创建; execute方法必须在UI thread中调用</li>
+</ol>
+</li>
+<li><strong>execute方法执行的整个流程</strong><ol>
+<li>AsyncTask的本质是一个静态的线程池，AsyncTask在构造函数中新建一个继承Callable接口的WorkerRunnable类对象，重载call方法，在call方法中封装了doInBackground中的异步任务；然后新建FutureTask接受WorkerRunnable作为参数，提交到线程池执行；在FutureTask的重载done函数中接收线程执行的返回结果并定义任务状态变化后的操作（包括失败和成功），发送message给UI </li>
+<li>AsyncTask派生出的子类可以实现不同的异步任务，这些任务都是提交到静态的线程池中执行; 线程池中的工作线程执行doInBackground(mParams)方法执行异步任务</li>
+<li>当任务状态改变(例如进度更新，执行成功，取消)之后，线程池中的工作线程会向UI线程发送消息，AsyncTask内部的InternalHandler响应这些消息，并调用相关的回调函数</li>
+</ol>
+</li>
+<li><strong>AsyncTask和Handler,Looper之间的区别联系</strong><ol>
+<li>AsyncTask是对Handler与Thread的封装。</li>
+<li>AsyncTask在代码上比Handler要轻量级别，但实际上比Handler更耗资源，因为AsyncTask底层是一个线程池，而Handler仅仅就是发送了一个消息队列。但是，如果异步任务的数据特别庞大，AsyncTask线程池比Handler节省开销，因为Handler需要不停的new Thread执行。</li>
+<li>AsyncTask的实例化只能在主线程，Handler可以随意，只和Looper有关系</li>
+</ol>
+</li>
+</ul>
+<ol>
 <li><p><strong>Handler+Looper+MessageQueue异步信息处理系统模型</strong></p>
 <ul>
 <li>Android系统中耗时操作不能放在主线程进行，所以一般放在AsyncTask或者新建子线程进行，然后通过Handler发送消息通知主线程；如果这些耗时操作涉及到UI界面的更新，可以借助于(Android系统UI的更新必须放在主线程进行)Handler发送消息给UI线程更新UI</li>
