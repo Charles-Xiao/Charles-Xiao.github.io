@@ -295,20 +295,20 @@ editor.commit();
    <span class="keyword">return</span>(oi.readObject());    
 }
 </code></pre></li>
-<li><p>当一个类声明要实现Serializable接口时，只是表明该类参加序列化协议;Java提供的ObjectInputStream和ObjectOutputStream将数据流功能扩展至可读写对象 。在ObjectInputStream中用readObject()方法可以直接读取一个对象，ObjectOutputStream中用writeObject()方法可以直接将对象保存到输出流中; 序列化只能保存对象的非静态成员变量，不能保存任何的成员方法和静态成员变量，而且序列化保存的只是变量的值，对于变量的任何修饰符都不能保存。  </p>
+<li><p>当一个类声明要实现Serializable接口时，只是表明该类参加序列化协议;Java提供的ObjectInputStream和ObjectOutputStream将数据流功能扩展至可读写对象 。在ObjectInputStream中用readObject()方法可以直接读取一个对象，ObjectOutputStream中用writeObject()方法可以直接将对象保存到输出流中; 序列化只能保存对象的非静态成员变量，不能保存任何的成员方法和静态成员变量，而且序列化保存的只是变量的值，对于变量的任何修饰符都不能保存。          </p>
 </li>
 </ol>
 </li>
 </ul>
 </li>
-</ol>
+<li><strong>工厂模式</strong>生产手表View：需要生成许多不同的CardView，利用CardFactory中的BuildPage函数<ul>
+<li>简单工厂模式:工程类+抽象产品类+具体产品类；根据参数的不同返回不同类的实例。专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类</li>
+<li>工厂方法模式: 抽象产品角色，具体产品角色，抽象工厂角色，具体工厂角色;工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，这样做的目的是将产品类的实例化操作延迟到工厂子类中完成，即通过工厂子类来确定究竟应该实例化哪一个具体产品类;一个抽象产品类，可以派生出多个具体产品类。一个抽象工厂类，可以派生出多个具体工厂类。每个具体工厂类只能创建一个具体产品类的实例。</li>
+<li>抽象工厂模式: 多个抽象产品类，每个抽象产品类可以派生出多个具体产品类。一个抽象工厂类，可以派生出多个具体工厂类。每个具体工厂类可以创建多个具体产品类的实例。</li>
+</ul>
 </li>
 </ol>
-<pre><code>6. <span class="keyword">*</span><span class="keyword">*</span>工厂模式<span class="keyword">*</span><span class="keyword">*</span>生产手表View：需要生成许多不同的CardView，利用CardFactory中的BuildPage函数
-    <span class="keyword">*</span> 简单工厂模式:工程类+抽象产品类+具体产品类；根据参数的不同返回不同类的实例。专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类
-    <span class="keyword">*</span> 工厂方法模式: 抽象产品角色，具体产品角色，抽象工厂角色，具体工厂角色;工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，这样做的目的是将产品类的实例化操作延迟到工厂子类中完成，即通过工厂子类来确定究竟应该实例化哪一个具体产品类;一个抽象产品类，可以派生出多个具体产品类。一个抽象工厂类，可以派生出多个具体工厂类。每个具体工厂类只能创建一个具体产品类的实例。
-    <span class="keyword">*</span> 抽象工厂模式: 多个抽象产品类，每个抽象产品类可以派生出多个具体产品类。一个抽象工厂类，可以派生出多个具体工厂类。每个具体工厂类可以创建多个具体产品类的实例。
-</code></pre><ol>
+</li>
 <li><p>百度锁屏项目</p>
 <ul>
 <li><p>View的自定义绘制与组合原理过程</p>
@@ -319,7 +319,7 @@ editor.commit();
 <ul>
 <li><strong>measure</strong> 过程由measure(int, int)方法发起，从上到下有序的测量 View，在 measure 过程的最后，每个视图存储了自己的尺寸大小和测量规格(三种测量规格MeasureSpec 类);measure 过程会为一个 View 及所有子节点的 mMeasuredWidth 和 mMeasuredHeight 变量赋值；onMeasure方法中调用setMeasuredDimension方法来设置自定义视图的尺寸</li>
 <li><strong>layout</strong>子视图的具体位置都是相对于父视图而言的。View 的 onLayout 方法为空实现，而 ViewGroup 的 onLayout 为 abstract 的，因此，如果自定义的 View 要继承 ViewGroup 时，必须实现 onLayout 函数。在 layout 过程中，子视图会调用getMeasuredWidth()和getMeasuredHeight()方法获取到 measure 过程得到的 mMeasuredWidth 和mMeasuredHeight，作为自己的 width 和 height。然后调用每一个子视图的layout(l, t, r, b)函数，来确定每个子视图在父视图中的位置。</li>
-<li><strong>Draw</strong>所有的视图最终都是调用 View 的 draw 方法进行绘制的。在自定义的视图复写onDraw(Canvas) 方法进行绘制， 操作canvas对象对一个bitmap对象进行绘制;View 的onDraw（Canvas）默认是空实现，复写该方法绘制自身的内容；<br>过程：绘制背景—-绘制自身—-绘制子视图—-绘制Layer和ScrollBar</li>
+<li><strong>Draw</strong>所有的视图最终都是调用 View 的 draw 方法进行绘制的。在自定义的视图复写onDraw(Canvas) 方法进行绘制， 操作canvas对象对一个bitmap对象进行绘制;View 的onDraw（Canvas）默认是空实现，复写该方法绘制自身的内容; <em>过程：绘制背景—-绘制自身—-绘制子视图—-绘制Layer和ScrollBar</em></li>
 <li><strong>invalidate()</strong>请求重绘 View 树，即 draw 过程，假如视图发生大小没有变化就不会调用layout()过程，并且只绘制那些调用了invalidate()方法的 View</li>
 <li><strong>requestLayout()</strong>当布局变化的时候，比如方向变化，尺寸的变化，会调用该方法，在自定义的视图中，如果某些情况下希望重新测量尺寸大小，应该手动去调用该方法，它会触发measure()和layout()过程，但不会进行 draw。</li>
 <li><strong>onTouchEvent()</strong>：监听触摸事件的回调  </li>
@@ -353,8 +353,9 @@ editor.commit();
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Volley.png" class="full-image"></p>
 <p><a href="http://a.codekk.com/detail/Android/grumoon/Volley%20%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90" target="_blank" rel="external">Volley源码分析</a></p>
 <p><strong>Volley用法</strong>  </p>
-<p> RequestQueue mQueue = Volley.newRequestQueue(context);<br> StringRequest stringRequest = new StringRequest(Method.POST, “<a href="http://www.baidu.com" target="_blank" rel="external">http://www.baidu.com</a>“,  </p>
-<pre><code><span class="literal">new</span> Response<span class="built_in">.</span>Listener<span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span>() {  
+<pre><code> RequestQueue mQueue <span class="subst">=</span> Volley<span class="built_in">.</span>newRequestQueue(context);  
+ StringRequest stringRequest <span class="subst">=</span> <span class="literal">new</span> StringRequest(Method<span class="built_in">.</span>POST, <span class="string">"http://www.baidu.com"</span>,  
+<span class="literal">new</span> Response<span class="built_in">.</span>Listener<span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span>() {  
     @Override  
     <span class="keyword">public</span> <span class="literal">void</span> onResponse(<span class="built_in">String</span> response) {  
         <span class="keyword">Log</span><span class="built_in">.</span>d(<span class="string">"TAG"</span>, response);  
@@ -373,8 +374,8 @@ editor.commit();
      <span class="keyword">return</span> <span class="built_in">map</span>;  
  }  
 }; 
-</code></pre><p> mQueue.add(stringRequest); </p>
-</li>
+ mQueue<span class="built_in">.</span>add(stringRequest); 
+</code></pre></li>
 </ol>
 </li>
 </ol>
@@ -431,7 +432,6 @@ mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback
         }
     }
 
-
 * **<span class="type">AsyncTask</span>&lt;<span class="type">String</span>,<span class="type">Integer</span>,<span class="type">Bitmap</span>&gt;参数解析**
 
     <span class="number">1</span>. params 启动任务执行的输入参数，比如<span class="type">HTTP</span>请求的<span class="type">URL</span>(doInBackground函数的参数类型)
@@ -442,8 +442,7 @@ mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback
 
     <span class="number">4</span>. new <span class="type">AsynTask</span>.execute(url);
 
-* 使用<span class="type">AsyncTask</span>类，以下是几条必须遵守的准则：<span class="type">Task</span>的实例必须在<span class="type">UI</span> thread中创建; execute方法必须在<span class="type">UI</span> thread中调用
-
+    <span class="number">5</span>. 使用<span class="type">AsyncTask</span>类，以下是几条必须遵守的准则：<span class="type">Task</span>的实例必须在<span class="type">UI</span> thread中创建; execute方法必须在<span class="type">UI</span> thread中调用
 
 * **execute方法执行的整个流程**
     <span class="number">1</span>. <span class="type">AsyncTask</span>的本质是一个静态的线程池，<span class="type">AsyncTask</span>在构造函数中新建一个继承<span class="type">Callable</span>接口的<span class="type">WorkerRunnable</span>类对象，重载call方法，在call方法中封装了doInBackground中的异步任务；然后新建<span class="type">FutureTask</span>接受<span class="type">WorkerRunnable</span>作为参数，提交到线程池执行；在<span class="type">FutureTask</span>的重载done函数中接收线程执行的返回结果并定义任务状态变化后的操作（包括失败和成功），发送message给<span class="type">UI</span>线程
@@ -453,7 +452,6 @@ mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback
     <span class="number">3</span>. 当任务状态改变(例如进度更新，执行成功，取消)之后，线程池中的工作线程会向<span class="type">UI</span>线程发送消息，<span class="type">AsyncTask</span>内部的<span class="type">InternalHandler</span>响应这些消息，并调用相关的回调函数
 
 * **<span class="type">AsyncTask</span>和<span class="type">Handler</span>,<span class="type">Looper</span>之间的区别联系**
-
     <span class="number">1</span>. <span class="type">AsyncTask</span>是对<span class="type">Handler</span>与<span class="type">Thread</span>的封装。
     <span class="number">2</span>. <span class="type">AsyncTask</span>在代码上比<span class="type">Handler</span>要轻量级别，但实际上比<span class="type">Handler</span>更耗资源，因为<span class="type">AsyncTask</span>底层是一个线程池，而<span class="type">Handler</span>仅仅就是发送了一个消息队列。但是，如果异步任务的数据特别庞大，<span class="type">AsyncTask</span>线程池比<span class="type">Handler</span>节省开销，因为<span class="type">Handler</span>需要不停的new <span class="type">Thread</span>执行。
     <span class="number">3</span>. <span class="type">AsyncTask</span>的实例化只能在主线程，<span class="type">Handler</span>可以随意，只和<span class="type">Looper</span>有关系
@@ -491,57 +489,60 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
         mHandler.obtainMessage(MSG_SUCCESS,bm).sendToTarget();                }
 };
 
-<span class="keyword">new</span> Thread(runnable).start();
+<span class="keyword">new</span> Thread(runnable).start();                    
 </code></pre></li>
+<li><p>Looper本质是一个ThreadLocal变量，每一个线程调用Looper.prepare时，都会创建为其唯一的Looper，它持有一个MessageQueue消息队列，实现Thread的消息循环和消息派发; Handler负责收发Message以及Runnable对象(post和sendMessage),包括push新消息到MessageQueue或者接收Looper从MessageQueue取出来的消息; MessageQueue是一个FIFO消息队列</p>
+<p>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Looper.jpg" class="full-image"></p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">LooperThread</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Thread</span> {</span>
+      public <span class="type">Handler</span> mHandler;
+      public void run() {
+             <span class="type">Looper</span>.prepare();
+
+             mHandler = <span class="keyword">new</span> <span class="type">Handler</span>() {
+                      public void handleMessage(<span class="type">Message</span> msg) {
+
+                      }                                                                                                                                                                                                                     };
+
+             <span class="type">Looper</span>.loop();
+
+      }
+}
+</code></pre></li>
+<li><p>一个线程只能拥有一个Looper实例(该Looper对象可以通过Looper.myLooper()来获取)，对应着一个MessageQueue消息队列，但是可以拥有多个Handler; 主线程初始化时默认创建一个Looper对象，可以通过Looper.getMainLooper()来获取他；主线程中可以直接新建Handler，但是子线程中新建Handler需要先调用Looper.prepare()</p>
+</li>
+<li><p><strong>handler可能引发的内存泄露和解决方案</strong></p>
+<ol>
+<li>当使用内部类（包括匿名类）来创建Handler的时候，Handler对象会隐式地持有一个外部类对象（通常是一个Activity）的引用。而Handler通常会伴随着一个耗时的后台线程一起出现，这个后台线程在任务执行完毕之后，通过消息机制通知Handler，然后Handler把消息发送到UI线程。然而，如果用户在耗时线程执行过程中关闭了Activity（正常情况下Activity不再被使用，它就有可能在GC检查时被回收掉），由于这时线程尚未执行完，而该线程持有Handler的引用，这个Handler又持有Activity的引用，就导致该Activity暂时无法被回收（即内存泄露）</li>
+<li><p>解决方案:</p>
+<ul>
+<li><p>Handler声明为静态内部类,不再持有外部类Activity,在其内部声明一个Activity的弱引用来操作Activity中的对象</p>
+<pre><code>static <span class="class"><span class="keyword">class</span> <span class="title">TestHandler</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Handler</span> {</span>
+    <span class="type">WeakReference</span>&lt;<span class="type">Activity</span> &gt; mActivityReference;
+
+    <span class="type">TestHandler</span>(<span class="type">Activity</span> activity) {
+        mActivityReference= <span class="keyword">new</span> <span class="type">WeakReference</span>&lt;<span class="type">Activity</span>&gt;(activity);
+    }
+
+    <span class="annotation">@Override</span>
+    public void handleMessage(<span class="type">Message</span> msg) {
+        <span class="keyword">final</span> <span class="type">Activity</span> activity = mActivityReference.get();
+        <span class="keyword">if</span> (activity != <span class="literal">null</span>) {
+            mImageView.setImageBitmap(mBitmap);
+        }
+    }
+}
+</code></pre></li>
+<li><p>①在关闭Activity的时候停掉你的后台线程。线程停掉了，就相当于切断了Handler和外部连接的线，Activity自然会在合适的时候被回收；②如果你的Handler是被delay的Message持有了引用，那么使用相应的Handler的removeCallbacks()方法，把消息对象从消息队列移除        </p>
+</li>
 </ul>
 </li>
 </ol>
-<pre><code>* <span class="type">Looper</span>本质是一个<span class="type">ThreadLocal</span>变量，每一个线程调用<span class="type">Looper</span>.prepare时，都会创建为其唯一的<span class="type">Looper</span>，它持有一个<span class="type">MessageQueue</span>消息队列，实现<span class="type">Thread</span>的消息循环和消息派发; <span class="type">Handler</span>负责收发<span class="type">Message</span>以及<span class="type">Runnable</span>对象(post和sendMessage),包括push新消息到<span class="type">MessageQueue</span>或者接收<span class="type">Looper</span>从<span class="type">MessageQueue</span>取出来的消息; <span class="type">MessageQueue</span>是一个<span class="type">FIFO</span>消息队列
-
-    &lt;img src=<span class="string">"https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Looper.jpg"</span> <span class="class"><span class="keyword">class</span>=</span><span class="string">"full-image"</span> /&gt;
-
-        <span class="class"><span class="keyword">class</span> <span class="title">LooperThread</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Thread</span> {</span>
-              public <span class="type">Handler</span> mHandler;
-              public void run() {
-                     <span class="type">Looper</span>.prepare();
-
-                     mHandler = <span class="keyword">new</span> <span class="type">Handler</span>() {
-                              public void handleMessage(<span class="type">Message</span> msg) {
-
-                              }                                                                                                                                                                                                                     };
-
-                     <span class="type">Looper</span>.loop();
-
-              }
-        }
-
-* 一个线程只能拥有一个<span class="type">Looper</span>实例(该<span class="type">Looper</span>对象可以通过<span class="type">Looper</span>.myLooper()来获取)，对应着一个<span class="type">MessageQueue</span>消息队列，但是可以拥有多个<span class="type">Handler</span>; 主线程初始化时默认创建一个<span class="type">Looper</span>对象，可以通过<span class="type">Looper</span>.getMainLooper()来获取他；主线程中可以直接新建<span class="type">Handler</span>，但是子线程中新建<span class="type">Handler</span>需要先调用<span class="type">Looper</span>.prepare()
-
-* **handler可能引发的内存泄露和解决方案**
-    <span class="number">1.</span> 当使用内部类（包括匿名类）来创建<span class="type">Handler</span>的时候，<span class="type">Handler</span>对象会隐式地持有一个外部类对象（通常是一个<span class="type">Activity</span>）的引用。而<span class="type">Handler</span>通常会伴随着一个耗时的后台线程一起出现，这个后台线程在任务执行完毕之后，通过消息机制通知<span class="type">Handler</span>，然后<span class="type">Handler</span>把消息发送到<span class="type">UI</span>线程。然而，如果用户在耗时线程执行过程中关闭了<span class="type">Activity</span>（正常情况下<span class="type">Activity</span>不再被使用，它就有可能在<span class="type">GC</span>检查时被回收掉），由于这时线程尚未执行完，而该线程持有<span class="type">Handler</span>的引用，这个<span class="type">Handler</span>又持有<span class="type">Activity</span>的引用，就导致该<span class="type">Activity</span>暂时无法被回收（即内存泄露）
-    <span class="number">2.</span> 解决方案:
-        * <span class="type">Handler</span>声明为静态内部类,不再持有外部类<span class="type">Activity</span>,在其内部声明一个<span class="type">Activity</span>的弱引用来操作<span class="type">Activity</span>中的对象
-
-                static <span class="class"><span class="keyword">class</span> <span class="title">TestHandler</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Handler</span> {</span>
-                    <span class="type">WeakReference</span>&lt;<span class="type">Activity</span> &gt; mActivityReference;
-
-                    <span class="type">TestHandler</span>(<span class="type">Activity</span> activity) {
-                        mActivityReference= <span class="keyword">new</span> <span class="type">WeakReference</span>&lt;<span class="type">Activity</span>&gt;(activity);
-                    }
-
-                    <span class="annotation">@Override</span>
-                    public void handleMessage(<span class="type">Message</span> msg) {
-                        <span class="keyword">final</span> <span class="type">Activity</span> activity = mActivityReference.get();
-                        <span class="keyword">if</span> (activity != <span class="literal">null</span>) {
-                            mImageView.setImageBitmap(mBitmap);
-                        }
-                    }
-                }
-
-        * ①在关闭<span class="type">Activity</span>的时候停掉你的后台线程。线程停掉了，就相当于切断了<span class="type">Handler</span>和外部连接的线，<span class="type">Activity</span>自然会在合适的时候被回收；②如果你的<span class="type">Handler</span>是被delay的<span class="type">Message</span>持有了引用，那么使用相应的<span class="type">Handler</span>的removeCallbacks()方法，把消息对象从消息队列移除
-
-* <span class="type">HandlerThread</span>是一个<span class="type">Looper</span>,<span class="type">Handler</span>,<span class="type">Thread</span>的组合实现；在其构造函数中对<span class="type">Looper</span>进行初始化，并提供一个<span class="type">Looper</span>对象给新创建的<span class="type">Handler</span>对象，使得<span class="type">Handler</span>处理消息事件在子线程中处理
-</code></pre><h3 id="毕设-WebCrawler项目">毕设-WebCrawler项目</h3><p>java优先级队列；Java多线程处理，线程池，html页面解析等</p>
+</li>
+<li>HandlerThread是一个Looper,Handler,Thread的组合实现；在其构造函数中对Looper进行初始化，并提供一个Looper对象给新创建的Handler对象，使得Handler处理消息事件在子线程中处理</li>
+</ul>
+</li>
+</ol>
+<h3 id="毕设-WebCrawler项目">毕设-WebCrawler项目</h3><p>java优先级队列；Java多线程处理，线程池，html页面解析等</p>
 <p>单例模式enum实现对MySQL数据库操作的优势</p>
 <h3 id="QA">QA</h3><ol>
 <li><p>如果在贵司移动开发部门做开发，主要用到哪些技术栈，我需要补充哪些技术站</p>
