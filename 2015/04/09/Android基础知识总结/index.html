@@ -233,6 +233,19 @@
 <li><p><strong>View.PostDelayed(Runnabe,long)</strong></p>
 </li>
 </ol>
+<h3 id="Activity四种启动模式，组件和生命周期">Activity四种启动模式，组件和生命周期</h3><ol>
+<li><strong>Application</strong>: 应用程序是组件的集合，manifest文件中展现了application中组件的结构,加载app时会根据manifest去加载和实例化组件</li>
+<li><strong>Process</strong>: 一个应用程序占据一个进程，一个运行中的dalvik虚拟机实例就占据一个进程; 但是我们可以给组件设置android:process = “name”来让组件运行在独立进程中</li>
+<li><strong>Task</strong>: 一组以栈的形式来进行管理的相互关联的activity的集合，它是存在于framework层的一个跨应用的概念，控制界面的跳转和返回；task中所有的activity在一个叫做back stack的栈中进行管理</li>
+<li><strong>四种启动模式</strong><ul>
+<li><strong>standard</strong>: 默认的lauchmode, 同一个activity可以被实例化多次，在一个task栈中可以同时存在一个activity的多个实例，每次startActivity就新建一个实例入栈<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/standard.png" class="full-image"></li>
+<li><strong>singleTop</strong>: 先检查栈顶是否是该activity的实例，是则重用该实例，并且调用该实例的onNewIntent()方法，否则要新建实例压入栈顶<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/singleTop.png" class="full-image">  </li>
+<li><strong>singleTask</strong>: 先检查栈中是否包含该activity的实例，是则重用该实例，清理该实例上的所有activity并将其显示给用户；否则新建实例压入back stack<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/singleTask.png" class="full-image"></li>
+<li><strong>singleInstance</strong>: 以singleInstance模式启动的Activity具有全局唯一性，即整个系统中只会存在一个这样的实例；而且具备独占性，以该模式启动的Activity不能与其他Activity共存在一个task中<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/singleInstance.png" class="full-image"></li>
+</ul>
+</li>
+<li><strong>四大组件</strong>: </li>
+</ol>
 
       
     </div>
@@ -376,7 +389,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Android子线程和UI线程交互的5种方式"><span class="nav-number">1.</span> <span class="nav-text">Android子线程和UI线程交互的5种方式</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Android子线程和UI线程交互的5种方式"><span class="nav-number">1.</span> <span class="nav-text">Android子线程和UI线程交互的5种方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity四种启动模式，组件和生命周期"><span class="nav-number">2.</span> <span class="nav-text">Activity四种启动模式，组件和生命周期</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

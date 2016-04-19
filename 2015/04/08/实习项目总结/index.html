@@ -185,6 +185,7 @@
 <ol>
 <li>请求流程: 当我们第一次打开应用获取图片时，先到网络去下载图片，然后依次存入内存缓存，磁盘缓存;以后每次加载图片的时候都优先去LRUCache内存缓存当中读取，当读取不到的时候则回去DiskLruCache硬盘缓存中读取，而如果硬盘缓存仍然读取不到的话，就从网络上请求原始数据。</li>
 <li><strong>二级缓存</strong>: 变化频繁的小数据都采用LRUCache,稳定的大文件数据采用DiskLruCache;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File；根据请求头里边的expires(缓存过期的时间（绝对时间）),Last-Modified, Cache-Control等内容来确定DiskLruCache中缓存的保留时间以及清理策略；例如用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据时间判断是否过期，从而实现缓存定时清理  </li>
+<li><strong>FIFO</strong>First In First Out，先进先出;判断被存储的时间，离目前存储时间最久的数据优先被淘汰。<strong>LFU</strong>：Least Frequently Used，最不经常使用;在一段时间内，数据被使用次数最少的，优先被淘汰。</li>
 </ol>
 <p>缓存图片举例：</p>
 </li>
@@ -200,7 +201,8 @@ mLruCache = <span class="keyword">new</span> LruCache&lt;<span class="keyword">S
         <span class="keyword">return</span> bitmap.getRowBytes() * bitmap.getHeight();
     }
 };
-mDiskLruCache = DiskLruCache.<span class="built_in">open</span>(getDiskCacheDir(context.getApplicationContext(), <span class="string">"xxxxx"</span>), getAppVersion(context), <span class="number">1</span>, DISKMAXSIZE);
+ mDiskLruCache=DiskLruCache.<span class="built_in">open</span>(getDiskCacheDir(context.getApplicationContext(),
+ <span class="string">"xxxxx"</span>),     getAppVersion(context), <span class="number">1</span>, DISKMAXSIZE);
 <span class="comment">// 缓存操作</span>
 mLruCache.<span class="built_in">get</span>(url);
 mLruCache.put(url, bitmap);
@@ -353,8 +355,9 @@ editor.commit();
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Volley.png" class="full-image"></p>
 <p><a href="http://a.codekk.com/detail/Android/grumoon/Volley%20%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90" target="_blank" rel="external">Volley源码分析</a></p>
 <p><strong>Volley用法</strong>  </p>
-<pre><code> RequestQueue mQueue <span class="subst">=</span> Volley<span class="built_in">.</span>newRequestQueue(context);  
- StringRequest stringRequest <span class="subst">=</span> <span class="literal">new</span> StringRequest(Method<span class="built_in">.</span>POST, <span class="string">"http://www.baidu.com"</span>,  
+<pre><code> RequestQueue mQueue <span class="subst">=</span> Volley<span class="built_in">.</span>newRequestQueue(context);
+ StringRequest stringRequest <span class="subst">=</span> <span class="literal">new</span> StringRequest
+ (Method<span class="built_in">.</span>POST, <span class="string">"http://www.baidu.com"</span>,  
 <span class="literal">new</span> Response<span class="built_in">.</span>Listener<span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span>() {  
     @Override  
     <span class="keyword">public</span> <span class="literal">void</span> onResponse(<span class="built_in">String</span> response) {  
@@ -463,7 +466,8 @@ mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback
     <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">handleMessage</span> <span class="params">(Message msg)</span> </span>{
         <span class="keyword">switch</span>(msg.what) {
         <span class="keyword">case</span> MSG_SUCCESS:
-            mImageView.setImageBitmap((Bitmap) msg.obj);                        <span class="keyword">break</span>;
+            mImageView.setImageBitmap((Bitmap) msg.obj);
+            <span class="keyword">break</span>;
         <span class="keyword">case</span> MSG_FAILURE:
             <span class="keyword">break</span>;
         }
@@ -476,7 +480,9 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
     <span class="annotation">@Override</span>
     <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
         HttpClient hc = <span class="keyword">new</span> DefaultHttpClient();
-        HttpGet hg = <span class="keyword">new</span> HttpGet(<span class="string">"http://www.oschina.net/img/logo.gif"</span>);                    <span class="keyword">final</span> Bitmap bm;
+        HttpGet hg = <span class="keyword">new</span> HttpGet(<span class="string">"http://www.oschina.net/img/logo.gif"</span>);
+        <span class="keyword">final</span> Bitmap bm;
+
         <span class="keyword">try</span> {
             HttpResponse hr = hc.execute(hg);
             bm = BitmapFactory.decodeStream(hr.getEntity().getContent());
@@ -484,7 +490,9 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
             mHandler.obtainMessage(MSG_FAILURE).sendToTarget();
             <span class="keyword">return</span>;
         }
-        mHandler.obtainMessage(MSG_SUCCESS,bm).sendToTarget();                }
+
+        mHandler.obtainMessage(MSG_SUCCESS,bm).sendToTarget();
+        }
 };
 
 <span class="keyword">new</span> Thread(runnable).start();                    

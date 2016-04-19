@@ -200,7 +200,7 @@
 <li><p>类加载器分为启动类加载器(不继承classLoader，负责加载原生代码实现的Java核心库,包括加载$JAVA_HOME中jre/lib/rt.jar里所有的 class)；扩展类加载器(负责在JVM中扩展库目录中去寻找加载Java扩展库,包括$JAVA_HOME中jre/lib/*.jar或-Djava.ext.dirs指定目录下的 jar 包)；应用程序类加载器(ClassLoader.getSystemClassLoader()负责加载Java类路径classpath中的类)</p>
 </li>
 </ol>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ClassLoader.png" class="full-image"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Classloader.png" class="full-image"></p>
 <ol>
 <li>类加载机制的流程：包括了加载、验证、准备、解析、初始化五个阶段<ul>
 <li><strong>加载</strong>：查找装载二进制文件，通过一个类的全限定名获取类的二进制字节流，并将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构；在 Java 堆中生成一个代表这个类的 java.lang.Class 对象，作为对方法区中这些数据的访问入口。</li>
