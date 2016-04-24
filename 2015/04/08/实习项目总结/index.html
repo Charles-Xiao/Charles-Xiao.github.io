@@ -498,7 +498,7 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 <span class="keyword">new</span> Thread(runnable).start();                    
 </code></pre></li>
 <li><p>Looper本质是一个ThreadLocal变量，每一个线程调用Looper.prepare时，都会创建为其唯一的Looper，它持有一个MessageQueue消息队列，实现Thread的消息循环和消息派发; Handler负责收发Message以及Runnable对象(post和sendMessage),包括push新消息到MessageQueue或者接收Looper从MessageQueue取出来的消息; MessageQueue是一个FIFO消息队列</p>
-<p>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Looper.jpg" class="full-image"></p>
+<p>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Looper.jpg" class="full-image" width="100%"></p>
 <pre><code><span class="class"><span class="keyword">class</span> <span class="title">LooperThread</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Thread</span> {</span>
       public <span class="type">Handler</span> mHandler;
       public void run() {
@@ -651,7 +651,7 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-count">31</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -665,7 +665,7 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-count">37</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

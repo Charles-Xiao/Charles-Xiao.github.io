@@ -190,18 +190,20 @@
 
       
         <h3 id="复用类(继承组合)与多态">复用类(继承组合)与多态</h3><ol>
-<li><strong>继承、组合与代理之间的区别与联系</strong>：组合只是将对象引用置于新类中即可，表述的是一种has-a的关系，而继承通过extends关键字实现，自动得到基类中所有域和方法，表述的是一种is-a的关系；而代理是介于两者之间的一种关系，首先将对象引用置于新类中，然后在新类中构建同名方法来暴露该对象的所有方法(类似于继承)</li>
+<li>Java面向对象编程思想的三种基本特征：<strong>继承、封装、复合和多态</strong><ul>
+<li><strong>封装</strong>：只公开代码的访问接口，隐藏其内部的数据和具体实现；通常采用public，protected，private<br>来进行访问权限控制；封装可以隐藏实现细节，还可以使得代码模块化以对象形式呈现</li>
+<li><strong>继承、组合与代理之间的区别与联系</strong>：组合只是将对象引用置于新类中即可，表述的是一种has-a的关系，而继承通过extends关键字实现，自动得到基类中所有域和方法，表述的是一种is-a的关系；而代理是介于两者之间的一种关系，首先将对象引用置于新类中，然后在新类中构建同名方法来暴露该对象的所有方法(类似于继承)；继承可以扩展已存在的代码模块，并且表达出层次逻辑和归属关系</li>
+<li><strong>多态</strong>也被称作动态绑定，与向上转型相反，通常通过接口和抽象类来实现(覆盖重写方法)，我们把重载（overloading）称为编译时多态，把覆盖（overriding）称为运行时多态；运行时多态是指允许将子类类型的引用赋值给父类类型的引用，赋值之后，父对象就可以根据当前赋值给它的子对象的特性以不同的方式运作；多态可以达到接口重用的目的，深刻地体现了一种设计原则里-依赖倒置原则；程序要依赖超类（抽象类、接口）不要依赖具体类，基于接口的开发，而不是基于实现的开发。</li>
+</ul>
+</li>
 <li><strong>继承与初始化</strong>：导出类继承自基类，构造器调用顺序是从上至下基类到导出类层层调用，若是默认构造器则不需要在导出类中显式调用基类构造器，否则需要首先在导出类构造器中使用super关键字调用基类构造器。见《Java编程思想P146和P158》</li>
-<li>多态也被称作动态绑定，与向上转型相反，抽象接口编程的重要性</li>
 </ol>
 <h3 id="接口与内部类">接口与内部类</h3><ol>
-<li><p><strong>接口与抽象类的区别联系</strong>：</p>
-<ul>
+<li><strong>接口与抽象类的区别联系</strong>：<ul>
 <li>一个类可以实现多个接口但是只能实现一个抽象类 </li>
 <li>接口中都是抽象方法，抽象类中可以有实现的方法</li>
-<li>接口中方法和域都是public，抽象类中可以自由定义修饰符</li>
-<li>接口不能有构造器，其所有域都是static和final的</li>
-<li>两者都不能实例化，都能存放子类或者实现类的对象</li>
+<li>接口中方法都是public的，属性都是public static final的;但是抽象类中方法和属性都可以自由定义修饰符</li>
+<li>接口不能有构造器，抽象类可以有构造器，但是两者都不能实例化</li>
 </ul>
 </li>
 <li><p><strong>静态内部类(嵌套类)与非静态内部类，方法内部类，匿名内部类区别</strong>：</p>
@@ -244,14 +246,45 @@ history_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {
 <li>在finally里边return会导致异常丢失，不再抛出异常(另一种异常丢失是因为前一个异常还没处理就抛出下一个异常，前一个异常就丢失了)</li>
 </ul>
 </li>
+</ol>
+<h3 id="Java反射机制">Java反射机制</h3><ol>
+<li><p><strong>反射</strong>：反射机制不但可以让我们在程序运行时获取类的函数、属性、父类、接口等 Class 内部信息，还可以让我们在运行期实例化对象，调用方法，通过调用get/set方法获取变量的值，即使方法或属性是私有的的也可以通过反射的形式调用，可以用于使用在编译器为程序生成代码之后很久才会出现的类，比如基于构建编程和远程方法调用，主要是通过Class类和java.lang.reflect类库来实现</p>
+<pre><code>//记载指定路径中的<span class="class"><span class="keyword">class</span>对象的两个方法</span>
+<span class="class"><span class="keyword">Class</span>.<span class="title">forName</span>(<span class="title">String</span> <span class="title">className</span>);</span>
+<span class="keyword">public</span> static <span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">forName</span> (<span class="title">String</span> <span class="title">className</span>, <span class="title">boolean</span> <span class="title">shouldInitialize</span>, <span class="title">ClassLoader</span> <span class="title">classLoader</span>)</span>
+
+//编译器获取类的<span class="class"><span class="keyword">class</span>对象</span>
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">myObjectClass</span> = <span class="title">MyObject</span>.<span class="title">class</span>;</span>
+//编译器获取对象的<span class="class"><span class="keyword">class</span>对象</span>
+Student me = <span class="keyword">new</span> Student(<span class="string">"mr.simple"</span>);    
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">clazz</span> = <span class="title">me</span>.<span class="title">getClass</span>();</span>
+
+// 运行期获取指定路径的 <span class="class"><span class="keyword">Class</span> 对象</span>
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">clz</span> = <span class="title">Class</span>.<span class="title">forName</span>("<span class="title">org</span>.<span class="title">java</span>.<span class="title">advance</span>.<span class="title">reflect</span>.<span class="title">Student</span>");</span>
+// 通过 <span class="class"><span class="keyword">Class</span> 对象获取 <span class="title">Constructor</span>，<span class="title">Student</span> 的构造函数有一个字符串参数</span>
+// 因此这里需要传递参数的类型 ( Student 类见后面的代码 )
+Constructor&lt;?&gt; constructor = clz.getConstructor(String.class);
+// 通过 Constructor 来创建 Student 对象
+Object obj = constructor.newInstance(<span class="string">"mr.simple"</span>);
+//获取父类和接口
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">superClass</span> = <span class="title">obj</span>.<span class="title">getClass</span>().<span class="title">getSuperclass</span>();</span>
+<span class="class"><span class="keyword">Class</span>&lt;?&gt;[] <span class="title">interfaceses</span> = <span class="title">obj</span>.<span class="title">getClass</span>().<span class="title">getInterfaces</span>();</span>
+
+System.out.println(<span class="string">" obj :  "</span> + obj.toString());
+</code></pre><ul>
+<li>Class 中的 <strong>getDeclaredMethods</strong> 函数，它会获取到当前类中的public、default、protected、private 的所有方法; <strong>getDeclaredMethod(String name, Class…&lt;?&gt; parameterTypes)</strong>则是获取当前类中某个指定的方法</li>
+<li>Class 中的 <strong>getMethods</strong> 函数用于获取当前类以及父类中的所有 public 方法，而 <strong>getMethod(String name, Class…&lt;?&gt; parameterTypes)</strong> 则是获取某个指定的public方法</li>
+<li>Class 中的 <strong>getDeclaredFields</strong> 函数，它会获取到当前类中的public、default、protected、private 的所有属性; <strong>getDeclaredField(String name)</strong>则是获取当前类中某个指定的属性</li>
+<li>Class 中的 <strong>getFields</strong> 函数用于获取当前类以及父类中的所有 public 属性，而 <strong>getField(String name)</strong> 则是获取某个指定的public属性    </li>
+</ul>
+</li>
 <li><strong>RTTI(Run-Time Type Identification)</strong>：在运行时识别对象的类型；其主要限制是在编译时就必须已知对象类型，也就是知道类名，它的三种应用场景：①类型转换 如：Shape s = (Shape)circle　②Shape.class这种类字面常量　③instanceof判断某对象是否是某类或其之类的实例</li>
-<li><strong>反射</strong>：反射机制可以用于使用在编译器为程序生成代码之后很久才会出现的类，比如基于构建编程和远程方法调用，主要是通过Class类和java.lang.reflect类库来实现。</li>
 <li><strong>RTTI和反射之间真正的区别</strong>在于：对RTTI来说，编译器在编译时打开和检查.class文件；对于反射机制来说，.class文件在编译时不可获取，只有等到运行时才能打开和检查。</li>
 </ol>
 <h3 id="枚举、注解与泛型">枚举、注解与泛型</h3><ol>
 <li><a href="http://www.cnblogs.com/happyPawpaw/archive/2013/04/09/3009553.html" target="_blank" rel="external">Java Enum用法</a></li>
 <li>注解又叫做元数据，一种在代码中添加信息的形式化方法，该信息可以在后期利用反射机制进行使用，我们可以通过编写注解处理器来解析代码中的注解，也可以使用apt来解析。</li>
-<li>泛型主要是用于容器定义。</li>
+<li>泛型主要是用于容器定义</li>
 </ol>
 <h3 id="字符串与数组">字符串与数组</h3><h3 id="持有对象的容器">持有对象的容器</h3><h3 id="java_I/O系统与并发">java I/O系统与并发</h3><h3 id="final、finally和finalize对比">final、finally和finalize对比</h3><ul>
 <li>final用于声明属性方法和类，分别表示：属性不可变，方法不可覆盖，类不可继承。可以用于关闭方法动态绑定</li>
@@ -301,7 +334,7 @@ System.<span class="keyword">out</span>.println(<span class="string">"s = "</spa
 <h3 id="[java中equals，hashcode，==分析]">[java中equals，hashcode，==分析]</h3><ul>
 <li>== : 对于基本类型的变量(int, char等), 只有==方法用于判断两者是否相等;==也可用于判断两个引用变量是否相等,但是引用变量相等只是说明两个引用变量引用了同一个对象</li>
 <li>equals(): 该方法继承自Object类,它在Object类中是用==实现的，跟==一样默认是比较两个引用是否相等;但是实际应用中它主要用于判断两个String,Integer等对象或者自定义对象在内存中的值是否相等; String等对象重载了equals方法，所以可以用来比较值是否相等;</li>
-<li>hashcode(): 哈希函数的作用是把不定长度的输入通过哈希算法将其压缩成固定长度的输出(int整数), 不同的输入可能转换成相同的输出;其在Object类中的默认实现是返回对象的内存地址的哈希码，不同的对象即使内容相同但引用不同也会返回不同的哈希码.主要用于HashMap等容器中的快速定位, 通过哈希值就可以直接定位到Map中数组的某个位置，然后再循环该位置对应的链表用equals判断<key,value>是否都相等。</key,value></li>
+<li>hashcode(): 哈希函数的作用是把不定长度的输入通过哈希算法将其压缩成固定长度的输出(int整数), 不同的输入可能转换成相同的输出;其在Object类中的默认实现是返回对象的内存地址的哈希码，不同的对象即使内容相同但引用不同也会返回不同的哈希码.主要用于HashMap等容器中的快速定位, 通过哈希值就可以直接定位到Map中Entry数组的某个位置，然后再循环该位置对应的链表用equals判断<key,value>是否都相等。</key,value></li>
 <li>set在使用add，remove等函数时会调用equals函数去判断两个自定义对象的地址是否相同，而不是比较两个对象的内容是否相同，需要重载hashcode和equals函数，类似于String类一样重载，才能够实现去重的目的！！ HashSet中的元素实际上是作为HashMap中的Key存放在HashMap中的，为了保证HashSet中的对象不会出现重复值，在被存放元素的类中必须要重写hashCode()和equals()这两个方法。</li>
 </ul>
 <h3 id="java深度克隆"><a href="http://www.importnew.com/10761.html" target="_blank" rel="external">java深度克隆</a></h3><p>Java集合的拷贝构造函数只提供浅拷贝而不是深拷贝，这意味着存储在原始List和克隆List中的对象是相同的，指向Java堆内存中相同的位置；深克隆将递归克隆对象直到基本数据类型或者不可变类；拷贝构造函数或者List或Set等各种集合类的addAll()方法仅仅创建了集合的浅拷贝，而且原始集合和克隆集合指向相同的对象。为避免这个问题，应该深克隆集合，遍历集合克隆每个元素。尽管这要求集合中的对象必须支持深克隆操作 <a id="more"></a>   </p>
@@ -479,7 +512,7 @@ n再和这个数做与运算*/</span>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-count">31</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -493,7 +526,7 @@ n再和这个数做与运算*/</span>
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-count">37</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -531,7 +564,7 @@ n再和这个数做与运算*/</span>
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#复用类(继承组合)与多态"><span class="nav-number">1.</span> <span class="nav-text">复用类(继承组合)与多态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接口与内部类"><span class="nav-number">2.</span> <span class="nav-text">接口与内部类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常处理与类型信息"><span class="nav-number">3.</span> <span class="nav-text">异常处理与类型信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#枚举、注解与泛型"><span class="nav-number">4.</span> <span class="nav-text">枚举、注解与泛型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串与数组"><span class="nav-number">5.</span> <span class="nav-text">字符串与数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#持有对象的容器"><span class="nav-number">6.</span> <span class="nav-text">持有对象的容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java_I/O系统与并发"><span class="nav-number">7.</span> <span class="nav-text">java I/O系统与并发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#final、finally和finalize对比"><span class="nav-number">8.</span> <span class="nav-text">final、finally和finalize对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String、StringBuffer和StringBuilder区别"><span class="nav-number">9.</span> <span class="nav-text">String、StringBuffer和StringBuilder区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#[java中equals，hashcode，==分析]"><span class="nav-number">10.</span> <span class="nav-text">[java中equals，hashcode，==分析]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java深度克隆"><span class="nav-number">11.</span> <span class="nav-text">java深度克隆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java同步加锁"><span class="nav-number">12.</span> <span class="nav-text">java同步加锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null判断将常量写在前面的好处"><span class="nav-number">13.</span> <span class="nav-text">null判断将常量写在前面的好处</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java生成随机数的方法(返回1-6的六个随机数)"><span class="nav-number">14.</span> <span class="nav-text">java生成随机数的方法(返回1-6的六个随机数)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java反转字符串方法"><span class="nav-number">15.</span> <span class="nav-text">java反转字符串方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数参数的预防性检测"><span class="nav-number">16.</span> <span class="nav-text">函数参数的预防性检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java常见位操作"><span class="nav-number">17.</span> <span class="nav-text">Java常见位操作</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#复用类(继承组合)与多态"><span class="nav-number">1.</span> <span class="nav-text">复用类(继承组合)与多态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接口与内部类"><span class="nav-number">2.</span> <span class="nav-text">接口与内部类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常处理与类型信息"><span class="nav-number">3.</span> <span class="nav-text">异常处理与类型信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java反射机制"><span class="nav-number">4.</span> <span class="nav-text">Java反射机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#枚举、注解与泛型"><span class="nav-number">5.</span> <span class="nav-text">枚举、注解与泛型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串与数组"><span class="nav-number">6.</span> <span class="nav-text">字符串与数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#持有对象的容器"><span class="nav-number">7.</span> <span class="nav-text">持有对象的容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java_I/O系统与并发"><span class="nav-number">8.</span> <span class="nav-text">java I/O系统与并发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#final、finally和finalize对比"><span class="nav-number">9.</span> <span class="nav-text">final、finally和finalize对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String、StringBuffer和StringBuilder区别"><span class="nav-number">10.</span> <span class="nav-text">String、StringBuffer和StringBuilder区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#[java中equals，hashcode，==分析]"><span class="nav-number">11.</span> <span class="nav-text">[java中equals，hashcode，==分析]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java深度克隆"><span class="nav-number">12.</span> <span class="nav-text">java深度克隆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java同步加锁"><span class="nav-number">13.</span> <span class="nav-text">java同步加锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null判断将常量写在前面的好处"><span class="nav-number">14.</span> <span class="nav-text">null判断将常量写在前面的好处</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java生成随机数的方法(返回1-6的六个随机数)"><span class="nav-number">15.</span> <span class="nav-text">java生成随机数的方法(返回1-6的六个随机数)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java反转字符串方法"><span class="nav-number">16.</span> <span class="nav-text">java反转字符串方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数参数的预防性检测"><span class="nav-number">17.</span> <span class="nav-text">函数参数的预防性检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java常见位操作"><span class="nav-number">18.</span> <span class="nav-text">Java常见位操作</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

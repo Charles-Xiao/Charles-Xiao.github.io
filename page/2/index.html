@@ -148,6 +148,225 @@
           
           
             
+              <a class="post-title-link" href="../../2015/09/04/OpenWrt/">
+                OpenWrt
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-09-04
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/09/04/OpenWrt/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/04/OpenWrt/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>Power consumption will be higher if a USB device is attached to its USB port!  </p>
+<p>scp command：  </p>
+<p>scp libmysqlclient_5.1.73-1_ar71xx.ipk root@192.168.1.1:  </p>
+<p><strong>scp error: Host key verification failed</strong></p>
+<p>cd ~/.ssh<br>rm known_hosts</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/08/30/Android应用性能优化/">
+                Android应用性能优化
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-08-30
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Android/">Android</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/08/30/Android应用性能优化/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/30/Android应用性能优化/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>Android手机由于其本身的后台机制和硬件特点，性能上一直被诟病，所以软件开发者对软件本身的性能优化就显得尤为重要；本文将对Android开发过程中性能优化的各个方面做一个回顾与总结。</p>
+<h2 id="Layout优化">Layout优化</h2><ul>
+<li><p><strong>include标签</strong>：该标签可以用于将布局文件中的公共部分提取出来给其它布局文件复用，从而使得布局模块化，代码轻量化</p>
+</li>
+<li><p><strong>viewstub标签</strong>：该标签与include一样用于引入布局模块，只是引入的布局默认不会扩张，既不会占用显示也不会占用位置，从而在解析layout时节省cpu和内存，其功能类似于将某个layout属性设置为android:visibility=”gone”</p>
+</li>
+<li><p><strong>merge标签</strong>：该标签在layout中会被自动忽略，从而减少一层布局嵌套，其主要有两种用法：①当布局顶结点是FrameLayout且不需要设置background或padding等属性，可以用merge代替 ②作为子布局被其他布局include时，使用merge当作该布局的顶节点来代替layout顶节点就可以减少一层嵌套</p>
+</li>
+<li><p><strong>hierarchy viewer</strong>：该工具可以方便的查看Activity的布局，各个View的属性、measure、layout、draw的时间，如果耗时较多会用红色标记，否则显示绿色</p>
+</li>
+<li><p>RelativeLayout代替LinearLayout可以减少布局层次和复杂性</p>
+</li>
+<li><p>减少不必要的inflate，尽量使用全局变量缓存View</p>
+</li>
+<li><p>尽可能为不同分辨率创建资源，以减少不必要的硬件缩放，这会降低UI的绘制速度</p>
+</li>
+</ul>
+<h2 id="Cache优化">Cache优化</h2><ul>
+<li><p><strong>ListView缓存</strong>：ListView中有一个回收器，Item滑出界面的时候View会回收到这里，需要显示新的Item的时候，就尽量重用回收器里面的View；每次在getView函数中inflate新的item之前会先判断回收器中是否有缓存的view，即判断convertView是否为null，是则inflate一个新的item View，否则重用回收器中的item。此外，ListView还使用静态的ViewHolder减少findViewById的次数</p>
+</li>
+<li><p><strong>IO缓存</strong>：在文件和网络IO中使用具有缓存策略的输入流，BufferedInputStream替代InputStream，BufferedReader替代Reader，BufferedReader替代BufferedInputStream</p>
+</li>
+<li><p><strong>data缓存(空间换时间)</strong>：①缓存数据库的查询结果，比如缓存数据库表中的数据条数，这样就可以避免多次的select count查询 ②缓存磁盘文件中需要频繁访问的数据到内存中 ③缓存耗时计算的结果</p>
+</li>
+</ul>
+<h2 id="Battery优化">Battery优化</h2><ul>
+<li>cpu的使用率和使用频率将直接或间接的影响电量的分配和使用，<strong>cpu降频</strong>可以节约电量</li>
+<li><p><strong>service优化</strong>  </p>
+<ul>
+<li>service作为一个运行在主线程中的后台服务，应该尽量避免耗时动作，而应该尽量新开线程去处理耗时动作</li>
+<li><p>监听系统广播看service是否存活，否则kill掉；降低service优先级使得系统内存吃紧时会被自动kill掉</p>
+</li>
+<li><p>使用Android提供的IntentService代替service，因为IntentService会在运行完成之后自动停止，而service需要手动调用stopService()才能停止运行</p>
+</li>
+<li><p>定时执行任务的Alarm机制：Android的定时任务有两种实现方式，Timer类和Alarm机制；Timer不适合长期后台运行的定时任务。因为每种手机都会有自己的休眠策略，Android手机就会在长时间不操作的情况下自动让CPU进入到睡眠状态，这就有可能导致Timer中的定时任务无法正常运行。而Alarm机制则不存在这种情况，它具有唤醒CPU的功能，即可以保证每次需要执行定时任务的时候CPU能正常工作。然而从Android4.4之后，Alarm任务的触发时间将会变得不准确，有可能会延迟一段时间后任务才能得到执行。这不是bug，而是系统在耗电性方面进行的优化。系统会自动检测目前有多少Alarm任务存在，然后将触发时间将近的几个任务放在一起执行，这就可以大幅度的减少CPU被唤醒的次数，从而有效延长电池的使用时间</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="网络优化">网络优化</h2><ul>
+<li><p>异步请求网络数据，避免频繁请求数据，及时缓存数据</p>
+</li>
+<li><p>wifi传输数据比蜂窝数据更省电，所以尽量在wifi下进行数据的预加载</p>
+</li>
+<li><p>httpClient和httpUrlConnection对比： </p>
+<ol>
+<li>httpClient是apache的开源实现，API数量多，非常稳定</li>
+<li>httpUrlConnection是java自带的模块: ①可以直接支持GZIP压缩,而HttpClient虽然也支持GZIP，但要自己写代码处理 ②httpUrlConnection直接在系统层面做了缓存策略处理，加快重复请求的速度 ③API简单，体积较小,而且直接支持系统级连接池，即打开的连接不会直接关闭，在一段时间内所有程序可共用</li>
+<li>HttpURLConnection在Android2.2之前有个重大Bug，调用close()函数会影响连接池，导致连接复用失效，需要关闭keepAlive;因此在2.2之前http请求都是用httpClient，2.2之后则是使用HttpURLConnection</li>
+<li>但是!!!现在!!!Android不再推荐这两种方式！二是直接使用OKHttp这种成熟方案！支持Android 2.3及其以上版本</li>
+</ol>
+</li>
+</ul>
+<h2 id="数据结构优化">数据结构优化</h2><ul>
+<li><p><strong>ArrayList和LinkedList的选择</strong>：ArrayList根据index取值更快，LinkedList更占内存、随机插入删除更快速、扩容效率更高</p>
+</li>
+<li><p><strong>ArrayList、HashMap、LinkedHashMap、HashSet的选择</strong>：hash系列数据结构查询速度更优，ArrayList存储有序元素，HashMap为键值对数据结构，LinkedHashMap可以记住加入次序的hashMap，HashSet不允许重复元素</p>
+</li>
+<li><p><strong>HashMap、WeakHashMap选择</strong>：WeakHashMap中元素可在适当时候被系统垃圾回收器自动回收，所以适合在内存紧张时使用</p>
+</li>
+<li><p><strong>Collections.synchronizedMap和ConcurrentHashMap的选择</strong>：ConcurrentHashMap为细分锁，锁粒度更小，并发性能更优；Collections.synchronizedMap为对象锁，自己添加函数进行锁控制更方便</p>
+</li>
+<li><p><strong>Android中性能更优的数据类型</strong>：如SparseArray、SparseBooleanArray、SparseIntArray、Pair；Sparse系列的数据结构是为key为int情况的特殊处理，采用二分查找及简单的数组存储，加上不需要泛型转换的开销，相对Map来说性能更优</p>
+</li>
+</ul>
+<p><a href="http://www.trinea.cn/android/android-performance-demo/" target="_blank" rel="external">参考链接1</a>   </p>
+<p><a href="http://blog.csdn.net/jdsjlzx/article/details/44600477" target="_blank" rel="external">参考链接2</a></p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/优化/"> #优化 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2015/08/29/浅谈MVC、MVP、MVVM三种框架模式/">
                 浅谈MVC、MVP、MVVM三种框架模式
               </a>
@@ -842,7 +1061,7 @@ __author__ = <span class="string">'xiaoyong'</span>
 </ol>
 <h3 id="内存相关问题">内存相关问题</h3><ol>
 <li><strong>内存泄露</strong>是指分配出去的内存没有被回收回来，由于失去了对该内存区域的控制，因而造成了资源的浪费。Java 中一般不会产生内存泄露，因为有垃圾回收器自动回收垃圾，但这也不绝对，Java堆内也可能发生内存泄露（Memory Leak; 当我们 new 了对象，并保存了其引用，但是后面一直没用它，而垃圾回收器又不会去回收它，这边会造成内存泄露</li>
-<li><strong>内存溢出</strong>是指程序所需要的内存超出了系统所能分配的内存（包括动态扩展）的上限3. </li>
+<li><strong>内存溢出</strong>是指程序所需要的内存超出了系统所能分配的内存（包括动态扩展）的上限</li>
 <li><strong>符号引用</strong>：符号引用以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可。符号引用与虚拟机实现的内存布局无关，引用的目标并不一定已经加载到了内存中。</li>
 <li><strong>直接引用</strong>：直接引用可以是直接指向目标的指针、相对偏移量或是一个能间接定位到目标的句柄。直接引用是与虚拟机实现的内存布局相关的，同一个符号引用在不同虚拟机实例上翻译出来的直接引用一般不会相同。如果有了直接引用，那说明引用的目标必定已经存在于内存之中了。</li>
 <li><strong>双亲委派模型</strong>：</li>
@@ -1224,297 +1443,6 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/06/12/彩云之南/">
-                彩云之南
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-06-12
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/在路上/">在路上</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/06/12/彩云之南/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/12/彩云之南/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>筹划已久的毕业旅行终于在6月初拉开帷幕~~~第一站便是为期9天的云南之行(6.3-6.11)。从昆明滇池到大理双廊，登苍山游洱海，沿三十公里洱海线骑行小普陀；夜宿丽江束河，古镇却多喧嚣；颠簸数百里山路只为一睹泸沽湖美貌，深入藏区一探香格里拉峡谷幽深。一路下来，各种奔波，各种惊艳，也遇上各种趣闻趣事趣人，的确不虚此行。
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2015/06/12/彩云之南/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/云南攻略/"> #云南攻略 </a>
-          
-            <a href="../../tags/毕业游记/"> #毕业游记 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/27/java重难点知识集锦/">
-                java重难点知识集锦
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-27
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/java学习笔记/">java学习笔记</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/27/java重难点知识集锦/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/27/java重难点知识集锦/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="复用类(继承组合)与多态">复用类(继承组合)与多态</h3><ol>
-<li><strong>继承、组合与代理之间的区别与联系</strong>：组合只是将对象引用置于新类中即可，表述的是一种has-a的关系，而继承通过extends关键字实现，自动得到基类中所有域和方法，表述的是一种is-a的关系；而代理是介于两者之间的一种关系，首先将对象引用置于新类中，然后在新类中构建同名方法来暴露该对象的所有方法(类似于继承)</li>
-<li><strong>继承与初始化</strong>：导出类继承自基类，构造器调用顺序是从上至下基类到导出类层层调用，若是默认构造器则不需要在导出类中显式调用基类构造器，否则需要首先在导出类构造器中使用super关键字调用基类构造器。见《Java编程思想P146和P158》</li>
-<li>多态也被称作动态绑定，与向上转型相反，抽象接口编程的重要性</li>
-</ol>
-<h3 id="接口与内部类">接口与内部类</h3><ol>
-<li><p><strong>接口与抽象类的区别联系</strong>：</p>
-<ul>
-<li>一个类可以实现多个接口但是只能实现一个抽象类 </li>
-<li>接口中都是抽象方法，抽象类中可以有实现的方法</li>
-<li>接口中方法和域都是public，抽象类中可以自由定义修饰符</li>
-<li>接口不能有构造器，其所有域都是static和final的</li>
-<li>两者都不能实例化，都能存放子类或者实现类的对象</li>
-</ul>
-</li>
-<li><p><strong>静态内部类(嵌套类)与非静态内部类，方法内部类，匿名内部类区别</strong>：</p>
-<ul>
-<li>嵌套类不需要内部类对象与外围类对象之间有联系，而内部类自动拥有其外围类所有成员的访问权(因为内部类对象拥有一个指向其外围类对象的引用);创建内部类对象之前需要先创建外围类对象，而创建嵌套类对象则不需要</li>
-<li>嵌套类不能访问外围类的非静态属性，但是内部类可以访问外围类的所有属性和方法(包括private)，内部类不能有static变量</li>
-<li>局部内部类: 该类被创建在外围类的方法或者作用域中，局部内部类的访问仅限于方法内或者该作用域内</li>
-<li><p>匿名内部类: 在java Listener中出现的非常多，必须继承某个接口或者父类，在其中只能重写一个方法；没有修饰符;匿名内部类是唯一一种没有构造器的类。正因为其没有构造器，所以匿名内部类的使用范围非常有限，大部分匿名内部类用于接口回调。匿名内部类在编译的时候由系统自动起名为Outter$1.class；多线程的实现也是匿名内部类的一种</p>
-<pre><code>scan_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {
-    @<span class="type">Override</span>
-    public <span class="type">void</span> onClick(<span class="type">View</span> v) {
-        // <span class="type">TODO</span> <span class="type">Auto</span>-generated <span class="keyword">method</span> stub
-
-    }
-});
-
-history_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {       
-    @<span class="type">Override</span>
-    public <span class="type">void</span> onClick(<span class="type">View</span> v) {
-        // <span class="type">TODO</span> <span class="type">Auto</span>-generated <span class="keyword">method</span> stub
-
-    }
-});
-</code></pre></li>
-<li>成员内部类，就是作为外部类的成员，可以直接使用外部类的所有成员和方法，即使是private的。虽然成员内部类可以无条件地访问外部类的成员，而外部类想访问成员内部类的成员却不是这么随心所欲了。在外部类中如果要访问成员内部类的成员，必须先创建一个成员内部类的对象，再通过指向这个对象的引用来访问</li>
-</ul>
-</li>
-<li><strong>为什么需要内部类？</strong><ul>
-<li>内部类提供了进入和操作外围类的窗口，可以直接调用外部类的private方法和属性，但是外部类却不可以调用内部类的方法和属性</li>
-<li>内部类完善了“多重继承”机制，他能提供继承多个具体类或抽象类的能力</li>
-<li>内部类可以更好地封装，它被封装在外部类里，不允许同包其他类访问</li>
-</ul>
-</li>
-<li><strong>内部类的继承与覆盖</strong> —- 见《Java编程思想P212》</li>
-</ol>
-<h3 id="异常处理与类型信息">异常处理与类型信息</h3><ol>
-<li>异常处理是java中唯一正式的错误报告机制，用于解决运行期间遇到的问题；可以用try……catch进行捕获也可以在定义方法或者类时使用throws声明。</li>
-<li><strong>return与finally</strong>：<ul>
-<li>在try里边return会先return再执行finally；在catch里边return则先执行finally再return</li>
-<li>在finally里边return会导致异常丢失，不再抛出异常(另一种异常丢失是因为前一个异常还没处理就抛出下一个异常，前一个异常就丢失了)</li>
-</ul>
-</li>
-<li><strong>RTTI(Run-Time Type Identification)</strong>：在运行时识别对象的类型；其主要限制是在编译时就必须已知对象类型，也就是知道类名，它的三种应用场景：①类型转换 如：Shape s = (Shape)circle　②Shape.class这种类字面常量　③instanceof判断某对象是否是某类或其之类的实例</li>
-<li><strong>反射</strong>：反射机制可以用于使用在编译器为程序生成代码之后很久才会出现的类，比如基于构建编程和远程方法调用，主要是通过Class类和java.lang.reflect类库来实现。</li>
-<li><strong>RTTI和反射之间真正的区别</strong>在于：对RTTI来说，编译器在编译时打开和检查.class文件；对于反射机制来说，.class文件在编译时不可获取，只有等到运行时才能打开和检查。</li>
-</ol>
-<h3 id="枚举、注解与泛型">枚举、注解与泛型</h3><ol>
-<li><a href="http://www.cnblogs.com/happyPawpaw/archive/2013/04/09/3009553.html">Java Enum用法</a></li>
-<li>注解又叫做元数据，一种在代码中添加信息的形式化方法，该信息可以在后期利用反射机制进行使用，我们可以通过编写注解处理器来解析代码中的注解，也可以使用apt来解析。</li>
-<li>泛型主要是用于容器定义。</li>
-</ol>
-<h3 id="字符串与数组">字符串与数组</h3><h3 id="持有对象的容器">持有对象的容器</h3><h3 id="java_I/O系统与并发">java I/O系统与并发</h3><h3 id="final、finally和finalize对比">final、finally和finalize对比</h3><ul>
-<li>final用于声明属性方法和类，分别表示：属性不可变，方法不可覆盖，类不可继承。可以用于关闭方法动态绑定</li>
-<li>finally是异常处理语句的一部分，表示总是执行。一般用于释放除内存之外的资源(例如已打开的文件或者网络连接)</li>
-<li>finalize是Object的一个方法，在垃圾收集器执行的时候会调用被回收对象的此方法。</li>
-</ul>
-<h3 id="String、StringBuffer和StringBuilder区别">String、StringBuffer和StringBuilder区别</h3><ul>
-<li>如果一个对象，在它创建完成之后，不能再改变它的状态，那么这个对象就是不可变的。不能改变状态的意思是，不能改变对象内的成员变量，包括基本数据类型的值不能改变，引用类型的变量不能指向其他的对象，引用类型指向的对象的状态也不能改变。</li>
-<li>String类对象是不可变对象，其在创建之后不能再改变其所拥有的所有private final成员变量；因为String类本身就是final类而且其源码中的char[]数组引用，offset(记录字符串首字母在value数组中对应的下标),count(记录字符串的长度)，hash等变量也是final的(JDK1.7中只存在hash和char[]数组),除非使用反射机制去改变char[]引用指向的堆中的数组数据；而String的substring， replace， replaceAll， toLowerCase等函数都是新建一个堆中的String对象然后返回给String的引用，从而使得引用指向了新的String对象，并没有改变原来的String对象</li>
-<li><p>用反射可以反射出String对象中的私有 value属性， 进而改变通过获得的char[]引用去改变数组的结构，例如：</p>
-<pre><code><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testReflection</span><span class="params">()</span> throws Exception </span>{  
-
-<span class="comment">//创建字符串"Hello World"， 并赋给引用s  </span>
-String s = <span class="string">"Hello World"</span>;   
-
-System.<span class="keyword">out</span>.println(<span class="string">"s = "</span> + s); <span class="comment">//Hello World  </span>
-
-<span class="comment">//获取String类中的value字段  </span>
-Field valueFieldOfString = String.class.getDeclaredField(<span class="string">"value"</span>);  
-
-<span class="comment">//改变value属性的访问权限  </span>
-valueFieldOfString.setAccessible(<span class="keyword">true</span>);  
-
-<span class="comment">//获取s对象上的value属性的值  </span>
-<span class="keyword">char</span>[] <span class="keyword">value</span> = (<span class="keyword">char</span>[]) valueFieldOfString.<span class="keyword">get</span>(s);  
-
-<span class="comment">//改变value所引用的数组中的第5个字符  </span>
-<span class="keyword">value</span>[<span class="number">5</span>] = <span class="string">'_'</span>;  
-
-System.<span class="keyword">out</span>.println(<span class="string">"s = "</span> + s);  <span class="comment">//Hello_World  </span>
-}
-</code></pre></li>
-<li><p>StringBuilder：非线程安全的可变字符串，单线程时字符串拼接最快</p>
-</li>
-<li><p>StringBuffer：通过调用其append和insert方法来添加字符；线程安全的可变字符串; String 对象的字符串拼接其实是被 JVM 解释成了 StringBuffer 对象的拼接</p>
-<pre><code><span class="comment">// String +操作快</span>
-<span class="built_in">String</span> S1 = “This <span class="keyword">is</span> only a” + “ simple” + “test”; <span class="comment">//其实就是：String S1 = “This is only a simple test”</span>
-
-<span class="comment">// StringBuffer.append()更快</span>
-<span class="built_in">String</span> S2 = “This <span class="keyword">is</span> only a”;
-<span class="built_in">String</span> S3 = “ simple”;
-<span class="built_in">String</span> S4 = “ test”;
-<span class="built_in">String</span> S1 = S2 +S3 + S4;
-</code></pre></li>
-<li>JDK1.7中subString函数改变:String类中不再有offset和count变量;这意味着成员变量char[] value将不会被共享;String.substring方法会为每个子串创建一个新的char[] value（而不是共享母串的char[] value）。这意味着String.substring方法的时间复杂度由常数阶变为线性阶。这种变化的好处是String对象占用的内存稍微少了一些（比以前少8个字节），同时确保String.substring方法不会导致内存泄漏</li>
-</ul>
-<h3 id="[java中equals，hashcode，==分析]">[java中equals，hashcode，==分析]</h3><ul>
-<li>== : 对于基本类型的变量(int, char等), 只有==方法用于判断两者是否相等;==也可用于判断两个引用变量是否相等,但是引用变量相等只是说明两个引用变量引用了同一个对象</li>
-<li>equals(): 该方法继承自Object类,它在Object类中是用==实现的，跟==一样默认是比较两个引用是否相等;但是实际应用中它主要用于判断两个String,Integer等对象或者自定义对象在内存中的值是否相等; String等对象重载了equals方法，所以可以用来比较值是否相等;</li>
-<li>hashcode(): 哈希函数的作用是把不定长度的输入通过哈希算法将其压缩成固定长度的输出(int整数), 不同的输入可能转换成相同的输出;其在Object类中的默认实现是返回对象的内存地址的哈希码，不同的对象即使内容相同但引用不同也会返回不同的哈希码.主要用于HashMap等容器中的快速定位, 通过哈希值就可以直接定位到Map中数组的某个位置，然后再循环该位置对应的链表用equals判断<key,value>是否都相等。</li>
-<li>set在使用add，remove等函数时会调用equals函数去判断两个自定义对象的地址是否相同，而不是比较两个对象的内容是否相同，需要重载hashcode和equals函数，类似于String类一样重载，才能够实现去重的目的！！ HashSet中的元素实际上是作为HashMap中的Key存放在HashMap中的，为了保证HashSet中的对象不会出现重复值，在被存放元素的类中必须要重写hashCode()和equals()这两个方法。</li>
-</ul>
-<h3 id="java深度克隆"><a href="http://www.importnew.com/10761.html">java深度克隆</a></h3><p>Java集合的拷贝构造函数只提供浅拷贝而不是深拷贝，这意味着存储在原始List和克隆List中的对象是相同的，指向Java堆内存中相同的位置；深克隆将递归克隆对象直到基本数据类型或者不可变类；拷贝构造函数或者List或Set等各种集合类的addAll()方法仅仅创建了集合的浅拷贝，而且原始集合和克隆集合指向相同的对象。为避免这个问题，应该深克隆集合，遍历集合克隆每个元素。尽管这要求集合中的对象必须支持深克隆操作
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2015/05/27/java重难点知识集锦/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/java/"> #java </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1553,7 +1481,7 @@ System.<span class="keyword">out</span>.println(<span class="string">"s = "</spa
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-count">31</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1567,7 +1495,7 @@ System.<span class="keyword">out</span>.println(<span class="string">"s = "</spa
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-count">37</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
