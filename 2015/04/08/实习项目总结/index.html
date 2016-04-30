@@ -325,6 +325,7 @@ editor.commit();
 <li><strong>invalidate()</strong>请求重绘 View 树，即 draw 过程，假如视图发生大小没有变化就不会调用layout()过程，并且只绘制那些调用了invalidate()方法的 View</li>
 <li><strong>requestLayout()</strong>当布局变化的时候，比如方向变化，尺寸的变化，会调用该方法，在自定义的视图中，如果某些情况下希望重新测量尺寸大小，应该手动去调用该方法，它会触发measure()和layout()过程，但不会进行 draw。</li>
 <li><strong>onTouchEvent()</strong>：监听触摸事件的回调  </li>
+<li><strong>控件参数设置</strong>: </li>
 </ul>
 </li>
 </ol>
@@ -439,27 +440,35 @@ mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback
 <li>params 启动任务执行的输入参数，比如HTTP请求的URL(doInBackground函数的参数类型)</li>
 <li>progress 后台任务执行的百分比（onProgressUpdate函数的参数类型）</li>
 <li>result 后台执行任务最终返回的结果，比如String(doInBackground返回的参数类型</li>
-<li>new AsynTask.execute(url);</li>
-<li>使用AsyncTask类，以下是几条必须遵守的准则：Task的实例必须在UI thread中创建; execute方法必须在UI thread中调用</li>
+<li>new AsynTask.execute(url); execute方法内部调用executeOnExecutor()方法，执行之后AsyncTask会把任务交给线程池，由线程池来管理创建Thread和运行Therad执行任务</li>
+<li>使用AsyncTask类，以下是几条必须遵守的准则：AsyncTask的实例必须在UI thread中创建; execute方法必须在UI thread中调用,并且只能调用一次；3.0版本之后的AsyncTask同时只能执行一个任务，但是提供executeOnExecutor(executor)来接收自定义ThreadPoolExecutor线程池，3.0之前默认为SerialExecutor，其核心线程池的大小是5，线程池总大小为128，缓存任务队列是10</li>
 </ol>
 </li>
-<li><strong>execute方法执行的整个流程</strong><ol>
-<li>AsyncTask的本质是一个静态的线程池，AsyncTask在构造函数中新建一个继承Callable接口的WorkerRunnable类对象，重载call方法，在call方法中封装了doInBackground中的异步任务；然后新建FutureTask接受WorkerRunnable作为参数，提交到线程池执行；在FutureTask的重载done函数中接收线程执行的返回结果并定义任务状态变化后的操作（包括失败和成功），发送message给UI </li>
+<li><p><strong>AsyncTask内部实现原理</strong></p>
+<ol>
+<li>AsyncTask的本质是一个线程池，AsyncTask在构造函数中新建一个继承Callable接口的WorkerRunnable类对象，重载call方法，在call方法中执行语句<strong>return postResult(doInBackground(mParams));</strong>执行doInBackground中的异步任务；然后新建FutureTask接受WorkerRunnable作为参数，提交到线程池执行；在FutureTask的重载done函数中调用get方法接收线程执行的返回结果并定义任务状态变化后的操作（包括失败和成功），再调用postResult方法利用handler(一个static class InternalHandler extends Handler对象)发送message给UI线程 </li>
 <li>AsyncTask派生出的子类可以实现不同的异步任务，这些任务都是提交到静态的线程池中执行; 线程池中的工作线程执行doInBackground(mParams)方法执行异步任务</li>
-<li>当任务状态改变(例如进度更新，执行成功，取消)之后，线程池中的工作线程会向UI线程发送消息，AsyncTask内部的InternalHandler响应这些消息，并调用相关的回调函数</li>
+<li>当任务状态改变(例如进度更新，执行成功，取消)之后，线程池中的工作线程会向UI线程发送消息，UI线程中的AsyncTask内部的InternalHandler响应这些消息并进行处理；例如：如果当前任务被取消掉了，就会调用onCancelled()方法不再调用onPostExecute方法，如果没有被取消，则调用onPostExecute()方法，这样当前任务的执行就全部结束了</li>
 </ol>
 </li>
-<li><strong>AsyncTask和Handler,Looper之间的区别联系</strong><ol>
+<li><p><strong>AsyncTask和Handler,Looper之间的区别联系</strong></p>
+<ol>
 <li>AsyncTask是对Handler与Thread的封装。</li>
-<li>AsyncTask在代码上比Handler要轻量级别，但实际上比Handler更耗资源，因为AsyncTask底层是一个线程池，而Handler仅仅就是发送了一个消息队列。但是，如果异步任务的数据特别庞大，AsyncTask线程池比Handler节省开销，因为Handler需要不停的new Thread执行。</li>
+<li>AsyncTask在代码上比Handler要轻量级别，但实际上比Handler更耗资源，因为AsyncTask底层是一个线程池，而Handler仅仅就是发送了一个消息队列。但是，如果异步任务的数据特别庞大，AsyncTask线程池比Handler节省开销，因为Handler需要不停的new Thread执行</li>
 <li>AsyncTask的实例化只能在主线程，Handler可以随意，只和Looper有关系</li>
 </ol>
 </li>
 </ul>
 <ol>
-<li><p><strong>Handler+Looper+MessageQueue异步信息处理系统模型</strong></p>
+<li><p><strong>Handler+Looper+MessageQueue异步信息处理系统模型</strong> <a href="http://m.blog.csdn.net/article/details?id=38377229" target="_blank" rel="external">Link</a></p>
 <ul>
-<li>Android系统中耗时操作不能放在主线程进行，所以一般放在AsyncTask或者新建子线程进行，然后通过Handler发送消息通知主线程；如果这些耗时操作涉及到UI界面的更新，可以借助于(Android系统UI的更新必须放在主线程进行)Handler发送消息给UI线程更新UI</li>
+<li><strong>Handler+Looper+MessageQueue概念</strong> <strong>Looper</strong>本质是一个ThreadLocal变量，它持有一个MessageQueue消息队列，负责实现消息循环和消息派发; <strong>Handler</strong>通过post和sendMessage方法去负责收发Message,包括push新消息到MessageQueue或者接收Looper从其持有的MessageQueue中取出来的消息; MessageQueue是一个FIFO消息队列</li>
+<li><p><strong>异步通信流程</strong>：<br>  ① <strong>消息分发和处理</strong>: 首先一个线程通过调用Looper.prepare()，为自己创建一个唯一的Looper对象，在该Looper对象的构造函数中会执行<strong>mQueue = new MessageQueue(quitAllowed);</strong>去创建一个消息队列；然后我们新建一个或者多个Handler并重载他们的handleMessage回调函数，用于处理其他线程中发送过来的消息；接下来我们调用<strong>Looper.loop</strong>方法，在该方法中会建立一个无限循环体，通过调用<strong>msg.target.dispatchMessage(msg);</strong>函数(其内部调用Handler的handleMessage回调函数)不断地从消息队列中取出message，分发给不同的Handler target.<br>  (注：在主线程中默认新建Looper对象不需要显示调用prepare和loop函数，Looper、MessageQueue和Handler都是在同一个线程中)  </p>
+<p>  ② <strong>Handler发送消息</strong>: Handler在初始化时就会调用<strong>mLooper = Looper.myLooper(); mQueue = mLooper.mQueue;</strong>和Looper以及消息队列相关联，然后在子线程中调用post或者sendMessage方法发送消息插入到消息队列中，这两个函数内部的调用顺序大致为sendMessageDelayed—&gt; sendMessageAtTime—&gt; enqueueMessage，在enqueueMessage函数中会执行<em>msg.target = this;</em>这样Looper就可以识别每条信息来自于哪个Handler，以便于分发消息的正确性</p>
+<p>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Looper.jpg" class="full-image" width="100%"></p>
+</li>
+<li><p><strong>Handler更新UI</strong>：Android系统中耗时操作不能放在主线程进行，例如网络请求、数据库操作、复杂计算等逻辑；所以他们一般放在AsyncTask或者新建子线程进行，然后通过Handler发送消息通知主线程；如果这些耗时操作涉及到UI界面的更新，可以借助于(Android系统UI的更新必须放在主线程进行)Handler发送消息给UI线程更新UI</p>
+</li>
 <li><p><strong>Handler更新UI实例</strong>：</p>
 <pre><code> <span class="comment">// UI线程新建的Handler，在handleMessage()中更新UI</span>
  <span class="keyword">private</span> Handler mHandler = <span class="keyword">new</span> Handler() {
@@ -486,19 +495,20 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
         <span class="keyword">try</span> {
             HttpResponse hr = hc.execute(hg);
             bm = BitmapFactory.decodeStream(hr.getEntity().getContent());
-        } <span class="keyword">catch</span> (Exception e) {
-            mHandler.obtainMessage(MSG_FAILURE).sendToTarget();
+        } <span class="keyword">catch</span> (Exception e) { 
+            mHandler.obtainMessage(MSG_FAILURE).sendToTarget();     
             <span class="keyword">return</span>;
         }
-
+        <span class="comment">// Handler发送消息可以new但是最好使用obtainMessage，因为Message内部</span>
+        <span class="comment">// 通过next实现一个缓存消息链表,使用obtain方法获取Message使用完之后系统</span>
+        <span class="comment">// 会调用recycle方法进行回收，节省内存</span>
         mHandler.obtainMessage(MSG_SUCCESS,bm).sendToTarget();
         }
 };
 
-<span class="keyword">new</span> Thread(runnable).start();                    
+<span class="keyword">new</span> Thread(runnable).start();                        
 </code></pre></li>
-<li><p>Looper本质是一个ThreadLocal变量，每一个线程调用Looper.prepare时，都会创建为其唯一的Looper，它持有一个MessageQueue消息队列，实现Thread的消息循环和消息派发; Handler负责收发Message以及Runnable对象(post和sendMessage),包括push新消息到MessageQueue或者接收Looper从MessageQueue取出来的消息; MessageQueue是一个FIFO消息队列</p>
-<p>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Looper.jpg" class="full-image" width="100%"></p>
+<li><p><strong>子线程中Handler结合Looper处理其他线程发送过来的消息实例</strong></p>
 <pre><code><span class="class"><span class="keyword">class</span> <span class="title">LooperThread</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Thread</span> {</span>
       public <span class="type">Handler</span> mHandler;
       public void run() {
@@ -514,8 +524,10 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
       }
 }
 </code></pre></li>
-<li><p>一个线程只能拥有一个Looper实例(该Looper对象可以通过Looper.myLooper()来获取)，对应着一个MessageQueue消息队列，但是可以拥有多个Handler; 主线程初始化时默认创建一个Looper对象，可以通过Looper.getMainLooper()来获取他；主线程中可以直接新建Handler，但是子线程中新建Handler需要先调用Looper.prepare()</p>
+<li><p>一个线程只能拥有一个Looper实例(该Looper对象可以通过Looper.myLooper()来获取)，对应着一个MessageQueue消息队列，但是可以拥有多个Handler; 主线程初始化时默认创建一个Looper对象，可以通过Looper.getMainLooper()来获取他；</p>
 </li>
+<li>主线程中可以直接新建Handler，但是子线程中新建Handler需要先调用Looper.prepare()</li>
+<li>消息队列其实内部实现是一个管道通信机制，当队列为空时线程进入等待状态，不为空时才进入处理消息状态；enqueueMessage方法也分为2种情况，队列为空直接将新message添加到队列头部，否则需要将消息按照时间先后顺序插入到合适位置，因为消息要按照处理时间排序</li>
 <li><p><strong>handler可能引发的内存泄露和解决方案</strong></p>
 <ol>
 <li>当使用内部类（包括匿名类）来创建Handler的时候，Handler对象会隐式地持有一个外部类对象（通常是一个Activity）的引用。而Handler通常会伴随着一个耗时的后台线程一起出现，这个后台线程在任务执行完毕之后，通过消息机制通知Handler，然后Handler把消息发送到UI线程。然而，如果用户在耗时线程执行过程中关闭了Activity（正常情况下Activity不再被使用，它就有可能在GC检查时被回收掉），由于这时线程尚未执行完，而该线程持有Handler的引用，这个Handler又持有Activity的引用，就导致该Activity暂时无法被回收（即内存泄露）</li>
@@ -544,7 +556,7 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 </li>
 </ol>
 </li>
-<li>HandlerThread是一个Looper,Handler,Thread的组合实现；在其构造函数中对Looper进行初始化，并提供一个Looper对象给新创建的Handler对象，使得Handler处理消息事件在子线程中处理</li>
+<li><strong>HandlerThread</strong>是一个Looper,Handler,Thread的组合实现；在其构造函数中对Looper进行初始化，并提供一个Looper对象给新创建的Handler对象，使得Handler处理消息事件在子线程中处理</li>
 </ul>
 </li>
 </ol>
@@ -557,6 +569,7 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 </li>
 <li><p>面试过程中有没有什么地方讲得太快或者不清楚的地方，我可以补充的，评价一下面试表现</p>
 </li>
+<li></li>
 </ol>
 
       
@@ -651,7 +664,7 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">31</span>
+              <span class="site-state-item-count">32</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -665,7 +678,7 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-count">38</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

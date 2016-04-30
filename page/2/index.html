@@ -1015,7 +1015,7 @@ __author__ = <span class="string">'xiaoyong'</span>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Java对象访问方式.png" class="full-image"></p>
 <p><strong>GC备注</strong>:  </p>
 <ol>
-<li>年轻对象存放在年轻代，采用Minor GC; 长期存活的年老对象以及大对象直接存放在年老代，采用Full GC，回收速度慢;JVM维护一个对象的年龄来进行对象的内存区域转移，从Eden-Survivor-老年代</li>
+<li>年轻对象存放在年轻代，采用Minor GC(指从年轻代空间（包括 Eden 和 Survivor 区域）回收内存); 长期存活的年老对象以及大对象直接存放在年老代，采用Full GC(Full GC == Major GC指的是对老年代/永久代的stop the world的GC)，回收速度慢;JVM维护一个对象的年龄来进行对象的内存区域转移，从Eden-Survivor-老年代</li>
 <li>新生代包括一个Eden区，两个survivor的from和to区（8:1:1）,负责年轻小对象的回收;Eden区存放新创建的大量对象,回收频繁,所以区域大;Survivor存放每次垃圾回收后存活的对象</li>
 <li>一个对象的成员变量可能随着这个对象自身存放在堆上</li>
 <li>一个Object的大小计算方法:一个引用4byte+空Object本身占据8byte+其它数据类型占据自身大小byte(例如char占用2byte);然而由于系统分配以8byte为单位，所以每个Object占据的大小必须为8的倍数，比如一个空的Object应该占据4+8=12，也就是说需要占据16byte</li>
@@ -1030,13 +1030,19 @@ __author__ = <span class="string">'xiaoyong'</span>
 <span class="number">4.</span><span class="keyword">static</span>方法初始化先于普通方法，静态初始化只有在必要时刻才进行且只初始化一次。
 
 注意:子类的构造方法，不管这个构造方法带不带参数，默认的它都会先去寻找父类的不带参数的构造方法。如果父类没有不带参数的构造方法，那么子类必须用supper关键子来调用父类带参数的构造方法，否则编译不能通过。
-</code></pre><h2 id="java内存回收">java内存回收</h2><h3 id="垃圾回收器和finalize()方法">垃圾回收器和finalize()方法</h3><p>java中垃圾回收器可以帮助程序猿自动回收无用对象占据的内存，但它只负责释放java中创建的对象所占据的所有内存，通过某种创建对象之外的方式为对象分配的内存空间则无法被垃圾回收器回收；而且垃圾回收本身也有开销，所以如果JVM没有面临内存耗尽，它是不会去浪费资源进行垃圾回收以恢复内存的。最后我们会发现，只要程序没有濒临存储空间用完那一刻，对象占用的空间就总也得不到释放。我们可以通过代码System.gc()来主动启动一个垃圾回收器(虽然JVM不会立刻去回收)，在释放new分配内存空间之前，将会通过finalize()释放用其他方法分配的内存空间。  </p>
+</code></pre><h2 id="java内存回收">java内存回收</h2><h3 id="垃圾回收器(4种收集器)和finalize()方法">垃圾回收器(4种收集器)和finalize()方法</h3><p>java中垃圾回收器可以帮助程序猿自动回收无用对象占据的内存，但它只负责释放java中创建的对象所占据的所有内存，通过某种创建对象之外的方式为对象分配的内存空间则无法被垃圾回收器回收；而且垃圾回收本身也有开销，所以如果JVM没有面临内存耗尽，它是不会去浪费资源进行垃圾回收以恢复内存的。最后我们会发现，只要程序没有濒临存储空间用完那一刻，对象占用的空间就总也得不到释放。我们可以通过代码System.gc()来主动启动一个垃圾回收器(虽然JVM不会立刻去回收)，在释放new分配内存空间之前，将会通过finalize()释放用其他方法分配的内存空间。  </p>
+<ol>
+<li><strong>Serial收集器</strong>：一个单线程的新生代收集器，它进行垃圾收集时，必须暂停其他所有的工作线程，直到它收集结束。简单高效</li>
+<li><strong>Parallel（并行）收集器</strong>：JVM缺省收集器，其最大的优点是使用多个线程来通过扫描并压缩堆。串行收集器在GC时会停止其他所有工作线程（stop-the-world），CPU利用率是最高的，所以适用于要求高吞吐量（throughput）的应用，但停顿时间（pause time）会比较长，所以对web应用来说就不适合，因为这意味着用户等待时间会加长。而并行收集器可以理解是多线程串行收集，在串行收集基础上采用多线程方式进行GC，很好的弥补了串行收集的不足，可以大幅缩短停顿时间，因此对于空间不大的区域（如young generation），采用并行收集器停顿时间很短，回收效率高，适合高频率执行。</li>
+<li><strong>CMS收集器</strong>：基于“标记-清除”算法实现的，它使用多线程的算法去扫描老生代堆（标记）并对发现的待回收对象进行回收（清除），容易产生大量内存碎片使得大对象无法创建然后不得不提前触发full GC。CPU资源占用过大，标记之后容易产生浮动垃圾只能留到下一次GC处理</li>
+<li><strong>G1收集器</strong>：G1收集器是基于“标记-整理”算法实现的收集器，也就是说它不会产生空间碎片。G1是一个针对多处理器大容量内存的服务器端的垃圾收集器，其目标是在实现高吞吐量的同时，尽可能的满足垃圾收集暂停时间的要求。它可以非常精确地控制停顿，既能让使用者明确指定在一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒，具备了一些实时Java（RTSJ）的垃圾收集器的特征。<a href="http://www.zicheng.net/article/55.htm" target="_blank" rel="external">垃圾收集器</a></li>
+</ol>
 <p>finalize()方法的工作原理是：一旦垃圾回收器准备好释放对象占用的存储空间，将首先调用并且只能调用一次该对象的finalize()方法(通过代码System.gc()实现)，并且在下一次垃圾回收动作发生时，才会真正回收对象占用的内存。所以如果我们重载finalize()方法就能在垃圾回收时刻做一些重要的清理工作或者自救该对象一次(只要在finalize()方法中让该对象重新和引用链上的任何一个对象建立关联即可)。finalize()方法用于释放用特殊方式分配的内存空间，这是因为我们可能在java中调用非java代码来分配内存，比如Android开发中调用NDK。那么，当我们调用C中的malloc()函数分配了存储空间，我们就只能用free()函数来释放这些内存，这样就需要我们在finalize()函数中用本地方法调用它。</p>
 <h3 id="对象内存状态&amp;&amp;引用形式及回收时机">对象内存状态&amp;&amp;引用形式及回收时机</h3><ul>
 <li><p>java对象内存状态转换图</p>
 <p>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/对象状态转换图.png" class="full-image"></p>
 </li>
-<li><p>如何判断java对象需要被回收？</p>
+<li><p>如何判断java对象需要被回收？GC判断方法</p>
 <ul>
 <li><strong>引用计数</strong>，被引用一次就加一，引用失效就减一；引用计数器为0则说明该对象不再可用；它很难解决对象之间的相互循环引用问题</li>
 <li><strong>可达性分析算法</strong>：从GC Root对象向下搜索其所走过的路径称为引用链，当一个对象不再被任何的GC root对象引用链相连时说明该对象不再可用，GC root对象包括四种：方法区中常量和静态变量引用的对象，虚拟机栈中变量引用的对象，本地方法栈中引用的对象  </li>
@@ -1065,6 +1071,7 @@ __author__ = <span class="string">'xiaoyong'</span>
 <li><strong>符号引用</strong>：符号引用以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可。符号引用与虚拟机实现的内存布局无关，引用的目标并不一定已经加载到了内存中。</li>
 <li><strong>直接引用</strong>：直接引用可以是直接指向目标的指针、相对偏移量或是一个能间接定位到目标的句柄。直接引用是与虚拟机实现的内存布局相关的，同一个符号引用在不同虚拟机实例上翻译出来的直接引用一般不会相同。如果有了直接引用，那说明引用的目标必定已经存在于内存之中了。</li>
 <li><strong>双亲委派模型</strong>：</li>
+<li><strong>静态分派和动态分派</strong>：</li>
 </ol>
 <h3 id="参考链接">参考链接</h3><ol>
 <li>《Java编程思想》</li>
@@ -1481,7 +1488,7 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">31</span>
+              <span class="site-state-item-count">32</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1495,7 +1502,7 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-count">38</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
