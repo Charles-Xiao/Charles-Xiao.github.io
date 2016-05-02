@@ -189,7 +189,11 @@
       
 
       
-        <h3 id="Synchronized代码块和方法">Synchronized代码块和方法</h3><p>synchronized关键字强制实施一个互斥锁(<strong>互斥锁</strong>：任意时刻，只有一个线程锁。即假设A线程已经获取了锁，在A线程释放这个锁之前，B线程是无法获取到这个锁的，B要获取这个锁就会进入阻塞状态。)，使得被保护的代码块在同一时间只能有一个线程进入并执行，防止多线程访问临界共享资源出现数据不一致性；同步是一种高开销的操作，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；Synchronized锁住的是对象或者类,对象被锁住时，该对象所有的其他同步方法和代码块不能被执行；类被锁住时，该类所有的其他同步静态方法和代码块不能被执行</p>
+        <h3 id="同步VS异步_and_阻塞VS非阻塞_Link">同步VS异步 and 阻塞VS非阻塞 <a href="http://elf8848.iteye.com/blog/1739611" target="_blank" rel="external">Link</a></h3><ol>
+<li><strong>同步/异步与阻塞/非阻塞是两组不同的概念,它们可以共存组合,同步和异步与消息的通知机制有关,阻塞和非阻塞与程序等待消息(无所谓同步或者异步)时的状态有关</strong> <strong>同步</strong>：就是在发出一个功能调用时，在没有得到结果之前，该调用就不返回(<strong>与阻塞的区别</strong>很多时候当前线程还是激活的，只是从逻辑上当前函数没有返回而已)。<strong>异步</strong>：当一个异步过程调用发出后，调用者不能立刻得到结果；这个调用的部件在处理完成后，通过状态、通知和回调来通知调用者。<strong>阻塞</strong>：是指调用结果返回之前，当前线程会被挂起，函数只有在得到结果之后才会返回。<strong>非阻塞</strong>指在不能立刻得到结果之前，该函数不会阻塞当前线程，而会立刻返回。</li>
+<li>举例: 我去买一本书，立即买到了，这就是<strong>非阻塞</strong>；如果恰好书店没有，我就等一直等到书店有了这本书买到了才走，这就是<strong>阻塞</strong>；这两种情况，非阻塞和阻塞都可以称为<strong>同步</strong>。如果书店恰好没有，我就告诉书店老板，书来了告诉我一声让我来取或者直接送到我家，然后我就走了，这就是<strong>异步</strong>。</li>
+</ol>
+<h3 id="Synchronized代码块和方法">Synchronized代码块和方法</h3><p>synchronized关键字强制实施一个互斥锁(<strong>互斥锁</strong>：任意时刻，只有一个线程锁。即假设A线程已经获取了锁，在A线程释放这个锁之前，B线程是无法获取到这个锁的，B要获取这个锁就会进入阻塞状态。)，使得被保护的代码块在同一时间只能有一个线程进入并执行，防止多线程访问临界共享资源出现数据不一致性；同步是一种高开销的操作，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；Synchronized锁住的是对象或者类,对象被锁住时，该对象所有的其他同步方法和代码块不能被执行；类被锁住时，该类所有的其他同步静态方法和代码块不能被执行</p>
 <pre><code><span class="class"><span class="keyword">class</span> <span class="title">Bank</span> </span>{
         <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
 
@@ -266,7 +270,7 @@
 <h3 id="Wait_&amp;&amp;_Notify同步(生产者消费者模式实现)">Wait &amp;&amp; Notify同步(生产者消费者模式实现)</h3><ol>
 <li><strong>Wait</strong>调用任意对象的wait()方法导致该线程阻塞，并释放该对象上的锁，进入等待对象同步锁的状态;<strong>Notify</strong>随机唤醒一个等待对象同步锁的线程</li>
 <li><strong>生产者-消费者（producer-consumer）问题</strong>，也称作有界缓冲区（bounded-buffer）问题，两个进程共享一个公共的固定大小的缓冲区。其中一个是生产者，用于将消息放入缓冲区；另外一个是消费者，用于从缓冲区中取出消息。问题出现在当缓冲区已经满了，而此时生产者还想向其中放入一个新的数据项的情形，其解决方法是让生产者此时进行休眠，等待消费者从缓冲区中取走了一个或者多个数据后再去唤醒它。同样地，当缓冲区已经空了，而消费者还想去取消息，此时也可以让消费者进行休眠，等待生产者放入一个或者多个数据时再唤醒它</li>
-<li>代码</li>
+<li>代码实现</li>
 </ol>
 
       
@@ -413,7 +417,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Synchronized代码块和方法"><span class="nav-number">1.</span> <span class="nav-text">Synchronized代码块和方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReentrantLock可重入锁"><span class="nav-number">2.</span> <span class="nav-text">ReentrantLock可重入锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal线程局部变量"><span class="nav-number">3.</span> <span class="nav-text">ThreadLocal线程局部变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile变量可见性"><span class="nav-number">4.</span> <span class="nav-text">volatile变量可见性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Wait_&&_Notify同步(生产者消费者模式实现)"><span class="nav-number">5.</span> <span class="nav-text">Wait && Notify同步(生产者消费者模式实现)</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#同步VS异步_and_阻塞VS非阻塞_Link"><span class="nav-number">1.</span> <span class="nav-text">同步VS异步 and 阻塞VS非阻塞 Link</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Synchronized代码块和方法"><span class="nav-number">2.</span> <span class="nav-text">Synchronized代码块和方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReentrantLock可重入锁"><span class="nav-number">3.</span> <span class="nav-text">ReentrantLock可重入锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal线程局部变量"><span class="nav-number">4.</span> <span class="nav-text">ThreadLocal线程局部变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile变量可见性"><span class="nav-number">5.</span> <span class="nav-text">volatile变量可见性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Wait_&&_Notify同步(生产者消费者模式实现)"><span class="nav-number">6.</span> <span class="nav-text">Wait && Notify同步(生产者消费者模式实现)</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

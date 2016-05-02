@@ -571,7 +571,11 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 
       
         
-          <h3 id="Synchronized代码块和方法">Synchronized代码块和方法</h3><p>synchronized关键字强制实施一个互斥锁(<strong>互斥锁</strong>：任意时刻，只有一个线程锁。即假设A线程已经获取了锁，在A线程释放这个锁之前，B线程是无法获取到这个锁的，B要获取这个锁就会进入阻塞状态。)，使得被保护的代码块在同一时间只能有一个线程进入并执行，防止多线程访问临界共享资源出现数据不一致性；同步是一种高开销的操作，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；Synchronized锁住的是对象或者类,对象被锁住时，该对象所有的其他同步方法和代码块不能被执行；类被锁住时，该类所有的其他同步静态方法和代码块不能被执行</p>
+          <h3 id="同步VS异步_and_阻塞VS非阻塞_Link">同步VS异步 and 阻塞VS非阻塞 <a href="http://elf8848.iteye.com/blog/1739611" target="_blank" rel="external">Link</a></h3><ol>
+<li><strong>同步/异步与阻塞/非阻塞是两组不同的概念,它们可以共存组合,同步和异步与消息的通知机制有关,阻塞和非阻塞与程序等待消息(无所谓同步或者异步)时的状态有关</strong> <strong>同步</strong>：就是在发出一个功能调用时，在没有得到结果之前，该调用就不返回(<strong>与阻塞的区别</strong>很多时候当前线程还是激活的，只是从逻辑上当前函数没有返回而已)。<strong>异步</strong>：当一个异步过程调用发出后，调用者不能立刻得到结果；这个调用的部件在处理完成后，通过状态、通知和回调来通知调用者。<strong>阻塞</strong>：是指调用结果返回之前，当前线程会被挂起，函数只有在得到结果之后才会返回。<strong>非阻塞</strong>指在不能立刻得到结果之前，该函数不会阻塞当前线程，而会立刻返回。</li>
+<li>举例: 我去买一本书，立即买到了，这就是<strong>非阻塞</strong>；如果恰好书店没有，我就等一直等到书店有了这本书买到了才走，这就是<strong>阻塞</strong>；这两种情况，非阻塞和阻塞都可以称为<strong>同步</strong>。如果书店恰好没有，我就告诉书店老板，书来了告诉我一声让我来取或者直接送到我家，然后我就走了，这就是<strong>异步</strong>。</li>
+</ol>
+<h3 id="Synchronized代码块和方法">Synchronized代码块和方法</h3><p>synchronized关键字强制实施一个互斥锁(<strong>互斥锁</strong>：任意时刻，只有一个线程锁。即假设A线程已经获取了锁，在A线程释放这个锁之前，B线程是无法获取到这个锁的，B要获取这个锁就会进入阻塞状态。)，使得被保护的代码块在同一时间只能有一个线程进入并执行，防止多线程访问临界共享资源出现数据不一致性；同步是一种高开销的操作，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；Synchronized锁住的是对象或者类,对象被锁住时，该对象所有的其他同步方法和代码块不能被执行；类被锁住时，该类所有的其他同步静态方法和代码块不能被执行</p>
 <pre><code><span class="class"><span class="keyword">class</span> <span class="title">Bank</span> </span>{
         <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
 
@@ -648,7 +652,7 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 <h3 id="Wait_&amp;&amp;_Notify同步(生产者消费者模式实现)">Wait &amp;&amp; Notify同步(生产者消费者模式实现)</h3><ol>
 <li><strong>Wait</strong>调用任意对象的wait()方法导致该线程阻塞，并释放该对象上的锁，进入等待对象同步锁的状态;<strong>Notify</strong>随机唤醒一个等待对象同步锁的线程</li>
 <li><strong>生产者-消费者（producer-consumer）问题</strong>，也称作有界缓冲区（bounded-buffer）问题，两个进程共享一个公共的固定大小的缓冲区。其中一个是生产者，用于将消息放入缓冲区；另外一个是消费者，用于从缓冲区中取出消息。问题出现在当缓冲区已经满了，而此时生产者还想向其中放入一个新的数据项的情形，其解决方法是让生产者此时进行休眠，等待消费者从缓冲区中取走了一个或者多个数据后再去唤醒它。同样地，当缓冲区已经空了，而消费者还想去取消息，此时也可以让消费者进行休眠，等待生产者放入一个或者多个数据时再唤醒它</li>
-<li>代码</li>
+<li>代码实现</li>
 </ol>
 
         
@@ -734,7 +738,8 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 
       
         
-          <h3 id="Android子线程和UI线程交互的5种方式">Android子线程和UI线程交互的5种方式</h3><ol>
+          <h3 id="Android架构层次">Android架构层次</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/android_framework.png" class="full-image" width="100%"></p>
+<h3 id="Android子线程和UI线程交互的5种方式">Android子线程和UI线程交互的5种方式</h3><ol>
 <li><p><strong>handler</strong>: 参考“实习项目总结”</p>
 </li>
 <li><p><strong>AsyncTask</strong>: 参考“实习项目总结”</p>
@@ -789,24 +794,33 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 <li><strong>singleInstance</strong>: 以singleInstance模式启动的Activity具有全局唯一性，即整个系统中只会存在一个这样的实例；而且具备独占性，以该模式启动的Activity不能与其他Activity共存在一个task中<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/singleInstance.png" class="full-image"></li>
 </ul>
 </li>
-<li><strong>Activity生命周期</strong>:</li>
-<li>如果一个以SingleTask启动的的Activity实例，再新建一个该实例，Activity的执行流程？？？singleTask保证了在栈中Activity的唯一性，如果被SingleTask标记的Activity处于栈底，上面的Activity都会被pop出栈，这个时候被标记过SingleTask的Activity生命周期会做出调整：onNewIntent-&gt;onStart-&gt;onResume, 不再调用onCreate函数</li>
+<li><p><strong>Activity以及Fragment生命周期</strong>:</p>
+<p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/activity_life.png" class="full-image" width="100%"></p>
+<p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/fragment_life.png" class="full-image" width="100%"></p>
+</li>
+<li><p>如果一个以SingleTask启动的的Activity实例，再新建一个该实例，Activity的执行流程？？？singleTask保证了在栈中Activity的唯一性，如果被SingleTask标记的Activity处于栈底，上面的Activity都会被pop出栈，这个时候被标记过SingleTask的Activity生命周期会做出调整：onNewIntent-&gt;onStart-&gt;onResume, 不再调用onCreate函数</p>
+</li>
 <li><strong>android:taskAffinity</strong>：每个Activity都有taskAffinity属性，这个属性指出了它希望进入的Task。如果一个Activity没有显式的指明该 Activity的taskAffinity，那么它的这个属性就等于Application指明的taskAffinity，如果 Application也没有指明，那么该taskAffinity的值就等于包名；例如 android:taskAffinity=””的意思是不依附于任何task，也就是自己新建一个task</li>
 </ol>
 <h3 id="Service">Service</h3><ol>
 <li><strong>两种启动模式</strong></li>
-<li><strong>Service生命周期</strong></li>
-<li><strong>Service与Activity的通信机制</strong></li>
+<li><p><strong>Service生命周期</strong></p>
+<p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/service_life.png" class="full-image" width="100%"></p>
+</li>
+<li><p><strong>Service与Activity的通信机制</strong></p>
+</li>
 <li><strong>Service,IntentService,和Intent区别</strong><ul>
 <li>Service默认运行在主线程，如果Service将要运行耗时或者可能被阻塞的操作时，例如直接把耗时操作放在 Service 的 onStartCommand()方法中可能会出现ANR错误；所以应该在Service中重新启动一个新的线程来进行这些操作，而</li>
-<li>IntentService在onCreate函数中开启HandlerThread去执行耗时操作，它不仅有Service的功能,还有Handler处理和循环消息的功能  </li>
+<li><strong>内部原理</strong>IntentService在onCreate函数中新建HandlerThread去执行耗时操作，并新建ServiceHandler对象处理消息，当启动一个IntentService的时候接下来会调用onstart方法，该方法会给ServiceHandler发送消息，在ServiceHandler的handleMessage回调函数中调用onHandleIntent函数，因此可以在这个方法里面处理我们的耗时工作；所以IntentService不仅有Service的功能,还有Handler处理和循环消息的功能  </li>
+<li><strong>处理流程</strong>IntentService使用队列的方式将请求的Intent加入队列，然后开启一个工作线程来处理队列中的Intent，对于异步的多次startService请求，IntentService会处理完成一个之后再处理第二个，每一个请求都会在一个单独的worker thread中处理，不会阻塞应用程序的主线程;当任务执行完后，IntentService 会自动停止，而不需要我们去手动控制。</li>
 </ul>
 </li>
 </ol>
 <h3 id="BroadcastReceiver">BroadcastReceiver</h3><ol>
 <li><strong>种类和特点</strong>: </li>
 </ol>
-<h3 id="ContentProvider">ContentProvider</h3>
+<h3 id="ContentProvider">ContentProvider</h3><h3 id="Android_View事件分发机制">Android View事件分发机制</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/scroller.png" class="full-image" width="100%"></p>
+
         
       
     </div>
@@ -877,7 +891,13 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 
       
         
-          <h3 id="Kactus">Kactus</h3><ol>
+          <h3 id="自我介绍_1min">自我介绍 1min</h3><ol>
+<li>姓名 —-&gt; 学习经历(中大科大软件专业) —-&gt; 强调科班出身的基础优势(本科到硕士都注重计算机基础知识积累，对Java语言基础，常见设计模式，数据结构和算法比较熟悉，对移动端和web端研发具有浓厚兴趣) </li>
+<li>强调注重实践的优势，讲述实习和项目经历，提现学习和工作能力(先后参与两份实习和校内科研项目，选择与岗位相符的两段经历进行1-2句话简述，做了什么和达到了什么成就) </li>
+<li>业务爱好，羽毛球，健身，阅读和利用coursera进行业余学习</li>
+<li>对目标岗位的理解和想法，应聘该岗位的强烈意愿以及自身吻合度</li>
+</ol>
+<h3 id="Kactus">Kactus</h3><ol>
 <li><p>ECO餐厅食用油回收系统</p>
 <ul>
 <li><p>Android端缓存机制的实现，采用二级缓存，从LRUcache到DiskLruCache，同时模拟浏览器缓存机制来分析http请求过程的请求头内容来确定cache-control策略</p>
@@ -891,24 +911,26 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 </ul>
 </li>
 </ol>
-<pre><code><span class="comment">// 获取应用可占内存的1/8作为缓存</span>
-<span class="built_in">int</span> maxSize = (<span class="built_in">int</span>) (Runtime.getRuntime().maxMemory() / <span class="number">8</span>);
-<span class="comment">// 实例化LruCaceh对象</span>
-mLruCache = <span class="keyword">new</span> LruCache&lt;<span class="keyword">String</span>, Bitmap&gt;(maxSize) {
-    @Override
-    <span class="keyword">protected</span> <span class="built_in">int</span> sizeOf(<span class="keyword">String</span> <span class="variable">key</span>, Bitmap bitmap) {
-        <span class="keyword">return</span> bitmap.getRowBytes() * bitmap.getHeight();
-    }
-};
- mDiskLruCache=DiskLruCache.<span class="built_in">open</span>(getDiskCacheDir(context.getApplicationContext(),
- <span class="string">"xxxxx"</span>),     getAppVersion(context), <span class="number">1</span>, DISKMAXSIZE);
-<span class="comment">// 缓存操作</span>
-mLruCache.<span class="built_in">get</span>(url);
-mLruCache.put(url, bitmap);
-bitmap = BitmapFactory.decodeStream(mDiskLruCache.<span class="built_in">get</span>(url).getInputStream(<span class="number">0</span>));
-DiskLruCache.Editor editor = mDiskLruCache.edit(<span class="variable">key</span>);
-OutputStream outputStream = editor.newOutputStream(<span class="number">0</span>);
-editor.commit();
+<pre><code>        <span class="comment">// 获取应用可占内存的1/8作为缓存</span>
+        <span class="built_in">int</span> maxSize = (<span class="built_in">int</span>) (Runtime.getRuntime().maxMemory() / <span class="number">8</span>);
+        <span class="comment">// 实例化LruCaceh对象</span>
+        mLruCache = <span class="keyword">new</span> LruCache&lt;<span class="keyword">String</span>, Bitmap&gt;(maxSize) {
+            @Override
+            <span class="keyword">protected</span> <span class="built_in">int</span> sizeOf(<span class="keyword">String</span> <span class="variable">key</span>, Bitmap bitmap) {
+                <span class="keyword">return</span> bitmap.getRowBytes() * bitmap.getHeight();
+            }
+        };
+         mDiskLruCache=DiskLruCache.<span class="built_in">open</span>(getDiskCacheDir(context.getApplicationContext(),
+         <span class="string">"xxxxx"</span>),     getAppVersion(context), <span class="number">1</span>, DISKMAXSIZE);
+        <span class="comment">// 缓存操作</span>
+        mLruCache.<span class="built_in">get</span>(url);
+        mLruCache.put(url, bitmap);
+        bitmap = BitmapFactory.decodeStream(mDiskLruCache.<span class="built_in">get</span>(url).getInputStream(<span class="number">0</span>));
+        DiskLruCache.Editor editor = mDiskLruCache.edit(<span class="variable">key</span>);
+        OutputStream outputStream = editor.newOutputStream(<span class="number">0</span>);
+        editor.commit();
+
+&lt;img src=<span class="string">"https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/browser_cache.png"</span> class=<span class="string">"full-image"</span> <span class="variable">width</span>=<span class="string">"100%"</span>/&gt;
 </code></pre><ol>
 <li><p>采用Java WebSocket编程取代传统的非实时http请求连接模式</p>
 <ul>
@@ -1031,8 +1053,6 @@ editor.commit();
 </li>
 </ul>
 </li>
-</ol>
-<ol>
 <li><p><strong>网络通信的优化和实现过程</strong>http从同步的主线程发送get请求优化为异步的子线程发送post请求, 加强了数据传输的安全性和长度，解决了应用程序无响应的应用体验问题; httpClient和HttpUrlConnection的区别对比;最后学习和使用Volley以及OkHttp通信库<br><a href="http://www.jianshu.com/p/3141d4e46240#Volley&amp;OkHttp" target="_blank" rel="external">参考链接</a></p>
 <ol>
 <li><p>异步的get和post请求实现过程(HttpUrlConnection)</p>
@@ -1362,6 +1382,9 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 <ol>
 <li><strong>物理内存</strong>就是系统硬件提供的内存大小，是真正的内存，相对于物理内存，<strong>虚拟内存</strong>就是为了满足物理内存的不足而提出的策略，它是利用磁盘空间虚拟出的一块逻辑内存，用作虚拟内存的磁盘空间被称为交换空间（Swap Space);<strong>虚拟内存</strong>作为物理内存的扩展，linux会在物理内存不足时，使用虚拟内存，更详细的说，就是Linux内核会将暂时不用的物理内存块信息写到交换空间，这样以来，物理内存得到了释放，这块内存就可以用于其它目的，当需要用到原始的内容时，这些信息会被重新从交换空间读入物理内存。</li>
 <li>Linux的内存管理采取的是<strong>分页存取机制</strong>，为了保证物理内存能得到充分的利用，内核会在适当的时候将物理内存中不经常使用的数据块自动交换到虚拟内存中，而将经常使用的信息保留到物理内存。Linux系统会不时的进行页面交换操作，以保持尽可能多的空闲物理内存，即使并没有什么事情需要内存，Linux也会交换出暂时不用的内存页面。这可以避免等待交换所需的时间；Linux进行<strong>页面交换</strong>是有条件的，不是所有页面在不用时都交换到虚拟内存，linux内核根据”最近最经常使用“算法，仅仅将一些不经常使用的页面文件交换到虚拟内存</li>
+<li><strong>逻辑地址</strong>是对应用程序而言的，一般以Seg:Offset段内偏移来表示；<strong>线性地址</strong>是CPU所能寻址的空间或者范围，是逻辑地址到物理地址变换之间的中间层；<strong>物理地址</strong>是机器中实际的内存地址,换言之，是机器中的内存容量范围</li>
+<li><strong>逻辑地址 -（段表）-&gt; 线性地址 — （页表）—&gt; 物理地址的转换过程(由大到小)</strong>：CPU将一个虚拟内存空间中的地址转换为物理地址，需要进行两步：首先将一个逻辑地址（其实是段内偏移量），CPU要利用其段式内存管理单元，先将逻辑地址加上相应段的基地址转换成一个线程地址；如果启用了分页机制，再利用其页式内存管理单元，通过查询页表来将线性地址转换为最终物理地址；若没有启用分页机制，那么线性地址直接就是物理地址 <a href="http://laoxu.blog.51cto.com/4120547/1166661" target="_blank" rel="external">Link</a></li>
+<li>不同的逻辑地址可以映射到同一个线性地址上；不同的线性地址也可以映射到同一个物理地址上；所以是多对一的关系。另外，同一个线性地址，在发生换页以后，也可能被重新装载到另外一个物理地址上。所以这种多对一的映射关系也会随时间发生变化。</li>
 </ol>
 
         
