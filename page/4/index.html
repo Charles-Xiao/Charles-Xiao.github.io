@@ -488,6 +488,7 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 <li><strong>JNI</strong><br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JNI.png" class="full-image" width="100%"></li>
 <li><strong>Java泛型</strong>：泛型是指在定义接口或者类时可以使用类型参数，泛型提供了编译期的类型安全检查，确保你只能把正确类型的对象放入集合中，避免了在运行时出现ClassCastException。Java中的泛型基本上都是在编译器这个层次来实现的。在生成的Java字节代码中是不包含泛型中的类型信息的。使用泛型的时候加上的类型参数，会被编译器在编译的时候去掉，JVM看到的只是List，而由泛型附加的类型信息对JVM来说是不可见的。这个过程就称为<strong>类型擦除</strong>。比如一个方法如果接收List<object>作为形式参数，那么如果尝试将一个List<string>的对象作为实际参数传进去，却发现无法通过编译；因为这会产生隐含的类型转换问题，编译器直接就禁止这样的行为；Array不支持泛型，所以不能保证编译期的类型安全保证。</string></object></li>
 <li><strong>Java IO与NIO</strong>Java IO是面向流的阻塞式IO方式，而NIO是面向缓冲区的无阻塞式IO方式；在Java IO中当一个线程调用read() 或 write()时，该线程被阻塞，直到有一些数据被读取，或数据完全写入，对于每一个客户端连接，服务端都会新开一个线程处理。而Java NIO的非阻塞模式使用一个专用的reactor来处理分发IO事件，数据处理采用双通道模式，client和server各自维护一个selector用于检测通道上的事件，通过访问selector来处理感兴趣事件</li>
+<li><strong>为什么匿名内部类和局部内部类只能访问final变量？</strong>：因为虽然匿名内部类在方法的内部，但实际编译的时候，内部类编译成Outer.Inner,这说明内部类所处的位置和外部类中的方法处在同一个等级上，外部类中的方法中的变量或参数只是方法的局部变量，这些变量或参数的作用域只在这个方法内部有效。因为编译的时候内部类和方法在同一级别上，所以方法中的变量或参数只有为final，内部类才可以引用，因为Java采用了一种copy local variable的方式来实现，也就是说把定义为final的局部变量拷贝过来用，而引用的也可以拿过来用，只是不能重新赋值。</li>
 </ol>
 
         
@@ -1378,6 +1379,13 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/http1.png" class="full-image" width="100%"></p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HttpRequest.jpeg" class="full-image" width="100%"></p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HttpResponse.png" class="full-image" width="100%"></p>
+<h3 id="Linux进程调度机制">Linux进程调度机制</h3><ol>
+<li>Linux的进程调度算法基本上是<strong>基于优先级的时间片轮转法</strong>，将CPU时间分片，给每个可运行进程分配一片，目的就是既能够实现进程之间的抢占，又不至于让低优先级的进程被饿死。。每个进程在创建之初有一个基本的优先级，执行期间调度系统会动态调整它的优先级，交互性高的任务会获得一个高的动态优先级，而交互性低的任务获得一个低的动态优先级；在较长的时间间隔内没有使用CPU的进程，通过动态地增加它们的优先级来提升它们。相应地，对于已经在CPU上运行了较长时间的进程，通过减少它们的优先级来处罚它们。</li>
+<li>Linux系统中进程调度操作由一个只在内核态运行的函数schedule()函数执行，该函数代码为所有进程共享；进程控制块PCB(Process ControlBlock)是系统中最为重要的数据结构之一。用来存放进程所必需的各种信息，PCB用结构task—struct来表示，包括进程的类型、进程状态、优先级、时钟信息等。</li>
+<li>Linux中设置了进程调度标志need—resched ，当标志为1时，可执行调度程序．通常，Linux 调度时机分以下两种情况：(1)<strong>主动调度</strong>：指显式调用schedule() 函数明确释放CPU ，引起新一轮调度．一般发生在当前进程状态改变，如：进程终止、进程睡眠、进程对某些信号处理过程中等(2)<strong>被动调度</strong>：指不显示调用schedule() 函数，只是PCB 中的need_resched 进程调度标志，该域置位为1 将引起新的进程调度  (3)三种情况：<strong>中断处理过程（包括时钟中断、I/O中断、系统调用和异常）</strong>中，直接调用schedule()，或者返回用户态时根据need_resched标记调用schedule()；<strong>内核线程</strong>可以直接调用schedule()进行进程切换，也可以在中断处理过程中进行调度，也就是说内核线程作为一类的特殊的进程可以主动调度，也可以被动调度；<strong>用户态进程</strong>无法实现主动调度，仅能通过陷入内核态后的某个时机点进行调度，即在中断处理过程中进行调度 </li>
+<li>Linux将进程分为<strong>实时进程和普通进程(又称非实时进程或一般进程)</strong>，实时进程的优先级要高于其他进程，如果一个实时进程处于可执行状态，它将先得到执行．实时进程又有两种策略：<strong>SCHED—RR时间片轮转和和SCHED—FIFO先进先出</strong>，在时间片轮转策略中每个可执行实时进程轮流执行一个时间片，而先进先出策略每个进程按各自在运行队列中的顺序执行且顺序不能变化。普通进程SCHED_OTHER也按照轮转调度策略处理</li>
+<li><strong>进程生命周期</strong>依次定义的数据结构为：TASK—RUNNING，TASK—INTERRUPTIBLE。TASK—UNINTERRUPTIBLE，TASK—ZOMBIE和TASK—STOPPED，一个进程在其生存期间，状态会发生多次变化。与其数据结构相对应的即是Linux进程的状态，分别是：运行态、等待态、暂停态和僵死态。<br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Linux_process.png" class="full-image" width="100%"></li>
+</ol>
 <h3 id="Linux内存管理机制">Linux内存管理机制</h3><p>Linux中无论物理内存有多大，都将其充份利用，将一些程序调用过的硬盘数据读入内存，利用内存读写的高速特性来提高Linux系统的数据访问性能；<strong>页高速缓存(cache)</strong>是Linux内核实现的一种主要磁盘缓存。它主要用来减少对磁盘的I/O操作。是通过把磁盘中的数据缓存到物理内存中，把对磁盘的访问变为对物理内存的访问。查看内存状态命令<code>top，free，vmstat</code><a href="https://blog.linuxeye.com/362.html" target="_blank" rel="external">Link</a></p>
 <ol>
 <li><strong>物理内存</strong>就是系统硬件提供的内存大小，是真正的内存，相对于物理内存，<strong>虚拟内存</strong>就是为了满足物理内存的不足而提出的策略，它是利用磁盘空间虚拟出的一块逻辑内存，用作虚拟内存的磁盘空间被称为交换空间（Swap Space);<strong>虚拟内存</strong>作为物理内存的扩展，linux会在物理内存不足时，使用虚拟内存，更详细的说，就是Linux内核会将暂时不用的物理内存块信息写到交换空间，这样以来，物理内存得到了释放，这块内存就可以用于其它目的，当需要用到原始的内容时，这些信息会被重新从交换空间读入物理内存。</li>
@@ -1385,6 +1393,9 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 <li><strong>逻辑地址</strong>是对应用程序而言的，一般以Seg:Offset段内偏移来表示；<strong>线性地址</strong>是CPU所能寻址的空间或者范围，是逻辑地址到物理地址变换之间的中间层；<strong>物理地址</strong>是机器中实际的内存地址,换言之，是机器中的内存容量范围</li>
 <li><strong>逻辑地址 -（段表）-&gt; 线性地址 — （页表）—&gt; 物理地址的转换过程(由大到小)</strong>：CPU将一个虚拟内存空间中的地址转换为物理地址，需要进行两步：首先将一个逻辑地址（其实是段内偏移量），CPU要利用其段式内存管理单元，先将逻辑地址加上相应段的基地址转换成一个线程地址；如果启用了分页机制，再利用其页式内存管理单元，通过查询页表来将线性地址转换为最终物理地址；若没有启用分页机制，那么线性地址直接就是物理地址 <a href="http://laoxu.blog.51cto.com/4120547/1166661" target="_blank" rel="external">Link</a></li>
 <li>不同的逻辑地址可以映射到同一个线性地址上；不同的线性地址也可以映射到同一个物理地址上；所以是多对一的关系。另外，同一个线性地址，在发生换页以后，也可能被重新装载到另外一个物理地址上。所以这种多对一的映射关系也会随时间发生变化。</li>
+</ol>
+<h3 id="Linux常用command">Linux常用command</h3><ol>
+<li><strong>ps -ef|grep java</strong> ： </li>
 </ol>
 
         
