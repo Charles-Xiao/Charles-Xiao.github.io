@@ -254,6 +254,7 @@
 <li><strong>android:taskAffinity</strong>：每个Activity都有taskAffinity属性，这个属性指出了它希望进入的Task。如果一个Activity没有显式的指明该 Activity的taskAffinity，那么它的这个属性就等于Application指明的taskAffinity，如果 Application也没有指明，那么该taskAffinity的值就等于包名；例如 android:taskAffinity=””的意思是不依附于任何task，也就是自己新建一个task</li>
 </ol>
 <h3 id="Service">Service</h3><ol>
+<li><strong>两种类型</strong>本地和远程service,分别运行于主线程或者独立进程的主线程，主要运行在后台执行监测行为，可以通过iBinder或者广播与Activity进行交互</li>
 <li><strong>两种启动模式</strong></li>
 <li><p><strong>Service生命周期</strong></p>
 <p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/service_life.png" class="full-image" width="100%"></p>
@@ -261,7 +262,7 @@
 <li><p><strong>Service与Activity的通信机制</strong></p>
 </li>
 <li><strong>Service,IntentService,和Intent区别</strong><ul>
-<li>Service默认运行在主线程，如果Service将要运行耗时或者可能被阻塞的操作时，例如直接把耗时操作放在 Service 的 onStartCommand()方法中可能会出现ANR错误；所以应该在Service中重新启动一个新的线程来进行这些操作，而</li>
+<li>Service默认运行在主线程，如果Service将要运行耗时或者可能被阻塞的操作时，例如直接把耗时操作放在 Service 的 onStartCommand()方法中可能会出现ANR错误；所以应该在Service中重新启动一个新的线程来进行这些操作</li>
 <li><strong>内部原理</strong>IntentService在onCreate函数中新建HandlerThread去执行耗时操作，并新建ServiceHandler对象处理消息，当启动一个IntentService的时候接下来会调用onstart方法，该方法会给ServiceHandler发送消息，在ServiceHandler的handleMessage回调函数中调用onHandleIntent函数，因此可以在这个方法里面处理我们的耗时工作；所以IntentService不仅有Service的功能,还有Handler处理和循环消息的功能  </li>
 <li><strong>处理流程</strong>IntentService使用队列的方式将请求的Intent加入队列，然后开启一个工作线程来处理队列中的Intent，对于异步的多次startService请求，IntentService会处理完成一个之后再处理第二个，每一个请求都会在一个单独的worker thread中处理，不会阻塞应用程序的主线程;当任务执行完后，IntentService 会自动停止，而不需要我们去手动控制。</li>
 </ul>

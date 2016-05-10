@@ -261,7 +261,7 @@
 <h3 id="HashMap与LinkedHashMap，TreeMap">HashMap与LinkedHashMap，TreeMap</h3><ol>
 <li><strong>HashMap</strong>内部对键值对的存储结构使用的是数组+链表的形式,HashMap在存储Entry对象的时候，首先根据Key的hash值判定存储到Entry[] table数组的哪一个元素对应的链表上O(1),然后调用Equals方法去遍历链表比较key值，如果找到则更新并返回旧址，否则将新的Entry加入到该链表头部；也就是说Entry<key,value>对象随机地分配到某个Entry[] table数组的元素表示的链表上, HashMap内部Entry<k,v>的遍历顺序是对Entry[] table 数组，从index=0开始，依次遍历table[i]上的链表上的Entry对象;所以对HashMap遍历Entry对象的顺序和Entry对象的存储顺序之间没有任何关系.HashMap允许null键插入，其内部会将null存到table[0]中进行处理. 当map中元素达到16*0.75=12时，因为链表长度可能很长导致查找效率降低，hashmap会对原来的所有元素重新进行hash,容量变为原来的2倍，重新hash时链表顺序会被反转，可以避免尾部遍历.<a href="http://www.xuebuyuan.com/2231227.html" target="_blank" rel="external">HashMap</a>; 在HashMap调整大小时会出现条件竞争，也就是多个线程同时来调整大小，出现死循环.Map的key值应该使用不可变对象，以防put和get的时候对象发生变化从而导致hashcode变化，取不到正确的对象；HashMap也可以声明为同步的，使用Map m = Collections.synchronizeMap(hashMap);<ul>
 <li><strong>Fail-Fast机制</strong>:在使用迭代器的过程中有其他线程修改了map结构，那么将抛出ConcurrentModificationException，这就是所谓fail-fast机制。这一机制在源码中的实现是通过modCount域，modCount顾名思义就是修改次数，对HashMap元素个数的修改都将增加这个值;在迭代器初始化过程中会将这个值赋给迭代器的expectedModCount。在迭代过程中，判断modCount跟expectedModCount是否相等，如果不相等就表示已经有其他线程修改了Map中元素个数.例如：HashMap在foreach迭代器循环遍历时如果其他线程对该map进行结构上的更改(比如进行add和map.remove元素操作,而不是简单的修改集合元素的内容)会导致ConcurrrentModificationEaception</li>
-<li><strong>遍历区别</strong>①for循环遍历时删除或者增加某个元素只会导致数组越界(rangeCheck函数)，或者一直add生成无穷序列以及遍历不完整 ②使用Iterator遍历或者foreach遍历时如果采用iterator.remove()不会报错，因为他会重新设置expectedModCount=modCount，如果采用list.remove()则会出现ConcurrrentModificationEaception</li>
+<li><strong>遍历区别</strong>①for循环遍历时删除或者增加某个元素只会导致数组越界(rangeCheck函数)，或者一直add生成无穷序列以及遍历不完整 ②使用Iterator遍历或者foreach遍历时如果采用iterator.remove()不会报错，因为他会重新设置expectedModCount=modCount，如果采用list.remove()则会出现ConcurrrentModificationException</li>
 <li>内部结构图：<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HashMap.jpg" class="full-image" width="100%">          </li>
 </ul>
 </k,v></key,value></li>
@@ -1175,7 +1175,7 @@ __author__ = <span class="string">'xiaoyong'</span>
 <ol>
 <li><p>首先Java源代码文件(.java后缀)会被Java编译器编译为字节码文件(.class后缀)，然后由JVM中的类加载器加载各个类的字节码文件，加载完毕之后，交由JVM执行引擎执行(执行过程还包括将字节码编译成机器码)，JVM执行引擎在执行字节码时首先会扫描四趟class文件来保证定义的类型的安全性，再检查空引用，数据越界，自动垃圾收集等。在整个程序执行过程中，JVM会用一段空间来存储程序执行期间需要用到的数据和相关信息，这段空间一般被称作为Runtime Data Area（运行时数据区），也就是我们常说的JVM内存</p>
 </li>
-<li><p>类加载器分为启动类加载器(不继承classLoader，负责加载原生代码实现的Java核心库,包括加载$JAVA_HOME中jre/lib/rt.jar里所有的 class)；扩展类加载器(负责在JVM中扩展库目录中去寻找加载Java扩展库,包括$JAVA_HOME中jre/lib/*.jar或-Djava.ext.dirs指定目录下的 jar 包)；应用程序类加载器(ClassLoader.getSystemClassLoader()负责加载Java类路径classpath中的类)</p>
+<li><p>类加载器分为启动类加载器(不继承classLoader，属于虚拟机的一部分；负责加载原生代码实现的Java核心库,包括加载$JAVA_HOME中jre/lib/rt.jar里所有的 class)；扩展类加载器(负责在JVM中扩展库目录中去寻找加载Java扩展库,包括$JAVA_HOME中jre/lib/*.jar或-Djava.ext.dirs指定目录下的 jar 包)；应用程序类加载器(ClassLoader.getSystemClassLoader()负责加载Java类路径classpath中的类)</p>
 </li>
 </ol>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Classloader.png" class="full-image"></p>
@@ -1196,8 +1196,8 @@ __author__ = <span class="string">'xiaoyong'</span>
 <li>Java内存模型中的堆栈分布在硬件内存结构中的CPU寄存器，CPU缓存层，CPU主存中，大部分分布在主存中</li>
 </ol>
 <h3 id="java内存模型划分">java内存模型划分</h3><p>一般来讲，我们将java内存划分为以下几个区域, 如图：</p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JVM内存分配与回收.png" class="full-image"></p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Java对象访问方式.png" class="full-image"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JVM内存分配与回收.png" class="full-image" width="100%"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Java对象访问方式.png" class="full-image" width="100%"></p>
 <p><strong>GC备注</strong>:  </p>
 <ol>
 <li>年轻对象存放在年轻代，采用Minor GC(指从年轻代空间（包括 Eden 和 Survivor 区域）回收内存); 长期存活的年老对象以及大对象直接存放在年老代，采用Full GC(Full GC == Major GC指的是对老年代/永久代的stop the world的GC)，回收速度慢;JVM维护一个对象的年龄来进行对象的内存区域转移，从Eden-Survivor-老年代</li>
@@ -1255,8 +1255,10 @@ __author__ = <span class="string">'xiaoyong'</span>
 <li><strong>内存溢出</strong>是指程序所需要的内存超出了系统所能分配的内存（包括动态扩展）的上限</li>
 <li><strong>符号引用</strong>：符号引用以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可。符号引用与虚拟机实现的内存布局无关，引用的目标并不一定已经加载到了内存中。</li>
 <li><strong>直接引用</strong>：直接引用可以是直接指向目标的指针、相对偏移量或是一个能间接定位到目标的句柄。直接引用是与虚拟机实现的内存布局相关的，同一个符号引用在不同虚拟机实例上翻译出来的直接引用一般不会相同。如果有了直接引用，那说明引用的目标必定已经存在于内存之中了。</li>
-<li><strong>双亲委派模型</strong>：</li>
-<li><strong>静态分派和动态分派</strong>：</li>
+<li><strong>双亲委派模型</strong>：表示类加载器之间的加载顺序从顶至下的层次关系，加载器之间的父子关系一般都是通过组合来实现，而不是继承。可以防止内存中出现多份同样的字节码，并确保加载顺序</li>
+<li><strong>双亲委托模型的工作过程</strong>是：在loadClass函数中，首先会判断该类是否被加载过，加载过则进行下一步—-解析，否则进行加载；如果一个类加载器收到了类加载器的请求，先不会自己尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父类加载器反馈自己无法完成这个加载请求（它的搜说范围中没有找到所需的类时，子加载类才会尝试自己去加载）</li>
+<li><strong>静态分派和动态分派</strong>：静态分派发生在编译阶段，是指依据静态类型(变量声明时定义的变量类型)来决定方法的执行版本，例如方法重载中依据参数的定义类型来定位具体应该执行的方法；动态分派发生在运行期，根据变量实例化时的实际类型来决定方法的执行版本，例如方法重写；目前的 Java 语言（JDK1.6）是一门<strong>静态多分派、动态单分派</strong>的语言。</li>
+<li><strong>动态分派具体实现</strong>Java虚拟机是通过在方法区中建立一个虚方法表，通过使用方法表的索引来代替元数据查找以提高性能。虚方法表中存放着各个方法的实际入口地址，如果子类没有覆盖父类的方法，那么子类的虚方法表里面的地址入口与父类是一致的；如果重写父类的方法，那么子类的方法表的地址将会替换为子类实现版本的地址。方法表是在类加载的连接阶段（验证、准备、解析）进行初始化，准备了子类的初始化值后，虚拟机会把该类的虚方法表也进行初始化。</li>
 </ol>
 <h3 id="参考链接">参考链接</h3><ol>
 <li>《Java编程思想》</li>

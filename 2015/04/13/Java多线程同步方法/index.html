@@ -270,9 +270,120 @@
 <h3 id="Wait_&amp;&amp;_Notify同步(生产者消费者模式实现)">Wait &amp;&amp; Notify同步(生产者消费者模式实现)</h3><ol>
 <li><strong>Wait</strong>调用任意对象的wait()方法导致该线程阻塞，并释放该对象上的锁，进入等待对象同步锁的状态;<strong>Notify</strong>随机唤醒一个等待对象同步锁的线程</li>
 <li><strong>生产者-消费者（producer-consumer）问题</strong>，也称作有界缓冲区（bounded-buffer）问题，两个进程共享一个公共的固定大小的缓冲区。其中一个是生产者，用于将消息放入缓冲区；另外一个是消费者，用于从缓冲区中取出消息。问题出现在当缓冲区已经满了，而此时生产者还想向其中放入一个新的数据项的情形，其解决方法是让生产者此时进行休眠，等待消费者从缓冲区中取走了一个或者多个数据后再去唤醒它。同样地，当缓冲区已经空了，而消费者还想去取消息，此时也可以让消费者进行休眠，等待生产者放入一个或者多个数据时再唤醒它</li>
-<li>代码实现</li>
+<li>代码实现: </li>
 </ol>
+<pre><code><span class="keyword">public</span> class ProducerCustomer {
 
+<span class="comment">/**
+ * @param args
+ */</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) {
+    Product product = <span class="keyword">new</span> Product(); <span class="comment">// 实例化产品对象</span>
+    Producer p = <span class="keyword">new</span> Producer(product); <span class="comment">// 实例化一个生产者</span>
+    Consumer c = <span class="keyword">new</span> Consumer(product); <span class="comment">// 实例化一个消费者</span>
+    <span class="keyword">new</span> Thread(p).start(); <span class="comment">// 开启生产者线程</span>
+    <span class="keyword">new</span> Thread(c).start(); <span class="comment">// 开启消费者线程</span>
+}
+
+<span class="comment">/**
+ * 生产者线程
+ */</span>
+<span class="keyword">static</span> class Producer implements Runnable {
+    <span class="keyword">private</span> Product product;
+
+    <span class="keyword">public</span> Producer(Product product) {
+        <span class="keyword">this</span>.product = product;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> run() {
+        <span class="keyword">while</span> (<span class="keyword">true</span>) {
+            <span class="comment">// 同步代码锁</span>
+            <span class="keyword">synchronized</span> (product) {
+                <span class="keyword">try</span> {
+                    <span class="keyword">while</span> (product.getMax() == product.<span class="built_in">size</span>()) {
+                        <span class="comment">// 产品栈已经满,不需要再生产,执行线程等待操作</span>
+                        System.out.<span class="built_in">println</span>(<span class="string">"产品栈已满，生产者休息中......"</span>);
+                        product.wait();
+                    }
+                    <span class="comment">// 产品栈不足,开始生产</span>
+                    <span class="keyword">Object</span> newObj = <span class="keyword">new</span> <span class="keyword">Object</span>();
+                    product.<span class="built_in">add</span>(newObj);
+                    System.out.<span class="built_in">println</span>(<span class="string">"Producer 生产了一个产品，目前产品栈大小为："</span>
+                            + product.<span class="built_in">size</span>());
+                    <span class="comment">// 生产一个产品之后,线程开始睡眠</span>
+                    Thread.sleep((<span class="keyword">long</span>) Math.<span class="built_in">random</span>() * <span class="number">3000</span>);
+                    <span class="comment">// 通知消费者,有新产品</span>
+                    product.notify();
+                } <span class="keyword">catch</span> (Exception e) {
+                }
+            }
+        }
+    }
+}
+
+<span class="comment">/**
+ * 消费者线程
+ */</span>
+<span class="keyword">static</span> class Consumer implements Runnable {
+    <span class="keyword">private</span> Product product;
+
+    <span class="keyword">public</span> Consumer(Product product) {
+        <span class="keyword">this</span>.product = product;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> run() {
+        <span class="keyword">while</span> (<span class="keyword">true</span>) {
+            <span class="comment">// 同步代码锁</span>
+            <span class="keyword">synchronized</span> (product) {
+                <span class="keyword">try</span> {
+                    <span class="keyword">while</span> (product.<span class="built_in">size</span>() == <span class="number">0</span>) {
+                        <span class="comment">// 产品栈已空,不可以再消费,执行线程等待操作</span>
+                        System.out.<span class="built_in">println</span>(<span class="string">"产品栈为空，消费者等待中......"</span>);
+                        product.wait();
+                    }
+                    <span class="comment">// 产品栈有商品,开始消费</span>
+                    product.remove();
+                    System.out.<span class="built_in">println</span>(<span class="string">"Consumer 消费了一个产品，目前产品栈大小为："</span>
+                            + product.<span class="built_in">size</span>());
+                    <span class="comment">// 消费一个产品之后,线程开始睡眠</span>
+                    Thread.sleep((<span class="keyword">long</span>) Math.<span class="built_in">random</span>() * <span class="number">3000</span>);
+                    product.notify();
+                } <span class="keyword">catch</span> (Exception e) {
+                }
+            }
+        }
+    }
+}
+
+<span class="keyword">static</span> class Product {
+    <span class="comment">// 使用list集合模拟一个产品栈</span>
+    <span class="keyword">private</span> List&lt;<span class="keyword">Object</span>&gt; goods = <span class="keyword">new</span> LinkedList&lt;<span class="keyword">Object</span>&gt;();
+    <span class="keyword">private</span> <span class="built_in">int</span> <span class="built_in">max</span> = <span class="number">10</span>; <span class="comment">// 最大产品数量</span>
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="built_in">add</span>(<span class="keyword">Object</span> obj) {
+        goods.<span class="built_in">add</span>(obj);
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> remove() {
+        <span class="keyword">if</span> (goods.<span class="built_in">size</span>() &gt; <span class="number">0</span>) {
+            goods.remove(goods.<span class="built_in">size</span>() - <span class="number">1</span>);
+        }
+    }
+
+    <span class="keyword">public</span> <span class="built_in">int</span> <span class="built_in">size</span>() {
+        <span class="keyword">return</span> goods.<span class="built_in">size</span>();
+    }
+
+    <span class="keyword">public</span> <span class="built_in">int</span> getMax() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="built_in">max</span>;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> setMax(<span class="built_in">int</span> <span class="built_in">max</span>) {
+        <span class="keyword">this</span>.<span class="built_in">max</span> = <span class="built_in">max</span>;
+    }
+}
+}
+</code></pre>
       
     </div>
 
