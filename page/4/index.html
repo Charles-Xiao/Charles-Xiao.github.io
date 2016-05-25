@@ -148,6 +148,156 @@
           
           
             
+              <a class="post-title-link" href="../../2015/05/19/数据库重难点集锦/">
+                数据库重难点集锦
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-19
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/数据库/">数据库</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/05/19/数据库重难点集锦/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/19/数据库重难点集锦/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="常见的Hash算法和一致性哈希">常见的Hash算法和一致性哈希</h3><ul>
+<li><p>线性哈希，平方取中法，随机数法，按位分割求和法  </p>
+</li>
+<li><p><strong>MD5和SHA</strong>这两种单向加密算法都是基于hash算法，前者产生128位的散列值，后者产生160位的散列值；两者都存在不同输入的散列值相同的情况，但是概率很低，为了防止被彩虹表破解，可以考虑加入Salt  </p>
+</li>
+<li><p>Hash算法主要用于文件校验、数字签名、鉴权协议等  </p>
+</li>
+<li><p><strong>一致性哈希算法</strong>主要应用在cache系统中，常用的hash(object)%N算法会计算object 的hash值，然后对N取模得到余数i，该Object就会被映射到编号为i的cache上;那么当增加或者减少n的值时会导致所有的n个对象的映射全部发生改变，但是一致性哈希算法却只需要重新hash K/n个元素，为什么呢？？？; 因为一致性哈希的内部原理是将Object和cache都使用同一种hash算法hash到同一个数值空间上，该空间为一个首尾相接的圆环；然后如何将Object映射到cache呢？顺着顺时针方向,将每一个Object映射到下一个最邻近的cache,这样当新增一个cache时，只需要将原本映射到下一个cache上的Object部分映射修改到新增的cache上；当减少cache时就将之前映射到该cache的Object都映射到下一个cache上.  </p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_pre.png" class="full-image"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_next.png" class="full-image"></p>
+<h3 id="数据库的事务、索引、范式和存储过程概念以及优缺点">数据库的事务、索引、范式和存储过程概念以及优缺点</h3><ol>
+<li><p>主键：数据库表中对储存数据对象予以唯一和完整标识的数据列或属性的组合。一个数据列只能有一个主键，且主键的取值不能缺失，即不能为空值（Null）。  </p>
+<p>超键：在关系中能唯一标识元组的属性集称为关系模式的超键。一个属性可以为作为一个超键，多个属性组合在一起也可以作为一个超键。超键包含候选键和主键。  </p>
+<p>候选键：能够确定全部属性的某个属性或某组属性，称为候选键。若候选键多于一个，则选定其中一个作为主键</p>
+<p>外键：在一个表中存在的另一个表的主键称此表的外键  </p>
+</li>
+</ol>
+<ol>
+<li><p><strong>事务</strong>：事务是数据库操作中的不可分割的逻辑单元,一个事务中的所有操作语句要么作为一个整体被执行，要么整体不被执行</p>
+<ul>
+<li>原子性：要么操作序列中全部语句都执行，要么全部不被执行,不可分割; 也就是说当事务的执行序列中某个语句执行错误，会回滚到该事务未执行时的状态</li>
+<li>一致性：事务执行之后数据库从一个一致性状态转化到另一个一致性状态</li>
+<li>隔离性：多个事务并行执行时互相之间不会影响</li>
+<li>永久性：事务执行之后会对数据库内容产生永久性影响</li>
+</ul>
+</li>
+<li><p><strong>范式</strong></p>
+<ul>
+<li>第一范式：数据库表里边的每一列都是不可分割的原子性基本数据项</li>
+<li>第二范式：数据库表里边每一个非关键字段都和任意一组候选关键字(主键)完全依赖，只有表的任意一组候选键有多个属性时才会出现部分依赖</li>
+<li>第三范式：数据库里边每一个非关键字段都和主键直接相关，而不能是间接相关(传递依赖)</li>
+<li>BC范式：数据里边每一列既不部分依赖于任何候选键也不传递依赖于任何候选键；一个关系满足BCNF则一定满足第三范式</li>
+</ul>
+</li>
+<li><p><strong>索引</strong> ：建立在数据库表的某些列上，例如需要搜索或者排序的列，主键列，外键列(用于连接的列),用在where语句中的列；有些列不应该建索引，比如：查询中很少使用或者参考的列， 只有很少数据值的列， 定义为text, image和bit数据类型的列,当修改性能远远大于检索性能时，不应该创建索引；索引的实现通常使用B树及其变种B+树</p>
+<ul>
+<li>参考: 一般来说，应该在这些列上创建索引：在经常需要搜索的列上，可以加快搜索的速度；在作为主键的列上，强制该列的唯一性和组织表中数据的排列结构；在经常用在连接的列上，这些列主要是一些外键，可以加快连接的速度；在经常需要根据范围进行搜索的列上创建索引，因为索引已经排序，其指定的范围是连续的；在经常需要排序的列上创建索引，因为索引已经排序，这样查询可以利用索引的排序，加快排序查询时间；在经常使用在WHERE子句中的列上面创建索引，加快条件的判断速度。</li>
+<li>复合索引就是索引建立在多个列上，唯一索引就是保证索引列中得所有数据都是唯一的，不会存在冗余数据;聚集索引是指表中行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能包含一个聚集索引</li>
+<li><p>当增加索引时，会提高检索性能，但是会降低修改性能 </p>
+<p>优点：</p>
+</li>
+</ul>
+<ol>
+<li>通过创建唯一性索引，可以保证数据库表中每一行数据的唯一性 </li>
+<li>可以大大加快数据的检索速度    </li>
+<li>可以加速表和表之间的连接</li>
+<li>在使用分组和排序子句进行数据检索时，同样可以显著减少查询中分组和排序的时间</li>
+<li><p>通过使用索引，可以在查询的过程中，使用优化隐藏器，提高系统的性能</p>
+<p>缺点：</p>
+</li>
+<li>创建索引和维护索引要耗费时间和大量的物理空间</li>
+<li>对表中的数据进行增加、删除和修改的时候，索引也要动态的维护，这样就降低了数据的维护速度</li>
+</ol>
+</li>
+<li><p><strong>存储过程</strong></p>
+<ul>
+<li>它是一组存储在数据库中的编译后的SQL语句集，可以接受参数以及返回值，也可以包括程序流，查询语句等</li>
+<li>正常情况下,我们在code中写好SQL语句,连接数据库，SQL语句会被发送到服务器然后编译优化，数据库引擎执行编译后的查询语句，最后将查询结果返回给客户端；那么如果我们使用存储过程就可以省掉编译优化的过程，而且存储过程存储在database中，可以减少网络流量和传输时间；而且可以对存储过程授予制定权限，从而保证数据库操作安全</li>
+</ul>
+</li>
+<li><p><strong>View</strong></p>
+<ul>
+<li>视图是一种通过自定义查询语句去查询筛选数据库表中的数据然后呈现给用户的一种动态生成的虚拟表,他和表一样包含行列数据，但是来自于其引用的表；其优点主要是可以保证数据库安全性以及筛选隐藏部分重要数据;View与Table之间的关系类似于MVC，在View中对数据进行修改会影响到Table中的数据，在Table中进行数据修改同样会显示到View，因为他们用的是同一份数据。</li>
+</ul>
+</li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/databse/"> #databse </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2015/05/15/Mac常用快捷键和Tips/">
                 Mac常用快捷键和Tips
               </a>
@@ -484,11 +634,12 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
           <ol>
 <li><strong>Switch语句参数</strong>: JDK7之前，switch 只能支持 byte、short、char、int 这几个基本数据类型和其对应的封装类型;如果想用String，需要将String包装成枚举类型作为参数；JDK7之后支持String类型直接作为参数<a href="http://blog.csdn.net/amazing7/article/details/51219315" target="_blank" rel="external">参考</a></li>
 <li><strong>for循环和foreach的区别</strong>: for循环效率高于foreach; for循环可以间隔遍历，步伐可以自由设置，但是foreach只能用于遍历读取每一个元素，还不能进行修改</li>
-<li><strong>Java和C++区别</strong>：①Java有接口，有垃圾回收机制②C++有引用，有多重继承，有操作符重载，</li>
+<li><strong>Java和C++区别</strong>：①Java有接口，有垃圾回收机制②C++有引用，有多重继承，有操作符重载</li>
 <li><strong>JNI</strong><br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JNI.png" class="full-image" width="100%"></li>
 <li><strong>Java泛型</strong>：泛型是指在定义接口或者类时可以使用类型参数，泛型提供了编译期的类型安全检查，确保你只能把正确类型的对象放入集合中，避免了在运行时出现ClassCastException。Java中的泛型基本上都是在编译器这个层次来实现的。在生成的Java字节代码中是不包含泛型中的类型信息的。使用泛型的时候加上的类型参数，会被编译器在编译的时候去掉，JVM看到的只是List，而由泛型附加的类型信息对JVM来说是不可见的。这个过程就称为<strong>类型擦除</strong>。比如一个方法如果接收List<object>作为形式参数，那么如果尝试将一个List<string>的对象作为实际参数传进去，却发现无法通过编译；因为这会产生隐含的类型转换问题，编译器直接就禁止这样的行为；Array不支持泛型，所以不能保证编译期的类型安全保证。</string></object></li>
 <li><strong>Java IO与NIO</strong>Java IO是面向流的阻塞式IO方式，而NIO是面向缓冲区的无阻塞式IO方式；在Java IO中当一个线程调用read() 或 write()时，该线程被阻塞，直到有一些数据被读取，或数据完全写入，对于每一个客户端连接，服务端都会新开一个线程处理。而Java NIO的非阻塞模式使用一个专用的reactor来处理分发IO事件，数据处理采用双通道模式，client和server各自维护一个selector用于检测通道上的事件，通过访问selector来处理感兴趣事件</li>
 <li><strong>为什么匿名内部类和局部内部类只能访问final变量？</strong>：因为虽然匿名内部类在方法的内部，但实际编译的时候，内部类编译成Outer.Inner,这说明内部类所处的位置和外部类中的方法处在同一个等级上，外部类中的方法中的变量或参数只是方法的局部变量，这些变量或参数的作用域只在这个方法内部有效。因为编译的时候内部类和方法在同一级别上，所以方法中的变量或参数只有为final，内部类才可以引用，因为Java采用了一种copy local variable的方式来实现，也就是说把定义为final的局部变量拷贝过来用，而引用的也可以拿过来用，只是不能重新赋值。</li>
+<li><strong>JDK8的新特性</strong>:</li>
 </ol>
 
         
@@ -851,6 +1002,22 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
       
         
           <h3 id="Android架构层次">Android架构层次</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/android_framework.png" class="full-image" width="100%"></p>
+<p><strong>android系统架构分从下往上为Linux内核层、运行库、应用程序框架层和应用程序层</strong></p>
+<ol>
+<li>Linux内核层：负责硬件的驱动程序、网络、电源、系统安全以及内存管理等功能。</li>
+<li>运行库和android runtion：运行库：即c/c++函数库部分，大多数都是开放源代码的函数库，例如webkit，该函数库负责android网页浏览器的运行；例如标准的c函数库libc、openssl、sqlite等，当然也包括支持游戏开发的2dsgl和3dopengles，在多媒体方面有mediaframework框架来支持各种影音和图形文件的播放与显示，如mpeg4、h.264、mp3、aac、amr、jpg和png等众多的多媒体文件格式。Androidruntion负责解释和执行生成的dalvik格式的字节码</li>
+<li>应用软件架构：java应用程序开发人员主要是使用该层封装好的api进行快速开发的。</li>
+<li>应用程序层：该层是java的应用程序层，android内置的googlemaps、email、IM、浏览器等，都处于该层，java开发人员工发的程序也处于该层，而且和内置的应用程序具有平等的地位，可以调用内置的应用程序，也可以替换内置的应用程序</li>
+</ol>
+<h3 id="ANR的产生原因以及解决方法">ANR的产生原因以及解决方法</h3><ol>
+<li>ANR由Activity manager和windows manager来负责监听，android应用程序通常是运行在一个单独的线程里，这就意味你的应用程序所做的事情如果在主线程里占用了大长时间的话，就会引发ANR对话框，因为你的应用程序并没有给自己机会来处理输入事件或者Intent广播</li>
+<li><strong>产生原因</strong>: ①Activity 5s没有响应输入事件，比如按键，触摸 事件②广播接收器在10s没有处理完毕事件 ③Service在20s之类没有完成事件处理</li>
+<li>解决方法: 不在主线程进行网络请求,磁盘读取，位图修改，更新UI等耗时操作，而应该采用子线程来完成，完成之后通过Handler通知主线程</li>
+</ol>
+<h3 id="Android_界面卡顿怎么处理？">Android 界面卡顿怎么处理？</h3><ol>
+<li>避免过度渲染和绘制</li>
+<li>View的嵌套层次不能过深</li>
+</ol>
 <h3 id="Android子线程和UI线程交互的5种方式">Android子线程和UI线程交互的5种方式</h3><ol>
 <li><p><strong>handler</strong>: 参考“实习项目总结”</p>
 </li>
@@ -909,23 +1076,44 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 <li><p><strong>Activity以及Fragment生命周期</strong>:</p>
 <p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/activity_life.png" class="full-image" width="100%"></p>
 <p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/fragment_life.png" class="full-image" width="100%"></p>
+<ul>
+<li><strong>onSaveInstanceState() 和 onRestoreInstanceState()</strong>： <a href="http://www.cnblogs.com/hanyonglu/archive/2012/03/28/2420515.html" target="_blank" rel="external">Link</a><br>①当某个activity变得”容易”被系统销毁时，该activity的<strong>onSaveInstanceState()</strong>就会被执行，除非该activity是被用户主动销毁的，例如当用户按BACK键的时候；他的调用有<strong>5种情况</strong>：(1)、<strong>当用户按下HOME键时</strong>：这是显而易见的，系统不知道你按下HOME后要运行多少其他的程序，自然也不知道activity A是否会被销毁，因此系统会调用onSaveInstanceState()，让用户有机会保存某些非永久性的数据。以下几种情况的分析都遵循该原则 (2)、<strong>长按HOME键，选择运行其他的程序时</strong>。(3)、<strong>按下电源按键（关闭屏幕显示）时</strong>。(4)、<strong>从activity A中启动一个新的activity时</strong>。(5)、<strong>屏幕方向切换时，例如从竖屏切换到横屏时</strong>。在屏幕切换之前，系统会销毁activity A，在屏幕切换之后系统又会自动地创建activity A，所以onSaveInstanceState()一定会被执行，且也一定会执行onRestoreInstanceState()。<br>②<strong>onRestoreInstanceState()</strong>被调用的前提是，activity A“确实”被系统销毁了，而如果仅仅是停留在有这种可能性的情况下，则该方法不会被调用，例如，当正在显示activity A的时候，用户按下HOME键回到主界面，然后用户紧接着又返回到activity A，这种情况下activity A一般不会因为内存的原因被系统销毁，故activity A的onRestoreInstanceState方法不会被执行 此也说明上二者，大多数情况下不成对被使用。</li>
+</ul>
 </li>
-<li><p>如果一个以SingleTask启动的的Activity实例，再新建一个该实例，Activity的执行流程？？？singleTask保证了在栈中Activity的唯一性，如果被SingleTask标记的Activity处于栈底，上面的Activity都会被pop出栈，这个时候被标记过SingleTask的Activity生命周期会做出调整：onNewIntent-&gt;onStart-&gt;onResume, 不再调用onCreate函数</p>
+<li><p><strong>如果一个以SingleTask启动的的Activity实例，再新建一个该实例，Activity的执行流程？？？</strong>singleTask保证了在栈中Activity的唯一性，如果被SingleTask标记的Activity处于栈底，上面的Activity都会被pop出栈，这个时候被标记过SingleTask的Activity生命周期会做出调整：onNewIntent-&gt;onStart-&gt;onResume, 不再调用onCreate函数</p>
 </li>
 <li><strong>android:taskAffinity</strong>：每个Activity都有taskAffinity属性，这个属性指出了它希望进入的Task。如果一个Activity没有显式的指明该 Activity的taskAffinity，那么它的这个属性就等于Application指明的taskAffinity，如果 Application也没有指明，那么该taskAffinity的值就等于包名；例如 android:taskAffinity=””的意思是不依附于任何task，也就是自己新建一个task</li>
 </ol>
 <h3 id="Service">Service</h3><ol>
-<li><strong>两种类型</strong>本地和远程service,分别运行于主线程或者独立进程的主线程，主要运行在后台执行监测行为，可以通过iBinder或者广播与Activity进行交互</li>
-<li><strong>两种启动模式</strong></li>
+<li><strong>两种类型</strong>本地和远程service,分别运行于主线程或者独立进程的主线程，Service主要运行在后台执行一些监测行为或者其他加载网页等后台操作，可以通过iBinder或者广播与Activity进行交互<a href="http://www.cnblogs.com/newcj/archive/2011/05/30/2061370.html" target="_blank" rel="external">Service总结</a></li>
+<li><strong>两种启动模式</strong>: <a href="http://www.jianshu.com/p/2fb6eb14fdec" target="_blank" rel="external">具体区别Link</a><ul>
+<li>start方法一旦服务开启跟调用者(开启者)就没有任何关系了;开启者退出了，开启者挂了，服务还在后台长期的运行;开启者不能调用服务里面的方法</li>
+<li>bind的方式开启服务，绑定服务，调用者挂了，服务也会跟着挂掉.绑定者可以调用服务里面的方法</li>
+<li><strong>绑定者如何调用服务里的方法呢？</strong> 自定义Service，在其内部重写onBind函数返回一个实现IBinder接口或者继承Binder的对象给绑定者—-这个自定义Binder是一个内部类，提供一个可以间接调用服务或者直接返回service对象的方法—-在Activity中调用bindService方法,服务成功绑定之后，在回调方法onServiceConnected中会传递过来一个IBinder对象给Activity使用(ServiceConnection的匿名内部类)</li>
+</ul>
+</li>
 <li><p><strong>Service生命周期</strong></p>
 <p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/service_life.png" class="full-image" width="100%"></p>
 </li>
 <li><p><strong>Service与Activity的通信机制</strong></p>
+<ul>
+<li>广播接收器: </li>
+<li>iBinder机制: </li>
+</ul>
 </li>
 <li><strong>Service,IntentService,和Intent区别</strong><ul>
 <li>Service默认运行在主线程，如果Service将要运行耗时或者可能被阻塞的操作时，例如直接把耗时操作放在 Service 的 onStartCommand()方法中可能会出现ANR错误；所以应该在Service中重新启动一个新的线程来进行这些操作</li>
-<li><strong>内部原理</strong>IntentService在onCreate函数中新建HandlerThread去执行耗时操作，并新建ServiceHandler对象处理消息，当启动一个IntentService的时候接下来会调用onstart方法，该方法会给ServiceHandler发送消息，在ServiceHandler的handleMessage回调函数中调用onHandleIntent函数，因此可以在这个方法里面处理我们的耗时工作；所以IntentService不仅有Service的功能,还有Handler处理和循环消息的功能  </li>
+<li><strong>IntentService内部原理</strong>IntentService在onCreate函数中新建HandlerThread去执行耗时操作，并新建ServiceHandler对象处理消息，当启动一个IntentService的时候接下来会调用onstart方法，该方法会给ServiceHandler发送消息，在ServiceHandler的handleMessage回调函数中调用onHandleIntent函数，因此可以在这个方法里面处理我们的耗时工作；所以IntentService不仅有Service的功能,还有Handler处理和循环消息的功能  </li>
 <li><strong>处理流程</strong>IntentService使用队列的方式将请求的Intent加入队列，然后开启一个工作线程来处理队列中的Intent，对于异步的多次startService请求，IntentService会处理完成一个之后再处理第二个，每一个请求都会在一个单独的worker thread中处理，不会阻塞应用程序的主线程;当任务执行完后，IntentService 会自动停止，而不需要我们去手动控制。</li>
+</ul>
+</li>
+<li><strong>Service后台保活</strong>: <ul>
+<li><strong>提高Service的优先级或者提高Service所在进程的优先级</strong>：这个，也只能说在系统内存不足需要回收资源的时候，优先级较高，不容易被回收；实现方法有<br>①setForeground(true) 来设置 Service 的优先级和正在运行的 Activity类似<br>②在AndroidManifest.xml文件中对于intent-filter可以通过android:priority = “1000”这个属性设置最高优先级，1000是最高值，如果数字越小则优先级越低</li>
+<li><strong>在onDestroy方法里重启service</strong>：这个倒还算挺有效的一个方法，但是，直接干掉进程的时候，onDestroy方法都进不来，更别想重启了</li>
+<li>broadcast广播：和第3种一样，没进入onDestroy，就不知道什么时候发广播了，另外，在Android4.4以上，程序完全退出后，就不好接收广播了，需要在发广播的地方特定处理</li>
+<li>Service的onStartCommand方法返回START_STICKY，这个也主要是针对系统资源不足而导致的服务被关闭。四个返回值<a href="http://www.jianshu.com/p/a9360c282ef0" target="_blank" rel="external">参考link</a>：start_sticky、start_no_sticky、START_REDELIVER_INTENT、START_STICKY_COMPATIBILITY</li>
+<li>App进程之间互相唤醒</li>
+<li>通过JNI的方式（NDK编程），fork()出一个子线程作为守护进程，轮询监听服务状态。守护进程（Daemon）是运行在后台的一种特殊进程。它独立于控制终端并且周期性地执行某种任务或等待处理某些发生的事件。而守护进程的会话组和当前目录，文件描述符都是独立的。后台运行只是终端进行了一次fork，让程序在后台执行，这些都没有改变。</li>
 </ul>
 </li>
 </ol>
@@ -933,6 +1121,17 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 <li><strong>种类和特点</strong>: </li>
 </ol>
 <h3 id="ContentProvider">ContentProvider</h3><h3 id="Android_View事件分发机制">Android View事件分发机制</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/scroller.png" class="full-image" width="100%"></p>
+<h3 id="Binder和AIDL">Binder和AIDL</h3><ol>
+<li><strong>AIDL</strong>：Android Interface Definition Language,即Android接口定义语言。由于Android不同的进程不能共享内存，所以为了解决进程间通讯的问题，Android使用一种接口定义语言来公开服务的接口，本质上，AIDL非常像一个接口，通过公开接口，让别的进程调用该接口，从而实现进程间的通讯。<a href="http://www.jianshu.com/p/b9b15252b3d6" target="_blank" rel="external">AIDL基本用法</a></li>
+<li><strong>Binder</strong>：Android进程间通信是通过Binder来实现的，Binder是安卓实现IPC的一种机制，Binder机制使本地对象能够调用远程对象的方法，在不同进程中传递单向/双向消息。远程Service在Client绑定服务时，会在onBind()的回调中返回一个Binder，当Client调用bindService()与远程Service建立连接成功时，会拿到远程Binder实例，从而使用远程Service提供的服务。Binder是基于C/S通信模式，传输过程只需要一次拷贝，且为Client添加UID/PID身份，性能和安全性更好，因此Android进程间通信使用了Binder。</li>
+<li><strong>Android的IPC机制</strong>：IPC是内部进程通信的简称，是共享”命名管道”的资源。Android中的IPC机制是为了让Activity和Service之间可以随时的进行交互，故在Android中该机制，只适用于Activity和Service之间的通信，类似于远程方法调用，类似于C/S模式的访问。通过定义AIDL接口文件来定义IPC接口。Servier端实现IPC接口，Client端调用IPC接口本地代理。</li>
+</ol>
+<h3 id="Json_VS_XML">Json VS XML</h3><p><a href="http://blog.csdn.net/wei78008023/article/details/44940579" target="_blank" rel="external">XML解析和Json解析简介以及两者的区别</a></p>
+<h3 id="Activity切换时生命周期交集">Activity切换时生命周期交集</h3><p>当一个activity A启动了另外一个activity B，它们的生命周期是有交叉的；</p>
+<ol>
+<li>首先A的onPause()被调用；之后B的onCrate(), onStart()及onResume() 方法会被调用（此时B拥有用户焦点）；最后，如果A在屏幕上不可见，onStop()方法被调用；</li>
+<li>因此，我们在两个activities中传递数据，或者共享资源时（如数据库连接），需要在前一个activity的onPause()方法而不是onStop()方法中进行</li>
+</ol>
 
         
       
@@ -1178,13 +1377,19 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 <li>但是!!!现在!!!Android不再推荐这两种方式！二是直接使用OKHttp这种成熟方案！支持Android 2.3及其以上版本; 什么是OKHttp?</li>
 </ul>
 </li>
-<li><p>Volley原理和OkHttp实现原理和应用方法以及优缺点  </p>
-<ul>
+<li><strong>Volley原理和OkHttp实现原理和应用方法以及优缺点</strong> <ul>
 <li><strong>Volley的调用过程</strong>，通过 newRequestQueue(…) 函数新建并启动一个请求队列RequestQueue后，只需要往这个RequestQueue不断 add Request 即可</li>
 <li><strong>Volley</strong>：Volley 对外暴露的 API，通过 newRequestQueue(…) 函数新建并启动一个请求队列RequestQueue。</li>
 <li><strong>Request</strong>：表示一个请求的抽象类。StringRequest、JsonRequest、ImageRequest 都是它的子类，表示某种类型的请求。</li>
-<li><strong>RequestQueue</strong>：表示请求队列，里面包含一个CacheDispatcher(用于处理走缓存请求的调度线程)、NetworkDispatcher数组(用于处理走网络请求的调度线程)，一个ResponseDelivery(返回结果分发接口)，通过 start() 函数启动时会启动CacheDispatcher和NetworkDispatchers。        <em> <em>*HttpStack</em></em>：处理 Http 请求，返回请求结果。目前 Volley 中有基于 HttpURLConnection 的HurlStack和 基于 Apache HttpClient 的HttpClientStack  </li>
+<li><strong>RequestQueue</strong>：表示请求队列，里面包含一个CacheDispatcher(用于处理走缓存请求的调度线程)、NetworkDispatcher数组(用于处理走网络请求的调度线程)，一个ResponseDelivery(返回结果分发接口)，通过 start() 函数启动时会启动CacheDispatcher和NetworkDispatchers。        </li>
+<li><strong>HttpStack</strong>：处理 Http 请求，返回请求结果。目前 Volley 中有基于 HttpURLConnection 的HurlStack和 基于 Apache HttpClient 的HttpClientStack，也可以内部采用OKHttp实现 </li>
+<li><strong>CacheDispatcher.java</strong>：继承自Thread，用于调度处理「缓存请求」。启动后会不断从缓存请求队列中取请求处理，队列为空则等待，请求处理结束则将结果传递给ResponseDelivery去执行后续处理。当结果未缓存过、缓存失效或缓存需要刷新的情况下，该请求都需要重新进入NetworkDispatcher去调度处理。</li>
+<li><strong>NetworkDispatcher.java</strong>：继承自Thread，用于调度处理「网络请求」。启动后会不断从网络请求队列中取请求处理，队列为空则等待，请求处理结束则将结果传递给ResponseDelivery去执行后续处理，并判断结果是否要进行缓存。 </li>
 </ul>
+</li>
+</ol>
+<ul>
+<li><p><strong>流程图解</strong>：<br>  第一步：主线程根据优先级把请求加入缓存队列<br>  第二步：「缓存调度线程」CacheDispatcher从缓存队列中取出一个请求，如果缓存命中，就读取缓存响应并解析，然后将结果返回到主线程<br>  第三步：缓存未命中，该请求被加入网络请求队列，「网络调度线程」NetworkDispatcher(一个默认值为4的线程池)从网络队列中轮询取出请求，进行HTTP请求传输，解析响应，写入缓存，然后将结果返回到主线程  </p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Volley.png" class="full-image"></p>
 <p><a href="http://a.codekk.com/detail/Android/grumoon/Volley%20%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90" target="_blank" rel="external">Volley源码分析</a></p>
 <p><strong>Volley用法</strong>  </p>
@@ -1212,7 +1417,7 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 }; 
  mQueue<span class="built_in">.</span>add(stringRequest); 
 </code></pre></li>
-</ol>
+</ul>
 </li>
 </ol>
 <p><strong>OkHttp用法</strong><a href="http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0326/2643.html" target="_blank" rel="external">源码分析</a></p>
@@ -1393,15 +1598,16 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 </li>
 </ol>
 <h3 id="毕设-WebCrawler项目">毕设-WebCrawler项目</h3><p>java优先级队列；Java多线程处理，线程池，html页面解析等</p>
-<p>单例模式enum实现对MySQL数据库操作的优势</p>
+<p>单例模式enum实现对MySQL数据库操作的优势<a href="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Volley.png" target="_blank" rel="external">https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Volley.png</a></p>
 <h3 id="QA">QA</h3><ol>
-<li><p>如果在贵司移动开发部门做开发，主要用到哪些技术栈，我需要补充哪些技术站</p>
+<li><p>如果在贵司移动开发部门做开发，主要是做哪些产品研发以及需要用到哪些技术知识，</p>
 </li>
-<li><p>跨平台应用研发，web轻应用和native app的开发前景比较看法</p>
+<li><p>我需要补充哪些技术和知识，有什么需要提高的地方？</p>
 </li>
 <li><p>面试过程中有没有什么地方讲得太快或者不清楚的地方，我可以补充的，评价一下面试表现</p>
 </li>
-<li></li>
+<li><p>跨平台应用研发，web轻应用和native app的开发前景比较看法</p>
+</li>
 </ol>
 
         
@@ -1415,112 +1621,6 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
             <a href="../../tags/实习/"> #实习 </a>
           
             <a href="../../tags/项目/"> #项目 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/03/10/Linux操作和计算机网络/">
-                Linux操作和计算机网络
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-03-10
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/编程知识/">编程知识</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/03/10/Linux操作和计算机网络/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/10/Linux操作和计算机网络/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="Http/Https/UDP/TCP/Socket区别与联系">Http/Https/UDP/TCP/Socket区别与联系</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/http0.png" class="full-image" width="100%"></p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/http1.png" class="full-image" width="100%"></p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HttpRequest.jpeg" class="full-image" width="100%"></p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HttpResponse.png" class="full-image" width="100%"></p>
-<h3 id="Linux进程调度机制">Linux进程调度机制</h3><ol>
-<li>Linux的进程调度算法基本上是<strong>基于优先级的时间片轮转法</strong>，将CPU时间分片，给每个可运行进程分配一片，目的就是既能够实现进程之间的抢占，又不至于让低优先级的进程被饿死。。每个进程在创建之初有一个基本的优先级，执行期间调度系统会动态调整它的优先级，交互性高的任务会获得一个高的动态优先级，而交互性低的任务获得一个低的动态优先级；在较长的时间间隔内没有使用CPU的进程，通过动态地增加它们的优先级来提升它们。相应地，对于已经在CPU上运行了较长时间的进程，通过减少它们的优先级来处罚它们。</li>
-<li>Linux系统中进程调度操作由一个只在内核态运行的函数schedule()函数执行，该函数代码为所有进程共享；进程控制块PCB(Process ControlBlock)是系统中最为重要的数据结构之一。用来存放进程所必需的各种信息，PCB用结构task—struct来表示，包括进程的类型、进程状态、优先级、时钟信息等。</li>
-<li>Linux中设置了进程调度标志need—resched ，当标志为1时，可执行调度程序．通常，Linux 调度时机分以下两种情况：(1)<strong>主动调度</strong>：指显式调用schedule() 函数明确释放CPU ，引起新一轮调度．一般发生在当前进程状态改变，如：进程终止、进程睡眠、进程对某些信号处理过程中等(2)<strong>被动调度</strong>：指不显示调用schedule() 函数，只是PCB 中的need_resched 进程调度标志，该域置位为1 将引起新的进程调度  (3)三种情况：<strong>中断处理过程（包括时钟中断、I/O中断、系统调用和异常）</strong>中，直接调用schedule()，或者返回用户态时根据need_resched标记调用schedule()；<strong>内核线程</strong>可以直接调用schedule()进行进程切换，也可以在中断处理过程中进行调度，也就是说内核线程作为一类的特殊的进程可以主动调度，也可以被动调度；<strong>用户态进程</strong>无法实现主动调度，仅能通过陷入内核态后的某个时机点进行调度，即在中断处理过程中进行调度 </li>
-<li>Linux将进程分为<strong>实时进程和普通进程(又称非实时进程或一般进程)</strong>，实时进程的优先级要高于其他进程，如果一个实时进程处于可执行状态，它将先得到执行．实时进程又有两种策略：<strong>SCHED—RR时间片轮转和和SCHED—FIFO先进先出</strong>，在时间片轮转策略中每个可执行实时进程轮流执行一个时间片，而先进先出策略每个进程按各自在运行队列中的顺序执行且顺序不能变化。普通进程SCHED_OTHER也按照轮转调度策略处理</li>
-<li><strong>进程生命周期</strong>依次定义的数据结构为：TASK—RUNNING，TASK—INTERRUPTIBLE。TASK—UNINTERRUPTIBLE，TASK—ZOMBIE和TASK—STOPPED，一个进程在其生存期间，状态会发生多次变化。与其数据结构相对应的即是Linux进程的状态，分别是：运行态、等待态、暂停态和僵死态。<br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Linux_process.png" class="full-image" width="100%"></li>
-</ol>
-<h3 id="Linux内存管理机制">Linux内存管理机制</h3><p>Linux中无论物理内存有多大，都将其充份利用，将一些程序调用过的硬盘数据读入内存，利用内存读写的高速特性来提高Linux系统的数据访问性能；<strong>页高速缓存(cache)</strong>是Linux内核实现的一种主要磁盘缓存。它主要用来减少对磁盘的I/O操作。是通过把磁盘中的数据缓存到物理内存中，把对磁盘的访问变为对物理内存的访问。查看内存状态命令<code>top，free，vmstat</code><a href="https://blog.linuxeye.com/362.html" target="_blank" rel="external">Link</a></p>
-<ol>
-<li><strong>物理内存</strong>就是系统硬件提供的内存大小，是真正的内存，相对于物理内存，<strong>虚拟内存</strong>就是为了满足物理内存的不足而提出的策略，它是利用磁盘空间虚拟出的一块逻辑内存，用作虚拟内存的磁盘空间被称为交换空间（Swap Space);<strong>虚拟内存</strong>作为物理内存的扩展，linux会在物理内存不足时，使用虚拟内存，更详细的说，就是Linux内核会将暂时不用的物理内存块信息写到交换空间，这样以来，物理内存得到了释放，这块内存就可以用于其它目的，当需要用到原始的内容时，这些信息会被重新从交换空间读入物理内存。</li>
-<li>Linux的内存管理采取的是<strong>分页存取机制</strong>，为了保证物理内存能得到充分的利用，内核会在适当的时候将物理内存中不经常使用的数据块自动交换到虚拟内存中，而将经常使用的信息保留到物理内存。Linux系统会不时的进行页面交换操作，以保持尽可能多的空闲物理内存，即使并没有什么事情需要内存，Linux也会交换出暂时不用的内存页面。这可以避免等待交换所需的时间；Linux进行<strong>页面交换</strong>是有条件的，不是所有页面在不用时都交换到虚拟内存，linux内核根据”最近最经常使用“算法，仅仅将一些不经常使用的页面文件交换到虚拟内存</li>
-<li><strong>逻辑地址</strong>是对应用程序而言的，一般以Seg:Offset段内偏移来表示；<strong>线性地址</strong>是CPU所能寻址的空间或者范围，是逻辑地址到物理地址变换之间的中间层；<strong>物理地址</strong>是机器中实际的内存地址,换言之，是机器中的内存容量范围</li>
-<li><strong>逻辑地址 -（段表）-&gt; 线性地址 — （页表）—&gt; 物理地址的转换过程(由大到小)</strong>：CPU将一个虚拟内存空间中的地址转换为物理地址，需要进行两步：首先将一个逻辑地址（其实是段内偏移量），CPU要利用其段式内存管理单元，先将逻辑地址加上相应段的基地址转换成一个线程地址；如果启用了分页机制，再利用其页式内存管理单元，通过查询页表来将线性地址转换为最终物理地址；若没有启用分页机制，那么线性地址直接就是物理地址 <a href="http://laoxu.blog.51cto.com/4120547/1166661" target="_blank" rel="external">Link</a></li>
-<li>不同的逻辑地址可以映射到同一个线性地址上；不同的线性地址也可以映射到同一个物理地址上；所以是多对一的关系。另外，同一个线性地址，在发生换页以后，也可能被重新装载到另外一个物理地址上。所以这种多对一的映射关系也会随时间发生变化。</li>
-</ol>
-<h3 id="Linux常用command">Linux常用command</h3><ol>
-<li><strong>ps -ef|grep java</strong> ： </li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Linux/"> #Linux </a>
-          
-            <a href="../../tags/Network/"> #Network </a>
           
         </div>
       
@@ -1574,7 +1674,7 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">34</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

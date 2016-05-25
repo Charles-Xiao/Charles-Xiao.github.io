@@ -441,11 +441,23 @@ ThreadPoolExecutor是Executors类的底层实现
     }
 }
 </code></pre><ol>
-<li><strong>死锁的必要条件</strong></li>
-<li><strong>死锁的解决方法</strong></li>
+<li><strong>死锁的必要条件</strong>死锁是指是指两个或两个以上的进程在执行过程中，因争夺资源而造成的一种互相等待对方占有的资源的现象，若无外力作用，它们都将无法推进下去。<ul>
+<li><strong>互斥条件</strong>：指进程对所分配到的资源进行排它性使用，即在一段时间内某资源只由一个进程占用。如果此时还有其它进程请求资源，则请求者只能等待，直至占有资源的进程用毕释放。</li>
+<li><strong>请求和保持条件</strong>：指进程请求新资源发生阻塞时对自己已经获得的其它资源保持不放。</li>
+<li><strong>不剥夺条件</strong>：指进程已获得的资源，在未使用完之前，不能被剥夺，只能在使用完时由自己释放。</li>
+<li><strong>环路等待条件</strong>：指在发生死锁时，进程之间会形成一种头尾相接的循环等待资源关系，即进程集合{P0，P1，P2，···，Pn}中的P0正在等待一个P1占用的资源；P1正在等待P2占用的资源，……，Pn正在等待已被P0占用的资源。</li>
+</ul>
+</li>
+<li><strong>死锁的避免、预防和解决方法</strong><ul>
+<li>采用资源有序分配法，破坏环路等待形成</li>
+<li>允许进程剥夺其他进程占有的资源</li>
+<li>银行家算法:把操作系统看作是银行家，操作系统管理的资源相当于银行家管理的资金，进程向操作系统请求分配资源相当于用户向银行家贷款。操作系统按照银行家制定的规则为进程分配资源，当进程首次申请资源时，要测试该进程对资源的最大需求量，如果系统现存的资源可以满足它的最大需求量则按当前的申请量分配资源，否则就推迟分配。当进程在执行中继续申请资源时，先测试该进程已占用的资源数与本次申请的资源数之和是否超过了该进程对资源的最大需求量。若超过则拒绝分配资源，若没有超过则再测试系统现存的资源能否满足该进程尚需的最大资源量，若能满足则按当前的申请量分配资源，否则也要推迟分配。</li>
+<li>互斥条件无法被破坏</li>
+</ul>
+</li>
 </ol>
 <h3 id="多线程相关问题">多线程相关问题</h3><ol>
-<li><strong>yield</strong>，表示暂停当前线程，执行其他线程(包括自身线程) 由cpu决定</li>
+<li><strong>yield</strong>表示暂停当前线程，执行其他线程(包括自身线程) 由cpu决定</li>
 <li><strong>join</strong>：阻塞所在线程，等调用它的线程执行完毕，再向下执行</li>
 <li><strong>sleep()方法</strong>属于Thread类中的，而<strong>wait()方法</strong>则是属于Object类；sleep()方法导致了程序暂停执行指定的时间，让出cpu给其他线程，但是他的监控状态依然保持，当指定的时间到了又会自动恢复运行状态，线程不会释放对象锁；而当调用wait()方法的时候，线程会放弃对象锁，只有针对此对象调用notify()方法后本线程才进入对象锁定池准备就绪</li>
 </ol>
@@ -547,7 +559,7 @@ ThreadPoolExecutor是Executors类的底层实现
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">34</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

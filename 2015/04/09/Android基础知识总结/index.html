@@ -190,6 +190,22 @@
 
       
         <h3 id="Android架构层次">Android架构层次</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/android_framework.png" class="full-image" width="100%"></p>
+<p><strong>android系统架构分从下往上为Linux内核层、运行库、应用程序框架层和应用程序层</strong></p>
+<ol>
+<li>Linux内核层：负责硬件的驱动程序、网络、电源、系统安全以及内存管理等功能。</li>
+<li>运行库和android runtion：运行库：即c/c++函数库部分，大多数都是开放源代码的函数库，例如webkit，该函数库负责android网页浏览器的运行；例如标准的c函数库libc、openssl、sqlite等，当然也包括支持游戏开发的2dsgl和3dopengles，在多媒体方面有mediaframework框架来支持各种影音和图形文件的播放与显示，如mpeg4、h.264、mp3、aac、amr、jpg和png等众多的多媒体文件格式。Androidruntion负责解释和执行生成的dalvik格式的字节码</li>
+<li>应用软件架构：java应用程序开发人员主要是使用该层封装好的api进行快速开发的。</li>
+<li>应用程序层：该层是java的应用程序层，android内置的googlemaps、email、IM、浏览器等，都处于该层，java开发人员工发的程序也处于该层，而且和内置的应用程序具有平等的地位，可以调用内置的应用程序，也可以替换内置的应用程序</li>
+</ol>
+<h3 id="ANR的产生原因以及解决方法">ANR的产生原因以及解决方法</h3><ol>
+<li>ANR由Activity manager和windows manager来负责监听，android应用程序通常是运行在一个单独的线程里，这就意味你的应用程序所做的事情如果在主线程里占用了大长时间的话，就会引发ANR对话框，因为你的应用程序并没有给自己机会来处理输入事件或者Intent广播</li>
+<li><strong>产生原因</strong>: ①Activity 5s没有响应输入事件，比如按键，触摸 事件②广播接收器在10s没有处理完毕事件 ③Service在20s之类没有完成事件处理</li>
+<li>解决方法: 不在主线程进行网络请求,磁盘读取，位图修改，更新UI等耗时操作，而应该采用子线程来完成，完成之后通过Handler通知主线程</li>
+</ol>
+<h3 id="Android_界面卡顿怎么处理？">Android 界面卡顿怎么处理？</h3><ol>
+<li>避免过度渲染和绘制</li>
+<li>View的嵌套层次不能过深</li>
+</ol>
 <h3 id="Android子线程和UI线程交互的5种方式">Android子线程和UI线程交互的5种方式</h3><ol>
 <li><p><strong>handler</strong>: 参考“实习项目总结”</p>
 </li>
@@ -248,23 +264,44 @@
 <li><p><strong>Activity以及Fragment生命周期</strong>:</p>
 <p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/activity_life.png" class="full-image" width="100%"></p>
 <p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/fragment_life.png" class="full-image" width="100%"></p>
+<ul>
+<li><strong>onSaveInstanceState() 和 onRestoreInstanceState()</strong>： <a href="http://www.cnblogs.com/hanyonglu/archive/2012/03/28/2420515.html" target="_blank" rel="external">Link</a><br>①当某个activity变得”容易”被系统销毁时，该activity的<strong>onSaveInstanceState()</strong>就会被执行，除非该activity是被用户主动销毁的，例如当用户按BACK键的时候；他的调用有<strong>5种情况</strong>：(1)、<strong>当用户按下HOME键时</strong>：这是显而易见的，系统不知道你按下HOME后要运行多少其他的程序，自然也不知道activity A是否会被销毁，因此系统会调用onSaveInstanceState()，让用户有机会保存某些非永久性的数据。以下几种情况的分析都遵循该原则 (2)、<strong>长按HOME键，选择运行其他的程序时</strong>。(3)、<strong>按下电源按键（关闭屏幕显示）时</strong>。(4)、<strong>从activity A中启动一个新的activity时</strong>。(5)、<strong>屏幕方向切换时，例如从竖屏切换到横屏时</strong>。在屏幕切换之前，系统会销毁activity A，在屏幕切换之后系统又会自动地创建activity A，所以onSaveInstanceState()一定会被执行，且也一定会执行onRestoreInstanceState()。<br>②<strong>onRestoreInstanceState()</strong>被调用的前提是，activity A“确实”被系统销毁了，而如果仅仅是停留在有这种可能性的情况下，则该方法不会被调用，例如，当正在显示activity A的时候，用户按下HOME键回到主界面，然后用户紧接着又返回到activity A，这种情况下activity A一般不会因为内存的原因被系统销毁，故activity A的onRestoreInstanceState方法不会被执行 此也说明上二者，大多数情况下不成对被使用。</li>
+</ul>
 </li>
-<li><p>如果一个以SingleTask启动的的Activity实例，再新建一个该实例，Activity的执行流程？？？singleTask保证了在栈中Activity的唯一性，如果被SingleTask标记的Activity处于栈底，上面的Activity都会被pop出栈，这个时候被标记过SingleTask的Activity生命周期会做出调整：onNewIntent-&gt;onStart-&gt;onResume, 不再调用onCreate函数</p>
+<li><p><strong>如果一个以SingleTask启动的的Activity实例，再新建一个该实例，Activity的执行流程？？？</strong>singleTask保证了在栈中Activity的唯一性，如果被SingleTask标记的Activity处于栈底，上面的Activity都会被pop出栈，这个时候被标记过SingleTask的Activity生命周期会做出调整：onNewIntent-&gt;onStart-&gt;onResume, 不再调用onCreate函数</p>
 </li>
 <li><strong>android:taskAffinity</strong>：每个Activity都有taskAffinity属性，这个属性指出了它希望进入的Task。如果一个Activity没有显式的指明该 Activity的taskAffinity，那么它的这个属性就等于Application指明的taskAffinity，如果 Application也没有指明，那么该taskAffinity的值就等于包名；例如 android:taskAffinity=””的意思是不依附于任何task，也就是自己新建一个task</li>
 </ol>
 <h3 id="Service">Service</h3><ol>
-<li><strong>两种类型</strong>本地和远程service,分别运行于主线程或者独立进程的主线程，主要运行在后台执行监测行为，可以通过iBinder或者广播与Activity进行交互</li>
-<li><strong>两种启动模式</strong></li>
+<li><strong>两种类型</strong>本地和远程service,分别运行于主线程或者独立进程的主线程，Service主要运行在后台执行一些监测行为或者其他加载网页等后台操作，可以通过iBinder或者广播与Activity进行交互<a href="http://www.cnblogs.com/newcj/archive/2011/05/30/2061370.html" target="_blank" rel="external">Service总结</a></li>
+<li><strong>两种启动模式</strong>: <a href="http://www.jianshu.com/p/2fb6eb14fdec" target="_blank" rel="external">具体区别Link</a><ul>
+<li>start方法一旦服务开启跟调用者(开启者)就没有任何关系了;开启者退出了，开启者挂了，服务还在后台长期的运行;开启者不能调用服务里面的方法</li>
+<li>bind的方式开启服务，绑定服务，调用者挂了，服务也会跟着挂掉.绑定者可以调用服务里面的方法</li>
+<li><strong>绑定者如何调用服务里的方法呢？</strong> 自定义Service，在其内部重写onBind函数返回一个实现IBinder接口或者继承Binder的对象给绑定者—-这个自定义Binder是一个内部类，提供一个可以间接调用服务或者直接返回service对象的方法—-在Activity中调用bindService方法,服务成功绑定之后，在回调方法onServiceConnected中会传递过来一个IBinder对象给Activity使用(ServiceConnection的匿名内部类)</li>
+</ul>
+</li>
 <li><p><strong>Service生命周期</strong></p>
 <p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/service_life.png" class="full-image" width="100%"></p>
 </li>
 <li><p><strong>Service与Activity的通信机制</strong></p>
+<ul>
+<li>广播接收器: </li>
+<li>iBinder机制: </li>
+</ul>
 </li>
 <li><strong>Service,IntentService,和Intent区别</strong><ul>
 <li>Service默认运行在主线程，如果Service将要运行耗时或者可能被阻塞的操作时，例如直接把耗时操作放在 Service 的 onStartCommand()方法中可能会出现ANR错误；所以应该在Service中重新启动一个新的线程来进行这些操作</li>
-<li><strong>内部原理</strong>IntentService在onCreate函数中新建HandlerThread去执行耗时操作，并新建ServiceHandler对象处理消息，当启动一个IntentService的时候接下来会调用onstart方法，该方法会给ServiceHandler发送消息，在ServiceHandler的handleMessage回调函数中调用onHandleIntent函数，因此可以在这个方法里面处理我们的耗时工作；所以IntentService不仅有Service的功能,还有Handler处理和循环消息的功能  </li>
+<li><strong>IntentService内部原理</strong>IntentService在onCreate函数中新建HandlerThread去执行耗时操作，并新建ServiceHandler对象处理消息，当启动一个IntentService的时候接下来会调用onstart方法，该方法会给ServiceHandler发送消息，在ServiceHandler的handleMessage回调函数中调用onHandleIntent函数，因此可以在这个方法里面处理我们的耗时工作；所以IntentService不仅有Service的功能,还有Handler处理和循环消息的功能  </li>
 <li><strong>处理流程</strong>IntentService使用队列的方式将请求的Intent加入队列，然后开启一个工作线程来处理队列中的Intent，对于异步的多次startService请求，IntentService会处理完成一个之后再处理第二个，每一个请求都会在一个单独的worker thread中处理，不会阻塞应用程序的主线程;当任务执行完后，IntentService 会自动停止，而不需要我们去手动控制。</li>
+</ul>
+</li>
+<li><strong>Service后台保活</strong>: <ul>
+<li><strong>提高Service的优先级或者提高Service所在进程的优先级</strong>：这个，也只能说在系统内存不足需要回收资源的时候，优先级较高，不容易被回收；实现方法有<br>①setForeground(true) 来设置 Service 的优先级和正在运行的 Activity类似<br>②在AndroidManifest.xml文件中对于intent-filter可以通过android:priority = “1000”这个属性设置最高优先级，1000是最高值，如果数字越小则优先级越低</li>
+<li><strong>在onDestroy方法里重启service</strong>：这个倒还算挺有效的一个方法，但是，直接干掉进程的时候，onDestroy方法都进不来，更别想重启了</li>
+<li>broadcast广播：和第3种一样，没进入onDestroy，就不知道什么时候发广播了，另外，在Android4.4以上，程序完全退出后，就不好接收广播了，需要在发广播的地方特定处理</li>
+<li>Service的onStartCommand方法返回START_STICKY，这个也主要是针对系统资源不足而导致的服务被关闭。四个返回值<a href="http://www.jianshu.com/p/a9360c282ef0" target="_blank" rel="external">参考link</a>：start_sticky、start_no_sticky、START_REDELIVER_INTENT、START_STICKY_COMPATIBILITY</li>
+<li>App进程之间互相唤醒</li>
+<li>通过JNI的方式（NDK编程），fork()出一个子线程作为守护进程，轮询监听服务状态。守护进程（Daemon）是运行在后台的一种特殊进程。它独立于控制终端并且周期性地执行某种任务或等待处理某些发生的事件。而守护进程的会话组和当前目录，文件描述符都是独立的。后台运行只是终端进行了一次fork，让程序在后台执行，这些都没有改变。</li>
 </ul>
 </li>
 </ol>
@@ -272,6 +309,17 @@
 <li><strong>种类和特点</strong>: </li>
 </ol>
 <h3 id="ContentProvider">ContentProvider</h3><h3 id="Android_View事件分发机制">Android View事件分发机制</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/scroller.png" class="full-image" width="100%"></p>
+<h3 id="Binder和AIDL">Binder和AIDL</h3><ol>
+<li><strong>AIDL</strong>：Android Interface Definition Language,即Android接口定义语言。由于Android不同的进程不能共享内存，所以为了解决进程间通讯的问题，Android使用一种接口定义语言来公开服务的接口，本质上，AIDL非常像一个接口，通过公开接口，让别的进程调用该接口，从而实现进程间的通讯。<a href="http://www.jianshu.com/p/b9b15252b3d6" target="_blank" rel="external">AIDL基本用法</a></li>
+<li><strong>Binder</strong>：Android进程间通信是通过Binder来实现的，Binder是安卓实现IPC的一种机制，Binder机制使本地对象能够调用远程对象的方法，在不同进程中传递单向/双向消息。远程Service在Client绑定服务时，会在onBind()的回调中返回一个Binder，当Client调用bindService()与远程Service建立连接成功时，会拿到远程Binder实例，从而使用远程Service提供的服务。Binder是基于C/S通信模式，传输过程只需要一次拷贝，且为Client添加UID/PID身份，性能和安全性更好，因此Android进程间通信使用了Binder。</li>
+<li><strong>Android的IPC机制</strong>：IPC是内部进程通信的简称，是共享”命名管道”的资源。Android中的IPC机制是为了让Activity和Service之间可以随时的进行交互，故在Android中该机制，只适用于Activity和Service之间的通信，类似于远程方法调用，类似于C/S模式的访问。通过定义AIDL接口文件来定义IPC接口。Servier端实现IPC接口，Client端调用IPC接口本地代理。</li>
+</ol>
+<h3 id="Json_VS_XML">Json VS XML</h3><p><a href="http://blog.csdn.net/wei78008023/article/details/44940579" target="_blank" rel="external">XML解析和Json解析简介以及两者的区别</a></p>
+<h3 id="Activity切换时生命周期交集">Activity切换时生命周期交集</h3><p>当一个activity A启动了另外一个activity B，它们的生命周期是有交叉的；</p>
+<ol>
+<li>首先A的onPause()被调用；之后B的onCrate(), onStart()及onResume() 方法会被调用（此时B拥有用户焦点）；最后，如果A在屏幕上不可见，onStop()方法被调用；</li>
+<li>因此，我们在两个activities中传递数据，或者共享资源时（如数据库连接），需要在前一个activity的onPause()方法而不是onStop()方法中进行</li>
+</ol>
 
       
     </div>
@@ -363,7 +411,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">34</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -415,7 +463,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Android架构层次"><span class="nav-number">1.</span> <span class="nav-text">Android架构层次</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android子线程和UI线程交互的5种方式"><span class="nav-number">2.</span> <span class="nav-text">Android子线程和UI线程交互的5种方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity四种启动模式和生命周期"><span class="nav-number">3.</span> <span class="nav-text">Activity四种启动模式和生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service"><span class="nav-number">4.</span> <span class="nav-text">Service</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BroadcastReceiver"><span class="nav-number">5.</span> <span class="nav-text">BroadcastReceiver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ContentProvider"><span class="nav-number">6.</span> <span class="nav-text">ContentProvider</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android_View事件分发机制"><span class="nav-number">7.</span> <span class="nav-text">Android View事件分发机制</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Android架构层次"><span class="nav-number">1.</span> <span class="nav-text">Android架构层次</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANR的产生原因以及解决方法"><span class="nav-number">2.</span> <span class="nav-text">ANR的产生原因以及解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android_界面卡顿怎么处理？"><span class="nav-number">3.</span> <span class="nav-text">Android 界面卡顿怎么处理？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android子线程和UI线程交互的5种方式"><span class="nav-number">4.</span> <span class="nav-text">Android子线程和UI线程交互的5种方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity四种启动模式和生命周期"><span class="nav-number">5.</span> <span class="nav-text">Activity四种启动模式和生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service"><span class="nav-number">6.</span> <span class="nav-text">Service</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BroadcastReceiver"><span class="nav-number">7.</span> <span class="nav-text">BroadcastReceiver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ContentProvider"><span class="nav-number">8.</span> <span class="nav-text">ContentProvider</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android_View事件分发机制"><span class="nav-number">9.</span> <span class="nav-text">Android View事件分发机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Binder和AIDL"><span class="nav-number">10.</span> <span class="nav-text">Binder和AIDL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Json_VS_XML"><span class="nav-number">11.</span> <span class="nav-text">Json VS XML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity切换时生命周期交集"><span class="nav-number">12.</span> <span class="nav-text">Activity切换时生命周期交集</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

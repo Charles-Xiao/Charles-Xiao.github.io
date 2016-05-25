@@ -282,14 +282,15 @@
 </li>
 </ol>
 <h3 id="HashTable，Hashset和ConcurrentHashMap">HashTable，Hashset和ConcurrentHashMap</h3><ol>
-<li>HashTable实现Map接口(和HashMap一样)不允许null键的存在，他是一个synchronized的map,因为内部的put,get方法进行了同步所以导致效率降低,线程安全性强于ConcurrentHashMap</li>
-<li>HashSet实现set接口，不允许重复元素的存在，但是允许null存在；每次add之前会先调用hashcode和equals方法去判断该对象是否已经存在，已存在则返回false,不会更改set中任何内容;存取速度没有HashMap快；但是其内部实现就是一个HashMap,只是每一个<key,value>中的value都是PRESET</key,value></li>
-<li>ConcurrentHashMap是一个Java5以后才提供的同步容器,其内部实现采用二次hash,分区同步的方式，内部默认维护一个包含16个segment对象的数组,每个数组对象又对应一个桶数组(相当于一个HashMap)，每个桶数组对象又维护着一个HashEntry链表;对于put的hashcode相同的key会出现同步阻塞，因为它会将当前hashcode对应的segment锁住，但是hashcode不相同的key插入时是不会出现同步阻塞的，这样相对于HashTable(同一时间点，只能有一个线程持有锁，也就是说在同一时间点，只能有一个线程能访问容器)就可以大大提高效率，提高了并发性，相当于16个线程同时操作。  </li>
+<li><strong>HashTable</strong>实现Map接口(和HashMap一样)不允许null键的存在，他是一个synchronized的map,因为内部的put,get方法进行了同步所以导致效率降低,线程安全性强于ConcurrentHashMap</li>
+<li><strong>HashSet</strong>实现set接口，不允许重复元素的存在，但是允许null存在；每次add之前会先调用hashcode和equals方法去判断该对象是否已经存在，已存在则返回false,不会更改set中任何内容;存取速度没有HashMap快；但是其内部实现就是一个HashMap,只是每一个<key,value>中的value都是PRESET</key,value></li>
+<li><strong>ConcurrentHashMap</strong>是一个Java5以后才提供的同步容器,其内部实现采用二次hash,分区同步的方式，内部默认维护一个包含16个segment对象的数组,每个数组对象又对应一个桶数组(相当于一个HashMap)，每个桶数组对象又维护着一个HashEntry链表;对于put的hashcode相同的key会出现同步阻塞，因为它会将当前hashcode对应的segment锁住，但是hashcode不相同的key插入时是不会出现同步阻塞的，这样相对于HashTable(同一时间点，只能有一个线程持有锁，也就是说在同一时间点，只能有一个线程能访问容器)就可以大大提高效率，提高了并发性，相当于16个线程同时操作。  </li>
 </ol>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConcurrentHashMap.jpg" class="full-image" width="100%"></p>
 <pre><code><span class="bullet">* </span>ConcurrentHashMap 针对读操作做了大量的优化。通过 HashEntry 对象的不变性和用 volatile 型变量协调线程间的内存可见性，使得大多数时候，读操作不需要加锁就可以正确获得值
 </code></pre><h3 id="ArrayList，CopyOnWriteArrayList和LinkedList">ArrayList，CopyOnWriteArrayList和LinkedList</h3><ol>
 <li><strong>ArrayList、LinkedList、Vector的区别</strong>：ArrayList 和Vector底层是采用数组方式存储数据，ArrayList可以通过<code>List list = Collections.synchronizeList(arrayList);</code>实现同步；Vector由于使用了synchronized方法（线程安全）所以性能上比ArrayList要差，LinkedList使用双向链表实现存储，随机存取比较慢，但是增删非常快，LinkedList中包含了 first 和 last 两个指针(Node)。Node 中包含了上一个节点和下一个节点的引用，这样就构成了双向的链表</li>
+<li><strong>CopyOnWriteArrayList</strong></li>
 <li><strong>HashMap和 HashTable 的区别</strong>：<br> HashTable基于Dictionary类实现的，HashMap则是基于Map接口实现的;HashTable是线程安全的,HashMap 则是线程不安全的;HashMap可以让你将空值作为一个表的条目的key或value</li>
 </ol>
 
@@ -383,7 +384,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">34</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

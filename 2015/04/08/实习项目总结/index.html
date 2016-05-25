@@ -352,13 +352,19 @@
 <li>但是!!!现在!!!Android不再推荐这两种方式！二是直接使用OKHttp这种成熟方案！支持Android 2.3及其以上版本; 什么是OKHttp?</li>
 </ul>
 </li>
-<li><p>Volley原理和OkHttp实现原理和应用方法以及优缺点  </p>
-<ul>
+<li><strong>Volley原理和OkHttp实现原理和应用方法以及优缺点</strong> <ul>
 <li><strong>Volley的调用过程</strong>，通过 newRequestQueue(…) 函数新建并启动一个请求队列RequestQueue后，只需要往这个RequestQueue不断 add Request 即可</li>
 <li><strong>Volley</strong>：Volley 对外暴露的 API，通过 newRequestQueue(…) 函数新建并启动一个请求队列RequestQueue。</li>
 <li><strong>Request</strong>：表示一个请求的抽象类。StringRequest、JsonRequest、ImageRequest 都是它的子类，表示某种类型的请求。</li>
-<li><strong>RequestQueue</strong>：表示请求队列，里面包含一个CacheDispatcher(用于处理走缓存请求的调度线程)、NetworkDispatcher数组(用于处理走网络请求的调度线程)，一个ResponseDelivery(返回结果分发接口)，通过 start() 函数启动时会启动CacheDispatcher和NetworkDispatchers。        <em> <em>*HttpStack</em></em>：处理 Http 请求，返回请求结果。目前 Volley 中有基于 HttpURLConnection 的HurlStack和 基于 Apache HttpClient 的HttpClientStack  </li>
+<li><strong>RequestQueue</strong>：表示请求队列，里面包含一个CacheDispatcher(用于处理走缓存请求的调度线程)、NetworkDispatcher数组(用于处理走网络请求的调度线程)，一个ResponseDelivery(返回结果分发接口)，通过 start() 函数启动时会启动CacheDispatcher和NetworkDispatchers。        </li>
+<li><strong>HttpStack</strong>：处理 Http 请求，返回请求结果。目前 Volley 中有基于 HttpURLConnection 的HurlStack和 基于 Apache HttpClient 的HttpClientStack，也可以内部采用OKHttp实现 </li>
+<li><strong>CacheDispatcher.java</strong>：继承自Thread，用于调度处理「缓存请求」。启动后会不断从缓存请求队列中取请求处理，队列为空则等待，请求处理结束则将结果传递给ResponseDelivery去执行后续处理。当结果未缓存过、缓存失效或缓存需要刷新的情况下，该请求都需要重新进入NetworkDispatcher去调度处理。</li>
+<li><strong>NetworkDispatcher.java</strong>：继承自Thread，用于调度处理「网络请求」。启动后会不断从网络请求队列中取请求处理，队列为空则等待，请求处理结束则将结果传递给ResponseDelivery去执行后续处理，并判断结果是否要进行缓存。 </li>
 </ul>
+</li>
+</ol>
+<ul>
+<li><p><strong>流程图解</strong>：<br>  第一步：主线程根据优先级把请求加入缓存队列<br>  第二步：「缓存调度线程」CacheDispatcher从缓存队列中取出一个请求，如果缓存命中，就读取缓存响应并解析，然后将结果返回到主线程<br>  第三步：缓存未命中，该请求被加入网络请求队列，「网络调度线程」NetworkDispatcher(一个默认值为4的线程池)从网络队列中轮询取出请求，进行HTTP请求传输，解析响应，写入缓存，然后将结果返回到主线程  </p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Volley.png" class="full-image"></p>
 <p><a href="http://a.codekk.com/detail/Android/grumoon/Volley%20%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90" target="_blank" rel="external">Volley源码分析</a></p>
 <p><strong>Volley用法</strong>  </p>
@@ -386,7 +392,7 @@
 }; 
  mQueue<span class="built_in">.</span>add(stringRequest); 
 </code></pre></li>
-</ol>
+</ul>
 </li>
 </ol>
 <p><strong>OkHttp用法</strong><a href="http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0326/2643.html" target="_blank" rel="external">源码分析</a></p>
@@ -567,15 +573,16 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 </li>
 </ol>
 <h3 id="毕设-WebCrawler项目">毕设-WebCrawler项目</h3><p>java优先级队列；Java多线程处理，线程池，html页面解析等</p>
-<p>单例模式enum实现对MySQL数据库操作的优势</p>
+<p>单例模式enum实现对MySQL数据库操作的优势<a href="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Volley.png" target="_blank" rel="external">https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Volley.png</a></p>
 <h3 id="QA">QA</h3><ol>
-<li><p>如果在贵司移动开发部门做开发，主要用到哪些技术栈，我需要补充哪些技术站</p>
+<li><p>如果在贵司移动开发部门做开发，主要是做哪些产品研发以及需要用到哪些技术知识，</p>
 </li>
-<li><p>跨平台应用研发，web轻应用和native app的开发前景比较看法</p>
+<li><p>我需要补充哪些技术和知识，有什么需要提高的地方？</p>
 </li>
 <li><p>面试过程中有没有什么地方讲得太快或者不清楚的地方，我可以补充的，评价一下面试表现</p>
 </li>
-<li></li>
+<li><p>跨平台应用研发，web轻应用和native app的开发前景比较看法</p>
+</li>
 </ol>
 
       
@@ -670,7 +677,7 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">34</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

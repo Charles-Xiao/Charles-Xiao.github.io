@@ -192,11 +192,12 @@
         <ol>
 <li><strong>Switch语句参数</strong>: JDK7之前，switch 只能支持 byte、short、char、int 这几个基本数据类型和其对应的封装类型;如果想用String，需要将String包装成枚举类型作为参数；JDK7之后支持String类型直接作为参数<a href="http://blog.csdn.net/amazing7/article/details/51219315" target="_blank" rel="external">参考</a></li>
 <li><strong>for循环和foreach的区别</strong>: for循环效率高于foreach; for循环可以间隔遍历，步伐可以自由设置，但是foreach只能用于遍历读取每一个元素，还不能进行修改</li>
-<li><strong>Java和C++区别</strong>：①Java有接口，有垃圾回收机制②C++有引用，有多重继承，有操作符重载，</li>
+<li><strong>Java和C++区别</strong>：①Java有接口，有垃圾回收机制②C++有引用，有多重继承，有操作符重载</li>
 <li><strong>JNI</strong><br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JNI.png" class="full-image" width="100%"></li>
 <li><strong>Java泛型</strong>：泛型是指在定义接口或者类时可以使用类型参数，泛型提供了编译期的类型安全检查，确保你只能把正确类型的对象放入集合中，避免了在运行时出现ClassCastException。Java中的泛型基本上都是在编译器这个层次来实现的。在生成的Java字节代码中是不包含泛型中的类型信息的。使用泛型的时候加上的类型参数，会被编译器在编译的时候去掉，JVM看到的只是List，而由泛型附加的类型信息对JVM来说是不可见的。这个过程就称为<strong>类型擦除</strong>。比如一个方法如果接收List<object>作为形式参数，那么如果尝试将一个List<string>的对象作为实际参数传进去，却发现无法通过编译；因为这会产生隐含的类型转换问题，编译器直接就禁止这样的行为；Array不支持泛型，所以不能保证编译期的类型安全保证。</string></object></li>
 <li><strong>Java IO与NIO</strong>Java IO是面向流的阻塞式IO方式，而NIO是面向缓冲区的无阻塞式IO方式；在Java IO中当一个线程调用read() 或 write()时，该线程被阻塞，直到有一些数据被读取，或数据完全写入，对于每一个客户端连接，服务端都会新开一个线程处理。而Java NIO的非阻塞模式使用一个专用的reactor来处理分发IO事件，数据处理采用双通道模式，client和server各自维护一个selector用于检测通道上的事件，通过访问selector来处理感兴趣事件</li>
 <li><strong>为什么匿名内部类和局部内部类只能访问final变量？</strong>：因为虽然匿名内部类在方法的内部，但实际编译的时候，内部类编译成Outer.Inner,这说明内部类所处的位置和外部类中的方法处在同一个等级上，外部类中的方法中的变量或参数只是方法的局部变量，这些变量或参数的作用域只在这个方法内部有效。因为编译的时候内部类和方法在同一级别上，所以方法中的变量或参数只有为final，内部类才可以引用，因为Java采用了一种copy local variable的方式来实现，也就是说把定义为final的局部变量拷贝过来用，而引用的也可以拿过来用，只是不能重新赋值。</li>
+<li><strong>JDK8的新特性</strong>:</li>
 </ol>
 
       
@@ -289,7 +290,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">34</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

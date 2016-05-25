@@ -190,10 +190,10 @@
 
       
         <p>Android手机由于其本身的后台机制和硬件特点，性能上一直被诟病，所以软件开发者对软件本身的性能优化就显得尤为重要；本文将对Android开发过程中性能优化的各个方面做一个回顾与总结。</p>
-<h2 id="Layout优化">Layout优化</h2><ul>
-<li><p><strong>include标签</strong>：该标签可以用于将布局文件中的公共部分提取出来给其它布局文件复用，从而使得布局模块化，代码轻量化</p>
+<h2 id="Layout优化Link">Layout优化<a href="http://blog.csdn.net/qinjuning/article/details/7944148" target="_blank" rel="external">Link</a></h2><ul>
+<li><p><strong>include标签</strong>：该标签可以用于将布局文件中的公共部分提取出来给其它布局文件复用，从而使得布局模块化，代码轻量化; <strong>注意点</strong>: ①如果<include>标签已经定义了id，而嵌入布局文件的root布局文件也定义了id，<include>标签的id会覆盖掉嵌入布局文件root的id，如果include标签没有定义id则会使用嵌入文件root的id ②如果想使用<include>标签覆盖嵌入布局root布局属性，必须同时覆盖layout_height和layout_width属性，否则会直接报编译时语法错误</include></include></include></p>
 </li>
-<li><p><strong>viewstub标签</strong>：该标签与include一样用于引入布局模块，只是引入的布局默认不会扩张，既不会占用显示也不会占用位置，从而在解析layout时节省cpu和内存，其功能类似于将某个layout属性设置为android:visibility=”gone”</p>
+<li><p><strong>viewstub标签</strong>：该标签与include一样用于引入布局模块，只是引入的布局默认不会扩张，不可见,既不会占用显示也不会占用位置，从而在解析layout时节省cpu和内存，只有通过调用setVisibility函数或者Inflate函数才会将其要装载的目标布局给加载出来，从而达到延迟加载的效果；例如条目详情、进度条标识或者未读消息等，这些情况如果在一开始初始化，虽然设置可见性View.GONE,但是在Inflate的时候View仍然会被Inflate，仍然会创建对象。</p>
 </li>
 <li><p><strong>merge标签</strong>：该标签在layout中会被自动忽略，从而减少一层布局嵌套，其主要有两种用法：①当布局顶结点是FrameLayout且不需要设置background或padding等属性，可以用merge代替 ②作为子布局被其他布局include时，使用merge当作该布局的顶节点来代替layout顶节点就可以减少一层嵌套</p>
 </li>
@@ -347,7 +347,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">34</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -399,7 +399,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Layout优化"><span class="nav-number">1.</span> <span class="nav-text">Layout优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cache优化"><span class="nav-number">2.</span> <span class="nav-text">Cache优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Battery优化"><span class="nav-number">3.</span> <span class="nav-text">Battery优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络优化"><span class="nav-number">4.</span> <span class="nav-text">网络优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据结构优化"><span class="nav-number">5.</span> <span class="nav-text">数据结构优化</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Layout优化Link"><span class="nav-number">1.</span> <span class="nav-text">Layout优化Link</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cache优化"><span class="nav-number">2.</span> <span class="nav-text">Cache优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Battery优化"><span class="nav-number">3.</span> <span class="nav-text">Battery优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络优化"><span class="nav-number">4.</span> <span class="nav-text">网络优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据结构优化"><span class="nav-number">5.</span> <span class="nav-text">数据结构优化</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
