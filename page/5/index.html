@@ -684,12 +684,14 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 </li>
 </ol>
 <h3 id="TCP流量控制和拥塞控制"><a href="http://blog.csdn.net/yechaodechuntian/article/details/25429143" target="_blank" rel="external">TCP流量控制和拥塞控制</a></h3><h2 id="UDP协议">UDP协议</h2><h2 id="HTTP协议">HTTP协议</h2><h3 id="Http1-0,_1-1，2-0和https之间的区别">Http1.0, 1.1，2.0和https之间的区别</h3><ol>
-<li><strong>HTTP1.0</strong>：客户端的每次请求都要求建立一次单独的连接，在处理完本次请求后，就自动释放连接</li>
-<li><strong>HTTP 1.1</strong>则可以在一次连接中处理多个请求，并且多个请求可以重叠进行，不需要等待一个请求结束后再发送下一个请求<h3 id="Http的get和post之间的区别">Http的get和post之间的区别</h3></li>
+<li><strong>HTTP1.0</strong>：规定浏览器与服务器只保持短暂的连接，浏览器的每次请求都需要与服务器建立一个单独的TCP连接，服务器完成请求处理后立即断开释放TCP连接，服务器不跟踪每个客户也不记录过去的请求。此外，由于大多数网页的流量都比较小，一次TCP连接很少能通过slow-start区，不利于提高带宽利用率。HTTP1.0要建立长连接，可以在请求消息中包含Connection: Keep-Alive头域</li>
+<li><strong>HTTP 1.1</strong>支持长连接（PersistentConnection）和请求的流水线（Pipelining）处理，在一个TCP连接上可以传送多个HTTP请求和响应，减少了建立和关闭连接的消耗和延迟。例如：一个包含有许多图像的网页文件的多个请求和应答可以在一个连接中传输，但每个单独的网页文件的请求和应答仍然需要使用各自的连接</li>
+<li><strong>HTTP 1.1</strong>还允许客户端不用等待上一次请求结果返回，就可以发出下一次请求，但服务器端必须按照接收到客户端请求的先后顺序依次回送响应结果，以保证客户端能够区分出每次请求的响应内容，这样也显著地减少了整个过程所需要的时间<h3 id="Http的get和post之间的区别">Http的get和post之间的区别</h3></li>
 </ol>
 <h3 id="Header和响应码">Header和响应码</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/http1.png" class="full-image" width="100%"></p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HttpRequest.jpeg" class="full-image" width="100%"></p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HttpResponse.png" class="full-image" width="100%"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/http头部字段.png" class="full-image" width="100%"></p>
 <h3 id="缓存对应的响应头部字段">缓存对应的响应头部字段</h3><ol>
 <li><strong><a href="http://www.cnblogs.com/skynet/archive/2012/11/28/2792503.html" target="_blank" rel="external">浏览器缓存机制</a></strong><ul>
 <li><strong>Expires</strong>是Web服务器响应消息头字段，在响应http请求时告诉浏览器在过期时间前浏览器可以直接从浏览器缓存取数据，而无需再次请求;不过Expires 是HTTP 1.0的东西，现在默认浏览器均默认使用HTTP 1.1，所以它的作用基本忽略</li>
