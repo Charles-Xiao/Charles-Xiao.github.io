@@ -198,27 +198,26 @@
 </ul>
 </li>
 </ol>
-<pre><code>        <span class="comment">// 获取应用可占内存的1/8作为缓存</span>
-        <span class="built_in">int</span> maxSize = (<span class="built_in">int</span>) (Runtime.getRuntime().maxMemory() / <span class="number">8</span>);
-        <span class="comment">// 实例化LruCaceh对象</span>
-        mLruCache = <span class="keyword">new</span> LruCache&lt;<span class="keyword">String</span>, Bitmap&gt;(maxSize) {
-            @Override
-            <span class="keyword">protected</span> <span class="built_in">int</span> sizeOf(<span class="keyword">String</span> <span class="variable">key</span>, Bitmap bitmap) {
-                <span class="keyword">return</span> bitmap.getRowBytes() * bitmap.getHeight();
-            }
-        };
-         mDiskLruCache=DiskLruCache.<span class="built_in">open</span>(getDiskCacheDir(context.getApplicationContext(),
-         <span class="string">"xxxxx"</span>),     getAppVersion(context), <span class="number">1</span>, DISKMAXSIZE);
-        <span class="comment">// 缓存操作</span>
-        mLruCache.<span class="built_in">get</span>(url);
-        mLruCache.put(url, bitmap);
-        bitmap = BitmapFactory.decodeStream(mDiskLruCache.<span class="built_in">get</span>(url).getInputStream(<span class="number">0</span>));
-        DiskLruCache.Editor editor = mDiskLruCache.edit(<span class="variable">key</span>);
-        OutputStream outputStream = editor.newOutputStream(<span class="number">0</span>);
-        editor.commit();
-
-&lt;img src=<span class="string">"https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/browser_cache.png"</span> class=<span class="string">"full-image"</span> <span class="variable">width</span>=<span class="string">"100%"</span>/&gt;
-</code></pre><ol>
+<pre><code><span class="comment">// 获取应用可占内存的1/8作为缓存</span>
+<span class="built_in">int</span> maxSize = (<span class="built_in">int</span>) (Runtime.getRuntime().maxMemory() / <span class="number">8</span>);
+<span class="comment">// 实例化LruCaceh对象</span>
+mLruCache = <span class="keyword">new</span> LruCache&lt;<span class="keyword">String</span>, Bitmap&gt;(maxSize) {
+    @Override
+    <span class="keyword">protected</span> <span class="built_in">int</span> sizeOf(<span class="keyword">String</span> <span class="variable">key</span>, Bitmap bitmap) {
+        <span class="keyword">return</span> bitmap.getRowBytes() * bitmap.getHeight();
+    }
+};
+ mDiskLruCache=DiskLruCache.<span class="built_in">open</span>(getDiskCacheDir(context.getApplicationContext(),
+ <span class="string">"xxxxx"</span>),     getAppVersion(context), <span class="number">1</span>, DISKMAXSIZE);
+<span class="comment">// 缓存操作</span>
+mLruCache.<span class="built_in">get</span>(url);
+mLruCache.put(url, bitmap);
+bitmap = BitmapFactory.decodeStream(mDiskLruCache.<span class="built_in">get</span>(url).getInputStream(<span class="number">0</span>));
+DiskLruCache.Editor editor = mDiskLruCache.edit(<span class="variable">key</span>);
+OutputStream outputStream = editor.newOutputStream(<span class="number">0</span>);
+editor.commit();
+</code></pre><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/browser_cache.png" class="full-image" width="100%"></p>
+<ol>
 <li><p>采用Java WebSocket编程取代传统的非实时http请求连接模式</p>
 <ul>
 <li><p><strong>实现方法</strong>: WebSocket是一个基于TCP连接的双向通道，Web应用的信息交互过程通常是客户端发出一个请求，服务器端接收和审核完请求后进行处理并返回结果给客户端，然后客户端浏览器将信息呈现出来，但是对于那些实时要求比较高的应用来说，比如说在线游戏、新闻在线播报、RSS 订阅推送等等，当客户端浏览器准备呈现这些信息的时候，这些信息在服务器端可能已经过时了;    <strong>常见的模拟实时应用方法</strong> </p>
