@@ -179,15 +179,23 @@
 
       
         <p>不管是进行app开发还是web开发，server端的开发都是必不可少的部分，最近打算尝试一下服务端开发；考虑到开发效率以及目前主流的前后端API标准，我打算采用python的flask框架来搭建一个简单server端作为移动app的Web Service来使用，API格式采用RESTful标准，本文将讲述RESTful架构服务端的大致实现过程。</p>
-<h2 id="RESTful架构">RESTful架构</h2><p><strong>Representational State Transfer 表现层状态转化</strong></p>
+<h2 id="RESTful架构">RESTful架构</h2><ol>
+<li><p><strong>什么是RESTful架构</strong>：</p>
 <ul>
-<li>Resoure：资源</li>
-<li>URL：统一资源定位符</li>
-<li>URI：统一资源标识符</li>
+<li>每一个URI代表一种资源；</li>
+<li>客户端和服务器之间，传递这种资源的某种表现层</li>
+<li>客户端通过四个HTTP动词，对服务器端资源进行操作，实现”表现层状态转化”。</li>
+</ul>
+</li>
+<li><p><strong>Representational State Transfer 表现层状态转化</strong></p>
+<ul>
+<li>Resoure：资源—-所谓”资源”，就是网络上的一个实体，或者说是网络上的一个具体信息。它可以是一段文本、一张图片、一首歌曲、一种服务</li>
+<li>URL：统一资源定位符—-要获取资源，访问它的URL就可以了    * URI：统一资源标识符—-每种资源对应一个特定的URI</li>
 <li>Representation：表现层 —- 资源呈现形式，如json，text，html</li>
 <li>State Trasfer：状态转移 —- http无状态协议中的GET、POST、PUT、DELETE</li>
 </ul>
-<p>REST架构设计六原则</p>
+</li>
+<li><p>REST架构设计六原则</p>
 <ul>
 <li>前后端统一接口</li>
 <li>无状态 —- 每次客户端请求必需包含完整的信息</li>
@@ -196,6 +204,16 @@
 <li>分层系统</li>
 <li>按需编码</li>
 </ul>
+</li>
+<li><p>优点</p>
+<ul>
+<li>可以利用缓存Cache来提高响应速度</li>
+<li>通讯本身的无状态性可以让不同的服务器的处理一系列请求中的不同请求，提高服务器的扩展性</li>
+<li>浏览器即可作为客户端，简化软件需求</li>
+<li>相对于其他叠加在HTTP协议之上的机制，REST的软件依赖性更小<br>*不需要额外的资源发现机制，在软件技术演进中的长期的兼容性更好</li>
+</ul>
+</li>
+</ol>
 <h2 id="Flask框架">Flask框架</h2><p>Flask框架是一个Python编写的基于Werkzeug WSGI工具箱和Jinja2模板引擎的轻量级web开发框架。Flask只保留了简单的核心，但是有着丰富的extension来实现其他功能模块以达到类似于Django这种全栈式框架的功能效果。例如ORM需要使用SQLAlchemy扩展、Oauth需要使用Oauthlib扩展, 此外还有大量的扩展用以支持数据库整合、表单验证、上传处理、缓存、生成后台和各种开放验证等等。</p>
 <h2 id="代码实现">代码实现</h2><p>下面我们将通过具体代码来运用Flask框架实现一个RESTful Web Service返回json数据以及template前端页面。该项目中有两个路由，一个用Flask-RESTful的路由形式返回json数据，另一个用Flask原生路由形式返回一个基于Jinja2模板的Flask-Bootstrap风格的注册登录页面；其中json数据通过SQLAlchemy插件从MySQL数据库中获取，然后显示到浏览器中。</p>
 <h3 id="配置Flask环境">配置Flask环境</h3><ol>
@@ -454,7 +472,7 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">34</span>
+              <span class="site-state-item-count">35</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
