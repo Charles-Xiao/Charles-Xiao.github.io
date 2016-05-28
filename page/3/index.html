@@ -405,6 +405,18 @@
 </ul>
 </li>
 </ol>
+<h2 id="API的设计实现">API的设计实现</h2><ol>
+<li><strong>注册登录的Token实现</strong><ul>
+<li><strong>Token是什么</strong>：是服务端生成的一串字符串，作为客户端进行请求的一个令牌；当客户端第一次登录时，服务端会去数据库查询用户名和密码并进行对比是否正确，如果正确服务器就会生成一个Token返回给客户端，并将该token存到服务器的session里边，以后客户端只需带上这个Token前来请求数据即可，通过比对session就可以验证登录，无需再次带上用户名和密码，也不需要再查询数据库。</li>
+<li><strong>Token有什么好处</strong>：可以减轻服务器的压力，减少频繁的查询数据库，使服务器更加健壮</li>
+<li><strong>Token的生成方式</strong>：服务端通过把客户端第一次登录时传输的部分参数(例如deviceId,MAC地址)+时间戳+随机salt进行拼接之后然后生成一个散列值，返回给客户端使用sharepreference保存，以后请求数据都要带上token</li>
+</ul>
+</li>
+<li><strong>传输数据的加密算法</strong>: 对用户名，密码，deviceID等重要隐私信息进行拼接然后RSA加密<ul>
+<li><strong>RSA算法</strong>: RSA是一种公钥加密算法(非对称加密)，它的加密和解密使用不同密钥。具体做法是这样，客户端在登录前先向服务器请求一个公钥密钥，然后用这个公钥密钥加密需要传输的数据(数据是指根据密码,用户名等生成的散列值)，然后发送给服务器。服务器使用私钥密钥解密，然后与根据数据库中的用户名和密码计算出来的散列值进行比较，一致的话，登录成功。然后服务端生成token返还给客户端，该token也需要进行加密比较安全。</li>
+</ul>
+</li>
+</ol>
 <h2 id="Flask框架">Flask框架</h2><p>Flask框架是一个Python编写的基于Werkzeug WSGI工具箱和Jinja2模板引擎的轻量级web开发框架。Flask只保留了简单的核心，但是有着丰富的extension来实现其他功能模块以达到类似于Django这种全栈式框架的功能效果。例如ORM需要使用SQLAlchemy扩展、Oauth需要使用Oauthlib扩展, 此外还有大量的扩展用以支持数据库整合、表单验证、上传处理、缓存、生成后台和各种开放验证等等。</p>
 <h2 id="代码实现">代码实现</h2><p>下面我们将通过具体代码来运用Flask框架实现一个RESTful Web Service返回json数据以及template前端页面。该项目中有两个路由，一个用Flask-RESTful的路由形式返回json数据，另一个用Flask原生路由形式返回一个基于Jinja2模板的Flask-Bootstrap风格的注册登录页面；其中json数据通过SQLAlchemy插件从MySQL数据库中获取，然后显示到浏览器中。</p>
 <h3 id="配置Flask环境">配置Flask环境</h3><ol>

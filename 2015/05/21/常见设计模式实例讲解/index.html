@@ -285,7 +285,95 @@
     }
 
 }
-</code></pre><h3 id="工厂模式实例">工厂模式实例</h3><h3 id="观察者模式">观察者模式</h3><h3 id="适配器模式">适配器模式</h3>
+</code></pre><h3 id="工厂模式实例">工厂模式实例</h3><h3 id="观察者模式">观察者模式</h3><ol>
+<li>在Java中通过Observable类和Observer接口实现了观察者模式，Observer对象监视着Observable对象的变化，当Observable对象发生变化时，Observer得到通知，就可以进行相应的工作。</li>
+<li><strong>Observable类</strong>—-程序中的被观察者类需要继承这个类</li>
+<li><strong>Observer接口</strong>—-观察者接口，观察者需要实现这个接口并重写其中的update()方法</li>
+<li>可以在main函数中通过调用被观察者的addObserver方法添加观察者，当被观察者发生变化时要调用<strong>setChanged()方法</strong>标记此Observable对象已改变，并调用<strong>notifyObservers()</strong>通知所有观察者</li>
+<li><p><strong>自定义代码实现观察者模式</strong>:</p>
+<pre><code><span class="comment">// 被观察者接口</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Subject</span> </span>{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerObserver</span><span class="params">(Observer o)</span></span>;
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer o)</span></span>;
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyAllObservers</span><span class="params">()</span></span>;
+}
+
+<span class="comment">// 观察者接口</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Observer</span> </span>{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Subject s)</span></span>;
+}
+
+    <span class="comment">// 猎头类</span>
+     <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HeadHunter</span> <span class="keyword">implements</span> <span class="title">Subject</span> </span>{
+        <span class="keyword">private</span> ArrayList&lt;Observer&gt; userList;
+        <span class="keyword">private</span> ArrayList&lt;String&gt; jobs;
+
+        <span class="function"><span class="keyword">public</span> <span class="title">HeadHunter</span><span class="params">()</span></span>{
+            userList = <span class="keyword">new</span> ArrayList&lt;Observer&gt;();
+            jobs = <span class="keyword">new</span> ArrayList&lt;String&gt;();
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerObserver</span><span class="params">(Observer o)</span> </span>{
+            userList.add(o);
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer o)</span> </span>{}
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyAllObservers</span><span class="params">()</span> </span>{
+            <span class="keyword">for</span>(Observer o: userList){
+                o.update(<span class="keyword">this</span>);
+            }
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addJob</span><span class="params">(String job)</span> </span>{
+            <span class="keyword">this</span>.jobs.add(job);
+            notifyAllObservers();
+        }
+
+        <span class="function"><span class="keyword">public</span> ArrayList&lt;String&gt; <span class="title">getJobs</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> jobs;
+        }
+
+        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>{
+            <span class="keyword">return</span> jobs.toString();
+        }
+    }
+
+<span class="comment">// 求职者类    </span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JobSeeker</span> <span class="keyword">implements</span> <span class="title">Observer</span> </span>{
+
+    <span class="keyword">private</span> String name;
+
+    <span class="function"><span class="keyword">public</span> <span class="title">JobSeeker</span><span class="params">(String name)</span></span>{
+        <span class="keyword">this</span>.name = name;
+    }
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Subject s)</span> </span>{
+        System.out.println(<span class="keyword">this</span>.name + <span class="string">" got notified!"</span>);
+        <span class="comment">//print job list</span>
+        System.out.println(s);
+    }
+}
+
+<span class="comment">// 主函数</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+        HeadHunter hh = <span class="keyword">new</span> HeadHunter();
+        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Mike"</span>));
+        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Chris"</span>));
+        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Jeff"</span>));
+
+        <span class="comment">//每次添加一个个job，所有找工作人都可以得到通知。</span>
+        hh.addJob(<span class="string">"Google Job"</span>);
+        hh.addJob(<span class="string">"Yahoo Job"</span>);
+    }
+}
+</code></pre></li>
+</ol>
+<h3 id="适配器模式">适配器模式</h3>
       
     </div>
 
