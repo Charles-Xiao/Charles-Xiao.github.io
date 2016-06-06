@@ -187,11 +187,13 @@
 <h3 id="Kactus">Kactus</h3><ol>
 <li><p>ECO餐厅食用油回收系统</p>
 <ul>
-<li><p>Android端缓存机制的实现，采用二级缓存，从LRUcache到DiskLruCache，同时模拟浏览器缓存机制来分析http请求过程的请求头内容来确定cache-control策略</p>
+<li><p>Android端缓存机制的实现，采用二级缓存，LRUcache内存缓存和DiskLruCache文件缓存，同时模拟浏览器缓存机制来分析http请求过程的请求头内容来确定cache-control策略</p>
 <ol>
-<li>请求流程: 当我们第一次打开应用获取图片时，先到网络去下载图片，然后依次存入内存缓存，磁盘缓存;以后每次加载图片的时候都优先去LRUCache内存缓存当中读取，当读取不到的时候则回去DiskLruCache硬盘缓存中读取，而如果硬盘缓存仍然读取不到的话，就从网络上请求原始数据。</li>
-<li><strong>二级缓存</strong>: 变化频繁的小数据都采用LRUCache,稳定的大文件数据采用DiskLruCache;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File；根据请求头里边的expires(缓存过期的时间（绝对时间）),Last-Modified, Cache-Control等内容来确定DiskLruCache中缓存的保留时间以及清理策略；例如用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据时间判断是否过期，从而实现缓存定时清理  </li>
+<li><strong>请求流程</strong>: 当我们第一次打开应用获取图片时，先到网络去下载图片，然后依次存入内存缓存，磁盘缓存;以后每次加载图片的时候都优先去LRUCache内存缓存当中读取，当读取不到的时候则回去DiskLruCache硬盘缓存中读取，而如果硬盘缓存仍然读取不到的话，就从网络上请求原始数据。</li>
+<li><strong>二级缓存</strong>: 变化频繁的小数据(例如订单列表)都采用LRUCache,以<url, data="">的键值对形式存储数据, 稳定的大文件数据(例如图片)采用DiskLruCache;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File；</url,></li>
+<li><strong>缓存管理策略</strong>：①根据请求头里边的expires(缓存过期的时间（绝对时间）),Last-Modified, Cache-Control等内容来确定DiskLruCache中缓存的保留时间以及清理策略，具体实现为将这些与缓存时间相关的http头部信息存储到SQLite数据库，然后每次请求都会查询数据库看缓存是否过期，是否需要重新发送网络请求；② 例如用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据自定义的缓存时间判断该缓存是否过期，从而实现缓存定时清理  </li>
 <li><strong>FIFO</strong>First In First Out，先进先出;判断被存储的时间，离目前存储时间最久的数据优先被淘汰。<strong>LFU</strong>：Least Frequently Used，最不经常使用;在一段时间内，数据被使用次数最少的，优先被淘汰。</li>
+<li><a href="http://hexo.trity.cc/2015/05/28/android-cache/" target="_blank" rel="external">缓存参考</a></li>
 </ol>
 <p>缓存图片举例：</p>
 </li>

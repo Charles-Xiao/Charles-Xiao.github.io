@@ -192,11 +192,13 @@
 <h3 id="Kactus">Kactus</h3><ol>
 <li><p>ECO餐厅食用油回收系统</p>
 <ul>
-<li><p>Android端缓存机制的实现，采用二级缓存，从LRUcache到DiskLruCache，同时模拟浏览器缓存机制来分析http请求过程的请求头内容来确定cache-control策略</p>
+<li><p>Android端缓存机制的实现，采用二级缓存，LRUcache内存缓存和DiskLruCache文件缓存，同时模拟浏览器缓存机制来分析http请求过程的请求头内容来确定cache-control策略</p>
 <ol>
-<li>请求流程: 当我们第一次打开应用获取图片时，先到网络去下载图片，然后依次存入内存缓存，磁盘缓存;以后每次加载图片的时候都优先去LRUCache内存缓存当中读取，当读取不到的时候则回去DiskLruCache硬盘缓存中读取，而如果硬盘缓存仍然读取不到的话，就从网络上请求原始数据。</li>
-<li><strong>二级缓存</strong>: 变化频繁的小数据都采用LRUCache,稳定的大文件数据采用DiskLruCache;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File；根据请求头里边的expires(缓存过期的时间（绝对时间）),Last-Modified, Cache-Control等内容来确定DiskLruCache中缓存的保留时间以及清理策略；例如用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据时间判断是否过期，从而实现缓存定时清理  </li>
+<li><strong>请求流程</strong>: 当我们第一次打开应用获取图片时，先到网络去下载图片，然后依次存入内存缓存，磁盘缓存;以后每次加载图片的时候都优先去LRUCache内存缓存当中读取，当读取不到的时候则回去DiskLruCache硬盘缓存中读取，而如果硬盘缓存仍然读取不到的话，就从网络上请求原始数据。</li>
+<li><strong>二级缓存</strong>: 变化频繁的小数据(例如订单列表)都采用LRUCache,以<url, data="">的键值对形式存储数据, 稳定的大文件数据(例如图片)采用DiskLruCache;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File；</url,></li>
+<li><strong>缓存管理策略</strong>：①根据请求头里边的expires(缓存过期的时间（绝对时间）),Last-Modified, Cache-Control等内容来确定DiskLruCache中缓存的保留时间以及清理策略，具体实现为将这些与缓存时间相关的http头部信息存储到SQLite数据库，然后每次请求都会查询数据库看缓存是否过期，是否需要重新发送网络请求；② 例如用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据自定义的缓存时间判断该缓存是否过期，从而实现缓存定时清理  </li>
 <li><strong>FIFO</strong>First In First Out，先进先出;判断被存储的时间，离目前存储时间最久的数据优先被淘汰。<strong>LFU</strong>：Least Frequently Used，最不经常使用;在一段时间内，数据被使用次数最少的，优先被淘汰。</li>
+<li><a href="http://hexo.trity.cc/2015/05/28/android-cache/" target="_blank" rel="external">缓存参考</a></li>
 </ol>
 <p>缓存图片举例：</p>
 </li>
@@ -684,9 +686,9 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 <h3 id="TCP流量控制和拥塞控制"><a href="http://blog.csdn.net/yechaodechuntian/article/details/25429143" target="_blank" rel="external">TCP流量控制和拥塞控制</a></h3><h2 id="UDP协议">UDP协议</h2><h2 id="HTTP协议">HTTP协议</h2><h3 id="Http1-0,_1-1，2-0和https之间的区别">Http1.0, 1.1，2.0和https之间的区别</h3><ol>
 <li><strong>HTTP1.0</strong>：规定浏览器与服务器只保持短暂的连接，浏览器的每次请求都需要与服务器建立一个单独的TCP连接，服务器完成请求处理后立即断开释放TCP连接，服务器不跟踪每个客户也不记录过去的请求。此外，由于大多数网页的流量都比较小，一次TCP连接很少能通过slow-start区，不利于提高带宽利用率。HTTP1.0要建立长连接，可以在请求消息中包含Connection: Keep-Alive头域</li>
 <li><strong>HTTP 1.1</strong>支持长连接（PersistentConnection）和请求的流水线（Pipelining）处理，在一个TCP连接上可以传送多个HTTP请求和响应，减少了建立和关闭连接的消耗和延迟。例如：一个包含有许多图像的网页文件的多个请求和应答可以在一个连接中传输，但每个单独的网页文件的请求和应答仍然需要使用各自的连接</li>
-<li><strong>HTTP 1.1</strong>还允许客户端不用等待上一次请求结果返回，就可以发出下一次请求，但服务器端必须按照接收到客户端请求的先后顺序依次回送响应结果，以保证客户端能够区分出每次请求的响应内容，这样也显著地减少了整个过程所需要的时间<h3 id="Http的get和post之间的区别">Http的get和post之间的区别</h3></li>
+<li><strong>HTTP 1.1</strong>还允许客户端不用等待上一次请求结果返回，就可以发出下一次请求，但服务器端必须按照接收到客户端请求的先后顺序依次回送响应结果，以保证客户端能够区分出每次请求的响应内容，这样也显著地减少了整个过程所需要的时间</li>
 </ol>
-<h3 id="Header和响应码">Header和响应码</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/http1.png" class="full-image" width="100%"></p>
+<h3 id="Http的get和post之间的区别">Http的get和post之间的区别</h3><h3 id="Header和响应码">Header和响应码</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/http1.png" class="full-image" width="100%"></p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HttpRequest.jpeg" class="full-image" width="100%"></p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HttpResponse.png" class="full-image" width="100%"></p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/http头部字段.png" class="full-image" width="100%"></p>
