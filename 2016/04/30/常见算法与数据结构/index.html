@@ -189,16 +189,30 @@
       
 
       
-        <h3 id="DFS和BFS">DFS和BFS</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/DFS_BFS.jpg" class="full-image"> </p>
+        <h3 id="DFS和BFS">DFS和BFS</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/DFS_BFS.jpg" class="full-image" width="100%"> </p>
 <h3 id="Tree">Tree</h3><ol>
-<li><p><strong>二叉查找树</strong>: 左孩子比父节点小，右孩子比父节点大，特性就是”中序遍历“可以让结点有序.<strong>范围查找</strong>是我们使用二叉树的最终目的，既然是范围查找，我们就知道了一个”min“和”max“，其实实现起来也很简单：</p>
+<li><p><strong>二叉查找树</strong>:（1）若左子树不空，则左子树上所有结点的值均小于它的根结点的值；（2）若右子树不空，则右子树上所有结点的值均大于它的根结点的值；（3）左、右子树也分别为二叉排序树；（4）没有键值相等的结点 (5) 特性就是”中序遍历“可以让结点有序.</p>
 <ul>
+<li><strong>范围查找</strong>是我们使用二叉树的最终目的，既然是范围查找，我们就知道了一个”min“和”max“，其实实现起来也很简单：</li>
 <li>我们要在树中找到min元素，当然min元素可能不存在，但是我们可以找到min的上界，耗费时间为O(logn)</li>
 <li>从min开始我们中序遍历寻找max的下界。耗费时间为m。m也就是匹配到的个数</li>
 </ul>
 </li>
 <li><p><strong>二叉平衡树(AVL)</strong>: 父节点的左子树和右子树的高度之差不能大于1的二叉查找树，平衡之后能够保证查找，添加，删除的平均和最差时间复杂度都是严格的O(logN) <a href="http://www.cnblogs.com/huangxincheng/archive/2012/07/22/2603956.html" target="_blank" rel="external">Link</a></p>
 <p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/AVL.jpg" class="full-image" width="100%"> </p>
+</li>
+</ol>
+<h3 id="KNN算法">KNN算法</h3><ol>
+<li><strong>基本思想</strong>: 从训练样本中找出K个与其最相近的样本，然后看这K个样本中哪个类别的样本多，则待判定的值（或说抽样）就属于这个类别</li>
+<li><p><strong>步骤</strong>:</p>
+<ul>
+<li>计算已知类别数据集中每个点与当前点的距离；</li>
+<li>选取与当前点距离最小的K个点；</li>
+<li>统计前K个点中每个类别的样本出现的频率；</li>
+<li>返回前K个点出现频率最高的类别作为当前点的预测分类</li>
+</ul>
+</li>
+<li><p><strong>算法关键</strong>:<a href="http://www.open-open.com/lib/view/open1420684852171.html" target="_blank" rel="external">Link</a></p>
 </li>
 </ol>
 
@@ -350,7 +364,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#DFS和BFS"><span class="nav-number">1.</span> <span class="nav-text">DFS和BFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tree"><span class="nav-number">2.</span> <span class="nav-text">Tree</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#DFS和BFS"><span class="nav-number">1.</span> <span class="nav-text">DFS和BFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tree"><span class="nav-number">2.</span> <span class="nav-text">Tree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KNN算法"><span class="nav-number">3.</span> <span class="nav-text">KNN算法</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

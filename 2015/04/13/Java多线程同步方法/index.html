@@ -269,7 +269,9 @@
 <p><strong>原子（atom）</strong>本意是“不能被进一步分割的最小粒子”，而原子操作（atomic operation）意为”不可被中断的一个或一系列操作” </p>
 <h3 id="Wait_&amp;&amp;_Notify同步(生产者消费者模式实现)">Wait &amp;&amp; Notify同步(生产者消费者模式实现)</h3><ol>
 <li><strong>Wait</strong>调用任意对象的wait()方法导致该线程阻塞，并释放该对象上的锁，进入等待对象同步锁的状态;<strong>Notify</strong>随机唤醒一个等待对象同步锁的线程</li>
+<li><strong>wait()方法</strong>：当缓冲区已满/空时，生产者/消费者线程停止自己的执行，放弃锁，使自己处于等待状态，让其他线程执行。<strong>notify()方法</strong>：当生产者/消费者向缓冲区放入/取出一个产品时，向其他等待的线程发出可执行的通知，同时放弃锁，使自己处于等待状态。</li>
 <li><strong>生产者-消费者（producer-consumer）问题</strong>，也称作有界缓冲区（bounded-buffer）问题，两个进程共享一个公共的固定大小的缓冲区。其中一个是生产者，用于将消息放入缓冲区；另外一个是消费者，用于从缓冲区中取出消息。问题出现在当缓冲区已经满了，而此时生产者还想向其中放入一个新的数据项的情形，其解决方法是让生产者此时进行休眠，等待消费者从缓冲区中取走了一个或者多个数据后再去唤醒它。同样地，当缓冲区已经空了，而消费者还想去取消息，此时也可以让消费者进行休眠，等待生产者放入一个或者多个数据时再唤醒它</li>
+<li><strong>如何停止消费者</strong>: 第一种方法: <strong>设置一个Volatile的boolean类型变量</strong>作为flag, 生产者结束后标示该变量为true, 消费者轮询这个变量来决定自己是否退出; 第二种方法: <strong>经典的“毒丸”策略</strong>，生产者结束后，把一个特别的对象：“毒丸”对象放入队列。消费者从队列中拿到对象后，判断是否是毒丸对象。如果是普通非毒丸对象，则正常消费。如果是毒丸对象，则放回队列（并杀死其他消费者），然后结束自己。  </li>
 <li>代码实现: </li>
 </ol>
 <pre><code><span class="keyword">public</span> class ProducerCustomer {
@@ -347,6 +349,7 @@
                             + product.<span class="built_in">size</span>());
                     <span class="comment">// 消费一个产品之后,线程开始睡眠</span>
                     Thread.sleep((<span class="keyword">long</span>) Math.<span class="built_in">random</span>() * <span class="number">3000</span>);
+                    <span class="comment">// 通知生产者,消费了一个产品</span>
                     product.notify();
                 } <span class="keyword">catch</span> (Exception e) {
                 }
