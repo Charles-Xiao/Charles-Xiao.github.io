@@ -210,7 +210,57 @@
 <li>不同的逻辑地址可以映射到同一个线性地址上；不同的线性地址也可以映射到同一个物理地址上；所以是多对一的关系。另外，同一个线性地址，在发生换页以后，也可能被重新装载到另外一个物理地址上。所以这种多对一的映射关系也会随时间发生变化。</li>
 </ol>
 <h3 id="Linux常用command">Linux常用command</h3><ol>
-<li><strong>ps -ef|grep java</strong> ：</li>
+<li><strong>ps -ef|grep java</strong> ：查找运行中的Java进程</li>
+<li><strong>top -p 345</strong>: 查看指定pid=345的进程,在mac中用-pid代替-p</li>
+<li><strong>ps -A</strong>: 显示所有程序</li>
+<li><strong>ps -a</strong>: 显示所有终端机下执行的程序，除了阶段作业领导者之外</li>
+<li><strong>kill -9 345</strong>: 杀死pid=345的进程</li>
+<li><strong>ifconfig</strong>: 查看自己的IP地址 </li>
+<li><strong>telnet</strong>: 远程登录; telnet hostname</li>
+<li><p><strong>其他</strong>    </p>
+<pre><code>touch创建文件  
+<span class="keyword">mkdir</span>创建文件夹 
+nano编辑文件   —编辑完成后 用 Ctrl ＋O 存盘，Ctrl＋X 退出  
+<span class="keyword">rm</span> 文件名 —删除文件 ：<span class="keyword">rm</span> -rf <span class="keyword">dir</span>              ，          <span class="keyword">rm</span> -f <span class="keyword">file</span>
+df -<span class="keyword">h</span> 查看服务器空间占用情况
+tail -f tmp.txt   查看文件尾部
+du -<span class="keyword">h</span> * 查看当前目录下文件夹大小
+
+push本地文件夹到远程主机： scp -r ./emailAccount/ release@210.209.103.130:/home/httpd/html/caspar.kactus.com.hk/emailAccount/
+
+push本地文件到远程主机：
+scp KFS_xy.jar evarist.f@test2-1.kactus.com.hk:/home/evarist.f/<span class="keyword">CAP</span>-IDA/gateway/KFS_xy.jar
+
+对当前目录下所有文件夹添加读写权限：
+chmod -R 777 * 或者chmod -R 777 . 
+chown -R a:b:c * 修改ower, group， others
+
+ssh连接： ssh charlesxiao@test2-1.kactus.com.hk 
+<span class="keyword">ls</span> -<span class="keyword">l</span> 显示文件和详细信息;  <span class="keyword">ls</span> -<span class="keyword">la</span>; <span class="keyword">ls</span> -Z
+cp -rf dir1 dir2
+grep -Hlr AlertEmail *  当前目录下查找所有包含AlertEmail字符串的文件
+ps aux | grep php 查询
+<span class="keyword">pwd</span> 显示当前位置全路径
+
+进程前后台运行切换命令： http:<span class="comment">//www.cnblogs.com/highfly2012/archive/2013/05/04/3059727.html</span>
+    1. command  &amp; 让进程在后台运行
+
+    2. jobs –<span class="keyword">l</span> 查看后台运行的进程
+
+    3. fg %<span class="keyword">n</span> 让后台运行的进程<span class="keyword">n</span>到前台来
+
+    4. bg %<span class="keyword">n</span> 让进程<span class="keyword">n</span>到后台去
+
+    5. 暂停程序运行CTRL+Z
+
+    6. kill %<span class="keyword">n</span> 杀死进程<span class="keyword">n</span>
+
+<span class="keyword">ls</span> -<span class="keyword">la</span> | grep php  查看php真实路径
+
+find . -name “start*”  查找以某某开头或者结尾的文件,区分大小写
+
+tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /home/httpd/html/<span class="keyword">CAP</span>-IDA/Data IDASUBSTAT   绝对路径压缩文件夹IDASUBSTAT，使用-C指定相对路径去除多余层次
+</code></pre></li>
 </ol>
 
         

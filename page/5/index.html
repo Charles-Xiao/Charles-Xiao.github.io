@@ -195,10 +195,14 @@
 <li><p>Android端缓存机制的实现，采用二级缓存，LRUcache内存缓存和DiskLruCache文件缓存，同时模拟浏览器缓存机制来分析http请求过程的请求头内容来确定cache-control策略</p>
 <ol>
 <li><strong>请求流程</strong>: 当我们第一次打开应用获取图片时，先到网络去下载图片，然后依次存入内存缓存，磁盘缓存;以后每次加载图片的时候都优先去LRUCache内存缓存当中读取，当读取不到的时候则回去DiskLruCache硬盘缓存中读取，而如果硬盘缓存仍然读取不到的话，就从网络上请求原始数据。</li>
-<li><strong>二级缓存</strong>: 变化频繁的小数据(例如订单列表)都采用LRUCache,以<url, data="">的键值对形式存储数据, 稳定的大文件数据(例如图片)采用DiskLruCache;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File；</url,></li>
-<li><strong>缓存管理策略</strong>：①根据请求头里边的expires(缓存过期的时间（绝对时间）),Last-Modified, Cache-Control等内容来确定DiskLruCache中缓存的保留时间以及清理策略，具体实现为将这些与缓存时间相关的http头部信息存储到SQLite数据库，然后每次请求都会查询数据库看缓存是否过期，是否需要重新发送网络请求；② 例如用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据自定义的缓存时间判断该缓存是否过期，从而实现缓存定时清理  </li>
+<li><strong>二级缓存</strong>: 变化频繁的小数据(例如订单列表)都采用LRUCache,以<url, data="">的键值对形式存储数据, 缓存时间为应用开启到关闭时间段; 稳定的大文件数据(例如图片)采用DiskLruCache,缓存时间可以根据需求自定义;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File;</url,></li>
+<li><strong>缓存管理和清理策略</strong>：<ul>
+<li>① 根据服务器响应头部里边的expires(缓存过期的时间（绝对时间）),Last-Modified(服务器响应的资源最终修改时间), Cache-Control(资源的有效期)等内容来确定是否需要将数据缓存到DiskLruCache中，以及缓存的保留时间，<strong>具体实现</strong>将资源URL和这些缓存时间相关的http头部信息(比如expires(缓存过期的时间))一起存储到SQLite数据库，然后每次加载资源都会先根据url查询数据库看本地缓存是否过期，是否需要重新发送网络请求并更新缓存; 每次请求url得到响应结果时还会解析头部Cache-Control去判断该响应资源是否需要缓存</li>
+<li>② 每次去读取缓存文件时先调用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据自定义的缓存时间判断该缓存是否过期，如果过期则重新请求文件，不然直接从缓存加载，这样就能实现缓存文件定时清理</li>
+<li>③ <strong>每次服务器资源变化时客户端怎么得到通知？</strong>, 客户端定时轮询请求某个指定url并解析返回的json判断某些数据是否变化，变化就重新请求该数据; 或者手动刷新，socket长连接</li>
+</ul>
+</li>
 <li><strong>FIFO</strong>First In First Out，先进先出;判断被存储的时间，离目前存储时间最久的数据优先被淘汰。<strong>LFU</strong>：Least Frequently Used，最不经常使用;在一段时间内，数据被使用次数最少的，优先被淘汰。</li>
-<li><a href="http://hexo.trity.cc/2015/05/28/android-cache/" target="_blank" rel="external">缓存参考</a></li>
 </ol>
 <p>缓存图片举例：</p>
 </li>
