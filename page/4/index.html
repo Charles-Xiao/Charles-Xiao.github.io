@@ -1413,13 +1413,11 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 </ol>
 <h3 id="ContentProvider">ContentProvider</h3><h3 id="Android_View事件分发机制">Android View事件分发机制</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/scroller.png" class="full-image" width="100%"></p>
 <h3 id="Android_Touch事件分发">Android Touch事件分发</h3><ol>
-<li>Touch事件传递的相关API有dispatchTouchEvent、onTouchEvent、onInterceptTouchEvent </li>
-<li>Touch事件相关的类有View、ViewGroup、Activity </li>
-<li>Touch事件会被封装成MotionEvent对象，该对象封装了手势按下、移动、松开等动作 </li>
-<li>Touch事件通常从Activity#dispatchTouchEvent发出，只要没有被消费，会一直往下传递，到最底层的View。 </li>
-<li>如果Touch事件传递到的每个View都不消费事件，那么Touch事件会反向向上传递,最终交由Activity#onTouchEvent处理. </li>
-<li>onInterceptTouchEvent为ViewGroup特有，可以拦截事件. </li>
-<li>Down事件到来时，如果一个View没有消费该事件，那么后续的MOVE/UP事件都不会再给它</li>
+<li>Touch事件传递的相关函数有dispatchTouchEvent(决定是否分发事件的函数)、onInterceptTouchEvent(决定是否截停事件的函数)、onTouchEvent(决定是否消费本次事件的函数)   </li>
+<li>Touch事件会被封装成MotionEvent对象，该对象封装了手势按下、移动、松开等动作;事件类型分为ACTION_DOWN, ACTION_UP, ACTION_MOVE, ACTION_POINTER_DOWN, ACTION_POINTER_UP, ACTION_CANCEL，每个事件都是以ACTION_DOWN开始ACTION_UP结束。</li>
+<li>Touch事件通常从Activity#dispatchTouchEvent发出，只要没有被消费，会一直往下传递，到最底层的View; 如果Touch事件传递到的每个View都不消费事件，那么Touch事件会反向向上传递,最终交由Activity#onTouchEvent处理. </li>
+<li>Touch事件相关的类有View、ViewGroup、Activity, onInterceptTouchEvent为ViewGroup特有，可以拦截事件; Down事件到来时，如果一个View没有消费该事件，那么后续的MOVE/UP事件都不会再给它;OnTouchListener优先于onTouchEvent()对事件进行消费</li>
+<li><strong>Touch事件分发详细图示</strong><br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/touch.png" class="full-image" width="100%"></li>
 </ol>
 <h3 id="Android平台中实现数据存储的5种方式">Android平台中实现数据存储的5种方式</h3><ol>
 <li><strong>使用SharedPreferences存储数据</strong>：SharedPreferences是Android平台上一个轻量级的存储类，本质是基于XML文件存储key-value键值对数据，主要是保存一些常用的配置信息，提供了Long长整形、Int整形、String字符串型的保存。它分为多种权限，可以全局共享访问，最终是以xml方式来保存。SharedPreferences对象本身只能获取数据而不支持存储和修改，存储修改是通过Editor对象实现。<ul>
@@ -1435,8 +1433,17 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 <li><strong>AIDL+Binder机制</strong><ul>
 <li><strong>AIDL</strong>：即Android接口定义语言，一种帮助实现Binder通信的工具。由于<strong>Android不同的进程不能共享内存</strong>，所以为了解决进程间通讯的问题，Android使用一种接口定义语言来公开服务的接口，本质上，AIDL非常像一个接口，通过公开接口，让别的进程调用该接口，从而实现进程间的通讯。<strong>具体用法</strong>: 只要用几条简单的函数声明，AIDL就会帮忙生成一个JAVA文件，包括了一个Proxy和Stub的访问接口，以及用于它们之间通信的Parcel，并保证Parcel的输入输出的顺序一致性，其中Proxy用于客户端进程，Stub用于Service端进程.<a href="http://www.jianshu.com/p/b9b15252b3d6" target="_blank" rel="external">AIDL基本用法</a></li>
 <li><strong>Binder机制</strong>：Android进程间通信是通过Binder来实现的，Binder机制使本地对象能够调用远程对象的方法，在不同进程中传递单向/双向消息。远程Service在Client绑定服务时，会在onBind()的回调中返回一个Binder，当Client调用bindService()与远程Service建立连接成功时，会拿到远程Binder实例，从而使用远程Service提供的服务。<strong>Binder优点</strong>是基于C/S通信模式，传输过程只需要一次拷贝，且为Client添加UID/PID身份，性能和安全性更好，并且Binder可以建立私有通道，这是linux的通信机制所无法实现的,因此Android进程间通信使用了Binder。</li>
-<li><strong>Binder通信模型</strong>:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Binder.jpg" class="full-image" width="100%"></li>
-<li><strong>Binder CS流程</strong>:<ol>
+<li><strong>Binder通信模型</strong>: Android系统Binder机制中的四个组件Client、Server、Service Manager和Binder驱动程序的关系如下图<ol>
+<li>Client、Server和Service Manager实现在用户空间中，Binder驱动程序实现在内核空间中<ol>
+<li>Binder驱动程序和Service Manager在Android平台中已经实现，开发者只需要在用户空间实现自己的Client和Server</li>
+<li>Binder驱动程序提供设备文件/dev/binder与用户空间交互，Client、Server和Service Manager通过open和ioctl文件操作函数与Binder驱动程序进行通信</li>
+<li>Client和Server之间的进程间通信通过Binder驱动程序间接实现</li>
+<li>Service Manager是一个守护进程，用来管理Server，并向Client提供查询Server接口的能力<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Binder.jpg" class="full-image" width="100%"></li>
+</ol>
+</li>
+</ol>
+</li>
+<li><strong>Binder CS通信流程</strong>:<ol>
 <li><strong>Server</strong>作为众多Service的拥有者，当它想向Client提供服务时，得先去Service Manager（以后缩写成SM）那儿注册自己的服务。Server可以向SM注册一个或多个服务。</li>
 <li><strong>Client</strong>作为Service的使用者，当它想使用服务时，得向SM申请自己所需要的服务。Client可以申请一个或多个服务。</li>
 <li><strong>ServiceManager</strong>SM一方面管理Server所提供的服务，同时又响应Client的请求并为之分配相应的服务。</li>
@@ -1471,10 +1478,21 @@ SharedPreferences sharedPreferences = otherAppContext.getSharedPreferences(<span
 <li>设置Activity的android:configChanges=”orientation|keyboardHidden”时，切屏不会重新调用各个生命周期，只会执行onConfigurationChanged方法</li>
 </ol>
 <h3 id="谈谈你对Android中Context的理解?">谈谈你对Android中Context的理解?</h3><p>Context:包含上下文信息(外部值) 的一个参数. Android 中的 Context 分三种,Application Context ,Activity Context ,Service Context.<br>它描述的是一个应用程序环境的信息，通过它我们可以获取应用程序的资源和类，也包括一些应用级别操作，例如：启动一个Activity，发送广播，接受Intent信息等</p>
-<h3 id="3-_如何缩减APK包大小？">3. 如何缩减APK包大小？</h3><ol>
+<h3 id="如何缩减APK包大小？">如何缩减APK包大小？</h3><ol>
 <li><strong>代码</strong><br> 保持良好的编程习惯，不要重复或者不用的代码，谨慎添加libs，移除使用不到的libs。<br>使用proguard混淆代码，它会对不用的代码做优化，并且混淆后也能够减少安装包的大小。<br>native code的部分，大多数情况下只需要支持armabi与x86的架构即可。如果非必须，可以考虑拿掉x86的部分。 </li>
 <li><strong>资源</strong><br>使用Lint工具查找没有使用到的资源。去除不使用的图片，String，XML等等。 assets目录下的资源请确保没有用不上的文件。<br>生成APK的时候，aapt工具本身会对png做优化，但是在此之前还可以使用其他工具如tinypng对图片进行进一步的压缩预处理。<br>jpeg还是png，根据需要做选择，在某些时候jpeg可以减少图片的体积。 对于9.png的图片，可拉伸区域尽量切小，另外可以通过使用9.png拉伸达到大图效果的时候尽量不要使用整张大图。 </li>
 <li>策略<br>有选择性的提供hdpi，xhdpi，xxhdpi的图片资源。建议优先提供xhdpi的图片，对于mdpi，ldpi与xxxhdpi根据需要提供有差异的部分即可。<br>尽可能的重用已有的图片资源。例如对称的图片，只需要提供一张，另外一张图片可以通过代码旋转的方式实现。<br>能用代码绘制实现的功能，尽量不要使用大量的图片。例如减少使用多张图片组成animate-list的AnimationDrawable，这种方式提供了多张图片很占空间。</li>
+</ol>
+<h3 id="Android插件化与动态加载">Android插件化与动态加载</h3><ol>
+<li><strong>为什么要插件化？？？And它是什么？有什么好处？</strong>当一个app的方法数超过了一个 Dex 最大方法数 65535 的上限，因而便有了插件化的概念，<strong>Android插件化</strong>指将一个程序划分为不同的部分，也就是将一个App划分为多个插件（Apk或相关格式）比如一般App的皮肤样式就可以看成一个插件; <strong>插件化的好处</strong>包括：(1) 模块解耦(2) 可以动态升级(3) 高效并行开发(编译速度更快) (4) 按需加载，内存占用更低 (5) 节省升级流量</li>
+<li><strong>插件化的原理实际是 Java ClassLoader 的原理</strong>: Android 有自己的 ClassLoader，分为 dalvik.system.DexClassLoader 和 dalvik.system.PathClassLoader，区别在于: <ul>
+<li><strong>PathClassLoader</strong>: 不能直接从 zip 包中得到 dex，因此只支持直接操作 dex 文件或者已经安装过的 apk（因为安装过的 apk 在 cache 中存在缓存的 dex 文件）</li>
+<li><strong>DexClassLoader</strong> 可以加载外部文件系统中的 apk、jar 或 dex文件，并且会在指定的 outpath 路径存放其 dex 文件。</li>
+<li><strong>此外还有URLClassLoader</strong> ：可以加载java中的jar，但是由于dalvik不能直接识别jar，所以此方法在Android中无法使用，尽管还有这个类</li>
+</ul>
+</li>
+<li><strong>Android热加载或Android动态部署</strong>指App在运⾏状态下动态加载某个模块，从而新增功能或改变某⼀部分行为. 例如一个app（称之为宿主程序）去本地文件中动态加载apk文件并将其放在自己的进程中执行 </li>
+<li><strong>为什么有dex文件以及为什么要有DexClassLoader？？？</strong>Android应用程序，本质上使用的是java开发，使用标准的java编译器编译出Class文件，和普通的java开发不同的地方是把class文件再重新打包成dex类型的文件，这种重新打包会对Class文件内部的各种函数表、变量表等进行优化，最终产生了dex文件。dex文件是一种经过android打包工具优化后的Class文件，因此加载这样特殊的Class文件就需要特殊的类装载器；所以android中提供了DexClassLoader类</li>
 </ol>
 
         
