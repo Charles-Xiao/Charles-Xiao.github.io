@@ -148,6 +148,287 @@
           
           
             
+              <a class="post-title-link" href="../../2015/04/13/Java多线程同步方法/">
+                Java多线程同步方法
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-04-13
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/java学习笔记/">java学习笔记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/04/13/Java多线程同步方法/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/13/Java多线程同步方法/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="同步VS异步_and_阻塞VS非阻塞_Link">同步VS异步 and 阻塞VS非阻塞 <a href="http://elf8848.iteye.com/blog/1739611" target="_blank" rel="external">Link</a></h3><ol>
+<li><strong>同步/异步与阻塞/非阻塞是两组不同的概念,它们可以共存组合,同步和异步与消息的通知机制有关,阻塞和非阻塞与程序等待消息(无所谓同步或者异步)时的状态有关</strong> <strong>同步</strong>：就是在发出一个功能调用时，在没有得到结果之前，该调用就不返回(<strong>与阻塞的区别</strong>很多时候当前线程还是激活的，只是从逻辑上当前函数没有返回而已)。<strong>异步</strong>：当一个异步过程调用发出后，调用者不能立刻得到结果；这个调用的部件在处理完成后，通过状态、通知和回调来通知调用者。<strong>阻塞</strong>：是指调用结果返回之前，当前线程会被挂起，函数只有在得到结果之后才会返回。<strong>非阻塞</strong>指在不能立刻得到结果之前，该函数不会阻塞当前线程，而会立刻返回。</li>
+<li>举例: 我去买一本书，立即买到了，这就是<strong>非阻塞</strong>；如果恰好书店没有，我就等一直等到书店有了这本书买到了才走，这就是<strong>阻塞</strong>；这两种情况，非阻塞和阻塞都可以称为<strong>同步</strong>。如果书店恰好没有，我就告诉书店老板，书来了告诉我一声让我来取或者直接送到我家，然后我就走了，这就是<strong>异步</strong>。</li>
+</ol>
+<h3 id="Synchronized代码块和方法">Synchronized代码块和方法</h3><p>synchronized关键字强制实施一个互斥锁(<strong>互斥锁</strong>：任意时刻，只有一个线程锁。即假设A线程已经获取了锁，在A线程释放这个锁之前，B线程是无法获取到这个锁的，B要获取这个锁就会进入阻塞状态。)，使得被保护的代码块在同一时间只能有一个线程进入并执行，防止多线程访问临界共享资源出现数据不一致性；同步是一种高开销的操作，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；Synchronized锁住的是对象或者类,对象被锁住时，该对象所有的其他同步方法和代码块不能被执行；类被锁住时，该类所有的其他同步静态方法和代码块不能被执行</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">Bank</span> </span>{
+        <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> account;
+        }
+
+        <span class="javadoc">/**
+         * 用同步方法实现
+         * 
+         *<span class="javadoctag"> @param</span> money
+         */</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+            account += money;
+        }
+
+        <span class="javadoc">/**
+         * 用同步代码块实现
+         * 
+         *<span class="javadoctag"> @param</span> money
+         */</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save1</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+            <span class="keyword">synchronized</span> (<span class="keyword">this</span>) {
+                account += money;
+            }
+        }
+    }
+</code></pre><h3 id="ReentrantLock可重入锁">ReentrantLock可重入锁</h3><ol>
+<li>可重入锁，也叫做递归锁，指的是同一线程外层函数获得锁之后，内层递归函数仍然有获取该锁的代码，但不受影响;即被同一个线程多次获取，而不会产生死锁。在JAVA环境下 ReentrantLock 和synchronized 都是可重入锁</li>
+<li><p>ReentrantLock是可重入、互斥、实现了Lock接口的锁，需要自己手动加锁与释放；要注意及时释放锁，否则会出现死锁，通常在finally代码释放锁；如果synchronized关键字能满足用户的需求，就用synchronized，因为它能简化代码</p>
+<pre><code><span class="keyword">class</span> <span class="title">Bank</span> {
+    <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
+    <span class="comment">// 创建一个ReentrantLock锁</span>
+    <span class="keyword">private</span> Lock <span class="keyword">lock</span> = <span class="keyword">new</span> ReentrantLock();
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
+        <span class="keyword">return</span> account;
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+        <span class="keyword">lock</span>.<span class="keyword">lock</span>();    <span class="comment">// 获得锁 </span>
+        <span class="keyword">try</span> {
+            account += money;
+        } <span class="keyword">finally</span> {
+            <span class="keyword">lock</span>.unlock();    <span class="comment">// 释放锁</span>
+        }
+    }
+}
+</code></pre></li>
+</ol>
+<h3 id="ThreadLocal线程局部变量">ThreadLocal线程局部变量</h3><p><strong>ThreadLocal与同步机制区别</strong>：a.ThreadLocal与同步机制都是为了解决多线程中相同变量的访问冲突问题。b.前者采用以”空间换时间”的方法，后者采用以”时间换空间”的方式<br>每一个使用ThreadLocal变量的线程都获得该变量的副本，副本之间相互独立，这样每一个线程都可以随意修改自己的变量副本，而不会对其他线程产生影响</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Bank</span> {
+    <span class="comment">// 使用ThreadLocal类管理共享变量account</span>
+    <span class="keyword">private</span> ThreadLocal&lt;Integer&gt; account = <span class="keyword">new</span> ThreadLocal&lt;Integer&gt;() {
+        @<span class="function">Override
+        <span class="keyword">protected</span> Integer <span class="title">initialValue</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> <span class="number">100</span>;
+        }
+    };
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+        account.<span class="keyword">set</span>(account.<span class="keyword">get</span>() + money);
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
+        <span class="keyword">return</span> account.<span class="keyword">get</span>();
+    }
+}
+</code></pre><h3 id="volatile变量可见性">volatile变量可见性</h3><p><strong>volatile</strong>: 在需要同步的变量上加上修饰符volatile，例如：private volatile int account = 100;volatile可以保证变量的可见性但是不保证原子性，不能用于修饰final常量，线程每一次对volatile变量的修改都会即时刷新到主存和通知到其他线程，也就是说每一次每个线程读取volatile变量时都会从主存中去取而不会从缓存寄存器中获取，以确保变量的值都是最新获取的;该关键字在JDK1.6开始可以保证指令不被重排序；但是他不能保证原子性，比如n++这种复合型操作;java虚拟机规范（jvm spec）中，规定了声明为volatile的long和double变量的get和set操作是原子的,所以将long和double类型的变量用volatile修饰，就可以保证对他们的赋值操作的原子性。  </p>
+<p><strong>CAS比较并交换操作</strong>：CAS 操作包含三个操作数 —— 内存位置（V）、预期原值（A）和新值(B). CAS有效地说明了“我认为位置 V 应该包含值 A；如果包含该值，则将 B 放到这个位置；否则，不要更改该位置，只告诉我这个位置现在的值即可。”   </p>
+<p>例如，有一个变量i=0，Thread-1和Thread-2都对这个变量执行自增操作。 可能会出现Thread-1与Thread-2同时读取i=0到各自的工作内存中，然后各自执行+1，最后将结果赋予i。这样，虽然两个线程都对i执行了自增操作，但是最后i的值为1，而不是2。<br>解决这个问题使用互斥锁自然可以。但是也可以使用CAS来实现，思路如下：<br>自增操作可以分为两步：（1）从内存中读取这个变量的当前值（2）执行（变量=上一步取到的当前值+1）的赋值操作。</p>
+<p>多线程情况下，自增操作出现问题的原因就是执行（2）的时候，变量在主内存中的值已经不等于上一步取到的当前值了，所以赋值时，用CompareAndSet操作代替Set操作：首先比较一下内存中这个变量的值是否等于上一步取到的当前值，如果等于，则说明可以执行+1运算，并赋值；如果不等于，则说明有其他线程在此期间更改了主内存中此变量的值，上一步取出的当前值已经失效，此时，不再执行+1运算及后续的赋值操作，而是返回主内存中此变量的最新值。“比较并交换（CAS）”操作是原子操作，它使用平台提供的用于并发操作的硬件原语。</p>
+<p><strong>原子（atom）</strong>本意是“不能被进一步分割的最小粒子”，而原子操作（atomic operation）意为”不可被中断的一个或一系列操作” </p>
+<h3 id="Wait_&amp;&amp;_Notify同步(生产者消费者模式实现)">Wait &amp;&amp; Notify同步(生产者消费者模式实现)</h3><ol>
+<li><strong>Wait</strong>调用任意对象的wait()方法导致该线程阻塞，并释放该对象上的锁，进入等待对象同步锁的状态;<strong>Notify</strong>随机唤醒一个等待对象同步锁的线程</li>
+<li><strong>wait()方法</strong>：当缓冲区已满/空时，生产者/消费者线程停止自己的执行，放弃锁，使自己处于等待状态，让其他线程执行。<strong>notify()方法</strong>：当生产者/消费者向缓冲区放入/取出一个产品时，向其他等待的线程发出可执行的通知，同时放弃锁，使自己处于等待状态。</li>
+<li><strong>生产者-消费者（producer-consumer）问题</strong>，也称作有界缓冲区（bounded-buffer）问题，两个进程共享一个公共的固定大小的缓冲区。其中一个是生产者，用于将消息放入缓冲区；另外一个是消费者，用于从缓冲区中取出消息。问题出现在当缓冲区已经满了，而此时生产者还想向其中放入一个新的数据项的情形，其解决方法是让生产者此时进行休眠，等待消费者从缓冲区中取走了一个或者多个数据后再去唤醒它。同样地，当缓冲区已经空了，而消费者还想去取消息，此时也可以让消费者进行休眠，等待生产者放入一个或者多个数据时再唤醒它</li>
+<li><strong>如何停止消费者</strong>: 第一种方法: <strong>设置一个Volatile的boolean类型变量</strong>作为flag, 生产者结束后标示该变量为true, 消费者轮询这个变量来决定自己是否退出; 第二种方法: <strong>经典的“毒丸”策略</strong>，生产者结束后，把一个特别的对象：“毒丸”对象放入队列。消费者从队列中拿到对象后，判断是否是毒丸对象。如果是普通非毒丸对象，则正常消费。如果是毒丸对象，则放回队列（并杀死其他消费者），然后结束自己。  </li>
+<li>代码实现: </li>
+</ol>
+<pre><code><span class="keyword">public</span> class ProducerCustomer {
+
+<span class="comment">/**
+ * @param args
+ */</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) {
+    Product product = <span class="keyword">new</span> Product(); <span class="comment">// 实例化产品对象</span>
+    Producer p = <span class="keyword">new</span> Producer(product); <span class="comment">// 实例化一个生产者</span>
+    Consumer c = <span class="keyword">new</span> Consumer(product); <span class="comment">// 实例化一个消费者</span>
+    <span class="keyword">new</span> Thread(p).start(); <span class="comment">// 开启生产者线程</span>
+    <span class="keyword">new</span> Thread(c).start(); <span class="comment">// 开启消费者线程</span>
+}
+
+<span class="comment">/**
+ * 生产者线程
+ */</span>
+<span class="keyword">static</span> class Producer implements Runnable {
+    <span class="keyword">private</span> Product product;
+
+    <span class="keyword">public</span> Producer(Product product) {
+        <span class="keyword">this</span>.product = product;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> run() {
+        <span class="keyword">while</span> (<span class="keyword">true</span>) {
+            <span class="comment">// 同步代码锁</span>
+            <span class="keyword">synchronized</span> (product) {
+                <span class="keyword">try</span> {
+                    <span class="keyword">while</span> (product.getMax() == product.<span class="built_in">size</span>()) {
+                        <span class="comment">// 产品栈已经满,不需要再生产,执行线程等待操作</span>
+                        System.out.<span class="built_in">println</span>(<span class="string">"产品栈已满，生产者休息中......"</span>);
+                        product.wait();
+                    }
+                    <span class="comment">// 产品栈不足,开始生产</span>
+                    <span class="keyword">Object</span> newObj = <span class="keyword">new</span> <span class="keyword">Object</span>();
+                    product.<span class="built_in">add</span>(newObj);
+                    System.out.<span class="built_in">println</span>(<span class="string">"Producer 生产了一个产品，目前产品栈大小为："</span>
+                            + product.<span class="built_in">size</span>());
+                    <span class="comment">// 生产一个产品之后,线程开始睡眠</span>
+                    Thread.sleep((<span class="keyword">long</span>) Math.<span class="built_in">random</span>() * <span class="number">3000</span>);
+                    <span class="comment">// 通知消费者,有新产品</span>
+                    product.notify();
+                } <span class="keyword">catch</span> (Exception e) {
+                }
+            }
+        }
+    }
+}
+
+<span class="comment">/**
+ * 消费者线程
+ */</span>
+<span class="keyword">static</span> class Consumer implements Runnable {
+    <span class="keyword">private</span> Product product;
+
+    <span class="keyword">public</span> Consumer(Product product) {
+        <span class="keyword">this</span>.product = product;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> run() {
+        <span class="keyword">while</span> (<span class="keyword">true</span>) {
+            <span class="comment">// 同步代码锁</span>
+            <span class="keyword">synchronized</span> (product) {
+                <span class="keyword">try</span> {
+                    <span class="keyword">while</span> (product.<span class="built_in">size</span>() == <span class="number">0</span>) {
+                        <span class="comment">// 产品栈已空,不可以再消费,执行线程等待操作</span>
+                        System.out.<span class="built_in">println</span>(<span class="string">"产品栈为空，消费者等待中......"</span>);
+                        product.wait();
+                    }
+                    <span class="comment">// 产品栈有商品,开始消费</span>
+                    product.remove();
+                    System.out.<span class="built_in">println</span>(<span class="string">"Consumer 消费了一个产品，目前产品栈大小为："</span>
+                            + product.<span class="built_in">size</span>());
+                    <span class="comment">// 消费一个产品之后,线程开始睡眠</span>
+                    Thread.sleep((<span class="keyword">long</span>) Math.<span class="built_in">random</span>() * <span class="number">3000</span>);
+                    <span class="comment">// 通知生产者,消费了一个产品</span>
+                    product.notify();
+                } <span class="keyword">catch</span> (Exception e) {
+                }
+            }
+        }
+    }
+}
+
+<span class="keyword">static</span> class Product {
+    <span class="comment">// 使用list集合模拟一个产品栈</span>
+    <span class="keyword">private</span> List&lt;<span class="keyword">Object</span>&gt; goods = <span class="keyword">new</span> LinkedList&lt;<span class="keyword">Object</span>&gt;();
+    <span class="keyword">private</span> <span class="built_in">int</span> <span class="built_in">max</span> = <span class="number">10</span>; <span class="comment">// 最大产品数量</span>
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="built_in">add</span>(<span class="keyword">Object</span> obj) {
+        goods.<span class="built_in">add</span>(obj);
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> remove() {
+        <span class="keyword">if</span> (goods.<span class="built_in">size</span>() &gt; <span class="number">0</span>) {
+            goods.remove(goods.<span class="built_in">size</span>() - <span class="number">1</span>);
+        }
+    }
+
+    <span class="keyword">public</span> <span class="built_in">int</span> <span class="built_in">size</span>() {
+        <span class="keyword">return</span> goods.<span class="built_in">size</span>();
+    }
+
+    <span class="keyword">public</span> <span class="built_in">int</span> getMax() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="built_in">max</span>;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> setMax(<span class="built_in">int</span> <span class="built_in">max</span>) {
+        <span class="keyword">this</span>.<span class="built_in">max</span> = <span class="built_in">max</span>;
+    }
+}
+}
+</code></pre>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Java/"> #Java </a>
+          
+            <a href="../../tags/多线程/"> #多线程 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2015/04/09/Android基础知识总结/">
                 Android基础知识总结
               </a>
@@ -1495,7 +1776,7 @@ ThreadPoolExecutor是Executors类的底层实现
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-count">37</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

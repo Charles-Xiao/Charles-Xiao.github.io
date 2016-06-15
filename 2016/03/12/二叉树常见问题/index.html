@@ -200,8 +200,218 @@
 }
 </code></pre><h4 id="求二叉树的节点个数">求二叉树的节点个数</h4><div align="center"><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/BTNodeNumber.jpg" width="50%"></div>
 
+<h4 id="求二叉树第K层的节点个数">求二叉树第K层的节点个数</h4><pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">int</span> <span class="title">kLevelNodeNumber</span><span class="params">(TreeNode root, <span class="keyword">int</span> k)</span> </span>{
+    <span class="comment">// 第k层节点数可以看做是左子树的k-1层节点数+右子树的k-1层节点数</span>
+    <span class="keyword">if</span> (root == <span class="keyword">null</span> || k &lt;= <span class="number">0</span>)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="keyword">if</span> (k == <span class="number">1</span>)
+        <span class="keyword">return</span> <span class="number">1</span>;
+    <span class="keyword">int</span> leftNodeNum = kLevelNodeNumber(root.left, k-<span class="number">1</span>);
+    <span class="keyword">int</span> rightNodeNum = kLevelNodeNumber(root.right, k-<span class="number">1</span>);
 
-<h4 id="反转二叉树(求二叉树镜像)_—-_递归和循环解法">反转二叉树(求二叉树镜像) —- 递归和循环解法</h4><div align="center"><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/invertBT.jpg" width="50%"></div>
+    <span class="keyword">return</span> leftNodeNum+rightNodeNum;
+}
+</code></pre><h4 id="求二叉树中叶子节点的个数">求二叉树中叶子节点的个数</h4><pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">int</span> <span class="title">leafNodeNumber</span><span class="params">(TreeNode root)</span> </span>{
+    <span class="keyword">if</span> (root == <span class="keyword">null</span>)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="keyword">if</span> (root.left == <span class="keyword">null</span> &amp;&amp; root.right == <span class="keyword">null</span>)
+        <span class="keyword">return</span> <span class="number">1</span>;
+    <span class="keyword">return</span> leafNodeNumber(root.left) + leafNodeNumber(root.right);
+
+}
+</code></pre><h4 id="反转二叉树(求二叉树镜像)_—-_递归和循环解法">反转二叉树(求二叉树镜像) —- 递归和循环解法</h4><div align="center"><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/invertBT.jpg" width="60%"></div>
+
+<h4 id="判断两棵二叉树是否结构相同">判断两棵二叉树是否结构相同</h4><pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">boolean</span> <span class="title">EqualsOrNot</span><span class="params">(TreeNode node1, TreeNode node2)</span> </span>{
+    <span class="comment">// 如果两棵二叉树都为空，返回真;一真一假则返回false</span>
+    <span class="keyword">if</span> (node1 == <span class="keyword">null</span> &amp;&amp; node2 == <span class="keyword">null</span>) 
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    <span class="keyword">else</span> <span class="keyword">if</span>(node1==<span class="keyword">null</span> || node2==<span class="keyword">null</span>)
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    <span class="keyword">boolean</span> left = EqualsOrNot(node1.left, node2.left);
+    <span class="keyword">boolean</span> right = EqualsOrNot(node1.right, node2.right);
+    <span class="comment">// 如果对应的左子树和右子树都为true则返回真</span>
+    <span class="keyword">return</span> left &amp;&amp; right;
+}
+</code></pre><h4 id="判断一个二叉树是否是完全二叉树">判断一个二叉树是否是完全二叉树</h4><p><strong>完全二叉树：</strong>二叉树的深度为h，除第 h 层外，其它各层 (1～h-1) 的结点数都达到最大个数，第 h 层所有的结点都连续集中在最左边<br><strong>思路：</strong>任意的一个二叉树，都可以补成一个满二叉树。这样中间就会有很多空洞。在广度优先遍历的时候，如果是满二叉树，或者完全二叉树，这些空洞是在广度优先的遍历的末尾，当我们遍历到空洞的时候，整个二叉树就已经遍历完成了。而如果遍历到空洞还没有完成遍历则说明它是非完全二叉树</p>
+<pre><code><span class="keyword">private</span> static <span class="built_in">boolean</span> isCompleteBT(TreeNode root) {
+
+    LinkedList<span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span> <span class="built_in">queue</span> <span class="subst">=</span> <span class="literal">new</span> LinkedList<span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span>();
+    <span class="comment">// 进行广度优先遍历（层次遍历），并把NULL节点也放入队列</span>
+    TreeNode node;
+    <span class="built_in">queue</span><span class="built_in">.</span>offer(root);
+    <span class="keyword">while</span>((node<span class="subst">=</span><span class="built_in">queue</span><span class="built_in">.</span>poll()) <span class="subst">!=</span> <span class="built_in">null</span>) {
+        <span class="built_in">queue</span><span class="built_in">.</span>offer(node<span class="built_in">.</span>left);
+        <span class="built_in">queue</span><span class="built_in">.</span>offer(node<span class="built_in">.</span>right);
+    }
+    <span class="comment">// 有未访问到的的非NULL节点，则树存在空洞，为非完全二叉树</span>
+    <span class="keyword">while</span>(<span class="subst">!</span><span class="built_in">queue</span><span class="built_in">.</span>isEmpty()) {
+        <span class="keyword">if</span> (<span class="built_in">queue</span><span class="built_in">.</span>poll() <span class="subst">!=</span> <span class="built_in">null</span>)
+            <span class="keyword">return</span> <span class="literal">false</span>;
+    }
+    <span class="keyword">return</span> <span class="literal">true</span>;
+}
+</code></pre><h4 id="判断二叉树是不是平衡二叉树">判断二叉树是不是平衡二叉树</h4><p><strong>平衡二叉树</strong>它是一棵空树或它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树</p>
+<pre><code>private <span class="keyword">static</span> int getTreeHeight(<span class="type">TreeNode</span> root) {
+    <span class="keyword">if</span> (root == null)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="comment">// 左子树depth与右子树depth的较大值+1即为tree的depth</span>
+    int <span class="keyword">left</span> = getTreeHeight(root.<span class="keyword">left</span>);
+    int <span class="keyword">right</span> = getTreeHeight(root.<span class="keyword">right</span>);
+
+    <span class="keyword">return</span> <span class="keyword">left</span>&gt;<span class="keyword">right</span> ? <span class="keyword">left</span>+<span class="number">1</span>:<span class="keyword">right</span>+<span class="number">1</span>;
+}
+
+private <span class="keyword">static</span> boolean isBalanceBT(<span class="type">TreeNode</span> root) {
+    <span class="keyword">if</span> (root == null)
+        <span class="keyword">return</span> <span class="built_in">true</span>;
+    int leftHeight = getTreeHeight(root.<span class="keyword">left</span>);
+    int rightHeight = getTreeHeight(root.<span class="keyword">right</span>);
+    <span class="comment">// 左右子树的高度之差应该&lt;=1;而且左右子树都应该是平衡二叉树</span>
+    <span class="keyword">if</span> (<span class="type">Math</span>.<span class="built_in">abs</span>(leftHeight-rightHeight) &gt; <span class="number">1</span>)
+        <span class="keyword">return</span> <span class="built_in">false</span>;
+    <span class="keyword">else</span>
+        <span class="keyword">return</span> isBalanceBT(root.<span class="keyword">left</span>) &amp;&amp; isBalanceBT(root.<span class="keyword">right</span>);
+}
+</code></pre><p><strong>优化解法: 只后序遍历二叉树一次，一边遍历一边比较左右子树的深度差</strong></p>
+<div align="center"><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/balanceOnce.jpg" width="50%"></div>
+
+<h4 id="判断二叉树B是不是A的子结构">判断二叉树B是不是A的子结构</h4><p><strong>思路</strong>: 第一步在树A中找到和B的根节点的值一样的节点R，第二步再判断A中以R为根节点的子树是不是包含和树B一样的结构</p>
+<pre><code><span class="keyword">private</span> <span class="function"><span class="keyword">boolean</span> <span class="title">isBsubTreeOfA</span><span class="params">(TreeNode rootA, TreeNode rootB)</span> </span>{
+    <span class="keyword">boolean</span> res = <span class="keyword">false</span>;
+    <span class="keyword">if</span> (rootA != <span class="keyword">null</span> &amp;&amp; rootB != <span class="keyword">null</span>) {
+        <span class="keyword">if</span> (rootA.val == rootB.val)
+            res = EqualsTreeOrNot.EqualsOrNot(rootA, rootB);<span class="comment">// 判断两棵树是否结构相同</span>
+        <span class="keyword">if</span> (!res)
+            res = isBsubTreeOfA(rootA.left, rootB);
+        <span class="keyword">if</span> (!res)
+            res = isBsubTreeOfA(rootA.right, rootB);
+    }
+    <span class="keyword">return</span> res;
+}
+</code></pre><h4 id="求二叉树中两个节点的最低公共祖先节点">求二叉树中两个节点的最低公共祖先节点</h4><pre><code><span class="comment">// 二叉查找树</span>
+<span class="keyword">public</span> <span class="keyword">static</span> TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+
+    <span class="keyword">if</span> (root.<span class="keyword">val</span> &gt; p.<span class="keyword">val</span> &amp;&amp; root.<span class="keyword">val</span> &gt; q.<span class="keyword">val</span>)
+        <span class="keyword">return</span> lowestCommonAncestor(root.left, p, q);
+    <span class="keyword">else</span> <span class="keyword">if</span> (root.<span class="keyword">val</span> &lt; p.<span class="keyword">val</span> &amp;&amp; root.<span class="keyword">val</span> &lt; q.<span class="keyword">val</span>)
+        <span class="keyword">return</span> lowestCommonAncestor(root.right, p, q);
+    <span class="keyword">else</span>
+        <span class="keyword">return</span> root;
+}
+<span class="comment">// 普通树二叉树</span>
+<span class="keyword">public</span> <span class="keyword">static</span> TreeNode lowestCommonAncestorBT(TreeNode root, TreeNode p, TreeNode q) {
+    <span class="comment">// 对二叉树做一个前序遍历，如果找到目标节点或者到了叶节点就return,对于return的结果进行判断</span>
+    <span class="comment">// ，两者都!null说明root就是这两个节点的最近公共父节点;否则返回非空的那一个节点；回溯过程中到达最近公共父节点时会满足两者都!null</span>
+    <span class="keyword">if</span> (root == <span class="keyword">null</span> || root == p || root == q)
+        <span class="keyword">return</span> root;
+    TreeNode leftNode = lowestCommonAncestorBT(root.left, p, q);
+    TreeNode rightNode = lowestCommonAncestorBT(root.right, p, q);
+    <span class="keyword">if</span> (leftNode != <span class="keyword">null</span> &amp;&amp; rightNode != <span class="keyword">null</span>) {
+        <span class="keyword">return</span> root;
+    } <span class="keyword">else</span> <span class="keyword">if</span> (leftNode != <span class="keyword">null</span>) {
+        <span class="keyword">return</span> leftNode;
+    } <span class="keyword">else</span> {
+        <span class="keyword">return</span> rightNode;
+    }
+}
+</code></pre><h4 id="求二叉树中两个节点之间的最大距离">求二叉树中两个节点之间的最大距离</h4><pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="typename">int</span> getTreeHeight(TreeNode root) {
+    <span class="keyword">if</span> (root == <span class="literal">null</span>)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="comment">// 左子树depth与右子树depth的较大值+1即为tree的depth</span>
+    <span class="typename">int</span> left = getTreeHeight(root.left);
+    <span class="typename">int</span> right = getTreeHeight(root.right);
+
+    <span class="keyword">return</span> left&gt;right ? left+1:right+<span class="number">1</span>;
+}
+
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="typename">int</span> findMaxDistance(TreeNode root) {
+    <span class="keyword">if</span> (root == <span class="literal">null</span>)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="comment">// 左右子树中的最大距离</span>
+    <span class="typename">int</span> leftMaxDis = findMaxDistance(root.left);
+    <span class="typename">int</span> rightMaxDis = findMaxDistance(root.right);
+
+    <span class="comment">// 左右子树的最大Height</span>
+    <span class="typename">int</span> leftHeight = <span class="number">0</span>, rightHeight = <span class="number">0</span>;
+    <span class="keyword">if</span> (root.left != <span class="literal">null</span>)
+        leftHeight = getTreeHeight(root.left);
+    <span class="keyword">if</span> (root.right != <span class="literal">null</span>)
+        rightHeight = getTreeHeight(root.right);
+
+    <span class="typename">int</span> max = leftMaxDis &gt; rightMaxDis ? leftMaxDis : rightMaxDis;
+    <span class="keyword">return</span> max&gt;(leftHeight+rightHeight) ? max:(leftHeight+rightHeight);
+}
+</code></pre><h4 id="将二叉查找树变为有序的双向链表">将二叉查找树变为有序的双向链表</h4><p><strong>思路</strong>:将tree看做左子树，根节点，右子树三个部分，然后利用中序遍历先对左子树转变为双向链表然后连接根节点；然后将右子树转变为双向链表，根节点连接到该双向链表；最后返回一个有序双向链表的头结点</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function">TreeNode <span class="title">BST2List</span><span class="params">(TreeNode root)</span> </span>{
+    TreeNode lastNodeOfList = <span class="keyword">null</span>;
+    lastNodeOfList = convert(root, lastNodeOfList);
+    <span class="comment">// 将lastNodeOfList从双向链表尾部移动到头部</span>
+    <span class="keyword">while</span> (lastNodeOfList != <span class="keyword">null</span> &amp;&amp; lastNodeOfList.left != <span class="keyword">null</span>) {
+        lastNodeOfList = lastNodeOfList.left;
+    }
+    <span class="keyword">return</span> lastNodeOfList;
+}
+
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="function">TreeNode <span class="title">convert</span><span class="params">(TreeNode root, TreeNode lastNodeOfList)</span> </span>{
+    <span class="keyword">if</span> (root == <span class="keyword">null</span>) {
+        <span class="keyword">return</span> root;
+    }
+    <span class="comment">// 转变左子树为双向链表</span>
+    <span class="keyword">if</span> (root.left != <span class="keyword">null</span>)
+        lastNodeOfList = convert(root.left, lastNodeOfList);
+    <span class="comment">// 修改双链表尾节点为当前节点</span>
+    <span class="keyword">if</span> (lastNodeOfList != <span class="keyword">null</span>) {
+        root.left = lastNodeOfList;
+        lastNodeOfList.right = root;
+    }
+    lastNodeOfList = root;
+    <span class="comment">// 转变右子树为双向链表</span>
+    <span class="keyword">if</span> (root.right != <span class="keyword">null</span>)
+        lastNodeOfList = convert(root.right, lastNodeOfList);
+    <span class="comment">// 返回值为双链表尾节点</span>
+    <span class="keyword">return</span> lastNodeOfList;
+}
+</code></pre><h4 id="由前序遍历序列和中序遍历序列重建二叉树">由前序遍历序列和中序遍历序列重建二叉树</h4><p>二叉树前序遍历序列中，第一个元素总是树的根节点的值。中序遍历序列中，左子树的节点的值位于根节点的值的左边，右子树的节点的值位于根节点的值的右边。<br><strong>递归解法</strong>：</p>
+<ol>
+<li>如果前序遍历为空或中序遍历为空或节点个数小于等于0，返回NULL。</li>
+<li>创建根节点。前序遍历的第一个数据就是根节点的数据，在中序遍历中找到根节点的位置，可分别得知左子树和右子树的前序和中序遍历序列，重建左右子树。</li>
+</ol>
+<h4 id="二叉树的下一个节点(给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点left和right，同时包含指向父结点的指针next)">二叉树的下一个节点(给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点left和right，同时包含指向父结点的指针next)</h4><p><strong>思路</strong>: 三种情况</p>
+<ol>
+<li>如果一个结点有右子树，那么它的下一个结点就是它的右子树中的左子结点。也就是说右子结点出发一直沿着指向左子结点的指针，我们就能找到它的下一个结点。 </li>
+<li><p>如果一个结点没有右子树，又可以分为两种情况：</p>
+<ul>
+<li>如果结点是它父节点的左子结点，那么它的下一个结点就是它的父结点。 </li>
+<li><p>如果一个结点既没有右子树，并且它还是它父结点的右子结点。我们可以沿着指向父节点的指针一直向上遍历，直到找到一个是它父结点的左结点的结点。如果这样的结点存在，那么这个结点的父结点就是我们要找的下一个结点。</p>
+<pre><code><span class="keyword">public</span> TreeLinkNode GetNext(TreeNode pNode) {
+    TreeNode curNode = <span class="keyword">null</span>;
+    <span class="comment">//第一步：判断是否有右孩子</span>
+    <span class="keyword">if</span>(pNode.right != <span class="keyword">null</span>){
+        curNode = pNode.right;
+        <span class="keyword">while</span>(curNode.left != <span class="keyword">null</span>) curNode = curNode.left;
+        <span class="keyword">return</span> curNode;
+    }
+    <span class="comment">//第二步：判断是否是其父节点的左孩子</span>
+    <span class="keyword">if</span>(pNode.<span class="keyword">next</span> == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;
+    <span class="keyword">if</span>(pNode == pNode.<span class="keyword">next</span>.left){
+        <span class="keyword">return</span> pNode.<span class="keyword">next</span>;
+    }
+    <span class="comment">//第三步：向上找其父节点，直到父节点是其父节点的父节点的左孩子</span>
+    curNode = pNode.<span class="keyword">next</span>;
+    <span class="keyword">while</span>(curNode.<span class="keyword">next</span> != <span class="keyword">null</span>){
+        <span class="keyword">if</span>(curNode == curNode.<span class="keyword">next</span>.left){
+            <span class="keyword">return</span> curNode.<span class="keyword">next</span>;
+        }
+        <span class="comment">//继续向上找父节点</span>
+        curNode = curNode.<span class="keyword">next</span>;
+    }
+    <span class="keyword">return</span> <span class="keyword">null</span>;
+}
+</code></pre></li>
+</ul>
+</li>
+</ol>
+
       
     </div>
 
@@ -296,7 +506,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-count">37</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -348,7 +558,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#求二叉树的深度(从根节点到叶子结点一次经过的结点形成树的一条路径，最长路径的长度为树的深度。根节点的深度为1。)"><span class="nav-number">1.</span> <span class="nav-text">求二叉树的深度(从根节点到叶子结点一次经过的结点形成树的一条路径，最长路径的长度为树的深度。根节点的深度为1。)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#求二叉树的节点个数"><span class="nav-number">2.</span> <span class="nav-text">求二叉树的节点个数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#反转二叉树(求二叉树镜像)_—-_递归和循环解法"><span class="nav-number">3.</span> <span class="nav-text">反转二叉树(求二叉树镜像) —- 递归和循环解法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#求二叉树的深度(从根节点到叶子结点一次经过的结点形成树的一条路径，最长路径的长度为树的深度。根节点的深度为1。)"><span class="nav-number">1.</span> <span class="nav-text">求二叉树的深度(从根节点到叶子结点一次经过的结点形成树的一条路径，最长路径的长度为树的深度。根节点的深度为1。)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#求二叉树的节点个数"><span class="nav-number">2.</span> <span class="nav-text">求二叉树的节点个数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#求二叉树第K层的节点个数"><span class="nav-number">3.</span> <span class="nav-text">求二叉树第K层的节点个数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#求二叉树中叶子节点的个数"><span class="nav-number">4.</span> <span class="nav-text">求二叉树中叶子节点的个数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#反转二叉树(求二叉树镜像)_—-_递归和循环解法"><span class="nav-number">5.</span> <span class="nav-text">反转二叉树(求二叉树镜像) —- 递归和循环解法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#判断两棵二叉树是否结构相同"><span class="nav-number">6.</span> <span class="nav-text">判断两棵二叉树是否结构相同</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#判断一个二叉树是否是完全二叉树"><span class="nav-number">7.</span> <span class="nav-text">判断一个二叉树是否是完全二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#判断二叉树是不是平衡二叉树"><span class="nav-number">8.</span> <span class="nav-text">判断二叉树是不是平衡二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#判断二叉树B是不是A的子结构"><span class="nav-number">9.</span> <span class="nav-text">判断二叉树B是不是A的子结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#求二叉树中两个节点的最低公共祖先节点"><span class="nav-number">10.</span> <span class="nav-text">求二叉树中两个节点的最低公共祖先节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#求二叉树中两个节点之间的最大距离"><span class="nav-number">11.</span> <span class="nav-text">求二叉树中两个节点之间的最大距离</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将二叉查找树变为有序的双向链表"><span class="nav-number">12.</span> <span class="nav-text">将二叉查找树变为有序的双向链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#由前序遍历序列和中序遍历序列重建二叉树"><span class="nav-number">13.</span> <span class="nav-text">由前序遍历序列和中序遍历序列重建二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二叉树的下一个节点(给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点left和right，同时包含指向父结点的指针next)"><span class="nav-number">14.</span> <span class="nav-text">二叉树的下一个节点(给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点left和right，同时包含指向父结点的指针next)</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
