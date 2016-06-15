@@ -307,6 +307,38 @@
 
     <span class="keyword">return</span> resultList;
 }
+</code></pre><h3 id="层次遍历">层次遍历</h3><pre><code><span class="comment">/**
+ * 层次遍历二叉树并按层打印
+ * @param root
+ * @return
+ */</span>
+<span class="keyword">public</span> static <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;&gt;</span> levelOrder(TreeNode root) {
+    <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;&gt;</span> resultList <span class="subst">=</span> <span class="literal">new</span> LinkedList<span class="subst">&lt;</span><span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;&gt;</span>();
+    LinkedList<span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span> <span class="built_in">queue</span> <span class="subst">=</span> <span class="literal">new</span> LinkedList<span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span>();
+    <span class="keyword">if</span> (root <span class="subst">==</span> <span class="built_in">null</span>) {
+        <span class="keyword">return</span> resultList;
+    }
+    <span class="built_in">queue</span><span class="built_in">.</span>offer(root);
+    <span class="keyword">while</span>(<span class="subst">!</span><span class="built_in">queue</span><span class="built_in">.</span>isEmpty()) {
+        <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> levelList <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span>(); 
+        <span class="comment">// poll current level and offer next level</span>
+        int num <span class="subst">=</span> <span class="built_in">queue</span><span class="built_in">.</span>size();
+        for (int i <span class="subst">=</span> <span class="number">0</span>; i <span class="subst">&lt;</span> num; i<span class="subst">++</span>) {
+            TreeNode top <span class="subst">=</span> <span class="built_in">queue</span><span class="built_in">.</span>poll();
+            System<span class="built_in">.</span>out<span class="built_in">.</span>println(top<span class="built_in">.</span>val);
+            levelList<span class="built_in">.</span>add(top<span class="built_in">.</span>val);
+            <span class="comment">// 必须判断是否为null，不然会将叶子节点的null子节点也加入队列，引起空指针错误</span>
+            <span class="keyword">if</span> (top<span class="built_in">.</span>left <span class="subst">!=</span> <span class="built_in">null</span>) {
+                <span class="built_in">queue</span><span class="built_in">.</span>offer(top<span class="built_in">.</span>left);
+            }
+            <span class="keyword">if</span> (top<span class="built_in">.</span>right <span class="subst">!=</span> <span class="built_in">null</span>) {
+                <span class="built_in">queue</span><span class="built_in">.</span>offer(top<span class="built_in">.</span>right);
+            }
+        }
+        resultList<span class="built_in">.</span>add(levelList);
+    }
+    <span class="keyword">return</span> resultList;
+}
 </code></pre>
         
       
