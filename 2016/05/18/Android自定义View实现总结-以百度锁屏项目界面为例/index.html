@@ -187,7 +187,10 @@
 <li>自定义回调函数</li>
 </ul>
 <h3 id="自定义View的三种形式">自定义View的三种形式</h3><ol>
-<li><strong>继承已有的控件</strong>: 往往继承自系统自带的控件，例如继承自ImageView, Viewpager等，例如ConstellationPager extends ViewPager，一个可以无限循环切换的ViewPager</li>
+<li><strong>继承已有的控件</strong>: 往往继承自系统自带的控件，例如继承自ImageView, Viewpager等，例如ConstellationPager extends ViewPager，一个可以无限循环切换的ViewPager<ul>
+<li><strong>ConstellationPager</strong>: 在该ViewPager的构造函数中初始化页面布局，通过addView添加自定义View，并设置OnPageChangeListener</li>
+</ul>
+</li>
 <li><strong>组合已有的控件</strong>: 往往继承自Layout, 通过LayoutInflater inflate xml文件来组合多个控件。例如KeyguardLayout extends FrameLayout, 该界面包括MultiWaveView，WeatherView等多个View；例如WeatherView extends LinearLayout，该界面中同样包括多个基础View控件</li>
 <li><strong>完全自绘的控件</strong>: 往往继承View/ViewGroup,例如MultiWaveView extends View, 一个锁屏的控件，包括a handle and outer ring，内部的OnTriggerListener监听手指滑动响应解锁或者打开App的操作，内部还绘制了类似彗星划过效果的动画</li>
 </ol>
