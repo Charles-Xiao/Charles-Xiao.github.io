@@ -320,7 +320,7 @@ System.<span class="keyword">out</span>.println(<span class="string">"s = "</spa
 </code></pre></li>
 <li><p><strong>StringBuilder</strong>：非线程安全的可变字符串，单线程时字符串拼接最快</p>
 </li>
-<li><p><strong>StringBuffer</strong>：通过调用其append和insert方法来添加字符；线程安全的可变字符串; String 对象的字符串拼接其实是被 JVM 解释成了 StringBuffer 对象的拼接</p>
+<li><p><strong>StringBuffer</strong>：通过调用其append和insert方法来添加字符；线程安全的可变字符串，因为内部的方法都加了synchronized关键字; String 对象的字符串拼接其实是被 JVM 解释成了 StringBuffer 对象的拼接</p>
 <pre><code><span class="comment">// String +操作快</span>
 <span class="built_in">String</span> S1 = “This <span class="keyword">is</span> only a” + “ simple” + “test”; <span class="comment">//其实就是：String S1 = “This is only a simple test”</span>
 
@@ -511,7 +511,7 @@ n再和这个数做与运算*/</span>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-count">38</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -525,7 +525,7 @@ n再和这个数做与运算*/</span>
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">44</span>
+              <span class="site-state-item-count">45</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

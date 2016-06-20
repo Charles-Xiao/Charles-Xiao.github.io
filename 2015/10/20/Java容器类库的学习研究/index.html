@@ -254,7 +254,7 @@
 </li>
 </ol>
 <h3 id="HashMap与LinkedHashMap，TreeMap">HashMap与LinkedHashMap，TreeMap</h3><ol>
-<li><strong>HashMap</strong>内部对键值对的存储结构使用的是数组+链表的形式,<strong>put存储元素</strong>HashMap在存储Entry对象的时候，首先根据Key的hash值判定存储到Entry[] table数组的哪一个元素对应的链表上O(1),然后调用Equals方法去遍历链表比较key值，如果找到则更新value并返回旧址，否则将新的Entry加入到该链表头部；<ul>
+<li><strong>HashMap</strong>内部对键值对的存储结构使用的是数组+链表的形式,<strong>put存储元素</strong>HashMap在存储Entry对象的时候，首先根据Key的hash值判定存储到Entry[] table数组的哪一个元素对应的链表上O(1),然后调用key的Equals方法去遍历链表比较key值，如果找到则更新value并返回旧址，否则将新的Entry加入到该链表头部；<ul>
 <li><strong>遍历顺序</strong>也就是说Entry<key,value>对象随机地分配到某个Entry[] table数组的元素表示的链表上, HashMap内部Entry<k,v>的遍历顺序是对Entry[] table 数组，从index=0开始，依次遍历table[i]上的链表上的Entry对象;所以对HashMap遍历Entry对象的顺序和Entry对象的存储顺序之间没有任何关系.</k,v></key,value></li>
 <li><strong>重新hash调节大小</strong>HashMap允许null键插入，其内部会将null存到table[0]中进行处理. 当map中元素达到16*0.75=12时，因为链表长度可能很长导致查找效率降低，hashmap会对原来的所有元素重新进行hash,容量变为原来的2倍，重新hash时链表顺序会被反转，可以避免尾部遍历.<a href="http://www.xuebuyuan.com/2231227.html" target="_blank" rel="external">HashMap</a>; 在HashMap调整大小时会出现条件竞争，也就是多个线程同时来调整大小，出现死循环.</li>
 <li><strong>key不可变</strong>Map的key值应该使用不可变对象，以防put和get的时候对象发生变化从而导致hashcode变化，取不到正确的对象；HashMap也可以声明为同步的，使用Map m = Collections.synchronizeMap(hashMap);</li>
@@ -289,12 +289,24 @@
 <li><strong>HashSet</strong>实现set接口，不允许重复元素的存在，但是允许null存在；每次add之前会先调用hashcode和equals方法去判断该对象是否已经存在，已存在则返回false,不会更改set中任何内容;存取速度没有HashMap快；但是其内部实现就是一个HashMap,只是每一个<key,value>中的value都是PRESET</key,value></li>
 <li><strong>ConcurrentHashMap</strong>是一个Java5以后才提供的同步容器,其内部实现采用二次hash,分区同步的方式，内部默认维护一个包含16个segment对象的数组,每个数组对象又对应一个桶数组(相当于一个HashMap)，每个桶数组对象又维护着一个HashEntry链表;对于put的hashcode相同的key会出现同步阻塞，因为它会将当前hashcode对应的segment锁住，但是hashcode不相同的key插入时是不会出现同步阻塞的，这样相对于HashTable(同一时间点，只能有一个线程持有锁，也就是说在同一时间点，只能有一个线程能访问容器)就可以大大提高效率，提高了并发性，相当于16个线程同时操作。  </li>
 </ol>
+<ul>
+<li>ConcurrentHashMap 针对读操作做了大量的优化。通过 HashEntry 对象的不变性和用 volatile 型变量协调线程间的内存可见性，使得大多数时候，<strong>读操作不需要加锁就可以正确获得值</strong></li>
+<li>其内部的结构可以让其在进行<strong>写操作的时候能够将锁的粒度保持地尽量地小</strong>，不用对整个ConcurrentHashMap加锁，而是分段加锁</li>
+<li><strong>源码中containsValue和size操作实现原理</strong>: ConcurrentHashMap的size操作是在多个Segment中进行,但是也采用了一种比较巧的方式，来尽量避免对所有的Segment都加锁。具体怎么做的呢？？？Segment中的有一个modCount变量，代表的是对Segment中元素的数量造成影响的操作的次数，这个值只增不减，size操作就是遍历了两次Segment，每次记录Segment的modCount值，然后将两次的modCount进行比较，如果相同，则表示期间没有发生过写入操作，就将原先遍历的结果返回，如果不相同，则把这个过程再重复做一次，如果再不相同，则就需要将所有的Segment都锁住，然后一个一个遍历了</li>
+<li><strong>hash函数</strong>: 用到了Wang/Jenkins hash算法的变种，主要的目的是为了减少哈希冲突，使元素能够均匀的分布在不同的Segment上，从而提高容器的存取效率。假如哈希的质量差到极点，那么所有的元素都在一个Segment中，不仅存取元素缓慢，分段锁也会失去意义  </li>
+</ul>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConcurrentHashMap.jpg" class="full-image" width="100%"></p>
-<pre><code><span class="bullet">* </span>ConcurrentHashMap 针对读操作做了大量的优化。通过 HashEntry 对象的不变性和用 volatile 型变量协调线程间的内存可见性，使得大多数时候，读操作不需要加锁就可以正确获得值
-</code></pre><h3 id="ArrayList，CopyOnWriteArrayList和LinkedList">ArrayList，CopyOnWriteArrayList和LinkedList</h3><ol>
+<h3 id="ArrayList，CopyOnWriteArrayList和LinkedList">ArrayList，CopyOnWriteArrayList和LinkedList</h3><ol>
 <li><strong>ArrayList、LinkedList、Vector的区别</strong>：ArrayList 和Vector底层是采用数组方式存储数据，ArrayList可以通过<code>List list = Collections.synchronizeList(arrayList);</code>实现同步；Vector由于使用了synchronized方法（线程安全）所以性能上比ArrayList要差，LinkedList使用双向链表实现存储，随机存取比较慢，但是增删非常快，LinkedList中包含了 first 和 last 两个指针(Node)。Node 中包含了上一个节点和下一个节点的引用，这样就构成了双向的链表</li>
 <li><strong>CopyOnWriteArrayList</strong>: CopyOnWriteArrayList的核心思想是利用高并发往往是读多写少的特性，对读操作不加锁，对写操作加锁，进行写操作时先复制一份新的集合，在新的集合上面修改，然后将新集合赋值给旧的引用，并通过volatile 保证其可见性。这种“写入时复制”策略，对容器的写操作将导致的容器中基本数组的复制，性能开销较大。所以在有写操作的情况下CopyOnWriteArrayList性能不佳，而且如果容器容量较大的话容易造成溢出</li>
-<li><strong>HashMap和 HashTable 的区别</strong>：<br> HashTable基于Dictionary类实现的，HashMap则是基于Map接口实现的;HashTable是线程安全的,HashMap 则是线程不安全的;HashMap可以让你将空值作为一个表的条目的key或value</li>
+<li><strong>HashMap和 HashTable 的区别</strong>：<ul>
+<li>两者都实现Map接口，但是HashTable继承Dictionary类，HashMap则是继承AbstractMap接口;</li>
+<li>HashTable是线程安全的(通过直接对get,put等方法加Synchronized锁来实现),HashMap则是线程不安全的;</li>
+<li>HashMap可以让你将空值作为一个表的条目的key或value，但是HashTable不可以；</li>
+<li>哈希值的使用不同，HashTable直接使用对象的hashCode。而HashMap重新计算hash值；</li>
+<li>两个遍历方式的内部实现上不同，Hashtable、HashMap都使用了 Iterator。而由于历史原因，Hashtable还使用了Enumeration的方式</li>
+</ul>
+</li>
 <li><strong>LinkedBlockingQueue</strong>: 它是线程安全的阻塞队列，是<strong>作为生产者消费者的首选</strong>，LinkedBlockingQueue 可以指定容量，也可以不指定，不指定的话，默认最大是Integer.MAX_VALUE，其中主要用到put和take方法，put方法在队列满的时候会阻塞直到有队列成员被消费，take方法在队列空的时候会阻塞，直到有队列成员被放进来</li>
 <li><strong>ConcurrentLinkedQueue</strong>: ConcurrentLinkedQueue是一个无锁的并发线程安全的非阻塞队列；Queue中元素按FIFO原则进行排序．采用CAS操作，来保证元素的一致性</li>
 </ol>
@@ -389,7 +401,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-count">38</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -403,7 +415,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">44</span>
+              <span class="site-state-item-count">45</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

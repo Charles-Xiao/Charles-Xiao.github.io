@@ -189,18 +189,18 @@
       
 
       
-        <h3 id="进程与线程之间关系">进程与线程之间关系</h3><p>一个进程对应一个程序的执行，而一个线程则是进程执行过程中的一个单独的执行序列，一个进程可以包含多个线程。线程有时候也被称为轻量级进程.  </p>
+        <h3 id="进程与线程之间关系">进程与线程之间关系</h3><p>一个进程对应一个程序的执行，它具有文本、数据、堆栈片段以及它自己的资源；而一个线程则是进程执行过程中的一个单独的执行序列，线程有时候也被称为轻量级进程. 一个进程可以包含多个线程，这些线程共享进程的资源。  </p>
 <p>首先我们明确一点，就是我们创建的每一个Java程序都是运行在一个单独的Java虚拟机进程中的，每启动一个java程序就会同时开启一个单独对应的JVM进程(也叫做JVM实例)，然后JVM进程会开始初始化类，包括初始化静态变量和静态代码块，普通变量，构造器等；然后再去寻找main()主线程作为程序执行入口,继续执行其他线程直至结束.(Android应用程序和dalvik虚拟机的关系也一样如此)</p>
 <h3 id="常见的进程间通信方式(IPC)">常见的进程间通信方式(IPC)</h3><ol>
-<li>管道与命名管道：管道允许一个进程和另一个与它有共同祖先的进程之间进行通信，命名管道允许无亲缘关系的进程间的通信,命名管道在文件系统中有对应的文件名,通过命令mkfifo或系统调用mkfifo来创建</li>
-<li>套接字：可用于不同机器之间的进程间通信</li>
-<li>共享内存：多个进程可以访问同一块内存空间，是最快的可用IPC形式</li>
-<li>内存映射：内存映射允许任何多个进程间通信，每一个使用该机制的进程通过把一个共享的文件映射到自己的进程地址空间来实现它。</li>
-<li>信号量：主要作为进程间以及同一进程不同线程之间的同步手段</li>
-<li>信号（Signal）：信号是比较复杂的通信方式，用于通知接受进程有某种事件发生，除了用于进程间通信外，进程还可以发送信号给进程本身</li>
-<li>消息队列：消息队列是消息的链接表，包括Posix消息队列和system V消息队列。有足够权限的进程可以向队列中添加消息，被赋予读权限的进程则可以读走队列中的消息</li>
+<li><strong>管道与命名管道</strong>：管道允许一个进程和另一个与它有共同祖先的进程之间进行通信，命名管道允许无亲缘关系的进程间的通信,命名管道在文件系统中有对应的文件名,通过命令mkfifo或系统调用mkfifo来创建</li>
+<li><strong>套接字</strong>：可用于不同机器之间的进程间通信</li>
+<li><strong>共享内存</strong>：多个进程可以访问同一块内存空间，是最快的可用IPC形式</li>
+<li><strong>内存映射</strong>：内存映射允许任何多个进程间通信，每一个使用该机制的进程通过把一个共享的文件映射到自己的进程地址空间来实现它。</li>
+<li><strong>信号量</strong>：主要作为进程间以及同一进程不同线程之间的同步手段</li>
+<li><strong>信号（Signal）</strong>：信号是比较复杂的通信方式，用于通知接受进程有某种事件发生，除了用于进程间通信外，进程还可以发送信号给进程本身</li>
+<li><strong>消息队列</strong>：消息队列是消息的链接表，包括Posix消息队列和system V消息队列。有足够权限的进程可以向队列中添加消息，被赋予读权限的进程则可以读走队列中的消息</li>
 </ol>
-<h3 id="进程的状态">进程的状态</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Linux_ps.png" class="full-image" width="100%"></p>
+<h3 id="进程的状态:就绪-运行-阻塞">进程的状态:就绪-运行-阻塞</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Linux_ps.png" class="full-image" width="100%"></p>
 <h3 id="多线程之间通信方式">多线程之间通信方式</h3><ol>
 <li>“共享变量”：实现Runnable接口实现线程的共享变量或者内部类共享外围类的变量</li>
 <li><p>“管道流”：</p>
@@ -559,7 +559,7 @@ ThreadPoolExecutor是Executors类的底层实现
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-count">38</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -573,7 +573,7 @@ ThreadPoolExecutor是Executors类的底层实现
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">44</span>
+              <span class="site-state-item-count">45</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -611,7 +611,7 @@ ThreadPoolExecutor是Executors类的底层实现
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程与线程之间关系"><span class="nav-number">1.</span> <span class="nav-text">进程与线程之间关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的进程间通信方式(IPC)"><span class="nav-number">2.</span> <span class="nav-text">常见的进程间通信方式(IPC)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程的状态"><span class="nav-number">3.</span> <span class="nav-text">进程的状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程之间通信方式"><span class="nav-number">4.</span> <span class="nav-text">多线程之间通信方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的四种创建方式"><span class="nav-number">5.</span> <span class="nav-text">线程的四种创建方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的状态变化"><span class="nav-number">6.</span> <span class="nav-text">线程的状态变化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#死锁及其解决办法"><span class="nav-number">7.</span> <span class="nav-text">死锁及其解决办法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程相关问题"><span class="nav-number">8.</span> <span class="nav-text">多线程相关问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程同步的方法"><span class="nav-number">9.</span> <span class="nav-text">多线程同步的方法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程与线程之间关系"><span class="nav-number">1.</span> <span class="nav-text">进程与线程之间关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的进程间通信方式(IPC)"><span class="nav-number">2.</span> <span class="nav-text">常见的进程间通信方式(IPC)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程的状态:就绪-运行-阻塞"><span class="nav-number">3.</span> <span class="nav-text">进程的状态:就绪-运行-阻塞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程之间通信方式"><span class="nav-number">4.</span> <span class="nav-text">多线程之间通信方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的四种创建方式"><span class="nav-number">5.</span> <span class="nav-text">线程的四种创建方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的状态变化"><span class="nav-number">6.</span> <span class="nav-text">线程的状态变化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#死锁及其解决办法"><span class="nav-number">7.</span> <span class="nav-text">死锁及其解决办法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程相关问题"><span class="nav-number">8.</span> <span class="nav-text">多线程相关问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程同步的方法"><span class="nav-number">9.</span> <span class="nav-text">多线程同步的方法</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
