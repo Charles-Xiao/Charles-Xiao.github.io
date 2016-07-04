@@ -148,6 +148,106 @@
           
           
             
+              <a class="post-title-link" href="../../2016/02/18/依道-wifi室内定位的实现原理/">
+                依道-wifi室内定位的实现原理
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-02-18
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/算法/">算法</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/02/18/依道-wifi室内定位的实现原理/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/18/依道-wifi室内定位的实现原理/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="技术原理">技术原理</h3><p><strong>基于RSSI(信号接收强度)方法</strong>它是一种基于MAC层的通过接收到的信号强弱测定信号点与接收点的距离，进而根据相应数据进行定位计算的方法。因为室内WIFI信号强度会随着传播距离的增加而降低，当然随着距离的增加同理定位的精度也会降低。我们根据移动终端测量接收到的信号强度和已知的无线信号衰落模型，可以估算出收发方之间的距离，根据多个估算的距离值，可以计算出移动终端的位置</p>
+<ol>
+<li>每一个无线AP都有一个全球唯一的MAC地址,并且一般来说无线AP在一段时间内是不会移动的; 然后每一个移动设备在开启Wi-Fi的情况下,即可扫描并收集周围的AP信号,无论是否加密,是否已连接，甚至信号强度不足以显示在无线信号列表中,都可以获取到AP广播出来的MAC地址</li>
+<li>移动设备将这些能够标示AP的数据发送到位置服务器,服务器检索出每一个AP的地理位置,并结合每个信号的强弱程度,计算出设备的地理位置并返回到用户设备</li>
+<li>位置服务商要不断更新、补充自己的数据库,以保证数据的准确性,毕竟无线AP不像基站塔那样基本100%不会移动 </li>
+</ol>
+<h3 id="两种算法">两种算法</h3><ol>
+<li><strong>三角定位</strong>:<br>如果我们已经知道了这些AP的位置，我们可以利用信号衰减模型RSSI估算出移动设备距离各个AP的距离,然后根据移动设备到周围AP距离作为直径画圆，其交点就是该设备的位置。很容易发现，三角定位算法需要我们提前知道AP的位置，因此对于环境变化较快的场合不适合使用。</li>
+<li><strong>指纹数据匹配算法</strong>：指纹算法类似于机器学习算法，分为两个阶段:<ul>
+<li><strong>离线训练阶段</strong>: 第一步，将需要室内定位区域划分网格，建立采样点（间距1~2m)；第二步，使用移动设备打开wifi逐个采样点采样，记录该点位置、所获取的RSSI及AP地址，保存到指纹数据库。<strong>采样过程</strong>对每个点每隔5s采样一次，共100次，然后对这些数据去除噪点，并对这些采样数据求均值</li>
+<li><strong>在线定位阶段</strong>: 用户持移动设备在定位区域移动，实时获取当前RSSI及AP地址，将该信息上传到服务器进行匹配（匹配算法有KNN、神经网络等),得到估算位置。</li>
+</ul>
+</li>
+</ol>
+<h3 id="参考链接">参考链接</h3><ol>
+<li><a href="http://www.zhihu.com/question/20593603" target="_blank" rel="external">Wi-Fi 定位的原理</a></li>
+<li><a href="http://blog.liuning.tk/2015/09/consin-similarity-indoor-positioning" target="_blank" rel="external">基于余弦相似性的指纹匹配算法</a></li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/室内定位/"> #室内定位 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2016/01/17/Html5、React-Native和Native应用开发方式的对比分析/">
                 Html5、React Native和Native应用开发方式的对比分析
               </a>
@@ -973,184 +1073,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/08/30/Android应用性能优化/">
-                Android应用性能优化
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-08-30
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Android/">Android</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/08/30/Android应用性能优化/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/30/Android应用性能优化/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>Android手机由于其本身的后台机制和硬件特点，性能上一直被诟病，所以软件开发者对软件本身的性能优化就显得尤为重要；本文将对Android开发过程中性能优化的各个方面做一个回顾与总结。</p>
-<h2 id="Cache优化">Cache优化</h2><ol>
-<li><p><strong>ListView缓存</strong>：</p>
-<ul>
-<li>ListView中有一个回收器，Item滑出界面的时候View会回收到这里，需要显示新的Item的时候，就尽量重用回收器里面的View；每次在getView函数中inflate新的item之前会先判断回收器中是否有缓存的view，即判断<strong>convertView</strong>是否为null，是则inflate一个新的item View，否则重用回收器中的item。</li>
-<li>此外，ListView还使用静态的<strong>ViewHolder减少findViewById的次数</strong></li>
-<li>ListView中有<strong>getViewTypeCount()函数用于获取列表有几种布局类型</strong>，<strong>getItemViewType(int position)用于获取在position位置上的布局类型</strong>; 我们可以利用ViewType来给不同类型的item创建不同的View，这样可以利于ListView的回收</li>
-<li>对Item中图片进行适当压缩, 并进行异步加载；如果快速滑动，不加载图片；实现数据的分页加载</li>
-</ul>
-</li>
-<li><p><strong>IO缓存</strong>：在文件和网络IO中使用具有缓存策略的输入流，BufferedInputStream替代InputStream，BufferedReader替代Reader，BufferedReader替代BufferedInputStream</p>
-</li>
-<li><p><strong>data缓存(空间换时间)</strong>：①缓存数据库的查询结果，比如缓存数据库表中的数据条数，这样就可以避免多次的select count查询 ②缓存磁盘文件中需要频繁访问的数据到内存中 ③缓存耗时计算的结果</p>
-</li>
-</ol>
-<h2 id="Battery优化">Battery优化</h2><ul>
-<li>cpu的使用率和使用频率将直接或间接的影响电量的分配和使用，<strong>cpu降频</strong>可以节约电量</li>
-<li><p><strong>service优化</strong>  </p>
-<ul>
-<li>service作为一个运行在主线程中的后台服务，应该尽量避免耗时动作，而应该尽量新开线程去处理耗时动作</li>
-<li><p>监听系统广播看service是否存活，否则kill掉；降低service优先级使得系统内存吃紧时会被自动kill掉</p>
-</li>
-<li><p>使用Android提供的IntentService代替service，因为IntentService会在运行完成之后自动停止，而service需要手动调用stopService()才能停止运行</p>
-</li>
-<li><p>定时执行任务的Alarm机制：<strong>Android的定时任务有两种实现方式，Timer类和Alarm机制</strong>；Timer不适合长期后台运行的定时任务。因为每种手机都会有自己的休眠策略，Android手机就会在长时间不操作的情况下自动让CPU进入到睡眠状态，这就有可能导致Timer中的定时任务无法正常运行。而Alarm机制则不存在这种情况，它具有唤醒CPU的功能，即可以保证每次需要执行定时任务的时候CPU能正常工作。然而从Android4.4之后，Alarm任务的触发时间将会变得不准确，有可能会延迟一段时间后任务才能得到执行。这不是bug，而是系统在耗电性方面进行的优化。系统会自动检测目前有多少Alarm任务存在，然后将触发时间将近的几个任务放在一起执行，这就可以大幅度的减少CPU被唤醒的次数，从而有效延长电池的使用时间</p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="渲染层优化">渲染层优化</h2><ol>
-<li><p><strong>Android 界面卡顿的原因？</strong></p>
-<ul>
-<li>UI线程中做耗时操作，比如进行网络请求,磁盘读取，位图修改，更新UI等耗时操作，从而导致UI线程卡顿</li>
-<li>布局Layout过于复杂，无法在16ms内完成渲染，或者嵌套层次过深</li>
-<li>View过度绘制或者频繁的触发measure、layout，同一时间动画执行的次数过多，导致CPU或GPU负载过重</li>
-<li>冗余资源及逻辑等导致加载和执行缓慢</li>
-</ul>
-</li>
-<li><p><strong>Android 界面卡顿怎么处理？</strong></p>
-<ul>
-<li><strong>xml布局优化</strong>：尽量使用include、merge、ViewStub标签，尽量不存在冗余嵌套及过于复杂布局（譬如10层就会直接异常），例如使用RelativeLayout代替LinearLayout可以减少布局层次和复杂性，View的嵌套层次不能过深，尽量使用GONE替换INVISIBLE，使用weight后尽量将width和heigh设置为0dp，减少运算，Item存在非常复杂的嵌套时考虑使用自定义Item View来取代，减少measure与layout次数等。</li>
-<li><strong>ListView及Adapter优化</strong>；尽量复用getView方法中的相关View，不重复获取实例导致卡顿，列表尽量在滑动过程中不进行UI元素刷新等。</li>
-<li><strong>背景和图片等内存分配优化</strong>；尽量减少不必要的背景设置，图片尽量压缩处理显示，尽量避免频繁内存抖动等问题出现；尽可能为不同分辨率创建资源，以减少不必要的硬件缩放</li>
-<li><strong>自定义View等绘图与布局优化</strong>；尽量避免在draw、measure、layout中做过于耗时及耗内存操作，尤其是draw方法中，尽量减少draw、measure、layout等执行次数，避免过度渲染和绘制；减少不必要的inflate，尽量使用全局变量缓存View</li>
-<li><strong>避免ANR</strong>，不要在UI线程中做耗时操作，譬如多次数据库操作等</li>
-</ul>
-</li>
-<li><p><strong>Layout常用的标签</strong></p>
-<ul>
-<li><p><strong>include标签</strong>：该标签可以用于将布局文件中的公共部分提取出来给其它布局文件复用，从而使得布局模块化，代码轻量化; <strong>注意点</strong>: ①如果<include>标签已经定义了id，而嵌入布局文件的root布局文件也定义了id，<include>标签的id会覆盖掉嵌入布局文件root的id，如果include标签没有定义id则会使用嵌入文件root的id ②如果想使用<include>标签覆盖嵌入布局root布局属性，必须同时覆盖layout_height和layout_width属性，否则会直接报编译时语法错误</include></include></include></p>
-</li>
-<li><p><strong>viewstub标签</strong>：该标签与include一样用于引入布局模块，只是引入的布局默认不会扩张，既不会占用显示也不会占用位置，从而在解析layout时节省cpu和内存，只有通过调用setVisibility函数或者Inflate函数才会将其要装载的目标布局给加载出来，从而达到延迟加载的效果；例如条目详情、进度条标识或者未读消息等，这些情况如果在一开始初始化，虽然设置可见性View.GONE,但是在Inflate的时候View仍然会被Inflate，仍然会创建对象。</p>
-</li>
-<li><p><strong>merge标签</strong>：该标签在layout中会被自动忽略，从而减少一层布局嵌套，其主要用处是当一个布局作为子布局被其他布局include时，使用merge当作该布局的顶节点来代替layout顶节点就可以减少一层嵌套</p>
-</li>
-<li><p><strong>hierarchy viewer</strong>：该工具可以方便的查看Activity的布局，各个View的属性、measure、layout、draw的时间，如果耗时较多会用红色标记，否则显示绿色</p>
-</li>
-</ul>
-</li>
-</ol>
-<h2 id="网络优化">网络优化</h2><ul>
-<li>异步请求网络数据，避免频繁请求数据（例如如果某个页面内请求过多，可以考虑做一定的请求合并），尽可能的减少网络请求次数和减小网络请求时间间隔</li>
-<li>网络应用传输中使用高效率的数据格式，譬如使用JSON代替XML，使用WebP代替其他图片格式,并对数据进行Gzip压缩数据，比如post请求的body和header内容</li>
-<li>及时缓存数据到内存/文件/数据库</li>
-<li><p>执行某些操作前尽量先进行网络状态判断，比如wifi传输数据比蜂窝数据更省电，所以尽量在wifi下进行数据的预加载</p>
-</li>
-<li><p><strong>httpClient和httpUrlConnection对比</strong>： </p>
-<ol>
-<li>httpClient是apache的开源实现，API数量多，非常稳定</li>
-<li>httpUrlConnection是java自带的模块: ①可以直接支持GZIP压缩,而HttpClient虽然也支持GZIP，但要自己写代码处理 ②httpUrlConnection直接在系统层面做了缓存策略处理，加快重复请求的速度 ③API简单，体积较小,而且直接支持系统级连接池，即打开的连接不会直接关闭，在一段时间内所有程序可共用</li>
-<li>HttpURLConnection在Android2.2之前有个重大Bug，调用close()函数会影响连接池，导致连接复用失效，需要关闭keepAlive;因此在2.2之前http请求都是用httpClient，2.2之后则是使用HttpURLConnection</li>
-<li>但是!!!现在!!!Android不再推荐这两种方式！二是直接使用OKHttp这种成熟方案！支持Android 2.3及其以上版本</li>
-</ol>
-</li>
-</ul>
-<h2 id="数据结构优化">数据结构优化</h2><ul>
-<li><p><strong>ArrayList和LinkedList的选择</strong>：ArrayList根据index取值更快，LinkedList更占内存、随机插入删除更快速、扩容效率更高</p>
-</li>
-<li><p><strong>ArrayList、HashMap、LinkedHashMap、HashSet的选择</strong>：hash系列数据结构查询速度更优，ArrayList存储有序元素，HashMap为键值对数据结构，LinkedHashMap可以记住加入次序的hashMap，HashSet不允许重复元素</p>
-</li>
-<li><p><strong>HashMap、WeakHashMap选择</strong>：WeakHashMap中元素可在适当时候被系统垃圾回收器自动回收，所以适合在内存紧张时使用</p>
-</li>
-<li><p><strong>Collections.synchronizedMap和ConcurrentHashMap的选择</strong>：ConcurrentHashMap为细分锁，锁粒度更小，并发性能更优；Collections.synchronizedMap为对象锁，自己添加函数进行锁控制更方便</p>
-</li>
-<li><p><strong>Android中性能更优的数据类型</strong>：如SparseArray、SparseBooleanArray、SparseIntArray、Pair；Sparse系列的数据结构是为key为int情况的特殊处理，采用二分查找及简单的数组存储，加上不需要泛型转换的开销，相对Map来说性能更优</p>
-</li>
-</ul>
-<h2 id="内存优化">内存优化</h2><ol>
-<li><strong>Android应用内存溢出OOM</strong><ul>
-<li><strong>内存溢出的主要导致原因有如下几类</strong>：①应用代码存在内存泄露，长时间积累无法释放导致OOM；②应用的某些逻辑操作疯狂的消耗掉大量内存（譬如加载一张不经过处理的超大超高清图片等）导致超过阈值OOM</li>
-<li><strong>解决思路</strong>①在内存引用上做些处理，常用的有软引用、弱引用 ②在内存中加载图片时直接在内存中做处理，如：边界压缩 ③动态回收内存，手动recyle bitmap，回收对象 ④优化Dalvik虚拟机的堆内存分配 ⑤自定义堆内存大小</li>
-</ul>
-</li>
-</ol>
-<p><a href="http://www.trinea.cn/android/android-performance-demo/" target="_blank" rel="external">参考链接1</a>   </p>
-<p><a href="http://blog.csdn.net/jdsjlzx/article/details/44600477" target="_blank" rel="external">参考链接2</a></p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/优化/"> #优化 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1189,7 +1111,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">38</span>
+              <span class="site-state-item-count">39</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1203,7 +1125,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">45</span>
+              <span class="site-state-item-count">47</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

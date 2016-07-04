@@ -148,6 +148,92 @@
           
           
             
+              <a class="post-title-link" href="2016/07/03/一路向北-从港漂到北漂/">
+                一路向北---从港漂到北漂
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-07-03
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="categories/在路上/">在路上</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2016/07/03/一路向北-从港漂到北漂/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/03/一路向北-从港漂到北漂/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>人生真是尴尬！五年前的我，甚至于一年前的我，也不曾想过我最终会去北漂; 然而现在的我却正在北上的高铁上。<br>毕业的去向选择十分艰难，似乎比当年高考填志愿还要艰难，每一个决定的做出都有得有失，也没有对错，最大的感觉就是选择有时候可能真的会比努力更重要，大形势的浩瀚大河里，个人的涓涓细流只能被挟裹着前行。<br>决定北上放弃了很多机会，赚钱的机会，留港的机会，加入独角兽的机会；仿佛站在一个十字路口，下一步去往哪里就在这几天之间做出了决定，谁又知道下一个盒子里的巧克力会是什么味道？<br>有着一种对未知的恐惧吧其实，也有着对前景的无法把握。也可能是想得到的太多，但又怎么可能面面兼顾。可20多岁又怎么想到30多岁的事情，随它去吧。  </p>
+<p>这些年下来，感觉人最重要的其实应该是兴趣和性格，这两个方面对个人发展的影响会是至关重要的。路很长，  </p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/毕业/"> #毕业 </a>
+          
+            <a href="tags/随感/"> #随感 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="2016/06/12/二叉树的前序、中序、后序和层次遍历方法/">
                 二叉树的前序、中序、后序和层次遍历方法
               </a>
@@ -1230,106 +1316,6 @@ private <span class="keyword">static</span> boolean isBalanceBT(<span class="typ
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="2016/02/18/依道-wifi室内定位的实现原理/">
-                依道-wifi室内定位的实现原理
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-02-18
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="categories/算法/">算法</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2016/02/18/依道-wifi室内定位的实现原理/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/18/依道-wifi室内定位的实现原理/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="技术原理">技术原理</h3><p><strong>基于RSSI(信号接收强度)方法</strong>它是一种基于MAC层的通过接收到的信号强弱测定信号点与接收点的距离，进而根据相应数据进行定位计算的方法。因为室内WIFI信号强度会随着传播距离的增加而降低，当然随着距离的增加同理定位的精度也会降低。我们根据移动终端测量接收到的信号强度和已知的无线信号衰落模型，可以估算出收发方之间的距离，根据多个估算的距离值，可以计算出移动终端的位置</p>
-<ol>
-<li>每一个无线AP都有一个全球唯一的MAC地址,并且一般来说无线AP在一段时间内是不会移动的; 然后每一个移动设备在开启Wi-Fi的情况下,即可扫描并收集周围的AP信号,无论是否加密,是否已连接，甚至信号强度不足以显示在无线信号列表中,都可以获取到AP广播出来的MAC地址</li>
-<li>移动设备将这些能够标示AP的数据发送到位置服务器,服务器检索出每一个AP的地理位置,并结合每个信号的强弱程度,计算出设备的地理位置并返回到用户设备</li>
-<li>位置服务商要不断更新、补充自己的数据库,以保证数据的准确性,毕竟无线AP不像基站塔那样基本100%不会移动 </li>
-</ol>
-<h3 id="两种算法">两种算法</h3><ol>
-<li><strong>三角定位</strong>:<br>如果我们已经知道了这些AP的位置，我们可以利用信号衰减模型RSSI估算出移动设备距离各个AP的距离,然后根据移动设备到周围AP距离作为直径画圆，其交点就是该设备的位置。很容易发现，三角定位算法需要我们提前知道AP的位置，因此对于环境变化较快的场合不适合使用。</li>
-<li><strong>指纹数据匹配算法</strong>：指纹算法类似于机器学习算法，分为两个阶段:<ul>
-<li><strong>离线训练阶段</strong>: 第一步，将需要室内定位区域划分网格，建立采样点（间距1~2m)；第二步，使用移动设备打开wifi逐个采样点采样，记录该点位置、所获取的RSSI及AP地址，保存到指纹数据库。<strong>采样过程</strong>对每个点每隔5s采样一次，共100次，然后对这些数据去除噪点，并对这些采样数据求均值</li>
-<li><strong>在线定位阶段</strong>: 用户持移动设备在定位区域移动，实时获取当前RSSI及AP地址，将该信息上传到服务器进行匹配（匹配算法有KNN、神经网络等),得到估算位置。</li>
-</ul>
-</li>
-</ol>
-<h3 id="参考链接">参考链接</h3><ol>
-<li><a href="http://www.zhihu.com/question/20593603" target="_blank" rel="external">Wi-Fi 定位的原理</a></li>
-<li><a href="http://blog.liuning.tk/2015/09/consin-similarity-indoor-positioning" target="_blank" rel="external">基于余弦相似性的指纹匹配算法</a></li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/室内定位/"> #室内定位 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1368,7 +1354,7 @@ private <span class="keyword">static</span> boolean isBalanceBT(<span class="typ
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">38</span>
+              <span class="site-state-item-count">39</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1382,7 +1368,7 @@ private <span class="keyword">static</span> boolean isBalanceBT(<span class="typ
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">45</span>
+              <span class="site-state-item-count">47</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
