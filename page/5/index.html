@@ -476,37 +476,49 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 <li><strong>同步/异步与阻塞/非阻塞是两组不同的概念,它们可以共存组合,同步和异步与消息的通知机制有关,阻塞和非阻塞与程序等待消息(无所谓同步或者异步)时的状态有关</strong> <strong>同步</strong>：就是在发出一个功能调用时，在没有得到结果之前，该调用就不返回(<strong>与阻塞的区别</strong>很多时候当前线程还是激活的，只是从逻辑上当前函数没有返回而已)。<strong>异步</strong>：当一个异步过程调用发出后，调用者不能立刻得到结果；这个调用的部件在处理完成后，通过状态、通知和回调来通知调用者。<strong>阻塞</strong>：是指调用结果返回之前，当前线程会被挂起，函数只有在得到结果之后才会返回。<strong>非阻塞</strong>指在不能立刻得到结果之前，该函数不会阻塞当前线程，而会立刻返回。</li>
 <li>举例: 我去买一本书，立即买到了，这就是<strong>非阻塞</strong>；如果恰好书店没有，我就等一直等到书店有了这本书买到了才走，这就是<strong>阻塞</strong>；这两种情况，非阻塞和阻塞都可以称为<strong>同步</strong>。如果书店恰好没有，我就告诉书店老板，书来了告诉我一声让我来取或者直接送到我家，然后我就走了，这就是<strong>异步</strong>。</li>
 </ol>
-<h3 id="Synchronized代码块和方法">Synchronized代码块和方法</h3><p>synchronized关键字强制实施一个互斥锁(<strong>互斥锁</strong>：任意时刻，只有一个线程锁。即假设A线程已经获取了锁，在A线程释放这个锁之前，B线程是无法获取到这个锁的，B要获取这个锁就会进入阻塞状态。)，使得被保护的代码块在同一时间只能有一个线程进入并执行，防止多线程访问临界共享资源出现数据不一致性；同步是一种高开销的操作，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；Synchronized锁住的是对象或者类,对象被锁住时，该对象所有的其他同步方法和代码块不能被执行；类被锁住时，该类所有的其他同步静态方法和代码块不能被执行</p>
-<pre><code><span class="class"><span class="keyword">class</span> <span class="title">Bank</span> </span>{
-        <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
+<h3 id="Java对象锁和类锁">Java对象锁和类锁</h3><ol>
+<li>在Java程序运行时环境中，JVM需要对两类线程共享的数据进行协调：①保存在堆中的实例变量 ②保存在方法区中的类变量。</li>
+<li>一个线程可以多次对同一个对象上锁。对于每一个对象，java虚拟机维护一个加锁计数器，线程每获得一次该对象，计数器就加1，每释放一次，计数器就减 1，当计数器值为0时，锁就被完全释放了。</li>
+<li>对于同一个类A，线程1争夺A对象实例的对象锁，线程2争夺类A的类锁，这两者不存在竞争关系。也就说对象锁和类锁互补干预内政</li>
+</ol>
+<h3 id="Synchronized代码块和方法">Synchronized代码块和方法</h3><ol>
+<li>synchronized关键字强制实施一个互斥锁，使得被保护的代码块在同一时间只能有一个线程进入并执行，防止多线程访问临界共享资源出现数据不一致性；同步是一种高开销的操作，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；</li>
+<li>Synchronized锁住的是对象或者类,对象被锁住时，该对象所有的其他同步方法和代码块不能被执行；类被锁住时，该类所有的其他同步静态方法和代码块不能被执行</li>
+<li><p><strong>互斥锁</strong>：任意时刻，只有一个线程锁。即假设A线程已经获取了锁，在A线程释放这个锁之前，B线程是无法获取到这个锁的，B要获取这个锁就会进入阻塞状态。</p>
+<p> class Bank {</p>
+<pre><code>    <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
 
-        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> account;
-        }
+    <span class="keyword">public</span> <span class="function"><span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
+        <span class="keyword">return</span> account;
+    }
 
-        <span class="javadoc">/**
-         * 用同步方法实现
-         * 
-         *<span class="javadoctag"> @param</span> money
-         */</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+    <span class="javadoc">/**
+     * 用同步方法实现
+     * 
+     *<span class="javadoctag"> @param</span> money
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="function"><span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+        account += money;
+    }
+
+    <span class="javadoc">/**
+     * 用同步代码块实现
+     * 
+     *<span class="javadoctag"> @param</span> money
+     */</span>
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">save1</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) {
             account += money;
         }
-
-        <span class="javadoc">/**
-         * 用同步代码块实现
-         * 
-         *<span class="javadoctag"> @param</span> money
-         */</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save1</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
-            <span class="keyword">synchronized</span> (<span class="keyword">this</span>) {
-                account += money;
-            }
-        }
     }
-</code></pre><h3 id="ReentrantLock可重入锁">ReentrantLock可重入锁</h3><ol>
+}
+</code></pre></li>
+</ol>
+<h3 id="ReentrantLock可重入锁">ReentrantLock可重入锁</h3><ol>
 <li>可重入锁，也叫做递归锁，指的是同一线程外层函数获得锁之后，内层递归函数仍然有获取该锁的代码，但不受影响;即被同一个线程多次获取，而不会产生死锁。在JAVA环境下 ReentrantLock 和synchronized 都是可重入锁</li>
-<li><p>ReentrantLock是可重入、互斥、实现了Lock接口的锁，需要自己手动加锁与释放；要注意及时释放锁，否则会出现死锁，通常在finally代码释放锁；如果synchronized关键字能满足用户的需求，就用synchronized，因为它能简化代码</p>
+<li>ReentrantLock是可重入、互斥、实现了Lock接口的锁，需要自己手动加锁与释放；要注意及时释放锁，否则会出现死锁，通常在finally代码释放锁；如果synchronized关键字能满足用户的需求，就用synchronized，因为它能简化代码 </li>
+<li><strong>Lock的常用方法</strong>:</li>
+<li><p><strong>synchronized和Lock的主要区别</strong></p>
 <pre><code><span class="keyword">class</span> <span class="title">Bank</span> {
     <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
     <span class="comment">// 创建一个ReentrantLock锁</span>
