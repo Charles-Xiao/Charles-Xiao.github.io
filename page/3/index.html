@@ -148,6 +148,76 @@
           
           
             
+              <a class="post-title-link" href="../../2015/09/04/OpenWrt/">
+                OpenWrt
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-09-04
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/09/04/OpenWrt/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/04/OpenWrt/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>Power consumption will be higher if a USB device is attached to its USB port!  </p>
+<p>scp command：  </p>
+<p>scp libmysqlclient_5.1.73-1_ar71xx.ipk root@192.168.1.1:  </p>
+<p><strong>scp error: Host key verification failed</strong></p>
+<p>cd ~/.ssh<br>rm known_hosts</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2015/08/30/Android应用性能优化/">
                 Android应用性能优化
               </a>
@@ -372,7 +442,7 @@
 
       
         
-          <p><strong>MVC模式</strong>是一种非常经典的复合型软件架构模式，在UI设计思路中扮演着非常重要的角色。它把用户界面交互分拆到不同的三种角色中，应用程序被分成三个核心部件：Model（模型）、View（视图）、Controller（控制器）, 各自处理自己的任务，提高了应用程序的灵活性和复用性。MVC模式不管是在web开发还是Android开发中都被广泛应用，最典型的MVC应用就是JSP + servlet + javabean的模式。</p>
+          <p><strong>MVC模式</strong>是一种非常经典的复合型软件架构模式，它把用户界面交互分拆到不同的三种角色中，应用程序被分成三个核心部件：Model（模型）、View（视图）、Controller（控制器）, 它们各自处理自己的任务，这样就可以把业务逻辑和视图显示解耦，提高了应用程序的灵活性和复用性。MVC模式不管是在web开发还是Android开发中都被广泛应用，最典型的MVC应用就是JSP + servlet + javabean的模式，例如SpringMVC开发框架。</p>
 <ul>
 <li><p>Model模型：模型持有所有的数据、状态和程序逻辑，一个模型可以有不同的多个视图表现形式，复用性高。例如数据库记录以及相应增删查改操作；Android中对数据库的操作、网络请求、格式转换、文件下载、大数据处理等的耗时操作都在Model里面处理</p>
 </li>
@@ -1037,6 +1107,7 @@ __author__ = <span class="string">'xiaoyong'</span>
 <li><strong>双亲委派模型的工作过程</strong>是：在loadClass函数中，首先会判断该类是否被加载过，加载过则进行下一步—-解析，否则进行加载；如果一个类加载器收到了类加载器的请求，先不会自己尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父类加载器反馈自己无法完成这个加载请求（它的搜说范围中没有找到所需的类时，子加载类才会尝试自己去加载）</li>
 <li><strong>静态分派和动态分派</strong>：静态分派发生在编译阶段，是指依据静态类型(变量声明时定义的变量类型)来决定方法的执行版本，例如方法重载中依据参数的定义类型来定位具体应该执行的方法；动态分派发生在运行期，根据变量实例化时的实际类型来决定方法的执行版本，例如方法重写；目前的 Java 语言（JDK1.6）是一门<strong>静态多分派、动态单分派</strong>的语言。</li>
 <li><strong>动态分派具体实现</strong>Java虚拟机是通过在方法区中建立一个虚方法表，通过使用方法表的索引来代替元数据查找以提高性能。虚方法表中存放着各个方法的实际入口地址，如果子类没有覆盖父类的方法，那么子类的虚方法表里面的地址入口与父类是一致的；如果重写父类的方法，那么子类的方法表的地址将会替换为子类实现版本的地址。方法表是在类加载的连接阶段（验证、准备、解析）进行初始化，准备了子类的初始化值后，虚拟机会把该类的虚方法表也进行初始化。</li>
+<li><strong>JDK7和8中内存模型变化</strong>：JDK7中把String常量池从永久代移到了堆中，并通过intern方法来保证不在堆中重复创建一个对象；JDK7开始使用G1收集器替代CMS收集器。JDK8使用元空间来替代原来的方法区，并且提供了字符串去重功能，也就是G1收集器可以识别出堆中那些重复出现的字符串并让他们指向同一个内部char[]数组，而不是在堆中存在多份拷贝</li>
 </ol>
 <h3 id="参考链接">参考链接</h3><ol>
 <li>《Java编程思想》</li>
@@ -1445,95 +1516,6 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/06/12/彩云之南/">
-                彩云之南
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-06-12
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/在路上/">在路上</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/06/12/彩云之南/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/12/彩云之南/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>筹划已久的毕业旅行终于在6月初拉开帷幕~~~第一站便是为期9天的云南之行(6.3-6.11)。从昆明滇池到大理双廊，登苍山游洱海，沿三十公里洱海线骑行小普陀；夜宿丽江束河，古镇却多喧嚣；颠簸数百里山路只为一睹泸沽湖美貌，深入藏区一探香格里拉峡谷幽深。一路下来，各种奔波，各种惊艳，也遇上各种趣闻趣事趣人，的确不虚此行。
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2015/06/12/彩云之南/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/云南攻略/"> #云南攻略 </a>
-          
-            <a href="../../tags/毕业游记/"> #毕业游记 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1572,21 +1554,21 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">39</span>
+              <span class="site-state-item-count">40</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="../..//categories">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">16</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-count">49</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

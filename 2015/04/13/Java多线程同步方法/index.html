@@ -270,7 +270,7 @@
 </ol>
 <h3 id="volatile变量可见性">volatile变量可见性</h3><p><strong>volatile</strong>: 在需要同步的变量上加上修饰符volatile，例如：private volatile int account = 100;volatile可以保证变量的可见性但是不保证原子性，不能用于修饰final常量，线程每一次对volatile变量的修改都会即时刷新到主存和通知到其他线程，也就是说每一次每个线程读取volatile变量时都会从主存中去取而不会从缓存寄存器中获取，以确保变量的值都是最新获取的;该关键字在JDK1.6开始可以保证指令不被重排序；但是他不能保证原子性，比如n++这种复合型操作;java虚拟机规范（jvm spec）中，规定了声明为volatile的long和double变量的get和set操作是原子的,所以将long和double类型的变量用volatile修饰，就可以保证对他们的赋值操作的原子性。  </p>
 <p><strong>CAS比较并交换操作</strong>：CAS 操作包含三个操作数 —— 内存位置（V）、预期原值（A）和新值(B). CAS有效地说明了“我认为位置 V 应该包含值 A；如果包含该值，则将 B 放到这个位置；否则，不要更改该位置，只告诉我这个位置现在的值即可。”   </p>
-<p>例如，有一个变量i=0，Thread-1和Thread-2都对这个变量执行自增操作。 可能会出现Thread-1与Thread-2同时读取i=0到各自的工作内存中，然后各自执行+1，最后将结果赋予i。这样，虽然两个线程都对i执行了自增操作，但是最后i的值为1，而不是2。<br>解决这个问题使用互斥锁自然可以。但是也可以使用CAS来实现，思路如下：<br>自增操作可以分为两步：（1）从内存中读取这个变量的当前值（2）执行（变量=上一步取到的当前值+1）的赋值操作。</p>
+<p>例如，有一个变量i=0，Thread-1和Thread-2都对这个变量执行自增操作。 可能会出现Thread-1与Thread-2同时读取i=0到各自的工作内存中，然后各自执行+1，最后将结果赋予i。这样，虽然两个线程都对i执行了自增操作，但是最后i的值为1，而不是2。<br>解决这个问题使用互斥锁自然可以。但是也可以使用CAS来实现，思路如下：<br><strong>自增操作可以分为三步</strong>：（1）从内存中读取这个变量的当前值（2）执行（变量=上一步取到的当前值+1）的赋值操作 (3)将自增后的值写入变量</p>
 <p>多线程情况下，自增操作出现问题的原因就是执行（2）的时候，变量在主内存中的值已经不等于上一步取到的当前值了，所以赋值时，用CompareAndSet操作代替Set操作：首先比较一下内存中这个变量的值是否等于上一步取到的当前值，如果等于，则说明可以执行+1运算，并赋值；如果不等于，则说明有其他线程在此期间更改了主内存中此变量的值，上一步取出的当前值已经失效，此时，不再执行+1运算及后续的赋值操作，而是返回主内存中此变量的最新值。“比较并交换（CAS）”操作是原子操作，它使用平台提供的用于并发操作的硬件原语。</p>
 <p><strong>原子（atom）</strong>本意是“不能被进一步分割的最小粒子”，而原子操作（atomic operation）意为”不可被中断的一个或一系列操作” </p>
 <h3 id="Wait_&amp;&amp;_Notify同步(生产者消费者模式实现)">Wait &amp;&amp; Notify同步(生产者消费者模式实现)</h3><ol>
@@ -485,21 +485,21 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">39</span>
+              <span class="site-state-item-count">40</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="../../../..//categories">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">16</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-count">49</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

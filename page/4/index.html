@@ -148,6 +148,95 @@
           
           
             
+              <a class="post-title-link" href="../../2015/06/12/彩云之南/">
+                彩云之南
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-06-12
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/在路上/">在路上</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/06/12/彩云之南/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/12/彩云之南/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>筹划已久的毕业旅行终于在6月初拉开帷幕~~~第一站便是为期9天的云南之行(6.3-6.11)。从昆明滇池到大理双廊，登苍山游洱海，沿三十公里洱海线骑行小普陀；夜宿丽江束河，古镇却多喧嚣；颠簸数百里山路只为一睹泸沽湖美貌，深入藏区一探香格里拉峡谷幽深。一路下来，各种奔波，各种惊艳，也遇上各种趣闻趣事趣人，的确不虚此行。
+          <div class="post-more-link text-center">
+            <a class="btn" href="../../2015/06/12/彩云之南/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/云南攻略/"> #云南攻略 </a>
+          
+            <a href="../../tags/毕业游记/"> #毕业游记 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2015/05/27/java重难点知识集锦/">
                 java重难点知识集锦
               </a>
@@ -1052,6 +1141,7 @@ n再和这个数做与运算*/</span>
 </ul>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_pre.png" class="full-image"></p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_next.png" class="full-image"></p>
+<h3 id="数据库结构概览">数据库结构概览</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/db.png" width="100%"></p>
 <h3 id="数据库的事务、索引、范式和存储过程概念以及优缺点">数据库的事务、索引、范式和存储过程概念以及优缺点</h3><ol>
 <li><p>主键：数据库表中对储存数据对象予以唯一和完整标识的数据列或属性的组合。一个数据列只能有一个主键，且主键的取值不能缺失，即不能为空值（Null）。  </p>
 <p>超键：在关系中能唯一标识元组的属性集称为关系模式的超键。一个属性可以为作为一个超键，多个属性组合在一起也可以作为一个超键。超键包含候选键和主键。  </p>
@@ -1065,7 +1155,7 @@ n再和这个数做与运算*/</span>
 <li>原子性：要么操作序列中全部语句都执行，要么全部不被执行,不可分割; 也就是说当事务的执行序列中某个语句执行错误，会回滚到该事务未执行时的状态</li>
 <li>一致性：事务执行之后数据库从一个一致性状态转化到另一个一致性状态</li>
 <li>隔离性：多个事务并行执行时互相之间不会影响</li>
-<li>永久性：事务执行之后会对数据库内容产生永久性影响</li>
+<li>持久性：事务成功执行之后会对数据库内容产生永久性影响</li>
 </ul>
 </li>
 <li><p><strong>范式</strong></p>
@@ -1076,11 +1166,10 @@ n再和这个数做与运算*/</span>
 <li>BC范式：数据里边每一列既不部分依赖于任何候选键也不传递依赖于任何候选键；一个关系满足BCNF则一定满足第三范式</li>
 </ul>
 </li>
-<li><p><strong>索引</strong> ：建立在数据库表的某些列上，例如需要搜索或者排序的列，主键列，外键列(用于连接的列),用在where语句中的列；有些列不应该建索引，比如：查询中很少使用或者参考的列， 只有很少数据值的列， 定义为text, image和bit数据类型的列,当修改性能远远大于检索性能时，不应该创建索引；索引的实现通常使用B树及其变种B+树</p>
+<li><p><strong>索引</strong> ：建立在数据库表的某些列上，例如需要搜索或者排序的列，主键列，外键列(用于连接的列),用在where语句中的列；<strong>有些列不应该建索引</strong>，比如：查询中很少使用或者参考的列， 只有很少数据值的列，定义为text, image和bit数据类型的列,当修改性能远远大于检索性能时，不应该创建索引；索引的实现通常使用B树及其变种B+树</p>
 <ul>
-<li>参考: 一般来说，应该在这些列上创建索引：在经常需要搜索的列上，可以加快搜索的速度；在作为主键的列上，强制该列的唯一性和组织表中数据的排列结构；在经常用在连接的列上，这些列主要是一些外键，可以加快连接的速度；在经常需要根据范围进行搜索的列上创建索引，因为索引已经排序，其指定的范围是连续的；在经常需要排序的列上创建索引，因为索引已经排序，这样查询可以利用索引的排序，加快排序查询时间；在经常使用在WHERE子句中的列上面创建索引，加快条件的判断速度。</li>
-<li>复合索引就是索引建立在多个列上，唯一索引就是保证索引列中得所有数据都是唯一的，不会存在冗余数据;聚集索引是指表中行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能包含一个聚集索引</li>
-<li><p>当增加索引时，会提高检索性能，但是会降低修改性能 </p>
+<li>参考: 一般来说，<strong>应该在这些列上创建索引</strong>：在经常需要搜索的列上，可以加快搜索的速度；在作为主键的列上，强制该列的唯一性和组织表中数据的排列结构；在经常用在连接的列上，这些列主要是一些外键，可以加快连接的速度；在经常需要根据范围进行搜索的列上创建索引，因为索引已经排序，其指定的范围是连续的；在经常需要排序的列上创建索引，因为索引已经排序，这样查询可以利用索引的排序，加快排序查询时间；在经常使用在WHERE子句中的列上面创建索引，加快条件的判断速度。</li>
+<li><p><strong>复合索引</strong>就是索引建立在多个列上，<strong>唯一索引</strong>就是保证索引列中的所有数据都是唯一的，不会存在冗余数据;<strong>聚集索引</strong>是指表中行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能包含一个聚集索引</p>
 <p>优点：</p>
 </li>
 </ul>
@@ -1111,13 +1200,13 @@ n再和这个数做与运算*/</span>
 <h3 id="MySQL的隔离级别与锁">MySQL的隔离级别与锁</h3><ol>
 <li><strong>四种隔离级别</strong>: 隔离级别决定了一个会话中的事务可能对另一个会话的影响、并发会话对数据库的操作、一个会话中所见数据的一致性; MySQL的InnoDB支持四种隔离级别,默认是可重读隔离级别<ul>
 <li><strong>未提交读READ UNCOMMITTED</strong>：最低级别的隔离，也被称之为脏读，它允许一个事务读取还没commit的事务的执行结果，这样可能会提高性能，但是导致脏读   </li>
-<li><strong>提交读READ COMMITTED</strong>：在一个事务中只允许看见已经commit的事务所做的改变。如果一个session中select还在查询中，另一会话session此时insert一条记录，则新添加的数据不可见(不可重复读)   </li>
-<li><strong>可重读REPEATABLE READ</strong>：同一个事务的多个实例在并发读取数据时会看到同样的数据行。也就是说在一个事务中重复select的结果一样，除非本事务中update数据库;可能导致<strong>幻读</strong></li>
+<li><strong>提交读READ COMMITTED</strong>：在一个事务中只允许看见已经commit的事务所做的改变。如果一个session中select还在查询中，另一会话session此时insert一条记录，则新添加的数据不可见；只有该操作commit之后才可见，也就是说—-<strong>不可重复读</strong>   </li>
+<li><strong>可重读REPEATABLE READ</strong>：同一个事务的多个实例在并发读取数据时会看到同样的数据行。也就是说在一个事务中重复select的结果一样，除非本事务中添加新数据到数据库，可能导致<strong>幻读</strong>;也就说事务之间只是在新数据方面突破了隔离，对已存在的数据仍旧隔离。</li>
 <li><strong>可串行化SERIALIZABLE</strong>：最高级别的隔离，强制事务排序并且只允许事务串行执行。为了达到此目的，数据库会锁住每个读的数据行，减少了并发，增加了稳定性，但是可能导致超时和锁竞争现象</li>
 <li><strong>事务并发导致的几个问题</strong><ul>
 <li><strong>脏读(Drity Read)</strong>：某个事务已更新一份数据，另一个事务在此时读取了同一份数据，由于某些原因，前一个回滚了操作，则后一个事务所读取的数据就会是不正确的</li>
-<li><strong>不可重复读</strong>:在一个事务的两次查询之中数据不一致，这可能是两次查询过程中间插入了一个事务更新的原有的数据。</li>
-<li><strong>幻读</strong>：例如一个事务的两次查询过程中有另外一个事务插入数据造成第二次查询出现了在第一次查询中没有出现的数据</li>
+<li><strong>不可重复读</strong>:在一个事务的两次查询之中数据不一致，这可能是两次查询过程中间插入了一个事务更新了原有的数据。</li>
+<li><strong>幻读</strong>：例如一个事务的两次查询过程中有另外一个事务插入数据造成第二次查询出现了在第一次查询中没有出现的数据；<strong>例如</strong>如果事务A运行”SELECT count(1) from TABLE_X” ，然后事务B在 TABLE_X 加入一条新数据并提交，当事务A再运行一次 count(1)结果不会是一样的，这就叫做<strong>幻读</strong></li>
 </ul>
 </li>
 <li>隔离级别越高，越能保证数据的完整性和一致性，但是对并发性能的影响也越大。对于多数应用程序，可以优先考虑把数据库系统的隔离级别设为Read Committed。它能够避免脏读取，而且具有较好的并发性能。尽管它会导致不可重复读和并发问题，可以由应用程序采用悲观锁或乐观锁来控制。</li>
@@ -1126,20 +1215,31 @@ n再和这个数做与运算*/</span>
 </li>
 <li><strong>共享锁</strong>：由读表操作加上的锁，加锁后其他用户只能获取该表或行的共享锁，不能获取排它锁，也就是说只能读不能写；一个事务获取了共享锁之后，可以对锁定范围内的数据执行读操作。</li>
 <li><strong>排它锁</strong>：由写表操作加上的锁，加锁后其他用户不能获取该表或行的任何锁;一个事务获取了排它锁之后，可以对锁定范围内的数据执行写操作。</li>
-<li><strong>乐观锁</strong>:读取数据时不锁，更新时检查是否数据已经被更新过，如果是则取消当前更新<br>一般在悲观锁的等待时间过长而不能接受时我们才会选择乐观锁；乐观锁适用于多读的应用类型，这样可以提高吞吐量</li>
+<li><strong>乐观锁</strong>:读取数据时不锁，更新时检查是否数据已经被更新过，如果是则取消当前更新<br>一般在悲观锁的等待时间过长而不能接受时我们才会选择乐观锁；<strong>乐观锁适用于多读的应用类型</strong>，这样可以提高吞吐量</li>
 <li><strong>悲观锁</strong>:在读取数据时锁住那几行，其他对这几行的更新需要等到悲观锁结束时才能继续；比如行锁，表锁等，读锁 </li>
 <li><strong>表级锁</strong>：对整个表加锁，影响标准的所有记录；开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。</li>
 <li><strong>行级锁</strong>：对一行记录加锁，只影响一条记录；开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。</li>
 <li><strong>页面锁</strong>：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</li>
+<li><strong>锁管理器</strong>是添加和释放锁的进程，在内部使用一个哈希表来保存锁的相关信息(关键字是被锁的数据），并且了解每一块数据是被哪个事务加的锁,哪个事务在等待数据解锁;锁管理器还需要检查是否存在死锁，以及决定选择取消哪一个事务来消除死锁，<strong>检查死锁有两种方式</strong>一种是<strong>检查循环等待</strong>还有一种是<strong>使用超时设定</strong>。如果一个锁在超时时间内没有加上，那事务就进入了死锁状态。</li>
+<li><strong>数据库一般采用锁或者数据版本控制来进行并发控制</strong> 版本控制是每个事务可以在相同时刻修改相同的数据，每个事务有自己的数据拷贝（或者叫版本）；如果2个事务修改相同的数据，只接受一个修改，另一个将被拒绝，相关的事务回滚（或重新运行）；这将提高性能，因为：读事务不会阻塞写事务，写事务不会阻塞读，可以减少锁管理器带来的额外开销，但是磁盘空间消耗巨大，以空间换时间</li>
 </ol>
-<h3 id="MyISAM和InnoDB存储引擎之间的区别">MyISAM和InnoDB存储引擎之间的区别</h3><ol>
+<h3 id="MyISAM和InnoDB存储引擎之间的区别">MyISAM和InnoDB存储引擎之间的区别</h3><p><strong>MyISAM引擎</strong>使用B+Tree作为索引结构，叶节点的data域存放的是数据记录的地址，索引检索的算法为首先按照B+Tree搜索算法搜索索引，如果指定的Key存在，则取出其data域的值，然后以data域的值为地址，读取相应数据记录。这种索引方式就属于“非聚集索引”；<strong>InnoDB中</strong>，表数据文件本身就是按B+Tree组织的一个索引结构，这棵树的叶节点data域保存了完整的数据记录  </p>
+<ol>
 <li>InnoDB支持事务、外键和行锁，而MyISAM不支持这些高级功能，但是<strong>MyISAM是默认引擎</strong>，InnoDB则需要指定(事务是一种高级的处理方式，如在一些列增删改中只要哪个出错还可以回滚还原)</li>
 <li>MyISAM适合SELECT为主的应用，InnoDB适合频繁修改(INSERT或UPDATE)以及涉及到安全性较高的应用,因为InnoDB数据库在进行update时表进行行锁，并发量相对较大;而MyISAM在进行updata时进行表锁，并发量相对较小</li>
 <li>InnoDB不支持FULLTEXT类型的索引; 虽然InnoDB支持行锁,但是某些情况下还是锁整表，如 update table set a=1 where user like ‘%lee%’，因为该SQL语句不能确定要扫描的范围</li>
 <li>DELETE清空整个表时，InnoDB是一行一行的删除，效率非常慢。MyISAM则会重建表</li>
 <li>MyISAM的索引和数据是分开的，并且索引是有压缩的，内存使用率就对应提高了不少。能加载更多索引，而Innodb是索引和数据是紧密捆绑的，没有使用压缩从而会造成Innodb比MyISAM体积庞大不小</li>
 <li>InnoDB中不保存表的具体行数，也就是说，执行select count ( <em> ) from table时，InnoDB要扫描一遍整个表来计算有多少行，但是MyISAM只要简单的读出保存好的行数即可。注意的是，当count(</em>) 语句包含where条件时，两种表的操作是一样的</li>
-<li>MyISAM缓存在内存的是索引，不是数据。而InnoDB缓存在内存的是数据</li>
+<li>MyISAM<strong>缓存</strong>在内存的是索引，不是数据。而InnoDB缓存在内存的是数据  </li>
+<li><strong>MyISAM和InnoDB索引B+树结构</strong>：</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/innodb.png" width="100%">  </p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/myisam.png" width="100%">  </p>
+<h3 id="日志管理器">日志管理器</h3><p>为了提升性能，数据库把数据保存在内存缓冲区内。但如果当事务提交时服务器崩溃，崩溃时还在内存里的数据会丢失，这破坏了事务的持久性。你可以把所有数据都写在磁盘上，但是如果服务器崩溃，最终数据可能只有部分写入磁盘，这破坏了事务的原子性。因此我们采用<strong>事务日志</strong>是一个存储空间，在每次写盘之前，数据库在事务日志中写入一些信息，这样当事务崩溃或回滚，数据库知道如何移除或完成尚未完成的事务。<strong>事务的每一个操作（增/删/改）产生一条日志</strong>  </p>
+<h3 id="参考链接">参考链接</h3><ol>
+<li><a href="http://blog.jobbole.com/100349/" target="_blank" rel="external">数据库整体架构原理</a></li>
+<li><a href="http://www.codeceo.com/article/mysql-index-struct.html#0-tsina-1-46551-397232819ff9a47a7b7e80a40613cfe1" target="_blank" rel="external">MySQL数据库索引原理</a>  </li>
 </ol>
 
         
@@ -1267,105 +1367,6 @@ cmd+option+esc <span class="comment">--- 打开进程管理窗口</span>
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/">
-                Mac设置环境变量(adb+NDK+sdk)
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-15
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Mac系统/">Mac系统</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>无论是在windows还是mac系统下，对于程序猿而言，在terminal中输入命令进行一些常用操作是比用鼠标更为快捷的方式。那么为了能够打开terminal就可以直接输入并执行命令，就需要进行环境变量的设置，这样就不必进入命令文件所在目录下执行该命令了。windows下配置环境变量较为简单，在此讲一下mac下配置环境变量的方法和注意事项。</p>
-<p><strong>1. 打开terminal，输入<code>cd ~</code>, 进入当前用户home目录</strong></p>
-<p><strong>2. 输入<code>touch .bash_profile</code>, 创建bash_profile文件(如果该文件已经存在则可以直接进入第3步)</strong></p>
-<p><strong>3. 打开记事本编辑bash_profile文件，示例如下</strong></p>
-<pre><code>方式一：用<span class="constant">SDK_HOME指</span>代一个通用路径，一处设置，多处使用，结构明晰，然后设置到<span class="constant">PATH</span>
-
-export <span class="constant">SDK_HOME=</span>“/usr/sdk”             
-export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:</span><span class="variable">${</span><span class="constant">SDK_HOME}</span><span class="symbol">:</span><span class="variable">${</span><span class="constant">SDK_HOME}</span>/<span class="symbol">tools:</span>/usr/ndk
-
-
-方式二：直接将各个命令的路径用<span class="symbol">:</span>连接起来设置到<span class="constant">PATH </span>形如--- export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:</span>路径<span class="number">1</span><span class="symbol">:</span>路径<span class="number">2</span><span class="symbol">:</span>路径<span class="number">3</span>
-
-export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:/usr/sdk</span><span class="symbol">:/usr/sdk/tools</span><span class="symbol">:/usr/ndk</span>
-</code></pre><p><strong>4. 保存修改，输入更新命令<code>source .bash_profile</code>,PATH变量配置完成</strong></p>
-<p><a href="http://blog.csdn.net/zf135792468/article/details/11926995" target="_blank" rel="external">参考链接</a></p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Android/"> #Android </a>
-          
-            <a href="../../tags/Mac/"> #Mac </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1404,21 +1405,21 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">39</span>
+              <span class="site-state-item-count">40</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="../..//categories">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">16</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-count">49</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
