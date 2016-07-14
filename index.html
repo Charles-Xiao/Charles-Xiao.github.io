@@ -148,6 +148,71 @@
           
           
             
+              <a class="post-title-link" href="2016/07/14/DUoBao项目代码学习笔记/">
+                DUoBao项目代码学习笔记
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-07-14
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2016/07/14/DUoBao项目代码学习笔记/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/14/DUoBao项目代码学习笔记/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="2016/07/07/SpringMVC-Mybatis开发框架学习笔记/">
                 SpringMVC+Mybatis开发框架学习笔记
               </a>
@@ -223,6 +288,22 @@
 </ol>
 <h4 id="Mybatis">Mybatis</h4><ol>
 <li><strong>Mybatis</strong>是一个<strong>支持普通SQL查询，存储过程和高级映射的优秀持久层框架</strong>。MyBatis消除了几乎所有的JDBC代码和参数的手工设置以及对结果集的检索封装；MyBatis可以使用简单的XML或注解用于配置映射，将接口和Java的POJO（Plain Old Java Objects，普通的Java对象）映射成数据库中的记录</li>
+</ol>
+<h3 id="Spring常见用法">Spring常见用法</h3><h4 id="Spring常用注解">Spring常用注解</h4><h3 id="cookie和session">cookie和session</h3><ol>
+<li><strong>会话跟踪</strong>是Web程序中常用的技术，用来跟踪用户的整个会话。常用的会话跟踪技术是Cookie与Session。<strong>Cookie通过在客户端记录信息确定用户身份，Session通过在服务器端记录信息确定用户身份</strong>。</li>
+<li><strong>Cookie</strong>实际上是一小段的文本信息。客户端请求服务器，如果服务器需要记录该用户状态，就使用response向客户端浏览器颁发一个Cookie。客户端浏览器会把Cookie保存起来。当浏览器再请求该网站时，浏览器把请求的网址连同该Cookie一同提交给服务器。服务器检查该Cookie，以此来辨认用户状态。cookie的内容主要包括：名字，值，过期时间，路径和域名</li>
+<li>客户端浏览器访问服务器的时候，服务器把客户端信息以某种形式记录在服务器上。<strong>这就是Session</strong>。客户端浏览器再次访问时只需要从该Session中查找该客户的状态就可以了。</li>
+<li><p><strong>cookie 和session 的区别</strong>：</p>
+<ul>
+<li>cookie数据存放在客户的浏览器上，session数据放在服务器上。</li>
+<li>cookie不是很安全，别人可以分析存放在本地的COOKIE并进行COOKIE欺骗,考虑到安全应当使用session。</li>
+<li>session会在一定时间内保存在服务器上。当访问增多，会比较占用你服务器的性能,考虑到减轻服务器性能方面，应当使用COOKIE。</li>
+<li>单个cookie保存的数据不能超过4K，很多浏览器都限制一个站点最多保存一定数目个cookie。</li>
+<li>将登陆信息等重要信息存放为SESSION;其他信息如果需要保留，可以放在COOKIE中</li>
+</ul>
+</li>
+<li><p><strong>html5提供新的存储</strong> <strong>sessionStorage</strong>用于本地存储一个会话（session）中的数据，这些数据只有在同一个会话中的页面才能访问并且当会话结束后数据也随之销毁。因此sessionStorage不是一种持久化的本地存储，仅仅是会话级别的存储。<strong>localStorage</strong>用于持久化的本地存储，除非主动删除数据，否则数据是永远不会过期的 </p>
+</li>
 </ol>
 
         
@@ -1012,124 +1093,11 @@ tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /ho
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="2016/04/21/shadowsocks-android源码Mac环境编译打包apk教程/">
-                shadowsocks-android源码Mac环境编译打包apk教程
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-04-21
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="categories/Android/">Android</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2016/04/21/shadowsocks-android源码Mac环境编译打包apk教程/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/21/shadowsocks-android源码Mac环境编译打包apk教程/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <ol>
-<li><p>安装homebrew包管理器</p>
-<pre><code><span class="comment">//卸载brew命令</span>
-ruby -e <span class="string">"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"</span>
-
-<span class="comment">//安装 brew命令</span>
-<span class="regexp">/usr/</span>bin<span class="regexp">/ruby -e "$(curl -fsSL https:/</span><span class="regexp">/raw.githubusercontent.com/</span>Homebrew<span class="regexp">/install/m</span>aster<span class="regexp">/install)"</span>
-</code></pre></li>
-<li>Install Android SDK and NDK by run brew install android-ndk android-sdk</li>
-<li><p>设置sdk全局变量和NDK全局变量,在~目录下新建或打开.bash_profile文件，添加两行export命令引入ndk和sdk文件夹,再在terminal执行source .bash_profile</p>
-<pre><code><span class="built_in">export</span> ANDROID_HOME=~/sdk            
-<span class="built_in">export</span> ANDROID_NDK_HOME=~/ndk/android-ndk-r10e 
-</code></pre></li>
-<li><p>cd 进入sdk目录下tools子目录,运行两个命令更新sdk</p>
-<pre><code><span class="keyword">echo</span> <span class="string">"y"</span> | ./android <span class="keyword">update</span> sdk --<span class="built_in">filter</span> tools,platform-tools,build-tools-<span class="number">23.0</span>.<span class="number">2</span>,android-<span class="number">23</span>,extra-google-m2repository --<span class="keyword">no</span>-ui -<span class="keyword">a</span>
-
-<span class="keyword">echo</span> <span class="string">"y"</span> | ./android <span class="keyword">update</span> sdk --<span class="built_in">filter</span> extra-android-m2repository --<span class="keyword">no</span>-ui --<span class="keyword">no</span>-https -<span class="keyword">a</span>
-</code></pre></li>
-<li><p>cd进入shadowsocks-android目录执行 <figure class="highlight"><figcaption><span>submodule update --init ```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6. &#23433;&#35013;sbt&#65306;``` brew install sbt</span><br></pre></td></tr></table></figure></p>
-</li>
-<li><p>生成keystore文件和Create local.properties from local.properties.example</p>
-<pre><code>keytool -genkey -v -keystore <span class="keyword">release</span>.keystore -<span class="keyword">alias</span> <span class="keyword">release</span> -keyalg RSA -keysize <span class="number">2048</span> -validity <span class="number">10000</span>
-</code></pre></li>
-<li><p>sbt编译</p>
-<pre><code><span class="comment">// Build native binaries</span>
-./build.sh
-
-<span class="comment">// Build the apk</span>
-sbt clean <span class="string">android:</span><span class="keyword">package</span>-release
-</code></pre></li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/shadowsocks/"> #shadowsocks </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
   <div class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="page/5/">5</a><a class="extend next" rel="next" href="page/2/">&raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="page/6/">6</a><a class="extend next" rel="next" href="page/2/">&raquo;</a>
   </div>
 
 
@@ -1163,7 +1131,7 @@ sbt clean <span class="string">android:</span><span class="keyword">package</spa
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-count">41</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

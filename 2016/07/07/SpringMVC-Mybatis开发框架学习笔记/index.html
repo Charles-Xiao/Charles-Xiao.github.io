@@ -219,6 +219,22 @@
 <h4 id="Mybatis">Mybatis</h4><ol>
 <li><strong>Mybatis</strong>是一个<strong>支持普通SQL查询，存储过程和高级映射的优秀持久层框架</strong>。MyBatis消除了几乎所有的JDBC代码和参数的手工设置以及对结果集的检索封装；MyBatis可以使用简单的XML或注解用于配置映射，将接口和Java的POJO（Plain Old Java Objects，普通的Java对象）映射成数据库中的记录</li>
 </ol>
+<h3 id="Spring常见用法">Spring常见用法</h3><h4 id="Spring常用注解">Spring常用注解</h4><h3 id="cookie和session">cookie和session</h3><ol>
+<li><strong>会话跟踪</strong>是Web程序中常用的技术，用来跟踪用户的整个会话。常用的会话跟踪技术是Cookie与Session。<strong>Cookie通过在客户端记录信息确定用户身份，Session通过在服务器端记录信息确定用户身份</strong>。</li>
+<li><strong>Cookie</strong>实际上是一小段的文本信息。客户端请求服务器，如果服务器需要记录该用户状态，就使用response向客户端浏览器颁发一个Cookie。客户端浏览器会把Cookie保存起来。当浏览器再请求该网站时，浏览器把请求的网址连同该Cookie一同提交给服务器。服务器检查该Cookie，以此来辨认用户状态。cookie的内容主要包括：名字，值，过期时间，路径和域名</li>
+<li>客户端浏览器访问服务器的时候，服务器把客户端信息以某种形式记录在服务器上。<strong>这就是Session</strong>。客户端浏览器再次访问时只需要从该Session中查找该客户的状态就可以了。</li>
+<li><p><strong>cookie 和session 的区别</strong>：</p>
+<ul>
+<li>cookie数据存放在客户的浏览器上，session数据放在服务器上。</li>
+<li>cookie不是很安全，别人可以分析存放在本地的COOKIE并进行COOKIE欺骗,考虑到安全应当使用session。</li>
+<li>session会在一定时间内保存在服务器上。当访问增多，会比较占用你服务器的性能,考虑到减轻服务器性能方面，应当使用COOKIE。</li>
+<li>单个cookie保存的数据不能超过4K，很多浏览器都限制一个站点最多保存一定数目个cookie。</li>
+<li>将登陆信息等重要信息存放为SESSION;其他信息如果需要保留，可以放在COOKIE中</li>
+</ul>
+</li>
+<li><p><strong>html5提供新的存储</strong> <strong>sessionStorage</strong>用于本地存储一个会话（session）中的数据，这些数据只有在同一个会话中的页面才能访问并且当会话结束后数据也随之销毁。因此sessionStorage不是一种持久化的本地存储，仅仅是会话级别的存储。<strong>localStorage</strong>用于持久化的本地存储，除非主动删除数据，否则数据是永远不会过期的 </p>
+</li>
+</ol>
 
       
     </div>
@@ -237,6 +253,8 @@
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="../../14/DUoBao项目代码学习笔记/">DUoBao项目代码学习笔记</a>
             
           </div>
 
@@ -310,7 +328,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-count">41</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -362,7 +380,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring,_SpringMVC,_Struts和Mybatis联系与区别"><span class="nav-number">1.</span> <span class="nav-text">Spring, SpringMVC, Struts和Mybatis联系与区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Spring"><span class="nav-number">1.1.</span> <span class="nav-text">Spring</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SpringMVC和Struts—-表现层框架(MVC)"><span class="nav-number">1.2.</span> <span class="nav-text">SpringMVC和Struts—-表现层框架(MVC)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mybatis"><span class="nav-number">1.3.</span> <span class="nav-text">Mybatis</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring,_SpringMVC,_Struts和Mybatis联系与区别"><span class="nav-number">1.</span> <span class="nav-text">Spring, SpringMVC, Struts和Mybatis联系与区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Spring"><span class="nav-number">1.1.</span> <span class="nav-text">Spring</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SpringMVC和Struts—-表现层框架(MVC)"><span class="nav-number">1.2.</span> <span class="nav-text">SpringMVC和Struts—-表现层框架(MVC)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mybatis"><span class="nav-number">1.3.</span> <span class="nav-text">Mybatis</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring常见用法"><span class="nav-number">2.</span> <span class="nav-text">Spring常见用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Spring常用注解"><span class="nav-number">2.1.</span> <span class="nav-text">Spring常用注解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cookie和session"><span class="nav-number">3.</span> <span class="nav-text">cookie和session</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
