@@ -203,7 +203,18 @@
 </li>
 <li><strong>面向切面编程AOP</strong>是对面向对象编程（OOP）的补充，OOP将程序分解成各个层次的对象，而<strong>面向切面编程</strong>从程序运行角度考虑程序的结构,将程序运行过程分解成各个切面，并提取业务处理过程的切面;它是一种对应用执行过程中的步骤的动态抽象，可以获得各个步骤之间低耦合性的隔离效果；Spring中的AOP还提供了声明式事务管理</li>
 </ol>
-<h4 id="SpringMVC和Struts—-表现层框架(MVC)">SpringMVC和Struts—-表现层框架(<a href="http://charles-xiao.github.io/2015/08/29/%E6%B5%85%E8%B0%88MVC%E3%80%81MVP%E3%80%81MVVM%E4%B8%89%E7%A7%8D%E6%A1%86%E6%9E%B6%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">MVC</a>)</h4><ol>
+<h4 id="SpringMVC和Struts—-表现层框架(MVC)">SpringMVC和Struts—-表现层框架(<a href="http://charles-xiao.github.io/2015/08/29/%E6%B5%85%E8%B0%88MVC%E3%80%81MVP%E3%80%81MVVM%E4%B8%89%E7%A7%8D%E6%A1%86%E6%9E%B6%E6%A8%A1%E5%BC%8F/" target="_blank" rel="external">MVC</a>)</h4><ul>
+<li><strong>Spring MVC框架</strong>是一个MVC框架，通过实现Model-View-Controller模式来很好地将数据、业务与展现进行分离。Spring MVC的设计是围绕DispatcherServlet展开的,DispatcherServlet负责将请求派发到特定的handler; 通过可配置的handler mappings、view resolution、locale以及theme resolution来处理请求并且转到对应的视图;   </li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/springmvc.png" class="full-image" width="100%"></p>
+<ul>
+<li><strong>Struts2</strong>是一个基于MVC设计模式的Web应用框架，它本质上相当于一个servlet，在MVC设计模式中，Struts2作为控制器(Controller)来建立模型与视图的数据交互.  </li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/strut2.png" class="full-image" width="100%"></p>
+<ul>
+<li><strong>区别</strong>  </li>
+</ul>
+<ol>
 <li><p>Struts2是类级别的拦截， 一个类对应一个request上下文，SpringMVC是方法级别的拦截，一个方法对应一个request上下文</p>
 </li>
 <li><p>拦截器实现机制上，Struts2有以自己的interceptor机制，SpringMVC用的是独立的AOP方式，这样导致Struts2的配置文件量还是比SpringMVC大。</p>
@@ -219,7 +230,16 @@
 <h4 id="Mybatis">Mybatis</h4><ol>
 <li><strong>Mybatis</strong>是一个<strong>支持普通SQL查询，存储过程和高级映射的优秀持久层框架</strong>。MyBatis消除了几乎所有的JDBC代码和参数的手工设置以及对结果集的检索封装；MyBatis可以使用简单的XML或注解用于配置映射，将接口和Java的POJO（Plain Old Java Objects，普通的Java对象）映射成数据库中的记录</li>
 </ol>
-<h3 id="Spring常见用法">Spring常见用法</h3><h4 id="Spring常用注解">Spring常用注解</h4><h3 id="cookie和session">cookie和session</h3><ol>
+<h3 id="Spring常见用法">Spring常见用法</h3><h4 id="Spring常用注解">Spring常用注解</h4><ol>
+<li><strong>@Service</strong>用于标注业务层组件</li>
+<li><strong>@Controller</strong>用于标注控制层组件（如struts中的action）</li>
+<li><strong>@Repository</strong>用于标注数据访问组件，即DAO组件</li>
+<li><strong>@Component</strong>泛指组件，当组件不好归类的时候，我们可以使用这个注解进行标注</li>
+<li><strong>@PathVariable</strong>当使用@RequestMapping URI template 样式映射时， 即 someUrl/{paramId}, 这时的paramId可通过 @Pathvariable注解绑定它传过来的值到方法的参数上</li>
+<li><strong>@Autowired</strong>Spring 2.5 引入了 @Autowired 注释，它可以对类成员变量、方法及构造函数进行标注，完成自动装配的工作。通过 @Autowired的使用来消除 set ，get方法</li>
+<li><strong>@RequestMapping</strong>是一个用来处理请求地址映射的注解，可用于类或方法上。用于类上，表示类中的所有响应请求的方法都是以该地址作为父路径</li>
+</ol>
+<h3 id="cookie和session">cookie和session</h3><ol>
 <li><strong>会话跟踪</strong>是Web程序中常用的技术，用来跟踪用户的整个会话。常用的会话跟踪技术是Cookie与Session。<strong>Cookie通过在客户端记录信息确定用户身份，Session通过在服务器端记录信息确定用户身份</strong>。</li>
 <li><strong>Cookie</strong>实际上是一小段的文本信息。客户端请求服务器，如果服务器需要记录该用户状态，就使用response向客户端浏览器颁发一个Cookie。客户端浏览器会把Cookie保存起来。当浏览器再请求该网站时，浏览器把请求的网址连同该Cookie一同提交给服务器。服务器检查该Cookie，以此来辨认用户状态。cookie的内容主要包括：名字，值，过期时间，路径和域名</li>
 <li>客户端浏览器访问服务器的时候，服务器把客户端信息以某种形式记录在服务器上。<strong>这就是Session</strong>。客户端浏览器再次访问时只需要从该Session中查找该客户的状态就可以了。</li>
