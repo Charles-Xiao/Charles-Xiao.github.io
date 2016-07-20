@@ -497,6 +497,26 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 <li><p><strong>为什么匿名内部类和局部内部类只能访问final变量？</strong>：因为虽然匿名内部类在方法的内部，但实际编译的时候，内部类编译成Outer.Inner,这说明内部类所处的位置和外部类中的方法处在同一个等级上，外部类中的方法中的变量或参数只是方法的局部变量，这些变量或参数的作用域只在这个方法内部有效。因为编译的时候内部类和方法在同一级别上，所以方法中的变量或参数只有为final，内部类才可以引用，因为Java采用了一种copy local variable的方式来实现，也就是说把定义为final的局部变量拷贝过来用，而引用的也可以拿过来用，只是不能重新赋值。</p>
 </li>
 <li><strong>JDK8的新特性</strong>:</li>
+<li><p><strong>Java 8 中的 Stream</strong> 是对集合（Collection）对象功能的增强，它专注于对集合对象进行各种非常便利、高效的聚合操作（aggregate operation），或者大批量数据操作 (bulk data operation)。Stream API 借助于同样新出现的 Lambda 表达式，极大的提高编程效率和程序可读性。同时它提供串行和并行两种模式进行汇聚操作，并发模式能够充分利用多核处理器的优势。通常编写并行代码很难而且容易出错, 但使用 Stream API 无需编写一行多线程的代码，就可以很方便地写出高性能的并发程序；Stream 可以并行化遍历操作，使用并行去遍历时，数据会被分成多个段，其中每一个都在不同的线程中处理，然后将结果一起输出; Stream 的并行操作依赖于 Java7 中引入的 Fork/Join 框架（JSR166y）来拆分任务和加速处理过程</p>
+<pre><code><span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> nums <span class="subst">=</span> Lists<span class="built_in">.</span>newArrayList(<span class="number">1</span>,<span class="built_in">null</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="built_in">null</span>,<span class="number">6</span>);
+<span class="comment">// 创建stream --&gt; map转换stream --&gt; reduce聚合函数</span>
+<span class="comment">// 含义：给定一个Integer类型的List，获取其对应的Stream对象，然后进行过滤掉null，再去重，再每个元素乘以2，再每个元素被消费的时候打印自身，在跳过前两个元素，最后取前四个元素进行加和运算</span>
+nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter(num <span class="subst">-&gt; </span>num <span class="subst">!=</span> <span class="built_in">null</span>)<span class="built_in">.
+               </span>distinct()<span class="built_in">.</span>mapToInt(num <span class="subst">-&gt; </span>num <span class="subst">*</span> <span class="number">2</span>)<span class="built_in">.
+               </span>peek(System<span class="built_in">.</span>out<span class="tag">::println</span>)<span class="built_in">.</span><span class="keyword">skip</span>(<span class="number">2</span>)<span class="built_in">.</span>limit(<span class="number">4</span>)<span class="built_in">.</span><span class="keyword">sum</span>();
+</code></pre></li>
+<li><p><strong>Java 8 中的 Lambda</strong> : 一段带有输入参数的可执行语句块,Lambda表达式取代了匿名类，取消了模板，允许用函数式风格编写代码。这样有时可读性更好，表达更清晰。书写形式：</p>
+<pre><code><span class="function"><span class="params">(params)</span> -&gt;</span> expression
+<span class="function"><span class="params">(params)</span> -&gt;</span> statement
+<span class="function"><span class="params">(params)</span> -&gt;</span> { statements }
+</code></pre></li>
+<li><p>JDK   </p>
+</li>
+</ol>
+<h3 id="参考链接">参考链接</h3><ol>
+<li><a href="http://ifeve.com/lambda/" target="_blank" rel="external">Java8初体验（一）lambda表达式语法</a></li>
+<li><a href="http://ifeve.com/stream/" target="_blank" rel="external">Java8初体验（二）Stream语法详解</a></li>
+<li><a href="http://www.importnew.com/16436.html" target="_blank" rel="external">Java8 lambda表达式10个示例</a></li>
 </ol>
 
         
