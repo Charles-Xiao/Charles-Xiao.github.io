@@ -194,7 +194,14 @@
 <li>Linux系统中进程调度操作由一个只在内核态运行的函数schedule()函数执行，该函数代码为所有进程共享；进程控制块PCB(Process ControlBlock)是系统中最为重要的数据结构之一。用来存放进程所必需的各种信息，PCB用结构task—struct来表示，包括进程的类型、进程状态、优先级、时钟信息等。</li>
 <li>Linux中设置了进程调度标志need—resched ，当标志为1时，可执行调度程序．通常，Linux 调度时机分以下两种情况：(1)<strong>主动调度</strong>：指显式调用schedule() 函数明确释放CPU ，引起新一轮调度．一般发生在当前进程状态改变，如：进程终止、进程睡眠、进程对某些信号处理过程中等(2)<strong>被动调度</strong>：指不显示调用schedule() 函数，只是PCB 中的need_resched 进程调度标志，该域置位为1 将引起新的进程调度  (3)三种情况：<strong>中断处理过程（包括时钟中断、I/O中断、系统调用和异常）</strong>中，直接调用schedule()，或者返回用户态时根据need_resched标记调用schedule()；<strong>内核线程</strong>可以直接调用schedule()进行进程切换，也可以在中断处理过程中进行调度，也就是说内核线程作为一类的特殊的进程可以主动调度，也可以被动调度；<strong>用户态进程</strong>无法实现主动调度，仅能通过陷入内核态后的某个时机点进行调度，即在中断处理过程中进行调度 </li>
 <li>Linux将进程分为<strong>实时进程和普通进程(又称非实时进程或一般进程)</strong>，实时进程的优先级要高于其他进程，如果一个实时进程处于可执行状态，它将先得到执行．实时进程又有两种策略：<strong>SCHED—RR时间片轮转和和SCHED—FIFO先进先出</strong>，在时间片轮转策略中每个可执行实时进程轮流执行一个时间片，而先进先出策略每个进程按各自在运行队列中的顺序执行且顺序不能变化。普通进程SCHED_OTHER也按照轮转调度策略处理</li>
-<li><strong>进程生命周期</strong>依次定义的数据结构为：TASK—RUNNING，TASK—INTERRUPTIBLE。TASK—UNINTERRUPTIBLE，TASK—ZOMBIE和TASK—STOPPED，一个进程在其生存期间，状态会发生多次变化。与其数据结构相对应的即是Linux进程的状态，分别是：运行态、等待态、暂停态和僵死态。<br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Linux_process.png" class="full-image" width="100%"></li>
+<li><p><strong>进程生命周期</strong>依次定义的数据结构为：TASK—RUNNING，TASK—INTERRUPTIBLE。TASK—UNINTERRUPTIBLE，TASK—ZOMBIE和TASK—STOPPED，一个进程在其生存期间，状态会发生多次变化。与其数据结构相对应的即是Linux进程的状态，分别是：运行态、等待态、暂停态和僵死态。<br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Linux_process.png" class="full-image" width="100%"></p>
+</li>
+<li><p><strong>中断和异常</strong>：</p>
+<ul>
+<li><strong>中断</strong>又叫异步中断，是指CPU在正常运行程序时，由于程序的预先安排或内外部事件，引起CPU中断正在运行的程序，而转到发生中断事件程序中。这些引起程序中断的事件称为中断源</li>
+<li><strong>异常</strong>是指CPU内部控制单元出现的中断，即在CPU执行特定指令时出现的非法情况。异常也称为同步中断，因此只有在一条指令执行后才会发出中断(程序执行异常或者系统调用)，不可能在指令执行期间发生异常</li>
+</ul>
+</li>
 </ol>
 <h3 id="Linux内存管理机制">Linux内存管理机制</h3><p>Linux中无论物理内存有多大，都将其充份利用，将一些程序调用过的硬盘数据读入内存，利用内存读写的高速特性来提高Linux系统的数据访问性能；<strong>页高速缓存(cache)</strong>是Linux内核实现的一种主要磁盘缓存。它主要用来减少对磁盘的I/O操作。是通过把磁盘中的数据缓存到物理内存中，把对磁盘的访问变为对物理内存的访问。查看内存状态命令<code>top，free，vmstat</code><a href="https://blog.linuxeye.com/362.html" target="_blank" rel="external">Link</a></p>
 <ol>

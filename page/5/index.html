@@ -606,47 +606,65 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 </ol>
 <h3 id="Java对象锁和类锁">Java对象锁和类锁</h3><ol>
 <li>在Java程序运行时环境中，JVM需要对两类线程共享的数据进行协调：①保存在堆中的实例变量 ②保存在方法区中的类变量。</li>
-<li>一个线程可以多次对同一个对象上锁。对于每一个对象，java虚拟机维护一个加锁计数器，线程每获得一次该对象，计数器就加1，每释放一次，计数器就减 1，当计数器值为0时，锁就被完全释放了。</li>
+<li>一个线程可以多次对同一个对象上锁。对于每一个对象，java虚拟机维护一个加锁计数器，线程每获得一次该对象，计数器就加1，每释放一次，计数器就减 1，当计数器值为0时，对象就被完全释放了。</li>
 <li>对于同一个类A，线程1争夺A对象实例的对象锁，线程2争夺类A的类锁，这两者不存在竞争关系。也就说对象锁和类锁互补干预内政</li>
 </ol>
+<h3 id="互斥锁与读写锁">互斥锁与读写锁</h3><ol>
+<li><strong>互斥锁</strong>：任意时刻，只能有一个线程持有锁。即假设A线程已经获取了锁，在A线程释放这个锁之前，B线程是无法获取到这个锁的，B要获取这个锁就会进入阻塞状态。例如synchronized和ReentrantLock都属于互斥锁</li>
+<li><strong>读写锁：ReadWriteLock</strong>：真实的业务场景中，一份数据，读取数据的操作次数通常高于写入数据的操作，而线程与线程间的读读操作是不涉及到线程安全的问题，没有必要加入互斥锁；所以读写锁只要满足<strong>“读-读”不互斥 ，”读-写”互斥 ，”写-写”互斥</strong>；也就是说只要在任何时候必须保证：①只有一个线程在写入；②线程正在读取的时候，写入操作等待；③线程正在写入的时候，其他线程的写入操作和读取操作都要等待；这样，读写锁就可以提高效率</li>
+</ol>
 <h3 id="Synchronized代码块和方法">Synchronized代码块和方法</h3><ol>
-<li>synchronized关键字强制实施一个互斥锁，使得被保护的代码块在同一时间只能有一个线程进入并执行，防止多线程访问临界共享资源出现数据不一致性；同步是一种高开销的操作，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；</li>
+<li>synchronized关键字强制实施一个<strong>互斥锁</strong>，使得被保护的代码块在同一时间只能有一个线程进入并执行，用于防止多线程访问临界共享资源出现数据不一致性；但是同步是一种高开销的操作，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；</li>
 <li>Synchronized锁住的是对象或者类,对象被锁住时，该对象所有的其他同步方法和代码块不能被执行；类被锁住时，该类所有的其他同步静态方法和代码块不能被执行</li>
-<li><p><strong>互斥锁</strong>：任意时刻，只有一个线程锁。即假设A线程已经获取了锁，在A线程释放这个锁之前，B线程是无法获取到这个锁的，B要获取这个锁就会进入阻塞状态。</p>
-<p> class Bank {</p>
-<pre><code>    <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
+</ol>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">Bank</span> </span>{
+        <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
 
-    <span class="keyword">public</span> <span class="function"><span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
-        <span class="keyword">return</span> account;
-    }
+        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> account;
+        }
 
-    <span class="javadoc">/**
-     * 用同步方法实现
-     * 
-     *<span class="javadoctag"> @param</span> money
-     */</span>
-    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="function"><span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
-        account += money;
-    }
-
-    <span class="javadoc">/**
-     * 用同步代码块实现
-     * 
-     *<span class="javadoctag"> @param</span> money
-     */</span>
-    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">save1</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
-        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) {
+        <span class="javadoc">/**
+         * 用同步方法实现
+         * 
+         *<span class="javadoctag"> @param</span> money
+         */</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
             account += money;
         }
+
+        <span class="javadoc">/**
+         * 用同步代码块实现
+         * 
+         *<span class="javadoctag"> @param</span> money
+         */</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save1</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+            <span class="keyword">synchronized</span> (<span class="keyword">this</span>) {
+                account += money;
+            }
+        }
     }
-}
-</code></pre></li>
-</ol>
-<h3 id="ReentrantLock可重入锁">ReentrantLock可重入锁</h3><ol>
+</code></pre><h3 id="ReentrantLock可重入锁">ReentrantLock可重入锁</h3><ol>
 <li>可重入锁，也叫做递归锁，指的是同一线程外层函数获得锁之后，内层递归函数仍然有获取该锁的代码，但不受影响;即被同一个线程多次获取，而不会产生死锁。在JAVA环境下 ReentrantLock 和synchronized 都是可重入锁</li>
-<li>ReentrantLock是可重入、互斥、实现了Lock接口的锁，需要自己手动加锁与释放；要注意及时释放锁，否则会出现死锁，通常在finally代码释放锁；如果synchronized关键字能满足用户的需求，就用synchronized，因为它能简化代码 </li>
-<li><strong>Lock的常用方法</strong>:</li>
-<li><p><strong>synchronized和Lock的主要区别</strong></p>
+<li>ReentrantLock是可重入、互斥、实现了Lock接口的锁，需要自己手动加锁与释放；要注意及时释放锁，否则会出现死锁，通常在finally代码释放锁；它能完成Synchronized所实现的所有功能,而且性能上有一定提升</li>
+<li><strong>ReentrantLock的常用方法</strong>:<ul>
+<li>lock(), 如果获取了锁立即返回，如果别的线程持有锁，当前线程则一直处于休眠状态，直到获取锁</li>
+<li>lockInterruptibly -&gt; 调用后一直阻塞到获得锁(和lock()一样)，但是接受中断信号</li>
+<li>tryLock(), 如果获取了锁立即返回true，如果别的线程正持有锁，立即返回false</li>
+<li>tryLock(long timeout,TimeUnit unit)，如果获取了锁定立即返回true，如果别的线程正持有锁，会等待参数给定的时间，在等待的过程中，如果获取了锁定，就返回true，如果等待超时，返回false</li>
+</ul>
+</li>
+<li><strong>synchronized和ReentrantLock的主要区别</strong><ul>
+<li><strong>ReentrantLock新特性</strong><ol>
+<li>等待可中断—-在持有锁的线程长时间不释放锁的时候,等待的线程可以选择放弃等待. 使用tryLock(long timeout, TimeUnit unit)方法</li>
+<li>公平锁(按照申请锁的顺序来依次获得锁称为公平锁)—-synchronized的是非公平锁,ReentrantLock可以通过构造函数实现公平锁. new RenentrantLock(boolean fair)</li>
+<li>可绑定多个Condition—-通过多次newCondition可以获得多个Condition对象,可以简单的通过await(),signal()方法实现比较复杂的线程同步的功能</li>
+</ol>
+</li>
+<li><strong>使用场景</strong>并发量比较小的情况下，Synchronized的性能要优于ReetrantLock，但是在并发量比较高，资源竞争很激烈的情况下，其性能下降很严重，此时ReentrantLock是个不错的方案;如果synchronized关键字能满足用户的需求，就用synchronized，因为它能简化代码，可读性高，而且编译器会尽可能优化synchronize</li>
+</ul>
+</li>
+</ol>
 <pre><code><span class="keyword">class</span> <span class="title">Bank</span> {
     <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
     <span class="comment">// 创建一个ReentrantLock锁</span>
@@ -665,9 +683,7 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
         }
     }
 }
-</code></pre></li>
-</ol>
-<h3 id="ThreadLocal线程局部变量">ThreadLocal线程局部变量</h3><ol>
+</code></pre><h3 id="ThreadLocal线程局部变量">ThreadLocal线程局部变量</h3><ol>
 <li><strong>ThreadLocal与同步机制区别</strong>：a.ThreadLocal与同步机制都是为了解决多线程中相同变量的访问冲突问题。b.前者采用以”空间换时间”的方法，后者采用以”时间换空间”的方式</li>
 <li><strong>性质</strong>每一个使用ThreadLocal变量的线程都获得该变量的副本，副本之间相互独立，这样每一个线程都可以随意修改自己的变量副本，而不会对其他线程产生影响</li>
 <li><strong>四个函数</strong>：initialValue函数用于获取此线程局部变量的初始值；get用于获取此线程局部变量在当前线程中的副本值，set用于设置，remove用于移除此线程局部变量在当前线程中的副本值；<strong>顺序</strong>在进行get之前，必须先set，否则会报空指针异常；如果想在get之前不需要调用set就能正常访问的话，必须重写initialValue()方法</li>
@@ -1200,7 +1216,9 @@ SharedPreferences sharedPreferences = otherAppContext.getSharedPreferences(<span
 <li>业务爱好，羽毛球，健身，阅读和利用coursera进行业余学习</li>
 <li>对目标岗位的理解和想法，应聘该岗位的强烈意愿以及自身吻合度</li>
 </ol>
-<h3 id="Kactus">Kactus</h3><ol>
+<h3 id="网易">网易</h3><ol>
+<li>学习Spring框架使用和原理</li>
+<li><h3 id="Kactus">Kactus</h3></li>
 <li><p>ECO餐厅食用油回收系统</p>
 <ul>
 <li><p>Android端缓存机制的实现，采用二级缓存，LRUcache内存缓存和DiskLruCache文件缓存，同时模拟浏览器缓存机制来分析http请求过程的请求头内容来确定cache-control策略</p>
@@ -1589,25 +1607,32 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 <h3 id="毕设-WebCrawler项目">毕设-WebCrawler项目</h3><p>java优先级队列；Java多线程处理，线程池，html页面解析等</p>
 <p>单例模式enum实现对MySQL数据库操作的优势</p>
 <h3 id="开放性问题">开放性问题</h3><ol>
-<li>说一个你曾独立或者作为核心去解决了的一个“有趣有难度”且过程很详细的步步深入优化的技术问题<ul>
+<li>说一个你曾独立或者作为核心去解决了的一个“有趣有难度”且过程很详细的步步深入优化的技术问题or项目<ul>
 <li>贡献和成果: 核心问题的效率优化过程与方法</li>
 <li>困难:体现解决问题的方法与能力</li>
 </ul>
 </li>
-<li><p>团队合作沟通能力和Team领导力</p>
+<li>团队合作沟通能力和Team领导力</li>
+<li><p><strong>如何白板写代码？？？</strong></p>
 <ul>
 <li>Show your idea,，例如白板写代码，遇到新问题即使不知道也可以开始分析，手动画图描述问题的解决过程，从思路到设计测试用例手动输入，一步步归纳出最终解法，转化成代码</li>
 <li>解决问题的多角度性，从小问题和具体性问题开始入手，一步步递进归纳算法；遇到细节性或者较难实现的问题，可以先声明一个函数及其相应功能，留到后边再完善，代码效率的优化同样可以放到后边再做，思路的流畅性和清晰很重要。</li>
-<li>单元测试，边缘情况测试</li>
+<li>主动单元测试，边缘情况测试，null，空字符串，StringUtils.isBlank(str)</li>
 </ul>
 </li>
-<li><p>成就最大的一件事</p>
-</li>
-<li><p>对技术的兴趣和业余爱好</p>
+<li><p>成就最大的一件事—-比如学习？比赛？</p>
 </li>
 <li><p>最大缺点</p>
 </li>
 <li><p>职业规划</p>
+</li>
+<li><p><strong>性格特征</strong></p>
+<ul>
+<li><strong>对感兴趣的技术会在业余时间去主动学习</strong>，刷刷coursera学习普林斯顿的算法课程学习常见算法堆排，买机器学习的书学KNN, 决策树 mapreduce相关知识</li>
+<li><strong>学习和做工程时愿意深入了解和钻研，多问为什么？</strong>例如做Kactus的回收油系统，从做移动端应用开发，我就会去考虑我拿的数据怎么来的，所以就会自己写程序去拿数据，拿到数据存到数据库，怎么做API把数据给移动端用，也自己做了，还会主动考虑着怎么去优化客户端体验，做二级缓存，怎么并行化收发数据来提高效率，怎么比较不同的http库去提高网络请求效率</li>
+<li><strong>能够发现生活细节，主动去发现问题，提出想法</strong>:比如高德项目，项目来源就是出去旅游发现人文景点不知道典故不好玩，看到有导游，怎么不用手机APP来做？，当时也有一些其他想法，比如运动分享记录APP</li>
+<li><strong>程序员中的外向者，善于与人交流沟通和参与社会活动</strong>从本科阶段的支教，社会调研等社会活动可以看出来</li>
+</ul>
 </li>
 </ol>
 <h3 id="QA">QA</h3><ol>
@@ -1617,7 +1642,6 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 </li>
 <li><p>跨平台应用研发，web轻应用和native app的开发前景比较看法</p>
 </li>
-<li></li>
 </ol>
 
         

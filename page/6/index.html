@@ -298,9 +298,9 @@ threadPool.execute(r);
 <li>newSingleThreadExecutor: 单线程池，保证任务被顺序执行</li>
 <li>newScheduledThreadPool: 调度型线程池，提供任务被定时和周期性执行的功能</li>
 </ol>
-<ul>
-<li><p>自定义线程池</p>
-<pre><code> ThreadPoolExecutor(<span class="keyword">int</span> corePoolSize, <span class="keyword">int</span> maximumPoolSize, <span class="keyword">long</span> keepAliveTime, TimeUnit unit, BlockingQueue&lt;Runnable&gt; workQueue, ThreadFactory threadFactory, RejectedExecutionHandler <span class="keyword">handler</span>)
+</li>
+<li><p><strong>自定义线程池</strong></p>
+<pre><code> ThreadPoolExecutor(<span class="keyword">int</span> corePoolSize, <span class="keyword">int</span> maximumPoolSize, <span class="keyword">long</span> keepAliveTime, TimeUnit unit, BlockingQueue&lt;Runnable&gt; workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler)
 
 <span class="comment">/*
 corePoolSize - 核心池中所保存的线程数，包括空闲线程。
@@ -313,82 +313,85 @@ handler - 由于超出线程范围和队列容量而使新到达的任务被阻�
 默认为AbortPolicy，表示无法处理新任务时抛出异常；DiscardPolicy：不能执行的任务将被删除
 ThreadPoolExecutor是Executors类的底层实现
 */</span>
+
+ <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadPoolTest</span></span>{   
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>{   
+        <span class="comment">//创建等待队列   </span>
+        BlockingQueue&lt;Runnable&gt; bqueue = <span class="keyword">new</span> ArrayBlockingQueue&lt;Runnable&gt;(<span class="number">20</span>);   
+        <span class="comment">//创建线程池，池中保存的线程数为3，允许的最大线程数为5  </span>
+        ThreadPoolExecutor pool = <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">3</span>,<span class="number">5</span>,<span class="number">50</span>,TimeUnit.MILLISECONDS,bqueue);   
+        <span class="comment">//创建七个任务   </span>
+        Runnable t1 = <span class="keyword">new</span> MyThread();   
+        Runnable t2 = <span class="keyword">new</span> MyThread();   
+        Runnable t3 = <span class="keyword">new</span> MyThread();   
+        Runnable t4 = <span class="keyword">new</span> MyThread();   
+        Runnable t5 = <span class="keyword">new</span> MyThread();   
+        Runnable t6 = <span class="keyword">new</span> MyThread();   
+        Runnable t7 = <span class="keyword">new</span> MyThread();   
+        <span class="comment">//每个任务会在一个线程上执行  </span>
+        pool.execute(t1);   
+        pool.execute(t2);   
+        pool.execute(t3);   
+        pool.execute(t4);   
+        pool.execute(t5);   
+        pool.execute(t6);   
+        pool.execute(t7);   
+        <span class="comment">//关闭线程池   </span>
+        pool.shutdown();   
+    }   
+}   
+
+<span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>{   
+    <span class="annotation">@Override</span>   
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>{   
+        System.out.println(Thread.currentThread().getName() + <span class="string">"正在执行。。。"</span>);   
+        <span class="keyword">try</span>{   
+            Thread.sleep(<span class="number">100</span>);   
+        }<span class="keyword">catch</span>(InterruptedException e){   
+            e.printStackTrace();   
+        }   
+    }   
+}  
 </code></pre></li>
+<li><strong>线程池工作流程</strong><br>   <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/threadpool-procedure.jpg" class="full-image">    </li>
+<li><p><strong>线程池的排队策略</strong>    </p>
+<ol>
+<li><strong>默认选项是SynchronousQueue</strong>，它将任务直接提交给线程而不保持它们，一个不存储元素的阻塞队列，每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态</li>
+<li><strong>无界队列</strong>。使用无界队列（例如，不具有预定义容量的 LinkedBlockingQueue）将导致在所有 corePoolSize 线程都忙时新任务在队列中等待。这样，创建的线程就不会超过corePoolSize。（因此，maximumPoolSize的值也就无效了。）当每个任务完全独立于其他任务，即任务执行互不影响时，适合于使用无界队列；例如，在 Web页服务器中。这种排队可用于处理瞬态突发请求，当命令以超过队列所能处理的平均数连续到达时，此策略允许无界线程具有增长的可能性。</li>
+<li><strong>有界队列</strong>。当使用有限的 maximumPoolSizes时，有界队列（如 ArrayBlockingQueue）有助于防止资源耗尽，但是可能较难调整和控制。队列大小和最大池大小可能需要相互折衷：使用大型队列和小型池可以最大限度地降低 CPU 使用率、操作系统资源和上下文切换开销，但是可能导致人工降低吞吐量。如果任务频繁阻塞（例如，如果它们是 I/O边界），则系统可能为超过您许可的更多线程安排时间。使用小型队列通常要求较大的池大小，CPU使用率较高，但是可能遇到不可接受的调度开销，这样也会降低吞吐量。 </li>
+<li><strong>PriorityBlockingQueue</strong>: 一个具有优先级的无限阻塞队列<ul>
+<li><strong>线程池的风险</strong></li>
 </ul>
+<ol>
+<li>死锁: 死锁的产生是因为一组线程或者进程互相等待资源的释放而永远互相等待;线程池中容易产生一种新的死锁: 当核心池中所有线程都在等待阻塞队列中的某个线程的执行结果，但是该线程却因为池中没有空闲线程而没有办法执行，这样就导致互相等待的死锁.</li>
+<li>并发错误: 线程池和其它排队机制依靠使用 wait() 和 notify() 方法,易出现问题 </li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p><strong>线程池的执行</strong>: execute和submit两个方法都可以向线程池提交任务， execute()方法的返回类型是void，它定义在Executor接口中；submit()方法可以返回持有计算结果的Future对象，它定义在ExecutorService接口中，它扩展了Executor接口</p>
+</li>
+<li><p><strong>线程池的关闭</strong></p>
+<ol>
+<li>通过调用线程池的shutdown或shutdownNow方法来关闭线程池，它们的原理是遍历线程池中的工作线程，然后逐个调用线程的interrupt方法来中断线程，所以无法响应中断的任务可能永远无法终止。但是它们存在一定的区别，shutdownNow首先将线程池的状态设置成STOP，然后尝试停止所有的正在执行或暂停任务的线程，并返回等待执行任务的列表，而shutdown只是将线程池的状态设置成SHUTDOWN状态，然后中断所有没有正在执行任务的线程。</li>
+</ol>
+</li>
+</ul>
+<ol>
+<li>只要调用了这两个关闭方法的其中一个，isShutdown方法就会返回true。当所有的任务都已关闭后,才表示线程池关闭成功，这时调用isTerminaed方法会返回true。至于我们应该调用哪一种方法来关闭线程池，应该由提交到线程池的任务特性决定，通常调用shutdown来关闭线程池，如果任务不一定要执行完，则可以调用shutdownNow。 </li>
+</ol>
+<ul>
+<li><strong>合理配置线程池</strong>       <ol>
+<li>任务的性质：CPU密集型任务，IO密集型任务和混合型任务；CPU密集型任务配置尽可能小的线程，如配置Ncpu+1个线程的线程池。IO密集型任务则由于线程并不是一直在执行任务，则配置尽可能多的线程，如2*Ncpu</li>
+<li>任务的优先级：高，中和低；PriorityBlockingQueue会导致优先级低的线程永远不被执行</li>
+<li>任务的执行时间：长，中和短；</li>
+<li>任务的依赖性：是否依赖其他系统资源，如数据库连接：依赖数据库连接池的任务，因为线程提交SQL后需要等待数据库返回结果，如果等待的时间越长CPU空闲时间就越长，那么线程数应该设置越大，这样才能更好的利用CPU。    </li>
+</ol>
 </li>
 </ul>
 </li>
 </ol>
-<pre><code>         <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadPoolTest</span></span>{   
-            <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>{   
-                <span class="comment">//创建等待队列   </span>
-                BlockingQueue&lt;Runnable&gt; bqueue = <span class="keyword">new</span> ArrayBlockingQueue&lt;Runnable&gt;(<span class="number">20</span>);   
-                <span class="comment">//创建线程池，池中保存的线程数为3，允许的最大线程数为5  </span>
-                ThreadPoolExecutor pool = <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">3</span>,<span class="number">5</span>,<span class="number">50</span>,TimeUnit.MILLISECONDS,bqueue);   
-                <span class="comment">//创建七个任务   </span>
-                Runnable t1 = <span class="keyword">new</span> MyThread();   
-                Runnable t2 = <span class="keyword">new</span> MyThread();   
-                Runnable t3 = <span class="keyword">new</span> MyThread();   
-                Runnable t4 = <span class="keyword">new</span> MyThread();   
-                Runnable t5 = <span class="keyword">new</span> MyThread();   
-                Runnable t6 = <span class="keyword">new</span> MyThread();   
-                Runnable t7 = <span class="keyword">new</span> MyThread();   
-                <span class="comment">//每个任务会在一个线程上执行  </span>
-                pool.execute(t1);   
-                pool.execute(t2);   
-                pool.execute(t3);   
-                pool.execute(t4);   
-                pool.execute(t5);   
-                pool.execute(t6);   
-                pool.execute(t7);   
-                <span class="comment">//关闭线程池   </span>
-                pool.shutdown();   
-            }   
-        }   
-
-        <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>{   
-            <span class="annotation">@Override</span>   
-            <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>{   
-                System.out.println(Thread.currentThread().getName() + <span class="string">"正在执行。。。"</span>);   
-                <span class="keyword">try</span>{   
-                    Thread.sleep(<span class="number">100</span>);   
-                }<span class="keyword">catch</span>(InterruptedException e){   
-                    e.printStackTrace();   
-                }   
-            }   
-        }  
-
-
- * **线程池工作流程**
-
-     &lt;img src=<span class="string">"https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/threadpool-procedure.jpg"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"full-image"</span> /&gt;
-
- * **线程池的排队策略**
-
- <span class="number">1.</span> 默认选项是SynchronousQueue，它将任务直接提交给线程而不保持它们，一个不存储元素的阻塞队列，每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态
- <span class="number">2.</span> 无界队列。使用无界队列（例如，不具有预定义容量的 LinkedBlockingQueue）将导致在所有 corePoolSize 线程都忙时新任务在队列中等待。这样，创建的线程就不会超过corePoolSize。（因此，maximumPoolSize的值也就无效了。）当每个任务完全独立于其他任务，即任务执行互不影响时，适合于使用无界队列；例如，在 Web页服务器中。这种排队可用于处理瞬态突发请求，当命令以超过队列所能处理的平均数连续到达时，此策略允许无界线程具有增长的可能性。
-<span class="number">3.</span> 有界队列。当使用有限的 maximumPoolSizes时，有界队列（如 ArrayBlockingQueue）有助于防止资源耗尽，但是可能较难调整和控制。队列大小和最大池大小可能需要相互折衷：使用大型队列和小型池可以最大限度地降低 CPU 使用率、操作系统资源和上下文切换开销，但是可能导致人工降低吞吐量。如果任务频繁阻塞（例如，如果它们是 I/O边界），则系统可能为超过您许可的更多线程安排时间。使用小型队列通常要求较大的池大小，CPU使用率较高，但是可能遇到不可接受的调度开销，这样也会降低吞吐量。 
-<span class="number">4.</span> PriorityBlockingQueue: 一个具有优先级的无限阻塞队列
-
- * **线程池的风险**
-     1. 死锁: 死锁的产生是因为一组线程或者进程互相等待资源的释放而永远互相等待;线程池中容易产生一种新的死锁: 当核心池中所有线程都在等待阻塞队列中的某个线程的执行结果，但是该线程却因为池中没有空闲线程而没有办法执行，这样就导致互相等待的死锁.
-     2. 并发错误: 线程池和其它排队机制依靠使用 wait() 和 notify() 方法,易出现问题
-
- * **线程池的关闭**
-
- 1. 通过调用线程池的shutdown或shutdownNow方法来关闭线程池，它们的原理是遍历线程池中的工作线程，然后逐个调用线程的interrupt方法来中断线程，所以无法响应中断的任务可能永远无法终止。但是它们存在一定的区别，shutdownNow首先将线程池的状态设置成STOP，然后尝试停止所有的正在执行或暂停任务的线程，并返回等待执行任务的列表，而shutdown只是将线程池的状态设置成SHUTDOWN状态，然后中断所有没有正在执行任务的线程。
-
-2. 只要调用了这两个关闭方法的其中一个，isShutdown方法就会返回<span class="keyword">true</span>。当所有的任务都已关闭后,才表示线程池关闭成功，这时调用isTerminaed方法会返回<span class="keyword">true</span>。至于我们应该调用哪一种方法来关闭线程池，应该由提交到线程池的任务特性决定，通常调用shutdown来关闭线程池，如果任务不一定要执行完，则可以调用shutdownNow。
-
- * **合理配置线程池** 
-
-     1. 任务的性质：CPU密集型任务，IO密集型任务和混合型任务；CPU密集型任务配置尽可能小的线程，如配置Ncpu+1个线程的线程池。IO密集型任务则由于线程并不是一直在执行任务，则配置尽可能多的线程，如2*Ncpu
-    2. 任务的优先级：高，中和低；PriorityBlockingQueue会导致优先级低的线程永远不被执行
-    3. 任务的执行时间：长，中和短；
-    4. 任务的依赖性：是否依赖其他系统资源，如数据库连接：依赖数据库连接池的任务，因为线程提交SQL后需要等待数据库返回结果，如果等待的时间越长CPU空闲时间就越长，那么线程数应该设置越大，这样才能更好的利用CPU。
-
- * execute和submit两个方法都可以向线程池提交任务， execute()方法的返回类型是<span class="keyword">void</span>，它定义在Executor接口中；submit()方法可以返回持有计算结果的Future对象，它定义在ExecutorService接口中，它扩展了Executor接口 
-</code></pre><h3 id="线程的状态变化">线程的状态变化</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/multiThread.png" class="full-image"></p>
+<h3 id="线程的状态变化">线程的状态变化</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/multiThread.png" class="full-image"></p>
 <h3 id="死锁及其解决办法">死锁及其解决办法</h3><pre><code><span class="comment">/**
  * 一个简单的死锁类 当DeadLock类的对象flag==1时（td1），先锁定o1,睡眠500毫秒
  * 而td1在睡眠的时候另一个flag==0的对象（td2）线程启动，先锁定o2,睡眠500毫秒
