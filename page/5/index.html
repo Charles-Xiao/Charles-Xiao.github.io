@@ -611,7 +611,12 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 </ol>
 <h3 id="互斥锁与读写锁">互斥锁与读写锁</h3><ol>
 <li><strong>互斥锁</strong>：任意时刻，只能有一个线程持有锁。即假设A线程已经获取了锁，在A线程释放这个锁之前，B线程是无法获取到这个锁的，B要获取这个锁就会进入阻塞状态。例如synchronized和ReentrantLock都属于互斥锁</li>
-<li><strong>读写锁：ReadWriteLock</strong>：真实的业务场景中，一份数据，读取数据的操作次数通常高于写入数据的操作，而线程与线程间的读读操作是不涉及到线程安全的问题，没有必要加入互斥锁；所以读写锁只要满足<strong>“读-读”不互斥 ，”读-写”互斥 ，”写-写”互斥</strong>；也就是说只要在任何时候必须保证：①只有一个线程在写入；②线程正在读取的时候，写入操作等待；③线程正在写入的时候，其他线程的写入操作和读取操作都要等待；这样，读写锁就可以提高效率</li>
+<li><strong>读写锁</strong>：Java并发包中实现ReadWriteLock接口的ReentrantReadWriteLock，它并没有实现Lock接口，是其内部类ReadLock和WriteLock实现了Lock的接口<ul>
+<li>在真实的业务场景中，通常会出现<strong>对一份数据的读取操作次数远高于写入操作</strong>这种读多写少的场景，而线程与线程间的读读操作是不涉及到线程安全的问题，没有必要加入互斥锁</li>
+<li>所以读写锁只要满足<strong>“读-读”不互斥 ，”读-写”互斥 ，”写-写”互斥</strong>；也就是说只要在任何时候必须保证：①只有一个线程在写入；②线程正在读取的时候，写入操作等待；③线程正在写入的时候，其他线程的写入操作和读取操作都要等待；这样，使用读写锁就可以大大提高效率</li>
+<li><a href="http://www.cnblogs.com/Gordon-YangYiBao/archive/2012/09/12/2681874.html" target="_blank" rel="external">读写锁实例讲解</a></li>
+</ul>
+</li>
 </ol>
 <h3 id="Synchronized代码块和方法">Synchronized代码块和方法</h3><ol>
 <li>synchronized关键字强制实施一个<strong>互斥锁</strong>，使得被保护的代码块在同一时间只能有一个线程进入并执行，用于防止多线程访问临界共享资源出现数据不一致性；但是同步是一种高开销的操作，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；</li>
