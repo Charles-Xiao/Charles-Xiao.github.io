@@ -234,9 +234,9 @@
         }
     }     
 </code></pre><h3 id="Collections-sort()与Arrays-sort()">Collections.sort()与Arrays.sort()</h3><ol>
-<li><p>Arrays.sort()在其内部实现上针对数组元素的不同类型采用不同的排序方式: ①基本类型数据(int, short, long, float, double等)采用QuickSort， 而对对象类型采取MergeSort. Why? 我们知道QuickSort在统计意义上效率比MergeSort高，为何不都采用 QuickSort ？<br> Answer: 概括的说，一个是稳定性，一个是移动次数。使用不同类型的排序算法主要是由于 quick sort 是不稳定的，而 merge sort 是 stable 的。这里的 stable 是指比较相等的数据在排序之后仍然按照排序之前的前后顺序排列（保序性）。对于基本数据类型，稳定性没有意义。而对于对象类型，稳定性是比较重要的，因为对象相等的判断可能只是判断关键属性，最好保持相等对象的非关键属性的顺序与排序前一直；另外一个原因是由于合并排序相对而言比较次数比快速排序少，移动（对象引用的移动）次数比快速排序多，而对于对象来说，比较一般比移动耗时。  </p>
-<p> MergeSort:（）1）最坏时间复杂度是 O(nlgn)；（2）平均时间复杂度是 O(nlgn)；（3）空间复杂度是 O(1)。  </p>
-<p> QuickSort: （1）最坏时间复杂度是 O(n^2)；（2）平均时间复杂度是 O(nlgn)；（3）空间复杂度是 O(n)。</p>
+<li><p>Arrays.sort()在其内部实现上针对数组元素的不同类型采用不同的排序方式: ①基本类型数据(int, short, long, float, double等)采用QuickSort， 而对对象类型采取MergeSort. Why? 我们知道QuickSort在统计意义上效率比MergeSort高，为何不都采用 QuickSort ？<br> Answer: 概括的说，一个是稳定性，一个是移动次数。使用不同类型的排序算法主要是由于 quick sort 是不稳定的，而 merge sort 是 stable 的。这里的 stable 是指比较相等的数据在排序之后仍然按照排序之前的前后顺序排列（保序性）。对于基本数据类型，稳定性没有意义。而<strong>对于对象类型，稳定性是比较重要的</strong>，因为对象相等的判断可能只是判断关键属性，最好保持相等对象的非关键属性的顺序与排序前一直；另外一个原因是由于<strong>合并排序相对而言比较次数比快速排序少，移动（对象引用的移动）次数比快速排序多</strong>，而对于对象来说，比较一般比移动耗时。  </p>
+<p> MergeSort:（）1）最坏时间复杂度是 O(nlgn)；（2）平均时间复杂度是 O(nlgn)；（3）空间复杂度是 O(n)。  </p>
+<p> QuickSort: （1）最坏时间复杂度是 O(n^2)；（2）平均时间复杂度是 O(nlgn)；（3）空间复杂度最坏是 O(n)，均匀就是O(logn)。</p>
 </li>
 </ol>
 <ol>
