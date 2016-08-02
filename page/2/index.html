@@ -307,7 +307,18 @@ sbt clean <span class="string">android:</span><span class="keyword">package</spa
 
       
         
-          <h4 id="求二叉树的深度(从根节点到叶子结点一次经过的结点形成树的一条路径，最长路径的长度为树的深度。根节点的深度为1。)">求二叉树的深度(从根节点到叶子结点一次经过的结点形成树的一条路径，最长路径的长度为树的深度。根节点的深度为1。)</h4><pre><code>private <span class="keyword">static</span> int getTreeHeight(<span class="type">TreeNode</span> root) {
+          <h4 id="链表相关问题"><a href="http://wuchong.me/blog/2014/03/25/interview-link-questions/" target="_blank" rel="external">链表相关问题</a></h4><ol>
+<li>在O(1)时间删除链表节点</li>
+<li>单链表的转置</li>
+<li>求链表倒数第k个节点</li>
+<li>求链表的中间节点</li>
+<li>判断单链表是否存在环</li>
+<li>找到环的入口点</li>
+<li>编程判断两个链表是否相交</li>
+<li>扩展：链表有环，如何判断相交</li>
+<li>扩展：两链表相交的第一个公共节点</li>
+</ol>
+<h4 id="求二叉树的深度(从根节点到叶子结点一次经过的结点形成树的一条路径，最长路径的长度为树的深度。根节点的深度为1。)">求二叉树的深度(从根节点到叶子结点一次经过的结点形成树的一条路径，最长路径的长度为树的深度。根节点的深度为1。)</h4><pre><code>private <span class="keyword">static</span> int getTreeHeight(<span class="type">TreeNode</span> root) {
     <span class="keyword">if</span> (root == null)
         <span class="keyword">return</span> <span class="number">0</span>;
     <span class="comment">// 左子树depth与右子树depth的较大值+1即为tree的depth</span>

@@ -241,6 +241,12 @@ history_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {
 </ol>
 <h3 id="异常处理与类型信息">异常处理与类型信息</h3><ol>
 <li>异常处理是java中唯一正式的错误报告机制，用于解决运行期间遇到的问题；可以用try……catch进行捕获也可以在定义方法或者类时使用throws声明。</li>
+<li><strong>Error类和Exception类区别</strong>它们的父类都是throwable类，他们的区别是：<ul>
+<li><strong>Error类</strong>一般是指与虚拟机相关的问题，如系统崩溃，虚拟机错误，内存空间不足，方法调用栈溢等。对于这类错误的导致的应用程序中断，仅靠程序本身无法恢复和和预防，遇到这样的错误，建议让程序终止。</li>
+<li><strong>Exception类</strong>表示程序可以处理的异常，可以捕获且可能恢复。遇到这类异常，应该尽可能处理异常，使程序恢复运行，而不应该随意终止异常。</li>
+<li>Exception类又分为<strong>运行时异常（Runtime Exception）</strong>和<strong>受检查的异常(Checked Exception )</strong>，运行时异常;ArithmaticException算术异常,IllegalArgumentException非法参数异常，NullPointerException 空指针异常，编译能通过，但是一运行就终止了，程序不会处理运行时异常，出现这类异常，程序会终止。而受检查的异常，要么用try……catch捕获，要么用throws字句声明抛出，交给它的父类处理，否则编译不会通过，SQLException</li>
+</ul>
+</li>
 <li><strong>return与finally</strong>：<ul>
 <li>在try里边return会先return再执行finally；在catch里边return则先执行finally再return</li>
 <li>在finally里边return会导致异常丢失，不再抛出异常(另一种异常丢失是因为前一个异常还没处理就抛出下一个异常，前一个异常就丢失了)</li>
@@ -284,7 +290,7 @@ System.out.println(<span class="string">" obj :  "</span> + obj.toString());
 <h3 id="枚举、注解与泛型">枚举、注解与泛型</h3><ol>
 <li><a href="http://www.cnblogs.com/happyPawpaw/archive/2013/04/09/3009553.html" target="_blank" rel="external">Java Enum用法</a></li>
 <li>注解又叫做元数据，一种在代码中添加信息的形式化方法，该信息可以在后期利用反射机制进行使用，我们可以通过编写注解处理器来解析代码中的注解，也可以使用apt来解析。</li>
-<li>泛型主要是用于容器定义</li>
+<li><strong>泛型</strong>主要是用于容器定义，泛型是通过类型擦除来实现的，编译器在编译时擦除了所有类型相关的信息，所以在运行时不存在任何类型相关的信息。例如 List<string>在运行时仅用一个List来表示。它提供了编译期的类型安全，确保你只能把正确类型的对象放入集合中，避免了在运行时出现ClassCastException。</string></li>
 </ol>
 <h3 id="字符串与数组">字符串与数组</h3><h3 id="持有对象的容器">持有对象的容器</h3><h3 id="java_I/O系统与并发">java I/O系统与并发</h3><h3 id="final、finally和finalize对比">final、finally和finalize对比</h3><ul>
 <li>final用于声明属性方法和类，分别表示：属性不可变，方法不可覆盖，类不可继承。可以用于关闭方法动态绑定</li>

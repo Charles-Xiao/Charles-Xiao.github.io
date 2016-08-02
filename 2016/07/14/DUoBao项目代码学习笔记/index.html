@@ -222,14 +222,21 @@
 </ul>
 </li>
 <li><strong>Redis优势</strong><ul>
-<li>性能极高 – Redis能读的速度是110000次/s,写的速度是81000次/s 。</li>
-<li>丰富的数据类型 – Redis支持二进制案例的 Strings, Lists, Hashes, Sets 及 Ordered Sets 数据类型操作。</li>
-<li>原子 – Redis的所有操作都是原子性的，同时Redis还支持对几个操作全并后的原子性执行。</li>
-<li>丰富的特性 – Redis还支持 publish/subscribe, 通知, key 过期等等特性。</li>
+<li>性能极高，读写速度快  – Redis能读的速度是110000次/s,写的速度是81000次/s 。</li>
+<li>丰富的数据类型 – Redis支持Strings, Lists, Hashes, Sets 及 Ordered Sets 数据类型操作。</li>
+<li>支持事务和原子 – Redis的所有操作都是原子性的，同时Redis还支持对几个操作全并后的原子性执行。</li>
+<li>丰富的特性 – Redis还支持 publish/subscribe, 消息通知, 按key设置过期时间，过期后将会自动删除等等特性。</li>
 </ul>
 </li>
-</ol>
-<h3 id="ZooKeeper">ZooKeeper</h3><ol>
+<li><strong>Memcache与Redis的区别</strong>: 读写速度、数据类型、是否可以持久化; <strong>它们之间底层实现方式 以及与客户端之间通信的应用协议不一样</strong>,Redis直接自己构建了VM 机制 ，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求</li>
+<li><strong>Redis常见性能问题和解决方案</strong><ul>
+<li><strong>Master最好不要做任何持久化工作，如RDB内存快照和AOF日志文件</strong>; 因为写内存快照时save命令调度rdbSave函数，会阻塞主线程的工作，当快照比较大时对性能影响是非常大的，会间断性暂停服务，所以Master最好不要写内存快照</li>
+<li><strong>Master调用重写AOF文件也会有性能问题</strong>，AOF在重写的时候会占大量的CPU和内存资源，导致服务load过高，出现短暂服务暂停现象；如果数据比较重要，某个Slave开启AOF备份数据，策略设置为每秒同步一次</li>
+<li>为了主从复制的速度和连接的稳定性，Master和Slave最好在同一个局域网内</li>
+<li>尽量避免在压力很大的主库上增加从库</li>
+<li>主从复制不要用图状结构，用单向链表结构更为稳定，即：Master &lt;- Slave1 &lt;- Slave2 &lt;- Slave3…;这样的结构方便解决单点故障问题，实现Slave对Master的替换。如果Master挂了，可以立刻启用Slave1做Master，其他不变。<h3 id="ZooKeeper">ZooKeeper</h3></li>
+</ul>
+</li>
 <li>ZooKeeper是一个分布式应用程序协调服务，它包含一个简单的原语集，分布式应用程序可以基于它实现同步服务，配置维护和命名服务等。主要用来解决分布式集群中应用系统的一致性问题，它能提供基于类似于文件系统的目录节点树方式的数据存储，但是 Zookeeper 并不是用来专门存储数据的，它的作用主要是用来维护和监控你存储的数据的状态变化。通过监控这些数据状态的变化，从而可以达到基于数据的集群管理</li>
 <li><strong>实现效果</strong><ul>
 <li>最终一致性：client不论连接到哪个Server，展示给它都是同一个视图，这是zookeeper最重要的性能。</li>
