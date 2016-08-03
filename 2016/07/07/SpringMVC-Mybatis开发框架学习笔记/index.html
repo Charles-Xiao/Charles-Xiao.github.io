@@ -244,8 +244,13 @@
 <li><strong>@Repository</strong>用于标注数据访问组件，即DAO组件</li>
 <li><strong>@Component</strong>泛指组件，当组件不好归类的时候，我们可以使用这个注解进行标注</li>
 <li><strong>@PathVariable</strong>当使用@RequestMapping URI template 样式映射时， 即 someUrl/{paramId}, 这时的paramId可通过 @Pathvariable注解绑定它传过来的值到方法的参数上</li>
-<li><strong>@Autowired</strong>Spring 2.5 引入了 @Autowired 注释，它可以对类成员变量、方法及构造函数进行标注，完成自动装配的工作。通过 @Autowired的使用来消除 set ，get方法</li>
+<li><strong>@Autowired和@Resource</strong>都可以用来装配bean，都可以写在字段上，或者方法上,用于完成装配的工作,消除 set ，get方法; @Autowired属于Spring2.5的；@Resource为JSR-250标准的注释，属于J2EE的;<ul>
+<li>@Autowired默认按类型装配，默认情况下必须要求依赖对象必须存在，如果要允许null值，可以设置它的required属性为false，例如：@Autowired(required=false) ，如果我们想使用名称装配可以结合@Qualifier注解进行使用</li>
+<li>@Resource，默认安装名称进行装配，名称可以通过name属性进行指定，如果没有指定name属性，当注解写在字段上时，默认取字段名进行安装名称查找，如果注解写在setter方法上默认取属性名进行装配。当找不到与名称匹配的bean时才按照类型进行装配。但是需要注意的是，如果name属性一旦指定，就只会按照名称进行装配</li>
+</ul>
+</li>
 <li><strong>@RequestMapping</strong>是一个用来处理请求地址映射的注解，可用于类或方法上。用于类上，表示类中的所有响应请求的方法都是以该地址作为父路径</li>
+<li><strong><context:annotation-config> <context:component-scan base-package="com.netease.duobao"></context:component-scan></context:annotation-config></strong> —- 自动去扫描base-pack下面或者子包下面的java文件，如果扫描到有@Component @Controller@Service等这些注解的类，则把这些类注册为bean；Use-dafault-filters=”false”的情况下：<context:exclude-filter>指定的不扫描,<context:include-filter>指定的扫描</context:include-filter></context:exclude-filter></li>
 </ol>
 <h3 id="Servlet">Servlet</h3><ol>
 <li>Servlet是一个按照Servlet规范编写的一个Java程序，此程序是基于Http协议的，运行在服务器端(如tomcat)，主要是处理客户端的请求并将其结果发送到客户端。</li>
