@@ -189,16 +189,24 @@
       
 
       
-        <h3 id="技术原理">技术原理</h3><p><strong>基于RSSI(信号接收强度)方法</strong>它是一种基于MAC层的通过接收到的信号强弱测定信号点与接收点的距离，进而根据相应数据进行定位计算的方法。因为室内WIFI信号强度会随着传播距离的增加而降低(当然随着距离的增加同理定位的精度也会降低。)我们<strong>根据移动终端测量接收到的信号强度和已知的无线信号衰落模型，可以估算出收发方之间的距离，根据多个估算的距离值，可以计算出移动终端的位置</strong><br><strong>背景和前提</strong>  </p>
-<ol>
+        <h3 id="技术背景和原理">技术背景和原理</h3><ol>
 <li>每一个无线AP都有一个全球唯一的MAC地址,并且一般来说无线AP在一段时间内是不会移动的; 然后每一个移动设备在开启Wi-Fi的情况下,即可扫描并收集周围的AP信号,无论是否加密,是否已连接，甚至信号强度不足以显示在无线信号列表中,都可以获取到AP广播出来的MAC地址</li>
-<li>位置服务商要不断更新、补充自己的数据库,以保证数据的准确性,毕竟无线AP不像基站塔那样基本100%不会移动 </li>
+<li><strong>基于RSSI(信号接收强度)模型方法</strong>是一种基于MAC层的通过接收到的信号强弱测定信号点与接收点的距离，进而根据相应数据进行定位计算的方法。因为室内WIFI信号强度会随着传播距离的增加而降低(当然随着距离的增加同理定位的精度也会降低。)我们<strong>根据移动终端测量接收到的信号强度和已知的无线信号衰落模型，可以估算出收发方之间的距离，根据多个估算的距离值，可以计算出移动终端的位置</strong>  </li>
+<li>位置服务商不断更新、补充自己的数据库,以保证数据的准确性,毕竟无线AP不像基站塔那样基本100%不会移动 </li>
 </ol>
 <h3 id="两种算法">两种算法</h3><ol>
 <li><strong>三角定位</strong>:<br>如果我们已经知道了所有AP的位置，我们可以利用信号衰减模型RSSI估算出移动设备距离各个AP的距离,然后根据移动设备到周围AP距离作为直径画圆，其交点就是该设备的位置，如果三者两两相交而不是交于一点，可以采用近似估计法找出位置。很容易发现，三角定位算法需要我们提前知道AP的位置，因此对于环境变化较快的场合不适合使用。</li>
 <li><strong>指纹数据匹配算法</strong>：指纹算法类似于机器学习算法，分为两个阶段:<ul>
 <li><strong>离线训练阶段</strong>: 第一步，将需要室内定位区域划分网格，建立采样点（间距1~2m)；第二步，使用移动设备打开wifi逐个采样点采样，记录该点位置、所获取的RSSI及AP地址，保存到指纹数据库。<strong>采样过程</strong>对每个点每隔5s采样一次，共100次，然后对这些数据去除噪点，并对这些采样数据求均值</li>
-<li><strong>在线定位阶段</strong>: 用户持移动设备在定位区域移动，实时获取当前RSSI及AP地址，将该信息上传到服务器进行匹配（匹配算法有KNN、神经网络等),得到估算位置。</li>
+<li><strong>在线定位阶段</strong>: 用户持移动设备在定位区域移动，实时获取当前信号接收强度及AP地址，将该信息上传到服务器进行匹配（匹配算法有KNN、神经网络等),得到估算位置返还给手机app。<strong>匹配具体过程</strong>：例如该手机获取到10个ap信号及其对应的信号接收强度，那么就去指纹数据库寻找对应的数据进行匹配,怎么寻找呢？通过每个ap及其信号接受强度都可以在数据库找到多个位置信息(也就是在数据库找到K个信息最近的数据，最近的度量方法是通过RSSI和AP—-数据库中相同AP的RSSI和该RSSI差值小于某一阀值)，假设每个找到10个，那就是一共100个位置信息，那么最后100个里边出现频率最高的就是位置就是该移动设备的定位结果</li>
+</ul>
+</li>
+</ol>
+<h3 id="定位过程常见问题及解决方法">定位过程常见问题及解决方法</h3><ol>
+<li><strong>怎么解决定位过程中路由器信号遇到障碍物反射影响精度的问题</strong><ul>
+<li>对RSSI模型要进行环境参数拟合，添加高斯随机变量来对不同的环境进行模型优化</li>
+<li>路由器数目要足够多，这样可以减少部分路由器遇到墙壁反射带来的误差</li>
+<li>一个移动设备会同时接收到多个路由器信号来确定位置，如果该位置得到的某个路由器及其信号接受强度和原数据库信息差异过大，就应该修改数据库数据</li>
 </ul>
 </li>
 </ol>
@@ -349,7 +357,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#技术原理"><span class="nav-number">1.</span> <span class="nav-text">技术原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两种算法"><span class="nav-number">2.</span> <span class="nav-text">两种算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">3.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#技术背景和原理"><span class="nav-number">1.</span> <span class="nav-text">技术背景和原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两种算法"><span class="nav-number">2.</span> <span class="nav-text">两种算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定位过程常见问题及解决方法"><span class="nav-number">3.</span> <span class="nav-text">定位过程常见问题及解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

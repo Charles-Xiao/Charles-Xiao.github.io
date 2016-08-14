@@ -510,8 +510,9 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 <span class="function"><span class="params">(params)</span> -&gt;</span> statement
 <span class="function"><span class="params">(params)</span> -&gt;</span> { statements }
 </code></pre></li>
-<li><p>JDK   </p>
+<li><p><strong>自动装箱</strong>就是Java自动将原始类型值转换成对应的对象，比如将int的变量转换成Integer对象，这个过程叫做装箱，反之将Integer对象转换成int类型值，这个过程叫做<strong>拆箱</strong>。自动装箱时编译器调用valueOf将原始类型值转换成对象，同时自动拆箱时，编译器通过调用类似intValue(),doubleValue()这类的方法将对象转换成原始类型值。原始类型byte,short,char,int,long,float,double和boolean对应的封装类为Byte,Short,Character,Integer,Long,Float,Double,Boolean。<strong><a href="http://www.importnew.com/15712.html" target="_blank" rel="external">存在问题</a></strong>: ①自动装箱会隐式地创建对象，如果在一个循环体中，会创建无用的中间对象，这样会增加GC压力，拉低程序的性能 ② 缓存对象，在Java中，会对-128到127的Integer对象进行缓存，当创建新的Integer对象时，如果符合这个这个范围，并且已有存在的相同值的对象，则返回这个对象，否则创建新的Integer对象。</p>
 </li>
+<li>JDK             </li>
 </ol>
 <h3 id="参考链接">参考链接</h3><ol>
 <li><a href="http://ifeve.com/lambda/" target="_blank" rel="external">Java8初体验（一）lambda表达式语法</a></li>
@@ -1216,51 +1217,57 @@ SharedPreferences sharedPreferences = otherAppContext.getSharedPreferences(<span
       
         
           <h3 id="自我介绍_1min">自我介绍 1min</h3><ol>
-<li>姓名 —-&gt; 学习经历(中大科大软件专业) —-&gt; 强调科班出身的基础优势(本科到硕士都注重计算机基础知识积累，对Java语言基础，常见设计模式，数据结构和算法比较熟悉，对移动端和web端研发具有浓厚兴趣) </li>
-<li>强调注重实践的优势，讲述实习和项目经历，提现学习和工作能力(先后参与两份实习和校内科研项目，选择与岗位相符的两段经历进行1-2句话简述，做了什么和达到了什么成就) </li>
+<li>姓名 —-&gt; 学习经历(中大科大软件专业) —-&gt; 本科到硕士都注重计算机基础知识积累，对Java语言基础，计算机网络/MySQL数据库原理，常见数据结构和算法比较熟悉，例如常见排序，链表，二叉树，队列栈等；平常对移动端和web端研发也具有浓厚兴趣</li>
+<li>一直以来也比较注重实践，陆续参加了几个实习和项目，提现学习和工作能力(先后参与3份实习和2个校内科研项目，选择与岗位相符的两段经历进行1-2句话简述，做了什么和达到了什么成就) </li>
 <li>业务爱好，羽毛球，健身，阅读和利用coursera进行业余学习</li>
 <li>对目标岗位的理解和想法，应聘该岗位的强烈意愿以及自身吻合度</li>
 </ol>
 <h3 id="网易">网易</h3><ol>
 <li>学习Spring框架使用和原理</li>
 <li><h3 id="Kactus">Kactus</h3></li>
-<li><p>ECO餐厅食用油回收系统</p>
-<ul>
-<li><p>Android端缓存机制的实现，采用二级缓存，LRUcache内存缓存和DiskLruCache文件缓存，同时模拟浏览器缓存机制来分析http请求过程的请求头内容来确定cache-control策略</p>
-<ol>
-<li><strong>请求流程</strong>: 当我们第一次打开应用获取图片时，先到网络去下载图片，然后依次存入内存缓存，磁盘缓存;以后每次加载图片的时候都优先去LRUCache内存缓存当中读取，当读取不到的时候则回去DiskLruCache硬盘缓存中读取，而如果硬盘缓存仍然读取不到的话，就从网络上请求原始数据。</li>
-<li><strong>二级缓存</strong>: 变化频繁的小数据(例如订单列表)都采用LRUCache,以<url, data="">的键值对形式存储数据, 缓存时间为应用开启到关闭时间段; 稳定的大文件数据(例如图片)采用DiskLruCache,缓存时间可以根据需求自定义;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File;</url,></li>
+<li>ECO餐厅食用油回收系统<ul>
+<li>Android端缓存机制的实现，采用二级缓存，LRUcache内存缓存和DiskLruCache文件缓存，同时模拟浏览器缓存机制来分析http请求过程的请求头内容来确定cache-control策略<ol>
+<li><strong>App请求server数据流程</strong>: 当我们第一次打开应用获取图片时，先到网络去下载图片，然后依次存入内存缓存，磁盘缓存;以后每次加载图片的时候都优先去LRUCache内存缓存当中读取，当读取不到的时候则回去DiskLruCache硬盘缓存中读取，而如果硬盘缓存仍然读取不到的话，就从网络上请求原始数据。</li>
+<li><strong>App的二级缓存实现</strong>: 变化频繁的小数据(例如订单列表)都采用LRUCache,以<url, data="">的键值对形式存储数据, 缓存时间为应用开启到关闭时间段; 稳定的大文件数据(例如图片)采用DiskLruCache,缓存时间可以根据需求自定义;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File;</url,></li>
 <li><strong>缓存管理和清理策略</strong>：<ul>
-<li>① 根据服务器响应头部里边的expires(缓存过期的时间（绝对时间）),Last-Modified(服务器响应的资源最终修改时间), Cache-Control(资源的有效期)等内容来确定是否需要将数据缓存到DiskLruCache中，以及缓存的保留时间，<strong>具体实现</strong>将资源URL和这些缓存时间相关的http头部信息(比如expires(缓存过期的时间))一起存储到SQLite数据库，然后每次加载资源都会先根据url查询数据库看本地缓存是否过期，是否需要重新发送网络请求并更新缓存; 每次请求url得到响应结果时还会解析头部Cache-Control去判断该响应资源是否需要缓存</li>
-<li>② 每次去读取缓存文件时先调用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据自定义的缓存时间判断该缓存是否过期，如果过期则重新请求文件，不然直接从缓存加载，这样就能实现缓存文件定时清理</li>
+<li>① <strong>现用方法</strong>App根据服务器响应头部里边的expires(缓存过期的时间（绝对时间）),Last-Modified(服务器响应的资源最终修改时间), Cache-Control(资源的有效期)等内容来确定是否需要将数据缓存到DiskLruCache中，以及缓存的保留时间，<strong>具体实现</strong> 每次请求url得到响应结果时会解析头部Cache-Control去判断该响应资源是否需要缓存以及缓存过期时间等内容；然后将资源URL和这些缓存时间相关的http头部信息(比如expires(缓存过期的时间))一起存储到SQLite数据库，然后每次加载资源都会先根据url查询数据库看本地缓存是否过期，是否需要重新发送网络请求并更新缓存        </li>
+<li>② <strong>其它方法</strong>每次去读取缓存文件时先调用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据自定义的缓存时间判断该缓存是否过期，如果过期则重新请求文件，不然直接从缓存加载，这样就能实现缓存文件定时清理</li>
 <li>③ <strong>每次服务器资源变化时客户端怎么得到通知？</strong>, 客户端定时轮询请求某个指定url并解析返回的json判断某些数据是否变化，变化就重新请求该数据; 或者手动刷新，socket长连接</li>
 </ul>
 </li>
-<li><strong>FIFO</strong>First In First Out，先进先出;判断被存储的时间，离目前存储时间最久的数据优先被淘汰。<strong>LFU</strong>：Least Frequently Used，最不经常使用;在一段时间内，数据被使用次数最少的，优先被淘汰。</li>
+<li><ul>
+<li><strong>FIFO</strong>First In First Out，先进先出;核心原则就是：如果一个数据最先进入缓存中，则应该最早淘汰掉。也就是说，当缓存满的时候，应当把最先进入缓存的数据给淘汰掉。</li>
+<li><strong>LFU</strong>：Least Frequently Used，最不经常使用;在一段时间内，数据被使用次数最少的，优先被淘汰。</li>
+<li><strong>LRU</strong>: Least Recently Used，最近最少使用策略，其核心思想是“如果数据最近被访问过，那么将来被访问的几率也更高”；简单的说就是缓存一定量的数据，当超过设定的阈值时就把一些<strong>最近最少使用的数据</strong>删除掉;<strong>最常见的实现算法</strong>是使用一个链表保存缓存数据，①新数据插入到链表头部；②每当缓存命中（即缓存数据被访问），则将数据移到链表头部；③当链表满的时候，将链表尾部的数据丢弃。</li>
+<li><strong>LRU-K</strong>中的K代表最近使用的次数，因此LRU可以认为是LRU-1。LRU-K的主要目的是为了解决LRU算法“缓存污染”的问题，其核心思想是将“最近使用过1次”的判断标准扩展为“最近使用过K次”。<strong>实现</strong>：相比LRU，LRU-K需要多维护一个队列，用于记录所有缓存数据被访问的历史。只有当数据的访问次数达到K次的时候，才将数据放入缓存。当需要淘汰数据时，LRU-K会淘汰第K次访问时间距当前时间最大的数据</li>
+</ul>
+</li>
 </ol>
-<p>缓存图片举例：</p>
 </li>
 </ul>
 </li>
 </ol>
-<pre><code><span class="comment">// 获取应用可占内存的1/8作为缓存</span>
-<span class="built_in">int</span> maxSize = (<span class="built_in">int</span>) (Runtime.getRuntime().maxMemory() / <span class="number">8</span>);
-<span class="comment">// 实例化LruCaceh对象</span>
-mLruCache = <span class="keyword">new</span> LruCache&lt;<span class="keyword">String</span>, Bitmap&gt;(maxSize) {
-    @Override
-    <span class="keyword">protected</span> <span class="built_in">int</span> sizeOf(<span class="keyword">String</span> <span class="variable">key</span>, Bitmap bitmap) {
-        <span class="keyword">return</span> bitmap.getRowBytes() * bitmap.getHeight();
-    }
-};
- mDiskLruCache=DiskLruCache.<span class="built_in">open</span>(getDiskCacheDir(context.getApplicationContext(),
- <span class="string">"xxxxx"</span>),     getAppVersion(context), <span class="number">1</span>, DISKMAXSIZE);
-<span class="comment">// 缓存操作</span>
-mLruCache.<span class="built_in">get</span>(url);
-mLruCache.put(url, bitmap);
-bitmap = BitmapFactory.decodeStream(mDiskLruCache.<span class="built_in">get</span>(url).getInputStream(<span class="number">0</span>));
-DiskLruCache.Editor editor = mDiskLruCache.edit(<span class="variable">key</span>);
-OutputStream outputStream = editor.newOutputStream(<span class="number">0</span>);
-editor.commit();
+<pre><code>缓存图片举例：
+
+
+        <span class="comment">// 获取应用可占内存的1/8作为缓存</span>
+        <span class="built_in">int</span> maxSize = (<span class="built_in">int</span>) (Runtime.getRuntime().maxMemory() / <span class="number">8</span>);
+        <span class="comment">// 实例化LruCaceh对象</span>
+        mLruCache = <span class="keyword">new</span> LruCache&lt;<span class="keyword">String</span>, Bitmap&gt;(maxSize) {
+            @Override
+            <span class="keyword">protected</span> <span class="built_in">int</span> sizeOf(<span class="keyword">String</span> <span class="variable">key</span>, Bitmap bitmap) {
+                <span class="keyword">return</span> bitmap.getRowBytes() * bitmap.getHeight();
+            }
+        };
+         mDiskLruCache=DiskLruCache.<span class="built_in">open</span>(getDiskCacheDir(context.getApplicationContext(),
+         <span class="string">"xxxxx"</span>),     getAppVersion(context), <span class="number">1</span>, DISKMAXSIZE);
+        <span class="comment">// 缓存操作</span>
+        mLruCache.<span class="built_in">get</span>(url);
+        mLruCache.put(url, bitmap);
+        bitmap = BitmapFactory.decodeStream(mDiskLruCache.<span class="built_in">get</span>(url).getInputStream(<span class="number">0</span>));
+        DiskLruCache.Editor editor = mDiskLruCache.edit(<span class="variable">key</span>);
+        OutputStream outputStream = editor.newOutputStream(<span class="number">0</span>);
+        editor.commit();
 </code></pre><ol>
 <li><p>采用Java WebSocket编程取代传统的非实时http请求连接模式</p>
 <ul>
@@ -1641,7 +1648,7 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 </li>
 </ol>
 <h3 id="QA">QA</h3><ol>
-<li><p>如果在贵司移动开发部门做开发，主要是做哪些产品研发以及需要用到哪些技术知识</p>
+<li><p>如果在贵司移动开发部门做开发，主要是做哪些产品研发以及需要用到哪些技术知识和基础，我需要在哪些方面进行努力</p>
 </li>
 <li><p>面试过程中有没有什么地方讲得太快或者不清楚的地方，我可以补充的，评价一下面试表现</p>
 </li>

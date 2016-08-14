@@ -218,8 +218,9 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 <span class="function"><span class="params">(params)</span> -&gt;</span> statement
 <span class="function"><span class="params">(params)</span> -&gt;</span> { statements }
 </code></pre></li>
-<li><p>JDK   </p>
+<li><p><strong>自动装箱</strong>就是Java自动将原始类型值转换成对应的对象，比如将int的变量转换成Integer对象，这个过程叫做装箱，反之将Integer对象转换成int类型值，这个过程叫做<strong>拆箱</strong>。自动装箱时编译器调用valueOf将原始类型值转换成对象，同时自动拆箱时，编译器通过调用类似intValue(),doubleValue()这类的方法将对象转换成原始类型值。原始类型byte,short,char,int,long,float,double和boolean对应的封装类为Byte,Short,Character,Integer,Long,Float,Double,Boolean。<strong><a href="http://www.importnew.com/15712.html" target="_blank" rel="external">存在问题</a></strong>: ①自动装箱会隐式地创建对象，如果在一个循环体中，会创建无用的中间对象，这样会增加GC压力，拉低程序的性能 ② 缓存对象，在Java中，会对-128到127的Integer对象进行缓存，当创建新的Integer对象时，如果符合这个这个范围，并且已有存在的相同值的对象，则返回这个对象，否则创建新的Integer对象。</p>
 </li>
+<li>JDK             </li>
 </ol>
 <h3 id="参考链接">参考链接</h3><ol>
 <li><a href="http://ifeve.com/lambda/" target="_blank" rel="external">Java8初体验（一）lambda表达式语法</a></li>
