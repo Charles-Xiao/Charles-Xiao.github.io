@@ -200,7 +200,7 @@
 <li><ul>
 <li><strong>FIFO</strong>First In First Out，先进先出;核心原则就是：如果一个数据最先进入缓存中，则应该最早淘汰掉。也就是说，当缓存满的时候，应当把最先进入缓存的数据给淘汰掉。</li>
 <li><strong>LFU</strong>：Least Frequently Used，最不经常使用;在一段时间内，数据被使用次数最少的，优先被淘汰。</li>
-<li><strong>LRU</strong>: Least Recently Used，最近最少使用策略，其核心思想是“如果数据最近被访问过，那么将来被访问的几率也更高”；简单的说就是缓存一定量的数据，当超过设定的阈值时就把一些<strong>最近最少使用的数据</strong>删除掉;<strong>最常见的实现算法</strong>是使用一个链表保存缓存数据，①新数据插入到链表头部；②每当缓存命中（即缓存数据被访问），则将数据移到链表头部；③当链表满的时候，将链表尾部的数据丢弃。</li>
+<li><strong>LRU</strong>: Least Recently Used，最近最少使用策略，其核心思想是“如果数据最近被访问过，那么将来被访问的几率也更高”；简单的说就是缓存一定量的数据，当超过设定的阈值时就把一些<strong>最近最少使用的数据</strong>删除掉;<strong>最常见的实现算法</strong>是使用一个链表保存缓存数据，①新数据插入到链表头部；②每当缓存命中（即缓存数据被访问），则将数据移到链表头部；③当链表满的时候，将链表尾部的数据丢弃。<a href="https://segmentfault.com/a/1190000003743083" target="_blank" rel="external">LRUCache双向链表+HashMap实现</a> <a href="https://segmentfault.com/a/1190000005922083" target="_blank" rel="external">LRUCache LinkedHashMap实现</a></li>
 <li><strong>LRU-K</strong>中的K代表最近使用的次数，因此LRU可以认为是LRU-1。LRU-K的主要目的是为了解决LRU算法“缓存污染”的问题，其核心思想是将“最近使用过1次”的判断标准扩展为“最近使用过K次”。<strong>实现</strong>：相比LRU，LRU-K需要多维护一个队列，用于记录所有缓存数据被访问的历史。只有当数据的访问次数达到K次的时候，才将数据放入缓存。当需要淘汰数据时，LRU-K会淘汰第K次访问时间距当前时间最大的数据</li>
 </ul>
 </li>
@@ -710,7 +710,7 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">41</span>
+              <span class="site-state-item-count">42</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -724,7 +724,7 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">49</span>
+              <span class="site-state-item-count">50</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

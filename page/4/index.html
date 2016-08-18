@@ -148,6 +148,296 @@
           
           
             
+              <a class="post-title-link" href="../../2015/07/26/利用Python框架Flask实现RESTful架构服务端/">
+                利用Python框架Flask实现RESTful架构服务端
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-07-26
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/07/26/利用Python框架Flask实现RESTful架构服务端/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/26/利用Python框架Flask实现RESTful架构服务端/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>不管是进行app开发还是web开发，server端的开发都是必不可少的部分，最近打算尝试一下服务端开发；考虑到开发效率以及目前主流的前后端API标准，我打算采用python的flask框架来搭建一个简单server端作为移动app的Web Service来使用，API格式采用RESTful标准，本文将讲述RESTful架构服务端的大致实现过程。</p>
+<h2 id="RESTful架构">RESTful架构</h2><ol>
+<li><p><strong>什么是RESTful架构</strong>：</p>
+<ul>
+<li>每一个URI代表一种资源；</li>
+<li>客户端和服务器之间，传递这种资源的某种表现层</li>
+<li>客户端通过四个HTTP动词，对服务器端资源进行操作，实现”表现层状态转化”。</li>
+</ul>
+</li>
+<li><p><strong>Representational State Transfer 表现层状态转化</strong></p>
+<ul>
+<li>Resoure：资源—-所谓”资源”，就是网络上的一个实体，或者说是网络上的一个具体信息。它可以是一段文本、一张图片、一首歌曲、一种服务</li>
+<li>URL：统一资源定位符—-要获取资源，访问它的URL就可以了    * URI：统一资源标识符—-每种资源对应一个特定的URI</li>
+<li>Representation：表现层 —- 资源呈现形式，如json，text，html</li>
+<li>State Trasfer：状态转移 —- http无状态协议中的GET、POST、PUT、DELETE</li>
+</ul>
+</li>
+<li><p>REST架构设计六原则</p>
+<ul>
+<li>前后端统一接口</li>
+<li>无状态 —- 每次客户端请求必需包含完整的信息</li>
+<li>可缓存 —- 服务器端必需指定哪些请求是可以缓存的</li>
+<li>服务端客户端业务分离</li>
+<li>分层系统</li>
+<li>按需编码</li>
+</ul>
+</li>
+<li><p>优点</p>
+<ul>
+<li>可以利用缓存Cache来提高响应速度</li>
+<li>通讯本身的无状态性可以让不同的服务器的处理一系列请求中的不同请求，提高服务器的扩展性</li>
+<li>浏览器即可作为客户端，简化软件需求</li>
+<li>相对于其他叠加在HTTP协议之上的机制，REST的软件依赖性更小<br>*不需要额外的资源发现机制，在软件技术演进中的长期的兼容性更好</li>
+</ul>
+</li>
+</ol>
+<h2 id="API的设计实现">API的设计实现</h2><ol>
+<li><strong>注册登录的Token实现</strong><ul>
+<li><strong>Token是什么</strong>：是服务端生成的一串字符串，作为客户端进行请求的一个令牌；当客户端第一次登录时，服务端会去数据库查询用户名和密码并进行对比是否正确，如果正确服务器就会生成一个Token返回给客户端，并将该token存到服务器的session里边，以后客户端只需带上这个Token前来请求数据即可，通过比对session就可以验证登录，无需再次带上用户名和密码，也不需要再查询数据库。</li>
+<li><strong>Token有什么好处</strong>：可以减轻服务器的压力，减少频繁的查询数据库，使服务器更加健壮</li>
+<li><strong>Token的生成方式</strong>：服务端通过把客户端第一次登录时传输的部分参数(例如deviceId,MAC地址)+时间戳+随机salt进行拼接之后然后生成一个散列值，返回给客户端使用sharepreference保存，以后请求数据都要带上token</li>
+</ul>
+</li>
+<li><strong>传输数据的加密算法</strong>: 对用户名，密码，deviceID等重要隐私信息进行拼接然后RSA加密<ul>
+<li><strong>RSA算法</strong>: RSA是一种公钥加密算法(非对称加密)，它的加密和解密使用不同密钥。具体做法是这样，客户端在登录前先向服务器请求一个公钥密钥，然后用这个公钥密钥加密需要传输的数据(数据是指根据密码,用户名等生成的散列值)，然后发送给服务器。服务器使用私钥密钥解密，然后与根据数据库中的用户名和密码计算出来的散列值进行比较，一致的话，登录成功。然后服务端生成token返还给客户端，该token也需要进行加密比较安全，采用<a href="http://www.jianshu.com/p/ce79ce9d5dfd" target="_blank" rel="external">AES对称加密</a>，采用同一个密钥可以同时用作信息的加密和解密。</li>
+<li><strong>摘要算法</strong>主要有MD5和SHA-1，又叫作Hash算法或散列算法，是一种将任意长度的输入浓缩成固定长度的字符串的算法，这个过程是不可逆的； 保证不同内容的文件生成的散列值一定不同，相同内容的文件生成的散列值一定相同</li>
+<li><strong>数字签名</strong>主要经过以下几个过程： 信息发送者使用一单向散列函数（HASH函数）对信息生成信息摘要； 信息发送者使用自己的私钥签名信息摘要； 信息发送者把信息本身和已签名的信息摘要一起发送出去； 信息接收者通过使用与信息发送者使用的同一个单向散列函数（HASH函数）对接收的信息本身生成新的信息摘要，再使用信息发送者的公钥对信息摘要进行验证，以确认信息发送者的身份和信息是否被修改过。 </li>
+<li><strong>数字加密</strong>主要经过以下几个过程： 当信息发送者需要发送信息时，首先生成一个对称密钥，用该对称密钥加密要发送的报文； 信息发送者用信息接收者的公钥加密上述对称密钥； 信息发送者将第一步和第二步的结果结合在一起传给信息接收者，称为数字信封； 信息接收者使用自己的私钥解密被加密的对称密钥，再用此对称密钥解密被发送方加密的密文，得到真正的原文。 </li>
+<li><strong>区别</strong>数字签名和数字加密的过程虽然都使用公开密钥体系，但实现的过程正好相反，使用的密钥对也不同。<strong>数字签名</strong>使用的是发送方的密钥对，发送方用自己的私有密钥进行加密，接收方用发送方的公开密钥进行解密，这是一个一对多的关系，任何拥有发送方公开密钥的人都可以验证数字签名的正确性。<strong>数字加密</strong>则使用的是接收方的密钥对，这是多对一的关系，任何知道接收方公开密钥的人都可以向接收方发送加密信息，只有唯一拥有接收方私有密钥的人才能对信息解密。另外，数字签名只采用了非对称密钥加密算法，它能保证发送信息的完整性、身份认证和不可否认性，而数字加密采用了对称密钥加密算法和非对称密钥加密算法相结合的方法，它能保证发送信息保密性。</li>
+</ul>
+</li>
+</ol>
+<h2 id="Flask框架">Flask框架</h2><p>Flask框架是一个Python编写的基于Werkzeug WSGI工具箱和Jinja2模板引擎的轻量级web开发框架。Flask只保留了简单的核心，但是有着丰富的extension来实现其他功能模块以达到类似于Django这种全栈式框架的功能效果。例如ORM需要使用SQLAlchemy扩展、Oauth需要使用Oauthlib扩展, 此外还有大量的扩展用以支持数据库整合、表单验证、上传处理、缓存、生成后台和各种开放验证等等。</p>
+<h2 id="代码实现">代码实现</h2><p>下面我们将通过具体代码来运用Flask框架实现一个RESTful Web Service返回json数据以及template前端页面。该项目中有两个路由，一个用Flask-RESTful的路由形式返回json数据，另一个用Flask原生路由形式返回一个基于Jinja2模板的Flask-Bootstrap风格的注册登录页面；其中json数据通过SQLAlchemy插件从MySQL数据库中获取，然后显示到浏览器中。</p>
+<h3 id="配置Flask环境">配置Flask环境</h3><ol>
+<li><p><strong>新建一个Flask项目</strong>，步骤如下</p>
+<ul>
+<li>打开PyCharm编辑器(安装教程请Google)，点击File按钮，选择new project</li>
+<li>选择左侧列表中Flask选项，修改Location中的”untitled”为你想要的项目名称，选择合适的interpreter，一般默认即可，Pycharm会自动下载安装Flask框架</li>
+<li>点击Create，可以看到项目结构:static文件夹、templates文件夹、py文件；Flask项目创建成功</li>
+</ul>
+</li>
+<li><p><strong>Mac安装Flask框架遇到的小bug</strong><br>Pycharm自动安装Flask框架时使用的是”pip install Flask”命令，但是在mac中会因为没有sudo权限导致无法安装成功，Pycharm会提示我们去terminal中输入命令行安装；然而，当我们在命令行中输入”sudo pip install Flask”时却会发现下载安装过程中依然会出现“bad md5 hash mismatch”的报错，解决步骤如下:</p>
+<ul>
+<li>Step1:更新pip到1.3以上，输入命令”sudo pip install —upgrade pip”</li>
+<li>Step2:安装Flask不使用缓存，输入命令”sudo pip install —no-cache-dir Flask”</li>
+</ul>
+</li>
+<li><p><strong>部分需要用到的Flask插件pip安装命令</strong>  </p>
+<pre><code><span class="comment"># Flask-RESTful插件: 用于快速开发REST API</span>
+sudo pip <span class="keyword">install</span> flask-restful
+
+<span class="comment"># Flask-Bootstrap插件: 用于构建Bootsrap风格的网页；也可以直接下载引用Bootstrap</span>
+sudo pip <span class="keyword">install</span> flask-bootstrap
+
+<span class="comment"># Flask-Pymysql插件: 一个类似于mysqldb的Python数据库驱动插件</span>
+sudo pip <span class="keyword">install</span> flask-pymysql 
+
+<span class="comment"># Flask-SQLAlchemy插件: 一个用于操作SQL数据库的ORM</span>
+sudo pip <span class="keyword">install</span> flask-sqlalchemy
+</code></pre></li>
+</ol>
+<h3 id="配置MySQL数据库">配置MySQL数据库</h3><p>在该项目中，我们连接MySQL中的test数据库(如果该数据库不存在请自行创建)，然后新建一个user表，包含id和name两个属性，后面要显示到浏览器中的json数据就是从这个表中提取。我们可以通过直接执行MySQL命令来操作数据库，也可以在Python文件中通过SQLAlchemy来执行SQL语句操作数据库；当然这一切的前提是在你的计算机上安装MySQL并开启服务，我们推荐使用xampp集成安装环境，非常方便，而且同时适用于win和mac。下面列出<strong>常用的MySQL命令</strong>：</p>
+<pre><code># 创建表user，包含id(主键)、name两个字段
+<span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">user</span> (
+id <span class="built_in">int</span>(<span class="number">4</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">primary</span> <span class="keyword">key</span>, name <span class="built_in">varchar</span>(<span class="number">20</span>)
+) <span class="keyword">engine</span>=<span class="keyword">innodb</span> <span class="keyword">default</span> <span class="keyword">charset</span>=utf8;</span>
+
+# 创建表book，包含id(主键)、name、user_id三个字段，其中user_id字段为book表的外键字段名
+对应user表中的id字段，一个user可能有一本或多本book
+<span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> book (
+id <span class="built_in">int</span>(<span class="number">4</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">primary</span> <span class="keyword">key</span>, name <span class="built_in">varchar</span>(<span class="number">20</span>), user_id <span class="built_in">varchar</span>(<span class="number">20</span>)
+) <span class="keyword">engine</span>=<span class="keyword">innodb</span> <span class="keyword">default</span> <span class="keyword">charset</span>=utf8;</span>
+
+# 给book表增加一个category字段
+<span class="operator"><span class="keyword">alter</span> <span class="keyword">table</span> book <span class="keyword">add</span> category <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">primary</span> <span class="keyword">key</span>;</span>
+
+# 列出表book的结构
+desc book;
+
+# 列出表book所有数据
+<span class="operator"><span class="keyword">select</span> * <span class="keyword">from</span> book
+
+# 清空表book所有数据
+<span class="keyword">truncate</span> <span class="keyword">table</span> book
+
+# 添加外键
+<span class="keyword">alter</span> <span class="keyword">table</span> book <span class="keyword">add</span> <span class="keyword">constraint</span> FK_ID <span class="keyword">foreign</span> <span class="keyword">key</span>(user_id) <span class="keyword">REFERENCES</span> <span class="keyword">user</span>(id);</span>
+
+# 删除外键, FK_ID为外键名
+<span class="operator"><span class="keyword">alter</span> <span class="keyword">TABLE</span> book <span class="keyword">DROP</span> <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> FK_ID;</span>
+</code></pre><h3 id="app-py">app.py</h3><p>在app.py中:<br>一方面: 我们通过SQLAlchemy连接数据库并查询user表中的用户数据信息，作为json数据返回给浏览器；这一部分采用RESTful插件实现, 通过访问localhost://5000/restful就可以看到返回的json数据<br>另一方面: 我们在flaskTest函数中加载login.html页面，该页面通过采用bootstrap框架实现.</p>
+<pre><code><span class="comment"># coding=utf-8</span>
+__author__ = <span class="string">'xiaoyong'</span>
+
+<span class="keyword">from</span> flask <span class="keyword">import</span> Flask, request, render_template
+<span class="keyword">from</span> flask.ext.bootstrap <span class="keyword">import</span> Bootstrap
+<span class="keyword">from</span> flask_restful <span class="keyword">import</span> fields, marshal_with, Api, Resource
+
+<span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> Column, String, create_engine, ForeignKey
+<span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> sessionmaker, relationship
+<span class="keyword">from</span> sqlalchemy.ext.declarative <span class="keyword">import</span> declarative_base
+
+<span class="keyword">import</span> json
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+app = Flask(__name__)
+api = Api(app)
+bootstrap = Bootstrap(app)
+
+<span class="comment"># 初始化MySQL数据库连接引擎</span>
+db_engine = create_engine(<span class="string">'mysql+pymysql://root:@localhost:3306/test'</span>)
+
+Base = declarative_base()
+
+
+<span class="comment"># 数据库表user对应的User对象</span>
+<span class="class"><span class="keyword">class</span> <span class="title">User</span><span class="params">(Base)</span>:</span>
+    __tablename__ = <span class="string">'user'</span>
+
+    id = Column(String(<span class="number">20</span>), primary_key=<span class="keyword">True</span>)
+    name = Column(String(<span class="number">20</span>))
+
+    <span class="comment"># 一对多外键关系</span>
+    books = relationship(<span class="string">'Book'</span>)
+
+
+<span class="class"><span class="keyword">class</span> <span class="title">Book</span><span class="params">(Base)</span>:</span>
+    __tablename__ = <span class="string">'book'</span>
+
+    id = Column(String(<span class="number">20</span>), primary_key=<span class="keyword">True</span>)
+    name = Column(String(<span class="number">20</span>))
+
+    user_id = Column(String(<span class="number">20</span>), ForeignKey(<span class="string">'user.id'</span>))
+
+
+<span class="comment"># 创建DBSession类型</span>
+DBSession = sessionmaker(bind=db_engine)
+<span class="comment"># 创建DBsession对象</span>
+session = DBSession()
+
+<span class="comment"># Query user表中的所有行数据</span>
+db_users = session.query(User).all()
+session.close()
+
+
+<span class="decorator">@app.route('/flask/&lt;user_name&gt;', methods=['GET', 'POST'])</span>
+<span class="function"><span class="keyword">def</span> <span class="title">flaskTest</span><span class="params">(user_name)</span>:</span>
+    <span class="comment"># 访问http://localhost:5000/flask/xy,进入登陆页</span>
+    <span class="keyword">if</span> user_name == <span class="string">'xy'</span> <span class="keyword">and</span> request.method == <span class="string">'GET'</span>:
+        <span class="keyword">return</span> render_template(<span class="string">'login.html'</span>)
+    <span class="comment"># 点击login，返回用户json数据</span>
+    <span class="keyword">if</span> request.method == <span class="string">'POST'</span> <span class="keyword">and</span> request.form[<span class="string">'user'</span>]:
+        u = request.form[<span class="string">'user'</span>]
+        p = request.form[<span class="string">'pw'</span>]
+        dic = {<span class="string">'user'</span>: u, <span class="string">'password'</span>: p}
+        <span class="keyword">return</span> json.dumps(dic)
+    <span class="keyword">else</span>:
+        <span class="keyword">return</span> <span class="string">'error url'</span>
+
+<span class="comment"># 返回的json数据模型</span>
+<span class="class"><span class="keyword">class</span> <span class="title">restfulModel</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, users, state)</span>:</span>
+        self.users = users
+        self.state = state
+
+
+<span class="comment"># marshal-蒙版</span>
+resource_fileds = {
+    <span class="string">'users'</span>: fields.List(fields.String),
+    <span class="string">'state'</span>: fields.String(default=<span class="string">''</span>),
+    <span class="string">'expires'</span>: fields.Float(default=<span class="number">0.0</span>),
+    <span class="string">'date'</span>: fields.DateTime(default=str(datetime.now()))
+
+}
+<span class="comment"># RESTful插件</span>
+<span class="class"><span class="keyword">class</span> <span class="title">restfulTest</span><span class="params">(Resource)</span>:</span>
+    <span class="decorator">@marshal_with(resource_fileds)</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span>
+        user_list = []
+        <span class="keyword">for</span> user <span class="keyword">in</span> db_users:
+            user_dic = {}
+            user_dic[<span class="string">'name'</span>] = user.name
+            user_dic[<span class="string">'id'</span>] = user.id
+            user_list.append(str(user_dic))
+        <span class="keyword">return</span> restfulModel(user_list, <span class="string">'OK'</span>)
+
+api.add_resource(restfulTest, <span class="string">'/restful'</span>)
+<span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:
+    app.run(debug=<span class="keyword">True</span>)
+</code></pre><h3 id="login-html">login.html</h3><p>该注册登录页面是基于Jinja2模板和bootstrap框架实现</p>
+<p>PS：实现该页面注册框居中的css代码:<br>form.form-signin {<br>        width: 20%;<br>        margin-left: auto;<br>        margin-right: auto;<br>    }</p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/login1.png" class="full-image">   </p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/login2.png" class="full-image">  </p>
+<h2 id="结语">结语</h2><p>上述即为通过Flask框架搭建资源服务器的大致过程，涉及到RESTful架构，SQLAlchemy ORM，Bootstrap，json处理等相关知识；我们可以看出利用Python框架搭建服务器的便捷性，很容易上手，如果需要深入学习相关知识请参考flask官网和相关extensions官网教程。</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/REST/"> #REST </a>
+          
+            <a href="../../tags/python/"> #python </a>
+          
+            <a href="../../tags/服务端开发/"> #服务端开发 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2015/06/12/五代十国史/">
                 五代十国史
               </a>
@@ -369,13 +659,18 @@
       
         
           <h3 id="复用类(继承组合)与多态">复用类(继承组合)与多态</h3><ol>
-<li>Java面向对象编程思想的三种基本特征：<strong>继承、封装、复合和多态</strong><ul>
+<li><p>Java面向对象编程思想的三种基本特征：<strong>继承、封装、复合和多态</strong></p>
+<ul>
 <li><strong>封装</strong>：只公开代码的访问接口，隐藏其内部的数据和具体实现；通常采用public，protected，private来进行访问权限控制；封装可以隐藏实现细节，还可以使得代码模块化以对象形式呈现</li>
 <li><strong>继承、组合与代理之间的区别与联系</strong>：<strong>组合</strong>只是将对象引用置于新类中即可，表述的是一种has-a的关系，而<strong>继承</strong>通过extends关键字实现，自动得到基类中所有域和方法，表述的是一种is-a的关系；而<strong>代理</strong>是介于两者之间的一种关系，首先将对象引用置于新类中，然后在新类中构建同名方法来暴露该对象的所有方法(类似于继承)；<strong>继承</strong>可以扩展已存在的代码模块，并且表达出层次逻辑和归属关系</li>
-<li><strong>多态</strong>也被称作动态绑定，与向上转型相反，通常通过接口和抽象类来实现(覆盖重写方法)，我们把重载（overloading）称为编译时多态，把覆盖（overriding）称为运行时多态；运行时多态是指允许将子类类型的引用赋值给父类类型的引用，赋值之后，父对象就可以根据当前赋值给它的子对象的特性以不同的方式运作；多态可以达到接口重用的目的，深刻地体现了一种设计原则里-依赖倒置原则；程序要依赖超类（抽象类、接口）不要依赖具体类，基于接口的开发，而不是基于实现的开发。</li>
+<li><strong>多态</strong>与向上转型相反，通常通过接口和抽象类来实现(覆盖重写方法)，我们把<strong>重载（overloading）称为编译时多态，把覆盖（overriding）称为运行时多态</strong>；多态可以达到接口重用的目的，深刻地体现了一种设计原则里-依赖倒置原则；程序要依赖超类（抽象类、接口）不要依赖具体类，基于接口的开发，而不是基于实现的开发。</li>
+<li><strong>运行时多态(也被称作动态绑定)</strong>是指允许将子类类型的引用赋值给父类类型的引用，赋值之后，父对象在执行期间(而非编译期间)就可以根据当前赋值给它的子对象的特性以不同的方式运作,根据实际类型判断并调用相应的属性和方法;<strong>编译时的多态</strong>是指参数列表的不同, 来区分不同的函数, 在编译后, 就自动变成两个不同的函数名.</li>
+<li><strong>动态绑定的底层实现</strong>是指针,我们知道程序中的方法是一段代码,存放在专门的内存区域(代码区),当我们在程序执行期间new 出一个对象后调用其方法的时候,JVM动态的把指针指向实际的对象重写的方法,从而实现了动态绑定.</li>
+<li><strong>动态绑定的最大好处</strong>就是给我们的程序的可扩展性带来了相当大的提高；如果没有动态绑定,我们一般情况下的做法是在子类中用instanceof判断一个对象是不是我们需要的当前具体对象,但当我们定义好多个子类的时候,每次都要判断,现在有了动态绑定,我们不需要再去判断,而是JVM动态给我们指向具体的对象并调用相应的属性和方法.</li>
 </ul>
 </li>
-<li><strong>继承与初始化</strong>：导出类继承自基类，构造器调用顺序是从上至下基类到导出类层层调用，若是默认构造器则不需要在导出类中显式调用基类构造器，否则需要首先在导出类构造器中使用super关键字调用基类构造器。见《Java编程思想P146和P158》</li>
+<li><p><strong>继承与初始化</strong>：导出类继承自基类，构造器调用顺序是从上至下基类到导出类层层调用，若是默认构造器则不需要在导出类中显式调用基类构造器，否则需要首先在导出类构造器中使用super关键字调用基类构造器。见《Java编程思想P146和P158》</p>
+</li>
 </ol>
 <h3 id="接口与内部类">接口与内部类</h3><ol>
 <li><strong>接口与抽象类的区别联系</strong>：<ul>
@@ -1143,7 +1438,7 @@ n再和这个数做与运算*/</span>
 }
 </code></pre></li>
 </ol>
-<h3 id="适配器模式">适配器模式</h3><h3 id="代理模式">代理模式</h3><ol>
+<h3 id="代理模式">代理模式</h3><ol>
 <li><strong>代理模式</strong>就是为某个对象提供一个代理，以控制对这个对象的访问。 代理类和委托类有共同的父类或父接口，这样在任何使用委托类对象的地方都可以用代理对象替代。代理类负责请求的预处理、过滤、将请求分派给委托类处理、以及委托类执行完请求后的后续处理。</li>
 <li><strong>静态代理</strong> 由程序员创建或工具生成代理类的源码，再编译代理类。所谓静态也就是在程序运行前就已经存在代理类的字节码文件，代理类和委托类的关系在运行前就确定了。</li>
 <li><strong>动态代理</strong> 动态代理类的源码是在程序运行期间由JVM根据反射等机制动态的生成，所以不存在代理类的字节码文件。代理类和委托类的关系是在程序运行时确定。<ul>
@@ -1152,7 +1447,19 @@ n再和这个数做与运算*/</span>
 </ul>
 </li>
 </ol>
-<h3 id="参考链接">参考链接</h3><ol>
+<h3 id="适配器模式">适配器模式</h3><ol>
+<li><strong>适配器模式</strong>：将一个类的接口，转换成客户期望的另外一个接口。适配器让原本接口不兼容的类可以很好的合作;<br>两种方式：①类的适配器模式（采用继承实现）②对象适配器（采用对象组合方式实现）；</li>
+<li><strong>使用场景</strong><ul>
+<li>系统需要使用现有的类，而这些类的接口不符合系统的接口。</li>
+<li>想要建立一个可以重用的类，用于与一些彼此之间没有太大关联的一些类，包括一些可能在将来引进的类一起工作</li>
+<li>使用第三方组件，组件接口定义和自己定义的不同，不希望修改自己的接口，但是要使用第三方组件接口的功能。</li>
+</ul>
+</li>
+</ol>
+<h3 id="装饰器模式VS代理模式">装饰器模式VS代理模式</h3><ol>
+<li><strong>装饰器模式</strong>关注于在一个对象上动态的添加方法，是继承关系的一个替代方案；然而<strong>代理模式</strong>关注于控制对对象的访问，并不提供对象本身的增强功能。</li>
+<li>对<strong>装饰器模式</strong>来说，装饰者和被装饰者都实现同一个接口; 对<strong>代理模式</strong>来说，代理类和真实处理的类都实现同一个接口</li>
+<li><h3 id="参考链接">参考链接</h3></li>
 <li><a href="http://layznet.iteye.com/blog/1182924" target="_blank" rel="external">Java动态代理</a></li>
 </ol>
 
@@ -1165,198 +1472,6 @@ n再和这个数做与运算*/</span>
         <div class="post-tags">
           
             <a href="../../tags/设计模式/"> #设计模式 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/19/数据库重难点集锦/">
-                数据库重难点集锦
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-19
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/数据库/">数据库</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/19/数据库重难点集锦/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/19/数据库重难点集锦/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="常见的Hash算法和一致性哈希">常见的Hash算法和一致性哈希</h3><ul>
-<li><p>线性哈希，平方取中法，随机数法，按位分割求和法  </p>
-</li>
-<li><p><strong>MD5和SHA</strong>这两种单向加密算法都是基于hash算法，前者产生128位的散列值，后者产生160位的散列值；两者都存在不同输入的散列值相同的情况，但是概率很低，为了防止被彩虹表破解，可以考虑加入Salt  </p>
-</li>
-<li><p>Hash算法主要用于文件校验、数字签名、鉴权协议等  </p>
-</li>
-<li><p><strong>一致性哈希算法</strong>主要应用在cache系统中，常用的hash(object)%N算法会计算object 的hash值，然后对N取模得到余数i，该Object就会被映射到编号为i的cache上;那么当增加或者减少n的值时会导致所有的n个对象的映射全部发生改变，但是一致性哈希算法却只需要重新hash K/n个元素，为什么呢？？？; 因为一致性哈希的内部原理是将Object和cache都使用同一种hash算法hash到同一个数值空间上，该空间为一个首尾相接的圆环；然后如何将Object映射到cache呢？顺着顺时针方向,将每一个Object映射到下一个最邻近的cache,这样当新增一个cache时，只需要将原本映射到下一个cache上的Object部分映射修改到新增的cache上；当减少cache时就将之前映射到该cache的Object都映射到下一个cache上.  </p>
-</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_pre.png" class="full-image"></p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_next.png" class="full-image"></p>
-<h3 id="数据库结构概览">数据库结构概览</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/db.png" width="100%"></p>
-<h3 id="数据库的事务、索引、范式和存储过程概念以及优缺点">数据库的事务、索引、范式和存储过程概念以及优缺点</h3><ol>
-<li><p>主键：数据库表中对储存数据对象予以唯一和完整标识的数据列或属性的组合。一个数据列只能有一个主键，且主键的取值不能缺失，即不能为空值（Null）。  </p>
-<p>超键：在关系中能唯一标识元组的属性集称为关系模式的超键。一个属性可以为作为一个超键，多个属性组合在一起也可以作为一个超键。超键包含候选键和主键。  </p>
-<p>候选键：能够确定全部属性的某个属性或某组属性，称为候选键。若候选键多于一个，则选定其中一个作为主键</p>
-<p>外键：在一个表中存在的另一个表的主键称此表的外键  </p>
-</li>
-</ol>
-<ol>
-<li><p><strong>事务</strong>：事务是数据库操作中的不可分割的逻辑单元,一个事务中的所有操作语句要么作为一个整体被执行，要么整体不被执行; 事务最重要的<strong>两个特性是事务的传播级别和数据隔离级别</strong>。传播级别定义的是事务的控制范围，事务隔离级别定义的是事务在数据库读写方面的控制范围。</p>
-<ul>
-<li>原子性：要么操作序列中全部语句都执行，要么全部不被执行,不可分割; 也就是说当事务的执行序列中某个语句执行错误，会回滚到该事务未执行时的状态</li>
-<li>一致性：事务执行之后数据库从一个一致性状态转化到另一个一致性状态</li>
-<li>隔离性：多个事务并行执行时互相之间不会影响</li>
-<li>持久性：事务成功执行之后会对数据库内容产生永久性影响</li>
-</ul>
-</li>
-<li><p><strong>范式</strong></p>
-<ul>
-<li>第一范式：数据库表里边的每一列都是不可分割的原子性基本数据项</li>
-<li>第二范式：数据库表里边每一个非关键字段都和任意一组候选关键字(主键)完全依赖，只有表的任意一组候选键有多个属性时才会出现部分依赖</li>
-<li>第三范式：数据库里边每一个非关键字段都和主键直接相关，而不能是间接相关(传递依赖)</li>
-<li>BC范式：数据里边每一列既不部分依赖于任何候选键也不传递依赖于任何候选键；一个关系满足BCNF则一定满足第三范式</li>
-</ul>
-</li>
-<li><p><strong>索引</strong> ：建立在数据库表的某些列上，例如需要搜索或者排序的列，主键列，外键列(用于连接的列),用在where语句中的列；<strong>有些列不应该建索引</strong>，比如：查询中很少使用或者参考的列， 只有很少数据值的列，定义为text, image和bit数据类型的列,当修改性能远远大于检索性能时，不应该创建索引；索引的实现通常使用B树及其变种B+树</p>
-<ul>
-<li>参考: 一般来说，<strong>应该在这些列上创建索引</strong>：在经常需要搜索的列上，可以加快搜索的速度；在作为主键的列上，强制该列的唯一性和组织表中数据的排列结构；在经常用在连接的列上，这些列主要是一些外键，可以加快连接的速度；在经常需要根据范围进行搜索的列上创建索引，因为索引已经排序，其指定的范围是连续的；在经常需要排序的列上创建索引，因为索引已经排序，这样查询可以利用索引的排序，加快排序查询时间；在经常使用在WHERE子句中的列上面创建索引，加快条件的判断速度。</li>
-<li><p><strong>复合索引</strong>就是索引建立在多个列上，<strong>唯一索引</strong>就是保证索引列中的所有数据都是唯一的，不会存在冗余数据;<strong>聚集索引</strong>是指表中行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能包含一个聚集索引</p>
-<p>优点：</p>
-</li>
-</ul>
-<ol>
-<li>通过创建唯一性索引，可以保证数据库表中每一行数据的唯一性 </li>
-<li>可以大大加快数据的检索速度    </li>
-<li>可以加速表和表之间的连接</li>
-<li>在使用分组和排序子句进行数据检索时，同样可以显著减少查询中分组和排序的时间</li>
-<li><p>通过使用索引，可以在查询的过程中，使用优化隐藏器，提高系统的性能</p>
-<p>缺点：</p>
-</li>
-<li>创建索引和维护索引要耗费时间和大量的物理空间</li>
-<li>对表中的数据进行增加、删除和修改的时候，索引也要动态的维护，这样就降低了数据的维护速度</li>
-</ol>
-</li>
-<li><p><strong>存储过程</strong></p>
-<ul>
-<li>它是一组存储在数据库中的编译后的SQL语句集，可以接受参数以及返回值，也可以包括程序流，查询语句等</li>
-<li>正常情况下,我们在code中写好SQL语句,连接数据库，SQL语句会被发送到服务器然后编译优化，数据库引擎执行编译后的查询语句，最后将查询结果返回给客户端；那么如果我们使用存储过程就可以省掉编译优化的过程，而且存储过程存储在database中，可以减少网络流量和传输时间；而且可以对存储过程授予制定权限，从而保证数据库操作安全</li>
-</ul>
-</li>
-<li><p><strong>View</strong></p>
-<ul>
-<li>视图是一种通过自定义查询语句去查询筛选数据库表中的数据然后呈现给用户的一种动态生成的虚拟表,他和表一样包含行列数据，但是来自于其引用的表；其优点主要是可以保证数据库安全性以及筛选隐藏部分重要数据;View与Table之间的关系类似于MVC，在View中对数据进行修改会影响到Table中的数据，在Table中进行数据修改同样会显示到View，因为他们用的是同一份数据。</li>
-</ul>
-</li>
-</ol>
-<h3 id="MySQL的隔离级别与锁">MySQL的隔离级别与锁</h3><ol>
-<li><strong>四种隔离级别</strong>: 隔离级别决定了一个会话中的事务可能对另一个会话的影响、并发会话对数据库的操作、一个会话中所见数据的一致性; MySQL的InnoDB支持四种隔离级别,默认是可重读隔离级别<ul>
-<li><strong>未提交读READ UNCOMMITTED</strong>：最低级别的隔离，也被称之为脏读，它允许一个事务读取还没commit的事务的执行结果，这样可能会提高性能，但是导致脏读   </li>
-<li><strong>提交读READ COMMITTED</strong>：在一个事务中只允许看见已经commit的事务所做的改变。如果一个session中select还在查询中，另一会话session此时insert一条记录，则新添加的数据不可见；只有该操作commit之后才可见，也就是说—-<strong>不可重复读</strong>   </li>
-<li><strong>可重读REPEATABLE READ</strong>：同一个事务的多个实例在并发读取数据时会看到同样的数据行。也就是说在一个事务中重复select的结果一样，除非本事务中添加新数据到数据库，可能导致<strong>幻读</strong>;也就说事务之间只是在新数据方面突破了隔离，对已存在的数据仍旧隔离。</li>
-<li><strong>可串行化SERIALIZABLE</strong>：最高级别的隔离，强制事务排序并且只允许事务串行执行。为了达到此目的，数据库会锁住每个读的数据行，减少了并发，增加了稳定性，但是可能导致超时和锁竞争现象</li>
-<li><strong>事务并发导致的几个问题</strong><ul>
-<li><strong>脏读(Drity Read)</strong>：某个事务已更新一份数据，另一个事务在此时读取了同一份数据，由于某些原因，前一个回滚了操作，则后一个事务所读取的数据就会是不正确的</li>
-<li><strong>不可重复读</strong>:在一个事务的两次查询之中数据不一致，这可能是两次查询过程中间插入了一个事务更新了原有的数据。</li>
-<li><strong>幻读</strong>：例如一个事务的两次查询过程中有另外一个事务插入数据造成第二次查询出现了在第一次查询中没有出现的数据；<strong>例如</strong>如果事务A运行”SELECT count(1) from TABLE_X” ，然后事务B在 TABLE_X 加入一条新数据并提交，当事务A再运行一次 count(1)结果不会是一样的，这就叫做<strong>幻读</strong></li>
-</ul>
-</li>
-<li>隔离级别越高，越能保证数据的完整性和一致性，但是对并发性能的影响也越大。对于多数应用程序，可以优先考虑把数据库系统的隔离级别设为Read Committed。它能够避免脏读取，而且具有较好的并发性能。尽管它会导致不可重复读和并发问题，可以由应用程序采用悲观锁或乐观锁来控制。</li>
-<li>性质<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/SQL隔离.png" class="full-image"></li>
-</ul>
-</li>
-<li><strong>共享锁</strong>：由读表操作加上的锁，加锁后其他用户只能获取该表或行的共享锁，不能获取排它锁，也就是说只能读不能写；一个事务获取了共享锁之后，可以对锁定范围内的数据执行读操作。</li>
-<li><strong>排它锁</strong>：由写表操作加上的锁，加锁后其他用户不能获取该表或行的任何锁;一个事务获取了排它锁之后，可以对锁定范围内的数据执行写操作。</li>
-<li><strong>乐观锁</strong>:读取数据时不锁，更新时检查是否数据已经被更新过，如果是则取消当前更新<br>一般在悲观锁的等待时间过长而不能接受时我们才会选择乐观锁；<strong>乐观锁适用于多读的应用类型</strong>，这样可以提高吞吐量</li>
-<li><strong>悲观锁</strong>:在读取数据时锁住那几行，其他对这几行的更新需要等到悲观锁结束时才能继续；比如行锁，表锁等，读锁 </li>
-<li><strong>表级锁</strong>：对整个表加锁，影响标准的所有记录；开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。</li>
-<li><strong>行级锁</strong>：对一行记录加锁，只影响一条记录；开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。</li>
-<li><strong>页面锁</strong>：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</li>
-<li><strong>锁管理器</strong>是添加和释放锁的进程，在内部使用一个哈希表来保存锁的相关信息(关键字是被锁的数据），并且了解每一块数据是被哪个事务加的锁,哪个事务在等待数据解锁;锁管理器还需要检查是否存在死锁，以及决定选择取消哪一个事务来消除死锁，<strong>检查死锁有两种方式</strong>一种是<strong>检查循环等待</strong>还有一种是<strong>使用超时设定</strong>。如果一个锁在超时时间内没有加上，那事务就进入了死锁状态。</li>
-<li><strong>数据库一般采用锁或者数据版本控制来进行并发控制</strong> 版本控制是每个事务可以在相同时刻修改相同的数据，每个事务有自己的数据拷贝（或者叫版本）；如果2个事务修改相同的数据，只接受一个修改，另一个将被拒绝，相关的事务回滚（或重新运行）；这将提高性能，因为：读事务不会阻塞写事务，写事务不会阻塞读，可以减少锁管理器带来的额外开销，但是磁盘空间消耗巨大，以空间换时间</li>
-</ol>
-<h3 id="MyISAM和InnoDB存储引擎之间的区别">MyISAM和InnoDB存储引擎之间的区别</h3><ol>
-<li>InnoDB支持事务、外键和行锁，而MyISAM不支持这些高级功能，但是<strong>MyISAM是默认引擎</strong>，InnoDB则需要指定(事务是一种高级的处理方式，如在一些列增删改中只要哪个出错还可以回滚还原)</li>
-<li>MyISAM适合SELECT为主的应用，InnoDB适合频繁修改(INSERT或UPDATE)以及涉及到安全性较高的应用,因为InnoDB数据库在进行update时表进行行锁，并发量相对较大;而MyISAM在进行updata时进行表锁，并发量相对较小</li>
-<li>InnoDB不支持FULLTEXT类型的索引; 虽然InnoDB支持行锁,但是某些情况下还是锁整表，如 update table set a=1 where user like ‘%lee%’，因为该SQL语句不能确定要扫描的范围</li>
-<li>DELETE清空整个表时，InnoDB是一行一行的删除，效率非常慢。MyISAM则会重建表</li>
-<li>MyISAM的索引和数据是分开的，并且索引是有压缩的，内存使用率就对应提高了不少。能加载更多索引，而Innodb是索引和数据是紧密捆绑的，没有使用压缩从而会造成Innodb比MyISAM体积庞大不小</li>
-<li>InnoDB中不保存表的具体行数，也就是说，执行select count ( <em> ) from table时，InnoDB要扫描一遍整个表来计算有多少行，但是MyISAM只要简单的读出保存好的行数即可。注意的是，当count(</em>) 语句包含where条件时，两种表的操作是一样的</li>
-<li>MyISAM<strong>缓存</strong>在内存的是索引，不是数据。而InnoDB缓存在内存的是数据  </li>
-<li><strong>MyISAM和InnoDB索引B+树结构的区别</strong>：<strong>MyISAM引擎</strong>使用B+Tree作为索引结构，叶节点的data域存放的是数据记录的地址，索引检索的算法为首先按照B+Tree搜索算法搜索索引，如果指定的Key存在，则取出其data域的值，然后以data域的值为地址，读取相应数据记录。这种索引方式就属于“非聚集索引”；<strong>InnoDB中</strong>，表数据文件本身就是按B+Tree组织的一个索引结构，这棵树的叶节点data域保存了完整的数据记录  </li>
-</ol>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/myisam.png" width="100%"><br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/innodb.png" width="100%">   </p>
-<h3 id="日志管理器">日志管理器</h3><p>为了提升性能，数据库把数据保存在内存缓冲区内。但如果当事务提交时服务器崩溃，崩溃时还在内存里的数据会丢失，这破坏了事务的持久性。你可以把所有数据都写在磁盘上，但是如果服务器崩溃，最终数据可能只有部分写入磁盘，这破坏了事务的原子性。因此我们采用<strong>事务日志</strong>是一个存储空间，在每次写盘之前，数据库在事务日志中写入一些信息，这样当事务崩溃或回滚，数据库知道如何移除或完成尚未完成的事务。<strong>事务的每一个操作（增/删/改）产生一条日志</strong>  </p>
-<h3 id="参考链接">参考链接</h3><ol>
-<li><a href="http://blog.jobbole.com/100349/" target="_blank" rel="external">数据库整体架构原理</a></li>
-<li><a href="http://www.codeceo.com/article/mysql-index-struct.html#0-tsina-1-46551-397232819ff9a47a7b7e80a40613cfe1" target="_blank" rel="external">MySQL数据库索引原理</a>  </li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/databse/"> #databse </a>
           
         </div>
       
@@ -1410,7 +1525,7 @@ n再和这个数做与运算*/</span>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">41</span>
+              <span class="site-state-item-count">42</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1424,7 +1539,7 @@ n再和这个数做与运算*/</span>
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">49</span>
+              <span class="site-state-item-count">50</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

@@ -268,7 +268,8 @@
 <li><p><strong>LinkedHashMap</strong>是HashMap的子类，它可以实现对容器内Entry的存储顺序和对Entry的遍历顺序保持一致; LinkedHashMap内部使用了一个Entry类型的双向链表，用这个双向链表记录Entry的存储顺序。当需要对该Map进行遍历的时候，实际上是遍历的是这个双向链表。</p>
 <p>内部结构图：<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/LinkedHashMap.png" class="full-image" width="100%"></p>
 <p>遍历方式:  </p>
-<pre><code>//默认accessOrder为<span class="literal">false</span>，按照插入顺序排序，先进先出；<span class="literal">true</span>代表按照访问顺序，访问一个元素就把他放到链表尾部
+<pre><code>//构造函数的默认值为<span class="literal">false</span>，按照插入顺序排序，先进先出；
+//<span class="literal">true</span>代表按照访问顺序排序，那么调用get方法后，内部会调用recordAccess方法记录访问顺序，将最新访问的元素添加到双向链表的表头，并从原来的位置删除，不断访问可以形成按访问顺序排序的链表;可以重写removeEldestEntry方法返回<span class="literal">true</span>值指定插入元素时移除最老的元素。 
 <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; linkedHashMap = new <span class="type">LinkedHashMap</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt;(<span class="number">16</span>,<span class="number">0</span>.<span class="number">75</span>f,<span class="literal">true</span>);
 
 <span class="type">Iterator</span>&lt;<span class="type">Map</span>.<span class="type">Entry</span>&gt; <span class="keyword">iterator</span>= linkedHashMap.entrySet().<span class="keyword">iterator</span>();  
@@ -406,7 +407,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">41</span>
+              <span class="site-state-item-count">42</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -420,7 +421,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">49</span>
+              <span class="site-state-item-count">50</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

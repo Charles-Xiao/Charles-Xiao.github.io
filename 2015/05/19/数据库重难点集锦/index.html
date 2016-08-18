@@ -294,6 +294,21 @@
 <li><strong>MyISAM和InnoDB索引B+树结构的区别</strong>：<strong>MyISAM引擎</strong>使用B+Tree作为索引结构，叶节点的data域存放的是数据记录的地址，索引检索的算法为首先按照B+Tree搜索算法搜索索引，如果指定的Key存在，则取出其data域的值，然后以data域的值为地址，读取相应数据记录。这种索引方式就属于“非聚集索引”；<strong>InnoDB中</strong>，表数据文件本身就是按B+Tree组织的一个索引结构，这棵树的叶节点data域保存了完整的数据记录  </li>
 </ol>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/myisam.png" width="100%"><br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/innodb.png" width="100%">   </p>
+<h3 id="SQL语句">SQL语句</h3><ol>
+<li><p><strong>in和exists区别</strong></p>
+<ul>
+<li>mysql中的<strong>in语句</strong>是把外表和内表作hash 连接，而<strong>exists语句</strong>是对外表作loop循环，每次loop循环再对内表进行查询。一直大家都认为exists比in语句的效率要高，这种说法其实是不准确的，这个是要区分环境的。</li>
+<li><strong>效率对比</strong>：①如果查询的两个表大小相当，那么用in和exists差别不大；②如果两个表中一个较小，一个是大表，则子查询表大的用exists，子查询表小的用in</li>
+<li><strong>实例（A&lt;B）</strong>：①select <em> from A where cc in (select cc from B) 效率低，用到了A表上cc列的索引；②select </em> from A where exists(select cc from B where cc=A.cc) 效率高，用到了B表上cc列的索引。③select <em> from B where cc in (select cc from A) 效率高，用到了B表上cc列的索引；④select </em> from B where exists(select cc from A where cc=B.cc) 效率低，用到了A表上cc列的索引。</li>
+</ul>
+</li>
+<li><p><strong>not in和not exists区别</strong></p>
+<ul>
+<li>not in 和not exists如果查询语句使用了not in 那么内外表都进行全表扫描，没有用到索引；而not extsts 的子查询依然能用到表上的索引。所以无论那个表大，用not exists都比not in要快。 </li>
+<li>在含有NULL值的列的时候，not in 逻辑上不完全等同于not exists；应该尽量不要使用not in(它会调用子查询)，而尽量使用not exists(它会调用关联子查询)。如果not in子查询中返回的任意一条记录含有空值，则查询将不返回任何记录；因此除非子查询字段有非空限制，这时可以使用not in</li>
+</ul>
+</li>
+</ol>
 <h3 id="日志管理器">日志管理器</h3><p>为了提升性能，数据库把数据保存在内存缓冲区内。但如果当事务提交时服务器崩溃，崩溃时还在内存里的数据会丢失，这破坏了事务的持久性。你可以把所有数据都写在磁盘上，但是如果服务器崩溃，最终数据可能只有部分写入磁盘，这破坏了事务的原子性。因此我们采用<strong>事务日志</strong>是一个存储空间，在每次写盘之前，数据库在事务日志中写入一些信息，这样当事务崩溃或回滚，数据库知道如何移除或完成尚未完成的事务。<strong>事务的每一个操作（增/删/改）产生一条日志</strong>  </p>
 <h3 id="参考链接">参考链接</h3><ol>
 <li><a href="http://blog.jobbole.com/100349/" target="_blank" rel="external">数据库整体架构原理</a></li>
@@ -390,7 +405,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">41</span>
+              <span class="site-state-item-count">42</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -404,7 +419,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">49</span>
+              <span class="site-state-item-count">50</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -442,7 +457,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的Hash算法和一致性哈希"><span class="nav-number">1.</span> <span class="nav-text">常见的Hash算法和一致性哈希</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库结构概览"><span class="nav-number">2.</span> <span class="nav-text">数据库结构概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库的事务、索引、范式和存储过程概念以及优缺点"><span class="nav-number">3.</span> <span class="nav-text">数据库的事务、索引、范式和存储过程概念以及优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL的隔离级别与锁"><span class="nav-number">4.</span> <span class="nav-text">MySQL的隔离级别与锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM和InnoDB存储引擎之间的区别"><span class="nav-number">5.</span> <span class="nav-text">MyISAM和InnoDB存储引擎之间的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志管理器"><span class="nav-number">6.</span> <span class="nav-text">日志管理器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">7.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的Hash算法和一致性哈希"><span class="nav-number">1.</span> <span class="nav-text">常见的Hash算法和一致性哈希</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库结构概览"><span class="nav-number">2.</span> <span class="nav-text">数据库结构概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库的事务、索引、范式和存储过程概念以及优缺点"><span class="nav-number">3.</span> <span class="nav-text">数据库的事务、索引、范式和存储过程概念以及优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL的隔离级别与锁"><span class="nav-number">4.</span> <span class="nav-text">MySQL的隔离级别与锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM和InnoDB存储引擎之间的区别"><span class="nav-number">5.</span> <span class="nav-text">MyISAM和InnoDB存储引擎之间的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL语句"><span class="nav-number">6.</span> <span class="nav-text">SQL语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志管理器"><span class="nav-number">7.</span> <span class="nav-text">日志管理器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">8.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

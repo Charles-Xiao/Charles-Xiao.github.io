@@ -179,8 +179,8 @@
 
       
         <h3 id="Dubbo框架">Dubbo框架</h3><ol>
-<li><strong>Dubbo</strong>是一个Alibaba开源的远程服务调用RPC分布式框架，基于TCP传输协议和高性能NIO框架Netty；它最大的特点是按照分层的方式来架构，使用这种方式可以使各个层之间解耦合。从服务模型的角度来看，Dubbo采用的是一种非常简单的模型，要么是提供方提供服务，要么是消费方消费服务，可以抽象出服务提供方（Provider）和服务消费方（Consumer）两个角色。</li>
-<li><p><strong>三个核心功能</strong></p>
+<li><strong>Dubbo</strong>是一个Alibaba开源的远程服务调用RPC分布式框架，基于TCP传输协议和高性能NIO框架Netty；它最大的优点是<strong>按照分层的方式来架构，使用这种方式可以使各个层之间解耦合</strong>。从服务模型的角度来看，Dubbo采用的是一种非常简单的模型，要么是提供方提供服务，要么是消费方消费服务，可以抽象出服务提供方（Provider）和服务消费方（Consumer）两个角色。</li>
+<li><p><strong>三个核心功能和优势</strong></p>
 <ul>
 <li><strong>远程通讯</strong>: 提供对多种基于长连接的NIO框架抽象封装，包括多种线程模型，序列化，以及“请求-响应”模式的信息交换方式。</li>
 <li><strong>集群容错</strong>: 提供基于接口方法的透明远程过程调用，包括多协议支持，以及软负载均衡，失败容错，地址路由，动态配置等集群支持。</li>
@@ -194,7 +194,7 @@
 <ul>
 <li>Provider: 暴露服务的服务提供方</li>
 <li>Consumer: 调用远程服务的服务消费方</li>
-<li>Registry: 服务注册与发现的注册中心，例如Zookeeper集群</li>
+<li>Registry: 服务注册与发现的注册中心，<strong>例如Zookeeper集群</strong></li>
 <li>Monitor: 统计服务的调用次调和调用时间的监控中心</li>
 <li>Container: 服务运行容器</li>
 </ul>
@@ -204,7 +204,7 @@
 <li>服务容器负责启动，加载，运行服务提供者。</li>
 <li>服务提供者在启动时，向注册中心注册自己提供的服务。</li>
 <li>服务消费者在启动时，向注册中心订阅自己所需的服务。</li>
-<li>注册中心返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。</li>
+<li>注册中心返回服务提供者的地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。</li>
 <li>服务消费者，从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另一台调用。</li>
 <li>服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心</li>
 </ol>
@@ -214,11 +214,20 @@
 <li><p><strong>使用方法</strong> : Dubbo采用全Spring配置方式，透明化接入应用，对应用没有任何API侵入，只需用Spring加载Dubbo的配置即可，Dubbo基于Spring的Schema扩展进行加载。如果不想使用Spring配置，而希望通过API的方式进行调用</p>
 </li>
 </ol>
+<h3 id="ZooKeeper">ZooKeeper</h3><ol>
+<li>ZooKeeper是一个分布式应用程序协调服务，它包含一个简单的原语集，分布式应用程序可以基于它实现同步服务，配置维护和命名服务等。<strong>主要用来解决分布式集群中应用系统的一致性问题，它能提供基于类似于文件系统的目录节点树方式的数据存储，但是 Zookeeper 并不是用来专门存储数据的，它的作用主要是用来维护和监控你存储的数据的状态变化。通过监控这些数据状态的变化，从而可以达到基于数据的集群管理</strong></li>
+<li><strong>ZooKeeper的备份，同步，选举，容错</strong></li>
+<li><strong>实现效果</strong><ul>
+<li>最终一致性：client不论连接到哪个Server，展示给它都是同一个视图，这是zookeeper最重要的性能。</li>
+<li>可靠性：具有简单、健壮、良好的性能，如果消息m被到一台服务器接受，那么它将被所有的服务器接受。</li>
+</ul>
+</li>
+</ol>
 <h3 id="Redis">Redis</h3><ol>
 <li>Redis是一个完全开源免费的遵守BSD协议的高性能key-value数据库，具有三大特点：<ul>
-<li>Redis支持数据的持久化，可以将内存中的数据保持在磁盘中，重启的时候可以再次加载进行使用。</li>
-<li>Redis不仅仅支持简单的key-value类型的数据，同时还提供list，set，zset，hash等数据结构的存储。</li>
-<li>Redis支持数据的备份，即master-slave模式的数据备份。</li>
+<li>Redis支持<strong>数据的持久化</strong>，可以将内存中的数据保持在磁盘中，重启的时候可以再次加载进行使用。</li>
+<li>Redis不仅仅支持简单的key-value类型的数据，同时还<strong>提供list，set，zset，hash等数据结构</strong>的存储。</li>
+<li>Redis<strong>支持数据的备份</strong>，即master-slave模式的数据备份。</li>
 </ul>
 </li>
 <li><strong>Redis优势</strong><ul>
@@ -228,19 +237,19 @@
 <li>丰富的特性 – Redis还支持 publish/subscribe, 消息通知, 按key设置过期时间，过期后将会自动删除等等特性。</li>
 </ul>
 </li>
+<li><strong>Redis数据类型</strong><ul>
+<li><strong>Sorted-Sets</strong>和Sets类型极为相似，它们都是字符串的集合，都不允许重复的成员出现在一个Set中。它们之间的主要差别是Sorted-Sets中的每一个成员都会有一个分数(score)与之关联，Redis正是通过分数来为集合中的成员进行从小到大的排序。然而需要额外指出的是，尽管Sorted-Sets中的成员必须是唯一的，但是分数(score)却是可以重复的。<strong>在Sorted-Set中添加、删除或更新一个成员都是非常快速的操作，其时间复杂度为集合中成员数量的对数</strong>。由于Sorted-Sets中的成员在集合中的位置是有序的，因此，即便是访问位于集合中部的成员也仍然是非常高效的</li>
+<li><a href="http://blog.sina.com.cn/s/blog_5f54f0be0102uxrg.html" target="_blank" rel="external">Redis 不同类型数据常见应用场景</a></li>
+<li><a href="http://my.oschina.net/ydsakyclguozi/blog/404625" target="_blank" rel="external">Redis 数据类型详解</a></li>
+</ul>
+</li>
 <li><strong>Memcache与Redis的区别</strong>: 读写速度、数据类型、是否可以持久化; <strong>它们之间底层实现方式 以及与客户端之间通信的应用协议不一样</strong>,Redis直接自己构建了VM 机制 ，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求</li>
 <li><strong>Redis常见性能问题和解决方案</strong><ul>
-<li><strong>Master最好不要做任何持久化工作，如RDB内存快照和AOF日志文件</strong>; 因为写内存快照时save命令调度rdbSave函数，会阻塞主线程的工作，当快照比较大时对性能影响是非常大的，会间断性暂停服务，所以Master最好不要写内存快照</li>
+<li><strong>Master最好不要做任何持久化工作，如RDB内存快照和AOF日志文件这两种持久化方式</strong>; 因为写内存快照时save命令调度rdbSave函数，会阻塞主线程的工作，当快照比较大时对性能影响是非常大的，会间断性暂停服务，所以Master最好不要写内存快照</li>
 <li><strong>Master调用重写AOF文件也会有性能问题</strong>，AOF在重写的时候会占大量的CPU和内存资源，导致服务load过高，出现短暂服务暂停现象；如果数据比较重要，某个Slave开启AOF备份数据，策略设置为每秒同步一次</li>
 <li>为了主从复制的速度和连接的稳定性，Master和Slave最好在同一个局域网内</li>
 <li>尽量避免在压力很大的主库上增加从库</li>
-<li>主从复制不要用图状结构，用单向链表结构更为稳定，即：Master &lt;- Slave1 &lt;- Slave2 &lt;- Slave3…;这样的结构方便解决单点故障问题，实现Slave对Master的替换。如果Master挂了，可以立刻启用Slave1做Master，其他不变。<h3 id="ZooKeeper">ZooKeeper</h3></li>
-</ul>
-</li>
-<li>ZooKeeper是一个分布式应用程序协调服务，它包含一个简单的原语集，分布式应用程序可以基于它实现同步服务，配置维护和命名服务等。主要用来解决分布式集群中应用系统的一致性问题，它能提供基于类似于文件系统的目录节点树方式的数据存储，但是 Zookeeper 并不是用来专门存储数据的，它的作用主要是用来维护和监控你存储的数据的状态变化。通过监控这些数据状态的变化，从而可以达到基于数据的集群管理</li>
-<li><strong>实现效果</strong><ul>
-<li>最终一致性：client不论连接到哪个Server，展示给它都是同一个视图，这是zookeeper最重要的性能。</li>
-<li>可靠性：具有简单、健壮、良好的性能，如果消息m被到一台服务器接受，那么它将被所有的服务器接受。</li>
+<li>主从复制不要用图状结构，用单向链表结构更为稳定，即：Master &lt;- Slave1 &lt;- Slave2 &lt;- Slave3…;这样的结构方便解决单点故障问题，实现Slave对Master的替换。如果Master挂了，可以立刻启用Slave1做Master，其他不变。</li>
 </ul>
 </li>
 </ol>
@@ -327,7 +336,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">41</span>
+              <span class="site-state-item-count">42</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -341,7 +350,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">49</span>
+              <span class="site-state-item-count">50</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -379,7 +388,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dubbo框架"><span class="nav-number">1.</span> <span class="nav-text">Dubbo框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis"><span class="nav-number">2.</span> <span class="nav-text">Redis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZooKeeper"><span class="nav-number">3.</span> <span class="nav-text">ZooKeeper</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dubbo框架"><span class="nav-number">1.</span> <span class="nav-text">Dubbo框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZooKeeper"><span class="nav-number">2.</span> <span class="nav-text">ZooKeeper</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis"><span class="nav-number">3.</span> <span class="nav-text">Redis</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
