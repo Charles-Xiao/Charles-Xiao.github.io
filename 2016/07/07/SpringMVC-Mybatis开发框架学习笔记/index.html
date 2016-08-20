@@ -246,7 +246,7 @@
 </ul>
 </li>
 <li><strong>使用场景和效率对比</strong>:JDK动态代理所创建的代理对象，在JDK 1.3下，性能强差人意。虽然在高版本的JDK中，动态代理对象的性能得到了很大的提高，但是<strong>有研究表明，CGLib所创建的动态代理对象的性能依旧比JDK的所创建的代理对象的性能高不少（大概10倍）。而CGLib在创建代理对象时性能却比JDK动态代理慢很多（大概8倍），所以对于singleton的代理对象或者具有实例池的代理，因为不需要频繁创建代理对象，所以比较适合用CGLib动态代理技术，反之适合用JDK动态代理技术。</strong>此外，由于CGLib采用生成子类的技术创建代理对象，所以不能对目标类中的final方法进行代理。</li>
-<li><aop:aspectj-autoproxy proxy-target-class="true">配置了这句话的话就会强制使用cglib代理。  默认就是false。</aop:aspectj-autoproxy></li>
+<li>‘’‘<aop:aspectj-autoproxy proxy-target-class="true">’‘’配置了这句话的话就会强制使用cglib代理。  默认就是false。</aop:aspectj-autoproxy></li>
 </ol>
 <h4 id="Spring常用注解">Spring常用注解</h4><ol>
 <li><strong>@Service</strong>用于标注业务层组件</li>
