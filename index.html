@@ -184,12 +184,15 @@
       
         
           <h3 id="Dubbo框架">Dubbo框架</h3><ol>
-<li><strong>Dubbo</strong>是一个Alibaba开源的远程服务调用RPC分布式框架，基于TCP传输协议和高性能NIO框架Netty；它最大的优点是<strong>按照分层的方式来架构，使用这种方式可以使各个层之间解耦合</strong>。从服务模型的角度来看，Dubbo采用的是一种非常简单的模型，要么是提供方提供服务，要么是消费方消费服务，可以抽象出服务提供方（Provider）和服务消费方（Consumer）两个角色。</li>
-<li><p><strong>三个核心功能和优势</strong></p>
-<ul>
+<li><strong>Dubbo</strong>是一个Alibaba开源的远程服务调用RPC分布式框架，<strong>基于TCP传输协议和高性能NIO框架Netty</strong>；它最大的优点是<strong>按照分层的方式来架构，使用这种方式可以使各个层之间解耦合</strong>。从服务模型的角度来看，Dubbo采用的是一种非常简单的模型，要么是提供方提供服务，要么是消费方消费服务，可以抽象出服务提供方（Provider）和服务消费方（Consumer）两个角色。</li>
+<li><strong>三个核心功能和优势</strong><ul>
 <li><strong>远程通讯</strong>: 提供对多种基于长连接的NIO框架抽象封装，包括多种线程模型，序列化，以及“请求-响应”模式的信息交换方式。</li>
 <li><strong>集群容错</strong>: 提供基于接口方法的透明远程过程调用，包括多协议支持，以及软负载均衡，失败容错，地址路由，动态配置等集群支持。</li>
 <li><strong>自动发现</strong>: 基于注册中心目录服务，使服务消费方能动态的查找服务提供方，使地址透明，使服务提供方可以平滑增加或减少机器。</li>
+</ul>
+</li>
+<li><strong>Dubbo支持多种协议</strong>，例如Dubbo协议，Hessian协议，HTTP协议，RMI协议，WebService协议，Redis协议；<strong>缺省协议，使用基于netty3.2.2+hessian3.2.1交互</strong>：连接个数：单连接；连接方式：长连接；传输协议：TCP；传输方式：NIO异步传输；序列化：Hessian二进制序列化<ul>
+<li><strong>在通信过程中，不同服务在性能上适用不同协议进行传输</strong>，比如大数据用短连接协议，小数据大并发用长连接协议。例如，使用RMI协议，一般会受到防火墙的限制，所以对于外部与内部进行通信的场景，就不要使用RMI协议，而是基于HTTP协议或者Hessian协议。</li>
 </ul>
 </li>
 <li><p><strong>整体架构</strong></p>
@@ -220,11 +223,19 @@
 </li>
 </ol>
 <h3 id="ZooKeeper">ZooKeeper</h3><ol>
-<li>ZooKeeper是一个分布式应用程序协调服务，它包含一个简单的原语集，分布式应用程序可以基于它实现同步服务，配置维护和命名服务等。<strong>主要用来解决分布式集群中应用系统的一致性问题，它能提供基于类似于文件系统的目录节点树方式的数据存储，但是 Zookeeper 并不是用来专门存储数据的，它的作用主要是用来维护和监控你存储的数据的状态变化。通过监控这些数据状态的变化，从而可以达到基于数据的集群管理</strong></li>
-<li><strong>ZooKeeper的备份，同步，选举，容错</strong></li>
+<li>ZooKeeper是一个分布式应用程序协调服务，它包含一个简单的原语集，分布式应用程序可以基于它实现同步服务，配置维护和命名服务等。<strong>主要用来解决分布式集群中应用系统的一致性问题，它能提供基于类似于文件系统的目录节点树方式的数据存储，但是 Zookeeper 并不是用来专门存储数据的，它的作用主要是用来维护和监控你存储的数据的状态变化。通过监控这些数据状态的变化，从而可以达到基于数据的集群管理</strong> <a href="http://www.open-open.com/lib/view/open1415453633887.html" target="_blank" rel="external">参考链接</a></li>
 <li><strong>实现效果</strong><ul>
 <li>最终一致性：client不论连接到哪个Server，展示给它都是同一个视图，这是zookeeper最重要的性能。</li>
-<li>可靠性：具有简单、健壮、良好的性能，如果消息m被到一台服务器接受，那么它将被所有的服务器接受。</li>
+<li>可靠性：具有简单、健壮、良好的性能，如果消息m被一台服务器接受，那么它将被所有的服务器接受。</li>
+</ul>
+</li>
+<li><strong>Zookeeper集群结构</strong>通常Zookeeper由2n+1台servers组成，每个server都知道彼此的存在。每个server都维护的内存状态镜像以及持久化存储的事务日志和快照。对于2n+1台server，只要有n+1台（大多数）server可用，整个系统保持可用。</li>
+<li><strong>Zookeeper的核心是原子广播，这个机制保证了各个server之间的同步</strong>。实现这个机制的协议叫做Zab协议。<strong>Zab协议有两种模式，它们分别是恢复模式和广播模式</strong>。当服务启动或者在领导者崩溃后，Zab就<strong>进入了恢复模式</strong>，当领导者被选举出来，且大多数server的完成了和leader的状态同步以后，恢复模式就结束了。状态同步保证了leader和server具有相同的系统状态。一旦leader已经和多数的follower进行了状态同步后，他就可以开始广播消息了，<strong>即进入广播状态</strong>。这时候当一个server加入zookeeper服务中，它会在恢复模式下启动，发现leader，并和leader进行状态同步。待到同步结束，它也参与消息广播。Zookeeper服务一直维持在Broadcast状态，直到leader崩溃了或者leader失去了大部分的followers支持。</li>
+<li><strong>基于paxos算法（主要是fastpaxos）的实现的选举算法</strong>：Paxos算法通过投票来对写操作进行全局编号，同一时刻，只有一个写操作被批准，同时并发的写操作要去争取选票，只有获得过半数选票的写操作才会被 批准（所以永远只会有一个写操作得到批准），其他的写操作竞争失败只好再发起一轮投票，就这样，在日复一日年复一年的投票中，所有写操作都被严格编号排 序。编号严格递增，当一个节点接受了一个编号为100的写操作，之后又接受到编号为99的写操作（因为网络延迟等很多不可预见原因），它马上能意识到自己 数据不一致了，自动停止对外服务并重启同步过程。任何一个节点挂掉都不会影响整个集群的数据一致性（总2n+1台，除非挂掉大于n台）</li>
+<li><strong>三个角色Leader、follower和Observer</strong><ul>
+<li>系统启动时，集群中的server会<strong>选举出一台server为Leader，其它的就作为follower</strong>（这里先不考虑observer角色）。接着由follower来服务client的请求，对于不改变系统一致性状态的读操作，由follower的本地内存数据库直接给client返回结果；对于会改变系统状态的更新操作，则交由Leader进行提议投票，超过半数通过后返回结果给client。</li>
+<li>为了提高吞吐量通常我们只要增加服务器到Zookeeper集群中。但是当服务器增加到一定程度，会导致投票的压力增大从而使得吞吐量降低。<strong>因此我们引出了一个角色：Observer</strong>;Observers 可以接受客户端的连接，将写请求转发给领导节点。但是，领导节点不会要求 Observers 参加投票。相反，Observers 不参与投票过程，仅仅和其他服务节点一起得到投票结果。</li>
+<li><strong>为什么需要Observers？？它带来什么好处</strong>Observers 的需求源于 ZooKeeper  follower服务器在上述工作流程中实际扮演了两个角色。它们从客户端接受连接与操作请求，之后对操作结果进行投票。这两个职能在 ZooKeeper集群扩展的时候彼此制约。如果我们希望增加 ZooKeeper 集群服务的客户数量，那么我们必须增加服务器的数量，来支持这么多的客户端。然而，从一致性协议的描述可以看到，增加服务器的数量增加了对协议的投票部分的压力。领导节点必须等待集群中过半数的服务器响应投票。于是，节点的增加使得部分计算机运行较慢，从而拖慢整个投票过程的可能性也随之提高，投票操作的会随之下降。这正是我们在实际操作中看到的问题——<strong>随着 ZooKeeper 集群变大，投票操作的吞吐量会下降。所以需要增加客户节点数量的期望和我们希望保持较好吞吐性能的期望间进行权衡。要打破这一耦合关系，引入了不参与投票的服务器，称为 Observers。这个简单的扩展给 ZooKeeper 的可伸缩性带来了全新的镜像。我们现在可以加入很多 Observers 节点，而无须担心严重影响写吞吐量。虽然协议中的通知阶段仍然与服务器的数量呈线性关系，但是穿行开销非常低。因此可以认为在通知服务器阶段的开销无法成为主要瓶颈。</strong></li>
 </ul>
 </li>
 </ol>
@@ -249,12 +260,23 @@
 </ul>
 </li>
 <li><strong>Memcache与Redis的区别</strong>: 读写速度、数据类型、是否可以持久化; <strong>它们之间底层实现方式 以及与客户端之间通信的应用协议不一样</strong>,Redis直接自己构建了VM 机制 ，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求</li>
+<li><strong>2种持久化方式</strong>：RDB内存快照和AOF日志文件；如果服务器开启了AOF持久化功能，服务器会优先使用AOF文件来还原数据库状态，只有在AOF持久化功能关闭的时候，才会使用RDB文件来还原数据库状态。</li>
 <li><strong>Redis常见性能问题和解决方案</strong><ul>
 <li><strong>Master最好不要做任何持久化工作，如RDB内存快照和AOF日志文件这两种持久化方式</strong>; 因为写内存快照时save命令调度rdbSave函数，会阻塞主线程的工作，当快照比较大时对性能影响是非常大的，会间断性暂停服务，所以Master最好不要写内存快照</li>
 <li><strong>Master调用重写AOF文件也会有性能问题</strong>，AOF在重写的时候会占大量的CPU和内存资源，导致服务load过高，出现短暂服务暂停现象；如果数据比较重要，某个Slave开启AOF备份数据，策略设置为每秒同步一次</li>
 <li>为了主从复制的速度和连接的稳定性，Master和Slave最好在同一个局域网内</li>
 <li>尽量避免在压力很大的主库上增加从库</li>
 <li>主从复制不要用图状结构，用单向链表结构更为稳定，即：Master &lt;- Slave1 &lt;- Slave2 &lt;- Slave3…;这样的结构方便解决单点故障问题，实现Slave对Master的替换。如果Master挂了，可以立刻启用Slave1做Master，其他不变。</li>
+</ul>
+</li>
+</ol>
+<h3 id="消息队列">消息队列</h3><ol>
+<li><strong>ActiveMQ是基于JMS实现的Provider（可以理解为队列）</strong>，它支持多种协议，如OpenWire，Stomp，AMQP等，基于此，支持多平台；支持事务，支持分发策略、还有上面的多种消息模型。ActiveMQ支持分布式，它支持Master-Slave提供高可用，也支持Broker-Cluster提供负载均衡，但是它的负载基于一种Forwarding Bridge机制。</li>
+<li><strong>Kafka是一种高吞吐量的分布式发布订阅消息系统，它可以处理消费者规模的网站中的所有动作流数据。</strong><ul>
+<li><strong>kafka的发布对象是topic</strong>。每类数据我们可以归为一个topic。向topic发送消息的我们称为生产者、从topic订阅消息的称为consumer。producer 和 consumer 可以同时读写数据。</li>
+<li>消息就是以partition作为存储单位，<strong>topic的存放形式是partition</strong>，每一个topic都可以设置partition数量。partition的数量决定了log的数量；producer在生产消息时，会把消息发布到topic的多个partition中。</li>
+<li><strong>broker</strong>: Kafka以集群的方式运行，可以由一个或多个服务组成，每个服务叫做一个broker；producer将消息推送到broker，consumer从broker拉取消息。</li>
+<li><strong>发布消息通常有两种模式：队列模式（queuing）和发布-订阅模式(publish-subscribe)</strong>。队列模式中，consumers可以同时从服务端读取消息，每个消息只被其中一个consumer读到；发布-订阅模式中消息被广播到所有的consumer中。</li>
 </ul>
 </li>
 </ol>
@@ -383,7 +405,17 @@
 <h4 id="Mybatis">Mybatis</h4><ol>
 <li><strong>Mybatis</strong>是一个<strong>支持普通SQL查询，存储过程和高级映射的优秀持久层框架</strong>。MyBatis消除了几乎所有的JDBC代码和参数的手工设置以及对结果集的检索封装；MyBatis可以使用简单的XML或注解用于配置映射，将接口和Java的POJO（Plain Old Java Objects，普通的Java对象）映射成数据库中的记录</li>
 </ol>
-<h3 id="Spring常见用法">Spring常见用法</h3><h4 id="Spring常用注解">Spring常用注解</h4><ol>
+<h3 id="Spring常见用法">Spring常见用法</h3><h4 id="Spring_AOP实现原理">Spring AOP实现原理</h4><ol>
+<li>Spring AOP使用了<strong>两种代理机制，一种是基于JDK的动态代理</strong>，利用截取消息的方式，对该消息进行装饰，以取代原有对象行为的执行；<strong>另一种是基于CGLib(动态字节码增强技术)的动态代理</strong>，通过CGLib可以为一个类创建子类，并在子类中采用方法拦截的技术拦截所有父类方法的调用，并在拦截方法相应地织入横切逻辑；之所以需要两种代理机制，很大程度上是因为JDK本身只提供基于接口的代理，不支持类的代理。尽管实现技术不一样，但都是基于代理模式，都是生成一个代理对象。</li>
+<li><strong>两种代理的具体实现方法</strong><ul>
+<li><strong>JDK动态代理</strong>：主要使用到 InvocationHandler 接口和 Proxy.newProxyInstance() 方法。JDK动态代理要求被代理实现一个接口，只有接口中的方法才能够被代理。其方法是将被代理对象注入到一个中间对象，而中间对象实现InvocationHandler接口，在实现该接口时，可以在 被代理对象调用它的方法时，在调用的前后插入一些代码。而 Proxy.newProxyInstance() 能够利用中间对象来生产代理对象。插入的代码就是切面代码。所以使用JDK动态代理可以实现AOP</li>
+<li><strong>CGLIB（code generate libary）</strong>:字节码生成技术实现AOP，其实就是继承被代理对象，然后Override需要被代理的方法，在覆盖该方法时，自然是可以插入我们自己的代码的。因为需要Override被代理对象的方法，所以自然CGLIB技术实现AOP时，就必须要求需要被代理的方法不能是final方法，因为final方法不能被子类覆盖。</li>
+</ul>
+</li>
+<li><strong>使用场景和效率对比</strong>:JDK动态代理所创建的代理对象，在JDK 1.3下，性能强差人意。虽然在高版本的JDK中，动态代理对象的性能得到了很大的提高，但是<strong>有研究表明，CGLib所创建的动态代理对象的性能依旧比JDK的所创建的代理对象的性能高不少（大概10倍）。而CGLib在创建代理对象时性能却比JDK动态代理慢很多（大概8倍），所以对于singleton的代理对象或者具有实例池的代理，因为不需要频繁创建代理对象，所以比较适合用CGLib动态代理技术，反之适合用JDK动态代理技术。</strong>此外，由于CGLib采用生成子类的技术创建代理对象，所以不能对目标类中的final方法进行代理。</li>
+<li><aop:aspectj-autoproxy proxy-target-class="true">配置了这句话的话就会强制使用cglib代理。  默认就是false。</aop:aspectj-autoproxy></li>
+</ol>
+<h4 id="Spring常用注解">Spring常用注解</h4><ol>
 <li><strong>@Service</strong>用于标注业务层组件</li>
 <li><strong>@Controller</strong>用于标注控制层组件（如struts中的action）</li>
 <li><strong>@Repository</strong>用于标注数据访问组件，即DAO组件</li>

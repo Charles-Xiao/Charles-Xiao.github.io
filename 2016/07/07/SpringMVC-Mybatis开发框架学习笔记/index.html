@@ -238,7 +238,17 @@
 <h4 id="Mybatis">Mybatis</h4><ol>
 <li><strong>Mybatis</strong>是一个<strong>支持普通SQL查询，存储过程和高级映射的优秀持久层框架</strong>。MyBatis消除了几乎所有的JDBC代码和参数的手工设置以及对结果集的检索封装；MyBatis可以使用简单的XML或注解用于配置映射，将接口和Java的POJO（Plain Old Java Objects，普通的Java对象）映射成数据库中的记录</li>
 </ol>
-<h3 id="Spring常见用法">Spring常见用法</h3><h4 id="Spring常用注解">Spring常用注解</h4><ol>
+<h3 id="Spring常见用法">Spring常见用法</h3><h4 id="Spring_AOP实现原理">Spring AOP实现原理</h4><ol>
+<li>Spring AOP使用了<strong>两种代理机制，一种是基于JDK的动态代理</strong>，利用截取消息的方式，对该消息进行装饰，以取代原有对象行为的执行；<strong>另一种是基于CGLib(动态字节码增强技术)的动态代理</strong>，通过CGLib可以为一个类创建子类，并在子类中采用方法拦截的技术拦截所有父类方法的调用，并在拦截方法相应地织入横切逻辑；之所以需要两种代理机制，很大程度上是因为JDK本身只提供基于接口的代理，不支持类的代理。尽管实现技术不一样，但都是基于代理模式，都是生成一个代理对象。</li>
+<li><strong>两种代理的具体实现方法</strong><ul>
+<li><strong>JDK动态代理</strong>：主要使用到 InvocationHandler 接口和 Proxy.newProxyInstance() 方法。JDK动态代理要求被代理实现一个接口，只有接口中的方法才能够被代理。其方法是将被代理对象注入到一个中间对象，而中间对象实现InvocationHandler接口，在实现该接口时，可以在 被代理对象调用它的方法时，在调用的前后插入一些代码。而 Proxy.newProxyInstance() 能够利用中间对象来生产代理对象。插入的代码就是切面代码。所以使用JDK动态代理可以实现AOP</li>
+<li><strong>CGLIB（code generate libary）</strong>:字节码生成技术实现AOP，其实就是继承被代理对象，然后Override需要被代理的方法，在覆盖该方法时，自然是可以插入我们自己的代码的。因为需要Override被代理对象的方法，所以自然CGLIB技术实现AOP时，就必须要求需要被代理的方法不能是final方法，因为final方法不能被子类覆盖。</li>
+</ul>
+</li>
+<li><strong>使用场景和效率对比</strong>:JDK动态代理所创建的代理对象，在JDK 1.3下，性能强差人意。虽然在高版本的JDK中，动态代理对象的性能得到了很大的提高，但是<strong>有研究表明，CGLib所创建的动态代理对象的性能依旧比JDK的所创建的代理对象的性能高不少（大概10倍）。而CGLib在创建代理对象时性能却比JDK动态代理慢很多（大概8倍），所以对于singleton的代理对象或者具有实例池的代理，因为不需要频繁创建代理对象，所以比较适合用CGLib动态代理技术，反之适合用JDK动态代理技术。</strong>此外，由于CGLib采用生成子类的技术创建代理对象，所以不能对目标类中的final方法进行代理。</li>
+<li><aop:aspectj-autoproxy proxy-target-class="true">配置了这句话的话就会强制使用cglib代理。  默认就是false。</aop:aspectj-autoproxy></li>
+</ol>
+<h4 id="Spring常用注解">Spring常用注解</h4><ol>
 <li><strong>@Service</strong>用于标注业务层组件</li>
 <li><strong>@Controller</strong>用于标注控制层组件（如struts中的action）</li>
 <li><strong>@Repository</strong>用于标注数据访问组件，即DAO组件</li>
@@ -443,7 +453,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring,_SpringMVC,_Struts和Mybatis联系与区别"><span class="nav-number">1.</span> <span class="nav-text">Spring, SpringMVC, Struts和Mybatis联系与区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Spring"><span class="nav-number">1.1.</span> <span class="nav-text">Spring</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SpringMVC和Struts—-表现层框架(MVC)"><span class="nav-number">1.2.</span> <span class="nav-text">SpringMVC和Struts—-表现层框架(MVC)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mybatis"><span class="nav-number">1.3.</span> <span class="nav-text">Mybatis</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring常见用法"><span class="nav-number">2.</span> <span class="nav-text">Spring常见用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Spring常用注解"><span class="nav-number">2.1.</span> <span class="nav-text">Spring常用注解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet"><span class="nav-number">3.</span> <span class="nav-text">Servlet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cookie和session"><span class="nav-number">4.</span> <span class="nav-text">cookie和session</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高并发Web网站处理方案"><span class="nav-number">5.</span> <span class="nav-text">高并发Web网站处理方案</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring,_SpringMVC,_Struts和Mybatis联系与区别"><span class="nav-number">1.</span> <span class="nav-text">Spring, SpringMVC, Struts和Mybatis联系与区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Spring"><span class="nav-number">1.1.</span> <span class="nav-text">Spring</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SpringMVC和Struts—-表现层框架(MVC)"><span class="nav-number">1.2.</span> <span class="nav-text">SpringMVC和Struts—-表现层框架(MVC)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mybatis"><span class="nav-number">1.3.</span> <span class="nav-text">Mybatis</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring常见用法"><span class="nav-number">2.</span> <span class="nav-text">Spring常见用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Spring_AOP实现原理"><span class="nav-number">2.1.</span> <span class="nav-text">Spring AOP实现原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Spring常用注解"><span class="nav-number">2.2.</span> <span class="nav-text">Spring常用注解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet"><span class="nav-number">3.</span> <span class="nav-text">Servlet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cookie和session"><span class="nav-number">4.</span> <span class="nav-text">cookie和session</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高并发Web网站处理方案"><span class="nav-number">5.</span> <span class="nav-text">高并发Web网站处理方案</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

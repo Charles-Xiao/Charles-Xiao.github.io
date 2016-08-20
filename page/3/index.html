@@ -1372,6 +1372,12 @@ __author__ = <span class="string">'xiaoyong'</span>
 <li>调整线程堆栈，socket缓冲区，JNI占用的内存以及虚拟机、GC消耗的内存</li>
 <li><strong>“-Xms and -Xmx (or: -XX:InitialHeapSize and -XX:MaxHeapSize)”参数</strong>：分别指定初始堆和最大堆大小，Xms一般代表着堆内存的最小值，JVM在运行时可以动态调整堆内存大小，如果我们 设置Xms=Xmx就相当于设置了一个固定大小的堆内存；例如：“java -Xms128m -Xmx2g MyApp”启动一个初始化堆内存为 128M，最大堆内存为 2G，名叫 “MyApp” 的 Java 应用程序；当我们设置Xmx最大堆内存不恰当时就很容易发生内存溢出，这样我们可以通过设置 - XX:+HeapDumpOnOutOfMemoryError 让 JVM 在发生内存溢出时自动生成堆内存快照，默认保存在JVM的启动目录下名为 java_pid.hprof 的文件里，分析它可以很好地定位到溢出位置</li>
 </ol>
+<h3 id="Linux下面查看Jvm性能信息的命令">Linux下面查看Jvm性能信息的命令</h3><ol>
+<li><strong>jstat</strong>： 用于查看Jvm的堆栈信息，能够查看eden,survivor,old,perm等堆区的的容量，利用率信息，对于查看系统是不是有内存泄漏以及参数设置是否合理有不错的意义。例如’’’ jstat -gc 12538 5000 —- 即会每5秒一次显示进程号为12538的java进成的GC情况 ‘’’</li>
+<li><strong>jstack</strong>：用来查看Jvm当前的线程dump的，可以看到当前Jvm里面的线程状况，对于查找blocked线程比较有意义</li>
+<li><strong>jmap</strong>：用来查看Jvm当前的heap dump的，可以看出当前Jvm中各种对象的数量，所占空间等等；尤其值得一提的是这个命令可以导出一份binary heap dump的bin文件，这个文件能够直接用Eclipse Memory Anayliser来分析，并找出潜在的内存泄漏的地方。</li>
+<li><strong>非jvm命令—netstat</strong>：通过这个命令可以看到Linux系统当前在各个端口的链接状态，比如查看数据库连接数等</li>
+</ol>
 <h3 id="内存相关问题">内存相关问题</h3><ol>
 <li><strong>内存泄露</strong>是指分配出去的内存没有被回收回来，由于失去了对该内存区域的控制(例如你把它的地址给弄丢了)，因而造成了资源的浪费。Java 中一般不会产生内存泄露，因为有垃圾回收器自动回收垃圾，但这也不绝对，Java堆内也可能发生内存泄露（Memory Leak; 当我们 new 了对象，并保存了其引用，但是后面一直没用它，而垃圾回收器又不会去回收它，这边会造成内存泄露</li>
 <li><strong>内存溢出</strong>是指程序所需要的内存超出了系统所能分配的内存（包括动态扩展）的上限</li>

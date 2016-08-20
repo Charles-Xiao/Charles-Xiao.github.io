@@ -425,7 +425,15 @@
     }
 }
 }
-</code></pre>
+</code></pre><h3 id="Semaphore（信号量）">Semaphore（信号量）</h3><ol>
+<li>Semaphore（信号量）是用来控制同时访问特定资源的线程数量，它通过协调各个线程，以保证合理的使用公共资源。</li>
+<li><strong>应用场景</strong><ul>
+<li><strong>Semaphore可以用于做流量控制，特别公用资源有限的应用场景，比如数据库连接</strong>。假如有一个需求，要读取几万个文件的数据，因为都是IO密集型任务，我们可以启动几十个线程并发的读取，但是如果读到内存后，还需要存储到数据库中，而数据库的连接数只有10个，这时我们必须控制只有十个线程同时获取数据库连接保存数据，否则会报错无法获取数据库连接。这个时候，我们就可以使用Semaphore来做流控</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>Semaphore的构造方法Semaphore(int permits) 接受一个整型的数字，表示可用的许可证数量。Semaphore(10)表示允许10个线程获取许可证，也就是最大并发数是10。Semaphore的用法也很简单，首先线程使用Semaphore的acquire()获取一个许可证，使用完之后调用release()归还许可证。还可以用tryAcquire()方法尝试获取许可证。</li>
+</ol>
+
       
     </div>
 
@@ -570,7 +578,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#同步VS异步_and_阻塞VS非阻塞_Link"><span class="nav-number">1.</span> <span class="nav-text">同步VS异步 and 阻塞VS非阻塞 Link</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java对象锁和类锁"><span class="nav-number">2.</span> <span class="nav-text">Java对象锁和类锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#互斥锁与读写锁"><span class="nav-number">3.</span> <span class="nav-text">互斥锁与读写锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Synchronized代码块和方法"><span class="nav-number">4.</span> <span class="nav-text">Synchronized代码块和方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReentrantLock可重入锁"><span class="nav-number">5.</span> <span class="nav-text">ReentrantLock可重入锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal线程局部变量"><span class="nav-number">6.</span> <span class="nav-text">ThreadLocal线程局部变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile变量可见性"><span class="nav-number">7.</span> <span class="nav-text">volatile变量可见性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Wait_&&_Notify同步(生产者消费者模式实现)"><span class="nav-number">8.</span> <span class="nav-text">Wait && Notify同步(生产者消费者模式实现)</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#同步VS异步_and_阻塞VS非阻塞_Link"><span class="nav-number">1.</span> <span class="nav-text">同步VS异步 and 阻塞VS非阻塞 Link</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java对象锁和类锁"><span class="nav-number">2.</span> <span class="nav-text">Java对象锁和类锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#互斥锁与读写锁"><span class="nav-number">3.</span> <span class="nav-text">互斥锁与读写锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Synchronized代码块和方法"><span class="nav-number">4.</span> <span class="nav-text">Synchronized代码块和方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReentrantLock可重入锁"><span class="nav-number">5.</span> <span class="nav-text">ReentrantLock可重入锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal线程局部变量"><span class="nav-number">6.</span> <span class="nav-text">ThreadLocal线程局部变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile变量可见性"><span class="nav-number">7.</span> <span class="nav-text">volatile变量可见性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Wait_&&_Notify同步(生产者消费者模式实现)"><span class="nav-number">8.</span> <span class="nav-text">Wait && Notify同步(生产者消费者模式实现)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Semaphore（信号量）"><span class="nav-number">9.</span> <span class="nav-text">Semaphore（信号量）</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
