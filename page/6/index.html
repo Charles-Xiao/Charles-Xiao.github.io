@@ -223,7 +223,46 @@
 </ul>
 </li>
 </ol>
-<h3 id="TCP流量控制和拥塞控制"><a href="http://blog.csdn.net/yechaodechuntian/article/details/25429143" target="_blank" rel="external">TCP流量控制和拥塞控制</a></h3><h2 id="UDP协议">UDP协议</h2><h2 id="HTTP协议">HTTP协议</h2><h3 id="Http1-0,_1-1，2-0和https之间的区别">Http1.0, 1.1，2.0和https之间的区别</h3><ol>
+<h3 id="TCP流量控制和拥塞控制"><a href="http://blog.csdn.net/yechaodechuntian/article/details/25429143" target="_blank" rel="external">TCP流量控制和拥塞控制</a></h3><h3 id="发展历程">发展历程</h3><ol>
+<li>最开始的TCP拥塞控制由“慢启动（slow start）”和“拥塞避免（congestion avoidance）”组成；后来TCP Reno版本中又针对性的加入了“快速重传”、“快速恢复”算法；再后来TCP NewReno中又改进了“快速恢复”；最近又出现了选择性应答（SACK）的算法。</li>
+<li>TCP拥塞控制主要依赖于“拥塞窗口（cwnd）”，TCP还有一个对端通告的接收窗口(rwnd)用于流量控制。窗口值的大小就代表能够发送出去的但还没有收到ACK的最大数据报文段，显然窗口越大那么数据发送的速度也就越快，但是也有越可能使得网络出现拥塞。TCP的拥塞控制算法就是要在这两者之间权衡，选取最好的cwnd值，从而使得网络吞吐量最大化且不产生拥塞。</li>
+<li>由于需要考虑拥塞控制和流量控制两个方面的内容，因此TCP的真正的发送窗口=min(rwnd, cwnd)。但是rwnd是由对端确定的，网络环境对其没有影响，所以在考虑拥塞的时候我们一般不考虑rwnd的值。我们暂时只讨论如何确定cwnd值的大小。关于cwnd的单位，在TCP中是以Byte来做单位的，我们假设TCP每次传输都是按照MSS大小来发送数据的，因此你可以认为cwnd按照数据包个数来做单位也可以理解，所以有时我们说cwnd增加1也就是相当于字节数增加1个MSS大小。</li>
+</ol>
+<h3 id="慢启动">慢启动</h3><p>   方法：根据网络情况逐步增加每次发送的数据量。</p>
+<p>   原因：最初的TCP在连接建立成功后会向网络中发送大量的数据包，这样很容易导致网络中路由器缓存空间耗尽，从而发生拥塞。</p>
+<p>   描述：当新建连接时，cwnd初始化为1个最大报文段(MSS)大小，发送端开始按照拥塞窗口大小发送数据，每当有一个报文段被确认，cwnd就增加1个MSS大小。这样cwnd的值就随着网络往返时间(Round Trip Time,RTT)呈指数级增长，事实上，慢启动的速度一点也不慢，只是它的起点比较低一点而已。如果带宽为W，那么经过RTT*log2W时间就可以占满带宽。</p>
+<p>   &lt; img src=”<a href="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ssca1.png" target="_blank" rel="external">https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ssca1.png</a>“ class=”full-image” width=”100%”/&gt;</p>
+<p>   <strong>慢启动引发的性能问题</strong></p>
+<p>   在海量用户高并发访问的大型网站后台，有一些基本的系统维护需求。比如迁移海量小文件，就是从一些机器拷贝海量小碎文件到另一些机器，来完成一些系统维护的基本需求。</p>
+<p>   举个简单的例子，我们对每个文件都采用独立的TCP连接来传输（循环使用scp拷贝就是这个例子的实际场景，很常见的用法）。那么工作过程应该是，每传输一个文件建立一个连接，然后连接处于慢启动阶段，传输小文件，每个小文件几乎都处于独立连接的慢启动阶段被传输，这样传输过程所用的TCP包的总量就会增多。更细致的说一说这个事，如果在慢启动过程中传输一个小文件，我们可能需要2至3个小包，而在一个已经完成慢启动的TCP通道中（TCP通道已进入在高速传输阶段），我们传输这个文件可能只需要1个大包。网络拷贝文件的时间基本上全部消耗都在网络传输的过程中（发数据过去等对端ACK，ACK确认归来继续再发，这样的数据来回交互相比较本机的文件读写非常耗时间），撇开三次握手和四次握手那些包，粗略来说，慢启动阶段传输这些文件所用的包的数目是高速通道传输这些文件的包的数目的2-3倍！那么时间上应该也是2-3倍的关系！如果文件的量足够大，这个总时间就会被放大到需求难以忍受的地步。</p>
+<p>   因此，在迁移海量小文件的需求下，我们不能使用“对每个文件都采用独立的TCP连接来传输（循环使用scp拷贝）“这样的策略，它会使每个文件的传输都处于在一个独立TCP的慢启动阶段。</p>
+<p>   <strong>如何避免慢启动，提升性能</strong></p>
+<p>   很简单，尽量把大量小文件放在一个TCP连接中排队传输。起初的一两个文件处于慢启动过程传输，后续的文件传输全部处于高速通道中传输，用这样的方式来减少发包的数目，进而降低时间消耗。</p>
+<p>   实际上这种传输策略带来的性能提升的功劳不仅仅归于避免慢启动，事实上也避免了大量的3次握手和四次握手，这个对海量小文件传输的性能消耗也非常致命。</p>
+<p>   随着多核服务器的兴起，以及现代网卡的多通道技术的迅猛发展，现在我们解决这一问题的通常做法是绑定多CPU的多核到网卡的多个通道，然后由CPU的核来均分传输这些小文件，每个核用一个TCP连接来排队发送分到的小文件。</p>
+<ol>
+<li><p><strong>拥塞避免</strong></p>
+<p>条件：TCP使用了一个叫慢启动门限(ssthresh)的变量，当cwnd超过该值后，慢启动过程结束，进入拥塞避免阶段。对于大多数TCP实现来说，ssthresh的值是65536(同样以字节计算)。</p>
+<p>原因：从慢启动可以看到，cwnd可以很快的增长上来，从而最大程度利用网络带宽资源，但是cwnd不能一直这样无限增长下去，一定需要某个限制。</p>
+<p>描述：拥塞避免的主要思想是加法增大，也就是cwnd的值不再指数级往上升，开始加法增加。此时当窗口中所有的报文段都被确认时，cwnd的大小加1，cwnd的值就随着RTT开始线性增加，这样就可以避免增长过快导致网络拥塞，慢慢的增加调整到网络的最佳值。<br><strong>发生拥塞以后怎么办</strong></p>
+<p>拥塞发生：TCP认为网络拥塞的主要依据是它重传了一个报文段。上面提到过，TCP对每一个报文段都有一个定时器，称为重传定时器(RTO)，当RTO超时且还没有得到数据确认，那么TCP就会对该报文段进行重传，当发生超时时，那么出现拥塞的可能性就很大，某个报文段可能在网络中某处丢失，并且后续的报文段也没有了消息。</p>
+<p>TCP反应：<br>&lt; img src=”<a href="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ssca2.png" target="_blank" rel="external">https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ssca2.png</a>“ class=”full-image” width=”100%”/&gt;</p>
+</li>
+<li><p><strong>快速重传</strong></p>
+<p>条件：其实TCP还有一种情况会进行重传：那就是收到3个相同的ACK。TCP在收到乱序到达包时就会立即发送ACK，TCP利用3个相同的ACK来判定数据包的丢失，此时进行快速重传。</p>
+<p>描述：<br>   &lt; img src=”<a href="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ssca3.png" target="_blank" rel="external">https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ssca3.png</a>“ class=”full-image” width=”100%”/&gt;</p>
+</li>
+<li><strong>快速恢复</strong></li>
+</ol>
+<ul>
+<li><p>当收到3个重复ACK时，TCP最后进入的不是拥塞避免阶段，而是快速恢复阶段。快速重传和快速恢复算法一般同时使用。</p>
+<p> 思想：“数据包守恒”原则，即同一个时刻在网络中的数据包数量是恒定的，只有当“老”数据包离开了网络后，才能向网络中发送一个“新”的数据包，如果发送方收到一个重复的ACK，那么根据TCP的ACK机制就表明有一个数据包离开了网络，于是cwnd加1。如果能够严格按照该原则那么网络中很少会发生拥塞，事实上拥塞控制的目的也就在修正违反该原则的地方。</p>
+<p> 描述：</p>
+<pre><code>&lt; img <span class="variable">src=</span><span class="string">"https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ssca4.png"</span> <span class="variable">class=</span><span class="string">"full-image"</span> <span class="variable">width=</span><span class="string">"100%"</span>/&gt;
+</code></pre></li>
+<li>快速重传算法首次出现在4.3BSD的Tahoe版本，快速恢复首次出现在4.3BSD的Reno版本，也称之为Reno版的TCP拥塞控制算法。<br>可以看出Reno的快速重传算法是针对一个包的重传情况的，然而在实际中，一个重传超时可能导致许多的数据包的重传，因此当多个数据包从一个数据窗口中丢失时并且触发快速重传和快速恢复算法时，问题就产生了。因此NewReno出现了，它在Reno快速恢复的基础上稍加了修改，可以恢复一个窗口内多个包丢失的情况。具体来讲就是：Reno在收到一个新的数据的ACK时就退出了快速恢复状态了，而NewReno需要收到该窗口内所有数据包的确认后才会退出快速恢复状态，从而更一步提高吞吐量。</li>
+</ul>
+<h2 id="UDP协议">UDP协议</h2><h2 id="HTTP协议">HTTP协议</h2><h3 id="Http1-0,_1-1，2-0和https之间的区别">Http1.0, 1.1，2.0和https之间的区别</h3><ol>
 <li><strong>HTTP1.0</strong>：规定浏览器与服务器只保持短暂的连接，浏览器的每次请求都需要与服务器建立一个单独的TCP连接，服务器完成请求处理后立即断开释放TCP连接，服务器不跟踪每个客户也不记录过去的请求。此外，由于大多数网页的流量都比较小，一次TCP连接很少能通过slow-start区，不利于提高带宽利用率。HTTP1.0要建立长连接，可以在请求消息中包含Connection: Keep-Alive头域</li>
 <li><strong>HTTP 1.1</strong>支持长连接（PersistentConnection）和请求的流水线（Pipelining）处理，在一个TCP连接上可以传送多个HTTP请求和响应，减少了建立和关闭连接的消耗和延迟。例如：一个包含有许多图像的网页文件的多个请求和应答可以在一个连接中传输，但每个单独的网页文件的请求和应答仍然需要使用各自的连接</li>
 <li><strong>HTTP 1.1</strong>还允许客户端不用等待上一次请求结果返回，就可以发出下一次请求，但服务器端必须按照接收到客户端请求的先后顺序依次回送响应结果，以保证客户端能够区分出每次请求的响应内容，这样也显著地减少了整个过程所需要的时间</li>
