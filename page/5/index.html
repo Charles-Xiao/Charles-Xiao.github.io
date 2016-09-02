@@ -318,6 +318,8 @@
 <li>在含有NULL值的列的时候，not in 逻辑上不完全等同于not exists；应该尽量不要使用not in(它会调用子查询)，而尽量使用not exists(它会调用关联子查询)。如果not in子查询中返回的任意一条记录含有空值，则查询将不返回任何记录；因此除非子查询字段有非空限制，这时可以使用not in</li>
 </ul>
 </li>
+<li><p><strong>inner join、outer join和cross join的区别</strong><br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Join区别.png" width="100%"></p>
+</li>
 </ol>
 <h3 id="日志管理器">日志管理器</h3><p>为了提升性能，数据库把数据保存在内存缓冲区内。但如果当事务提交时服务器崩溃，崩溃时还在内存里的数据会丢失，这破坏了事务的持久性。你可以把所有数据都写在磁盘上，但是如果服务器崩溃，最终数据可能只有部分写入磁盘，这破坏了事务的原子性。因此我们采用<strong>事务日志</strong>是一个存储空间，在每次写盘之前，数据库在事务日志中写入一些信息，这样当事务崩溃或回滚，数据库知道如何移除或完成尚未完成的事务。<strong>事务的每一个操作（增/删/改）产生一条日志</strong>  </p>
 <h3 id="参考链接">参考链接</h3><ol>
@@ -824,7 +826,7 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 </ol>
 <h3 id="互斥锁与读写锁">互斥锁与读写锁</h3><ol>
 <li><strong>互斥锁</strong>：任意时刻，只能有一个线程持有锁。即假设A线程已经获取了锁，在A线程释放这个锁之前，B线程是无法获取到这个锁的，B要获取这个锁就会进入阻塞状态。例如synchronized和ReentrantLock都属于互斥锁</li>
-<li><strong>读写锁</strong>：Java并发包中实现ReadWriteLock接口的ReentrantReadWriteLock，它并没有实现Lock接口，是其内部类ReadLock和WriteLock实现了Lock的接口<ul>
+<li><strong>读写锁ReadWriteLock</strong>：Java并发包中实现ReadWriteLock接口的ReentrantReadWriteLock，它并没有实现Lock接口，是其内部类ReadLock和WriteLock实现了Lock的接口<ul>
 <li>在真实的业务场景中，通常会出现<strong>对一份数据的读取操作次数远高于写入操作</strong>这种读多写少的场景，而线程与线程间的读读操作是不涉及到线程安全的问题，没有必要加入互斥锁</li>
 <li>所以读写锁只要满足<strong>“读-读”不互斥 ，”读-写”互斥 ，”写-写”互斥</strong>；也就是说只要在任何时候必须保证：①只有一个线程在写入；②线程正在读取的时候，写入操作等待；③线程正在写入的时候，其他线程的写入操作和读取操作都要等待；这样，使用读写锁就可以大大提高效率</li>
 <li><a href="http://www.cnblogs.com/Gordon-YangYiBao/archive/2012/09/12/2681874.html" target="_blank" rel="external">读写锁实例讲解</a></li>
@@ -832,37 +834,38 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 </li>
 </ol>
 <h3 id="Synchronized代码块和方法">Synchronized代码块和方法</h3><ol>
-<li>synchronized关键字强制实施一个<strong>互斥锁</strong>，使得被保护的代码块在同一时间只能有一个线程进入并执行，用于防止多线程访问临界共享资源出现数据不一致性；但是同步是一种高开销的操作，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；</li>
-<li>Synchronized锁住的是对象或者类,对象被锁住时，该对象所有的其他同步方法和代码块不能被执行；类被锁住时，该类所有的其他同步静态方法和代码块不能被执行</li>
-</ol>
+<li>synchronized关键字强制实施一个<strong>互斥锁</strong>，使得被保护的代码块在同一时间只能有一个线程进入并执行，用于防止多线程访问临界共享资源出现数据不一致性；但是<strong>同步是一种高开销的操作</strong>(因为在锁竞争激烈的情况下，各个线程不断在阻塞和运行状态之间切换会导致操作系统的上下文切换开销非常大)，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；</li>
+<li><p>Synchronized锁住的是对象或者类,对象被锁住时，该对象所有的其他同步方法和代码块不能被执行；类被锁住时，该类所有的其他同步静态方法和代码块不能被执行</p>
 <pre><code><span class="class"><span class="keyword">class</span> <span class="title">Bank</span> </span>{
-        <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
+    <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
 
-        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> account;
-        }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
+        <span class="keyword">return</span> account;
+    }
 
-        <span class="javadoc">/**
-         * 用同步方法实现
-         * 
-         *<span class="javadoctag"> @param</span> money
-         */</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+    <span class="javadoc">/**
+     * 用同步方法实现
+     * 
+     *<span class="javadoctag"> @param</span> money
+     */</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+        account += money;
+    }
+
+    <span class="javadoc">/**
+     * 用同步代码块实现
+     * 
+     *<span class="javadoctag"> @param</span> money
+     */</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save1</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) {
             account += money;
         }
-
-        <span class="javadoc">/**
-         * 用同步代码块实现
-         * 
-         *<span class="javadoctag"> @param</span> money
-         */</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save1</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
-            <span class="keyword">synchronized</span> (<span class="keyword">this</span>) {
-                account += money;
-            }
-        }
     }
-</code></pre><h3 id="ReentrantLock可重入锁">ReentrantLock可重入锁</h3><ol>
+}
+</code></pre></li>
+</ol>
+<h3 id="ReentrantLock可重入锁">ReentrantLock可重入锁</h3><ol>
 <li>可重入锁，也叫做递归锁，指的是同一线程外层函数获得锁之后，内层递归函数仍然有获取该锁的代码，但不受影响;即被同一个线程多次获取，而不会产生死锁。在JAVA环境下 ReentrantLock 和synchronized 都是可重入锁</li>
 <li>ReentrantLock是可重入、互斥、实现了Lock接口的锁，需要自己手动加锁与释放；要注意及时释放锁，否则会出现死锁，通常在finally代码释放锁；它能完成Synchronized所实现的所有功能,而且性能上有一定提升</li>
 <li><strong>ReentrantLock的常用方法</strong>:<ul>
@@ -884,24 +887,26 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 </li>
 </ol>
 <pre><code><span class="keyword">class</span> <span class="title">Bank</span> {
-    <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
-    <span class="comment">// 创建一个ReentrantLock锁</span>
-    <span class="keyword">private</span> Lock <span class="keyword">lock</span> = <span class="keyword">new</span> ReentrantLock();
+<span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
+<span class="comment">// 创建一个ReentrantLock锁</span>
+<span class="keyword">private</span> Lock <span class="keyword">lock</span> = <span class="keyword">new</span> ReentrantLock();
 
-    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
-        <span class="keyword">return</span> account;
-    }
+<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
+    <span class="keyword">return</span> account;
+}
 
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
-        <span class="keyword">lock</span>.<span class="keyword">lock</span>();    <span class="comment">// 获得锁 </span>
-        <span class="keyword">try</span> {
-            account += money;
-        } <span class="keyword">finally</span> {
-            <span class="keyword">lock</span>.unlock();    <span class="comment">// 释放锁</span>
-        }
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+    <span class="keyword">lock</span>.<span class="keyword">lock</span>();    <span class="comment">// 获得锁 </span>
+    <span class="keyword">try</span> {
+        account += money;
+    } <span class="keyword">finally</span> {
+        <span class="keyword">lock</span>.unlock();    <span class="comment">// 释放锁</span>
     }
 }
-</code></pre><h3 id="ThreadLocal线程局部变量">ThreadLocal线程局部变量</h3><ol>
+}
+</code></pre><h3 id="自旋锁">自旋锁</h3><ol>
+<li><strong>自旋锁</strong>是对线程阻塞的一种优化，他的原理是当线程争用锁失败的时候不立即进入阻塞状态，而是再等一会，因为对于执行时间短的代码这一会可能就会释放锁，而线程就不需要进行一次阻塞与唤醒。这个等待操作就是让线程多执行几个空指令，至于等待多久这跟具体的处理器实现有关，也有可能处理器根本不支持自旋锁，具体实现的时候我们可以设置一个临界值，当超过了这个临界值之后我们就不自旋了，就乖乖进入阻塞状态吧。这种优化对于执行时间短的代码是很有效的。synchronized使用自旋锁的时机是线程进入等待队列即阻塞的前一步。</li>
+<li><strong>无锁</strong>例如Disruptor并发框架，Disruptor底层依赖一个RingBuffer来进行线程之间的数据交换，在并发条件下，多线程对RingBuffer的读和写不会涉及到锁，然而因为RingBuffer满或者RingBuffer中没有可消费内容引发的线程等待，那就要另当别论了。<strong>Disruptor无锁原理</strong>RingBuffer维护者可读和可写的指针，也叫游标，它指向生产者或消费者需要写或读的位置，而对于指针的更新是由CAS来完成的，这个过程中我们不需要加锁/解锁的过程。<h3 id="ThreadLocal线程局部变量">ThreadLocal线程局部变量</h3></li>
 <li><strong>ThreadLocal与同步机制区别</strong>：a.ThreadLocal与同步机制都是为了解决多线程中相同变量的访问冲突问题。b.前者采用以”空间换时间”的方法，后者采用以”时间换空间”的方式</li>
 <li><strong>性质</strong>每一个使用ThreadLocal变量的线程都获得该变量的副本，副本之间相互独立，这样每一个线程都可以随意修改自己的变量副本，而不会对其他线程产生影响</li>
 <li><strong>四个函数</strong>：initialValue函数用于获取此线程局部变量的初始值；get用于获取此线程局部变量在当前线程中的副本值，set用于设置，remove用于移除此线程局部变量在当前线程中的副本值；<strong>顺序</strong>在进行get之前，必须先set，否则会报空指针异常；如果想在get之前不需要调用set就能正常访问的话，必须重写initialValue()方法</li>
@@ -928,7 +933,7 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 <h3 id="volatile变量可见性">volatile变量可见性</h3><p><strong>volatile</strong>: 在需要同步的变量上加上修饰符volatile，例如：private volatile int account = 100;volatile可以保证变量的可见性但是不保证原子性，不能用于修饰final常量，线程每一次对volatile变量的修改都会即时刷新到主存和通知到其他线程，也就是说每一次每个线程读取volatile变量时都会从主存中去取而不会从缓存寄存器中获取，以确保变量的值都是最新获取的;该关键字在JDK1.6开始可以保证指令不被重排序；但是他不能保证原子性，比如n++这种复合型操作;java虚拟机规范（jvm spec）中，规定了声明为volatile的long和double变量的get和set操作是原子的,所以将long和double类型的变量用volatile修饰，就可以保证对他们的赋值操作的原子性。  </p>
 <p><strong>CAS比较并交换操作</strong>：CAS 操作包含三个操作数 —— 内存位置（V）、预期原值（A）和新值(B). CAS有效地说明了“我认为位置 V 应该包含值 A；如果包含该值，则将 B 放到这个位置；否则，不要更改该位置，只告诉我这个位置现在的值即可。”   </p>
 <p>例如，有一个变量i=0，Thread-1和Thread-2都对这个变量执行自增操作。 可能会出现Thread-1与Thread-2同时读取i=0到各自的工作内存中，然后各自执行+1，最后将结果赋予i。这样，虽然两个线程都对i执行了自增操作，但是最后i的值为1，而不是2。<br>解决这个问题使用互斥锁自然可以。但是也可以使用CAS来实现，思路如下：<br><strong>自增操作可以分为三步</strong>：（1）从内存中读取这个变量的当前值（2）执行（变量=上一步取到的当前值+1）的赋值操作 (3)将自增后的值写入变量</p>
-<p>多线程情况下，自增操作出现问题的原因就是执行（2）的时候，变量在主内存中的值已经不等于上一步取到的当前值了，所以赋值时，用CompareAndSet操作代替Set操作：首先比较一下内存中这个变量的值是否等于上一步取到的当前值，如果等于，则说明可以执行+1运算，并赋值；如果不等于，则说明有其他线程在此期间更改了主内存中此变量的值，上一步取出的当前值已经失效，此时，不再执行+1运算及后续的赋值操作，而是返回主内存中此变量的最新值。“比较并交换（CAS）”操作是原子操作，它使用平台提供的用于并发操作的硬件原语。</p>
+<p>多线程情况下，自增操作出现问题的原因就是执行（2）的时候，变量在主内存中的值已经不等于上一步取到的当前值了，所以赋值时，用CompareAndSet操作代替Set操作：首先比较一下内存中这个变量的值是否等于上一步取到的当前值，如果等于，则说明可以执行+1运算，并赋值；如果不等于，则说明有其他线程在此期间更改了主内存中此变量的值，上一步取出的当前值已经失效，此时，不再执行+1运算及后续的赋值操作，而是返回主内存中此变量的最新值。<strong>“比较并交换（compare_and_swap）”操作是原子操作，它使用平台提供的CPU级别上的用于并发操作的硬件原语</strong>。</p>
 <p><strong>原子（atom）</strong>本意是“不能被进一步分割的最小粒子”，而原子操作（atomic operation）意为”不可被中断的一个或一系列操作” </p>
 <h3 id="Wait_&amp;&amp;_Notify同步(生产者消费者模式实现)">Wait &amp;&amp; Notify同步(生产者消费者模式实现)</h3><ol>
 <li><strong>Wait</strong>调用任意对象的wait()方法导致该线程阻塞，并释放该对象上的锁，进入等待对象同步锁的状态;<strong>Notify</strong>随机唤醒一个等待对象同步锁的线程</li>

@@ -1349,14 +1349,14 @@ __author__ = <span class="string">'xiaoyong'</span>
 <li><p>java对象内存状态转换图</p>
 <p>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/对象状态转换图.png" class="full-image"></p>
 </li>
-<li><p>如何判断java对象需要被回收？GC判断方法</p>
+<li><p><strong>如何判断java对象需要被回收？GC判断方法</strong></p>
 <ul>
-<li><strong>引用计数</strong>，被引用一次就加一，引用失效就减一；引用计数器为0则说明该对象不再可用；它很难解决对象之间的相互循环引用问题</li>
-<li><strong>可达性分析算法</strong>：从GC Root对象向下搜索其所走过的路径称为引用链，当一个对象不再被任何的GC root对象引用链相连时说明该对象不再可用，GC root对象包括四种：方法区中常量和静态变量引用的对象，虚拟机栈中变量引用的对象，本地方法栈中引用的对象  </li>
+<li><strong>引用计数</strong>，引用计数法记录着每一个对象被其它对象所持有的引用数，被引用一次就加一，引用失效就减一；引用计数器为0则说明该对象不再可用；当一个对象被回收后，被该对象所引用的其它对象的引用计数都应该相应减少，它很难解决对象之间的相互循环引用问题<a href="http://blog.csdn.net/jiasike/article/details/51355729" target="_blank" rel="external">循环引用实例</a></li>
+<li><strong>可达性分析算法</strong>：从GC Root对象向下搜索其所走过的路径称为引用链，当一个对象不再被任何的GC root对象引用链相连时说明该对象不再可用，GC root对象包括四种：方法区中常量和静态变量引用的对象，虚拟机栈中变量引用的对象，本地方法栈中引用的对象; <strong>解决循环引用是因为</strong>GC Root通常是一组特别管理的指针，这些指针是tracing GC的trace的起点。它们不是对象图里的对象，对象也不可能引用到这些“外部”的指针。</li>
+<li>采用引用计数算法的系统只需在每个实例对象创建之初，通过计数器来记录所有的引用次数即可。而可达性算法，则需要再次GC时，遍历整个GC根节点来判断是否回收</li>
 </ul>
 </li>
-<li><p>java对象的四种引用<br>1.<strong>强引用</strong> ：创建一个对象并把这个对象直接赋给一个变量，eg ：Person person = new Person(“sunny”); 不管系统资源有么的紧张，强引用的对象都绝对不会被回收，即使他以后不会再用到。<br>2.<strong>软引用</strong> ：通过SoftReference类实现，eg : SoftReference<person> p = new SoftReference<person>(new Person(“Rain”));内存非常紧张的时候会被回收，其他时候不会被回收，所以在使用之前要判断是否为null从而判断他是否已经被回收了。<br>3.<strong>弱引用</strong> ：通过WeakReference类实现，eg : WeakReference<person> p = new WeakReference<person>(new Person(“Rain”));不管内存是否足够，系统垃圾回收时必定会回收<br>4.<strong>虚引用</strong> ：不能单独使用，主要是用于追踪对象被垃圾回收的状态，为一个对象设置虚引用关联的唯一目的是希望能在这个对象被收集器回收时收到一个系统通知。通过PhantomReference类和引用队列ReferenceQueue类联合使用实现</person></person></person></person></p>
-</li>
+<li>java对象的四种引用<br>1.<strong>强引用</strong> ：创建一个对象并把这个对象直接赋给一个变量，eg ：Person person = new Person(“sunny”); 不管系统资源有么的紧张，强引用的对象都绝对不会被回收，即使他以后不会再用到。<br>2.<strong>软引用</strong> ：通过SoftReference类实现，eg : SoftReference<person> p = new SoftReference<person>(new Person(“Rain”));内存非常紧张的时候会被回收，其他时候不会被回收，所以在使用之前要判断是否为null从而判断他是否已经被回收了。<br>3.<strong>弱引用</strong> ：通过WeakReference类实现，eg : WeakReference<person> p = new WeakReference<person>(new Person(“Rain”));不管内存是否足够，系统垃圾回收时必定会回收<br>4.<strong>虚引用</strong> ：不能单独使用，主要是用于追踪对象被垃圾回收的状态，为一个对象设置虚引用关联的唯一目的是希望能在这个对象被收集器回收时收到一个系统通知。通过PhantomReference类和引用队列ReferenceQueue类联合使用实现</person></person></person></person></li>
 </ul>
 <h3 id="常见垃圾回收算法参考图">常见垃圾回收算法<a href="https://yq.aliyun.com/articles/14411" target="_blank" rel="external">参考图</a></h3><ul>
 <li><strong>停止-复制算法</strong><br>这是一种非后台回收算法，将可用内存按容量划分为大小相等的两块，每次只使用其中的一块，内存浪费严重.它先暂停程序的运行，然后将所有存活的对象从当前堆复制到另外一个堆，没被复制的死对象则全部是垃圾，存活对象被复制到新堆之后全部紧密排列，就可以直接分配新空间了。此方法耗费空间且效率低，适用于存活对象少。</li>

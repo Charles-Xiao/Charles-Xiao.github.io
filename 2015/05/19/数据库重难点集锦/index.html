@@ -313,6 +313,8 @@
 <li>在含有NULL值的列的时候，not in 逻辑上不完全等同于not exists；应该尽量不要使用not in(它会调用子查询)，而尽量使用not exists(它会调用关联子查询)。如果not in子查询中返回的任意一条记录含有空值，则查询将不返回任何记录；因此除非子查询字段有非空限制，这时可以使用not in</li>
 </ul>
 </li>
+<li><p><strong>inner join、outer join和cross join的区别</strong><br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Join区别.png" width="100%"></p>
+</li>
 </ol>
 <h3 id="日志管理器">日志管理器</h3><p>为了提升性能，数据库把数据保存在内存缓冲区内。但如果当事务提交时服务器崩溃，崩溃时还在内存里的数据会丢失，这破坏了事务的持久性。你可以把所有数据都写在磁盘上，但是如果服务器崩溃，最终数据可能只有部分写入磁盘，这破坏了事务的原子性。因此我们采用<strong>事务日志</strong>是一个存储空间，在每次写盘之前，数据库在事务日志中写入一些信息，这样当事务崩溃或回滚，数据库知道如何移除或完成尚未完成的事务。<strong>事务的每一个操作（增/删/改）产生一条日志</strong>  </p>
 <h3 id="参考链接">参考链接</h3><ol>
