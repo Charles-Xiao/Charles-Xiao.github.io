@@ -413,6 +413,161 @@ SharedPreferences sharedPreferences = otherAppContext.getSharedPreferences(<span
 <li><strong>Android热加载或Android动态部署</strong>指App在运⾏状态下动态加载某个模块，从而新增功能或改变某⼀部分行为. 例如一个app（称之为宿主程序）去本地文件中动态加载apk文件并将其放在自己的进程中执行 </li>
 <li><strong>为什么有dex文件以及为什么要有DexClassLoader？？？</strong>Android应用程序，本质上使用的是java开发，使用标准的java编译器编译出Class文件，和普通的java开发不同的地方是把class文件再重新打包成dex类型的文件，这种重新打包会对Class文件内部的各种函数表、变量表等进行优化，最终产生了dex文件。dex文件是一种经过android打包工具优化后的Class文件，因此加载这样特殊的Class文件就需要特殊的类装载器；所以android中提供了DexClassLoader类</li>
 </ol>
+<h3 id="AsyncTask和Handler,Looper">AsyncTask和Handler,Looper</h3><ol>
+<li><strong>网络请求交互</strong>：参见百度锁屏项目</li>
+<li><strong>Android AsynTask实现多任务下载管理</strong>:</li>
+</ol>
+<pre><code><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoAsyncTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">String</span>, <span class="title">Integer</span>, <span class="title">Bitmap</span>&gt; </span>{
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPreExecute</span><span class="params">()</span> </span>{
+        <span class="keyword">super</span>.onPreExecute();
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> Bitmap <span class="title">doInBackground</span><span class="params">(String... params)</span> </span>{
+        <span class="keyword">return</span> <span class="keyword">null</span>;
+    }   
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(Bitmap result)</span> </span>{
+        <span class="keyword">super</span>.onPostExecute(result);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onProgressUpdate</span><span class="params">(Integer... progress)</span> </span>{
+        <span class="keyword">super</span>.onProgressUpdate(progress);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCancelled</span><span class="params">()</span> </span>{
+        <span class="keyword">super</span>.onCancelled();
+    }
+}
+</code></pre><ul>
+<li><strong>AsyncTask<string,integer,bitmap>参数解析</string,integer,bitmap></strong><ol>
+<li>params 启动任务执行的输入参数，比如HTTP请求的URL(doInBackground函数的参数类型)</li>
+<li>progress 后台任务执行的百分比（onProgressUpdate函数的参数类型）</li>
+<li>result 后台执行任务最终返回的结果，比如String(doInBackground返回的参数类型</li>
+<li>new AsynTask.execute(url); execute方法内部调用executeOnExecutor()方法，执行之后AsyncTask会把任务交给线程池，由线程池来管理创建Thread和运行Therad执行任务</li>
+<li>使用AsyncTask类，以下是几条必须遵守的准则：AsyncTask的实例必须在UI thread中创建; execute方法必须在UI thread中调用,并且只能调用一次；3.0版本之后的AsyncTask同时只能执行一个任务，但是提供executeOnExecutor(executor)来接收自定义ThreadPoolExecutor线程池，3.0之前默认为SerialExecutor，其核心线程池的大小是5，线程池总大小为128，缓存任务队列是10</li>
+</ol>
+</li>
+<li><p><strong>AsyncTask内部实现原理</strong></p>
+<ol>
+<li>AsyncTask的本质是一个线程池，AsyncTask在构造函数中新建一个继承Callable接口的WorkerRunnable类对象，重载call方法，在call方法中执行语句<strong>return postResult(doInBackground(mParams));</strong>执行doInBackground中的异步任务；然后新建FutureTask接受WorkerRunnable作为参数，提交到线程池执行；在FutureTask的重载done函数中调用get方法接收线程执行的返回结果并定义任务状态变化后的操作（包括失败和成功），再调用postResult方法利用handler(一个static class InternalHandler extends Handler对象)发送message给UI线程 </li>
+<li>AsyncTask派生出的子类可以实现不同的异步任务，这些任务都是提交到静态的线程池中执行; 线程池中的工作线程执行doInBackground(mParams)方法执行异步任务</li>
+<li>当任务状态改变(例如进度更新，执行成功，取消)之后，线程池中的工作线程会向UI线程发送消息，UI线程中的AsyncTask内部的InternalHandler响应这些消息并进行处理；例如：如果当前任务被取消掉了，就会调用onCancelled()方法不再调用onPostExecute方法，如果没有被取消，则调用onPostExecute()方法，这样当前任务的执行就全部结束了</li>
+</ol>
+</li>
+<li><p><strong>AsyncTask和Handler,Looper之间的区别联系</strong></p>
+<ol>
+<li>AsyncTask是对Handler与Thread的封装。</li>
+<li>AsyncTask在代码上比Handler要轻量级别，但实际上比Handler更耗资源，因为AsyncTask底层是一个线程池，而Handler仅仅就是发送了一个消息队列。但是，如果异步任务的数据特别庞大，AsyncTask线程池比Handler节省开销，因为Handler需要不停的new Thread执行</li>
+<li>AsyncTask的实例化只能在主线程，Handler可以随意，只和Looper有关系</li>
+</ol>
+</li>
+</ul>
+<ol>
+<li><p><strong>Handler+Looper+MessageQueue异步信息处理系统模型</strong> <a href="http://m.blog.csdn.net/article/details?id=38377229" target="_blank" rel="external">Link</a></p>
+<ul>
+<li><strong>Handler+Looper+MessageQueue概念</strong> <strong>Looper</strong>本质是一个ThreadLocal变量，它持有一个MessageQueue消息队列，负责实现消息循环和消息派发; <strong>Handler</strong>通过post和sendMessage方法去负责收发Message,包括push新消息到MessageQueue或者接收Looper从其持有的MessageQueue中取出来的消息; MessageQueue是一个FIFO消息队列</li>
+<li><p><strong>异步通信流程</strong>：<br>  ① <strong>消息分发和处理</strong>: 首先一个线程通过调用Looper.prepare()，为自己创建一个唯一的Looper对象，在该Looper对象的构造函数中会执行<strong>mQueue = new MessageQueue(quitAllowed);</strong>去创建一个消息队列；然后我们新建一个或者多个Handler并重载他们的handleMessage回调函数，用于处理其他线程中发送过来的消息；接下来我们调用<strong>Looper.loop</strong>方法，在该方法中会建立一个无限循环体，通过调用<strong>msg.target.dispatchMessage(msg);</strong>函数(其内部调用Handler的handleMessage回调函数)不断地从消息队列中取出message，分发给不同的Handler target.<br>  (注：在主线程中默认新建Looper对象不需要显示调用prepare和loop函数，Looper、MessageQueue和Handler都是在同一个线程中)  </p>
+<p>  ② <strong>Handler发送消息</strong>: Handler在初始化时就会调用<strong>mLooper = Looper.myLooper(); mQueue = mLooper.mQueue;</strong>和Looper以及消息队列相关联，然后在子线程中调用post或者sendMessage方法发送消息插入到消息队列中，这两个函数内部的调用顺序大致为sendMessageDelayed—&gt; sendMessageAtTime—&gt; enqueueMessage，在enqueueMessage函数中会执行<em>msg.target = this;</em>这样Looper就可以识别每条信息来自于哪个Handler，以便于分发消息的正确性</p>
+<p>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Looper.jpg" class="full-image" width="100%"></p>
+</li>
+<li><p><strong>Handler更新UI</strong>：Android系统中耗时操作不能放在主线程进行，例如网络请求、数据库操作、复杂计算等逻辑；所以他们一般放在AsyncTask或者新建子线程进行，然后通过Handler发送消息通知主线程；如果这些耗时操作涉及到UI界面的更新，可以借助于(Android系统UI的更新必须放在主线程进行)Handler发送消息给UI线程更新UI</p>
+</li>
+<li><p><strong>Handler更新UI实例</strong>：</p>
+<pre><code> <span class="comment">// UI线程新建的Handler，在handleMessage()中更新UI</span>
+ <span class="keyword">private</span> Handler mHandler = <span class="keyword">new</span> Handler() {
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">handleMessage</span> <span class="params">(Message msg)</span> </span>{
+        <span class="keyword">switch</span>(msg.what) {
+        <span class="keyword">case</span> MSG_SUCCESS:
+            mImageView.setImageBitmap((Bitmap) msg.obj);
+            <span class="keyword">break</span>;
+        <span class="keyword">case</span> MSG_FAILURE:
+            <span class="keyword">break</span>;
+        }
+    }
+};
+
+<span class="comment">// 子线程中获取网络图片并发送message通知UI线程更新显示图片</span>
+Runnable runnable = <span class="keyword">new</span> Runnable() {
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
+        HttpClient hc = <span class="keyword">new</span> DefaultHttpClient();
+        HttpGet hg = <span class="keyword">new</span> HttpGet(<span class="string">"http://www.oschina.net/img/logo.gif"</span>);
+        <span class="keyword">final</span> Bitmap bm;
+
+        <span class="keyword">try</span> {
+            HttpResponse hr = hc.execute(hg);
+            bm = BitmapFactory.decodeStream(hr.getEntity().getContent());
+        } <span class="keyword">catch</span> (Exception e) { 
+            mHandler.obtainMessage(MSG_FAILURE).sendToTarget();     
+            <span class="keyword">return</span>;
+        }
+        <span class="comment">// Handler发送消息可以new但是最好使用obtainMessage，因为Message内部</span>
+        <span class="comment">// 通过next实现一个缓存消息链表,使用obtain方法获取Message使用完之后系统</span>
+        <span class="comment">// 会调用recycle方法进行回收，节省内存</span>
+        mHandler.obtainMessage(MSG_SUCCESS,bm).sendToTarget();
+        }
+};
+
+<span class="keyword">new</span> Thread(runnable).start();                        
+</code></pre></li>
+<li><p><strong>子线程中Handler结合Looper处理其他线程发送过来的消息实例</strong></p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">LooperThread</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Thread</span> {</span>
+      public <span class="type">Handler</span> mHandler;
+      public void run() {
+             <span class="type">Looper</span>.prepare();
+
+             mHandler = <span class="keyword">new</span> <span class="type">Handler</span>() {
+                      public void handleMessage(<span class="type">Message</span> msg) {
+
+                      }                                                                                                                                                                                                                     };
+
+             <span class="type">Looper</span>.loop();
+
+      }
+}
+</code></pre></li>
+<li><p>一个线程只能拥有一个Looper实例(该Looper对象可以通过Looper.myLooper()来获取)，对应着一个MessageQueue消息队列，但是可以拥有多个Handler; 主线程初始化时默认创建一个Looper对象，可以通过Looper.getMainLooper()来获取他；</p>
+</li>
+<li>主线程中可以直接新建Handler，但是子线程中新建Handler需要先调用Looper.prepare()</li>
+<li>消息队列其实内部实现是一个管道通信机制，当队列为空时线程进入等待状态，不为空时才进入处理消息状态；enqueueMessage方法也分为2种情况，队列为空直接将新message添加到队列头部，否则需要将消息按照时间先后顺序插入到合适位置，因为消息要按照处理时间排序</li>
+<li><p><strong>handler可能引发的内存泄露和解决方案</strong></p>
+<ol>
+<li>当使用内部类（包括匿名类）来创建Handler的时候，Handler对象会隐式地持有一个外部类对象（通常是一个Activity）的引用。而Handler通常会伴随着一个耗时的后台线程一起出现，这个后台线程在任务执行完毕之后，通过消息机制通知Handler，然后Handler把消息发送到UI线程。然而，如果用户在耗时线程执行过程中关闭了Activity（正常情况下Activity不再被使用，它就有可能在GC检查时被回收掉），由于这时线程尚未执行完，而该线程持有Handler的引用，这个Handler又持有Activity的引用，就导致该Activity暂时无法被回收（即内存泄露）</li>
+<li><p>解决方案:</p>
+<ul>
+<li><p>Handler声明为静态内部类,不再持有外部类Activity,在其内部声明一个Activity的弱引用来操作Activity中的对象</p>
+<pre><code>static <span class="class"><span class="keyword">class</span> <span class="title">TestHandler</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Handler</span> {</span>
+    <span class="type">WeakReference</span>&lt;<span class="type">Activity</span> &gt; mActivityReference;
+
+    <span class="type">TestHandler</span>(<span class="type">Activity</span> activity) {
+        mActivityReference= <span class="keyword">new</span> <span class="type">WeakReference</span>&lt;<span class="type">Activity</span>&gt;(activity);
+    }
+
+    <span class="annotation">@Override</span>
+    public void handleMessage(<span class="type">Message</span> msg) {
+        <span class="keyword">final</span> <span class="type">Activity</span> activity = mActivityReference.get();
+        <span class="keyword">if</span> (activity != <span class="literal">null</span>) {
+            mImageView.setImageBitmap(mBitmap);
+        }
+    }
+}
+</code></pre></li>
+<li><p>①在关闭Activity的时候停掉你的后台线程。线程停掉了，就相当于切断了Handler和外部连接的线，Activity自然会在合适的时候被回收；②如果你的Handler是被delay的Message持有了引用，那么使用相应的Handler的removeCallbacks()方法，把消息对象从消息队列移除        </p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><strong>HandlerThread</strong>是一个Looper,Handler,Thread的组合实现；在其构造函数中对Looper进行初始化，并提供一个Looper对象给新创建的Handler对象，使得Handler处理消息事件在子线程中处理</li>
+</ul>
+</li>
+</ol>
 
       
     </div>
@@ -556,7 +711,7 @@ SharedPreferences sharedPreferences = otherAppContext.getSharedPreferences(<span
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Android架构层次"><span class="nav-number">1.</span> <span class="nav-text">Android架构层次</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANR的产生原因以及解决方法"><span class="nav-number">2.</span> <span class="nav-text">ANR的产生原因以及解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android_界面卡顿怎么处理？Link"><span class="nav-number">3.</span> <span class="nav-text">Android 界面卡顿怎么处理？Link</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android子线程和UI线程交互的5种方式"><span class="nav-number">4.</span> <span class="nav-text">Android子线程和UI线程交互的5种方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity四种启动模式和生命周期"><span class="nav-number">5.</span> <span class="nav-text">Activity四种启动模式和生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service"><span class="nav-number">6.</span> <span class="nav-text">Service</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BroadcastReceiver"><span class="nav-number">7.</span> <span class="nav-text">BroadcastReceiver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ContentProvider"><span class="nav-number">8.</span> <span class="nav-text">ContentProvider</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android_View事件分发机制"><span class="nav-number">9.</span> <span class="nav-text">Android View事件分发机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android_Touch事件分发"><span class="nav-number">10.</span> <span class="nav-text">Android Touch事件分发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android平台中实现数据存储的5种方式"><span class="nav-number">11.</span> <span class="nav-text">Android平台中实现数据存储的5种方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android_屏幕适配方法总结"><span class="nav-number">12.</span> <span class="nav-text">Android 屏幕适配方法总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android进程间通信方法"><span class="nav-number">13.</span> <span class="nav-text">Android进程间通信方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android数据共享"><span class="nav-number">14.</span> <span class="nav-text">Android数据共享</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Json_VS_XML"><span class="nav-number">15.</span> <span class="nav-text">Json VS XML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android安全"><span class="nav-number">16.</span> <span class="nav-text">Android安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设备横竖屏切换的时候，接下来会发生什么？"><span class="nav-number">17.</span> <span class="nav-text">设备横竖屏切换的时候，接下来会发生什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#谈谈你对Android中Context的理解?"><span class="nav-number">18.</span> <span class="nav-text">谈谈你对Android中Context的理解?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何缩减APK包大小？"><span class="nav-number">19.</span> <span class="nav-text">如何缩减APK包大小？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android插件化与动态加载"><span class="nav-number">20.</span> <span class="nav-text">Android插件化与动态加载</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Android架构层次"><span class="nav-number">1.</span> <span class="nav-text">Android架构层次</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANR的产生原因以及解决方法"><span class="nav-number">2.</span> <span class="nav-text">ANR的产生原因以及解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android_界面卡顿怎么处理？Link"><span class="nav-number">3.</span> <span class="nav-text">Android 界面卡顿怎么处理？Link</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android子线程和UI线程交互的5种方式"><span class="nav-number">4.</span> <span class="nav-text">Android子线程和UI线程交互的5种方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity四种启动模式和生命周期"><span class="nav-number">5.</span> <span class="nav-text">Activity四种启动模式和生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service"><span class="nav-number">6.</span> <span class="nav-text">Service</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BroadcastReceiver"><span class="nav-number">7.</span> <span class="nav-text">BroadcastReceiver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ContentProvider"><span class="nav-number">8.</span> <span class="nav-text">ContentProvider</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android_View事件分发机制"><span class="nav-number">9.</span> <span class="nav-text">Android View事件分发机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android_Touch事件分发"><span class="nav-number">10.</span> <span class="nav-text">Android Touch事件分发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android平台中实现数据存储的5种方式"><span class="nav-number">11.</span> <span class="nav-text">Android平台中实现数据存储的5种方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android_屏幕适配方法总结"><span class="nav-number">12.</span> <span class="nav-text">Android 屏幕适配方法总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android进程间通信方法"><span class="nav-number">13.</span> <span class="nav-text">Android进程间通信方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android数据共享"><span class="nav-number">14.</span> <span class="nav-text">Android数据共享</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Json_VS_XML"><span class="nav-number">15.</span> <span class="nav-text">Json VS XML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android安全"><span class="nav-number">16.</span> <span class="nav-text">Android安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设备横竖屏切换的时候，接下来会发生什么？"><span class="nav-number">17.</span> <span class="nav-text">设备横竖屏切换的时候，接下来会发生什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#谈谈你对Android中Context的理解?"><span class="nav-number">18.</span> <span class="nav-text">谈谈你对Android中Context的理解?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何缩减APK包大小？"><span class="nav-number">19.</span> <span class="nav-text">如何缩减APK包大小？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android插件化与动态加载"><span class="nav-number">20.</span> <span class="nav-text">Android插件化与动态加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AsyncTask和Handler,Looper"><span class="nav-number">21.</span> <span class="nav-text">AsyncTask和Handler,Looper</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
