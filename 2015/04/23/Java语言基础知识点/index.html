@@ -204,7 +204,14 @@
 </li>
 <li><p><strong>为什么匿名内部类和局部内部类只能访问final变量？</strong>：因为虽然匿名内部类在方法的内部，但实际编译的时候，内部类编译成Outer.Inner,这说明内部类所处的位置和外部类中的方法处在同一个等级上，外部类中的方法中的变量或参数只是方法的局部变量，这些变量或参数的作用域只在这个方法内部有效。因为编译的时候内部类和方法在同一级别上，所以方法中的变量或参数只有为final，内部类才可以引用，因为Java采用了一种copy local variable的方式来实现，也就是说把定义为final的局部变量拷贝过来用，而引用的也可以拿过来用，只是不能重新赋值。</p>
 </li>
-<li><strong>JDK8的新特性</strong>:</li>
+<li><strong>JDK8的新特性</strong>:<ul>
+<li><strong>新增函数接口</strong>，引入注解@FunctionalInterface，函数式接口就是只有一个方法的普通接口</li>
+<li><strong>接口可以有默认方法和实现以及静态方法</strong></li>
+<li>取消方法区/永久代，采用元空间取代</li>
+<li>新的Date-Time API</li>
+<li>引入Optional类来防止空指针异常，它可以保存类型T的值，或者保存null。使用Optional类我们就不用显式进行空指针检查，主要是利用orElseGet(),flatMap()等函数</li>
+</ul>
+</li>
 <li><p><strong>Java 8 中的 Stream</strong> 是对集合（Collection）对象功能的增强，它专注于对集合对象进行各种非常便利、高效的聚合操作（aggregate operation），或者大批量数据操作 (bulk data operation)。Stream API 借助于同样新出现的 Lambda 表达式，极大的提高编程效率和程序可读性。同时它提供串行和并行两种模式进行汇聚操作，并发模式能够充分利用多核处理器的优势。通常编写并行代码很难而且容易出错, 但使用 Stream API 无需编写一行多线程的代码，就可以很方便地写出高性能的并发程序；Stream 可以并行化遍历操作，使用并行去遍历时，数据会被分成多个段，其中每一个都在不同的线程中处理，然后将结果一起输出; Stream 的并行操作依赖于 Java7 中引入的 Fork/Join 框架（JSR166y）来拆分任务和加速处理过程</p>
 <pre><code><span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> nums <span class="subst">=</span> Lists<span class="built_in">.</span>newArrayList(<span class="number">1</span>,<span class="built_in">null</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="built_in">null</span>,<span class="number">6</span>);
 <span class="comment">// 创建stream --&gt; map转换stream --&gt; reduce聚合函数</span>
@@ -216,10 +223,9 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 <li><p><strong>Java 8 中的 Lambda</strong> : 一段带有输入参数的可执行语句块,Lambda表达式取代了匿名类，取消了模板，允许用函数式风格编写代码。这样有时可读性更好，表达更清晰。书写形式：</p>
 <pre><code><span class="function"><span class="params">(params)</span> -&gt;</span> expression
 <span class="function"><span class="params">(params)</span> -&gt;</span> statement
-<span class="function"><span class="params">(params)</span> -&gt;</span> { statements }
+<span class="function"><span class="params">(params)</span> -&gt;</span> { statements }                      
 </code></pre></li>
-<li><p><strong>自动装箱</strong>就是Java自动将原始类型值转换成对应的对象，比如将int的变量转换成Integer对象，这个过程叫做装箱，反之将Integer对象转换成int类型值，这个过程叫做<strong>拆箱</strong>。自动装箱时编译器调用valueOf将原始类型值转换成对象，同时自动拆箱时，编译器通过调用类似intValue(),doubleValue()这类的方法将对象转换成原始类型值。原始类型byte,short,char,int,long,float,double和boolean对应的封装类为Byte,Short,Character,Integer,Long,Float,Double,Boolean。<strong><a href="http://www.importnew.com/15712.html" target="_blank" rel="external">存在问题</a></strong>: ①自动装箱会隐式地创建对象，如果在一个循环体中，会创建无用的中间对象，这样会增加GC压力，拉低程序的性能 ② 缓存对象，在Java中，会对-128到127的Integer对象进行缓存，当创建新的Integer对象时，如果符合这个这个范围，并且已有存在的相同值的对象，则返回这个对象，否则创建新的Integer对象。</p>
-</li>
+<li><strong>自动装箱</strong>就是Java自动将原始类型值转换成对应的对象，比如将int的变量转换成Integer对象，这个过程叫做装箱，反之将Integer对象转换成int类型值，这个过程叫做<strong>拆箱</strong>。自动装箱时编译器调用valueOf将原始类型值转换成对象，同时自动拆箱时，编译器通过调用类似intValue(),doubleValue()这类的方法将对象转换成原始类型值。原始类型byte,short,char,int,long,float,double和boolean对应的封装类为Byte,Short,Character,Integer,Long,Float,Double,Boolean。<strong><a href="http://www.importnew.com/15712.html" target="_blank" rel="external">存在问题</a></strong>: ①自动装箱会隐式地创建对象，如果在一个循环体中，会创建无用的中间对象，这样会增加GC压力，拉低程序的性能 ② 缓存对象，在Java中，会对-128到127的Integer对象进行缓存，当创建新的Integer对象时，如果符合这个这个范围，并且已有存在的相同值的对象，则返回这个对象，否则创建新的Integer对象。</li>
 <li>JDK             </li>
 </ol>
 <h3 id="参考链接">参考链接</h3><ol>

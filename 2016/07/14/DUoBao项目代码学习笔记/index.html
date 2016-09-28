@@ -220,13 +220,13 @@
 <h3 id="ZooKeeper">ZooKeeper</h3><ol>
 <li>ZooKeeper是一个分布式应用程序协调服务，它包含一个简单的原语集，分布式应用程序可以基于它实现同步服务，配置维护和命名服务等。<strong>主要用来解决分布式集群中应用系统的一致性问题，它能提供基于类似于文件系统的目录节点树方式的数据存储，但是 Zookeeper 并不是用来专门存储数据的，它的作用主要是用来维护和监控你存储的数据的状态变化。通过监控这些数据状态的变化，从而可以达到基于数据的集群管理</strong> <a href="http://www.open-open.com/lib/view/open1415453633887.html" target="_blank" rel="external">参考链接</a></li>
 <li><strong>实现效果</strong><ul>
-<li>最终一致性：client不论连接到哪个Server，展示给它都是同一个视图，这是zookeeper最重要的性能。</li>
-<li>可靠性：具有简单、健壮、良好的性能，如果消息m被一台服务器接受，那么它将被所有的服务器接受。</li>
+<li><strong>最终一致性</strong>：client不论连接到哪个Server，展示给它都是同一个视图，这是zookeeper最重要的性能。</li>
+<li><strong>可靠性</strong>：具有简单、健壮、良好的性能，如果消息m被一台服务器接受，那么它将被所有的服务器接受。</li>
 </ul>
 </li>
 <li><strong>Zookeeper集群结构</strong>通常Zookeeper由2n+1台servers组成，每个server都知道彼此的存在。每个server都维护的内存状态镜像以及持久化存储的事务日志和快照。对于2n+1台server，只要有n+1台（大多数）server可用，整个系统保持可用。</li>
 <li><strong>Zookeeper的核心是原子广播，这个机制保证了各个server之间的同步</strong>。实现这个机制的协议叫做Zab协议。<strong>Zab协议有两种模式，它们分别是恢复模式和广播模式</strong>。当服务启动或者在领导者崩溃后，Zab就<strong>进入了恢复模式</strong>，当领导者被选举出来，且大多数server的完成了和leader的状态同步以后，恢复模式就结束了。状态同步保证了leader和server具有相同的系统状态。一旦leader已经和多数的follower进行了状态同步后，他就可以开始广播消息了，<strong>即进入广播状态</strong>。这时候当一个server加入zookeeper服务中，它会在恢复模式下启动，发现leader，并和leader进行状态同步。待到同步结束，它也参与消息广播。Zookeeper服务一直维持在Broadcast状态，直到leader崩溃了或者leader失去了大部分的followers支持。</li>
-<li><strong>基于paxos算法（主要是fastpaxos）的实现的选举算法</strong>：Paxos算法通过投票来对写操作进行全局编号，同一时刻，只有一个写操作被批准，同时并发的写操作要去争取选票，只有获得过半数选票的写操作才会被 批准（所以永远只会有一个写操作得到批准），其他的写操作竞争失败只好再发起一轮投票，就这样，在日复一日年复一年的投票中，所有写操作都被严格编号排 序。编号严格递增，当一个节点接受了一个编号为100的写操作，之后又接受到编号为99的写操作（因为网络延迟等很多不可预见原因），它马上能意识到自己 数据不一致了，自动停止对外服务并重启同步过程。任何一个节点挂掉都不会影响整个集群的数据一致性（总2n+1台，除非挂掉大于n台）</li>
+<li><strong>基于paxos算法（主要是fastpaxos）的实现的FastLeaderElection选举算法</strong>：Paxos算法通过投票来对写操作进行全局编号，同一时刻，只有一个写操作被批准，同时并发的写操作要去争取选票，只有获得过半数选票的写操作才会被批准（所以永远只会有一个写操作得到批准），其他的写操作竞争失败只好再发起一轮投票，就这样，在日复一日年复一年的投票中，所有写操作都被严格编号排序。编号严格递增，当一个节点接受了一个编号为100的写操作，之后又接受到编号为99的写操作（因为网络延迟等很多不可预见原因），它马上能意识到自己数据不一致了，自动停止对外服务并重启同步过程。任何一个节点挂掉都不会影响整个集群的数据一致性（总2n+1台，除非挂掉大于n台）</li>
 <li><strong>三个角色Leader、follower和Observer</strong><ul>
 <li>系统启动时，集群中的server会<strong>选举出一台server为Leader，其它的就作为follower</strong>（这里先不考虑observer角色）。接着由follower来服务client的请求，对于不改变系统一致性状态的读操作，由follower的本地内存数据库直接给client返回结果；对于会改变系统状态的更新操作，则交由Leader进行提议投票，超过半数通过后返回结果给client。</li>
 <li>为了提高吞吐量通常我们只要增加服务器到Zookeeper集群中。但是当服务器增加到一定程度，会导致投票的压力增大从而使得吞吐量降低。<strong>因此我们引出了一个角色：Observer</strong>;Observers 可以接受客户端的连接，将写请求转发给领导节点。但是，领导节点不会要求 Observers 参加投票。相反，Observers 不参与投票过程，仅仅和其他服务节点一起得到投票结果。</li>
