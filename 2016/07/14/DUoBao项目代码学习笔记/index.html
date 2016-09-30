@@ -216,7 +216,7 @@
 </li>
 </ul>
 </li>
-<li><p><strong>使用方法</strong> : Dubbo采用全Spring配置方式，透明化接入应用，对应用没有任何API侵入，只需用Spring加载Dubbo的配置即可，Dubbo基于Spring的Schema扩展进行加载。如果不想使用Spring配置，而希望通过API的方式进行调用</p>
+<li><p><strong>使用方法</strong> : Dubbo采用全Spring配置方式，透明化接入应用，对应用没有任何API侵入，只需用Spring加载Dubbo的配置即可，Dubbo基于Spring的Schema扩展进行加载。如果不想使用Spring配置，而希望通过API的方式进行调用 <a href="https://yq.aliyun.com/articles/28065" target="_blank" rel="external">Dubbo架构设计详解</a></p>
 </li>
 </ol>
 <h3 id="ZooKeeper">ZooKeeper</h3><ol>
@@ -224,15 +224,35 @@
 <li><strong>实现效果</strong><ul>
 <li><strong>最终一致性</strong>：client不论连接到哪个Server，展示给它都是同一个视图，这是zookeeper最重要的性能。</li>
 <li><strong>可靠性</strong>：具有简单、健壮、良好的性能，如果消息m被一台服务器接受，那么它将被所有的服务器接受。</li>
+<li><strong>实时性</strong>：Zookeeper保证客户端将在一个时间间隔范围内获得服务器的更新信息，或者服务器失效的信息。但由于网络延时等原因，Zookeeper不能保证两个客户端能同时得到刚更新的数据，如果需要最新数据，应该在读数据之前调用sync()接口。</li>
+<li><strong>等待无关（wait-free）</strong>：慢的或者失效的client不得干预快速的client的请求，使得每个client都能有效的等待。</li>
+<li><strong>原子性</strong>：更新只能成功或者失败，没有中间状态。</li>
 </ul>
 </li>
 <li><strong>Zookeeper集群结构</strong>通常Zookeeper由2n+1台servers组成，每个server都知道彼此的存在。每个server都维护的内存状态镜像以及持久化存储的事务日志和快照。对于2n+1台server，只要有n+1台（大多数）server可用，整个系统保持可用。</li>
-<li><strong>Zookeeper的核心是原子广播，这个机制保证了各个server之间的同步</strong>。实现这个机制的协议叫做Zab协议。<strong>Zab协议有两种模式，它们分别是恢复模式和广播模式</strong>。当服务启动或者在领导者崩溃后，Zab就<strong>进入了恢复模式</strong>，当领导者被选举出来，且大多数server的完成了和leader的状态同步以后，恢复模式就结束了。状态同步保证了leader和server具有相同的系统状态。一旦leader已经和多数的follower进行了状态同步后，他就可以开始广播消息了，<strong>即进入广播状态</strong>。这时候当一个server加入zookeeper服务中，它会在恢复模式下启动，发现leader，并和leader进行状态同步。待到同步结束，它也参与消息广播。Zookeeper服务一直维持在Broadcast状态，直到leader崩溃了或者leader失去了大部分的followers支持。</li>
-<li><strong>基于paxos算法（主要是fastpaxos）的实现的FastLeaderElection选举算法</strong>：Paxos算法通过投票来对写操作进行全局编号，同一时刻，只有一个写操作被批准，同时并发的写操作要去争取选票，只有获得过半数选票的写操作才会被批准（所以永远只会有一个写操作得到批准），其他的写操作竞争失败只好再发起一轮投票，就这样，在日复一日年复一年的投票中，所有写操作都被严格编号排序。编号严格递增，当一个节点接受了一个编号为100的写操作，之后又接受到编号为99的写操作（因为网络延迟等很多不可预见原因），它马上能意识到自己数据不一致了，自动停止对外服务并重启同步过程。任何一个节点挂掉都不会影响整个集群的数据一致性（总2n+1台，除非挂掉大于n台）</li>
+<li><strong>Zookeeper工作原理的核心是原子广播，这个机制保证了各个server之间的同步</strong>。实现这个机制的协议叫做Zab协议。<strong>Zab协议有两种模式，它们分别是恢复模式和广播模式</strong>。当服务启动或者在领导者崩溃后，Zab就<strong>进入了恢复模式</strong>，当领导者被选举出来，且大多数server的完成了和leader的状态同步以后，恢复模式就结束了。状态同步保证了leader和server具有相同的系统状态。一旦leader已经和多数的follower进行了状态同步后，他就可以开始广播消息了，<strong>即进入广播状态</strong>。这时候当一个server加入zookeeper服务中，它会在恢复模式下启动，发现leader，并和leader进行状态同步。待到同步结束，它也参与消息广播。Zookeeper服务一直维持在广播状态，直到leader崩溃了或者leader失去了大部分的followers支持，此时再次进入恢复模式，重新选举并恢复所有的server到正确状态。</li>
+<li><strong>Zk的选举算法有两种：一种是基于basic paxos实现的，另外一种是基于fast paxos算法实现的FastLeaderElection选举算法</strong>。系统默认的选举算法为fast paxos。先介绍<strong>basic paxos流程</strong>：<ul>
+<li>选举线程由当前Server发起选举的线程担任，其主要功能是对投票结果进行统计，并选出推荐的Server；</li>
+<li>选举线程首先向所有Server发起一次询问（包括自己）；</li>
+<li>选举线程收到回复后，验证是否是自己发起的询问（验证zxid是否一致），然后获取对方的id（myid），并存储到当前询问对象列表中，最后获取对方提议的leader相关信息（id,zxid），并将这些信息存储到当次选举的投票记录表中；</li>
+<li>收到所有Server回复以后，就计算出zxid最大的那个Server，并将这个Server相关信息设置成下一次要投票的Server；</li>
+<li>线程将当前zxid最大的Server设置为当前Server要推荐的Leader，如果此时获胜的Server获得n/2 + 1的Server票数，设置当前推荐的leader为获胜的Server，将根据获胜的Server相关信息设置自己的状态，否则，继续这个过程，直到leader被选举出来。</li>
+<li>通过流程分析我们可以得出：要使Leader获得多数Server的支持，则Server总数必须是奇数2n+1，且存活的Server的数目不得少于n+1.</li>
+<li>每个Server启动后都会重复以上流程。在恢复模式下，如果是刚从崩溃状态恢复的或者刚启动的server还会从磁盘快照中恢复数据和会话信息，zk会记录事务日志并定期进行快照，方便在恢复时进行状态恢复。</li>
+<li><strong>fast paxos流程</strong>是在选举过程中，某Server首先向所有Server提议自己要成为leader，当其它Server收到提议以后，解决epoch和zxid的冲突，并接受对方的提议，然后向对方发送接受提议完成的消息，重复这个流程，最后一定能选举出Leader。</li>
+</ul>
+</li>
 <li><strong>三个角色Leader、follower和Observer</strong><ul>
 <li>系统启动时，集群中的server会<strong>选举出一台server为Leader，其它的就作为follower</strong>（这里先不考虑observer角色）。接着由follower来服务client的请求，对于不改变系统一致性状态的读操作，由follower的本地内存数据库直接给client返回结果；对于会改变系统状态的更新操作，则交由Leader进行提议投票，超过半数通过后返回结果给client。</li>
-<li>为了提高吞吐量通常我们只要增加服务器到Zookeeper集群中。但是当服务器增加到一定程度，会导致投票的压力增大从而使得吞吐量降低。<strong>因此我们引出了一个角色：Observer</strong>;Observers 可以接受客户端的连接，将写请求转发给领导节点。但是，领导节点不会要求 Observers 参加投票。相反，Observers 不参与投票过程，仅仅和其他服务节点一起得到投票结果。</li>
-<li><strong>为什么需要Observers？？它带来什么好处</strong>Observers 的需求源于 ZooKeeper  follower服务器在上述工作流程中实际扮演了两个角色。它们从客户端接受连接与操作请求，之后对操作结果进行投票。这两个职能在 ZooKeeper集群扩展的时候彼此制约。如果我们希望增加 ZooKeeper 集群服务的客户数量，那么我们必须增加服务器的数量，来支持这么多的客户端。然而，从一致性协议的描述可以看到，增加服务器的数量增加了对协议的投票部分的压力。领导节点必须等待集群中过半数的服务器响应投票。于是，节点的增加使得部分计算机运行较慢，从而拖慢整个投票过程的可能性也随之提高，投票操作的会随之下降。这正是我们在实际操作中看到的问题——<strong>随着 ZooKeeper 集群变大，投票操作的吞吐量会下降。所以需要增加客户节点数量的期望和我们希望保持较好吞吐性能的期望间进行权衡。要打破这一耦合关系，引入了不参与投票的服务器，称为 Observers。这个简单的扩展给 ZooKeeper 的可伸缩性带来了全新的镜像。我们现在可以加入很多 Observers 节点，而无须担心严重影响写吞吐量。虽然协议中的通知阶段仍然与服务器的数量呈线性关系，但是穿行开销非常低。因此可以认为在通知服务器阶段的开销无法成为主要瓶颈。</strong></li>
+<li>为了提高吞吐量通常我们只要增加服务器到Zookeeper集群中。但是当服务器增加到一定程度，会导致投票的压力增大从而使得吞吐量降低。<strong>因此我们引出了一个角色：Observer</strong>;Observers可以接受客户端的连接，将写请求转发给领导节点。但是，领导节点不会要求 Observers 参加投票。相反，<strong>Observers 不参与投票过程，仅仅和其他服务节点一起得到投票结果</strong>。</li>
+<li><strong>为什么需要Observers？？它带来什么好处</strong>Observers 的需求源于ZooKeeper  <strong>follower服务器在上述工作流程中实际扮演了两个角色。它们从客户端接受连接与操作请求并返回结果，之后对操作结果进行投票。这两个职能在 ZooKeeper集群扩展的时候彼此制约。</strong>如果我们希望增加ZooKeeper集群服务的客户数量，那么我们必须增加服务器的数量，来支持这么多的客户端。然而，从一致性协议的描述可以看到，增加服务器的数量增加了对协议的投票部分的压力。领导节点必须等待集群中过半数的服务器响应投票。于是，节点的增加使得部分计算机运行较慢，从而拖慢整个投票过程的可能性也随之提高，投票操作的会随之下降。这正是我们在实际操作中看到的问题——<strong>随着 ZooKeeper 集群变大，投票操作的吞吐量会下降。所以需要增加客户节点数量的期望和我们希望保持较好吞吐性能的期望间进行权衡。要打破这一耦合关系，引入了不参与投票的服务器，称为 Observers。这个简单的扩展给 ZooKeeper 的可伸缩性带来了全新的镜像。我们现在可以加入很多 Observers 节点，而无须担心严重影响写吞吐量。虽然协议中的通知阶段仍然与服务器的数量呈线性关系，但是穿行开销非常低。因此可以认为在通知服务器阶段的开销无法成为主要瓶颈。</strong></li>
+</ul>
+</li>
+<li><strong>应用场景</strong><ul>
+<li>统一命名服务</li>
+<li>集群管理</li>
+<li>配置管理</li>
+<li>队列管理</li>
 </ul>
 </li>
 </ol>
