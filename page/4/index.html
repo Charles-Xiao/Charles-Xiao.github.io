@@ -148,6 +148,576 @@
           
           
             
+              <a class="post-title-link" href="../../2015/08/01/Python基础知识实例讲解/">
+                Python基础知识实例讲解
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-08-01
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Python开发/">Python开发</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/08/01/Python基础知识实例讲解/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/01/Python基础知识实例讲解/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>Python作为一种面向对象、解释型计算机程序设计语言，语法简洁而清晰，具有丰富和强大的类库，在网站开发，数据处理，网络编程，图形处理，网络爬虫、机器学习、科学计算、自动化测试、系统运维等方面应用广泛。也正是由于Python开发简洁、优雅、开发效率高，它能够在很多地方替代java、C++等语言从而提高程序猿编程效率。作为程序猿，掌握这样一门便捷的编程语言来作为工具显得十分必要。本文主要参考了“极客学院”相关Python入门视频教程，对Python基础入门知识进行了整合，采用代码实例展现的方式，语法知识全部体现在代码中，简洁明了易于理解；本文主要包括三个Python module，分别是hellopython.py、mylib.py、stackqueue.py，涵盖了Python数据类型，常量变量，判断循环，函数，类和对象，模块，数据结构等知识(Python开发编辑器为PyCharm)</p>
+<h3 id="hellopython-py">hellopython.py</h3><p>该模块为主模块，负责实现大部分Python基础语法及其测试，从该模块我们看到几乎所有的Python基础句法的使用方法  </p>
+<p>代码：  </p>
+<pre><code><span class="comment"># coding=UTF-8</span>
+__author__ = <span class="string">'xiaoyong'</span>
+
+<span class="keyword">from</span> math <span class="keyword">import</span> *
+<span class="keyword">from</span> stackqueue <span class="keyword">import</span> *
+<span class="keyword">from</span> mylib <span class="keyword">import</span> Hi
+<span class="keyword">from</span> collections <span class="keyword">import</span> Counter
+<span class="keyword">from</span> itertools <span class="keyword">import</span> combinations
+
+<span class="keyword">import</span> mylib
+<span class="keyword">import</span> sys
+
+<span class="class"><span class="keyword">class</span> <span class="title">HelloPy</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">helloPy</span><span class="params">(self, param)</span>:</span>
+        <span class="string">'''文档字符串：该函数用于测试变量定义，判断语句
+
+        循环语句'''</span>
+        <span class="comment"># 定义变量</span>
+        <span class="keyword">global</span> globalVar
+        globalVar = <span class="number">10</span>
+        var1 = <span class="number">10</span>
+        var2 = <span class="number">20</span>
+        var3 = var1 + var2
+        print(var3)
+
+        <span class="comment"># 判断语句</span>
+        <span class="keyword">if</span> param &gt;= <span class="number">60</span>:
+            print(<span class="string">"{0} &gt; 60"</span>.format(param))
+        <span class="keyword">elif</span> param &gt; <span class="number">0</span>:
+            print(<span class="string">"{0} &gt; 0"</span>.format(param))
+        <span class="keyword">else</span>:
+            print(<span class="string">"{0} &lt; 60 &amp;&amp; 0 &gt; {1}"</span>).format(param, <span class="string">"param"</span>)
+
+        <span class="comment"># 循环语句</span>
+        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>):
+            print(i)
+
+        var4 = <span class="number">0</span>
+        <span class="keyword">while</span> var4 &lt; <span class="number">3</span>:
+            print(var4)
+            var4 += <span class="number">1</span>
+        <span class="keyword">else</span>:
+            print(<span class="string">"else var4={0}"</span>.format(var4))
+
+
+<span class="comment"># 形参设置默认初始值</span>
+<span class="function"><span class="keyword">def</span> <span class="title">fuc1</span><span class="params">(a, b=<span class="number">1</span>, c=<span class="number">2</span>)</span>:</span>
+    print(a);print(b);print(c)
+
+
+<span class="function"><span class="keyword">def</span> <span class="title">fuc2</span><span class="params">(a, b=<span class="number">1</span>)</span>:</span>
+    print(a)
+    <span class="keyword">return</span> b
+
+
+<span class="function"><span class="keyword">def</span> <span class="title">fuc3</span><span class="params">()</span>:</span>
+    <span class="keyword">return</span> (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)
+
+<span class="comment"># Python常用tips </span>
+<span class="function"><span class="keyword">def</span> <span class="title">fuc_python_tips</span><span class="params">()</span>:</span>
+    print(<span class="string">'\nPython常用tips: '</span>)
+    <span class="comment"># 交换变量</span>
+    var1 = <span class="number">0</span>
+    var2 = <span class="number">1</span>
+    var1, var2 = var2, var1
+    <span class="keyword">print</span> var1, var2
+    <span class="comment"># if语句在行内</span>
+    print(<span class="string">'hello'</span>) <span class="keyword">if</span> <span class="number">1</span> != <span class="number">1</span> <span class="keyword">else</span> <span class="string">'world'</span>
+    print(<span class="string">'hello'</span> + str(var1))
+    <span class="comment"># 数字技巧</span>
+    <span class="keyword">print</span> <span class="number">5.0</span> // <span class="number">2</span>, <span class="number">5.0</span> / <span class="number">2</span>, <span class="number">2</span> ** <span class="number">5</span>, .<span class="number">3</span> / .<span class="number">1</span>, .<span class="number">3</span> // .<span class="number">1</span>
+    var3 = <span class="number">2</span>
+    <span class="keyword">if</span> <span class="number">1</span> &lt; var3 &lt; <span class="number">3</span>:
+        print(var3)
+    <span class="comment"># 列表迭代</span>
+    list1 = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]
+    list2 = [<span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>]
+    <span class="keyword">for</span> a, b <span class="keyword">in</span> zip(list1, list2):
+        <span class="keyword">print</span> a + <span class="string">" vs "</span> + b
+    <span class="keyword">for</span> index, a <span class="keyword">in</span> enumerate(list1):
+        <span class="keyword">print</span> index, a
+    list3 = [<span class="number">0</span>] * <span class="number">3</span>
+    list3.append(<span class="number">2</span>)
+    print(list3)
+    <span class="comment"># 列表--&gt;字符串</span>
+    print(<span class="string">','</span>.join(list1))
+    <span class="comment"># 获取列表子集</span>
+    x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]
+    <span class="comment"># 前3个</span>
+    <span class="keyword">print</span> x[:<span class="number">3</span>]
+    <span class="comment"># 中间4个</span>
+    <span class="keyword">print</span> x[<span class="number">1</span>:<span class="number">5</span>]
+    <span class="comment"># 最后3个</span>
+    <span class="keyword">print</span> x[-<span class="number">3</span>:]
+    <span class="comment"># 奇数项</span>
+    <span class="keyword">print</span> x[::<span class="number">2</span>]
+    <span class="comment"># 偶数项</span>
+    <span class="keyword">print</span> x[<span class="number">1</span>::<span class="number">2</span>]
+    <span class="comment"># 统计单个字母数目</span>
+    <span class="keyword">print</span> Counter(<span class="string">'hello'</span>)
+    <span class="comment"># 列出所有组合方式</span>
+    <span class="keyword">for</span> t <span class="keyword">in</span> combinations(x, <span class="number">2</span>):
+        print(t)
+
+<span class="comment"># python标识符首字符只能是下划线或者字母，其他部分可以是下划线、字母、数字；标识符对大小写敏感</span>
+
+print(sys.version);
+<span class="keyword">print</span> (<span class="string">"模块名：{0}"</span>).format(__name__)
+print(pi)
+help(HelloPy.helloPy)
+<span class="comment"># 列出模块定义的标识符,标识符有函数、类和变量</span>
+<span class="keyword">print</span> dir(sys)
+print(HelloPy.helloPy.__doc__)
+
+<span class="comment"># 引用mylib.py模块调用函数</span>
+h = mylib.Hello(<span class="string">"mylib"</span>)
+h.sayHello()
+
+h1 = Hi(<span class="string">"mylib"</span>)
+h1.sayHi()
+
+h2 = HelloPy()
+h2.helloPy(<span class="number">15</span>)
+<span class="comment"># 全局变量</span>
+print(globalVar)
+
+fuc1(b=<span class="number">2</span>, a=<span class="number">3</span>)
+var1 = fuc2(<span class="number">2</span>, <span class="number">3</span>)
+print(var1)
+var2 = fuc3()
+print(var2)
+m1, m2, m3 = fuc3()
+print(<span class="string">"{0} {1} {2}"</span>.format(m1, m2, m3))
+
+fuc_python_tips()
+
+<span class="comment"># 引号</span>
+str1 = <span class="string">'It is a "dog"'</span>
+str2 = <span class="string">"It's a dog"</span>
+str3 = <span class="string">'''she
+I
+you'''</span>
+print(<span class="string">"{0}  {1}"</span>.format(str1, str2))
+
+<span class="comment"># 字符串重复输出</span>
+print(str3) * <span class="number">3</span>
+
+<span class="comment"># 转义符</span>
+print(<span class="string">'It\'s a dog\nyou are not'</span>)
+<span class="keyword">print</span><span class="string">"women\
+doushihaohaizi"</span>
+
+<span class="comment"># 自然字符串</span>
+print(<span class="string">r"It's a dog \n you are not"</span>)
+
+<span class="comment"># 子字符串,索引和切片两种方式</span>
+print(str1[<span class="number">1</span>]);print(str1[<span class="number">0</span>:<span class="number">3</span>]);print(str1[:<span class="number">3</span>]);print(str1[<span class="number">3</span>:]);
+
+<span class="comment"># set,求两个set的&amp; | - 重复元素</span>
+print(<span class="string">"\n集合 列表 元组 字典测试:"</span>)
+var3 = set(<span class="string">'aaabbc'</span>)
+<span class="comment"># 集合中不能有重复元素</span>
+newVar = set(var3)
+print(newVar)
+<span class="comment"># 列表，数据可以修改</span>
+students = [<span class="string">"a"</span>, <span class="string">'b'</span>, <span class="string">"c"</span>]
+print(students[<span class="number">1</span>])
+
+<span class="comment"># 元组,数据不可修改</span>
+students = (<span class="string">"a"</span>, <span class="string">'b'</span>, <span class="string">"c"</span>)
+print(students[<span class="number">1</span>])
+
+<span class="comment"># 字典</span>
+dic = {<span class="string">'姓名'</span>: <span class="string">'xiaoyong'</span>, <span class="string">"性别"</span>: <span class="string">"男"</span>}
+dic[<span class="string">'兴趣'</span>] = <span class="string">'音乐'</span>
+print(dic[<span class="string">'兴趣'</span>])
+print(dic.get(<span class="string">'姓名'</span>))
+
+<span class="comment"># 栈测试</span>
+print(<span class="string">"\n栈测试:"</span>)
+stack = Stack()
+stack.push(<span class="number">1</span>)
+stack.push(<span class="number">2</span>)
+stack.push(<span class="number">3</span>)
+print(stack.length())
+print(stack.isEmpty())
+print(stack.top())
+stack.pop()
+print(stack.top())
+
+<span class="comment"># 队列测试</span>
+print(<span class="string">"\n队列测试:"</span>)
+queue = Queue()
+queue.enQueue(<span class="number">1</span>)
+queue.enQueue(<span class="number">2</span>)
+queue.enQueue(<span class="number">3</span>)
+print(queue.length())
+print(queue.isEmpty())
+print(queue.head())
+print(queue.tail())
+queue.deQueue()
+print(queue.head())
+print(queue.tail())
+</code></pre><h3 id="mylib-py">mylib.py</h3><p>该模块为引用模块，实现两个类，Hello为父类，Hi为子类  </p>
+<p>代码：</p>
+<pre><code><span class="comment"># coding=UTF-8</span>
+__author__ = <span class="string">'xiaoyong'</span>
+
+<span class="class"><span class="keyword">class</span> <span class="title">Hello</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span>
+        self._name = name
+
+    <span class="function"><span class="keyword">def</span> <span class="title">sayHello</span><span class="params">(self)</span>:</span>
+        print(<span class="string">"class Hello: sayHello"</span>)
+        <span class="keyword">print</span> (<span class="string">"模块名：{0}"</span>).format(__name__)
+
+<span class="comment"># 类的继承</span>
+<span class="class"><span class="keyword">class</span> <span class="title">Hi</span><span class="params">(Hello)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span>
+        Hello.__init__(self, name)
+
+    <span class="function"><span class="keyword">def</span> <span class="title">sayHi</span><span class="params">(self)</span>:</span>
+        print(<span class="string">"class Hi: sayHi"</span>)
+</code></pre><h3 id="stackqueue-py">stackqueue.py</h3><p>该模块为引用模块，Stack和Queue类分别实现栈和队列两种数据结构  </p>
+<p>代码：</p>
+<pre><code><span class="comment"># coding= utf-8</span>
+__author__ = <span class="string">'xiaoyong'</span>
+
+
+<span class="comment"># 栈实现</span>
+<span class="class"><span class="keyword">class</span> <span class="title">Stack</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
+        self.stack = []
+
+    <span class="function"><span class="keyword">def</span> <span class="title">push</span><span class="params">(self, item)</span>:</span>
+        self.stack.append(item)
+
+    <span class="function"><span class="keyword">def</span> <span class="title">pop</span><span class="params">(self)</span>:</span>
+        <span class="keyword">if</span> self.stack != []:
+            <span class="keyword">return</span> self.stack.pop(-<span class="number">1</span>)
+        <span class="keyword">else</span>:
+            <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="function"><span class="keyword">def</span> <span class="title">top</span><span class="params">(self)</span>:</span>
+        <span class="keyword">if</span> self.stack != []:
+            <span class="keyword">return</span> self.stack[-<span class="number">1</span>]
+        <span class="keyword">else</span>:
+            <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="function"><span class="keyword">def</span> <span class="title">length</span><span class="params">(self)</span>:</span>
+        <span class="keyword">return</span> len(self.stack)
+
+    <span class="function"><span class="keyword">def</span> <span class="title">isEmpty</span><span class="params">(self)</span>:</span>
+        <span class="keyword">return</span> self.stack == []
+
+
+<span class="comment"># 队列实现</span>
+<span class="class"><span class="keyword">class</span> <span class="title">Queue</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
+        self.queue = []
+
+    <span class="function"><span class="keyword">def</span> <span class="title">enQueue</span><span class="params">(self, item)</span>:</span>
+        self.queue.append(item)
+
+    <span class="function"><span class="keyword">def</span> <span class="title">deQueue</span><span class="params">(self)</span>:</span>
+        <span class="keyword">if</span> self.queue != []:
+            <span class="keyword">return</span> self.queue.pop(<span class="number">0</span>)
+        <span class="keyword">else</span>:
+            <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="function"><span class="keyword">def</span> <span class="title">head</span><span class="params">(self)</span>:</span>
+        <span class="keyword">if</span> self.queue != []:
+            <span class="keyword">return</span> self.queue[<span class="number">0</span>]
+        <span class="keyword">else</span>:
+            <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="function"><span class="keyword">def</span> <span class="title">tail</span><span class="params">(self)</span>:</span>
+        <span class="keyword">if</span> self.queue != []:
+            <span class="keyword">return</span> self.queue[-<span class="number">1</span>]
+        <span class="keyword">else</span>:
+            <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="function"><span class="keyword">def</span> <span class="title">length</span><span class="params">(self)</span>:</span>
+        <span class="keyword">return</span> len(self.queue)
+
+    <span class="function"><span class="keyword">def</span> <span class="title">isEmpty</span><span class="params">(self)</span>:</span>
+        <span class="keyword">return</span> self.queue == []
+</code></pre><h3 id="结语">结语</h3><p>以上三个模块基本涵盖了Python所有基本语法的使用，仅作参考查询之用；如需深入学习Python相关知识，比如RESTful API开发，web2Py，Flask等框架使用，请Google之或参考相关官网。</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Python/"> #Python </a>
+          
+            <a href="../../tags/栈/"> #栈 </a>
+          
+            <a href="../../tags/队列/"> #队列 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/07/29/浅析java内存管理机制/">
+                浅析java内存管理机制
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-07-28
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/java学习笔记/">java学习笔记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/07/29/浅析java内存管理机制/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/29/浅析java内存管理机制/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>内存管理是计算机编程中的一个重要问题，一般来说，内存管理主要包括<strong>内存分配</strong>和<strong>内存回收</strong>两个部分。不同的编程语言有不同的内存管理机制，本文在对比C++和java语言内存管理机制的不同的基础上，浅析java中的内存分配和内存回收机制，包括java对象初始化及其内存分配，内存回收方法及其注意事项等…… </p>
+<h2 id="java与C++内存管理机制对比">java与C++内存管理机制对比</h2><p><strong>在C++中</strong>，所有的对象都会被销毁，局部对象的销毁发生在以右花括号为界的对象作用域的末尾处，而程序猿new出来的对象则应该主动调用delete操作符从而调用析构函数去回收对象占用的内存。但是C++这种直接操作内存的方式存在很大内存泄露风险，而且人为管理内存复杂且困难。  </p>
+<p><strong>在java中</strong>，内存管理由JVM完全负责，java中的“垃圾回收器”负责自动回收无用对象占据的内存资源，这样可以大大减少程序猿在内存管理上花费的时间，可以更集中于业务逻辑和具体功能实现；但这并不是说java有了垃圾回收器程序猿就可以高枕无忧，将内存管理抛之脑外了！一方面，实际上java中还存在垃圾回收器没法回收以某种“特殊方式”分配的内存的情况(这种特殊方式我们将在下文中进行详细描述)；另一方面，java的垃圾回收是不能保证一定发生的，除非JVM面临内存耗尽的情况。所以java中部分对象内存还是需要程序猿手动进行释放，合理地对部分对象进行管理可以减少内存占用与资源消耗。</p>
+<h2 id="java内存分配">java内存分配</h2><h3 id="java程序执行过程">java程序执行过程</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Java程序执行过程.jpg" class="full-image"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JVM编译执行顺序.png" class="full-image"></p>
+<ol>
+<li><p>首先Java源代码文件(.java后缀)会被Java编译器<strong>编译</strong>为字节码文件(.class后缀)，然后由JVM中的类加载器<strong>加载</strong>各个类的字节码文件，加载完毕之后，交由JVM执行引擎<strong>执行</strong>(执行过程还包括将字节码编译成机器码)，JVM执行引擎在执行字节码时首先会扫描四趟class文件来保证定义的类型的安全性，再检查空引用，数据越界，自动垃圾收集等。在整个程序执行过程中，JVM会用一段空间来存储程序执行期间需要用到的数据和相关信息，这段空间一般被称作为<strong>Runtime Data Area（运行时数据区），也就是我们常说的JVM内存</strong></p>
+</li>
+<li><p>类加载器分为<strong>启动类加载器</strong>(不继承classLoader，属于虚拟机的一部分；负责加载原生代码实现的Java核心库,包括加载JAVA_HOME中jre/lib/rt.jar里所有的 class)；<strong>扩展类加载器</strong>(负责在JVM中扩展库目录中去寻找加载Java扩展库,包括JAVA_HOME中jre/lib/ext/xx.jar或-Djava.ext.dirs指定目录下的 jar 包)；<strong>应用程序类加载器</strong>(ClassLoader.getSystemClassLoader()负责加载Java类路径classpath中的类)</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Classloader.png" class="full-image"></p>
+<ol>
+<li>类加载机制的流程：包括了<strong>加载、连接(验证、准备、解析)、初始化五个阶段</strong><ul>
+<li><strong>加载</strong>：查找装载二进制文件，通过一个类的全限定名获取类的二进制字节流，并将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构；在 Java 堆中生成一个代表这个类的 java.lang.Class 对象，作为对方法区中这些数据的访问入口。</li>
+<li><strong>验证</strong>：为了确保Class文件中的字节流包含的信息符合当前虚拟机的要求，完成以下四个阶段的验证：文件格式的验证、元数据的验证、字节码验证和符号引用验证。</li>
+<li><strong>准备</strong>：准备阶段是正式为类变量分配内存并设置类变量初始值的阶段，这些内存都将在方法区中分配</li>
+<li><strong>解析</strong>：解析阶段是虚拟机将常量池中的符号引用转化为直接引用的过程</li>
+<li><strong>初始化</strong>：初始化阶段是根据程序员通过程序指定的主观计划去初始化类变量和其他资源，也就是执行类构造器()方法的过程</li>
+</ul>
+</li>
+</ol>
+<h3 id="现代硬件内存架构">现代硬件内存架构</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/硬件内存架构.png" class="full-image"></p>
+<ol>
+<li>一个有两个或者多个 CPU 的现代计算机上同时运行多个线程是可能的，如果你的 Java 程序是多线程的，在你的 Java 程序中每个 CPU 上一个线程可能同时（并发）执行</li>
+<li>CPU在寄存器上的执行操作速度稍微大于CPU缓存层的执行速度，远大于在主存上的执行速度</li>
+<li>Java内存模型中的堆栈分布在硬件内存结构中的CPU寄存器，CPU缓存层，CPU主存中，大部分分布在主存中</li>
+</ol>
+<h3 id="java内存模型划分">java内存模型划分</h3><p>一般来讲，我们将java内存划分为以下几个区域, 如图：</p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JVM内存分配与回收.png" class="full-image" width="100%"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Java对象访问方式.png" class="full-image" width="100%"></p>
+<p><strong>GC备注</strong>:  </p>
+<ol>
+<li>年轻对象存放在年轻代，采用Minor GC(指从年轻代空间（包括 Eden 和 Survivor 区域）回收内存); 长期存活的年老对象以及大对象直接存放在年老代，采用Full GC(Full GC == Major GC指的是对老年代/永久代的stop the world的GC)，回收速度慢;JVM维护一个对象的年龄来进行对象的内存区域转移，从Eden-Survivor-老年代</li>
+<li>新生代包括一个Eden区，两个survivor的from和to区（8:1:1）,负责年轻小对象的回收;Eden区存放新创建的大量对象,回收频繁,所以区域大;Survivor存放每次垃圾回收后存活的对象</li>
+<li>一个对象的成员变量可能随着这个对象自身存放在堆上</li>
+<li>一个Object的大小计算方法:一个引用4byte+空Object本身占据8byte+其它数据类型占据自身大小byte(例如char占用2byte);然而由于系统分配以8byte为单位，所以每个Object占据的大小必须为8的倍数，比如一个空的Object应该占据4+8=12，也就是说需要占据16byte</li>
+</ol>
+<p>下文中将要提到的内存分配与回收主要是指对象所占据的堆内存的释放与回收。</p>
+<h3 id="java对象创建及初始化">java对象创建及初始化</h3><p>java对象创建之后，就会在堆内存拥有自己的一块区域，接着就是对象的初始化过程。对象一般通过<strong>构造器来进行初始化</strong>，构造器是一种与类名相同的没有返回值的特殊方法；如果一个类中没有定义构造函数，则系统会自动生成一个不接受任何参数的默认构造器；但是如果已经定义一个构造器(无论是否有参数)，编译器就不会再自动创建默认构造器了；我们可以对构造函数进行多次重载(即传递不同数目或不同顺序的参数列表),也可以在一个构造器中调用另一个构造器，但是只能调用一次，并且必须将构造器放在最起始处，否则编译器会报错。  </p>
+<p>那么<strong>类成员初始化</strong>又是怎么做的呢？顺序是怎样的呢？java中所有变量在使用前都应该得到恰当的初始化，即使是方法的局部变量，如果不进行初始化就会发生编译错误；而如果是类的成员变量，即使你不进行初始化赋值，系统也是会给与其一个初始值的，例如char、int类型的初始值都是0，对象引用不进行初始化则默认为null。</p>
+<p><strong>类成员初始化顺序</strong>总结：先静态后普通再构造, 先父类后子类，同级看书写顺序 </p>
+<pre><code><span class="number">1.</span>先执行父类静态变量和静态代码块，再执行子类静态变量和静态代码块
+<span class="number">2.</span>先执行父类普通变量和代码块，再执行父类构造器(<span class="keyword">static</span>方法) 
+<span class="number">3.</span>先执行子类普通变量和代码块，再执行子类构造器(<span class="keyword">static</span>方法) 
+<span class="number">4.</span><span class="keyword">static</span>方法初始化先于普通方法，静态初始化只有在必要时刻才进行且只初始化一次。
+
+注意:子类的构造方法，不管这个构造方法带不带参数，默认的它都会先去寻找父类的不带参数的构造方法。如果父类没有不带参数的构造方法，那么子类必须用supper关键子来调用父类带参数的构造方法，否则编译不能通过。
+</code></pre><h2 id="java内存回收">java内存回收</h2><h3 id="垃圾回收器(4种收集器)和finalize()方法">垃圾回收器(4种收集器)和finalize()方法</h3><p>java中垃圾回收器可以帮助程序猿自动回收无用对象占据的内存，但它只负责释放java中创建的对象所占据的所有内存，通过某种创建对象之外的方式为对象分配的内存空间则无法被垃圾回收器回收；而且垃圾回收本身也有开销，GC的优先级比较低，所以如果JVM没有面临内存耗尽，它是不会去浪费资源进行垃圾回收以恢复内存的。最后我们会发现，只要程序没有濒临存储空间用完那一刻，对象占用的空间就总也得不到释放。我们可以通过代码System.gc()来主动启动一个垃圾回收器(虽然JVM不会立刻去回收)，在释放new分配内存空间之前，将会通过finalize()释放用其他方法分配的内存空间。  </p>
+<ol>
+<li><strong>Serial收集器</strong>：一个单线程的新生代收集器，它进行垃圾收集时，必须暂停其他所有的工作线程，直到它收集结束。简单高效</li>
+<li><strong>Parallel（并行）收集器</strong>：JVM缺省收集器，其最大的优点是使用多个线程来通过扫描并压缩堆。串行收集器在GC时会停止其他所有工作线程（stop-the-world），CPU利用率是最高的，所以适用于要求高吞吐量（throughput）的应用，但停顿时间（pause time）会比较长，所以对web应用来说就不适合，因为这意味着用户等待时间会加长。而并行收集器可以理解是多线程串行收集，在串行收集基础上采用多线程方式进行GC，很好的弥补了串行收集的不足，可以大幅缩短停顿时间，因此对于空间不大的区域（如young generation），采用并行收集器停顿时间很短，回收效率高，适合高频率执行。</li>
+<li><strong>CMS收集器</strong>：基于“标记-清除”算法实现的，它使用多线程的算法去扫描老生代堆（标记）并对发现的待回收对象进行回收（清除），容易产生大量内存碎片使得大对象无法创建然后不得不提前触发full GC。CPU资源占用过大，标记之后容易产生浮动垃圾只能留到下一次GC处理</li>
+<li><strong>G1收集器</strong>：G1收集器是基于“标记-整理”算法实现的收集器，也就是说它不会产生空间碎片。G1是一个针对多处理器大容量内存的服务器端的垃圾收集器，其目标是在实现高吞吐量的同时，尽可能的满足垃圾收集暂停时间的要求。它可以非常精确地控制停顿，既能让使用者明确指定在一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒，具备了一些实时Java（RTSJ）的垃圾收集器的特征。<a href="http://www.zicheng.net/article/55.htm" target="_blank" rel="external">垃圾收集器</a></li>
+</ol>
+<p>finalize()方法的工作原理是：一旦垃圾回收器准备好释放对象占用的存储空间，将首先调用并且只能调用一次该对象的finalize()方法(通过代码System.gc()实现)，并且在下一次垃圾回收动作发生时，才会真正回收对象占用的内存。所以如果我们重载finalize()方法就能在垃圾回收时刻做一些重要的清理工作或者自救该对象一次(只要在finalize()方法中让该对象重新和引用链上的任何一个对象建立关联即可)。finalize()方法用于释放用特殊方式分配的内存空间，这是因为我们可能在java中调用非java代码来分配内存，比如Android开发中调用NDK。那么，当我们调用C中的malloc()函数分配了存储空间，我们就只能用free()函数来释放这些内存，这样就需要我们在finalize()函数中用本地方法调用它。</p>
+<h3 id="对象内存状态&amp;&amp;引用形式及回收时机">对象内存状态&amp;&amp;引用形式及回收时机</h3><ul>
+<li><p>java对象内存状态转换图</p>
+<p>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/对象状态转换图.png" class="full-image"></p>
+</li>
+<li><p><strong>如何判断java对象需要被回收？GC判断方法</strong></p>
+<ul>
+<li><strong>引用计数</strong>，引用计数法记录着每一个对象被其它对象所持有的引用数，被引用一次就加一，引用失效就减一；引用计数器为0则说明该对象不再可用；当一个对象被回收后，被该对象所引用的其它对象的引用计数都应该相应减少，它很难解决对象之间的相互循环引用问题<a href="http://blog.csdn.net/jiasike/article/details/51355729" target="_blank" rel="external">循环引用实例</a></li>
+<li><strong>可达性分析算法</strong>：从GC Root对象向下搜索其所走过的路径称为引用链，当一个对象不再被任何的GC root对象引用链相连时说明该对象不再可用，GC root对象包括四种：方法区中常量和静态变量引用的对象，虚拟机栈中变量引用的对象，本地方法栈中引用的对象; <strong>解决循环引用是因为</strong>GC Root通常是一组特别管理的指针，这些指针是tracing GC的trace的起点。它们不是对象图里的对象，对象也不可能引用到这些“外部”的指针。</li>
+<li>采用引用计数算法的系统只需在每个实例对象创建之初，通过计数器来记录所有的引用次数即可。而可达性算法，则需要再次GC时，遍历整个GC根节点来判断是否回收</li>
+</ul>
+</li>
+<li>java对象的四种引用<br>1.<strong>强引用</strong> ：创建一个对象并把这个对象直接赋给一个变量，eg ：Person person = new Person(“sunny”); 不管系统资源有么的紧张，强引用的对象都绝对不会被回收，即使他以后不会再用到。<br>2.<strong>软引用</strong> ：通过SoftReference类实现，eg : SoftReference<person> p = new SoftReference<person>(new Person(“Rain”));内存非常紧张的时候会被回收，其他时候不会被回收，所以在使用之前要判断是否为null从而判断他是否已经被回收了。<br>3.<strong>弱引用</strong> ：通过WeakReference类实现，eg : WeakReference<person> p = new WeakReference<person>(new Person(“Rain”));不管内存是否足够，系统垃圾回收时必定会回收<br>4.<strong>虚引用</strong> ：不能单独使用，主要是用于追踪对象被垃圾回收的状态，为一个对象设置虚引用关联的唯一目的是希望能在这个对象被收集器回收时收到一个系统通知。通过PhantomReference类和引用队列ReferenceQueue类联合使用实现</person></person></person></person></li>
+</ul>
+<h3 id="常见垃圾回收算法参考图">常见垃圾回收算法<a href="https://yq.aliyun.com/articles/14411" target="_blank" rel="external">参考图</a></h3><ul>
+<li><strong>停止-复制算法</strong><br>这是一种非后台回收算法，将可用内存按容量划分为大小相等的两块，每次只使用其中的一块，内存浪费严重.它先暂停程序的运行，然后将所有存活的对象从当前堆复制到另外一个堆，没被复制的死对象则全部是垃圾，存活对象被复制到新堆之后全部紧密排列，就可以直接分配新空间了。此方法耗费空间且效率低，适用于存活对象少。</li>
+<li><strong>标记-清扫算法</strong><br>同样是非后台回收算法，该算法从堆栈区和静态域出发，遍历每一个引用去寻找所有需要回收的对象，对每个找到需要回收对象都进行标记。标记结束之后，开始清理工作，被标记的对象都会被释放掉，如果需要连续堆空间，则还需要对剩下的存货对象进行整理;否则会产生大量内存碎片</li>
+<li><p><strong>标记-整理算法</strong><br>先标记需要回收的对象，但是不会直接清理那些可回收的对象，而是将存活对象向内存区域的一端移动，然后清理掉端以外的内存。适用于存活对象多。</p>
+</li>
+<li><p><strong>分代算法</strong><br>在新生代中，每次垃圾收集时都会发现有大量对象死去，只有少量存活，因此可选用停止复制算法来完成收集，而老年代中因为对象存活率高、没有额外空间对它进行分配担保，就必须使用标记—清除算法或标记—整理算法来进行回收。</p>
+</li>
+</ul>
+<h3 id="JVM性能调优">JVM性能调优</h3><ol>
+<li>JVM分配超大堆（前提是物理机的内存足够大）来提升服务器的响应速度，但分配超大堆的前提是有把握把应用程序的 Full GC 频率控制得足够低，因为一次 Full GC 的时间造成比较长时间的停顿。控制 Full GC 频率的关键是保证应用中绝大多数对象的生存周期不应太长，尤其不能产生批量的、生命周期长的大对象，这样才能保证老年代的稳定</li>
+<li>分配超大堆时，如果用到了 NIO 机制分配使用了很多的 Direct Memory，则有可能导致 Direct Memory 的 OutOfMemoryError 异常，这时可以通过-XX:MaxDirectMemorySize 参数调整 Direct Memory 的大小</li>
+<li>调整线程堆栈，socket缓冲区，JNI占用的内存以及虚拟机、GC消耗的内存</li>
+<li><strong>“-Xms and -Xmx (or: -XX:InitialHeapSize and -XX:MaxHeapSize)”参数</strong>：分别指定初始堆和最大堆大小，Xms一般代表着堆内存的最小值，JVM在运行时可以动态调整堆内存大小，如果我们 设置Xms=Xmx就相当于设置了一个固定大小的堆内存；例如：“java -Xms128m -Xmx2g MyApp”启动一个初始化堆内存为 128M，最大堆内存为 2G，名叫 “MyApp” 的 Java 应用程序；当我们设置Xmx最大堆内存不恰当时就很容易发生内存溢出，这样我们可以通过设置 - XX:+HeapDumpOnOutOfMemoryError 让 JVM 在发生内存溢出时自动生成堆内存快照，默认保存在JVM的启动目录下名为 java_pid.hprof 的文件里，分析它可以很好地定位到溢出位置</li>
+</ol>
+<h3 id="Linux下面查看Jvm性能信息的命令">Linux下面查看Jvm性能信息的命令</h3><ol>
+<li><strong>jstat</strong>： 用于查看Jvm的堆栈信息，能够查看eden,survivor,old,perm等堆区的的容量，利用率信息，对于查看系统是不是有内存泄漏以及参数设置是否合理有不错的意义。例如’’’ jstat -gc 12538 5000 —- 即会每5秒一次显示进程号为12538的java进成的GC情况 ‘’’</li>
+<li><strong>jstack</strong>：用来查看Jvm当前的线程dump的，可以看到当前Jvm里面的线程状况，对于查找blocked线程比较有意义</li>
+<li><strong>jmap</strong>：用来查看Jvm当前的heap dump的，可以看出当前Jvm中各种对象的数量，所占空间等等；尤其值得一提的是这个命令可以导出一份binary heap dump的bin文件，这个文件能够直接用Eclipse Memory Anayliser来分析，并找出潜在的内存泄漏的地方。</li>
+<li><strong>非jvm命令—netstat</strong>：通过这个命令可以看到Linux系统当前在各个端口的链接状态，比如查看数据库连接数等</li>
+</ol>
+<h3 id="内存相关问题">内存相关问题</h3><ol>
+<li><strong>内存泄露</strong>是指分配出去的内存没有被回收回来，由于失去了对该内存区域的控制(例如你把它的地址给弄丢了)，因而造成了资源的浪费。Java 中一般不会产生内存泄露，因为有垃圾回收器自动回收垃圾，但这也不绝对，Java堆内也可能发生内存泄露（Memory Leak; 当我们 new 了对象，并保存了其引用，但是后面一直没用它，而垃圾回收器又不会去回收它，这边会造成内存泄露</li>
+<li><strong>内存溢出</strong>是指程序所需要的内存超出了系统所能分配的内存（包括动态扩展）的上限</li>
+<li><strong>符号引用</strong>：符号引用以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可。符号引用与虚拟机实现的内存布局无关，引用的目标并不一定已经加载到了内存中。</li>
+<li><strong>直接引用</strong>：直接引用可以是直接指向目标的指针、相对偏移量或是一个能间接定位到目标的句柄。直接引用是与虚拟机实现的内存布局相关的，同一个符号引用在不同虚拟机实例上翻译出来的直接引用一般不会相同。如果有了直接引用，那说明引用的目标必定已经存在于内存之中了。</li>
+<li><strong>双亲委派模型</strong>：表示类加载器之间的加载顺序从顶至下的层次关系，加载器之间的父子关系一般都是通过组合来实现，而不是继承。可以防止内存中出现多份同样的字节码，并确保加载顺序</li>
+<li><strong>双亲委派模型的工作过程</strong>是：在loadClass函数中，首先会判断该类是否被加载过，加载过则进行下一步—-解析，否则进行加载；如果一个类加载器收到了类加载器的请求，先不会自己尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父类加载器反馈自己无法完成这个加载请求（它的搜说范围中没有找到所需的类时，子加载类才会尝试自己去加载）</li>
+<li><strong>静态分派和动态分派</strong>：静态分派发生在编译阶段，是指依据静态类型(变量声明时定义的变量类型)来决定方法的执行版本，例如方法重载中依据参数的定义类型来定位具体应该执行的方法；动态分派发生在运行期，根据变量实例化时的实际类型来决定方法的执行版本，例如方法重写；目前的 Java 语言（JDK1.6）是一门<strong>静态多分派、动态单分派</strong>的语言。</li>
+<li><strong>动态分派具体实现</strong>Java虚拟机是通过在方法区中建立一个虚方法表，通过使用方法表的索引来代替元数据查找以提高性能。虚方法表中存放着各个方法的实际入口地址，如果子类没有覆盖父类的方法，那么子类的虚方法表里面的地址入口与父类是一致的；如果重写父类的方法，那么子类的方法表的地址将会替换为子类实现版本的地址。方法表是在类加载的连接阶段（验证、准备、解析）进行初始化，准备了子类的初始化值后，虚拟机会把该类的虚方法表也进行初始化。</li>
+<li><strong>JDK7和8中内存模型变化</strong>：JDK7中把String常量池从永久代移到了堆中，并通过intern方法来保证不在堆中重复创建一个对象；JDK7开始使用G1收集器替代CMS收集器。JDK8使用元空间来替代原来的方法区，并且提供了字符串去重功能，也就是G1收集器可以识别出堆中那些重复出现的字符串并让他们指向同一个内部char[]数组，而不是在堆中存在多份拷贝</li>
+</ol>
+<h3 id="参考链接">参考链接</h3><ol>
+<li>《Java编程思想》</li>
+<li><a href="http://blog.jobbole.com/37273/" target="_blank" rel="external">Java的内存回收机制</a></li>
+<li><a href="http://blog.csdn.net/tutngfei1129287460/article/details/7383473" target="_blank" rel="external">java内存空间详解</a></li>
+<li><a href="http://www.jayfeng.com/2016/03/11/%E7%90%86%E8%A7%A3Java%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" target="_blank" rel="external">理解Java垃圾回收机制</a></li>
+<li><a href="http://howiefh.github.io/2015/04/08/jvm-note-2/" target="_blank" rel="external">深入理解Java虚拟机</a></li>
+<li><a href="http://286.iteye.com/blog/1931174" target="_blank" rel="external">Java堆内存和JVM参数</a></li>
+<li><a href="http://www.importnew.com/18961.html" target="_blank" rel="external">Java内存划分</a></li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/java/"> #java </a>
+          
+            <a href="../../tags/内存管理/"> #内存管理 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2015/07/26/利用Python框架Flask实现RESTful架构服务端/">
                 利用Python框架Flask实现RESTful架构服务端
               </a>
@@ -1110,383 +1680,6 @@ n再和这个数做与运算*/</span>
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/24/读《1988-我想和这个世界谈谈》/">
-                读《1988-我想和这个世界谈谈》
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-24
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/读书札记/">读书札记</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/24/读《1988-我想和这个世界谈谈》/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/24/读《1988-我想和这个世界谈谈》/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>　　最近花了2天左右的时间看完了韩寒的这本书，总体感觉，嗯，很抽象的小说，却也有着很鲜明的现实意义，把社会现实和人性揭露得都很透彻，在此写写我读到了什么。<br>　　主人公貌似叫做路子野，而1988则是他的那辆由朋友帮忙改装好的旅游车，因为那辆车是1988年出厂，1988就是这么来的；他开着这辆车上路去接他的刚出狱的朋友，途中接受了已怀孕妓女娜娜的“特殊服务”却被警察查到，由此结缘，娜娜成为了他旅途的唯一伴侣；两个本来有着不同的目标、不同的社会经历和身份的人，在这个漫长的旅途中，他们互相交谈，聊着自己的人生经历，再加上这一路的经历，就组成了这么一本小说。<br>　　写到这儿，我想我是应该按小说中不同的事件来叙说感想，还是按照小说叙述的先后顺序来写呢？还是按照前者来写吧，应该会清楚一些。
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2015/05/24/读《1988-我想和这个世界谈谈》/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/阅读/"> #阅读 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/21/常见设计模式实例讲解/">
-                常见设计模式实例讲解
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-21
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/设计模式/">设计模式</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/21/常见设计模式实例讲解/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/21/常见设计模式实例讲解/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="单例模式的三种实现方式及其优缺点">单例模式的三种实现方式及其优缺点</h3><pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>{
-
-    <span class="javadoc">/**
-     *<span class="javadoctag"> @param</span> args
-     */</span>
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
-        SingletonEnum.INSTANCE.setmName(<span class="string">"enum"</span>);
-        SingletonInner.getInstance().setmName(<span class="string">"inner"</span>);
-        SingletonDoubleCheck.getInstance().setmName(<span class="string">"doubleCheck"</span>);
-    }
-
-    <span class="comment">/*
-     * 单例模式考虑点： 
-     * 1. 线程安全：Synchronized关键字，Enum，静态内部类 
-     * 2. 延迟加载：减少负载和消耗 
-     * 3. 自动序列化(Serializable和transient) 
-     * 4. 防止反射强行调用构造器
-     * 3、4点只有枚举可以实现
-     */</span>
-
-    <span class="comment">/*
-     * 枚举实现单例
-     */</span>
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">enum</span> SingletonEnum {
-        INSTANCE;
-        <span class="keyword">private</span> String mName;
-
-        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> mName;
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
-            <span class="keyword">this</span>.mName = mName;
-        }
-
-    }
-    <span class="comment">/*
-     * 双重检查锁：单例模式中需要new的情况非常少,第一层锁可以减少锁的次数
-     */</span>
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDoubleCheck</span> </span>{
-        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingletonDoubleCheck singleton = <span class="keyword">null</span>;
-
-        <span class="function"><span class="keyword">private</span> <span class="title">SingletonDoubleCheck</span><span class="params">()</span> </span>{
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDoubleCheck <span class="title">getInstance</span><span class="params">()</span> </span>{
-            <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) {
-                <span class="keyword">synchronized</span> (SingletonDoubleCheck.class) {
-                    <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) {
-                        singleton = <span class="keyword">new</span> SingletonDoubleCheck();
-                    }
-                }
-            }
-            <span class="keyword">return</span> singleton;
-        }
-
-        <span class="keyword">private</span> String mName;
-
-        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> mName;
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
-            <span class="keyword">this</span>.mName = mName;
-        }
-    }
-
-    <span class="comment">/*
-     * 内部类方式实现
-     */</span>
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonInner</span> </span>{
-
-        <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Holder</span> </span>{
-            <span class="keyword">private</span> <span class="keyword">static</span> SingletonInner singleton = <span class="keyword">new</span> SingletonInner();
-        }
-
-        <span class="function"><span class="keyword">private</span> <span class="title">SingletonInner</span><span class="params">()</span> </span>{
-
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonInner <span class="title">getInstance</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> Holder.singleton;
-        }
-
-        <span class="keyword">private</span> String mName;
-
-        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> mName;
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
-            <span class="keyword">this</span>.mName = mName;
-        }
-    }
-
-}
-</code></pre><h3 id="工厂模式实例">工厂模式实例</h3><h3 id="观察者模式">观察者模式</h3><ol>
-<li>在Java中通过Observable类和Observer接口实现了观察者模式，Observer对象监视着Observable对象的变化，当Observable对象发生变化时，Observer得到通知，就可以进行相应的工作。</li>
-<li><strong>Observable类</strong>—-程序中的被观察者类需要继承这个类</li>
-<li><strong>Observer接口</strong>—-观察者接口，观察者需要实现这个接口并重写其中的update()方法</li>
-<li>可以在main函数中通过调用被观察者的addObserver方法添加观察者，当被观察者发生变化时要调用<strong>setChanged()方法</strong>标记此Observable对象已改变，并调用<strong>notifyObservers()</strong>通知所有观察者</li>
-<li><p><strong>自定义代码实现观察者模式</strong>:</p>
-<pre><code><span class="comment">// 被观察者接口</span>
-<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Subject</span> </span>{
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerObserver</span><span class="params">(Observer o)</span></span>;
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer o)</span></span>;
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyAllObservers</span><span class="params">()</span></span>;
-}
-
-<span class="comment">// 观察者接口</span>
-<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Observer</span> </span>{
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Subject s)</span></span>;
-}
-
-    <span class="comment">// 猎头类</span>
-     <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HeadHunter</span> <span class="keyword">implements</span> <span class="title">Subject</span> </span>{
-        <span class="keyword">private</span> ArrayList&lt;Observer&gt; userList;
-        <span class="keyword">private</span> ArrayList&lt;String&gt; jobs;
-
-        <span class="function"><span class="keyword">public</span> <span class="title">HeadHunter</span><span class="params">()</span></span>{
-            userList = <span class="keyword">new</span> ArrayList&lt;Observer&gt;();
-            jobs = <span class="keyword">new</span> ArrayList&lt;String&gt;();
-        }
-
-        <span class="annotation">@Override</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerObserver</span><span class="params">(Observer o)</span> </span>{
-            userList.add(o);
-        }
-
-        <span class="annotation">@Override</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer o)</span> </span>{}
-
-        <span class="annotation">@Override</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyAllObservers</span><span class="params">()</span> </span>{
-            <span class="keyword">for</span>(Observer o: userList){
-                o.update(<span class="keyword">this</span>);
-            }
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addJob</span><span class="params">(String job)</span> </span>{
-            <span class="keyword">this</span>.jobs.add(job);
-            notifyAllObservers();
-        }
-
-        <span class="function"><span class="keyword">public</span> ArrayList&lt;String&gt; <span class="title">getJobs</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> jobs;
-        }
-
-        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>{
-            <span class="keyword">return</span> jobs.toString();
-        }
-    }
-
-<span class="comment">// 求职者类    </span>
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JobSeeker</span> <span class="keyword">implements</span> <span class="title">Observer</span> </span>{
-
-    <span class="keyword">private</span> String name;
-
-    <span class="function"><span class="keyword">public</span> <span class="title">JobSeeker</span><span class="params">(String name)</span></span>{
-        <span class="keyword">this</span>.name = name;
-    }
-    <span class="annotation">@Override</span>
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Subject s)</span> </span>{
-        System.out.println(<span class="keyword">this</span>.name + <span class="string">" got notified!"</span>);
-        <span class="comment">//print job list</span>
-        System.out.println(s);
-    }
-}
-
-<span class="comment">// 主函数</span>
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>{
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
-        HeadHunter hh = <span class="keyword">new</span> HeadHunter();
-        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Mike"</span>));
-        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Chris"</span>));
-        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Jeff"</span>));
-
-        <span class="comment">//每次添加一个个job，所有找工作人都可以得到通知。</span>
-        hh.addJob(<span class="string">"Google Job"</span>);
-        hh.addJob(<span class="string">"Yahoo Job"</span>);
-    }
-}
-</code></pre></li>
-</ol>
-<h3 id="代理模式">代理模式</h3><ol>
-<li><strong>代理模式</strong>就是为某个对象提供一个代理，以控制对这个对象的访问。 代理类和委托类有共同的父类或父接口，这样在任何使用委托类对象的地方都可以用代理对象替代。代理类负责请求的预处理、过滤、将请求分派给委托类处理、以及委托类执行完请求后的后续处理。</li>
-<li><strong>静态代理</strong> 由程序员创建或工具生成代理类的源码，再编译代理类。所谓静态也就是在程序运行前就已经存在代理类的字节码文件，代理类和委托类的关系在运行前就确定了。</li>
-<li><strong>动态代理</strong> 动态代理类的源码是在程序运行期间由JVM根据反射等机制动态的生成，所以不存在代理类的字节码文件。代理类和委托类的关系是在程序运行时确定。<ul>
-<li><strong>java.lang.reflect.Proxy</strong> ：Java 动态代理机制生成的所有动态代理类的父类，它提供了一组静态方法来为一组接口动态地生成代理类及其对象, 其中newProxyInstance方法用于为指定类装载器、一组接口及调用处理器生成动态代理类实例</li>
-<li><strong>java.lang.reflect.InvocationHandler</strong>：这是调用处理器接口，它自定义了一个 invoke 方法，用于集中处理在动态代理类对象上的方法调用，通常在该方法中实现对委托类的代理访问。每次生成动态代理类对象时都要指定一个对应的调用处理器对象。 </li>
-</ul>
-</li>
-</ol>
-<h3 id="适配器模式">适配器模式</h3><ol>
-<li><strong>适配器模式</strong>：将一个类的接口，转换成客户期望的另外一个接口。适配器让原本接口不兼容的类可以很好的合作;<br>两种方式：①类的适配器模式（采用继承实现）②对象适配器（采用对象组合方式实现）；</li>
-<li><strong>使用场景</strong><ul>
-<li>系统需要使用现有的类，而这些类的接口不符合系统的接口。</li>
-<li>想要建立一个可以重用的类，用于与一些彼此之间没有太大关联的一些类，包括一些可能在将来引进的类一起工作</li>
-<li>使用第三方组件，组件接口定义和自己定义的不同，不希望修改自己的接口，但是要使用第三方组件接口的功能。</li>
-</ul>
-</li>
-</ol>
-<h3 id="装饰器模式VS代理模式">装饰器模式VS代理模式</h3><ol>
-<li><strong>装饰器模式</strong>关注于在一个对象上动态的添加方法，是继承关系的一个替代方案；然而<strong>代理模式</strong>关注于控制对对象的访问，并不提供对象本身的增强功能。</li>
-<li>对<strong>装饰器模式</strong>来说，装饰者和被装饰者都实现同一个接口; 对<strong>代理模式</strong>来说，代理类和真实处理的类都实现同一个接口</li>
-<li><h3 id="参考链接">参考链接</h3></li>
-<li><a href="http://layznet.iteye.com/blog/1182924" target="_blank" rel="external">Java动态代理</a></li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/设计模式/"> #设计模式 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1525,7 +1718,7 @@ n再和这个数做与运算*/</span>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">42</span>
+              <span class="site-state-item-count">44</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1584,7 +1777,7 @@ n再和这个数做与运算*/</span>
         <div class="copyright">
   
   &copy; &nbsp;  2015.05.16 - 
-  2016
+  2017
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>

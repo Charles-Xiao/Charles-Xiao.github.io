@@ -148,6 +148,859 @@
           
           
             
+              <a class="post-title-link" href="../../2015/04/09/Android基础知识总结/">
+                Android基础知识总结
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-04-09
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Android开发/">Android开发</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/04/09/Android基础知识总结/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/09/Android基础知识总结/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="Android架构层次">Android架构层次</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/android_framework.png" class="full-image" width="100%"></p>
+<p><strong>android系统架构分从下往上为Linux内核层、运行库、应用程序框架层和应用程序层</strong></p>
+<ol>
+<li>Linux内核层：负责硬件的驱动程序、网络、电源、系统安全以及内存管理等功能。</li>
+<li>运行库和android runtion：运行库：即c/c++函数库部分，大多数都是开放源代码的函数库，例如webkit，该函数库负责android网页浏览器的运行；例如标准的c函数库libc、openssl、sqlite等，当然也包括支持游戏开发的2dsgl和3dopengles，在多媒体方面有mediaframework框架来支持各种影音和图形文件的播放与显示，如mpeg4、h.264、mp3、aac、amr、jpg和png等众多的多媒体文件格式。Androidruntion负责解释和执行生成的dalvik格式的字节码</li>
+<li>应用软件架构：java应用程序开发人员主要是使用该层封装好的api进行快速开发的。</li>
+<li>应用程序层：该层是java的应用程序层，android内置的googlemaps、email、IM、浏览器等，都处于该层，java开发人员工发的程序也处于该层，而且和内置的应用程序具有平等的地位，可以调用内置的应用程序，也可以替换内置的应用程序</li>
+</ol>
+<h3 id="ANR的产生原因以及解决方法">ANR的产生原因以及解决方法</h3><ol>
+<li>ANR由Activity manager和windows manager来负责监听，你的应用程序所做的事情如果在主线程里占用了大长时间的话，就会引发ANR对话框，因为你的应用程序并没有给自己机会来处理输入事件或者Intent广播</li>
+<li><strong>产生原因</strong>: ①Activity 5s没有响应输入事件，比如按键，触摸事件②广播接收器在10s没有处理完毕事件 ③Service在20s之类没有完成事件处理</li>
+<li>解决方法: 不在主线程进行网络请求,磁盘读取，位图修改，更新UI等耗时操作，而应该采用子线程来完成，完成之后通过Handler通知主线程</li>
+<li><strong>如何定位ANR</strong>：①检查log文件并分析LogCat输出，查看CPU使用量等信息; ②从/data/anr/目录下的trace.txt文件查看app调用栈信息; ③代码检查</li>
+</ol>
+<h3 id="Android_界面卡顿怎么处理？Link">Android 界面卡顿怎么处理？<a href="http://charles-xiao.github.io/2015/08/30/Android%E5%BA%94%E7%94%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" target="_blank" rel="external">Link</a></h3><h3 id="Android子线程和UI线程交互的5种方式">Android子线程和UI线程交互的5种方式</h3><ol>
+<li><p><strong>handler</strong>: 参考“实习项目总结”</p>
+</li>
+<li><p><strong>AsyncTask</strong>: 参考“实习项目总结”</p>
+</li>
+<li><p><strong>Activity.runOnUIThread(Runnable)</strong>  </p>
+<p> <strong>子线程更新UI</strong>  </p>
+<pre><code><span class="keyword">new</span> Thread() {  
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{  
+        <span class="comment">//这儿是耗时操作，完成之后更新UI；  </span>
+        runOnUiThread(<span class="keyword">new</span> Runnable(){  
+
+            <span class="annotation">@Override</span>  
+            <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{  
+                <span class="comment">//更新UI  </span>
+                imageView.setImageBitmap(bitmap);  
+            }  
+
+        });  
+    }  
+}.start(); 
+</code></pre><p> <strong>非Activity更新UI</strong></p>
+<pre><code>Activity activity = (Activity) imageView.getContext();  
+        activity.runOnUiThread(<span class="keyword">new</span> Runnable() {  
+
+            <span class="annotation">@Override</span>  
+            <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{  
+                imageView.setImageBitmap(bitmap);  
+            }  
+});  
+</code></pre></li>
+<li><p><strong>View.Post(Runnable)</strong></p>
+<pre><code>imageView.post(<span class="keyword">new</span> Runnable(){  
+
+            <span class="annotation">@Override</span>  
+            <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{  
+                imageView.setImageBitmap(bitmap);  
+            }  
+
+});  
+</code></pre></li>
+<li><p><strong>View.PostDelayed(Runnabe,long)</strong></p>
+</li>
+</ol>
+<h3 id="Activity四种启动模式和生命周期">Activity四种启动模式和生命周期</h3><ol>
+<li><strong>Application</strong>: 应用程序是组件的集合，manifest文件中展现了application中组件的结构,加载app时会根据manifest去加载和实例化组件</li>
+<li><strong>Process</strong>: 一个应用程序占据一个进程，一个运行中的dalvik虚拟机实例就占据一个进程; 但是我们可以给组件设置android:process = “name”来让组件运行在独立进程中</li>
+<li><strong>Task</strong>: 一组以栈的形式来进行管理的相互关联的activity的集合，它是存在于framework层的一个跨应用的概念，控制界面的跳转和返回；task中所有的activity在一个叫做back stack的栈中进行管理</li>
+<li><strong>四种启动模式</strong><ul>
+<li><strong>standard</strong>: 默认的lauchmode, 同一个activity可以被实例化多次，在一个task栈中可以同时存在一个activity的多个实例，每次startActivity就新建一个实例入栈<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/standard.png" class="full-image"></li>
+<li><strong>singleTop</strong>: 先检查栈顶是否是该activity的实例，是则重用该实例，并且调用该实例的onNewIntent()方法，否则要新建实例压入栈顶<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/singleTop.png" class="full-image">  </li>
+<li><strong>singleTask</strong>: 先检查栈中是否包含该activity的实例，是则重用该实例，清理该实例上的所有activity并将其显示给用户；否则新建实例压入back stack<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/singleTask.png" class="full-image"></li>
+<li><strong>singleInstance</strong>: 以singleInstance模式启动的Activity具有全局唯一性，即整个系统中只会存在一个这样的实例；而且具备独占性，以该模式启动的Activity不能与其他Activity共存在一个task中<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/singleInstance.png" class="full-image"></li>
+</ul>
+</li>
+<li><p><strong>Activity以及Fragment生命周期</strong>:</p>
+<p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/activity_life.png" class="full-image" width="100%"></p>
+<p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/fragment_life.png" class="full-image" width="100%"></p>
+</li>
+<li><p><strong>Activity切换时生命周期交集</strong></p>
+<ul>
+<li><strong>当一个activity A启动了另外一个activity B，它们的生命周期是有交叉的</strong></li>
+<li>首先A的onPause()被调用；之后B的onCrate(), onStart()及onResume() 方法会被调用（此时B拥有用户焦点）；最后，如果A在屏幕上不可见，onStop()方法被调用；</li>
+<li>因此，我们在两个activities中传递数据，或者共享资源时（如数据库连接），需要在前一个activity的onPause()方法而不是onStop()方法中进行</li>
+</ul>
+</li>
+<li><p><strong>onSaveInstanceState() 和 onRestoreInstanceState()</strong>： <a href="http://www.cnblogs.com/hanyonglu/archive/2012/03/28/2420515.html" target="_blank" rel="external">Link</a><br> ①当某个activity变得”容易”被系统销毁时，该activity的<strong>onSaveInstanceState()</strong>就会被执行，除非该activity是被用户主动销毁的，例如当用户按BACK键的时候；他的调用有<strong>5种情况</strong>：(1)、<strong>当用户按下HOME键时</strong>：这是显而易见的，系统不知道你按下HOME后要运行多少其他的程序，自然也不知道activity A是否会被销毁，因此系统会调用onSaveInstanceState()，让用户有机会保存某些非永久性的数据。以下几种情况的分析都遵循该原则 (2)、<strong>长按HOME键，选择运行其他的程序时</strong>。(3)、<strong>按下电源按键（关闭屏幕显示）时</strong>。(4)、<strong>从activity A中启动一个新的activity时</strong>。(5)、<strong>屏幕方向切换时，例如从竖屏切换到横屏时</strong>。在屏幕切换之前，系统会销毁activity A，在屏幕切换之后系统又会自动地创建activity A，所以onSaveInstanceState()一定会被执行，且也一定会执行onRestoreInstanceState()。<br> ②<strong>onRestoreInstanceState()</strong>被调用的前提是，activity A“确实”被系统销毁了，而如果仅仅是停留在有这种可能性的情况下，则该方法不会被调用，例如，当正在显示activity A的时候，用户按下HOME键回到主界面，然后用户紧接着又返回到activity A，这种情况下activity A一般不会因为内存的原因被系统销毁，故activity A的onRestoreInstanceState方法不会被执行 此也说明上二者，大多数情况下不成对被使用。</p>
+</li>
+<li><p><strong>如果一个以SingleTask启动的的Activity实例，再新建一个该实例，Activity的执行流程？？？</strong>singleTask保证了在栈中Activity的唯一性，如果被SingleTask标记的Activity处于栈底，上面的Activity都会被pop出栈，这个时候被标记过SingleTask的Activity生命周期会做出调整：onNewIntent-&gt;onStart-&gt;onResume, 不再调用onCreate函数</p>
+</li>
+<li><strong>android:taskAffinity</strong>：每个Activity都有taskAffinity属性，这个属性指出了它希望进入的Task。如果一个Activity没有显式的指明该 Activity的taskAffinity，那么它的这个属性就等于Application指明的taskAffinity，如果 Application也没有指明，那么该taskAffinity的值就等于包名；例如 android:taskAffinity=””的意思是不依附于任何task，也就是自己新建一个task</li>
+</ol>
+<h3 id="Service">Service</h3><p><strong>Service</strong>默认运行在主线程，Service主要运行在后台执行一些监测行为或者其他加载网页等后台操作，可以通过iBinder或者广播与Activity进行交互</p>
+<ol>
+<li><strong>Service两种类型:本地和远程service</strong>: <ul>
+<li><strong>本地服务</strong>运行于主进程上的主线程,主进程被杀死后，服务便会终止;因为是在同一进程，因此不需要IPC，也不需要AIDL.</li>
+<li><strong>远程服务</strong>运行于独立进程的主线程,不受其他进程影响，有利于为多个进程提供服务;但是会占用一定资源，并且使用AIDL进行IPC通信;对应的独立进程的名字格式为所在包名加上指定android:process字符串。</li>
+</ul>
+</li>
+<li><strong>两种启动模式</strong>: <a href="http://www.jianshu.com/p/2fb6eb14fdec" target="_blank" rel="external">具体区别Link</a><ul>
+<li><strong>startService</strong>方法一旦服务开启跟开启者就没有任何关系了;开启者退出了，服务还在后台长期的运行;开启者不能调用服务里面的方法</li>
+<li>多次调用startService，该Service只能被创建一次，即该Service的onCreate方法只会被调用一次。但是每次调用startService，onStartCommand方法都会被调用;通过只能调用Context.stopService()方法结束服务</li>
+<li><strong>bindService</strong>的方式开启并绑定服务，绑定者挂了，服务也会跟着挂掉.绑定者可以调用服务里面的方法</li>
+<li>第一次执行bindService时，onCreate和onBind方法会被调用，但是多次执行bindService时，onCreate和onBind方法并不会被多次调用，即并不会多次创建服务和绑定服务;可以通过调用unbindService()方法来结束服务，调用该方法也会导致系统调用服务的onUnbind()—&gt;onDestroy()方法</li>
+<li><strong>注意:对于既使用了startService同时也使用了bindService启动的服务我们如果需要停止该服务，应该同时调用stopService与unbindService方法;单独调用unbindService将不会停止Service，而必须调用stopService或Service的stopSelf 来停止服务</strong></li>
+<li><strong>onDestroy方法中做清理工作</strong>例如停止在Service中创建并运行的线程。</li>
+<li><strong>绑定者Activity如何调用service里的方法呢？</strong> <ul>
+<li><strong>第一步</strong>自定义Service，在其内部重写onBind函数返回一个实现IBinder接口或者继承Binder的对象给绑定者—-这个自定义Binder是一个内部类，提供一个可以间接调用服务或者直接返回service对象的方法</li>
+<li><strong>第二步</strong>在Activity中调用bindService方法,服务成功绑定之后，新建一个ServiceConnection的匿名内部类对象，在回调方法onServiceConnected中会传递过来一个IBinder对象给Activity使用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Service生命周期</strong></p>
+<p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/service_life.png" class="full-image" width="100%"></p>
+</li>
+<li><p><strong>Service与Activity的通信机制</strong></p>
+<ul>
+<li>广播接收器: </li>
+<li>iBinder机制: </li>
+</ul>
+</li>
+<li><strong>IntentService</strong><ul>
+<li><strong>为什么要用IntentService</strong>如果Service将要运行耗时或者可能被阻塞的操作时，例如直接把耗时操作放在 Service 的 onStartCommand()方法中可能会出现ANR错误；所以应该在Service中重新启动一个新的线程来进行这些操作，这时我们就可以用IntentService</li>
+<li><strong>IntentService内部原理</strong>IntentService是一个用来处理异步请求的Service类的子类，当客户端通过startService(Intent)方法传递多个请求给IntentService；IntentService会在onCreate函数中新建HandlerThread去执行这些耗时操作，并新建ServiceHandler对象处理消息，当启动一个IntentService的时候接下来会调用onstart方法，该方法会给ServiceHandler发送消息，在ServiceHandler的handleMessage回调函数中调用onHandleIntent函数，<strong>因此我们可以在这个onHandleIntent方法里面处理我们的耗时工作</strong>；所以IntentService不仅有Service的功能,还有Handler处理和循环消息的功能  </li>
+<li><strong>IntentService对多个异步请求的处理流程</strong>IntentService使用队列的方式将请求的Intent加入队列，然后开启一个工作线程来处理队列中的Intent，对于异步的多次startService请求，IntentService会处理完成一个之后再处理第二个，每一个请求都会在一个单独的worker thread中处理，不会阻塞应用程序的主线程;当任务执行完后，IntentService 会自动停止，而不需要我们去手动控制。</li>
+</ul>
+</li>
+<li><strong>Service后台保活</strong>: <ul>
+<li><strong>提高Service的优先级或者提高Service所在进程的优先级</strong>：这个，也只能说在系统内存不足需要回收资源的时候，优先级较高，不容易被回收；实现方法有<br>①startForeground()方法来设置 Service为前台服务，优先级和正在运行的 Activity类似<br>②在AndroidManifest.xml文件中对于intent-filter可以通过android:priority = “1000”这个属性设置最高优先级，1000是最高值，如果数字越小则优先级越低</li>
+<li><strong>在onDestroy方法里重启service</strong>：这个倒还算挺有效的一个方法，但是，直接干掉进程的时候，onDestroy方法都进不来，更别想重启了</li>
+<li><strong>broadcast广播</strong>：和第3种一样，没进入onDestroy，就不知道什么时候发广播了，另外，在Android4.4以上，程序完全退出后，就不好接收广播了，需要在发广播的地方特定处理</li>
+<li><strong>Service的onStartCommand方法返回START_STICKY</strong>，这个也主要是针对系统资源不足而导致的服务被关闭。四个返回值<a href="http://www.jianshu.com/p/a9360c282ef0" target="_blank" rel="external">参考link</a>：start_sticky、start_no_sticky、START_REDELIVER_INTENT、START_STICKY_COMPATIBILITY</li>
+<li><strong>App进程之间互相唤醒</strong></li>
+<li><strong>通过JNI的方式（NDK编程），fork()出一个子线程作为守护进程，轮询监听服务状态</strong>。守护进程（Daemon）是运行在后台的一种特殊进程。它独立于控制终端并且周期性地执行某种任务或等待处理某些发生的事件。而守护进程的会话组和当前目录，文件描述符都是独立的。后台运行只是终端进行了一次fork，让程序在后台执行，这些都没有改变。</li>
+</ul>
+</li>
+</ol>
+<h3 id="BroadcastReceiver">BroadcastReceiver</h3><p><strong>广播接收器</strong>用于过滤接收并响应来自其他应用程序或者系统的广播消息；每次广播到来时, 会重新创建 BroadcastReceiver对象,并且调用onReceive()方法,执行完以后,该对象即被销毁。当onReceive()方法在 10 秒内没有执行完毕，就会导致ANR。如果需要执行长任务，那么就有必要使用Service；BroadcastReceiver会堵塞主线程。唯有onReceive()结束，主线程才得以继续进行。</p>
+<ol>
+<li><strong>种类和特点</strong>: <ul>
+<li><strong>全局广播包括有序广播、同步广播等</strong>，即发出去的广播可以被其他任何应用程序接收到，并且我们也可以接收来自于其他任何应用程序的广播。</li>
+<li>全局广播跨进程必然会造成安全问题，于是便有了<strong>本地广播</strong>：即只能在本应用程序中发送和接收广播。这就要使用到了LocalBroadcastManager这个类来对广播进行管理。</li>
+</ul>
+</li>
+<li><strong>静态注册和动态注册</strong>：</li>
+</ol>
+<h3 id="ContentProvider">ContentProvider</h3><h3 id="Android_View事件分发机制">Android View事件分发机制</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/scroller.png" class="full-image" width="100%"></p>
+<h3 id="Android_Touch事件分发">Android Touch事件分发</h3><ol>
+<li>Touch事件传递的相关函数有dispatchTouchEvent(决定是否分发事件的函数)、onInterceptTouchEvent(决定是否截停事件的函数)、onTouchEvent(决定是否消费本次事件的函数)   </li>
+<li>Touch事件会被封装成MotionEvent对象，该对象封装了手势按下、移动、松开等动作;事件类型分为ACTION_DOWN, ACTION_UP, ACTION_MOVE, ACTION_POINTER_DOWN, ACTION_POINTER_UP, ACTION_CANCEL，每个事件都是以ACTION_DOWN开始ACTION_UP结束。</li>
+<li>Touch事件通常从Activity#dispatchTouchEvent发出，只要没有被消费，会一直往下传递，到最底层的View; 如果Touch事件传递到的每个View都不消费事件，那么Touch事件会反向向上传递,最终交由Activity#onTouchEvent处理. </li>
+<li>Touch事件相关的类有View、ViewGroup、Activity, onInterceptTouchEvent为ViewGroup特有，可以拦截事件; Down事件到来时，如果一个View没有消费该事件，那么后续的MOVE/UP事件都不会再给它;OnTouchListener优先于onTouchEvent()对事件进行消费</li>
+<li><strong>Touch事件分发详细图示</strong><br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/touch.png" class="full-image" width="100%"></li>
+</ol>
+<h3 id="Android平台中实现数据存储的5种方式">Android平台中实现数据存储的5种方式</h3><ol>
+<li><strong>使用SharedPreferences存储数据</strong>：SharedPreferences是Android平台上一个轻量级的存储类，本质是基于XML文件存储key-value键值对数据，主要是保存一些常用的配置信息，提供了Long长整形、Int整形、String字符串型的保存。它分为多种权限，可以全局共享访问，最终是以xml方式来保存。SharedPreferences对象本身只能获取数据而不支持存储和修改，存储修改是通过Editor对象实现。<ul>
+<li><strong>存储步骤</strong>:①根据Context获取SharedPreferences对象 ②利用edit()方法获取Editor对象。 ③通过Editor对象存储key-value键值对数据。 ④通过commit()方法提交数据。</li>
+</ul>
+</li>
+<li><strong>文件存储数据</strong></li>
+<li><strong>SQLite数据库存储数据</strong></li>
+<li><strong>使用ContentProvider存储数据</strong></li>
+<li><strong>网络存储数据</strong></li>
+</ol>
+<h3 id="Android_屏幕适配方法总结"><a href="http://www.jianshu.com/p/ec5a1a30694b" target="_blank" rel="external">Android 屏幕适配方法总结</a></h3><h3 id="Android进程间通信方法">Android进程间通信方法</h3><ol>
+<li><strong>AIDL+Binder机制</strong><ul>
+<li><strong>AIDL</strong>：即Android接口定义语言，一种帮助实现Binder通信的工具。由于<strong>Android不同的进程不能共享内存</strong>，所以为了解决进程间通讯的问题，Android使用一种接口定义语言来公开服务的接口，本质上，AIDL非常像一个接口，通过公开接口，让别的进程调用该接口，从而实现进程间的通讯。<strong>具体用法</strong>: 只要用几条简单的函数声明，AIDL就会帮忙生成一个JAVA文件，包括了一个Proxy和Stub的访问接口，以及用于它们之间通信的Parcel，并保证Parcel的输入输出的顺序一致性，其中Proxy用于客户端进程，Stub用于Service端进程.<a href="http://www.jianshu.com/p/b9b15252b3d6" target="_blank" rel="external">AIDL基本用法</a></li>
+<li><strong>Binder机制</strong>：Android进程间通信是通过Binder来实现的，Binder机制使本地对象能够调用远程对象的方法，在不同进程中传递单向/双向消息。远程Service在Client绑定服务时，会在onBind()的回调中返回一个Binder，当Client调用bindService()与远程Service建立连接成功时，会拿到远程Binder实例，从而使用远程Service提供的服务。<strong>Binder优点</strong>是基于C/S通信模式，传输过程只需要一次拷贝，且为Client添加UID/PID身份，性能和安全性更好，并且Binder可以建立私有通道，这是linux的通信机制所无法实现的,因此Android进程间通信使用了Binder。</li>
+<li><strong>Binder通信模型</strong>: Android系统Binder机制中的四个组件Client、Server、Service Manager和Binder驱动程序的关系如下图<ol>
+<li>Client、Server和Service Manager实现在用户空间中，Binder驱动程序实现在内核空间中<ol>
+<li>Binder驱动程序和Service Manager在Android平台中已经实现，开发者只需要在用户空间实现自己的Client和Server</li>
+<li>Binder驱动程序提供设备文件/dev/binder与用户空间交互，Client、Server和Service Manager通过open和ioctl文件操作函数与Binder驱动程序进行通信</li>
+<li>Client和Server之间的进程间通信通过Binder驱动程序间接实现</li>
+<li>Service Manager是一个守护进程，用来管理Server，并向Client提供查询Server接口的能力<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Binder.jpg" class="full-image" width="100%"></li>
+</ol>
+</li>
+</ol>
+</li>
+<li><strong>Binder CS通信流程</strong>:<ol>
+<li><strong>Server</strong>作为众多Service的拥有者，当它想向Client提供服务时，得先去Service Manager（以后缩写成SM）那儿注册自己的服务。Server可以向SM注册一个或多个服务。</li>
+<li><strong>Client</strong>作为Service的使用者，当它想使用服务时，得向SM申请自己所需要的服务。Client可以申请一个或多个服务。</li>
+<li><strong>ServiceManager</strong>SM一方面管理Server所提供的服务，同时又响应Client的请求并为之分配相应的服务。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>Messenger</strong>：Messenger是基于AIDL实现的，服务端（被动方）提供一个Service来处理客户端（主动方）连接，维护一个Handler来创建Messenger，在onBind时返回Messenger的binder。<br>双方用Messenger来发送数据，用Handler来处理数据。Messenger处理数据依靠Handler，所以是串行的，也就是说，Handler接到多个message时，就要排队依次处理</li>
+<li><strong>Socket通信</strong>: 在服务端定义ServerSocket并使用一个while循环监听客户端端口，客户端使用Socket来请求端口，连通后就可以进行通信<h3 id="Android数据共享">Android数据共享</h3></li>
+<li><strong>ContentProvider</strong>: 系统四大组件之一，底层也是Binder实现，主要用来为不同应用程序之间提供数据共享；可以用文件，内存数据，数据库等一切来充当数据源</li>
+<li><strong>Bundle/Intent传递数据</strong>：可传递基本类型，String，实现了Serializable或Parcellable接口的数据结构。Serializable是Java的序列化方法，Parcellable是Android的序列化方法，前者代码量少，但I/O开销较大，一般用于输出到磁盘或网卡；后者实现代码多，效率高，一般用户内存间序列化和反序列化传输</li>
+<li><strong>本地文件共享</strong>：对同一个文件先后写读，从而实现传输，Linux机制下，可以对文件并发写，所以要注意同步。顺便一提，Windows下不支持并发读或写。</li>
+<li><p><strong>SharedPreferences</strong>：Preference提供了一种轻量级的数据存取方法，应用场合主要是数据比较少的配置信息。它以“键-值”（是一个Map）对的方式将数据保存在一个XML配置文件中</p>
+<pre><code><span class="keyword">Context</span> otherAppContext = createPackageContext(<span class="string">"com.gary.appdisplaycontrol"</span>, <span class="keyword">Context</span>.CONTEXT_IGNORE_SECURITY);
+SharedPreferences sharedPreferences = otherAppContext.getSharedPreferences(<span class="string">"preferences"</span>,<span class="keyword">Context</span>.MODE_WORLD_READABLE|<span class="keyword">Context</span>.MODE_MULTI_PROCESS)
+</code></pre></li>
+</ol>
+<h3 id="Json_VS_XML">Json VS XML</h3><p><a href="http://blog.csdn.net/wei78008023/article/details/44940579" target="_blank" rel="external">XML解析和Json解析简介以及两者的区别</a></p>
+<h3 id="Android安全">Android安全</h3><ol>
+<li>错误导出组件 </li>
+<li>参数校验不严 </li>
+<li>WebView引入各种安全问题,webview中的js注入 </li>
+<li>不混淆、不防二次打包 </li>
+<li>明文存储关键信息 </li>
+<li>错误使用HTTPS </li>
+<li>山寨加密方法 </li>
+<li>滥用权限、内存泄露、使用debug签名</li>
+</ol>
+<h3 id="设备横竖屏切换的时候，接下来会发生什么？">设备横竖屏切换的时候，接下来会发生什么？</h3><ol>
+<li>不设置Activity的android:configChanges时，切屏会重新调用各个生命周期，切横屏时会执行一次，切竖屏时会执行两次 </li>
+<li>设置Activity的android:configChanges=”orientation”时，切屏还是会重新调用各个生命周期，切横、竖屏时只会执行一次 </li>
+<li>设置Activity的android:configChanges=”orientation|keyboardHidden”时，切屏不会重新调用各个生命周期，只会执行onConfigurationChanged方法</li>
+</ol>
+<h3 id="谈谈你对Android中Context的理解?">谈谈你对Android中Context的理解?</h3><p>Context:包含上下文信息(外部值) 的一个参数. Android 中的 Context 分三种,Application Context ,Activity Context ,Service Context.<br>它描述的是一个应用程序环境的信息，通过它我们可以获取应用程序的资源和类，也包括一些应用级别操作，例如：启动一个Activity，发送广播，接受Intent信息等</p>
+<h3 id="如何缩减APK包大小？">如何缩减APK包大小？</h3><ol>
+<li><strong>代码</strong><br> 保持良好的编程习惯，不要重复或者不用的代码，谨慎添加libs，移除使用不到的libs。<br>使用proguard混淆代码，它会对不用的代码做优化，并且混淆后也能够减少安装包的大小。<br>native code的部分，大多数情况下只需要支持armabi与x86的架构即可。如果非必须，可以考虑拿掉x86的部分。 </li>
+<li><strong>资源</strong><br>使用Lint工具查找没有使用到的资源。去除不使用的图片，String，XML等等。 assets目录下的资源请确保没有用不上的文件。<br>生成APK的时候，aapt工具本身会对png做优化，但是在此之前还可以使用其他工具如tinypng对图片进行进一步的压缩预处理。<br>jpeg还是png，根据需要做选择，在某些时候jpeg可以减少图片的体积。 对于9.png的图片，可拉伸区域尽量切小，另外可以通过使用9.png拉伸达到大图效果的时候尽量不要使用整张大图。 </li>
+<li>策略<br>有选择性的提供hdpi，xhdpi，xxhdpi的图片资源。建议优先提供xhdpi的图片，对于mdpi，ldpi与xxxhdpi根据需要提供有差异的部分即可。<br>尽可能的重用已有的图片资源。例如对称的图片，只需要提供一张，另外一张图片可以通过代码旋转的方式实现。<br>能用代码绘制实现的功能，尽量不要使用大量的图片。例如减少使用多张图片组成animate-list的AnimationDrawable，这种方式提供了多张图片很占空间。</li>
+</ol>
+<h3 id="Android插件化与动态加载">Android插件化与动态加载</h3><ol>
+<li><strong>为什么要插件化？？？And它是什么？有什么好处？</strong>当一个app的方法数超过了一个 Dex 最大方法数 65535 的上限，因而便有了插件化的概念，<strong>Android插件化</strong>指将一个程序划分为不同的部分，也就是将一个App划分为多个插件（Apk或相关格式）比如一般App的皮肤样式就可以看成一个插件; <strong>插件化的好处</strong>包括：(1) 模块解耦(2) 可以动态升级(3) 高效并行开发(编译速度更快) (4) 按需加载，内存占用更低 (5) 节省升级流量</li>
+<li><strong>插件化的原理实际是 Java ClassLoader 的原理</strong>: Android 有自己的 ClassLoader，分为 dalvik.system.DexClassLoader 和 dalvik.system.PathClassLoader，区别在于: <ul>
+<li><strong>PathClassLoader</strong>: 不能直接从 zip 包中得到 dex，因此只支持直接操作 dex 文件或者已经安装过的 apk（因为安装过的 apk 在 cache 中存在缓存的 dex 文件）</li>
+<li><strong>DexClassLoader</strong> 可以加载外部文件系统中的 apk、jar 或 dex文件，并且会在指定的 outpath 路径存放其 dex 文件。</li>
+<li><strong>此外还有URLClassLoader</strong> ：可以加载java中的jar，但是由于dalvik不能直接识别jar，所以此方法在Android中无法使用，尽管还有这个类</li>
+</ul>
+</li>
+<li><strong>Android热加载或Android动态部署</strong>指App在运⾏状态下动态加载某个模块，从而新增功能或改变某⼀部分行为. 例如一个app（称之为宿主程序）去本地文件中动态加载apk文件并将其放在自己的进程中执行 </li>
+<li><strong>为什么有dex文件以及为什么要有DexClassLoader？？？</strong>Android应用程序，本质上使用的是java开发，使用标准的java编译器编译出Class文件，和普通的java开发不同的地方是把class文件再重新打包成dex类型的文件，这种重新打包会对Class文件内部的各种函数表、变量表等进行优化，最终产生了dex文件。dex文件是一种经过android打包工具优化后的Class文件，因此加载这样特殊的Class文件就需要特殊的类装载器；所以android中提供了DexClassLoader类</li>
+</ol>
+<h3 id="AsyncTask和Handler,Looper">AsyncTask和Handler,Looper</h3><ol>
+<li><strong>网络请求交互</strong>：参见百度锁屏项目</li>
+<li><strong>Android AsynTask实现多任务下载管理</strong>:</li>
+</ol>
+<pre><code><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoAsyncTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">String</span>, <span class="title">Integer</span>, <span class="title">Bitmap</span>&gt; </span>{
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPreExecute</span><span class="params">()</span> </span>{
+        <span class="keyword">super</span>.onPreExecute();
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> Bitmap <span class="title">doInBackground</span><span class="params">(String... params)</span> </span>{
+        <span class="keyword">return</span> <span class="keyword">null</span>;
+    }   
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(Bitmap result)</span> </span>{
+        <span class="keyword">super</span>.onPostExecute(result);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onProgressUpdate</span><span class="params">(Integer... progress)</span> </span>{
+        <span class="keyword">super</span>.onProgressUpdate(progress);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCancelled</span><span class="params">()</span> </span>{
+        <span class="keyword">super</span>.onCancelled();
+    }
+}
+</code></pre><ul>
+<li><strong>AsyncTask<string,integer,bitmap>参数解析</string,integer,bitmap></strong><ol>
+<li>params 启动任务执行的输入参数，比如HTTP请求的URL(doInBackground函数的参数类型)</li>
+<li>progress 后台任务执行的百分比（onProgressUpdate函数的参数类型）</li>
+<li>result 后台执行任务最终返回的结果，比如String(doInBackground返回的参数类型</li>
+<li>new AsynTask.execute(url); execute方法内部调用executeOnExecutor()方法，执行之后AsyncTask会把任务交给线程池，由线程池来管理创建Thread和运行Therad执行任务</li>
+<li>使用AsyncTask类，以下是几条必须遵守的准则：AsyncTask的实例必须在UI thread中创建; execute方法必须在UI thread中调用,并且只能调用一次；3.0版本之后的AsyncTask同时只能执行一个任务，但是提供executeOnExecutor(executor)来接收自定义ThreadPoolExecutor线程池，3.0之前默认为SerialExecutor，其核心线程池的大小是5，线程池总大小为128，缓存任务队列是10</li>
+</ol>
+</li>
+<li><p><strong>AsyncTask内部实现原理</strong></p>
+<ol>
+<li>AsyncTask的本质是一个线程池，AsyncTask在构造函数中新建一个继承Callable接口的WorkerRunnable类对象，重载call方法，在call方法中执行语句<strong>return postResult(doInBackground(mParams));</strong>执行doInBackground中的异步任务；然后新建FutureTask接受WorkerRunnable作为参数，提交到线程池执行；在FutureTask的重载done函数中调用get方法接收线程执行的返回结果并定义任务状态变化后的操作（包括失败和成功），再调用postResult方法利用handler(一个static class InternalHandler extends Handler对象)发送message给UI线程 </li>
+<li>AsyncTask派生出的子类可以实现不同的异步任务，这些任务都是提交到静态的线程池中执行; 线程池中的工作线程执行doInBackground(mParams)方法执行异步任务</li>
+<li>当任务状态改变(例如进度更新，执行成功，取消)之后，线程池中的工作线程会向UI线程发送消息，UI线程中的AsyncTask内部的InternalHandler响应这些消息并进行处理；例如：如果当前任务被取消掉了，就会调用onCancelled()方法不再调用onPostExecute方法，如果没有被取消，则调用onPostExecute()方法，这样当前任务的执行就全部结束了</li>
+</ol>
+</li>
+<li><p><strong>AsyncTask和Handler,Looper之间的区别联系</strong></p>
+<ol>
+<li>AsyncTask是对Handler与Thread的封装。</li>
+<li>AsyncTask在代码上比Handler要轻量级别，但实际上比Handler更耗资源，因为AsyncTask底层是一个线程池，而Handler仅仅就是发送了一个消息队列。但是，如果异步任务的数据特别庞大，AsyncTask线程池比Handler节省开销，因为Handler需要不停的new Thread执行</li>
+<li>AsyncTask的实例化只能在主线程，Handler可以随意，只和Looper有关系</li>
+</ol>
+</li>
+</ul>
+<ol>
+<li><p><strong>Handler+Looper+MessageQueue异步信息处理系统模型</strong> <a href="http://m.blog.csdn.net/article/details?id=38377229" target="_blank" rel="external">Link</a></p>
+<ul>
+<li><strong>Handler+Looper+MessageQueue概念</strong> <strong>Looper</strong>本质是一个ThreadLocal变量，它持有一个MessageQueue消息队列，负责实现消息循环和消息派发; <strong>Handler</strong>通过post和sendMessage方法去负责收发Message,包括push新消息到MessageQueue或者接收Looper从其持有的MessageQueue中取出来的消息; MessageQueue是一个FIFO消息队列</li>
+<li><p><strong>异步通信流程</strong>：<br>  ① <strong>消息分发和处理</strong>: 首先一个线程通过调用Looper.prepare()，为自己创建一个唯一的Looper对象，在该Looper对象的构造函数中会执行<strong>mQueue = new MessageQueue(quitAllowed);</strong>去创建一个消息队列；然后我们新建一个或者多个Handler并重载他们的handleMessage回调函数，用于处理其他线程中发送过来的消息；接下来我们调用<strong>Looper.loop</strong>方法，在该方法中会建立一个无限循环体，通过调用<strong>msg.target.dispatchMessage(msg);</strong>函数(其内部调用Handler的handleMessage回调函数)不断地从消息队列中取出message，分发给不同的Handler target.<br>  (注：在主线程中默认新建Looper对象不需要显示调用prepare和loop函数，Looper、MessageQueue和Handler都是在同一个线程中)  </p>
+<p>  ② <strong>Handler发送消息</strong>: Handler在初始化时就会调用<strong>mLooper = Looper.myLooper(); mQueue = mLooper.mQueue;</strong>和Looper以及消息队列相关联，然后在子线程中调用post或者sendMessage方法发送消息插入到消息队列中，这两个函数内部的调用顺序大致为sendMessageDelayed—&gt; sendMessageAtTime—&gt; enqueueMessage，在enqueueMessage函数中会执行<em>msg.target = this;</em>这样Looper就可以识别每条信息来自于哪个Handler，以便于分发消息的正确性</p>
+<p>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Looper.jpg" class="full-image" width="100%"></p>
+</li>
+<li><p><strong>Handler更新UI</strong>：Android系统中耗时操作不能放在主线程进行，例如网络请求、数据库操作、复杂计算等逻辑；所以他们一般放在AsyncTask或者新建子线程进行，然后通过Handler发送消息通知主线程；如果这些耗时操作涉及到UI界面的更新，可以借助于(Android系统UI的更新必须放在主线程进行)Handler发送消息给UI线程更新UI</p>
+</li>
+<li><p><strong>Handler更新UI实例</strong>：</p>
+<pre><code> <span class="comment">// UI线程新建的Handler，在handleMessage()中更新UI</span>
+ <span class="keyword">private</span> Handler mHandler = <span class="keyword">new</span> Handler() {
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">handleMessage</span> <span class="params">(Message msg)</span> </span>{
+        <span class="keyword">switch</span>(msg.what) {
+        <span class="keyword">case</span> MSG_SUCCESS:
+            mImageView.setImageBitmap((Bitmap) msg.obj);
+            <span class="keyword">break</span>;
+        <span class="keyword">case</span> MSG_FAILURE:
+            <span class="keyword">break</span>;
+        }
+    }
+};
+
+<span class="comment">// 子线程中获取网络图片并发送message通知UI线程更新显示图片</span>
+Runnable runnable = <span class="keyword">new</span> Runnable() {
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
+        HttpClient hc = <span class="keyword">new</span> DefaultHttpClient();
+        HttpGet hg = <span class="keyword">new</span> HttpGet(<span class="string">"http://www.oschina.net/img/logo.gif"</span>);
+        <span class="keyword">final</span> Bitmap bm;
+
+        <span class="keyword">try</span> {
+            HttpResponse hr = hc.execute(hg);
+            bm = BitmapFactory.decodeStream(hr.getEntity().getContent());
+        } <span class="keyword">catch</span> (Exception e) { 
+            mHandler.obtainMessage(MSG_FAILURE).sendToTarget();     
+            <span class="keyword">return</span>;
+        }
+        <span class="comment">// Handler发送消息可以new但是最好使用obtainMessage，因为Message内部</span>
+        <span class="comment">// 通过next实现一个缓存消息链表,使用obtain方法获取Message使用完之后系统</span>
+        <span class="comment">// 会调用recycle方法进行回收，节省内存</span>
+        mHandler.obtainMessage(MSG_SUCCESS,bm).sendToTarget();
+        }
+};
+
+<span class="keyword">new</span> Thread(runnable).start();                        
+</code></pre></li>
+<li><p><strong>子线程中Handler结合Looper处理其他线程发送过来的消息实例</strong></p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">LooperThread</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Thread</span> {</span>
+      public <span class="type">Handler</span> mHandler;
+      public void run() {
+             <span class="type">Looper</span>.prepare();
+
+             mHandler = <span class="keyword">new</span> <span class="type">Handler</span>() {
+                      public void handleMessage(<span class="type">Message</span> msg) {
+
+                      }                                                                                                                                                                                                                     };
+
+             <span class="type">Looper</span>.loop();
+
+      }
+}
+</code></pre></li>
+<li><p>一个线程只能拥有一个Looper实例(该Looper对象可以通过Looper.myLooper()来获取)，对应着一个MessageQueue消息队列，但是可以拥有多个Handler; 主线程初始化时默认创建一个Looper对象，可以通过Looper.getMainLooper()来获取他；</p>
+</li>
+<li>主线程中可以直接新建Handler，但是子线程中新建Handler需要先调用Looper.prepare()</li>
+<li>消息队列其实内部实现是一个管道通信机制，当队列为空时线程进入等待状态，不为空时才进入处理消息状态；enqueueMessage方法也分为2种情况，队列为空直接将新message添加到队列头部，否则需要将消息按照时间先后顺序插入到合适位置，因为消息要按照处理时间排序</li>
+<li><p><strong>handler可能引发的内存泄露和解决方案</strong></p>
+<ol>
+<li>当使用内部类（包括匿名类）来创建Handler的时候，Handler对象会隐式地持有一个外部类对象（通常是一个Activity）的引用。而Handler通常会伴随着一个耗时的后台线程一起出现，这个后台线程在任务执行完毕之后，通过消息机制通知Handler，然后Handler把消息发送到UI线程。然而，如果用户在耗时线程执行过程中关闭了Activity（正常情况下Activity不再被使用，它就有可能在GC检查时被回收掉），由于这时线程尚未执行完，而该线程持有Handler的引用，这个Handler又持有Activity的引用，就导致该Activity暂时无法被回收（即内存泄露）</li>
+<li><p>解决方案:</p>
+<ul>
+<li><p>Handler声明为静态内部类,不再持有外部类Activity,在其内部声明一个Activity的弱引用来操作Activity中的对象</p>
+<pre><code>static <span class="class"><span class="keyword">class</span> <span class="title">TestHandler</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Handler</span> {</span>
+    <span class="type">WeakReference</span>&lt;<span class="type">Activity</span> &gt; mActivityReference;
+
+    <span class="type">TestHandler</span>(<span class="type">Activity</span> activity) {
+        mActivityReference= <span class="keyword">new</span> <span class="type">WeakReference</span>&lt;<span class="type">Activity</span>&gt;(activity);
+    }
+
+    <span class="annotation">@Override</span>
+    public void handleMessage(<span class="type">Message</span> msg) {
+        <span class="keyword">final</span> <span class="type">Activity</span> activity = mActivityReference.get();
+        <span class="keyword">if</span> (activity != <span class="literal">null</span>) {
+            mImageView.setImageBitmap(mBitmap);
+        }
+    }
+}
+</code></pre></li>
+<li><p>①在关闭Activity的时候停掉你的后台线程。线程停掉了，就相当于切断了Handler和外部连接的线，Activity自然会在合适的时候被回收；②如果你的Handler是被delay的Message持有了引用，那么使用相应的Handler的removeCallbacks()方法，把消息对象从消息队列移除        </p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><strong>HandlerThread</strong>是一个Looper,Handler,Thread的组合实现；在其构造函数中对Looper进行初始化，并提供一个Looper对象给新创建的Handler对象，使得Handler处理消息事件在子线程中处理</li>
+</ul>
+</li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Android/"> #Android </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/04/08/实习项目总结/">
+                实习项目总结
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-04-08
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/04/08/实习项目总结/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/08/实习项目总结/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="自我介绍_1min_慢，停顿">自我介绍 1min 慢，停顿</h3><ol>
+<li>姓名 —-&gt; 学习经历(中大科大软件专业) 基于兴趣和职业规划 —-&gt; 本科到硕士都注重计算机基础知识积累，对Java语言基础，计算机网络/MySQL数据库原理，常见数据结构和算法比较熟悉，例如常见排序，链表，二叉树，队列栈等；平常对移动端和web端研发也具有浓厚兴趣</li>
+<li>一直以来也比较注重实践，陆续参加了几个实习和项目，提现学习和工作能力(先后参与3份实习和2个校内科研项目，选择与岗位相符的两段经历进行1-2句话简述，做了什么和达到了什么成就) </li>
+<li>业余爱好，羽毛球，健身，阅读和利用coursera进行业余学习</li>
+<li>对目标岗位的理解和想法，应聘该岗位的强烈意愿以及自身吻合度</li>
+<li>经历：前期社会活动兴趣的广泛性+后期对专业的专注性；性格：程序员中的外向型</li>
+</ol>
+<h3 id="网易">网易</h3><ol>
+<li>学习Spring框架使用和原理</li>
+<li>接口实现</li>
+<li>网易实习时有挑战性的地方以及，最大的贡献<ul>
+<li>自己扮演的角色应该是<strong>需求开发者和主动学习者的角色</strong> ①快速学习能力的体现以及快速学习的方法，学习使用redis，Spring框架开发restful 数据接口②沟通与合作：与产品，前端，测试之间分工合作②贡献818的部分核心需求，开奖时服务端通过张连接WebSocket主动推送给app开奖信息；设置一个观察者观察开奖数据；然后查表中未中奖用户的信息进行推送</li>
+</ul>
+</li>
+</ol>
+<h3 id="Kactus">Kactus</h3><ol>
+<li>ECO餐厅食用油回收系统<ul>
+<li>Android端缓存机制的实现，采用二级缓存，LRUcache内存缓存和DiskLruCache文件缓存，同时模拟浏览器缓存机制来分析http请求过程的请求头内容来确定cache-control策略<ol>
+<li><strong>App请求server数据流程</strong>: 当我们第一次打开应用获取图片时，先到网络去下载图片，然后依次存入内存缓存，磁盘缓存;以后每次加载图片的时候都优先去LRUCache内存缓存当中读取，当读取不到的时候则回去DiskLruCache硬盘缓存中读取，而如果硬盘缓存仍然读取不到的话，就从网络上请求原始数据。</li>
+<li><strong>App的二级缓存实现</strong>: 变化频繁的小数据(例如订单列表)都采用LRUCache,以<url, data="">的键值对形式存储数据, 缓存时间为应用开启到关闭时间段; 稳定的大文件数据(例如图片)采用DiskLruCache,缓存时间可以根据需求自定义;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File;</url,></li>
+<li><strong>缓存管理和清理策略</strong>：<ul>
+<li>① <strong>现用方法</strong>App根据服务器响应头部里边的expires(缓存过期的时间（绝对时间）),Last-Modified(服务器响应的资源最终修改时间), Cache-Control(资源的有效期)等内容来确定是否需要将数据缓存到DiskLruCache中，以及缓存的保留时间，<strong>具体实现</strong> 每次请求url得到响应结果时会解析头部Cache-Control去判断该响应资源是否需要缓存以及缓存过期时间等内容；然后将资源URL和这些缓存时间相关的http头部信息(比如expires(缓存过期的时间))一起存储到SQLite数据库，然后每次加载资源都会先根据url查询数据库看本地缓存是否过期，是否需要重新发送网络请求并更新缓存        </li>
+<li>② <strong>其它方法</strong>每次去读取缓存文件时先调用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据自定义的缓存时间判断该缓存是否过期，如果过期则重新请求文件，不然直接从缓存加载，这样就能实现缓存文件定时清理</li>
+<li>③ <strong>每次服务器资源变化时客户端怎么得到通知？</strong>, 客户端定时轮询请求某个指定url并解析返回的json判断某些数据是否变化，变化就重新请求该数据; 或者手动刷新，socket长连接</li>
+</ul>
+</li>
+<li><ul>
+<li><strong>FIFO</strong>First In First Out，先进先出;核心原则就是：如果一个数据最先进入缓存中，则应该最早淘汰掉。也就是说，当缓存满的时候，应当把最先进入缓存的数据给淘汰掉。</li>
+<li><strong>LFU</strong>：Least Frequently Used，最不经常使用;在一段时间内，数据被使用次数最少的，优先被淘汰。</li>
+<li><strong>LRU</strong>: Least Recently Used，最近最少使用策略，其核心思想是“如果数据最近被访问过，那么将来被访问的几率也更高”；简单的说就是缓存一定量的数据，当超过设定的阈值时就把一些<strong>最近最少使用的数据</strong>删除掉;<strong>最常见的实现算法</strong>是使用一个链表保存缓存数据，①新数据插入到链表头部；②每当缓存命中（即缓存数据被访问），则将数据移到链表头部；③当链表满的时候，将链表尾部的数据丢弃。<a href="https://segmentfault.com/a/1190000003743083" target="_blank" rel="external">LRUCache双向链表+HashMap实现</a> <a href="https://segmentfault.com/a/1190000005922083" target="_blank" rel="external">LRUCache LinkedHashMap实现</a></li>
+<li><strong>LRU-K</strong>中的K代表最近使用的次数，因此LRU可以认为是LRU-1。LRU-K的主要目的是为了解决LRU算法“缓存污染”的问题，其核心思想是将“最近使用过1次”的判断标准扩展为“最近使用过K次”。<strong>实现</strong>：相比LRU，LRU-K需要多维护一个队列，用于记录所有缓存数据被访问的历史。只有当数据的访问次数达到K次的时候，才将数据放入缓存。当需要淘汰数据时，LRU-K会淘汰第K次访问时间距当前时间最大的数据</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<pre><code>缓存图片举例：
+
+
+        <span class="comment">// 获取应用可占内存的1/8作为缓存</span>
+        <span class="built_in">int</span> maxSize = (<span class="built_in">int</span>) (Runtime.getRuntime().maxMemory() / <span class="number">8</span>);
+        <span class="comment">// 实例化LruCaceh对象</span>
+        mLruCache = <span class="keyword">new</span> LruCache&lt;<span class="keyword">String</span>, Bitmap&gt;(maxSize) {
+            @Override
+            <span class="keyword">protected</span> <span class="built_in">int</span> sizeOf(<span class="keyword">String</span> <span class="variable">key</span>, Bitmap bitmap) {
+                <span class="keyword">return</span> bitmap.getRowBytes() * bitmap.getHeight();
+            }
+        };
+         mDiskLruCache=DiskLruCache.<span class="built_in">open</span>(getDiskCacheDir(context.getApplicationContext(),
+         <span class="string">"xxxxx"</span>),     getAppVersion(context), <span class="number">1</span>, DISKMAXSIZE);
+        <span class="comment">// 缓存操作</span>
+        mLruCache.<span class="built_in">get</span>(url);
+        mLruCache.put(url, bitmap);
+        bitmap = BitmapFactory.decodeStream(mDiskLruCache.<span class="built_in">get</span>(url).getInputStream(<span class="number">0</span>));
+        DiskLruCache.Editor editor = mDiskLruCache.edit(<span class="variable">key</span>);
+        OutputStream outputStream = editor.newOutputStream(<span class="number">0</span>);
+        editor.commit();
+</code></pre><ol>
+<li><p>采用Java WebSocket编程取代传统的非实时http请求连接模式</p>
+<ul>
+<li><p><strong>为什么要用WebSocket实时交互数据？</strong>: 传统Web应用的信息交互过程通常是客户端发出一个请求，服务器端接收和审核完请求后进行处理并返回结果给客户端，然后客户端浏览器将信息呈现出来，但是对于那些实时要求比较高的应用来说，比如说在线游戏、新闻在线播报、RSS 订阅推送等等，当客户端浏览器准备呈现这些信息的时候，这些信息在服务器端可能已经过时了;所以我们考虑采用webSocket    <strong>常见的模拟实时应用方法</strong> </p>
+<p>  <strong>轮询</strong>：最早的一种实现实时 Web 应用的方案。客户端以一定的时间间隔向服务端发出请求，以频繁请求的方式来保持客户端和服务器端的同步。服务器端的数据可能并没有更新但是依然请求，会带来很多无谓的网络传输，所以这是一种非常低效的实时方案。  </p>
+<p>  <strong>长轮询</strong>：为了降低无效的网络传输，当服务器端没有数据更新的时候，连接会保持一段时间周期直到数据或状态改变或者时间过期，通过这种机制来减少无效的客户端和服务器间的交互  </p>
+<p>  <strong>流</strong>： 流技术方案通常就是在客户端的页面使用一个隐藏的窗口向服务端发出一个长连接的请求。服务器端接到这个请求后作出回应并不断更新连接状态以保证客户端和服务器端的连接不过期。通过这种机制可以将服务器端的信息源源不断地推向客户端。这种机制需要针对不同的浏览器设计不同的方案来改进用户体验，同时这种机制在并发比较大的情况下，对服务器端的资源是一个极大的考验。</p>
+<p>  <strong>WebSocket原理和建立过程</strong>: WebSocket是一个基于TCP连接的双向通道；为了建立一个 WebSocket 连接，客户端浏览器首先要向服务器发起一个 HTTP 请求，这个请求和通常的 HTTP 请求不同，包含了一些附加头信息，其中附加头信息”Upgrade: WebSocket”表明这是一个申请协议升级的 HTTP 请求，服务器端解析这些附加的头信息然后产生应答信息返回给客户端，客户端和服务器端的 WebSocket 连接就建立起来了，双方就可以通过这个连接通道自由的传递信息，并且这个连接会持续存在直到客户端或者服务器端的某一方主动的关闭连接。    </p>
+<pre><code><span class="annotation">@ServerEndpoint</span>(<span class="string">"/websocket"</span>)
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebSocketTest</span> </span>{
+
+  <span class="annotation">@OnMessage</span>
+  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onMessage</span><span class="params">(String message, Session session)</span>
+    <span class="keyword">throws</span> IOException, InterruptedException </span>{
+
+    System.out.println(<span class="string">"Received: "</span> + message);
+
+    <span class="comment">// Send the first message to the client</span>
+    session.getBasicRemote().sendText(<span class="string">"This is the first server message"</span>);
+
+    <span class="comment">// Send 3 messages to the client every 5 seconds</span>
+    <span class="keyword">int</span> sentMessages = <span class="number">0</span>;
+    <span class="keyword">while</span>(sentMessages &lt; <span class="number">3</span>){
+      Thread.sleep(<span class="number">5000</span>);
+      session.getBasicRemote().
+        sendText(<span class="string">"This is an intermediate server message. Count: "</span>
+          + sentMessages);
+      sentMessages++;
+    }
+
+    <span class="comment">// Send a final message to the client</span>
+    session.getBasicRemote().sendText(<span class="string">"This is the last server message"</span>);
+  }
+
+  <span class="annotation">@OnOpen</span>
+  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onOpen</span><span class="params">()</span> </span>{
+    System.out.println(<span class="string">"Client connected"</span>);
+  }
+
+  <span class="annotation">@OnClose</span>
+  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClose</span><span class="params">()</span> </span>{
+    System.out.println(<span class="string">"Connection closed"</span>);
+  }
+
+}
+</code></pre><p>  <strong>如何使用Encoder和Decoder传输更复杂的数据</strong>：Websocket使用Decoder将文本消息转换成Java对象，然后传给@OnMessage方法处理; 而当对象写入到session中时，Websocket将使用Encoder将Java对象转换成文本，再发送给客户端。</p>
+</li>
+<li><p>整个项目从简单的多线程优化到采用线程池来实现xml数据文件的获取</p>
+</li>
+<li>总体项目图<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/kactus项目.JPG" width="100%"></li>
+</ul>
+</li>
+</ol>
+<h3 id="Baidu">Baidu</h3><ol>
+<li><p>Duwear项目短信管理模块: 目的是将手机短信库的变化情况通知到wear端</p>
+<ol>
+<li><strong>SMSObserver</strong>继承ContentProvider类实现观察者模式，注册了一个短信数据库的观察者，发生变化该类都会被通知；在重载函数onChange中进行操作比对判断数据库变化情况，只知道变化，但是不知道具体操作？如何判断用户是标为已读还是删除，新建短信</li>
+<li><strong>SmsReceivedListener接口</strong>：两个回调函数，作为一个接口参数传到SMSObserver的构造函数中，然后一旦判断是新短信还是短信已读，就调用其回调函数</li>
+<li><strong>SmsRpcService类</strong>：继承自上边的接口，在回调函数中将这个操作判断出来发送给手表</li>
+<li><strong>SmsUtils</strong>: 4个函数，查询短信数据库，标为已读的数据库操作函数</li>
+<li><p>SMSObserver类中的具体的判断方式和优化过程</p>
+<ul>
+<li>从维护所有信息的set到只维护未读信息的内容，信息实体占用内存很大，内存优化；</li>
+<li><p>ArrayList到HashSet对比与区别：防止出现重复信息，去重速度很快因为使用HashTable中的hashCode()以及equals进行查找去重；</p>
+</li>
+<li><p>多次读取unreadSet并对两个set进行比对，removeAll和AddAll求补集并集来比对两个未读信息集合;两个方法都用到了hashCode和equals，所以SmsEntity对象中hashcode和equals方法的同时重载；直接removeAll新set可以判断出哪些信息被标为已读，AddAll新set再removeAll旧set可以判断得到新增加的短信；比如1，2，3和1，2，4，5</p>
+</li>
+<li><p><strong>java集合中的浅复制和深复制，clone集合不影响原集合</strong></p>
+<ol>
+<li><p><strong>浅复制</strong>: 复制后的对象与原对象所有变量的值相同，包括引用变量，浅复制时只会复制引用变量本身，不会复制它指向的对象本身</p>
+</li>
+<li><p><strong>深复制</strong>: 复制后的对象与原对象所有变量的值相同，但是不包括引用变量，深复制时会复制引用变量指向的对象本身，所以引用值发生改变</p>
+</li>
+<li><p><strong>Clone()方法和Cloneable接口</strong>: Cloneable接口是一个不包含方法的标志接口，一个类必须先继承它才能在其内部调用super.clone()方法，否则会抛出不支持clone的异常;clone()方法是一个native方法，拷贝对象时已经包括一部分原对象信息，效率优于使用新建对象再一一复制变量的方式;重写clone()方法需要先调用super.clone()方法，该方法会开辟一块新的内存用于拷贝原对象，将原对象的内容一一复制到新对象的内存空间中，它是一种浅复制;如果要实现深复制，需要对复制的对象中的所有引用变量对应的对象也进行复制(具体操作:重写引用对象的clone方法，在其中调用super.clone，然后在上层对象的重载clone方法中调用该对象的clone方法)</p>
+</li>
+<li><p><strong>序列化实现深复制</strong>: 序列化主要用于将内存中对象状态写入数据库或者文件，以及利用Socket在网络中传输对象;一个对象要能够被序列化需要该类实现Serializable接口，可序列化类的子类默认也是可以被序列化的，不需要再次实现Serializable接口；利用序列化进行深复制的前提是该对象及其内部的引用到的对象都是可序列化的，这样对对象序列化时才能递归地保存对象及其引用对象的数据</p>
+<pre><code>deepClone() {    
+   <span class="comment">//序列化:将内存中对象状态转化为字节流，写入目标输出流</span>
+   ByteArrayOutoutStream bo=<span class="keyword">new</span> ByteArrayOutputStream();    
+   ObjectOutputStream oo=<span class="keyword">new</span> ObjectOutputStream(bo);
+   <span class="comment">//    </span>
+   oo.writeObject(<span class="keyword">this</span>);    
+   <span class="comment">//反序列化:读取源输入流中的字节流重建一个内存中相同状态的对象     </span>
+   ByteArrayInputStream bi=<span class="keyword">new</span> ByteArrayInputStream(bo.toByteArray());    
+   ObjectInputStream oi=<span class="keyword">new</span> ObjectInputStream(bi);    
+   <span class="keyword">return</span>(oi.readObject());    
+}
+</code></pre></li>
+<li><p>当一个类声明要实现Serializable接口时，只是表明该类参加序列化协议;Java提供的ObjectInputStream和ObjectOutputStream将数据流功能扩展至可读写对象 。在ObjectInputStream中用readObject()方法可以直接读取一个对象，ObjectOutputStream中用writeObject()方法可以直接将对象保存到输出流中; 序列化只能保存对象的非静态成员变量，不能保存任何的成员方法和静态成员变量，而且序列化保存的只是变量的值，对于变量的任何修饰符都不能保存。          </p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>工厂模式</strong>生产手表View：需要生成许多不同的CardView，利用CardFactory中的BuildPage函数<ul>
+<li>简单工厂模式:工程类+抽象产品类+具体产品类；根据参数的不同返回不同类的实例。专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类</li>
+<li>工厂方法模式: 抽象产品角色，具体产品角色，抽象工厂角色，具体工厂角色;工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，这样做的目的是将产品类的实例化操作延迟到工厂子类中完成，即通过工厂子类来确定究竟应该实例化哪一个具体产品类;一个抽象产品类，可以派生出多个具体产品类。一个抽象工厂类，可以派生出多个具体工厂类。每个具体工厂类只能创建一个具体产品类的实例。</li>
+<li>抽象工厂模式: 多个抽象产品类，每个抽象产品类可以派生出多个具体产品类。一个抽象工厂类，可以派生出多个具体工厂类。每个具体工厂类可以创建多个具体产品类的实例。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>百度锁屏项目: <a href="https://charles-xiao.github.io/2016/05/18/Android%E8%87%AA%E5%AE%9A%E4%B9%89View%E5%AE%9E%E7%8E%B0%E6%80%BB%E7%BB%93-%E4%BB%A5%E7%99%BE%E5%BA%A6%E9%94%81%E5%B1%8F%E9%A1%B9%E7%9B%AE%E7%95%8C%E9%9D%A2%E4%B8%BA%E4%BE%8B/" target="_blank" rel="external">View的自定义绘制与组合原理过程</a></p>
+</li>
+</ol>
+<ol>
+<li><p><strong>网络通信的优化和实现过程</strong>http从同步的主线程发送get请求优化为异步的子线程发送post请求, 加强了数据传输的安全性和长度，解决了应用程序无响应的应用体验问题; httpClient和HttpUrlConnection的区别对比;最后学习和使用Volley以及OkHttp通信库<br><a href="http://www.jianshu.com/p/3141d4e46240#Volley&amp;OkHttp" target="_blank" rel="external">参考链接</a></p>
+<ol>
+<li><p>异步的get和post请求实现过程(HttpUrlConnection)</p>
+</li>
+<li><p><strong>httpClient和httpUrlConnection, OKHttp对比</strong>：</p>
+<ul>
+<li>httpClient是apache的开源实现，API数量多，非常稳定</li>
+<li>httpUrlConnection是java自带的模块: ①可以直接支持GZIP压缩,而HttpClient虽然也支持GZIP，但要自己写代码处理 ②httpUrlConnection直接在系统层面做了缓存策略处理，加快重复请求的速度 ③API简单，体积较小,而且直接支持系统级连接池，即打开的连接不会直接关闭，在一段时间内所有程序可共用</li>
+<li>HttpURLConnection在Android2.2之前有个重大Bug，调用close()函数会影响连接池，导致连接复用失效，需要关闭keepAlive;因此在2.2之前http请求都是用httpClient，2.2之后则是使用HttpURLConnection</li>
+<li>但是!!!现在!!!Android不再推荐这两种方式！二是直接使用OKHttp这种成熟方案！支持Android 2.3及其以上版本; 什么是OKHttp?</li>
+</ul>
+</li>
+<li><strong>Volley原理和OkHttp实现原理和应用方法以及优缺点</strong> <ul>
+<li><strong>Volley的调用过程</strong>，通过 newRequestQueue(…) 函数新建并启动一个请求队列RequestQueue后，只需要往这个RequestQueue不断 add Request 即可</li>
+<li><strong>Volley</strong>：Volley 对外暴露的 API，通过 newRequestQueue(…) 函数新建并启动一个请求队列RequestQueue。</li>
+<li><strong>Request</strong>：表示一个请求的抽象类。StringRequest、JsonRequest、ImageRequest 都是它的子类，表示某种类型的请求。</li>
+<li><strong>RequestQueue</strong>：表示请求队列，里面包含一个CacheDispatcher(用于处理走缓存请求的调度线程)、NetworkDispatcher数组(用于处理走网络请求的调度线程)，一个ResponseDelivery(返回结果分发接口)，通过 start() 函数启动时会启动CacheDispatcher和NetworkDispatchers。        </li>
+<li><strong>HttpStack</strong>：处理 Http 请求，返回请求结果。目前 Volley 中有基于 HttpURLConnection 的HurlStack和 基于 Apache HttpClient 的HttpClientStack，也可以内部采用OKHttp实现 </li>
+<li><strong>CacheDispatcher.java</strong>：继承自Thread，用于调度处理「缓存请求」。启动后会不断从缓存请求队列中取请求处理，队列为空则等待，请求处理结束则将结果传递给ResponseDelivery去执行后续处理。当结果未缓存过、缓存失效或缓存需要刷新的情况下，该请求都需要重新进入NetworkDispatcher去调度处理。</li>
+<li><strong>NetworkDispatcher.java</strong>：继承自Thread，用于调度处理「网络请求」。启动后会不断从网络请求队列中取请求处理，队列为空则等待，请求处理结束则将结果传递给ResponseDelivery去执行后续处理，并判断结果是否要进行缓存。 </li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><p><strong>Volley与Activity生命周期联动与取消请求</strong>:为了在Activity退出或销毁的时候，取消对应的网络请求，避免网络请求在后台浪费资源；我们使用Volley的话，可以在Activity停止的时候，同时取消所有或部分未完成的网络请求，这些请求将不会被返回给主线程，取消操作一般在onStop()函数里边执行</p>
+<pre><code> <span class="comment">// 遍历整个Activity中的请求集合，例如List</span>
+ <span class="keyword">for</span> (Request &lt;?&gt; req : mRequestQueue) {  
+    req.cancel();  
+}
+<span class="comment">// 取消整个队列中的请求 </span>
+mRequestQueue.cancelAll(<span class="keyword">this</span>);
+<span class="comment">// 根据RequestFilter或者Tag来终止某些请求</span>
+mRequestQueue.cancelAll( <span class="keyword">new</span> RequestFilter() {});    
+mRequestQueue.cancelAll(<span class="keyword">new</span> <span class="built_in">Object</span>());
+</code></pre></li>
+<li><p><strong>流程图解</strong>：<br>  第一步：主线程根据优先级把请求加入缓存队列<br>  第二步：「缓存调度线程」CacheDispatcher从缓存队列中取出一个请求，如果缓存命中，就读取缓存响应并解析，然后将结果返回到主线程<br>  第三步：缓存未命中，该请求被加入网络请求队列，「网络调度线程」NetworkDispatcher(一个默认值为4的线程池)从网络队列中轮询取出请求，进行HTTP请求传输，解析响应，写入缓存，然后将结果返回到主线程  </p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Volley.png" class="full-image" width="100%">    </p>
+<p><a href="http://a.codekk.com/detail/Android/grumoon/Volley%20%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90" target="_blank" rel="external">Volley源码分析</a></p>
+<p><strong>Volley用法</strong>  </p>
+<pre><code> RequestQueue mQueue <span class="subst">=</span> Volley<span class="built_in">.</span>newRequestQueue(context);
+ StringRequest stringRequest <span class="subst">=</span> <span class="literal">new</span> StringRequest
+ (Method<span class="built_in">.</span>POST, <span class="string">"http://www.baidu.com"</span>,  
+<span class="literal">new</span> Response<span class="built_in">.</span>Listener<span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span>() {  
+    @Override  
+    <span class="keyword">public</span> <span class="literal">void</span> onResponse(<span class="built_in">String</span> response) {  
+        <span class="keyword">Log</span><span class="built_in">.</span>d(<span class="string">"TAG"</span>, response);  
+    }  
+}, <span class="literal">new</span> Response<span class="built_in">.</span>ErrorListener() {  
+    @Override  
+    <span class="keyword">public</span> <span class="literal">void</span> onErrorResponse(VolleyError error) {  
+        <span class="keyword">Log</span><span class="built_in">.</span>e(<span class="string">"TAG"</span>, error<span class="built_in">.</span>getMessage(), error);  
+    }  
+}){
+@Override  
+ <span class="keyword">protected</span> <span class="built_in">Map</span><span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">&gt;</span> getParams() throws AuthFailureError {  
+     <span class="built_in">Map</span><span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">&gt;</span> <span class="built_in">map</span> <span class="subst">=</span> <span class="literal">new</span> HashMap<span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">&gt;</span>();  
+     <span class="built_in">map</span><span class="built_in">.</span>put(<span class="string">"params1"</span>, <span class="string">"value1"</span>);  
+     <span class="built_in">map</span><span class="built_in">.</span>put(<span class="string">"params2"</span>, <span class="string">"value2"</span>);  
+     <span class="keyword">return</span> <span class="built_in">map</span>;  
+ }  
+}; 
+ mQueue<span class="built_in">.</span>add(stringRequest); 
+</code></pre></li>
+</ul>
+</li>
+</ol>
+<p><strong>OkHttp用法</strong><a href="http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0326/2643.html" target="_blank" rel="external">源码分析</a></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/OkHttp.png" class="full-image"></p>
+<pre><code>OkHttpClient mOkHttpClient = <span class="keyword">new</span> OkHttpClient();
+FormEncodingBuilder builder = <span class="keyword">new</span> FormEncodingBuilder();   
+builder.add(<span class="string">"username"</span>,<span class="string">"value"</span>);
+
+Request request = <span class="keyword">new</span> Request.Builder()
+                   .url(url)
+                .post(builder.build())
+                .build();
+mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback(){
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Request request, IOException e)</span>
+    </span>{
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(<span class="keyword">final</span> Response response)</span> <span class="keyword">throws</span> IOException
+    </span>{
+            <span class="comment">//String htmlStr =  response.body().string();</span>
+    }
+});
+</code></pre><h3 id="毕设-WebCrawler项目">毕设-WebCrawler项目</h3><p>java优先级队列；Java多线程处理，线程池，html页面解析等</p>
+<p>单例模式enum实现对MySQL数据库操作的优势</p>
+<h3 id="开放性问题">开放性问题</h3><ol>
+<li>说一个你曾独立或者作为核心去解决了的一个“有趣有难度”且过程很详细的步步深入优化的<strong>技术问题or项目</strong><ul>
+<li>贡献和成果: 核心问题的效率优化过程与方法</li>
+<li>困难:体现解决问题的方法与能力</li>
+<li><strong>思路</strong>：如果说有趣有难度的项目的话，我想说说kactus的食用油回收项目；在这个项目中参与时间长达半年，技术成长较大；<strong>这个项目主要是用来开发</strong>一个后台管理系统和Android app，包括司机和经理，用于订单处理和发布；在这个项目中，<strong>我参与了整个项目的研发</strong>，包括3个主要部分，①通过Java http和WebSocket请求订单数据，利用生产者消费者模式和多线程池提高并发读写效率 ②操作数据库制作RESTful API给移动端app使用 ③移动端app的开发以及二级缓存的优化实现</li>
+</ul>
+</li>
+<li><strong>成就感最大的一件事</strong>: 比如学习,比赛,需要体现<strong>创新性的成果和idea</strong>：高德LBS的比赛全国八强，做了什么？为什么有成就感？从日常生活出发想出一个创新的idea，然后结合课程理论进行实践，到最后拿奖这样一个过程。</li>
+<li>团队合作沟通能力和Team领导力</li>
+<li><p><strong>如何白板写代码？？？</strong></p>
+<ul>
+<li>Show your idea,，例如白板写代码，遇到新问题即使不知道也可以开始分析，手动画图描述问题的解决过程，从思路到设计测试用例手动输入，一步步归纳出最终解法，转化成代码</li>
+<li>解决问题的多角度性，从小问题和具体性问题开始入手，一步步递进归纳算法；遇到细节性或者较难实现的问题，可以先声明一个函数及其相应功能，留到后边再完善，代码效率的优化同样可以放到后边再做，思路的流畅性和清晰很重要。</li>
+<li>主动单元测试，边缘情况测试，null，空字符串，StringUtils.isBlank(str)</li>
+</ul>
+</li>
+<li><p>遇到生活学习上的<strong>印象中最大的困难或者挫折</strong>？最后怎么解决的？</p>
+<ul>
+<li>留学的DIY过程是一个比较困难的过程。为什么？绝大多数人会选择找中介，会省事很多，整个流程和材料的准备都不需要自己动手，但是我选择了自己DIY，所以在这一路的申请过程中遇到不少的挫折和困难，①对于留学的讯息了解不够 , ②准备考雅思 ③文书材料的撰写和修改；</li>
+<li>最终这一路申请过程中虽然遇到各种困难，但是最终还是受益颇多，其实我本来自己DIY的原因就是我自己觉得申请过程其实是一次很好的审视自我的过程，也为我自己才是最了解我自己的人；不管结果如何，申请这个过程就是一段很好的人生经历，虽然遇到各种困难，但是一一克服，最终也有了一个比较好的结果，拿到了几家不错的offer</li>
+</ul>
+</li>
+<li><p><strong>最大缺点</strong>: 这个问题好难回答啊！我想想……</p>
+<pre><code><span class="bullet">* </span>我的缺点是比较专注和执着，比如在技术方面比较爱钻研，有的时候会为了研究一个技术问题，不断地沉浸在里边，不弄明白不罢休，到饭点了都能忘，晚上在公司研究到很晚才撤退。最近出的那个电脑端和手机端同步功能就很好，可以利用零碎时间看博客解决问题了
+<span class="bullet">* </span>还有就是，工作比较按部就班，总是按照项目经管的要求完成任务。另外的缺点是，总在息的工作范围内有创新意识，并没有扩展给其他同事。这些问题我想我可以进入公司后以最短的时间来解决，我的学习能力很强，我相信可以很快融入公司的企业文化，进入工作状态。我想就这些吧。
+</code></pre></li>
+<li><strong>最大的特点或者优势</strong>：基础知识+创新能力</li>
+<li><strong>最感兴趣的课程</strong> 本科阶段的话，最感兴趣的是移动端开发，</li>
+<li><strong>最感兴趣的运动或者业余爱好，长期坚持的爱好</strong>: 羽毛球，吉他</li>
+<li><strong>性格特征</strong><ul>
+<li><strong>对感兴趣的技术会在业余时间去主动学习</strong>，刷刷coursera学习普林斯顿的算法课程学习常见算法堆排，买机器学习的书学KNN, 决策树 mapreduce相关知识</li>
+<li><strong>学习和做工程时愿意深入了解和钻研，多问为什么？</strong>例如做Kactus的回收油系统，从做移动端应用开发，我就会去考虑我拿的数据怎么来的，所以就会自己写程序去拿数据，拿到数据存到数据库，怎么做API把数据给移动端用，也自己做了，还会主动考虑着怎么去优化客户端体验，做二级缓存，怎么并行化收发数据来提高效率，怎么比较不同的http库去提高网络请求效率</li>
+<li><strong>能够发现生活细节，主动去发现问题，提出想法</strong>:比如高德项目，项目来源就是出去旅游发现人文景点不知道典故不好玩，看到有导游，怎么不用手机APP来做？，当时也有一些其他想法，比如运动分享记录APP</li>
+<li><strong>程序员中的外向者，善于与人交流沟通和参与社会活动</strong>从本科阶段的支教，社会调研等社会活动可以看出来</li>
+</ul>
+</li>
+<li><strong>三个词形容自己</strong>：专注深入，发现问题(细心)，淡定(有耐心的解决问题)</li>
+<li><strong>职业规划</strong>: ：我希望从现在开始，1-2年之内能够在我目前的这个职位上沉淀下来，通过不断的努力后，最好能有晋升，希望3-5年内可以通过在现有的开发岗位上的不断学习和历练，基于现在的项目和平台，包括现在项目所提供的数据背景，条件，能够培养自己的大局观，逐步地从开发到架构，提升自己的业务水平</li>
+<li>对比一下网易和百度的不同？整体的规范性，团队年轻，沟通非常顺利</li>
+<li><strong>这么多实习过程中最大的收获？</strong>①将理论和实践相结合的机会，了解到为什么学理论，并将学到的付诸于实践，做出真正可用的给成千上万的用户带去便利的产品，是件很有成就感的事情②大公司的开发规范和流程</li>
+<li><strong>为什么来北京？</strong>一方面是因为北京互联网工作机会多，类似于BAT之类的好公司好平台都在北京，是一个增长见识，锻炼自我的环境；二. 最优秀的人也在北京，在这样一个充满竞争的平台里，把握机会，成就自我。</li>
+<li><strong>你对薪资的要求？</strong>关于薪资的话，我个人倒是没有什么特别的要求，首先，我觉得公司提供的平台和成长更为重要，我会更加关注在这个良好的平台带来的自我能力的提升，这个才是比较长远的；另外，我也相信XX作为一家知名公司，在薪酬待遇上肯定不会差，而且校招也有一个合理的市场offer价格，如果公司对我的能力认同的话，肯定能协商出一个双方满意的offer待遇</li>
+<li><strong>如果公司录用你，你将怎样融入新团队开展工作？</strong>作为一个开发工程师而言，进入一个新的工作环境，参与一个新的产品项目我想我首先要积极融入团队，不管是生活上还是工作上，积极主动的沟通才能让我更快地了解整个团队，整个项目，多提问，多思考才能快速进步；然后要对部门的主营业务要有一个了解，了解公司的业务组成部分、业务的发展方向。第二了解我参与项目的开发方式，开发技术栈，架构方式，尽快投入具体的开发工作中。</li>
+<li>加入新团队的挑战？你怎么融入？？？新的大模块的从无到有的项目接手的挑战；融入初期的担忧；技术的全局了解和深入快速学习；和团队人员之间的磨合，怎么磨合？</li>
+<li>对公司的了解如何？希望获得什么？看中技术沉淀和业务前景；加班多么？压力大么？</li>
+</ol>
+<h3 id="Tips">Tips</h3><ol>
+<li>面试时不要有“我记得 我认为 应该”，可以说我回想一下！一定要慢！声音大！有停顿！</li>
+<li>不要说自己的工作简单！！！应该说自己快速高效完成，游刃有余，还能挤出时间自学；这是一个有难度的工作</li>
+<li>压力面试时一定要淡定，即使不会也要有自信，有条不紊的回答问题，遭受质疑时要有理有据地说出自己的观点和自己知道的内容，并主动询问面试官的建议</li>
+<li>记得问问题。</li>
+</ol>
+<h3 id="QA">QA</h3><ol>
+<li><p>如果在贵司移动开发部门做开发，主要是做哪些产品研发以及需要用到哪些技术知识和基础，我需要在哪些方面进行努力</p>
+</li>
+<li><p>面试过程中有没有什么地方讲得太快或者不清楚的地方，我可以补充的</p>
+</li>
+<li><p>如果可以，可否评价一下面试表现，提供一下您的建议和看法</p>
+</li>
+<li><p>跨平台应用研发，web轻应用和native app的开发前景比较看法</p>
+</li>
+<li><p>他们做什么业务，用些什么技术，希望面试者具备哪些方面的能力，对于做这个方向的人有什么建议，觉得我在技术上有什么优点和不足这种</p>
+</li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/实习/"> #实习 </a>
+          
+            <a href="../../tags/项目/"> #项目 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2015/03/10/计算机网络基础知识/">
                 计算机网络基础知识
               </a>
@@ -740,7 +1593,7 @@ ThreadPoolExecutor是Executors类的底层实现
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">42</span>
+              <span class="site-state-item-count">44</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -799,7 +1652,7 @@ ThreadPoolExecutor是Executors类的底层实现
         <div class="copyright">
   
   &copy; &nbsp;  2015.05.16 - 
-  2016
+  2017
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>

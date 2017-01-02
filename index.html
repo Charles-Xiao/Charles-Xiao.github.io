@@ -148,6 +148,187 @@
           
           
             
+              <a class="post-title-link" href="2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/">
+                Mac安装配置mySQL/mongodb/Redis开发环境及开机自启动
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-12-23
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="categories/Mac系统/">Mac系统</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>后端开发中免不了和数据库、缓存打交道，最近所参与的项目用到的就包括MySQL、mongodb、Redis，配置相关环境是参与开发的第一步; 本文主要讲述安装配置MySQL、mongodb、Redis的相关命令以及如何在mac中设置开机自启，也会记录一些相关控制台命令。</p>
+<h4 id="MySQL">MySQL</h4><h5 id="安装命令">安装命令</h5><pre><code><span class="comment">// 执行该命令之前请确认已经安装homebrew</span>
+brew install mysql
+</code></pre><h5 id="开机自启">开机自启</h5><pre><code><span class="comment">// 创建自启动目录</span>
+mkdir -<span class="tag">p</span> ~/Library/LaunchAgents
+<span class="comment">// 注意修改本机的mysql安装路径和版本号</span>
+cp /usr/local/Cellar/mysql/<span class="number">5.6</span>.<span class="number">17</span>/homebrew<span class="class">.mxcl</span><span class="class">.mysql</span><span class="class">.plist</span> ~/Library/LaunchAgents/
+<span class="comment">// 设置自启动</span>
+launchctl load -w ~/Library/LaunchAgents/homebrew<span class="class">.mxcl</span><span class="class">.mysql</span><span class="class">.plist</span>
+</code></pre><h5 id="MySQL操作命令">MySQL操作命令</h5><pre><code><span class="comment">// mysql启动</span>
+mysql<span class="class">.server</span> start
+<span class="comment">// mysql登录</span>
+mysql -u root -<span class="tag">p</span>
+<span class="comment">// 修改密码</span>
+SET PASSWORD FOR <span class="string">'root'</span>@<span class="string">'localhost'</span> = <span class="function"><span class="title">PASSWORD</span><span class="params">(<span class="string">'newpass'</span>)</span></span>
+<span class="comment">// 查看版本</span>
+status
+select version
+</code></pre><h5 id="错误处理">错误处理</h5><pre><code><span class="comment">// 错误 </span>
+ERROR <span class="number">2002</span> (HY000): Can <span class="literal">not</span> connect <span class="keyword">to</span> <span class="built_in">local</span> MySQL server through socket <span class="string">'/tmp/mysql.sock'</span> (<span class="number">2</span>)
+<span class="comment">// 解决方法</span>
+unset TMPDIR
+mysql_install_db <span class="subst">--</span>verbose <span class="subst">--</span>user<span class="subst">=</span>root <span class="subst">--</span>basedir<span class="subst">=</span><span class="string">"$(brew --prefix mysql)"</span><span class="subst">--</span>datadir<span class="subst">=</span>/usr/<span class="built_in">local</span>/<span class="built_in">var</span>/mysql <span class="subst">--</span>tmpdir<span class="subst">=</span>/tmp
+</code></pre><h4 id="Redis">Redis</h4><h5 id="安装命令-1">安装命令</h5><pre><code><span class="comment">// 执行该命令之前请确认已经安装homebrew</span>
+brew install Redis
+</code></pre><h5 id="开机自启-1">开机自启</h5><pre><code><span class="comment">// 复制plist文件到指定目录</span>
+cp /usr/local/Cellar/redis/<span class="number">3.2</span>.<span class="number">6</span>/homebrew<span class="class">.mxcl</span><span class="class">.redis</span><span class="class">.plist</span> ~/Library/LaunchAgents/homebrew<span class="class">.mxcl</span><span class="class">.redis</span><span class="class">.plist</span>
+<span class="comment">// 设置自启动</span>
+launchctl load -w ~/Library/LaunchAgents/homebrew<span class="class">.mxcl</span><span class="class">.redis</span><span class="class">.plist</span>
+</code></pre><h5 id="启动Redis服务">启动Redis服务</h5><pre><code><span class="regexp">/usr/</span>local<span class="regexp">/bin/</span>redis-server
+</code></pre><h4 id="mongodb">mongodb</h4><h5 id="安装命令-2">安装命令</h5><pre><code>brew <span class="keyword">install</span> mongodb
+</code></pre><h5 id="启动mongodb">启动mongodb</h5><pre><code>mongod --config <span class="regexp">/usr/</span>local<span class="regexp">/etc/m</span>ongod.conf
+</code></pre><h5 id="开机自启(同上)">开机自启(同上)</h5><h4 id="Launchrocket帮助管理Homebrew安装的服务—-打开设置就能管理服务">Launchrocket帮助管理Homebrew安装的服务—-打开设置就能管理服务</h4><pre><code><span class="comment">// 安装命令</span>
+brew cask install launchrocket
+</code></pre>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/Mac/"> #Mac </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="2016/11/29/毕业求职漫漫路/">
+                毕业求职漫漫路
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-11-28
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2016/11/29/毕业求职漫漫路/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/29/毕业求职漫漫路/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="2016/07/14/DuoBao项目代码学习笔记/">
                 DuoBao项目代码学习笔记
               </a>
@@ -1100,218 +1281,6 @@ tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /ho
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="2016/04/30/常见算法与数据结构/">
-                常见算法与数据结构
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-04-30
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="categories/算法/">算法</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2016/04/30/常见算法与数据结构/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/30/常见算法与数据结构/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="DFS和BFS">DFS和BFS</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/DFS_BFS.jpg" class="full-image" width="100%"> </p>
-<h3 id="Tree">Tree</h3><ol>
-<li><p><strong>二叉查找树</strong>:（1）若左子树不空，则左子树上所有结点的值均小于它的根结点的值；（2）若右子树不空，则右子树上所有结点的值均大于它的根结点的值；（3）左、右子树也分别为二叉排序树；（4）没有键值相等的结点 (5) 特性就是”中序遍历“可以让结点有序.</p>
-<ul>
-<li><strong>范围查找</strong>是我们使用二叉树的最终目的，既然是范围查找，我们就知道了一个”min“和”max“，其实实现起来也很简单：</li>
-<li>我们要在树中找到min元素，当然min元素可能不存在，但是我们可以找到min的上界，耗费时间为O(logn)</li>
-<li>从min开始我们中序遍历寻找max的下界。耗费时间为m。m也就是匹配到的个数</li>
-</ul>
-</li>
-<li><p><strong>平衡二叉查找树(AVL)</strong>: 父节点的左子树和右子树的高度之差不能大于1的二叉查找树，平衡之后能够保证查找，添加，删除的平均和最差时间复杂度都是严格的O(logN) <a href="http://www.cnblogs.com/huangxincheng/archive/2012/07/22/2603956.html" target="_blank" rel="external">Link</a></p>
-<p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/AVL.jpg" class="full-image" width="100%"> </p>
-</li>
-<li><p><strong>B-Tree</strong>:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/B-Tree.png" class="full-image" width="100%"> </p>
-</li>
-<li><strong>B+ Tree</strong>:一棵m阶的B+树和m阶的B树的<strong>异同点</strong>在于：<ul>
-<li>所有的叶子结点中包含了全部关键字的信息，及指向含有这些关键字记录的指针，且叶子结点本身依关键字的大小自小而大的顺序链接。(而B 树的叶子节点并没有包括全部需要查找的信息)</li>
-<li>所有的非终端结点可以看成是索引部分，结点中仅含有其子树根结点中最大（或最小）关键字。(而B 树的非终节点也包含需要查找的有效信息)</li>
-</ul>
-</li>
-<li><strong>为什么说B+树比B 树更适合实际应用中操作系统的文件索引和数据库索引？</strong><ul>
-<li><strong>B+树的磁盘读写代价更低</strong>：B+树的内部结点并没有指向关键字具体信息的指针。因此其内部结点相对B树更小。如果把所有同一内部结点的关键字存放在同一盘块中，那么盘块所能容纳的关键字数量也越多。一次性读入内存中的需要查找的关键字也就越多。相对来说IO读写次数也就降低了。</li>
-<li><strong>B+树的查询效率更加稳定</strong>：由于非终结点并不是最终指向文件内容的结点，而只是叶子结点中关键字的索引。所以任何关键字的查找必须走一条从根结点到叶子结点的路。所有关键字查询的路径长度相同，导致每一个数据的查询效率相当。</li>
-</ul>
-</li>
-<li><strong>RB-Tree红黑树</strong>:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/RB-Tree.png" class="full-image" width="100%"> </li>
-</ol>
-<h3 id="KNN算法">KNN算法</h3><ol>
-<li><strong>基本思想</strong>: 从训练样本中找出K个与其最相近的样本，然后看这K个样本中哪个类别的样本多，则待判定的值（或说抽样）就属于这个类别</li>
-<li><p><strong>步骤</strong>:</p>
-<ul>
-<li>计算已知类别数据集中每个点与当前点的距离；</li>
-<li>选取与当前点距离最小的K个点；</li>
-<li>统计前K个点中每个类别的样本出现的频率；</li>
-<li>返回前K个点出现频率最高的类别作为当前点的预测分类</li>
-</ul>
-</li>
-<li><p><strong>算法关键</strong>:<a href="http://www.open-open.com/lib/view/open1420684852171.html" target="_blank" rel="external">Link</a></p>
-</li>
-<li><strong>优缺点和应用场景</strong></li>
-</ol>
-<h3 id="排序算法">排序算法</h3><h4 id="快排">快排</h4><h4 id="堆排">堆排</h4><h4 id="归并">归并</h4><h3 id="决策树算法">决策树算法</h3><h3 id="神经网络算法">神经网络算法</h3><h3 id="海量数据处理算法">海量数据处理算法</h3><h4 id="Top_K_问题解法">Top K 问题解法</h4>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/BFS/"> #BFS </a>
-          
-            <a href="tags/DFS/"> #DFS </a>
-          
-            <a href="tags/数据结构/"> #数据结构 </a>
-          
-            <a href="tags/算法/"> #算法 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="2016/04/26/Android开源控件实现原理汇总/">
-                Android开源控件实现原理汇总
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-04-26
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="categories/Android开发/">Android开发</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2016/04/26/Android开源控件实现原理汇总/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/26/Android开源控件实现原理汇总/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="ListView下拉刷新和下拉加载">ListView下拉刷新和下拉加载</h3>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/Android/"> #Android </a>
-          
-            <a href="tags/开源控件/"> #开源控件 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1350,7 +1319,7 @@ tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /ho
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">42</span>
+              <span class="site-state-item-count">44</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1409,7 +1378,7 @@ tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /ho
         <div class="copyright">
   
   &copy; &nbsp;  2015.05.16 - 
-  2016
+  2017
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>

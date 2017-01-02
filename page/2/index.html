@@ -148,6 +148,218 @@
           
           
             
+              <a class="post-title-link" href="../../2016/04/30/常见算法与数据结构/">
+                常见算法与数据结构
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-04-30
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/算法/">算法</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/04/30/常见算法与数据结构/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/30/常见算法与数据结构/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="DFS和BFS">DFS和BFS</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/DFS_BFS.jpg" class="full-image" width="100%"> </p>
+<h3 id="Tree">Tree</h3><ol>
+<li><p><strong>二叉查找树</strong>:（1）若左子树不空，则左子树上所有结点的值均小于它的根结点的值；（2）若右子树不空，则右子树上所有结点的值均大于它的根结点的值；（3）左、右子树也分别为二叉排序树；（4）没有键值相等的结点 (5) 特性就是”中序遍历“可以让结点有序.</p>
+<ul>
+<li><strong>范围查找</strong>是我们使用二叉树的最终目的，既然是范围查找，我们就知道了一个”min“和”max“，其实实现起来也很简单：</li>
+<li>我们要在树中找到min元素，当然min元素可能不存在，但是我们可以找到min的上界，耗费时间为O(logn)</li>
+<li>从min开始我们中序遍历寻找max的下界。耗费时间为m。m也就是匹配到的个数</li>
+</ul>
+</li>
+<li><p><strong>平衡二叉查找树(AVL)</strong>: 父节点的左子树和右子树的高度之差不能大于1的二叉查找树，平衡之后能够保证查找，添加，删除的平均和最差时间复杂度都是严格的O(logN) <a href="http://www.cnblogs.com/huangxincheng/archive/2012/07/22/2603956.html" target="_blank" rel="external">Link</a></p>
+<p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/AVL.jpg" class="full-image" width="100%"> </p>
+</li>
+<li><p><strong>B-Tree</strong>:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/B-Tree.png" class="full-image" width="100%"> </p>
+</li>
+<li><strong>B+ Tree</strong>:一棵m阶的B+树和m阶的B树的<strong>异同点</strong>在于：<ul>
+<li>所有的叶子结点中包含了全部关键字的信息，及指向含有这些关键字记录的指针，且叶子结点本身依关键字的大小自小而大的顺序链接。(而B 树的叶子节点并没有包括全部需要查找的信息)</li>
+<li>所有的非终端结点可以看成是索引部分，结点中仅含有其子树根结点中最大（或最小）关键字。(而B 树的非终节点也包含需要查找的有效信息)</li>
+</ul>
+</li>
+<li><strong>为什么说B+树比B 树更适合实际应用中操作系统的文件索引和数据库索引？</strong><ul>
+<li><strong>B+树的磁盘读写代价更低</strong>：B+树的内部结点并没有指向关键字具体信息的指针。因此其内部结点相对B树更小。如果把所有同一内部结点的关键字存放在同一盘块中，那么盘块所能容纳的关键字数量也越多。一次性读入内存中的需要查找的关键字也就越多。相对来说IO读写次数也就降低了。</li>
+<li><strong>B+树的查询效率更加稳定</strong>：由于非终结点并不是最终指向文件内容的结点，而只是叶子结点中关键字的索引。所以任何关键字的查找必须走一条从根结点到叶子结点的路。所有关键字查询的路径长度相同，导致每一个数据的查询效率相当。</li>
+</ul>
+</li>
+<li><strong>RB-Tree红黑树</strong>:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/RB-Tree.png" class="full-image" width="100%"> </li>
+</ol>
+<h3 id="KNN算法">KNN算法</h3><ol>
+<li><strong>基本思想</strong>: 从训练样本中找出K个与其最相近的样本，然后看这K个样本中哪个类别的样本多，则待判定的值（或说抽样）就属于这个类别</li>
+<li><p><strong>步骤</strong>:</p>
+<ul>
+<li>计算已知类别数据集中每个点与当前点的距离；</li>
+<li>选取与当前点距离最小的K个点；</li>
+<li>统计前K个点中每个类别的样本出现的频率；</li>
+<li>返回前K个点出现频率最高的类别作为当前点的预测分类</li>
+</ul>
+</li>
+<li><p><strong>算法关键</strong>:<a href="http://www.open-open.com/lib/view/open1420684852171.html" target="_blank" rel="external">Link</a></p>
+</li>
+<li><strong>优缺点和应用场景</strong></li>
+</ol>
+<h3 id="排序算法">排序算法</h3><h4 id="快排">快排</h4><h4 id="堆排">堆排</h4><h4 id="归并">归并</h4><h3 id="决策树算法">决策树算法</h3><h3 id="神经网络算法">神经网络算法</h3><h3 id="海量数据处理算法">海量数据处理算法</h3><h4 id="Top_K_问题解法">Top K 问题解法</h4>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/BFS/"> #BFS </a>
+          
+            <a href="../../tags/DFS/"> #DFS </a>
+          
+            <a href="../../tags/数据结构/"> #数据结构 </a>
+          
+            <a href="../../tags/算法/"> #算法 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2016/04/26/Android开源控件实现原理汇总/">
+                Android开源控件实现原理汇总
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-04-26
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Android开发/">Android开发</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/04/26/Android开源控件实现原理汇总/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/26/Android开源控件实现原理汇总/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="ListView下拉刷新和下拉加载">ListView下拉刷新和下拉加载</h3>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Android/"> #Android </a>
+          
+            <a href="../../tags/开源控件/"> #开源控件 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2016/04/21/shadowsocks-android源码Mac环境编译打包apk教程/">
                 shadowsocks-android源码Mac环境编译打包apk教程
               </a>
@@ -990,282 +1202,6 @@ private <span class="keyword">static</span> boolean isBalanceBT(<span class="typ
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/01/13/Remove-element问题的简单优化/">
-                Remove element问题的简单优化
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-01-13
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Leetcode/">Leetcode</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/01/13/Remove-element问题的简单优化/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/13/Remove-element问题的简单优化/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>原题链接: <a href="https://leetcode.com/problems/remove-element/" target="_blank" rel="external">Remove Element</a>. 这是一道easy的水题，之所以拿出来讲，主要是其中有一个巧妙的小优化,可以因小见大体会到代码效率优化的无处不在，激励自己写出最优的代码.</p>
-<h3 id="最初解法">最初解法</h3><pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span> {
-    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> val)</span> </span>{
-        <span class="keyword">int</span> length = nums.length;
-        <span class="keyword">int</span> res = <span class="number">0</span>;
-        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length; ++i) {
-            <span class="keyword">if</span> (nums[i] != val) {
-                 nums[res] = nums[i];
-                 res++;
-            }
-        }
-        <span class="keyword">return</span> res;
-    }
-}
-</code></pre><p>思路讲解: 从头开始遍历数组元素length次，当元素nums[i]与val不相等，重新赋值, 相等则跳过，最终数组中前res个元素都是不等于val的元素</p>
-<p>效率:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/remove_element_0.png" class="full-image">  </p>
-<h3 id="改进解法">改进解法</h3><pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span> {
-    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> val)</span> </span>{
-        <span class="keyword">int</span> length = nums.length;
-        <span class="keyword">int</span> res = <span class="number">0</span>;
-        <span class="comment">// 减少i++操作引发70%的效率提升</span>
-        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length-res;) {
-            <span class="keyword">if</span> (nums[i] == val) {
-                 nums[i] = nums[length-res-<span class="number">1</span>];
-                 res++;
-            } <span class="keyword">else</span> {
-                i++;
-            }
-        }
-        <span class="keyword">return</span> length-res;
-    }
-}
-</code></pre><p>思路讲解: 从头开始遍历数组元素length-res次，当元素nums[i]与val相等，i不改变, 从末尾取出一个对应的将不再被循环遍历到的元素赋值到当前的nums[i], 再次与val比较；如果nums[i]与val不相等则i++，比较下一元素</p>
-<p>效率:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/remove_element_1.png" class="full-image">  </p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Array/"> #Array </a>
-          
-            <a href="../../tags/Leetcode/"> #Leetcode </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/01/13/Roman与Integer之间的相互转换/">
-                Roman与Integer之间的相互转换
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-01-13
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Leetcode/">Leetcode</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/01/13/Roman与Integer之间的相互转换/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/13/Roman与Integer之间的相互转换/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>罗马数字与阿拉伯数字之间的简单转换方法,首先需要了解罗马数字计数法，在这两道转换题里我们只用到了前三项规则</p>
-<ol>
-<li><p>罗马数字共有7个，即I（1）、V（5）、X（10）、L（50）、C（100）、D（500）和M（1000）</p>
-</li>
-<li><p>右加左减: 较大的罗马数字的右边记上较小的罗马数字，表示大数字加小数字; 较大的罗马数字的左边记上较小的罗马数字，表示大数字减小数字</p>
-</li>
-<li>左减有一定限制: 只有I, X, C可以放到左边当做减数使用,而且左减不能越位,I的右边只能是VX, X右边只能是LC, C的右边只能是DM; 左减数字必须为一位</li>
-<li>其他规则: 加线乘千、重复数次、右加数字不可连续超过三位、同一数码最多只能连续出现三次</li>
-</ol>
-<h3 id="Roman_to_Integer">Roman to Integer</h3><p>解题思路:  对于每一个roman字符,除了I，X，C三种情况会出现减去对应数值，其他情况都是加上该字符对应的数值; 针对I、X、C，我们可以总结发现只需要考察他们的下一位是否满足减的条件,是则减，否则加。</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
-    <span class="keyword">public</span> <span class="function"><span class="keyword">int</span> <span class="title">romanToInt</span><span class="params">(String s)</span> </span>{
-        <span class="keyword">int</span> res = <span class="number">0</span>;
-        <span class="keyword">int</span> len = s.length();
-        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) {
-            <span class="keyword">char</span> tmp = s.charAt(i);
-            <span class="keyword">switch</span> (tmp) {
-                <span class="keyword">case</span> <span class="string">'I'</span>:
-                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'V' || s.charAt(i+1) == 'X')) {
-                        res -= <span class="number">1</span>;
-                        <span class="keyword">break</span>;
-                    }
-                    res += <span class="number">1</span>;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'V'</span>:
-                    res += 5;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'X'</span>:
-                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'L' || s.charAt(i+1) == 'C')) {
-                        res -= <span class="number">10</span>;
-                        <span class="keyword">break</span>;
-                    }
-                    res += <span class="number">10</span>;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'L'</span>:
-                    res += 50;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'C'</span>:
-                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'D' || s.charAt(i+1) == 'M')) {
-                        res -= <span class="number">100</span>;
-                        <span class="keyword">break</span>;
-                    }
-                    res += <span class="number">100</span>;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'D'</span>:
-                    res += 500;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'M'</span>:
-                    res += 1000;
-                    <span class="keyword">break</span>;
-                <span class="keyword">default</span>:
-                    <span class="keyword">break</span>;
-            }
-        }
-        <span class="keyword">return</span> res;
-    }
-}
-</code></pre><h3 id="Integer_To_Roman">Integer To Roman</h3><p>解题思路: 对于输入的数值进行取商处理，从大的计数单位到小的计数单位依次取商, 商则是该计数单位对应的roman字符的个数。</p>
-<pre><code>public <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
-    public <span class="built_in">String</span> intToRoman(<span class="built_in">int</span> <span class="built_in">num</span>) {
-        <span class="comment">// igr存储的是从大到小每一个基本计数单位,与roman一一对应</span>
-        <span class="built_in">String</span>[] roman = {<span class="string">"M"</span>, <span class="string">"CM"</span>, <span class="string">"D"</span>, <span class="string">"CD"</span>, <span class="string">"C"</span>, <span class="string">"XC"</span>, <span class="string">"L"</span>, <span class="string">"XL"</span>, <span class="string">"X"</span>, <span class="string">"IX"</span>, <span class="string">"V"</span>, <span class="string">"IV"</span>, <span class="string">"I"</span>};
-        <span class="built_in">int</span>[] igr = {<span class="number">1000</span>, <span class="number">900</span>, <span class="number">500</span>, <span class="number">400</span>, <span class="number">100</span>, <span class="number">90</span>, <span class="number">50</span>, <span class="number">40</span>, <span class="number">10</span>, <span class="number">9</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">1</span>};
-        StringBuilder res = <span class="keyword">new</span> StringBuilder();
-        <span class="keyword">for</span> (<span class="built_in">int</span> i=<span class="number">0</span>; i&lt;roman.length; i++) {
-            <span class="built_in">int</span> quotient = <span class="built_in">num</span> / igr[i];
-            <span class="keyword">for</span> (<span class="built_in">int</span> j=<span class="number">0</span>; j&lt;quotient; j++) {
-                res.append(roman[i]);
-            }
-            <span class="built_in">num</span> -= quotient * igr[i];
-        }
-        <span class="keyword">return</span> res.toString();
-    }
-}
-</code></pre>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Leetcode/"> #Leetcode </a>
-          
-            <a href="../../tags/String/"> #String </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1304,7 +1240,7 @@ private <span class="keyword">static</span> boolean isBalanceBT(<span class="typ
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">42</span>
+              <span class="site-state-item-count">44</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1363,7 +1299,7 @@ private <span class="keyword">static</span> boolean isBalanceBT(<span class="typ
         <div class="copyright">
   
   &copy; &nbsp;  2015.05.16 - 
-  2016
+  2017
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>
