@@ -148,6 +148,95 @@
           
           
             
+              <a class="post-title-link" href="2017/01/15/从菊与刀初探日本文化/">
+                从菊与刀初探日本文化
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-01-14
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="categories/读书札记/">读书札记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2017/01/15/从菊与刀初探日本文化/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/15/从菊与刀初探日本文化/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>说到日本文化，我其实是不太感兴趣的，应该说是因为从小到大接触的少，如果接触得多说不定也会很感兴趣；然而身边有些朋友对日本文化表现出了很深的兴趣，不管是漫画还是电影还是其他。可以说，在我这一代人里边应该是有不少人收到日本文化影响的，包括大部分二次元的东西应该都是起源于日本。我想，日本文化是必有其过人之处的，否则不太可能有这么的输出力。抱着了解的心态，我从亚马逊下单了《菊与刀》，趁着每日睡前读完了它，一探日本文化。
+          <div class="post-more-link text-center">
+            <a class="btn" href="2017/01/15/从菊与刀初探日本文化/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/日本/"> #日本 </a>
+          
+            <a href="tags/菊与刀/"> #菊与刀 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/">
                 Mac安装配置mySQL/mongodb/Redis开发环境及开机自启动
               </a>
@@ -1192,95 +1281,6 @@ tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /ho
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="2016/05/18/Android自定义View实现总结-以百度锁屏项目界面为例/">
-                Android自定义View实现总结---以百度锁屏项目界面为例
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-05-18
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2016/05/18/Android自定义View实现总结-以百度锁屏项目界面为例/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/18/Android自定义View实现总结-以百度锁屏项目界面为例/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p><strong>自定义View的原则</strong>：一个好的自定义控件应当和Android本身提供的控件一样，封装了一系列的功能以供开发者使用，不仅具有完备的功能，也需要高效的使用内存和CPU<br><strong>开发自定义View的步骤</strong>：</p>
-<ul>
-<li>编写继承自View的子类</li>
-<li>为自定义View类增加属性</li>
-<li>绘制自定义View</li>
-<li>响应用户消息和事件</li>
-<li>自定义回调函数</li>
-</ul>
-<h3 id="自定义View的三种形式">自定义View的三种形式</h3><ol>
-<li><strong>继承已有的控件</strong>: 往往继承自系统自带的控件，例如继承自ImageView, Viewpager等，例如ConstellationPager extends ViewPager，一个可以无限循环切换的ViewPager<ul>
-<li><strong>ConstellationPager</strong>: 在该ViewPager的构造函数中初始化页面布局，通过addView添加自定义View，并设置OnPageChangeListener</li>
-</ul>
-</li>
-<li><strong>组合已有的控件</strong>: 往往继承自Layout, 通过LayoutInflater inflate xml文件来组合多个控件。例如KeyguardLayout extends FrameLayout, 该界面包括MultiWaveView，WeatherView等多个View；例如WeatherView extends LinearLayout，该界面中同样包括多个基础View控件</li>
-<li><strong>完全自绘的控件</strong>: 往往继承View/ViewGroup,例如MultiWaveView extends View, 一个锁屏的控件，包括a handle and outer ring，内部的OnTriggerListener监听手指滑动响应解锁或者打开App的操作，内部还绘制了类似彗星划过效果的动画</li>
-</ol>
-<h3 id="自定义View的重载方法">自定义View的重载方法</h3><ul>
-<li><strong>measure</strong> 过程由measure(int, int)方法发起，从上到下有序的测量 View，在 measure 过程的最后，每个视图存储了自己的尺寸大小和测量规格(三种测量规格MeasureSpec 类);measure 过程会为一个 View 及所有子节点的 mMeasuredWidth 和 mMeasuredHeight 变量赋值；onMeasure方法中调用setMeasuredDimension方法来设置自定义视图的尺寸</li>
-<li><strong>layout</strong>子视图的具体位置都是相对于父视图而言的。View 的 onLayout 方法为空实现，而 ViewGroup 的 onLayout 为 abstract 的，因此，如果自定义的 View 要继承 ViewGroup 时，必须实现 onLayout 函数。在 layout 过程中，子视图会调用getMeasuredWidth()和getMeasuredHeight()方法获取到 measure 过程得到的 mMeasuredWidth 和mMeasuredHeight，作为自己的 width 和 height。然后调用每一个子视图的layout(l, t, r, b)函数，来确定每个子视图在父视图中的位置。</li>
-<li><strong>Draw</strong>所有的视图最终都是调用 View 的 draw 方法进行绘制的。在自定义的视图复写onDraw(Canvas) 方法进行绘制， 操作canvas对象对一个bitmap对象进行绘制;View 的onDraw（Canvas）默认是空实现，复写该方法绘制自身的内容; <em>过程：绘制背景—-绘制自身—-绘制子视图—-绘制Layer和ScrollBar</em></li>
-<li><strong>invalidate()</strong>请求重绘 View 树，即 draw 过程，假如视图发生大小没有变化就不会调用layout()过程，并且只绘制那些调用了invalidate()方法的 View</li>
-<li><strong>requestLayout()</strong>当布局变化的时候，比如方向变化，尺寸的变化，会调用该方法，在自定义的视图中，如果某些情况下希望重新测量尺寸大小，应该手动去调用该方法，它会触发measure()和layout()过程，但不会进行 draw。</li>
-<li><strong>onTouchEvent()</strong>：监听触摸事件的回调 </li>
-</ul>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1319,7 +1319,7 @@ tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /ho
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">44</span>
+              <span class="site-state-item-count">45</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1333,7 +1333,7 @@ tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /ho
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">50</span>
+              <span class="site-state-item-count">52</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

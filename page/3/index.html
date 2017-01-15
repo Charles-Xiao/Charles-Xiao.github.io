@@ -148,6 +148,130 @@
           
           
             
+              <a class="post-title-link" href="../../2016/01/14/Palindrome-Reverse-Integer问题/">
+                Palindrome && Reverse Integer问题
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-01-14
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Leetcode/">Leetcode</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/01/14/Palindrome-Reverse-Integer问题/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/14/Palindrome-Reverse-Integer问题/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="Palindrome_Number问题">Palindrome Number问题</h3><p><a href="https://leetcode.com/problems/palindrome-number/" target="_blank" rel="external">题目链接</a></p>
+<p>解题思路：首先需要注意两点,①负数和小数都不是回文数 ②Integer有32位的范围限制，所以反转之后可能溢出. 对该整数循环除以10,取余数和商,余数则为从尾到头依次的digit number,并利用该digit number计算反转之后的结果，直到商为0结束循环；最终判断反转结构是否与原数相等。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
+    <span class="keyword">public</span> <span class="keyword">boolean</span> isPalindrome(<span class="keyword">int</span> x) {
+        <span class="keyword">if</span> (x &lt; <span class="number">0</span>)
+            <span class="keyword">return</span> <span class="keyword">false</span>;
+        <span class="keyword">int</span> <span class="keyword">reverse</span> = <span class="number">0</span>;
+        <span class="keyword">int</span> quotient = x;
+        <span class="keyword">while</span> (quotient != <span class="number">0</span>) {
+            <span class="keyword">reverse</span> = <span class="keyword">reverse</span>*<span class="number">10</span> + quotient%<span class="number">10</span>;
+            quotient = quotient/<span class="number">10</span>;
+        }
+        <span class="keyword">if</span> (<span class="keyword">reverse</span> == x)
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        <span class="keyword">else</span>
+            <span class="keyword">return</span> <span class="keyword">false</span>; 
+    }
+}
+</code></pre><p>优化解法: 分别从整数的首尾开始比对，第一位和最后一位比较，第二位和倒数第二位比较，一直比较到中间位置，如果发现全部都相等则说明是回文数,此方法可以避免溢出，例如对于:121,第一次比较1和1，剩下2；再比较2和2，发现它是回文数.</p>
+<h3 id="Reverse_Integer问题">Reverse Integer问题</h3><p><a href="https://leetcode.com/problems/reverse-integer/" target="_blank" rel="external">题目链接</a></p>
+<p>解题思路：这道题与上一题类似,也是个反转整数的题,在java中Integer占据4个bytes, 有32位的范围限制，对于正数,它的最高位是0,所以它最大能表示的数是01111….(后面共31个1),数化成十进制即是2147483647，Integer.MAX_VALUE = 2147483647[0x7fffffff]; 负数能表示的最小数的二进制数为1000..(后面共31个0),化为十进制数即为-int 类型的范围是 -2147483648,即为Integer.MIN_VALUE.当一个整数溢出时，变成一个与原数不相等的在int范围内的数，所以可以通过reverse/10 != tmp来判断是否溢出.</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
+    <span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">reverse</span>(<span class="keyword">int</span> x) {
+        <span class="comment">// Consider the case: reverse overflow int</span>
+        <span class="keyword">int</span> <span class="keyword">reverse</span> = <span class="number">0</span>;
+        <span class="keyword">int</span> quotient = x;
+        <span class="keyword">while</span> (quotient != <span class="number">0</span>) {
+            <span class="keyword">int</span> tmp = <span class="keyword">reverse</span>;
+            <span class="comment">// if (reverse &gt; Integer.MAX_VALUE || reverse &lt; Integer.MIN_VALUE)</span>
+            <span class="comment">//    return 0;</span>
+            <span class="keyword">reverse</span> = <span class="keyword">reverse</span> * <span class="number">10</span> + quotient % <span class="number">10</span>;
+            quotient = quotient / <span class="number">10</span>;
+            <span class="comment">// deal with overflow</span>
+            <span class="keyword">if</span> (<span class="keyword">reverse</span>/<span class="number">10</span> != tmp) {
+                <span class="keyword">return</span> <span class="number">0</span>;
+            }
+
+        }
+
+        <span class="keyword">return</span> <span class="keyword">reverse</span>;
+    }
+}
+</code></pre>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Leetcode/"> #Leetcode </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2016/01/13/Remove-element问题的简单优化/">
                 Remove element问题的简单优化
               </a>
@@ -1041,96 +1165,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/">
-                Android开发adb无法识别MX手机和部分平板设备的解决方法
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-08-16
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Android开发/">Android开发</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="mac安装adb命令">mac安装adb命令</h3><p><code>brew install android-platform-tools</code></p>
-<h3 id="adb无法识别设备">adb无法识别设备</h3><p>在Android开发过程中，当我们把移动设备连接到计算机进行真机测试时经常会出现部分设备无法被计算机识别的情况，比如魅族系列手机和部分国产android平板电脑，这种异常情况在mac系统和win系统中都会出现，在此讲述一下解决步骤：</p>
-<p><strong>1. 将移动设备连接到计算机，确保连接无误</strong></p>
-<p><strong>2. 打开terminal窗口，在当前用户home目录下输入<code>system_profiler SPUSBDataType</code>；可以看到该计算机连接的所有usb设备信息</strong></p>
-<p><strong>3. 记录你希望计算机识别的usb设备的Vendor ID参数，例如我的mx3手机Vendor ID参数为0x18d1</strong></p>
-<p><strong>4. 在terminal中输入 <code>echo &quot;0x18d1&quot; &gt;&gt; ~/.android/adb_usb.ini</code>即可(该命令会在adb_usb.ini文件中添加一行0x18d1，使得该usb设备可以被计算机识别)</strong></p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/adb/"> #adb </a>
-          
-            <a href="../../tags/bug/"> #bug </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1169,7 +1203,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">44</span>
+              <span class="site-state-item-count">45</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1183,7 +1217,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">50</span>
+              <span class="site-state-item-count">52</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
