@@ -148,6 +148,112 @@
           
           
             
+              <a class="post-title-link" href="../../2015/08/29/浅谈MVC、MVP、MVVM三种框架模式/">
+                浅谈MVC、MVP、MVVM三种框架模式
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-08-29
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/框架模式/">框架模式</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/08/29/浅谈MVC、MVP、MVVM三种框架模式/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/29/浅谈MVC、MVP、MVVM三种框架模式/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p><strong>MVC模式</strong>是一种非常经典的复合型软件架构模式，它把用户界面交互分拆到不同的三种角色中，应用程序被分成三个核心部件：Model（模型）、View（视图）、Controller（控制器）, 它们各自处理自己的任务，这样就可以把业务逻辑和视图显示解耦，提高了应用程序的灵活性和复用性。MVC模式不管是在web开发还是Android开发中都被广泛应用，最典型的MVC应用就是JSP + servlet + javabean的模式，例如SpringMVC开发框架。</p>
+<ul>
+<li><p>Model模型：模型持有所有的数据、状态和程序逻辑，一个模型可以有不同的多个视图表现形式，复用性高。例如数据库记录以及相应增删查改操作；Android中对数据库的操作、网络请求、格式转换、文件下载、大数据处理等的耗时操作都在Model里面处理</p>
+</li>
+<li><p>View视图：视图是用户看到并与之交互的页面，通常直接从模型中取得它需要显示的状态与数据，一个视图往往有一个相应的控制器，理论上也可以同不同的模型相关联。例如html、xml页面；Android中主要是layout布局xml文件，webview等</p>
+</li>
+<li><p>Controller控制器：位于视图和模型中间，负责接受用户的输入，将输入进行解析并反馈给模型，例如Android开发中的Activity</p>
+</li>
+<li><p>MVC模式图解析：Event(事件)导致Controller改变Model或View，或者同时改变两者。只要Controller改变了Model的数据或者属性，所有依赖的View都会自动更新。类似的，只要Controller改变了View，View会从潜在的Model中获取数据来刷新自己。</p>
+</li>
+</ul>
+<p>　　<img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/MVC.jpeg" class="full-image">  </p>
+<p>　<strong>android中mvc的具体体现</strong>如下：<br>  1)视图层（view）：一般采用xml文件进行界面的描述，使用的时候可以非常方便的引入，当然，如何你对android了解的比较的多了话，就一定 可以想到在android中也可以使用javascript+html等的方式作为view层，当然这里需要进行java和javascript之间的通 信，幸运的是，android提供了它们之间非常方便的通信实现。</p>
+<p>　2)控制层（controller）：android的控制层的重 任通常落在了众多的acitvity的肩上，这句话也就暗含了不要在acitivity中写代码，要通过activity交割model业务逻辑层处理， 这样做的另外一个原因是android中的acitivity的响应时间是5s，如果耗时的操作放在这里，程序就很容易被回收掉。</p>
+<p>　3)模型层（model）：对数据库的操作、对网络等的操作都应该在model里面处理，当然对业务计算等操作也是必须放在的该层的。</p>
+<p><strong>MVP模式</strong><br>View不再与model交互，所有的交互通过presenter实现，双方之间的交互都是双向的，view层作为被动视图非常薄，没有任何的业务逻辑，业务逻辑都在presenter里边；Presenter与View的交互是通过接口来进行的</p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/MVP.png" class="full-image">  </p>
+<p><a href="http://blog.csdn.net/vector_yi/article/details/24719873?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="external">MVP模式在Android开发中的应用</a></p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/MVC/"> #MVC </a>
+          
+            <a href="../../tags/MVP/"> #MVP </a>
+          
+            <a href="../../tags/MVVM/"> #MVVM </a>
+          
+            <a href="../../tags/框架模式/"> #框架模式 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/">
                 Android开发adb无法识别MX手机和部分平板设备的解决方法
               </a>
@@ -1590,97 +1696,6 @@ n再和这个数做与运算*/</span>
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/27/Android开发常见bug解决方法及注意事项/">
-                Android开发常见bug解决方法及注意事项
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-27
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Android开发/">Android开发</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/27/Android开发常见bug解决方法及注意事项/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/27/Android开发常见bug解决方法及注意事项/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="xml文件出现找不到相应类">xml文件出现找不到相应类</h3><p>例如ViewPager类找不到，应该检查类名单词拼写是否错误，是否写错包名以及是否导入jar包并勾选</p>
-<h3 id="xml文件布局merge标签">xml文件布局merge标签</h3><p><merge>标签能百分百代替<FrameLayout>这个布局组件， 对于不复杂的其他布局组件如线性布局等组合组件中，可以在继承子类中对其属性进行设置后也可以使用<merge>标 签，<merge>标签不占资源，自然在生成界面时也不会生成对应的组件。另外需要注意一点是<merge>只能作为根元素，对 于需要用inflate生成布局文件时，必须指定一个ViewGroup作为其父元素，并且要设置inflate的attachToRoot参数为 true</p>
-<h3 id="DEXpathlist错误">DEXpathlist错误</h3><p>往往是因为重复导入jar或者第三方依赖包
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2015/05/27/Android开发常见bug解决方法及注意事项/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Android/"> #Android </a>
-          
-            <a href="../../tags/bug/"> #bug </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1719,7 +1734,7 @@ n再和这个数做与运算*/</span>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">45</span>
+              <span class="site-state-item-count">46</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1733,7 +1748,7 @@ n再和这个数做与运算*/</span>
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">52</span>
+              <span class="site-state-item-count">53</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
