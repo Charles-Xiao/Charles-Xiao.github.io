@@ -190,17 +190,15 @@
 
       
         <h3 id="Spring,_SpringMVC,_Struts和Mybatis联系与区别">Spring, SpringMVC, Struts和Mybatis联系与区别</h3><h4 id="Spring">Spring</h4><ol>
-<li><p><strong>Spring</strong>是一个轻量级的控制反转IOC和面向切面AOP的容器框架，它有许多优点:</p>
-<ul>
+<li><strong>Spring</strong>是一个轻量级的控制反转IOC和面向切面AOP的容器框架，它有许多优点:<ul>
 <li>降低了组件之间的耦合性 ，实现了软件各层之间的解耦</li>
 <li>容器提供单例模式支持,以及事务管理，消息服务等众多服务</li>
 <li>容器提供了AOP面向切面编程，利用它很容易实现如权限拦截，运行期监控等功能</li>
 <li>spring对于主流的应用框架提供了集成支持，如hibernate，Struts等，高度开放</li>
-<li>spring的DI机制降低了业务对象替换的复杂性  </li>
+<li>spring的DI机制降低了业务对象替换的复杂性  <a id="more"></a></li>
 </ul>
 </li>
-<li><p><strong>控制反转</strong>是指由Spring负责控制对象的生命周期(例如创建和销毁)以及对象之间的关系，它是通过<strong>依赖注入</strong>来动态地给某个对象提供它所需要的其他对象，依赖注入其实是通过反射实现；<strong>具体的讲</strong>：当某个对象需要另外一个对象协助的时候，在传统的程序设计过程中，通常由调用者来创建被调用者的实例。但在Spring中创建被调用者的工作不再由调用者来完成，而是由spring来完成，然后注入调用者。<strong>这个就叫做控制反转，依赖注入</strong></p>
-</li>
+<li><strong>控制反转</strong>是指由Spring负责控制对象的生命周期(例如创建和销毁)以及对象之间的关系，它是通过<strong>依赖注入</strong>来动态地给某个对象提供它所需要的其他对象，依赖注入其实是通过反射实现；<strong>具体的讲</strong>：当某个对象需要另外一个对象协助的时候，在传统的程序设计过程中，通常由调用者来创建被调用者的实例。但在Spring中创建被调用者的工作不再由调用者来完成，而是由spring来完成，然后注入调用者。<strong>这个就叫做控制反转，依赖注入</strong></li>
 <li><strong>面向切面编程AOP</strong>是对面向对象编程（OOP）的补充，OOP将程序分解成各个层次的对象，而<strong>面向切面编程</strong>从程序运行角度考虑程序的结构,将程序运行过程分解成各个切面，并提取业务处理过程的切面;它是一种对应用执行过程中的步骤的动态抽象，可以获得各个步骤之间低耦合性的隔离效果；Spring中的AOP还提供了声明式事务管理</li>
 <li><strong>依赖注入的三种方式</strong><ul>
 <li>接口注入（interface injection） 接口注入指的就是在接口中定义要注入的信息，并通过接口完成注入。</li>
