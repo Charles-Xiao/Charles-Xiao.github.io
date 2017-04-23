@@ -148,6 +148,726 @@
           
           
             
+              <a class="post-title-link" href="../../2016/04/21/shadowsocks-android源码Mac环境编译打包apk教程/">
+                shadowsocks-android源码Mac环境编译打包apk教程
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-04-21
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Android/">Android</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/04/21/shadowsocks-android源码Mac环境编译打包apk教程/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/21/shadowsocks-android源码Mac环境编译打包apk教程/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <ol>
+<li><p>安装homebrew包管理器</p>
+<pre><code><span class="comment">//卸载brew命令</span>
+ruby -e <span class="string">"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"</span>
+
+<span class="comment">//安装 brew命令</span>
+<span class="regexp">/usr/</span>bin<span class="regexp">/ruby -e "$(curl -fsSL https:/</span><span class="regexp">/raw.githubusercontent.com/</span>Homebrew<span class="regexp">/install/m</span>aster<span class="regexp">/install)"</span>
+</code></pre></li>
+<li>Install Android SDK and NDK by run brew install android-ndk android-sdk</li>
+<li><p>设置sdk全局变量和NDK全局变量,在~目录下新建或打开.bash_profile文件，添加两行export命令引入ndk和sdk文件夹,再在terminal执行source .bash_profile</p>
+<pre><code><span class="built_in">export</span> ANDROID_HOME=~/sdk            
+<span class="built_in">export</span> ANDROID_NDK_HOME=~/ndk/android-ndk-r10e 
+</code></pre></li>
+<li><p>cd 进入sdk目录下tools子目录,运行两个命令更新sdk</p>
+<pre><code><span class="keyword">echo</span> <span class="string">"y"</span> | ./android <span class="keyword">update</span> sdk --<span class="built_in">filter</span> tools,platform-tools,build-tools-<span class="number">23.0</span>.<span class="number">2</span>,android-<span class="number">23</span>,extra-google-m2repository --<span class="keyword">no</span>-ui -<span class="keyword">a</span>
+
+<span class="keyword">echo</span> <span class="string">"y"</span> | ./android <span class="keyword">update</span> sdk --<span class="built_in">filter</span> extra-android-m2repository --<span class="keyword">no</span>-ui --<span class="keyword">no</span>-https -<span class="keyword">a</span>
+</code></pre></li>
+<li><p>cd进入shadowsocks-android目录执行 <figure class="highlight"><figcaption><span>submodule update --init ```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6. &#23433;&#35013;sbt&#65306;``` brew install sbt</span><br></pre></td></tr></table></figure></p>
+</li>
+<li><p>生成keystore文件和Create local.properties from local.properties.example</p>
+<pre><code>keytool -genkey -v -keystore <span class="keyword">release</span>.keystore -<span class="keyword">alias</span> <span class="keyword">release</span> -keyalg RSA -keysize <span class="number">2048</span> -validity <span class="number">10000</span>
+</code></pre></li>
+<li><p>sbt编译</p>
+<pre><code><span class="comment">// Build native binaries</span>
+./build.sh
+
+<span class="comment">// Build the apk</span>
+sbt clean <span class="string">android:</span><span class="keyword">package</span>-release
+</code></pre></li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/shadowsocks/"> #shadowsocks </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2016/04/19/海量数据处理常用方法/">
+                海量数据处理常用方法
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-04-18
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/算法/">算法</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/04/19/海量数据处理常用方法/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/19/海量数据处理常用方法/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="BitSet位图">BitSet位图</h3><ol>
+<li><strong>BitSet原理</strong>BitSet位图类实现了一个按需增长的位向量，每一位值只有0或1，可以用1位来表示一个数据是否出现过，0为没有出现过，1表示出现过；内部维护了一个long数组，初始只有一个long，所以BitSet最小的size是64，当随着存储的元素越来越多，BitSet内部会动态扩充，最终内部是由N个long来存储。</li>
+<li><strong>常见的应用</strong>是那些需要对海量数据进行一些统计工作的时候，比如日志分析等；一个1G的空间有 8<em>1024</em>1024<em>1024=8.58</em>10^9bit，也就是可以表示85亿个不同的数</li>
+<li><strong>问题1</strong>：现在有1千万个随机数，随机数的范围在1到1亿之间。将1到1亿之间没有在随机数中的数求出来；<strong>问题2</strong>：两个10G文本, 里边是1-1亿的数字，怎么找出一个里边没有的3个数？<strong>答案</strong>：如果有足够的内存的话可以用位图法，即开一个1亿位的bitset，内存为100m/8== 12.5m, 然后如果一个数有出现，对应的bitset上标记为1，最后统计bitset上为0的即可。</li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/数据结构/"> #数据结构 </a>
+          
+            <a href="../../tags/海量数据/"> #海量数据 </a>
+          
+            <a href="../../tags/算法/"> #算法 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2016/03/12/二叉树常见问题/">
+                二叉树常见问题
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-03-12
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/算法/">算法</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/03/12/二叉树常见问题/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/12/二叉树常见问题/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h4 id="链表相关问题"><a href="http://wuchong.me/blog/2014/03/25/interview-link-questions/" target="_blank" rel="external">链表相关问题</a></h4><ol>
+<li>在O(1)时间删除链表节点</li>
+<li>单链表的转置</li>
+<li>求链表倒数第k个节点</li>
+<li>求链表的中间节点</li>
+<li>判断单链表是否存在环</li>
+<li>找到环的入口点</li>
+<li>编程判断两个链表是否相交</li>
+<li>扩展：链表有环，如何判断相交</li>
+<li>扩展：两链表相交的第一个公共节点</li>
+</ol>
+<h4 id="求二叉树的深度(从根节点到叶子结点一次经过的结点形成树的一条路径，最长路径的长度为树的深度。根节点的深度为1。)">求二叉树的深度(从根节点到叶子结点一次经过的结点形成树的一条路径，最长路径的长度为树的深度。根节点的深度为1。)</h4><pre><code>private <span class="keyword">static</span> int getTreeHeight(<span class="type">TreeNode</span> root) {
+    <span class="keyword">if</span> (root == null)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="comment">// 左子树depth与右子树depth的较大值+1即为tree的depth</span>
+    int <span class="keyword">left</span> = getTreeHeight(root.<span class="keyword">left</span>);
+    int <span class="keyword">right</span> = getTreeHeight(root.<span class="keyword">right</span>);
+
+    <span class="keyword">return</span> <span class="keyword">left</span>&gt;<span class="keyword">right</span> ? <span class="keyword">left</span>+<span class="number">1</span>:<span class="keyword">right</span>+<span class="number">1</span>;
+}
+</code></pre><h4 id="求二叉树的节点个数">求二叉树的节点个数</h4><div align="center"><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/BTNodeNumber.jpg" width="50%"></div>
+
+<h4 id="求二叉树第K层的节点个数">求二叉树第K层的节点个数</h4><pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">int</span> <span class="title">kLevelNodeNumber</span><span class="params">(TreeNode root, <span class="keyword">int</span> k)</span> </span>{
+    <span class="comment">// 第k层节点数可以看做是左子树的k-1层节点数+右子树的k-1层节点数</span>
+    <span class="keyword">if</span> (root == <span class="keyword">null</span> || k &lt;= <span class="number">0</span>)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="keyword">if</span> (k == <span class="number">1</span>)
+        <span class="keyword">return</span> <span class="number">1</span>;
+    <span class="keyword">int</span> leftNodeNum = kLevelNodeNumber(root.left, k-<span class="number">1</span>);
+    <span class="keyword">int</span> rightNodeNum = kLevelNodeNumber(root.right, k-<span class="number">1</span>);
+
+    <span class="keyword">return</span> leftNodeNum+rightNodeNum;
+}
+</code></pre><h4 id="求二叉树中叶子节点的个数">求二叉树中叶子节点的个数</h4><pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">int</span> <span class="title">leafNodeNumber</span><span class="params">(TreeNode root)</span> </span>{
+    <span class="keyword">if</span> (root == <span class="keyword">null</span>)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="keyword">if</span> (root.left == <span class="keyword">null</span> &amp;&amp; root.right == <span class="keyword">null</span>)
+        <span class="keyword">return</span> <span class="number">1</span>;
+    <span class="keyword">return</span> leafNodeNumber(root.left) + leafNodeNumber(root.right);
+
+}
+</code></pre><h4 id="反转二叉树(求二叉树镜像)_—-_递归和循环解法">反转二叉树(求二叉树镜像) —- 递归和循环解法</h4><div align="center"><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/invertBT.jpg" width="60%"></div>
+
+<h4 id="判断两棵二叉树是否结构相同">判断两棵二叉树是否结构相同</h4><pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">boolean</span> <span class="title">EqualsOrNot</span><span class="params">(TreeNode node1, TreeNode node2)</span> </span>{
+    <span class="comment">// 如果两棵二叉树都为空，返回真;一真一假则返回false</span>
+    <span class="keyword">if</span> (node1 == <span class="keyword">null</span> &amp;&amp; node2 == <span class="keyword">null</span>) 
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    <span class="keyword">else</span> <span class="keyword">if</span>(node1==<span class="keyword">null</span> || node2==<span class="keyword">null</span>)
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    <span class="keyword">boolean</span> left = EqualsOrNot(node1.left, node2.left);
+    <span class="keyword">boolean</span> right = EqualsOrNot(node1.right, node2.right);
+    <span class="comment">// 如果对应的左子树和右子树都为true则返回真</span>
+    <span class="keyword">return</span> left &amp;&amp; right;
+}
+</code></pre><h4 id="判断一个二叉树是否是完全二叉树">判断一个二叉树是否是完全二叉树</h4><p><strong>完全二叉树：</strong>二叉树的深度为h，除第 h 层外，其它各层 (1～h-1) 的结点数都达到最大个数，第 h 层所有的结点都连续集中在最左边<br><strong>思路：</strong>任意的一个二叉树，都可以补成一个满二叉树。这样中间就会有很多空洞。在广度优先遍历的时候，如果是满二叉树，或者完全二叉树，这些空洞是在广度优先的遍历的末尾，当我们遍历到空洞的时候，整个二叉树就已经遍历完成了。而如果遍历到空洞还没有完成遍历则说明它是非完全二叉树</p>
+<pre><code><span class="keyword">private</span> static <span class="built_in">boolean</span> isCompleteBT(TreeNode root) {
+
+    LinkedList<span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span> <span class="built_in">queue</span> <span class="subst">=</span> <span class="literal">new</span> LinkedList<span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span>();
+    <span class="comment">// 进行广度优先遍历（层次遍历），并把NULL节点也放入队列</span>
+    TreeNode node;
+    <span class="built_in">queue</span><span class="built_in">.</span>offer(root);
+    <span class="keyword">while</span>((node<span class="subst">=</span><span class="built_in">queue</span><span class="built_in">.</span>poll()) <span class="subst">!=</span> <span class="built_in">null</span>) {
+        <span class="built_in">queue</span><span class="built_in">.</span>offer(node<span class="built_in">.</span>left);
+        <span class="built_in">queue</span><span class="built_in">.</span>offer(node<span class="built_in">.</span>right);
+    }
+    <span class="comment">// 有未访问到的的非NULL节点，则树存在空洞，为非完全二叉树</span>
+    <span class="keyword">while</span>(<span class="subst">!</span><span class="built_in">queue</span><span class="built_in">.</span>isEmpty()) {
+        <span class="keyword">if</span> (<span class="built_in">queue</span><span class="built_in">.</span>poll() <span class="subst">!=</span> <span class="built_in">null</span>)
+            <span class="keyword">return</span> <span class="literal">false</span>;
+    }
+    <span class="keyword">return</span> <span class="literal">true</span>;
+}
+</code></pre><h4 id="判断二叉树是不是平衡二叉树">判断二叉树是不是平衡二叉树</h4><p><strong>平衡二叉树</strong>它是一棵空树或它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树</p>
+<pre><code>private <span class="keyword">static</span> int getTreeHeight(<span class="type">TreeNode</span> root) {
+    <span class="keyword">if</span> (root == null)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="comment">// 左子树depth与右子树depth的较大值+1即为tree的depth</span>
+    int <span class="keyword">left</span> = getTreeHeight(root.<span class="keyword">left</span>);
+    int <span class="keyword">right</span> = getTreeHeight(root.<span class="keyword">right</span>);
+
+    <span class="keyword">return</span> <span class="keyword">left</span>&gt;<span class="keyword">right</span> ? <span class="keyword">left</span>+<span class="number">1</span>:<span class="keyword">right</span>+<span class="number">1</span>;
+}
+
+private <span class="keyword">static</span> boolean isBalanceBT(<span class="type">TreeNode</span> root) {
+    <span class="keyword">if</span> (root == null)
+        <span class="keyword">return</span> <span class="built_in">true</span>;
+    int leftHeight = getTreeHeight(root.<span class="keyword">left</span>);
+    int rightHeight = getTreeHeight(root.<span class="keyword">right</span>);
+    <span class="comment">// 左右子树的高度之差应该&lt;=1;而且左右子树都应该是平衡二叉树</span>
+    <span class="keyword">if</span> (<span class="type">Math</span>.<span class="built_in">abs</span>(leftHeight-rightHeight) &gt; <span class="number">1</span>)
+        <span class="keyword">return</span> <span class="built_in">false</span>;
+    <span class="keyword">else</span>
+        <span class="keyword">return</span> isBalanceBT(root.<span class="keyword">left</span>) &amp;&amp; isBalanceBT(root.<span class="keyword">right</span>);
+}
+</code></pre><p><strong>优化解法: 只后序遍历二叉树一次，一边遍历一边比较左右子树的深度差</strong></p>
+<div align="center"><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/balanceOnce.jpg" width="50%"></div>
+
+<h4 id="判断二叉树B是不是A的子结构">判断二叉树B是不是A的子结构</h4><p><strong>思路</strong>: 第一步在树A中找到和B的根节点的值一样的节点R，第二步再判断A中以R为根节点的子树是不是包含和树B一样的结构</p>
+<pre><code><span class="keyword">private</span> <span class="function"><span class="keyword">boolean</span> <span class="title">isBsubTreeOfA</span><span class="params">(TreeNode rootA, TreeNode rootB)</span> </span>{
+    <span class="keyword">boolean</span> res = <span class="keyword">false</span>;
+    <span class="keyword">if</span> (rootA != <span class="keyword">null</span> &amp;&amp; rootB != <span class="keyword">null</span>) {
+        <span class="keyword">if</span> (rootA.val == rootB.val)
+            res = EqualsTreeOrNot.EqualsOrNot(rootA, rootB);<span class="comment">// 判断两棵树是否结构相同</span>
+        <span class="keyword">if</span> (!res)
+            res = isBsubTreeOfA(rootA.left, rootB);
+        <span class="keyword">if</span> (!res)
+            res = isBsubTreeOfA(rootA.right, rootB);
+    }
+    <span class="keyword">return</span> res;
+}
+</code></pre><h4 id="求二叉树中两个节点的最低公共祖先节点">求二叉树中两个节点的最低公共祖先节点</h4><pre><code><span class="comment">// 二叉查找树</span>
+<span class="keyword">public</span> <span class="keyword">static</span> TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+
+    <span class="keyword">if</span> (root.<span class="keyword">val</span> &gt; p.<span class="keyword">val</span> &amp;&amp; root.<span class="keyword">val</span> &gt; q.<span class="keyword">val</span>)
+        <span class="keyword">return</span> lowestCommonAncestor(root.left, p, q);
+    <span class="keyword">else</span> <span class="keyword">if</span> (root.<span class="keyword">val</span> &lt; p.<span class="keyword">val</span> &amp;&amp; root.<span class="keyword">val</span> &lt; q.<span class="keyword">val</span>)
+        <span class="keyword">return</span> lowestCommonAncestor(root.right, p, q);
+    <span class="keyword">else</span>
+        <span class="keyword">return</span> root;
+}
+<span class="comment">// 普通树二叉树</span>
+<span class="keyword">public</span> <span class="keyword">static</span> TreeNode lowestCommonAncestorBT(TreeNode root, TreeNode p, TreeNode q) {
+    <span class="comment">// 对二叉树做一个前序遍历，如果找到目标节点或者到了叶节点就return,对于return的结果进行判断</span>
+    <span class="comment">// ，两者都!null说明root就是这两个节点的最近公共父节点;否则返回非空的那一个节点；回溯过程中到达最近公共父节点时会满足两者都!null</span>
+    <span class="keyword">if</span> (root == <span class="keyword">null</span> || root == p || root == q)
+        <span class="keyword">return</span> root;
+    TreeNode leftNode = lowestCommonAncestorBT(root.left, p, q);
+    TreeNode rightNode = lowestCommonAncestorBT(root.right, p, q);
+    <span class="keyword">if</span> (leftNode != <span class="keyword">null</span> &amp;&amp; rightNode != <span class="keyword">null</span>) {
+        <span class="keyword">return</span> root;
+    } <span class="keyword">else</span> <span class="keyword">if</span> (leftNode != <span class="keyword">null</span>) {
+        <span class="keyword">return</span> leftNode;
+    } <span class="keyword">else</span> {
+        <span class="keyword">return</span> rightNode;
+    }
+}
+</code></pre><h4 id="求二叉树中两个节点之间的最大距离">求二叉树中两个节点之间的最大距离</h4><pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="typename">int</span> getTreeHeight(TreeNode root) {
+    <span class="keyword">if</span> (root == <span class="literal">null</span>)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="comment">// 左子树depth与右子树depth的较大值+1即为tree的depth</span>
+    <span class="typename">int</span> left = getTreeHeight(root.left);
+    <span class="typename">int</span> right = getTreeHeight(root.right);
+
+    <span class="keyword">return</span> left&gt;right ? left+1:right+<span class="number">1</span>;
+}
+
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="typename">int</span> findMaxDistance(TreeNode root) {
+    <span class="keyword">if</span> (root == <span class="literal">null</span>)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="comment">// 左右子树中的最大距离</span>
+    <span class="typename">int</span> leftMaxDis = findMaxDistance(root.left);
+    <span class="typename">int</span> rightMaxDis = findMaxDistance(root.right);
+
+    <span class="comment">// 左右子树的最大Height</span>
+    <span class="typename">int</span> leftHeight = <span class="number">0</span>, rightHeight = <span class="number">0</span>;
+    <span class="keyword">if</span> (root.left != <span class="literal">null</span>)
+        leftHeight = getTreeHeight(root.left);
+    <span class="keyword">if</span> (root.right != <span class="literal">null</span>)
+        rightHeight = getTreeHeight(root.right);
+
+    <span class="typename">int</span> max = leftMaxDis &gt; rightMaxDis ? leftMaxDis : rightMaxDis;
+    <span class="keyword">return</span> max&gt;(leftHeight+rightHeight) ? max:(leftHeight+rightHeight);
+}
+</code></pre><h4 id="将二叉查找树变为有序的双向链表">将二叉查找树变为有序的双向链表</h4><p><strong>思路</strong>:将tree看做左子树，根节点，右子树三个部分，然后利用中序遍历先对左子树转变为双向链表然后连接根节点；然后将右子树转变为双向链表，根节点连接到该双向链表；最后返回一个有序双向链表的头结点</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function">TreeNode <span class="title">BST2List</span><span class="params">(TreeNode root)</span> </span>{
+    TreeNode lastNodeOfList = <span class="keyword">null</span>;
+    lastNodeOfList = convert(root, lastNodeOfList);
+    <span class="comment">// 将lastNodeOfList从双向链表尾部移动到头部</span>
+    <span class="keyword">while</span> (lastNodeOfList != <span class="keyword">null</span> &amp;&amp; lastNodeOfList.left != <span class="keyword">null</span>) {
+        lastNodeOfList = lastNodeOfList.left;
+    }
+    <span class="keyword">return</span> lastNodeOfList;
+}
+
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="function">TreeNode <span class="title">convert</span><span class="params">(TreeNode root, TreeNode lastNodeOfList)</span> </span>{
+    <span class="keyword">if</span> (root == <span class="keyword">null</span>) {
+        <span class="keyword">return</span> root;
+    }
+    <span class="comment">// 转变左子树为双向链表</span>
+    <span class="keyword">if</span> (root.left != <span class="keyword">null</span>)
+        lastNodeOfList = convert(root.left, lastNodeOfList);
+    <span class="comment">// 修改双链表尾节点为当前节点</span>
+    <span class="keyword">if</span> (lastNodeOfList != <span class="keyword">null</span>) {
+        root.left = lastNodeOfList;
+        lastNodeOfList.right = root;
+    }
+    lastNodeOfList = root;
+    <span class="comment">// 转变右子树为双向链表</span>
+    <span class="keyword">if</span> (root.right != <span class="keyword">null</span>)
+        lastNodeOfList = convert(root.right, lastNodeOfList);
+    <span class="comment">// 返回值为双链表尾节点</span>
+    <span class="keyword">return</span> lastNodeOfList;
+}
+</code></pre><h4 id="由前序遍历序列和中序遍历序列重建二叉树">由前序遍历序列和中序遍历序列重建二叉树</h4><p>二叉树前序遍历序列中，第一个元素总是树的根节点的值。中序遍历序列中，左子树的节点的值位于根节点的值的左边，右子树的节点的值位于根节点的值的右边。<br><strong>递归解法</strong>：</p>
+<ol>
+<li>如果前序遍历为空或中序遍历为空或节点个数小于等于0，返回NULL。</li>
+<li>创建根节点。前序遍历的第一个数据就是根节点的数据，在中序遍历中找到根节点的位置，可分别得知左子树和右子树的前序和中序遍历序列，重建左右子树。</li>
+</ol>
+<h4 id="二叉树的下一个节点(给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点left和right，同时包含指向父结点的指针next)">二叉树的下一个节点(给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点left和right，同时包含指向父结点的指针next)</h4><p><strong>思路</strong>: 三种情况</p>
+<ol>
+<li>如果一个结点有右子树，那么它的下一个结点就是它的右子树中的左子结点。也就是说右子结点出发一直沿着指向左子结点的指针，我们就能找到它的下一个结点。 </li>
+<li><p>如果一个结点没有右子树，又可以分为两种情况：</p>
+<ul>
+<li>如果结点是它父节点的左子结点，那么它的下一个结点就是它的父结点。 </li>
+<li><p>如果一个结点既没有右子树，并且它还是它父结点的右子结点。我们可以沿着指向父节点的指针一直向上遍历，直到找到一个是它父结点的左结点的结点。如果这样的结点存在，那么这个结点的父结点就是我们要找的下一个结点。</p>
+<pre><code><span class="keyword">public</span> TreeLinkNode GetNext(TreeNode pNode) {
+    TreeNode curNode = <span class="keyword">null</span>;
+    <span class="comment">//第一步：判断是否有右孩子</span>
+    <span class="keyword">if</span>(pNode.right != <span class="keyword">null</span>){
+        curNode = pNode.right;
+        <span class="keyword">while</span>(curNode.left != <span class="keyword">null</span>) curNode = curNode.left;
+        <span class="keyword">return</span> curNode;
+    }
+    <span class="comment">//第二步：判断是否是其父节点的左孩子</span>
+    <span class="keyword">if</span>(pNode.<span class="keyword">next</span> == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;
+    <span class="keyword">if</span>(pNode == pNode.<span class="keyword">next</span>.left){
+        <span class="keyword">return</span> pNode.<span class="keyword">next</span>;
+    }
+    <span class="comment">//第三步：向上找其父节点，直到父节点是其父节点的父节点的左孩子</span>
+    curNode = pNode.<span class="keyword">next</span>;
+    <span class="keyword">while</span>(curNode.<span class="keyword">next</span> != <span class="keyword">null</span>){
+        <span class="keyword">if</span>(curNode == curNode.<span class="keyword">next</span>.left){
+            <span class="keyword">return</span> curNode.<span class="keyword">next</span>;
+        }
+        <span class="comment">//继续向上找父节点</span>
+        curNode = curNode.<span class="keyword">next</span>;
+    }
+    <span class="keyword">return</span> <span class="keyword">null</span>;
+}
+</code></pre></li>
+</ul>
+</li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/二叉树/"> #二叉树 </a>
+          
+            <a href="../../tags/数据结构/"> #数据结构 </a>
+          
+            <a href="../../tags/递归/"> #递归 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2016/02/19/Nginx配置教程/">
+                Nginx配置教程
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-02-19
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/02/19/Nginx配置教程/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/19/Nginx配置教程/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h4 id="nginx反向代理/负载均衡">nginx反向代理/负载均衡</h4><p>nginx是一个网页服务器，它能反向代理HTTP, HTTPS, SMTP, POP3, IMAP的协议链接，以及负载均衡和HTTP缓存  </p>
+<ol>
+<li><strong>代理</strong>，就是在客户端和服务端之间强行添加了一层，用来实现流量转发的功能  </li>
+<li><strong>正向代理</strong>，是用于代理客户端的。举个很简单的例子：你直接在大陆地区访问google.com肯定是访问不了的，但是现在假如你有一台在美国的主机A，并且能够正常访问，那么你可以将浏览器对google.com的请求先转发给服务器A，服务器A收到请求后，扮演客户端的角色，发起对google.com的请求，服务器A收到响应后，又扮演服务端，将此响应原封不动的返回给你，自此，一次正向代理顺利完成。  </li>
+<li><strong>反向代理</strong>顾名思义是用来代理服务端的多台机器，访问同一个域名可以分流到不同的服务器。也就是<strong>负载均衡</strong>，用来分流流量压力到不同的服务器</li>
+</ol>
+<h4 id="nginx的多进程并发模型">nginx的多进程并发模型</h4><h4 id="nginx配置文件">nginx配置文件</h4><ol>
+<li><p>配置文件所在的常见目录: (可用nginx -t 测试配置文件是否正确)</p>
+<pre><code>/etc/nginx/nginx<span class="class">.conf</span>
+/opt/nginx/conf/nginx<span class="class">.conf</span>
+/usr/local/nginx/nginx<span class="class">.conf</span>
+/usr/local/etc/nginx/nginx.<span class="function"><span class="title">cnf</span><span class="params">(Mac系统)</span></span>
+</code></pre></li>
+<li><p>Nginx配置文件主要分成6部分：<strong>main（全局设置）、server（主机设置/指定虚拟主机域名、IP和端口）、upstream（上游服务器设置，主要为反向代理、负载均衡相关配置）和 location（URL匹配特定位置后的设置/用于匹配网页位置）、events(nginx工作模式)、http(http设置)</strong>  </p>
+</li>
+<li>他们之间的关系式：server继承main，location继承server,upstream既不会继承指令也不会被继承,它有自己的特殊指令，不需要在其他地方的应用</li>
+<li><a href="https://www.zybuluo.com/phper/note/89391" target="_blank" rel="external">参考链接</a></li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/nginx/"> #nginx </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2016/02/18/依道-wifi室内定位的实现原理/">
+                依道-wifi室内定位的实现原理
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-02-18
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/算法/">算法</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/02/18/依道-wifi室内定位的实现原理/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/18/依道-wifi室内定位的实现原理/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="技术背景和原理">技术背景和原理</h3><ol>
+<li>每一个无线AP都有一个全球唯一的MAC地址,并且一般来说无线AP在一段时间内是不会移动的; 然后每一个移动设备在开启Wi-Fi的情况下,即可扫描并收集周围的AP信号,无论是否加密,是否已连接，甚至信号强度不足以显示在无线信号列表中,都可以获取到AP广播出来的MAC地址</li>
+<li><strong>基于RSSI(信号接收强度)模型方法</strong>是一种基于MAC层的通过接收到的信号强弱测定信号点与接收点的距离，进而根据相应数据进行定位计算的方法。因为室内WIFI信号强度会随着传播距离的增加而降低(当然随着距离的增加同理定位的精度也会降低。)我们<strong>根据移动终端测量接收到的信号强度和已知的无线信号衰落模型，可以估算出收发方之间的距离，根据多个估算的距离值，可以计算出移动终端的位置</strong>  </li>
+<li>位置服务商不断更新、补充自己的数据库,以保证数据的准确性,毕竟无线AP不像基站塔那样基本100%不会移动 </li>
+</ol>
+<h3 id="两种算法">两种算法</h3><ol>
+<li><strong>三角定位</strong>:<br>如果我们已经知道了所有AP的位置，我们可以利用信号衰减模型RSSI估算出移动设备距离各个AP的距离,然后根据移动设备到周围AP距离作为直径画圆，其交点就是该设备的位置，如果三者两两相交而不是交于一点，可以采用近似估计法找出位置。很容易发现，三角定位算法需要我们提前知道AP的位置，因此对于环境变化较快的场合不适合使用。</li>
+<li><strong>指纹数据匹配算法</strong>：指纹算法类似于机器学习算法，分为两个阶段:<ul>
+<li><strong>离线训练阶段</strong>: 第一步，将需要室内定位区域划分网格，建立采样点（间距1~2m)；第二步，使用移动设备打开wifi逐个采样点采样，记录该点位置、所获取的RSSI及AP地址，保存到指纹数据库。<strong>采样过程</strong>对每个点每隔5s采样一次，共100次，然后对这些数据去除噪点，并对这些采样数据求均值</li>
+<li><strong>在线定位阶段</strong>: 用户持移动设备在定位区域移动，实时获取当前信号接收强度及AP地址，将该信息上传到服务器进行匹配（匹配算法有KNN、神经网络等),得到估算位置返还给手机app。<strong>匹配具体过程</strong>：例如该手机获取到10个ap信号及其对应的信号接收强度，那么就去指纹数据库寻找对应的数据进行匹配,怎么寻找呢？通过每个ap及其信号接受强度都可以在数据库找到多个位置信息(也就是在数据库找到K个信息最近的数据，最近的度量方法是通过RSSI和AP—-数据库中相同AP的RSSI和该RSSI差值小于某一阀值)，假设每个找到10个，那就是一共100个位置信息，那么最后100个里边出现频率最高的就是位置就是该移动设备的定位结果</li>
+</ul>
+</li>
+</ol>
+<h3 id="定位过程常见问题及解决方法">定位过程常见问题及解决方法</h3><ol>
+<li><strong>怎么解决定位过程中路由器信号遇到障碍物反射影响精度的问题</strong><ul>
+<li>对RSSI模型要进行环境参数拟合，添加高斯随机变量来对不同的环境进行模型优化</li>
+<li>路由器数目要足够多，这样可以减少部分路由器遇到墙壁反射带来的误差</li>
+<li>一个移动设备会同时接收到多个路由器信号来确定位置，如果该位置得到的某个路由器及其信号接受强度和原数据库信息差异过大，就应该修改数据库数据</li>
+</ul>
+</li>
+</ol>
+<h3 id="参考图">参考图</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/wifi定位.JPG" width="100%"></p>
+<h3 id="参考链接">参考链接</h3><ol>
+<li><a href="http://www.zhihu.com/question/20593603" target="_blank" rel="external">Wi-Fi 定位的原理</a></li>
+<li><a href="http://blog.liuning.tk/2015/09/consin-similarity-indoor-positioning" target="_blank" rel="external">基于余弦相似性的指纹匹配算法</a></li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/室内定位/"> #室内定位 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2016/01/17/Html5、React-Native和Native应用开发方式的对比分析/">
                 Html5、React Native和Native应用开发方式的对比分析
               </a>
@@ -477,691 +1197,11 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/01/13/Roman与Integer之间的相互转换/">
-                Roman与Integer之间的相互转换
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-01-13
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Leetcode/">Leetcode</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/01/13/Roman与Integer之间的相互转换/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/13/Roman与Integer之间的相互转换/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>罗马数字与阿拉伯数字之间的简单转换方法,首先需要了解罗马数字计数法，在这两道转换题里我们只用到了前三项规则</p>
-<ol>
-<li><p>罗马数字共有7个，即I（1）、V（5）、X（10）、L（50）、C（100）、D（500）和M（1000）</p>
-</li>
-<li><p>右加左减: 较大的罗马数字的右边记上较小的罗马数字，表示大数字加小数字; 较大的罗马数字的左边记上较小的罗马数字，表示大数字减小数字</p>
-</li>
-<li>左减有一定限制: 只有I, X, C可以放到左边当做减数使用,而且左减不能越位,I的右边只能是VX, X右边只能是LC, C的右边只能是DM; 左减数字必须为一位</li>
-<li>其他规则: 加线乘千、重复数次、右加数字不可连续超过三位、同一数码最多只能连续出现三次</li>
-</ol>
-<h3 id="Roman_to_Integer">Roman to Integer</h3><p>解题思路:  对于每一个roman字符,除了I，X，C三种情况会出现减去对应数值，其他情况都是加上该字符对应的数值; 针对I、X、C，我们可以总结发现只需要考察他们的下一位是否满足减的条件,是则减，否则加。</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
-    <span class="keyword">public</span> <span class="function"><span class="keyword">int</span> <span class="title">romanToInt</span><span class="params">(String s)</span> </span>{
-        <span class="keyword">int</span> res = <span class="number">0</span>;
-        <span class="keyword">int</span> len = s.length();
-        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) {
-            <span class="keyword">char</span> tmp = s.charAt(i);
-            <span class="keyword">switch</span> (tmp) {
-                <span class="keyword">case</span> <span class="string">'I'</span>:
-                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'V' || s.charAt(i+1) == 'X')) {
-                        res -= <span class="number">1</span>;
-                        <span class="keyword">break</span>;
-                    }
-                    res += <span class="number">1</span>;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'V'</span>:
-                    res += 5;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'X'</span>:
-                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'L' || s.charAt(i+1) == 'C')) {
-                        res -= <span class="number">10</span>;
-                        <span class="keyword">break</span>;
-                    }
-                    res += <span class="number">10</span>;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'L'</span>:
-                    res += 50;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'C'</span>:
-                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'D' || s.charAt(i+1) == 'M')) {
-                        res -= <span class="number">100</span>;
-                        <span class="keyword">break</span>;
-                    }
-                    res += <span class="number">100</span>;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'D'</span>:
-                    res += 500;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'M'</span>:
-                    res += 1000;
-                    <span class="keyword">break</span>;
-                <span class="keyword">default</span>:
-                    <span class="keyword">break</span>;
-            }
-        }
-        <span class="keyword">return</span> res;
-    }
-}
-</code></pre><h3 id="Integer_To_Roman">Integer To Roman</h3><p>解题思路: 对于输入的数值进行取商处理，从大的计数单位到小的计数单位依次取商, 商则是该计数单位对应的roman字符的个数。</p>
-<pre><code>public <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
-    public <span class="built_in">String</span> intToRoman(<span class="built_in">int</span> <span class="built_in">num</span>) {
-        <span class="comment">// igr存储的是从大到小每一个基本计数单位,与roman一一对应</span>
-        <span class="built_in">String</span>[] roman = {<span class="string">"M"</span>, <span class="string">"CM"</span>, <span class="string">"D"</span>, <span class="string">"CD"</span>, <span class="string">"C"</span>, <span class="string">"XC"</span>, <span class="string">"L"</span>, <span class="string">"XL"</span>, <span class="string">"X"</span>, <span class="string">"IX"</span>, <span class="string">"V"</span>, <span class="string">"IV"</span>, <span class="string">"I"</span>};
-        <span class="built_in">int</span>[] igr = {<span class="number">1000</span>, <span class="number">900</span>, <span class="number">500</span>, <span class="number">400</span>, <span class="number">100</span>, <span class="number">90</span>, <span class="number">50</span>, <span class="number">40</span>, <span class="number">10</span>, <span class="number">9</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">1</span>};
-        StringBuilder res = <span class="keyword">new</span> StringBuilder();
-        <span class="keyword">for</span> (<span class="built_in">int</span> i=<span class="number">0</span>; i&lt;roman.length; i++) {
-            <span class="built_in">int</span> quotient = <span class="built_in">num</span> / igr[i];
-            <span class="keyword">for</span> (<span class="built_in">int</span> j=<span class="number">0</span>; j&lt;quotient; j++) {
-                res.append(roman[i]);
-            }
-            <span class="built_in">num</span> -= quotient * igr[i];
-        }
-        <span class="keyword">return</span> res.toString();
-    }
-}
-</code></pre>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Leetcode/"> #Leetcode </a>
-          
-            <a href="../../tags/String/"> #String </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/12/24/Google-Compute-Engine配置LAMP环境以及部署Web项目/">
-                Google Compute Engine配置LAMP环境以及部署Web项目
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-12-24
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/12/24/Google-Compute-Engine配置LAMP环境以及部署Web项目/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/24/Google-Compute-Engine配置LAMP环境以及部署Web项目/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/10/20/Java容器类库的学习研究/">
-                Java容器类库的学习研究
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-10-20
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/java学习笔记/">java学习笔记</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/10/20/Java容器类库的学习研究/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/20/Java容器类库的学习研究/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="Comparable和Comparator接口区别"><a href="http://fuxueliang.com/tech/2013/05/26/java-sorting-comparator-vs-comparable-tutorial/" target="_blank" rel="external">Comparable和Comparator接口区别</a></h3><ol>
-<li>Comparable &amp; Comparator 都是用来实现集合中元素的比较、排序的，只是 Comparable 是在集合内部定义的方法实现的排序，Comparator 是在集合外部实现的排序，所以，如想实现排序，就需要在集合外定义 Comparator 接口的方法或在集合内实现 Comparable 接口的方法</li>
-<li><p><strong>Comparable</strong>:一个实现了comparable接口的对象的实例可以被用于和相同类的不同实例做对比。它本身必须实现java.lang.Comparable的接口，这样它就拥有了对比的能力;java.util.Collections.sort(List) 和 java.util.Arrays.sort(Object[]) 方法被用来排列使用内在排序（natural ordering）方式的对象.</p>
-</li>
-<li><p><strong>Comparator</strong>:一个实现了comparator接口的对象能够对比不同的对象。它不能用于同一个类的不同实例的对比，但是可以用于其他的类的实例做对比。它必须实现java.util.Comparator的接口;java.util.Collections.sort(List, Comparator) 和 java.util.Arrays.sort(Object[], Comparator)方法在Comparator如果可供比较的时候会被用到.</p>
-</li>
-<li><p>两者的接口实现差异:<br> <strong>java.lang.Comparable: int compareTo(Object o1)</strong></p>
-<p> 当前对象与o1对象做对比，返回int值：  </p>
-<p> positive – 当前对象大于o1  </p>
-<p> zero – 当前对象等于o1  </p>
-<p> negative – 当前对象小于o1  </p>
-<p> <strong>java.util.Comparator: int compare(Object o1, Objecto2)</strong></p>
-<p> 用于o1与o2对象做对比，返回int值：</p>
-<p> positive – o1大于o2  </p>
-<p> zero – o1等于o2  </p>
-<p> negative – o1小于o2</p>
-</li>
-<li><p>实例:<br> 内在ID顺序排序</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Employee</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Employee</span>&gt; </span>{
-    <span class="keyword">private</span> <span class="keyword">int</span> empId;
-    <span class="keyword">private</span> String name;
-    <span class="keyword">private</span> <span class="keyword">int</span> age;
-
-    <span class="comment">/**
-    * Compare a given Employee with this object.
-    * If employee id of this object is 
-    * greater than the received object,
-    * then this object is greater than the other.
-    */</span>
-    <span class="keyword">public</span> <span class="keyword">int</span> compareTo(Employee o) {
-        <span class="keyword">return</span> <span class="keyword">this</span>.empId - o.empId ;
-    }
-….
-}
-</code></pre></li>
-</ol>
-<pre><code>按照name排序
-
-    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EmpSortByName</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Employee</span>&gt;</span>{
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Employee o1, Employee o2)</span> </span>{
-            <span class="keyword">return</span> o1.getName().compareTo(o2.getName());
-        }
-    }     
-</code></pre><h3 id="Collections-sort()与Arrays-sort()">Collections.sort()与Arrays.sort()</h3><ol>
-<li><p>Arrays.sort()在其内部实现上针对数组元素的不同类型采用不同的排序方式: ①基本类型数据(int, short, long, float, double等)采用QuickSort， 而对对象类型采取MergeSort. Why? 我们知道QuickSort在统计意义上效率比MergeSort高，为何不都采用 QuickSort ？<br> Answer: 概括的说，一个是稳定性，一个是移动次数。使用不同类型的排序算法主要是由于 quick sort 是不稳定的，而 merge sort 是 stable 的。这里的 stable 是指比较相等的数据在排序之后仍然按照排序之前的前后顺序排列（保序性）。对于基本数据类型，稳定性没有意义。而<strong>对于对象类型，稳定性是比较重要的</strong>，因为对象相等的判断可能只是判断关键属性，最好保持相等对象的非关键属性的顺序与排序前一直；另外一个原因是由于<strong>合并排序相对而言比较次数比快速排序少，移动（对象引用的移动）次数比快速排序多</strong>，而对于对象来说，比较一般比移动耗时。  </p>
-<p> MergeSort:（）1）最坏时间复杂度是 O(nlgn)；（2）平均时间复杂度是 O(nlgn)；（3）空间复杂度是 O(n)。  </p>
-<p> QuickSort: （1）最坏时间复杂度是 O(n^2)；（2）平均时间复杂度是 O(nlgn)；（3）空间复杂度最坏是 O(n)，均匀就是O(logn)。</p>
-</li>
-</ol>
-<ol>
-<li><p>Collections.sort()主要是针对集合的排序,比如List, 其内部实现如下:</p>
-<pre><code><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Comparable&lt;? super T&gt;&gt; <span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(List&lt;T&gt; <span class="built_in">list</span>)</span> </span>{
-    Object[] a = <span class="built_in">list</span>.toArray();
-    Arrays.sort(a);
-    ListIterator&lt;T&gt; i = <span class="built_in">list</span>.listIterator();
-    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;a.length; j++) {
-        i.next();
-        i.<span class="built_in">set</span>((T)a[j]);
-    }
-}
-</code></pre><p> 可以看出其内部实际采用的就是Arrays.sort()</p>
-</li>
-</ol>
-<h3 id="HashMap与LinkedHashMap，TreeMap">HashMap与LinkedHashMap，TreeMap</h3><ol>
-<li><p><strong>HashMap实现原理</strong>内部对键值对的存储结构使用的是数组+链表+红黑树的形式（JDK1.8增加了红黑树部分,当一个链表长度&gt;8就转换为红黑树，利用红黑树快速增删改查的特点提高HashMap的性能),每一个数组元素都是一个键值对，分别都对应着一个链表结构</p>
-<ul>
-<li><strong>put存储元素</strong>HashMap在存储Entry对象的时候，首先根据Key的hashCode()方法得到其hashCode值，然后根据高位运算和取模运算来判定将存储到Entry[]数组的哪一个位置对应的链表上O(1),然后调用key的Equals方法去遍历链表比较key值，如果找到则更新value并返回旧址，否则将新的Entry加入到该链表头部</li>
-<li><strong>内部结构图</strong>：<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HashMap.jpg" class="full-image" width="100%"></li>
-<li><strong>遍历顺序</strong>也就是说Entry<key,value>对象随机地分配到某个Entry[] table数组的元素表示的链表上, HashMap内部Entry<k,v>的遍历顺序是对Entry[] table 数组，从index=0开始，依次遍历table[i]上的链表上的Entry对象;所以对HashMap遍历Entry对象的顺序和Entry对象的存储顺序之间没有任何关系.</k,v></key,value></li>
-<li><strong>重新hash调节大小</strong>HashMap允许null键插入，其内部会将null存到table[0]中进行处理. 内部有负载因子和数组长度、size等参数，当map中元素达到16*0.75=12时，因为链表长度可能很长导致查找效率降低，hashmap会对原来的所有元素重新进行hash,数组容量变为原来的2倍，当然Java里的数组是无法自动扩容的，方法是使用一个新的数组代替已有的容量小的数组；重新hash时链表顺序会被反转，可以避免尾部遍历(1.8中不会倒置，也不会重新计算哈希).<a href="http://www.xuebuyuan.com/2231227.html" target="_blank" rel="external">HashMap</a>; 在HashMap调整大小时会出现条件竞争，也就是多个线程同时来调整大小，出现死循环.如果内存空间很多而又对时间效率要求很高，可以降低负载因子Load factor的值；相反，如果内存空间紧张而对时间效率要求不高，可以增加负载因子loadFactor的值，这个值可以大于1。</li>
-<li><strong>key不可变</strong>Map的key值应该使用不可变对象，以防put和get的时候对象发生变化从而导致hashcode变化，取不到正确的对象；HashMap也可以声明为同步的，使用Map m = Collections.synchronizeMap(hashMap);</li>
-<li><strong>Fail-Fast机制</strong>:在使用迭代器的过程中有其他线程修改了map结构，那么将抛出ConcurrentModificationException，这就是所谓fail-fast机制。这一机制在源码中的实现是通过modCount域，modCount顾名思义就是修改次数，对HashMap元素个数的修改都将增加这个值;在迭代器初始化过程中会将这个值赋给迭代器的expectedModCount。在迭代过程中，判断modCount跟expectedModCount是否相等，如果不相等就表示已经有其他线程修改了Map中元素个数.例如：HashMap在foreach迭代器循环遍历时如果其他线程对该map进行结构上的更改(比如进行add和map.remove元素操作,而不是简单的修改集合元素的内容)会导致ConcurrrentModificationEaception</li>
-<li><strong>遍历区别</strong>①for循环遍历时删除或者增加某个元素只会导致数组越界(rangeCheck函数)，或者一直add生成无穷序列以及遍历不完整 ②使用Iterator遍历或者foreach遍历时如果采用iterator.remove()不会报错，因为他会重新设置expectedModCount=modCount，如果采用list.remove()则会出现ConcurrrentModificationException</li>
-</ul>
-</li>
-<li><p><strong>LinkedHashMap</strong>是HashMap的子类，它可以实现对容器内Entry的存储顺序和对Entry的遍历顺序保持一致; LinkedHashMap内部使用了一个Entry类型的双向链表，用这个双向链表记录Entry的存储顺序。当需要对该Map进行遍历的时候，实际上是遍历的是这个双向链表。</p>
-<p>内部结构图：<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/LinkedHashMap.png" class="full-image" width="100%"></p>
-<p>遍历方式:  </p>
-<pre><code>//构造函数的默认值为<span class="literal">false</span>，按照插入顺序排序，先进先出；
-//<span class="literal">true</span>代表按照访问顺序排序，那么调用get方法后，内部会调用recordAccess方法记录访问顺序，将最新访问的元素添加到双向链表的表头，并从原来的位置删除，不断访问可以形成按访问顺序排序的链表;可以重写removeEldestEntry方法返回<span class="literal">true</span>值指定插入元素时移除最老的元素。 
-<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; linkedHashMap = new <span class="type">LinkedHashMap</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt;(<span class="number">16</span>,<span class="number">0</span>.<span class="number">75</span>f,<span class="literal">true</span>);
-
-<span class="type">Iterator</span>&lt;<span class="type">Map</span>.<span class="type">Entry</span>&gt; <span class="keyword">iterator</span>= linkedHashMap.entrySet().<span class="keyword">iterator</span>();  
-
-<span class="keyword">while</span>(<span class="keyword">iterator</span>.hasNext())  
-{  
-    <span class="type">Map</span>.<span class="type">Entry</span> entry = <span class="keyword">iterator</span>.next();  
-    <span class="type">System</span>.<span class="keyword">out</span>.println(entry.getKey()+<span class="string">":"</span>+entry.getValue());  
-} 
-
-<span class="keyword">for</span>(<span class="type">Entry</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; entry : linkedHashMap.entrySet()) {
-    <span class="type">System</span>.<span class="keyword">out</span>.println(entry.getKey() + <span class="string">": "</span> + entry.getValue());
-}
-</code></pre></li>
-<li><p><strong>TreeMap</strong>实现SortedMap接口，可以保证元素的排列以key值有序，默认是按键值的升序排序，也可以指定排序的比较器，当用Iterator遍历TreeMap时，得到的记录是排过序的。内部实现采用红黑树(一种平衡排序二叉树)，循环遍历时直接中序遍历树输出。在使用TreeMap时，key必须实现Comparable接口或者在构造TreeMap传入自定义的Comparator，否则会在运行时抛出java.lang.ClassCastException类型的异常。</p>
-</li>
-</ol>
-<h3 id="HashTable，Hashset和ConcurrentHashMap">HashTable，Hashset和ConcurrentHashMap</h3><ol>
-<li><strong>HashTable</strong>实现Map接口(和HashMap一样)不允许null键的存在，他是一个synchronized的map,因为内部的put,get方法进行了同步所以导致效率降低,线程安全性强于ConcurrentHashMap</li>
-<li><strong>HashSet</strong>实现set接口，不允许重复元素的存在，但是允许null存在；每次add之前会先调用hashcode和equals方法去判断该对象是否已经存在，已存在则返回false,不会更改set中任何内容;存取速度没有HashMap快；但是其内部实现就是一个HashMap,只是每一个<key,value>中的value都是PRESET</key,value></li>
-<li><strong>HashMap和 HashTable 的区别</strong>：<ul>
-<li>两者都实现Map接口，但是HashTable继承Dictionary类，HashMap则是继承AbstractMap接口;</li>
-<li>HashTable是线程安全的(通过直接对get,put等方法加Synchronized锁来实现),HashMap则是线程不安全的;</li>
-<li>HashMap可以让你将空值作为一个表的条目的key或value，但是HashTable不可以；</li>
-<li>哈希值的使用不同，HashTable直接使用对象的hashCode。而HashMap重新计算hash值；</li>
-<li>两个遍历方式的内部实现上不同，Hashtable、HashMap都使用了 Iterator。而由于历史原因，Hashtable还使用了Enumeration的方式</li>
-</ul>
-</li>
-<li><strong>ConcurrentHashMap</strong>是一个Java5以后才提供的同步容器,其内部实现采用二次hash,分区同步的方式，内部默认维护一个包含16个segment对象的数组,每个数组对象又对应一个桶数组(相当于一个HashMap)，每个桶数组对象又维护着一个HashEntry链表;对于put的hashcode相同的key会出现同步阻塞，因为它会将当前hashcode对应的segment锁住，但是hashcode不相同的key插入时是不会出现同步阻塞的，这样相对于HashTable(同一时间点，只能有一个线程持有锁，也就是说在同一时间点，只能有一个线程能访问容器)就可以大大提高效率，提高了并发性，相当于16个线程同时操作。  <ul>
-<li>ConcurrentHashMap 针对读操作做了大量的优化。通过 HashEntry 对象的不变性和用 volatile 型变量协调线程间的内存可见性，使得大多数时候，<strong>读操作不需要加锁就可以正确获得值</strong></li>
-<li>其内部的结构可以让其在进行<strong>写操作的时候能够将锁的粒度保持地尽量地小</strong>，不用对整个ConcurrentHashMap加锁，而是分段加锁</li>
-<li><strong>源码中containsValue和size操作实现原理</strong>: ConcurrentHashMap的size操作是在多个Segment中进行,但是也采用了一种比较巧的方式，来尽量避免对所有的Segment都加锁。具体怎么做的呢？？？Segment中的有一个modCount变量，代表的是对Segment中元素的数量造成影响的操作的次数，这个值只增不减，size操作就是遍历了两次Segment，每次记录Segment的modCount值，然后将两次的modCount进行比较，如果相同，则表示期间没有发生过写入操作，就将原先遍历的结果返回，如果不相同，则把这个过程再重复做一次，如果再不相同，则就需要将所有的Segment都锁住，然后一个一个遍历了</li>
-<li><strong>hash函数</strong>: 用到了Wang/Jenkins hash算法的变种，主要的目的是为了减少哈希冲突，使元素能够均匀的分布在不同的Segment上，从而提高容器的存取效率。假如哈希的质量差到极点，那么所有的元素都在一个Segment中，不仅存取元素缓慢，分段锁也会失去意义  </li>
-</ul>
-</li>
-</ol>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConcurrentHashMap.jpg" class="full-image" width="100%"></p>
-<h3 id="ArrayList，CopyOnWriteArrayList和LinkedList">ArrayList，CopyOnWriteArrayList和LinkedList</h3><ol>
-<li><strong>ArrayList、LinkedList、Vector的区别</strong>：ArrayList 和Vector底层是采用数组方式存储数据，ArrayList可以通过<code>List list = Collections.synchronizeList(arrayList);</code>实现同步；Vector由于使用了synchronized方法（线程安全）所以性能上比ArrayList要差，LinkedList使用双向链表实现存储，随机存取比较慢，但是增删非常快，LinkedList中包含了 first 和 last 两个指针(Node)。Node 中包含了上一个节点和下一个节点的引用，这样就构成了双向的链表</li>
-<li><strong>CopyOnWriteArrayList</strong>: CopyOnWriteArrayList的核心思想是利用高并发往往是读多写少的特性，对读操作不加锁，对写操作加锁，进行写操作时先复制一份新的集合，在新的集合上面修改，然后将新集合赋值给旧的引用，并通过volatile 保证其可见性。这种“写入时复制”策略，对容器的写操作将导致的容器中基本数组的复制，性能开销较大。所以在有写操作的情况下CopyOnWriteArrayList性能不佳，而且如果容器容量较大的话容易造成溢出</li>
-<li><strong>LinkedBlockingQueue</strong>: 它是线程安全的阻塞队列，是<strong>作为生产者消费者的首选</strong>，LinkedBlockingQueue 可以指定容量，也可以不指定，不指定的话，默认最大是Integer.MAX_VALUE，其中主要用到put和take方法，put方法在队列满的时候会阻塞直到有队列成员被消费，take方法在队列空的时候会阻塞，直到有队列成员被放进来</li>
-<li><strong>ConcurrentLinkedQueue</strong>: ConcurrentLinkedQueue是一个无锁的并发线程安全的非阻塞队列；Queue中元素按FIFO原则进行排序．采用CAS操作，来保证元素的一致性</li>
-</ol>
-<h3 id="参考链接">参考链接</h3><ol>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477291&amp;idx=1&amp;sn=68fd7ee467eb60bb984b3c6136cea039&amp;scene=0#wechat_redirect" target="_blank" rel="external">Java8系列之重新认识HashMap</a></li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/java/"> #java </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/09/04/OpenWrt/">
-                OpenWrt
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-09-04
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/09/04/OpenWrt/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/04/OpenWrt/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>Power consumption will be higher if a USB device is attached to its USB port!  </p>
-<p>scp command：  </p>
-<p>scp libmysqlclient_5.1.73-1_ar71xx.ipk root@192.168.1.1:  </p>
-<p><strong>scp error: Host key verification failed</strong></p>
-<p>cd ~/.ssh<br>rm known_hosts</p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/08/30/Android应用性能优化/">
-                Android应用性能优化
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-08-30
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Android/">Android</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/08/30/Android应用性能优化/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/30/Android应用性能优化/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>Android手机由于其本身的后台机制和硬件特点，性能上一直被诟病，所以软件开发者对软件本身的性能优化就显得尤为重要；本文将对Android开发过程中性能优化的各个方面做一个回顾与总结。</p>
-<h2 id="Cache优化">Cache优化</h2><ol>
-<li><p><strong>ListView缓存</strong>：</p>
-<ul>
-<li>ListView中有一个回收器，Item滑出界面的时候View会回收到这里，需要显示新的Item的时候，就尽量重用回收器里面的View；每次在getView函数中inflate新的item之前会先判断回收器中是否有缓存的view，即判断<strong>convertView</strong>是否为null，是则inflate一个新的item View，否则重用回收器中的item。</li>
-<li>此外，ListView还使用静态的<strong>ViewHolder减少findViewById的次数</strong></li>
-<li>ListView中有<strong>getViewTypeCount()函数用于获取列表有几种布局类型</strong>，<strong>getItemViewType(int position)用于获取在position位置上的布局类型</strong>; 我们可以利用ViewType来给不同类型的item创建不同的View，这样可以利于ListView的回收</li>
-<li>对Item中图片进行适当压缩, 并进行异步加载；如果快速滑动，不加载图片；实现数据的分页加载</li>
-</ul>
-</li>
-<li><p><strong>IO缓存</strong>：在文件和网络IO中使用具有缓存策略的输入流，BufferedInputStream替代InputStream，BufferedReader替代Reader，BufferedReader替代BufferedInputStream</p>
-</li>
-<li><p><strong>data缓存(空间换时间)</strong>：①缓存数据库的查询结果，比如缓存数据库表中的数据条数，这样就可以避免多次的select count查询 ②缓存磁盘文件中需要频繁访问的数据到内存中 ③缓存耗时计算的结果</p>
-</li>
-</ol>
-<h2 id="Battery优化">Battery优化</h2><ul>
-<li>cpu的使用率和使用频率将直接或间接的影响电量的分配和使用，<strong>cpu降频</strong>可以节约电量</li>
-<li><p><strong>service优化</strong>  </p>
-<ul>
-<li>service作为一个运行在主线程中的后台服务，应该尽量避免耗时动作，而应该尽量新开线程去处理耗时动作</li>
-<li><p>监听系统广播看service是否存活，否则kill掉；降低service优先级使得系统内存吃紧时会被自动kill掉</p>
-</li>
-<li><p>使用Android提供的IntentService代替service，因为IntentService会在运行完成之后自动停止，而service需要手动调用stopService()才能停止运行</p>
-</li>
-<li><p>定时执行任务的Alarm机制：<strong>Android的定时任务有两种实现方式，Timer类和Alarm机制</strong>；Timer不适合长期后台运行的定时任务。因为每种手机都会有自己的休眠策略，Android手机就会在长时间不操作的情况下自动让CPU进入到睡眠状态，这就有可能导致Timer中的定时任务无法正常运行。而Alarm机制则不存在这种情况，它具有唤醒CPU的功能，即可以保证每次需要执行定时任务的时候CPU能正常工作。然而从Android4.4之后，Alarm任务的触发时间将会变得不准确，有可能会延迟一段时间后任务才能得到执行。这不是bug，而是系统在耗电性方面进行的优化。系统会自动检测目前有多少Alarm任务存在，然后将触发时间将近的几个任务放在一起执行，这就可以大幅度的减少CPU被唤醒的次数，从而有效延长电池的使用时间</p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="渲染层优化">渲染层优化</h2><ol>
-<li><p><strong>Android 界面卡顿的原因？</strong></p>
-<ul>
-<li>UI线程中做耗时操作，比如进行网络请求,磁盘读取，位图修改，更新UI等耗时操作，从而导致UI线程卡顿</li>
-<li>布局Layout过于复杂，无法在16ms内完成渲染，或者嵌套层次过深</li>
-<li>View过度绘制或者频繁的触发measure、layout，同一时间动画执行的次数过多，导致CPU或GPU负载过重</li>
-<li>冗余资源及逻辑等导致加载和执行缓慢</li>
-</ul>
-</li>
-<li><p><strong>Android 界面卡顿怎么处理？</strong></p>
-<ul>
-<li><strong>xml布局优化</strong>：尽量使用include、merge、ViewStub标签，尽量不存在冗余嵌套及过于复杂布局（譬如10层就会直接异常），例如使用RelativeLayout代替LinearLayout可以减少布局层次和复杂性，View的嵌套层次不能过深，尽量使用GONE替换INVISIBLE，使用weight后尽量将width和heigh设置为0dp，减少运算，Item存在非常复杂的嵌套时考虑使用自定义Item View来取代，减少measure与layout次数等。</li>
-<li><strong>ListView及Adapter优化</strong>；尽量复用getView方法中的相关View，不重复获取实例导致卡顿，列表尽量在滑动过程中不进行UI元素刷新等。</li>
-<li><strong>背景和图片等内存分配优化</strong>；尽量减少不必要的背景设置，图片尽量压缩处理显示，尽量避免频繁内存抖动等问题出现；尽可能为不同分辨率创建资源，以减少不必要的硬件缩放</li>
-<li><strong>自定义View等绘图与布局优化</strong>；尽量避免在draw、measure、layout中做过于耗时及耗内存操作，尤其是draw方法中，尽量减少draw、measure、layout等执行次数，避免过度渲染和绘制；减少不必要的inflate，尽量使用全局变量缓存View</li>
-<li><strong>避免ANR</strong>，不要在UI线程中做耗时操作，譬如多次数据库操作等</li>
-</ul>
-</li>
-<li><p><strong>Layout常用的标签</strong></p>
-<ul>
-<li><p><strong>include标签</strong>：该标签可以用于将布局文件中的公共部分提取出来给其它布局文件复用，从而使得布局模块化，代码轻量化; <strong>注意点</strong>: ①如果<include>标签已经定义了id，而嵌入布局文件的root布局文件也定义了id，<include>标签的id会覆盖掉嵌入布局文件root的id，如果include标签没有定义id则会使用嵌入文件root的id ②如果想使用<include>标签覆盖嵌入布局root布局属性，必须同时覆盖layout_height和layout_width属性，否则会直接报编译时语法错误</include></include></include></p>
-</li>
-<li><p><strong>viewstub标签</strong>：该标签与include一样用于引入布局模块，只是引入的布局默认不会扩张，既不会占用显示也不会占用位置，从而在解析layout时节省cpu和内存，只有通过调用setVisibility函数或者Inflate函数才会将其要装载的目标布局给加载出来，从而达到延迟加载的效果；例如条目详情、进度条标识或者未读消息等，这些情况如果在一开始初始化，虽然设置可见性View.GONE,但是在Inflate的时候View仍然会被Inflate，仍然会创建对象。</p>
-</li>
-<li><p><strong>merge标签</strong>：该标签在layout中会被自动忽略，从而减少一层布局嵌套，其主要用处是当一个布局作为子布局被其他布局include时，使用merge当作该布局的顶节点来代替layout顶节点就可以减少一层嵌套</p>
-</li>
-<li><p><strong>hierarchy viewer</strong>：该工具可以方便的查看Activity的布局，各个View的属性、measure、layout、draw的时间，如果耗时较多会用红色标记，否则显示绿色</p>
-</li>
-</ul>
-</li>
-</ol>
-<h2 id="网络优化">网络优化</h2><ul>
-<li>异步请求网络数据，避免频繁请求数据（例如如果某个页面内请求过多，可以考虑做一定的请求合并），尽可能的减少网络请求次数和减小网络请求时间间隔</li>
-<li>网络应用传输中使用高效率的数据格式，譬如使用JSON代替XML，使用WebP代替其他图片格式,并对数据进行Gzip压缩数据，比如post请求的body和header内容</li>
-<li>及时缓存数据到内存/文件/数据库</li>
-<li><p>执行某些操作前尽量先进行网络状态判断，比如wifi传输数据比蜂窝数据更省电，所以尽量在wifi下进行数据的预加载</p>
-</li>
-<li><p><strong>httpClient和httpUrlConnection对比</strong>： </p>
-<ol>
-<li>httpClient是apache的开源实现，API数量多，非常稳定</li>
-<li>httpUrlConnection是java自带的模块: ①可以直接支持GZIP压缩,而HttpClient虽然也支持GZIP，但要自己写代码处理 ②httpUrlConnection直接在系统层面做了缓存策略处理，加快重复请求的速度 ③API简单，体积较小,而且直接支持系统级连接池，即打开的连接不会直接关闭，在一段时间内所有程序可共用</li>
-<li>HttpURLConnection在Android2.2之前有个重大Bug，调用close()函数会影响连接池，导致连接复用失效，需要关闭keepAlive;因此在2.2之前http请求都是用httpClient，2.2之后则是使用HttpURLConnection</li>
-<li>但是!!!现在!!!Android不再推荐这两种方式！二是直接使用OKHttp这种成熟方案！支持Android 2.3及其以上版本</li>
-</ol>
-</li>
-</ul>
-<h2 id="数据结构优化">数据结构优化</h2><ul>
-<li><p><strong>ArrayList和LinkedList的选择</strong>：ArrayList根据index取值更快，LinkedList更占内存、随机插入删除更快速、扩容效率更高</p>
-</li>
-<li><p><strong>ArrayList、HashMap、LinkedHashMap、HashSet的选择</strong>：hash系列数据结构查询速度更优，ArrayList存储有序元素，HashMap为键值对数据结构，LinkedHashMap可以记住加入次序的hashMap，HashSet不允许重复元素</p>
-</li>
-<li><p><strong>HashMap、WeakHashMap选择</strong>：WeakHashMap中元素可在适当时候被系统垃圾回收器自动回收，所以适合在内存紧张时使用</p>
-</li>
-<li><p><strong>Collections.synchronizedMap和ConcurrentHashMap的选择</strong>：ConcurrentHashMap为细分锁，锁粒度更小，并发性能更优；Collections.synchronizedMap为对象锁，自己添加函数进行锁控制更方便</p>
-</li>
-<li><p><strong>Android中性能更优的数据类型</strong>：如SparseArray、SparseBooleanArray、SparseIntArray、Pair；Sparse系列的数据结构是为key为int情况的特殊处理，采用二分查找及简单的数组存储，加上不需要泛型转换的开销，相对Map来说性能更优</p>
-</li>
-</ul>
-<h2 id="内存优化">内存优化</h2><ol>
-<li><strong>Android应用内存溢出OOM</strong><ul>
-<li><strong>内存溢出的主要导致原因有如下几类</strong>：①应用代码存在内存泄露，长时间积累无法释放导致OOM；②应用的某些逻辑操作疯狂的消耗掉大量内存（譬如加载一张不经过处理的超大超高清图片等）导致超过阈值OOM</li>
-<li><strong>解决思路</strong>①在内存引用上做些处理，常用的有软引用、弱引用 ②在内存中加载图片时直接在内存中做处理，如：边界压缩 ③动态回收内存，手动recyle bitmap，回收对象 ④优化Dalvik虚拟机的堆内存分配 ⑤自定义堆内存大小</li>
-</ul>
-</li>
-</ol>
-<p><a href="http://www.trinea.cn/android/android-performance-demo/" target="_blank" rel="external">参考链接1</a>   </p>
-<p><a href="http://blog.csdn.net/jdsjlzx/article/details/44600477" target="_blank" rel="external">参考链接2</a></p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/优化/"> #优化 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
   <div class="pagination">
-    <a class="extend prev" rel="prev" href="../2/">&laquo;</a><a class="page-number" href="../..//">1</a><a class="page-number" href="../2/">2</a><span class="page-number current">3</span><a class="page-number" href="../4/">4</a><span class="space">&hellip;</span><a class="page-number" href="../6/">6</a><a class="extend next" rel="next" href="../4/">&raquo;</a>
+    <a class="extend prev" rel="prev" href="../2/">&laquo;</a><a class="page-number" href="../..//">1</a><a class="page-number" href="../2/">2</a><span class="page-number current">3</span><a class="page-number" href="../4/">4</a><span class="space">&hellip;</span><a class="page-number" href="../7/">7</a><a class="extend next" rel="next" href="../4/">&raquo;</a>
   </div>
 
 
@@ -1195,21 +1235,21 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-count">51</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="../..//categories">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">53</span>
+              <span class="site-state-item-count">59</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

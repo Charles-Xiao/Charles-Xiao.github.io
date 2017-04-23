@@ -148,6 +148,992 @@
           
           
             
+              <a class="post-title-link" href="../../2015/07/29/浅析java内存管理机制/">
+                浅析java内存管理机制
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-07-28
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/java学习笔记/">java学习笔记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/07/29/浅析java内存管理机制/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/29/浅析java内存管理机制/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>内存管理是计算机编程中的一个重要问题，一般来说，内存管理主要包括<strong>内存分配</strong>和<strong>内存回收</strong>两个部分。不同的编程语言有不同的内存管理机制，本文在对比C++和java语言内存管理机制的不同的基础上，浅析java中的内存分配和内存回收机制，包括java对象初始化及其内存分配，内存回收方法及其注意事项等…… </p>
+<h2 id="java与C++内存管理机制对比">java与C++内存管理机制对比</h2><p><strong>在C++中</strong>，所有的对象都会被销毁，局部对象的销毁发生在以右花括号为界的对象作用域的末尾处，而程序猿new出来的对象则应该主动调用delete操作符从而调用析构函数去回收对象占用的内存。但是C++这种直接操作内存的方式存在很大内存泄露风险，而且人为管理内存复杂且困难。  </p>
+<p><strong>在java中</strong>，内存管理由JVM完全负责，java中的“垃圾回收器”负责自动回收无用对象占据的内存资源，这样可以大大减少程序猿在内存管理上花费的时间，可以更集中于业务逻辑和具体功能实现；但这并不是说java有了垃圾回收器程序猿就可以高枕无忧，将内存管理抛之脑外了！一方面，实际上java中还存在垃圾回收器没法回收以某种“特殊方式”分配的内存的情况(这种特殊方式我们将在下文中进行详细描述)；另一方面，java的垃圾回收是不能保证一定发生的，除非JVM面临内存耗尽的情况。所以java中部分对象内存还是需要程序猿手动进行释放，合理地对部分对象进行管理可以减少内存占用与资源消耗。</p>
+<h2 id="java内存分配">java内存分配</h2><h3 id="java程序执行过程">java程序执行过程</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Java程序执行过程.jpg" class="full-image"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JVM编译执行顺序.png" class="full-image"></p>
+<ol>
+<li><p>首先Java源代码文件(.java后缀)会被Java编译器<strong>编译</strong>为字节码文件(.class后缀)，然后由JVM中的类加载器<strong>加载</strong>各个类的字节码文件，加载完毕之后，交由JVM执行引擎<strong>执行</strong>(执行过程还包括将字节码编译成机器码)，JVM执行引擎在执行字节码时首先会扫描四趟class文件来保证定义的类型的安全性，再检查空引用，数据越界，自动垃圾收集等。在整个程序执行过程中，JVM会用一段空间来存储程序执行期间需要用到的数据和相关信息，这段空间一般被称作为<strong>Runtime Data Area（运行时数据区），也就是我们常说的JVM内存</strong></p>
+</li>
+<li><p>类加载器分为<strong>启动类加载器</strong>(不继承classLoader，属于虚拟机的一部分；负责加载原生代码实现的Java核心库,包括加载JAVA_HOME中jre/lib/rt.jar里所有的 class)；<strong>扩展类加载器</strong>(负责在JVM中扩展库目录中去寻找加载Java扩展库,包括JAVA_HOME中jre/lib/ext/xx.jar或-Djava.ext.dirs指定目录下的 jar 包)；<strong>应用程序类加载器</strong>(ClassLoader.getSystemClassLoader()负责加载Java类路径classpath中的类)</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Classloader.png" class="full-image"></p>
+<ol>
+<li>类加载机制的流程：包括了<strong>加载、连接(验证、准备、解析)、初始化五个阶段</strong><ul>
+<li><strong>加载</strong>：查找装载二进制文件，通过一个类的全限定名获取类的二进制字节流，并将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构；在 Java 堆中生成一个代表这个类的 java.lang.Class 对象，作为对方法区中这些数据的访问入口。</li>
+<li><strong>验证</strong>：为了确保Class文件中的字节流包含的信息符合当前虚拟机的要求，完成以下四个阶段的验证：文件格式的验证、元数据的验证、字节码验证和符号引用验证。</li>
+<li><strong>准备</strong>：准备阶段是正式为类变量分配内存并设置类变量初始值的阶段，这些内存都将在方法区中分配</li>
+<li><strong>解析</strong>：解析阶段是虚拟机将常量池中的符号引用转化为直接引用的过程</li>
+<li><strong>初始化</strong>：初始化阶段是根据程序员通过程序指定的主观计划去初始化类变量和其他资源，也就是执行类构造器()方法的过程</li>
+</ul>
+</li>
+</ol>
+<h3 id="现代硬件内存架构">现代硬件内存架构</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/硬件内存架构.png" class="full-image"></p>
+<ol>
+<li>一个有两个或者多个 CPU 的现代计算机上同时运行多个线程是可能的，如果你的 Java 程序是多线程的，在你的 Java 程序中每个 CPU 上一个线程可能同时（并发）执行</li>
+<li>CPU在寄存器上的执行操作速度稍微大于CPU缓存层的执行速度，远大于在主存上的执行速度</li>
+<li>Java内存模型中的堆栈分布在硬件内存结构中的CPU寄存器，CPU缓存层，CPU主存中，大部分分布在主存中</li>
+</ol>
+<h3 id="java内存模型划分">java内存模型划分</h3><p>一般来讲，我们将java内存划分为以下几个区域, 如图：</p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JVM内存分配与回收.png" class="full-image" width="100%"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Java对象访问方式.png" class="full-image" width="100%"></p>
+<p><strong>GC备注</strong>:  </p>
+<ol>
+<li>年轻对象存放在年轻代，采用Minor GC(指从年轻代空间（包括 Eden 和 Survivor 区域）回收内存); 长期存活的年老对象以及大对象直接存放在年老代，采用Full GC(Full GC == Major GC指的是对老年代/永久代的stop the world的GC)，回收速度慢;JVM维护一个对象的年龄来进行对象的内存区域转移，从Eden-Survivor-老年代</li>
+<li>新生代包括一个Eden区，两个survivor的from和to区（8:1:1）,负责年轻小对象的回收;Eden区存放新创建的大量对象,回收频繁,所以区域大;Survivor存放每次垃圾回收后存活的对象</li>
+<li>一个对象的成员变量可能随着这个对象自身存放在堆上</li>
+<li>一个Object的大小计算方法:一个引用4byte+空Object本身占据8byte+其它数据类型占据自身大小byte(例如char占用2byte);然而由于系统分配以8byte为单位，所以每个Object占据的大小必须为8的倍数，比如一个空的Object应该占据4+8=12，也就是说需要占据16byte</li>
+</ol>
+<p>下文中将要提到的内存分配与回收主要是指对象所占据的堆内存的释放与回收。</p>
+<h3 id="java对象创建及初始化">java对象创建及初始化</h3><p>java对象创建之后，就会在堆内存拥有自己的一块区域，接着就是对象的初始化过程。对象一般通过<strong>构造器来进行初始化</strong>，构造器是一种与类名相同的没有返回值的特殊方法；如果一个类中没有定义构造函数，则系统会自动生成一个不接受任何参数的默认构造器；但是如果已经定义一个构造器(无论是否有参数)，编译器就不会再自动创建默认构造器了；我们可以对构造函数进行多次重载(即传递不同数目或不同顺序的参数列表),也可以在一个构造器中调用另一个构造器，但是只能调用一次，并且必须将构造器放在最起始处，否则编译器会报错。  </p>
+<p>那么<strong>类成员初始化</strong>又是怎么做的呢？顺序是怎样的呢？java中所有变量在使用前都应该得到恰当的初始化，即使是方法的局部变量，如果不进行初始化就会发生编译错误；而如果是类的成员变量，即使你不进行初始化赋值，系统也是会给与其一个初始值的，例如char、int类型的初始值都是0，对象引用不进行初始化则默认为null。</p>
+<p><strong>类成员初始化顺序</strong>总结：先静态后普通再构造, 先父类后子类，同级看书写顺序 </p>
+<pre><code><span class="number">1.</span>先执行父类静态变量和静态代码块，再执行子类静态变量和静态代码块
+<span class="number">2.</span>先执行父类普通变量和代码块，再执行父类构造器(<span class="keyword">static</span>方法) 
+<span class="number">3.</span>先执行子类普通变量和代码块，再执行子类构造器(<span class="keyword">static</span>方法) 
+<span class="number">4.</span><span class="keyword">static</span>方法初始化先于普通方法，静态初始化只有在必要时刻才进行且只初始化一次。
+
+注意:子类的构造方法，不管这个构造方法带不带参数，默认的它都会先去寻找父类的不带参数的构造方法。如果父类没有不带参数的构造方法，那么子类必须用supper关键子来调用父类带参数的构造方法，否则编译不能通过。
+</code></pre><h2 id="java内存回收">java内存回收</h2><h3 id="垃圾回收器(4种收集器)和finalize()方法">垃圾回收器(4种收集器)和finalize()方法</h3><p>java中垃圾回收器可以帮助程序猿自动回收无用对象占据的内存，但它只负责释放java中创建的对象所占据的所有内存，通过某种创建对象之外的方式为对象分配的内存空间则无法被垃圾回收器回收；而且垃圾回收本身也有开销，GC的优先级比较低，所以如果JVM没有面临内存耗尽，它是不会去浪费资源进行垃圾回收以恢复内存的。最后我们会发现，只要程序没有濒临存储空间用完那一刻，对象占用的空间就总也得不到释放。我们可以通过代码System.gc()来主动启动一个垃圾回收器(虽然JVM不会立刻去回收)，在释放new分配内存空间之前，将会通过finalize()释放用其他方法分配的内存空间。  </p>
+<ol>
+<li><strong>Serial收集器</strong>：一个单线程的新生代收集器，它进行垃圾收集时，必须暂停其他所有的工作线程，直到它收集结束。简单高效</li>
+<li><strong>Parallel（并行）收集器</strong>：JVM缺省收集器，其最大的优点是使用多个线程来通过扫描并压缩堆。串行收集器在GC时会停止其他所有工作线程（stop-the-world），CPU利用率是最高的，所以适用于要求高吞吐量（throughput）的应用，但停顿时间（pause time）会比较长，所以对web应用来说就不适合，因为这意味着用户等待时间会加长。而并行收集器可以理解是多线程串行收集，在串行收集基础上采用多线程方式进行GC，很好的弥补了串行收集的不足，可以大幅缩短停顿时间，因此对于空间不大的区域（如young generation），采用并行收集器停顿时间很短，回收效率高，适合高频率执行。</li>
+<li><strong>CMS收集器</strong>：基于“标记-清除”算法实现的，它使用多线程的算法去扫描老生代堆（标记）并对发现的待回收对象进行回收（清除），容易产生大量内存碎片使得大对象无法创建然后不得不提前触发full GC。CPU资源占用过大，标记之后容易产生浮动垃圾只能留到下一次GC处理</li>
+<li><strong>G1收集器</strong>：G1收集器是基于“标记-整理”算法实现的收集器，也就是说它不会产生空间碎片。G1是一个针对多处理器大容量内存的服务器端的垃圾收集器，其目标是在实现高吞吐量的同时，尽可能的满足垃圾收集暂停时间的要求。它可以非常精确地控制停顿，既能让使用者明确指定在一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒，具备了一些实时Java（RTSJ）的垃圾收集器的特征。<a href="http://www.zicheng.net/article/55.htm" target="_blank" rel="external">垃圾收集器</a></li>
+</ol>
+<p>finalize()方法的工作原理是：一旦垃圾回收器准备好释放对象占用的存储空间，将首先调用并且只能调用一次该对象的finalize()方法(通过代码System.gc()实现)，并且在下一次垃圾回收动作发生时，才会真正回收对象占用的内存。所以如果我们重载finalize()方法就能在垃圾回收时刻做一些重要的清理工作或者自救该对象一次(只要在finalize()方法中让该对象重新和引用链上的任何一个对象建立关联即可)。finalize()方法用于释放用特殊方式分配的内存空间，这是因为我们可能在java中调用非java代码来分配内存，比如Android开发中调用NDK。那么，当我们调用C中的malloc()函数分配了存储空间，我们就只能用free()函数来释放这些内存，这样就需要我们在finalize()函数中用本地方法调用它。</p>
+<h3 id="对象内存状态&amp;&amp;引用形式及回收时机">对象内存状态&amp;&amp;引用形式及回收时机</h3><ul>
+<li><p>java对象内存状态转换图</p>
+<p>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/对象状态转换图.png" class="full-image"></p>
+</li>
+<li><p><strong>如何判断java对象需要被回收？GC判断方法</strong></p>
+<ul>
+<li><strong>引用计数</strong>，引用计数法记录着每一个对象被其它对象所持有的引用数，被引用一次就加一，引用失效就减一；引用计数器为0则说明该对象不再可用；当一个对象被回收后，被该对象所引用的其它对象的引用计数都应该相应减少，它很难解决对象之间的相互循环引用问题<a href="http://blog.csdn.net/jiasike/article/details/51355729" target="_blank" rel="external">循环引用实例</a></li>
+<li><strong>可达性分析算法</strong>：从GC Root对象向下搜索其所走过的路径称为引用链，当一个对象不再被任何的GC root对象引用链相连时说明该对象不再可用，GC root对象包括四种：方法区中常量和静态变量引用的对象，虚拟机栈中变量引用的对象，本地方法栈中引用的对象; <strong>解决循环引用是因为</strong>GC Root通常是一组特别管理的指针，这些指针是tracing GC的trace的起点。它们不是对象图里的对象，对象也不可能引用到这些“外部”的指针。</li>
+<li>采用引用计数算法的系统只需在每个实例对象创建之初，通过计数器来记录所有的引用次数即可。而可达性算法，则需要再次GC时，遍历整个GC根节点来判断是否回收</li>
+</ul>
+</li>
+<li>java对象的四种引用<br>1.<strong>强引用</strong> ：创建一个对象并把这个对象直接赋给一个变量，eg ：Person person = new Person(“sunny”); 不管系统资源有么的紧张，强引用的对象都绝对不会被回收，即使他以后不会再用到。<br>2.<strong>软引用</strong> ：通过SoftReference类实现，eg : SoftReference<person> p = new SoftReference<person>(new Person(“Rain”));内存非常紧张的时候会被回收，其他时候不会被回收，所以在使用之前要判断是否为null从而判断他是否已经被回收了。<br>3.<strong>弱引用</strong> ：通过WeakReference类实现，eg : WeakReference<person> p = new WeakReference<person>(new Person(“Rain”));不管内存是否足够，系统垃圾回收时必定会回收<br>4.<strong>虚引用</strong> ：不能单独使用，主要是用于追踪对象被垃圾回收的状态，为一个对象设置虚引用关联的唯一目的是希望能在这个对象被收集器回收时收到一个系统通知。通过PhantomReference类和引用队列ReferenceQueue类联合使用实现</person></person></person></person></li>
+</ul>
+<h3 id="常见垃圾回收算法参考图">常见垃圾回收算法<a href="https://yq.aliyun.com/articles/14411" target="_blank" rel="external">参考图</a></h3><ul>
+<li><strong>停止-复制算法</strong><br>这是一种非后台回收算法，将可用内存按容量划分为大小相等的两块，每次只使用其中的一块，内存浪费严重.它先暂停程序的运行，然后将所有存活的对象从当前堆复制到另外一个堆，没被复制的死对象则全部是垃圾，存活对象被复制到新堆之后全部紧密排列，就可以直接分配新空间了。此方法耗费空间且效率低，适用于存活对象少。</li>
+<li><strong>标记-清扫算法</strong><br>同样是非后台回收算法，该算法从堆栈区和静态域出发，遍历每一个引用去寻找所有需要回收的对象，对每个找到需要回收对象都进行标记。标记结束之后，开始清理工作，被标记的对象都会被释放掉，如果需要连续堆空间，则还需要对剩下的存货对象进行整理;否则会产生大量内存碎片</li>
+<li><p><strong>标记-整理算法</strong><br>先标记需要回收的对象，但是不会直接清理那些可回收的对象，而是将存活对象向内存区域的一端移动，然后清理掉端以外的内存。适用于存活对象多。</p>
+</li>
+<li><p><strong>分代算法</strong><br>在新生代中，每次垃圾收集时都会发现有大量对象死去，只有少量存活，因此可选用停止复制算法来完成收集，而老年代中因为对象存活率高、没有额外空间对它进行分配担保，就必须使用标记—清除算法或标记—整理算法来进行回收。</p>
+</li>
+</ul>
+<h3 id="JVM性能调优">JVM性能调优</h3><ol>
+<li>JVM分配超大堆（前提是物理机的内存足够大）来提升服务器的响应速度，但分配超大堆的前提是有把握把应用程序的 Full GC 频率控制得足够低，因为一次 Full GC 的时间造成比较长时间的停顿。控制 Full GC 频率的关键是保证应用中绝大多数对象的生存周期不应太长，尤其不能产生批量的、生命周期长的大对象，这样才能保证老年代的稳定</li>
+<li>分配超大堆时，如果用到了 NIO 机制分配使用了很多的 Direct Memory，则有可能导致 Direct Memory 的 OutOfMemoryError 异常，这时可以通过-XX:MaxDirectMemorySize 参数调整 Direct Memory 的大小</li>
+<li>调整线程堆栈，socket缓冲区，JNI占用的内存以及虚拟机、GC消耗的内存</li>
+<li><strong>“-Xms and -Xmx (or: -XX:InitialHeapSize and -XX:MaxHeapSize)”参数</strong>：分别指定初始堆和最大堆大小，Xms一般代表着堆内存的最小值，JVM在运行时可以动态调整堆内存大小，如果我们 设置Xms=Xmx就相当于设置了一个固定大小的堆内存；例如：“java -Xms128m -Xmx2g MyApp”启动一个初始化堆内存为 128M，最大堆内存为 2G，名叫 “MyApp” 的 Java 应用程序；当我们设置Xmx最大堆内存不恰当时就很容易发生内存溢出，这样我们可以通过设置 - XX:+HeapDumpOnOutOfMemoryError 让 JVM 在发生内存溢出时自动生成堆内存快照，默认保存在JVM的启动目录下名为 java_pid.hprof 的文件里，分析它可以很好地定位到溢出位置</li>
+</ol>
+<h3 id="Linux下面查看Jvm性能信息的命令">Linux下面查看Jvm性能信息的命令</h3><ol>
+<li><strong>jstat</strong>： 用于查看Jvm的堆栈信息，能够查看eden,survivor,old,perm等堆区的的容量，利用率信息，对于查看系统是不是有内存泄漏以及参数设置是否合理有不错的意义。例如’’’ jstat -gc 12538 5000 —- 即会每5秒一次显示进程号为12538的java进成的GC情况 ‘’’</li>
+<li><strong>jstack</strong>：用来查看Jvm当前的线程dump的，可以看到当前Jvm里面的线程状况，对于查找blocked线程比较有意义</li>
+<li><strong>jmap</strong>：用来查看Jvm当前的heap dump的，可以看出当前Jvm中各种对象的数量，所占空间等等；尤其值得一提的是这个命令可以导出一份binary heap dump的bin文件，这个文件能够直接用Eclipse Memory Anayliser来分析，并找出潜在的内存泄漏的地方。</li>
+<li><strong>非jvm命令—netstat</strong>：通过这个命令可以看到Linux系统当前在各个端口的链接状态，比如查看数据库连接数等</li>
+</ol>
+<h3 id="内存相关问题">内存相关问题</h3><ol>
+<li><strong>内存泄露</strong>是指分配出去的内存没有被回收回来，由于失去了对该内存区域的控制(例如你把它的地址给弄丢了)，因而造成了资源的浪费。Java 中一般不会产生内存泄露，因为有垃圾回收器自动回收垃圾，但这也不绝对，Java堆内也可能发生内存泄露（Memory Leak; 当我们 new 了对象，并保存了其引用，但是后面一直没用它，而垃圾回收器又不会去回收它，这边会造成内存泄露</li>
+<li><strong>内存溢出</strong>是指程序所需要的内存超出了系统所能分配的内存（包括动态扩展）的上限</li>
+<li><strong>符号引用</strong>：符号引用以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可。符号引用与虚拟机实现的内存布局无关，引用的目标并不一定已经加载到了内存中。</li>
+<li><strong>直接引用</strong>：直接引用可以是直接指向目标的指针、相对偏移量或是一个能间接定位到目标的句柄。直接引用是与虚拟机实现的内存布局相关的，同一个符号引用在不同虚拟机实例上翻译出来的直接引用一般不会相同。如果有了直接引用，那说明引用的目标必定已经存在于内存之中了。</li>
+<li><strong>双亲委派模型</strong>：表示类加载器之间的加载顺序从顶至下的层次关系，加载器之间的父子关系一般都是通过组合来实现，而不是继承。可以防止内存中出现多份同样的字节码，并确保加载顺序</li>
+<li><strong>双亲委派模型的工作过程</strong>是：在loadClass函数中，首先会判断该类是否被加载过，加载过则进行下一步—-解析，否则进行加载；如果一个类加载器收到了类加载器的请求，先不会自己尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父类加载器反馈自己无法完成这个加载请求（它的搜说范围中没有找到所需的类时，子加载类才会尝试自己去加载）</li>
+<li><strong>静态分派和动态分派</strong>：静态分派发生在编译阶段，是指依据静态类型(变量声明时定义的变量类型)来决定方法的执行版本，例如方法重载中依据参数的定义类型来定位具体应该执行的方法；动态分派发生在运行期，根据变量实例化时的实际类型来决定方法的执行版本，例如方法重写；目前的 Java 语言（JDK1.6）是一门<strong>静态多分派、动态单分派</strong>的语言。</li>
+<li><strong>动态分派具体实现</strong>Java虚拟机是通过在方法区中建立一个虚方法表，通过使用方法表的索引来代替元数据查找以提高性能。虚方法表中存放着各个方法的实际入口地址，如果子类没有覆盖父类的方法，那么子类的虚方法表里面的地址入口与父类是一致的；如果重写父类的方法，那么子类的方法表的地址将会替换为子类实现版本的地址。方法表是在类加载的连接阶段（验证、准备、解析）进行初始化，准备了子类的初始化值后，虚拟机会把该类的虚方法表也进行初始化。</li>
+<li><strong>JDK7和8中内存模型变化</strong>：JDK7中把String常量池从永久代移到了堆中，并通过intern方法来保证不在堆中重复创建一个对象；JDK7开始使用G1收集器替代CMS收集器。JDK8使用元空间来替代原来的方法区，并且提供了字符串去重功能，也就是G1收集器可以识别出堆中那些重复出现的字符串并让他们指向同一个内部char[]数组，而不是在堆中存在多份拷贝</li>
+</ol>
+<h3 id="参考链接">参考链接</h3><ol>
+<li>《Java编程思想》</li>
+<li><a href="http://blog.jobbole.com/37273/" target="_blank" rel="external">Java的内存回收机制</a></li>
+<li><a href="http://blog.csdn.net/tutngfei1129287460/article/details/7383473" target="_blank" rel="external">java内存空间详解</a></li>
+<li><a href="http://www.jayfeng.com/2016/03/11/%E7%90%86%E8%A7%A3Java%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" target="_blank" rel="external">理解Java垃圾回收机制</a></li>
+<li><a href="http://howiefh.github.io/2015/04/08/jvm-note-2/" target="_blank" rel="external">深入理解Java虚拟机</a></li>
+<li><a href="http://286.iteye.com/blog/1931174" target="_blank" rel="external">Java堆内存和JVM参数</a></li>
+<li><a href="http://www.importnew.com/18961.html" target="_blank" rel="external">Java内存划分</a></li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/java/"> #java </a>
+          
+            <a href="../../tags/内存管理/"> #内存管理 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/07/26/利用Python框架Flask实现RESTful架构服务端/">
+                利用Python框架Flask实现RESTful架构服务端
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-07-26
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/07/26/利用Python框架Flask实现RESTful架构服务端/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/26/利用Python框架Flask实现RESTful架构服务端/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>不管是进行app开发还是web开发，server端的开发都是必不可少的部分，最近打算尝试一下服务端开发；考虑到开发效率以及目前主流的前后端API标准，我打算采用python的flask框架来搭建一个简单server端作为移动app的Web Service来使用，API格式采用RESTful标准，本文将讲述RESTful架构服务端的大致实现过程。</p>
+<h2 id="RESTful架构">RESTful架构</h2><ol>
+<li><p><strong>什么是RESTful架构</strong>：</p>
+<ul>
+<li>每一个URI代表一种资源；</li>
+<li>客户端和服务器之间，传递这种资源的某种表现层</li>
+<li>客户端通过四个HTTP动词，对服务器端资源进行操作，实现”表现层状态转化”。</li>
+</ul>
+</li>
+<li><p><strong>Representational State Transfer 表现层状态转化</strong></p>
+<ul>
+<li>Resoure：资源—-所谓”资源”，就是网络上的一个实体，或者说是网络上的一个具体信息。它可以是一段文本、一张图片、一首歌曲、一种服务</li>
+<li>URL：统一资源定位符—-要获取资源，访问它的URL就可以了    * URI：统一资源标识符—-每种资源对应一个特定的URI</li>
+<li>Representation：表现层 —- 资源呈现形式，如json，text，html</li>
+<li>State Trasfer：状态转移 —- http无状态协议中的GET、POST、PUT、DELETE</li>
+</ul>
+</li>
+<li><p>REST架构设计六原则</p>
+<ul>
+<li>前后端统一接口</li>
+<li>无状态 —- 每次客户端请求必需包含完整的信息</li>
+<li>可缓存 —- 服务器端必需指定哪些请求是可以缓存的</li>
+<li>服务端客户端业务分离</li>
+<li>分层系统</li>
+<li>按需编码</li>
+</ul>
+</li>
+<li><p>优点</p>
+<ul>
+<li>可以利用缓存Cache来提高响应速度</li>
+<li>通讯本身的无状态性可以让不同的服务器的处理一系列请求中的不同请求，提高服务器的扩展性</li>
+<li>浏览器即可作为客户端，简化软件需求</li>
+<li>相对于其他叠加在HTTP协议之上的机制，REST的软件依赖性更小<br>*不需要额外的资源发现机制，在软件技术演进中的长期的兼容性更好</li>
+</ul>
+</li>
+</ol>
+<h2 id="API的设计实现">API的设计实现</h2><ol>
+<li><strong>注册登录的Token实现</strong><ul>
+<li><strong>Token是什么</strong>：是服务端生成的一串字符串，作为客户端进行请求的一个令牌；当客户端第一次登录时，服务端会去数据库查询用户名和密码并进行对比是否正确，如果正确服务器就会生成一个Token返回给客户端，并将该token存到服务器的session里边，以后客户端只需带上这个Token前来请求数据即可，通过比对session就可以验证登录，无需再次带上用户名和密码，也不需要再查询数据库。</li>
+<li><strong>Token有什么好处</strong>：可以减轻服务器的压力，减少频繁的查询数据库，使服务器更加健壮</li>
+<li><strong>Token的生成方式</strong>：服务端通过把客户端第一次登录时传输的部分参数(例如deviceId,MAC地址)+时间戳+随机salt进行拼接之后然后生成一个散列值，返回给客户端使用sharepreference保存，以后请求数据都要带上token</li>
+</ul>
+</li>
+<li><strong>传输数据的加密算法</strong>: 对用户名，密码，deviceID等重要隐私信息进行拼接然后RSA加密<ul>
+<li><strong>RSA算法</strong>: RSA是一种公钥加密算法(非对称加密)，它的加密和解密使用不同密钥。具体做法是这样，客户端在登录前先向服务器请求一个公钥密钥，然后用这个公钥密钥加密需要传输的数据(数据是指根据密码,用户名等生成的散列值)，然后发送给服务器。服务器使用私钥密钥解密，然后与根据数据库中的用户名和密码计算出来的散列值进行比较，一致的话，登录成功。然后服务端生成token返还给客户端，该token也需要进行加密比较安全，采用<a href="http://www.jianshu.com/p/ce79ce9d5dfd" target="_blank" rel="external">AES对称加密</a>，采用同一个密钥可以同时用作信息的加密和解密。</li>
+<li><strong>摘要算法</strong>主要有MD5和SHA-1，又叫作Hash算法或散列算法，是一种将任意长度的输入浓缩成固定长度的字符串的算法，这个过程是不可逆的； 保证不同内容的文件生成的散列值一定不同，相同内容的文件生成的散列值一定相同</li>
+<li><strong>数字签名</strong>主要经过以下几个过程： 信息发送者使用一单向散列函数（HASH函数）对信息生成信息摘要； 信息发送者使用自己的私钥签名信息摘要； 信息发送者把信息本身和已签名的信息摘要一起发送出去； 信息接收者通过使用与信息发送者使用的同一个单向散列函数（HASH函数）对接收的信息本身生成新的信息摘要，再使用信息发送者的公钥对信息摘要进行验证，以确认信息发送者的身份和信息是否被修改过。 </li>
+<li><strong>数字加密</strong>主要经过以下几个过程： 当信息发送者需要发送信息时，首先生成一个对称密钥，用该对称密钥加密要发送的报文； 信息发送者用信息接收者的公钥加密上述对称密钥； 信息发送者将第一步和第二步的结果结合在一起传给信息接收者，称为数字信封； 信息接收者使用自己的私钥解密被加密的对称密钥，再用此对称密钥解密被发送方加密的密文，得到真正的原文。 </li>
+<li><strong>区别</strong>数字签名和数字加密的过程虽然都使用公开密钥体系，但实现的过程正好相反，使用的密钥对也不同。<strong>数字签名</strong>使用的是发送方的密钥对，发送方用自己的私有密钥进行加密，接收方用发送方的公开密钥进行解密，这是一个一对多的关系，任何拥有发送方公开密钥的人都可以验证数字签名的正确性。<strong>数字加密</strong>则使用的是接收方的密钥对，这是多对一的关系，任何知道接收方公开密钥的人都可以向接收方发送加密信息，只有唯一拥有接收方私有密钥的人才能对信息解密。另外，数字签名只采用了非对称密钥加密算法，它能保证发送信息的完整性、身份认证和不可否认性，而数字加密采用了对称密钥加密算法和非对称密钥加密算法相结合的方法，它能保证发送信息保密性。</li>
+</ul>
+</li>
+</ol>
+<h2 id="Flask框架">Flask框架</h2><p>Flask框架是一个Python编写的基于Werkzeug WSGI工具箱和Jinja2模板引擎的轻量级web开发框架。Flask只保留了简单的核心，但是有着丰富的extension来实现其他功能模块以达到类似于Django这种全栈式框架的功能效果。例如ORM需要使用SQLAlchemy扩展、Oauth需要使用Oauthlib扩展, 此外还有大量的扩展用以支持数据库整合、表单验证、上传处理、缓存、生成后台和各种开放验证等等。</p>
+<h2 id="代码实现">代码实现</h2><p>下面我们将通过具体代码来运用Flask框架实现一个RESTful Web Service返回json数据以及template前端页面。该项目中有两个路由，一个用Flask-RESTful的路由形式返回json数据，另一个用Flask原生路由形式返回一个基于Jinja2模板的Flask-Bootstrap风格的注册登录页面；其中json数据通过SQLAlchemy插件从MySQL数据库中获取，然后显示到浏览器中。</p>
+<h3 id="配置Flask环境">配置Flask环境</h3><ol>
+<li><p><strong>新建一个Flask项目</strong>，步骤如下</p>
+<ul>
+<li>打开PyCharm编辑器(安装教程请Google)，点击File按钮，选择new project</li>
+<li>选择左侧列表中Flask选项，修改Location中的”untitled”为你想要的项目名称，选择合适的interpreter，一般默认即可，Pycharm会自动下载安装Flask框架</li>
+<li>点击Create，可以看到项目结构:static文件夹、templates文件夹、py文件；Flask项目创建成功</li>
+</ul>
+</li>
+<li><p><strong>Mac安装Flask框架遇到的小bug</strong><br>Pycharm自动安装Flask框架时使用的是”pip install Flask”命令，但是在mac中会因为没有sudo权限导致无法安装成功，Pycharm会提示我们去terminal中输入命令行安装；然而，当我们在命令行中输入”sudo pip install Flask”时却会发现下载安装过程中依然会出现“bad md5 hash mismatch”的报错，解决步骤如下:</p>
+<ul>
+<li>Step1:更新pip到1.3以上，输入命令”sudo pip install —upgrade pip”</li>
+<li>Step2:安装Flask不使用缓存，输入命令”sudo pip install —no-cache-dir Flask”</li>
+</ul>
+</li>
+<li><p><strong>部分需要用到的Flask插件pip安装命令</strong>  </p>
+<pre><code><span class="comment"># Flask-RESTful插件: 用于快速开发REST API</span>
+sudo pip <span class="keyword">install</span> flask-restful
+
+<span class="comment"># Flask-Bootstrap插件: 用于构建Bootsrap风格的网页；也可以直接下载引用Bootstrap</span>
+sudo pip <span class="keyword">install</span> flask-bootstrap
+
+<span class="comment"># Flask-Pymysql插件: 一个类似于mysqldb的Python数据库驱动插件</span>
+sudo pip <span class="keyword">install</span> flask-pymysql 
+
+<span class="comment"># Flask-SQLAlchemy插件: 一个用于操作SQL数据库的ORM</span>
+sudo pip <span class="keyword">install</span> flask-sqlalchemy
+</code></pre></li>
+</ol>
+<h3 id="配置MySQL数据库">配置MySQL数据库</h3><p>在该项目中，我们连接MySQL中的test数据库(如果该数据库不存在请自行创建)，然后新建一个user表，包含id和name两个属性，后面要显示到浏览器中的json数据就是从这个表中提取。我们可以通过直接执行MySQL命令来操作数据库，也可以在Python文件中通过SQLAlchemy来执行SQL语句操作数据库；当然这一切的前提是在你的计算机上安装MySQL并开启服务，我们推荐使用xampp集成安装环境，非常方便，而且同时适用于win和mac。下面列出<strong>常用的MySQL命令</strong>：</p>
+<pre><code># 创建表user，包含id(主键)、name两个字段
+<span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">user</span> (
+id <span class="built_in">int</span>(<span class="number">4</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">primary</span> <span class="keyword">key</span>, name <span class="built_in">varchar</span>(<span class="number">20</span>)
+) <span class="keyword">engine</span>=<span class="keyword">innodb</span> <span class="keyword">default</span> <span class="keyword">charset</span>=utf8;</span>
+
+# 创建表book，包含id(主键)、name、user_id三个字段，其中user_id字段为book表的外键字段名
+对应user表中的id字段，一个user可能有一本或多本book
+<span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> book (
+id <span class="built_in">int</span>(<span class="number">4</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">primary</span> <span class="keyword">key</span>, name <span class="built_in">varchar</span>(<span class="number">20</span>), user_id <span class="built_in">varchar</span>(<span class="number">20</span>)
+) <span class="keyword">engine</span>=<span class="keyword">innodb</span> <span class="keyword">default</span> <span class="keyword">charset</span>=utf8;</span>
+
+# 给book表增加一个category字段
+<span class="operator"><span class="keyword">alter</span> <span class="keyword">table</span> book <span class="keyword">add</span> category <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">primary</span> <span class="keyword">key</span>;</span>
+
+# 列出表book的结构
+desc book;
+
+# 列出表book所有数据
+<span class="operator"><span class="keyword">select</span> * <span class="keyword">from</span> book
+
+# 清空表book所有数据
+<span class="keyword">truncate</span> <span class="keyword">table</span> book
+
+# 添加外键
+<span class="keyword">alter</span> <span class="keyword">table</span> book <span class="keyword">add</span> <span class="keyword">constraint</span> FK_ID <span class="keyword">foreign</span> <span class="keyword">key</span>(user_id) <span class="keyword">REFERENCES</span> <span class="keyword">user</span>(id);</span>
+
+# 删除外键, FK_ID为外键名
+<span class="operator"><span class="keyword">alter</span> <span class="keyword">TABLE</span> book <span class="keyword">DROP</span> <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> FK_ID;</span>
+</code></pre><h3 id="app-py">app.py</h3><p>在app.py中:<br>一方面: 我们通过SQLAlchemy连接数据库并查询user表中的用户数据信息，作为json数据返回给浏览器；这一部分采用RESTful插件实现, 通过访问localhost://5000/restful就可以看到返回的json数据<br>另一方面: 我们在flaskTest函数中加载login.html页面，该页面通过采用bootstrap框架实现.</p>
+<pre><code><span class="comment"># coding=utf-8</span>
+__author__ = <span class="string">'xiaoyong'</span>
+
+<span class="keyword">from</span> flask <span class="keyword">import</span> Flask, request, render_template
+<span class="keyword">from</span> flask.ext.bootstrap <span class="keyword">import</span> Bootstrap
+<span class="keyword">from</span> flask_restful <span class="keyword">import</span> fields, marshal_with, Api, Resource
+
+<span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> Column, String, create_engine, ForeignKey
+<span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> sessionmaker, relationship
+<span class="keyword">from</span> sqlalchemy.ext.declarative <span class="keyword">import</span> declarative_base
+
+<span class="keyword">import</span> json
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+app = Flask(__name__)
+api = Api(app)
+bootstrap = Bootstrap(app)
+
+<span class="comment"># 初始化MySQL数据库连接引擎</span>
+db_engine = create_engine(<span class="string">'mysql+pymysql://root:@localhost:3306/test'</span>)
+
+Base = declarative_base()
+
+
+<span class="comment"># 数据库表user对应的User对象</span>
+<span class="class"><span class="keyword">class</span> <span class="title">User</span><span class="params">(Base)</span>:</span>
+    __tablename__ = <span class="string">'user'</span>
+
+    id = Column(String(<span class="number">20</span>), primary_key=<span class="keyword">True</span>)
+    name = Column(String(<span class="number">20</span>))
+
+    <span class="comment"># 一对多外键关系</span>
+    books = relationship(<span class="string">'Book'</span>)
+
+
+<span class="class"><span class="keyword">class</span> <span class="title">Book</span><span class="params">(Base)</span>:</span>
+    __tablename__ = <span class="string">'book'</span>
+
+    id = Column(String(<span class="number">20</span>), primary_key=<span class="keyword">True</span>)
+    name = Column(String(<span class="number">20</span>))
+
+    user_id = Column(String(<span class="number">20</span>), ForeignKey(<span class="string">'user.id'</span>))
+
+
+<span class="comment"># 创建DBSession类型</span>
+DBSession = sessionmaker(bind=db_engine)
+<span class="comment"># 创建DBsession对象</span>
+session = DBSession()
+
+<span class="comment"># Query user表中的所有行数据</span>
+db_users = session.query(User).all()
+session.close()
+
+
+<span class="decorator">@app.route('/flask/&lt;user_name&gt;', methods=['GET', 'POST'])</span>
+<span class="function"><span class="keyword">def</span> <span class="title">flaskTest</span><span class="params">(user_name)</span>:</span>
+    <span class="comment"># 访问http://localhost:5000/flask/xy,进入登陆页</span>
+    <span class="keyword">if</span> user_name == <span class="string">'xy'</span> <span class="keyword">and</span> request.method == <span class="string">'GET'</span>:
+        <span class="keyword">return</span> render_template(<span class="string">'login.html'</span>)
+    <span class="comment"># 点击login，返回用户json数据</span>
+    <span class="keyword">if</span> request.method == <span class="string">'POST'</span> <span class="keyword">and</span> request.form[<span class="string">'user'</span>]:
+        u = request.form[<span class="string">'user'</span>]
+        p = request.form[<span class="string">'pw'</span>]
+        dic = {<span class="string">'user'</span>: u, <span class="string">'password'</span>: p}
+        <span class="keyword">return</span> json.dumps(dic)
+    <span class="keyword">else</span>:
+        <span class="keyword">return</span> <span class="string">'error url'</span>
+
+<span class="comment"># 返回的json数据模型</span>
+<span class="class"><span class="keyword">class</span> <span class="title">restfulModel</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, users, state)</span>:</span>
+        self.users = users
+        self.state = state
+
+
+<span class="comment"># marshal-蒙版</span>
+resource_fileds = {
+    <span class="string">'users'</span>: fields.List(fields.String),
+    <span class="string">'state'</span>: fields.String(default=<span class="string">''</span>),
+    <span class="string">'expires'</span>: fields.Float(default=<span class="number">0.0</span>),
+    <span class="string">'date'</span>: fields.DateTime(default=str(datetime.now()))
+
+}
+<span class="comment"># RESTful插件</span>
+<span class="class"><span class="keyword">class</span> <span class="title">restfulTest</span><span class="params">(Resource)</span>:</span>
+    <span class="decorator">@marshal_with(resource_fileds)</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span>
+        user_list = []
+        <span class="keyword">for</span> user <span class="keyword">in</span> db_users:
+            user_dic = {}
+            user_dic[<span class="string">'name'</span>] = user.name
+            user_dic[<span class="string">'id'</span>] = user.id
+            user_list.append(str(user_dic))
+        <span class="keyword">return</span> restfulModel(user_list, <span class="string">'OK'</span>)
+
+api.add_resource(restfulTest, <span class="string">'/restful'</span>)
+<span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:
+    app.run(debug=<span class="keyword">True</span>)
+</code></pre><h3 id="login-html">login.html</h3><p>该注册登录页面是基于Jinja2模板和bootstrap框架实现</p>
+<p>PS：实现该页面注册框居中的css代码:<br>form.form-signin {<br>        width: 20%;<br>        margin-left: auto;<br>        margin-right: auto;<br>    }</p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/login1.png" class="full-image">   </p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/login2.png" class="full-image">  </p>
+<h2 id="结语">结语</h2><p>上述即为通过Flask框架搭建资源服务器的大致过程，涉及到RESTful架构，SQLAlchemy ORM，Bootstrap，json处理等相关知识；我们可以看出利用Python框架搭建服务器的便捷性，很容易上手，如果需要深入学习相关知识请参考flask官网和相关extensions官网教程。</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/REST/"> #REST </a>
+          
+            <a href="../../tags/python/"> #python </a>
+          
+            <a href="../../tags/服务端开发/"> #服务端开发 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/06/12/五代十国史/">
+                五代十国史
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-06-12
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/读书札记/">读书札记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/06/12/五代十国史/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/12/五代十国史/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>在分分合合的中国历史上，除了耳熟能详的三国鼎立之外，五代十国绝对可以称得上是一段动乱不堪的战乱史。在这介于唐宋之间的五十多年里，政权更替，藩镇割据，骄兵悍将，自立弑主，层出不穷；几乎每个政权都逃脱不了短命的轮回。</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/五代十国/"> #五代十国 </a>
+          
+            <a href="../../tags/历史/"> #历史 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/06/12/彩云之南/">
+                彩云之南
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-06-12
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/在路上/">在路上</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/06/12/彩云之南/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/12/彩云之南/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>筹划已久的毕业旅行终于在6月初拉开帷幕~~~第一站便是为期9天的云南之行(6.3-6.11)。从昆明滇池到大理双廊，登苍山游洱海，沿三十公里洱海线骑行小普陀；夜宿丽江束河，古镇却多喧嚣；颠簸数百里山路只为一睹泸沽湖美貌，深入藏区一探香格里拉峡谷幽深。一路下来，各种奔波，各种惊艳，也遇上各种趣闻趣事趣人，的确不虚此行。
+          <div class="post-more-link text-center">
+            <a class="btn" href="../../2015/06/12/彩云之南/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/云南攻略/"> #云南攻略 </a>
+          
+            <a href="../../tags/毕业游记/"> #毕业游记 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/05/27/java重难点知识集锦/">
+                java重难点知识集锦
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-27
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/java学习笔记/">java学习笔记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/05/27/java重难点知识集锦/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/27/java重难点知识集锦/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="复用类(继承组合)与多态">复用类(继承组合)与多态</h3><ol>
+<li><p>Java面向对象编程思想的三种基本特征：<strong>继承、封装、复合和多态</strong></p>
+<ul>
+<li><strong>封装</strong>：只公开代码的访问接口，隐藏其内部的数据和具体实现；通常采用public，protected，private来进行访问权限控制；封装可以隐藏实现细节，还可以使得代码模块化以对象形式呈现</li>
+<li><strong>继承、组合与代理之间的区别与联系</strong>：<strong>组合</strong>只是将对象引用置于新类中即可，表述的是一种has-a的关系，而<strong>继承</strong>通过extends关键字实现，自动得到基类中所有域和方法，表述的是一种is-a的关系；而<strong>代理</strong>是介于两者之间的一种关系，首先将对象引用置于新类中，然后在新类中构建同名方法来暴露该对象的所有方法(类似于继承)；<strong>继承</strong>可以扩展已存在的代码模块，并且表达出层次逻辑和归属关系</li>
+<li><strong>多态</strong>与向上转型相反，通常通过接口和抽象类来实现(覆盖重写方法)，我们把<strong>重载（overloading）称为编译时多态，把覆盖（overriding）称为运行时多态</strong>；多态可以达到接口重用的目的，深刻地体现了一种设计原则里-依赖倒置原则；程序要依赖超类（抽象类、接口）不要依赖具体类，基于接口的开发，而不是基于实现的开发。</li>
+<li><strong>运行时多态(也被称作动态绑定)</strong>是指允许将子类类型的引用赋值给父类类型的引用，赋值之后，父对象在执行期间(而非编译期间)就可以根据当前赋值给它的子对象的特性以不同的方式运作,根据实际类型判断并调用相应的属性和方法;<strong>编译时的多态</strong>是指参数列表的不同, 来区分不同的函数, 在编译后, 就自动变成两个不同的函数名.</li>
+<li><strong>动态绑定的底层实现</strong>是指针,我们知道程序中的方法是一段代码,存放在专门的内存区域(代码区),当我们在程序执行期间new 出一个对象后调用其方法的时候,JVM动态的把指针指向实际的对象重写的方法,从而实现了动态绑定.</li>
+<li><strong>动态绑定的最大好处</strong>就是给我们的程序的可扩展性带来了相当大的提高；如果没有动态绑定,我们一般情况下的做法是在子类中用instanceof判断一个对象是不是我们需要的当前具体对象,但当我们定义好多个子类的时候,每次都要判断,现在有了动态绑定,我们不需要再去判断,而是JVM动态给我们指向具体的对象并调用相应的属性和方法.</li>
+</ul>
+</li>
+<li><p><strong>继承与初始化</strong>：导出类继承自基类，构造器调用顺序是从上至下基类到导出类层层调用，若是默认构造器则不需要在导出类中显式调用基类构造器，否则需要首先在导出类构造器中使用super关键字调用基类构造器。见《Java编程思想P146和P158》</p>
+</li>
+</ol>
+<h3 id="接口与内部类">接口与内部类</h3><ol>
+<li><strong>接口与抽象类的区别联系</strong>：<ul>
+<li>一个类可以实现多个接口但是只能实现一个抽象类 </li>
+<li>接口中都是抽象方法，抽象类中可以有实现的方法</li>
+<li>接口中方法都是public的，属性都是public static final的;但是抽象类中方法和属性都可以自由定义修饰符</li>
+<li>接口不能有构造器，抽象类可以有构造器，但是两者都不能实例化</li>
+</ul>
+</li>
+<li><p><strong>静态内部类(嵌套类)与非静态内部类，方法内部类，匿名内部类区别</strong>：</p>
+<ul>
+<li>嵌套类不需要内部类对象与外围类对象之间有联系，而内部类自动拥有其外围类所有成员的访问权(因为内部类对象拥有一个指向其外围类对象的引用);创建内部类对象之前需要先创建外围类对象，而创建嵌套类对象则不需要</li>
+<li>嵌套类不能访问外围类的非静态属性，但是内部类可以访问外围类的所有属性和方法(包括private)，内部类不能有static变量</li>
+<li>局部内部类: 该类被创建在外围类的方法或者作用域中，局部内部类的访问仅限于方法内或者该作用域内</li>
+<li><p>匿名内部类: 在java Listener中出现的非常多，必须继承某个接口或者父类，在其中只能重写一个方法；没有修饰符;匿名内部类是唯一一种没有构造器的类。正因为其没有构造器，所以匿名内部类的使用范围非常有限，大部分匿名内部类用于接口回调。匿名内部类在编译的时候由系统自动起名为Outter$1.class；多线程的实现也是匿名内部类的一种</p>
+<pre><code>scan_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {
+    @<span class="type">Override</span>
+    public <span class="type">void</span> onClick(<span class="type">View</span> v) {
+        // <span class="type">TODO</span> <span class="type">Auto</span>-generated <span class="keyword">method</span> stub
+
+    }
+});
+
+history_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {       
+    @<span class="type">Override</span>
+    public <span class="type">void</span> onClick(<span class="type">View</span> v) {
+        // <span class="type">TODO</span> <span class="type">Auto</span>-generated <span class="keyword">method</span> stub
+
+    }
+});
+</code></pre></li>
+<li>成员内部类，就是作为外部类的成员，可以直接使用外部类的所有成员和方法，即使是private的。虽然成员内部类可以无条件地访问外部类的成员，而外部类想访问成员内部类的成员却不是这么随心所欲了。在外部类中如果要访问成员内部类的成员，必须先创建一个成员内部类的对象，再通过指向这个对象的引用来访问</li>
+</ul>
+</li>
+<li><strong>为什么需要内部类？</strong><ul>
+<li>内部类提供了进入和操作外围类的窗口，可以直接调用外部类的private方法和属性，但是外部类却不可以调用内部类的方法和属性</li>
+<li>内部类完善了“多重继承”机制，他能提供继承多个具体类或抽象类的能力</li>
+<li>内部类可以更好地封装，它被封装在外部类里，不允许同包其他类访问</li>
+</ul>
+</li>
+<li><strong>内部类的继承与覆盖</strong> —- 见《Java编程思想P212》</li>
+</ol>
+<h3 id="异常处理与类型信息">异常处理与类型信息</h3><ol>
+<li>异常处理是java中唯一正式的错误报告机制，用于解决运行期间遇到的问题；可以用try……catch进行捕获也可以在定义方法或者类时使用throws声明。</li>
+<li><strong>Error类和Exception类区别</strong>它们的父类都是throwable类，他们的区别是：<ul>
+<li><strong>Error类</strong>一般是指与虚拟机相关的问题，如系统崩溃，虚拟机错误，内存空间不足，方法调用栈溢等。对于这类错误的导致的应用程序中断，仅靠程序本身无法恢复和和预防，遇到这样的错误，建议让程序终止。</li>
+<li><strong>Exception类</strong>表示程序可以处理的异常，可以捕获且可能恢复。遇到这类异常，应该尽可能处理异常，使程序恢复运行，而不应该随意终止异常。</li>
+<li>Exception类又分为<strong>运行时异常（Runtime Exception）</strong>和<strong>受检查的异常(Checked Exception )</strong>，运行时异常;ArithmaticException算术异常,IllegalArgumentException非法参数异常，NullPointerException 空指针异常，编译能通过，但是一运行就终止了，程序不会处理运行时异常，出现这类异常，程序会终止。而受检查的异常，要么用try……catch捕获，要么用throws字句声明抛出，交给它的父类处理，否则编译不会通过，SQLException</li>
+</ul>
+</li>
+<li><strong>return与finally</strong>：<ul>
+<li>在try里边return会先return再执行finally；在catch里边return则先执行finally再return</li>
+<li>在finally里边return会导致异常丢失，不再抛出异常(另一种异常丢失是因为前一个异常还没处理就抛出下一个异常，前一个异常就丢失了)</li>
+</ul>
+</li>
+</ol>
+<h3 id="Java反射机制">Java反射机制</h3><ol>
+<li><p><strong>反射</strong>：反射机制不但可以让我们在程序运行时获取类的函数、属性、父类、接口等 Class 内部信息，还可以让我们在运行期实例化对象，调用方法，通过调用get/set方法获取变量的值，即使方法或属性是私有的的也可以通过反射的形式调用，可以用于使用在编译器为程序生成代码之后很久才会出现的类，比如基于构建编程和远程方法调用，主要是通过Class类和java.lang.reflect类库来实现</p>
+<pre><code>//记载指定路径中的<span class="class"><span class="keyword">class</span>对象的两个方法</span>
+<span class="class"><span class="keyword">Class</span>.<span class="title">forName</span>(<span class="title">String</span> <span class="title">className</span>);</span>
+<span class="keyword">public</span> static <span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">forName</span> (<span class="title">String</span> <span class="title">className</span>, <span class="title">boolean</span> <span class="title">shouldInitialize</span>, <span class="title">ClassLoader</span> <span class="title">classLoader</span>)</span>
+
+//编译器获取类的<span class="class"><span class="keyword">class</span>对象</span>
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">myObjectClass</span> = <span class="title">MyObject</span>.<span class="title">class</span>;</span>
+//编译器获取对象的<span class="class"><span class="keyword">class</span>对象</span>
+Student me = <span class="keyword">new</span> Student(<span class="string">"mr.simple"</span>);    
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">clazz</span> = <span class="title">me</span>.<span class="title">getClass</span>();</span>
+
+// 运行期获取指定路径的 <span class="class"><span class="keyword">Class</span> 对象</span>
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">clz</span> = <span class="title">Class</span>.<span class="title">forName</span>("<span class="title">org</span>.<span class="title">java</span>.<span class="title">advance</span>.<span class="title">reflect</span>.<span class="title">Student</span>");</span>
+// 通过 <span class="class"><span class="keyword">Class</span> 对象获取 <span class="title">Constructor</span>，<span class="title">Student</span> 的构造函数有一个字符串参数</span>
+// 因此这里需要传递参数的类型 ( Student 类见后面的代码 )
+Constructor&lt;?&gt; constructor = clz.getConstructor(String.class);
+// 通过 Constructor 来创建 Student 对象
+Object obj = constructor.newInstance(<span class="string">"mr.simple"</span>);
+//获取父类和接口
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">superClass</span> = <span class="title">obj</span>.<span class="title">getClass</span>().<span class="title">getSuperclass</span>();</span>
+<span class="class"><span class="keyword">Class</span>&lt;?&gt;[] <span class="title">interfaceses</span> = <span class="title">obj</span>.<span class="title">getClass</span>().<span class="title">getInterfaces</span>();</span>
+
+System.out.println(<span class="string">" obj :  "</span> + obj.toString());
+</code></pre><ul>
+<li>Class 中的 <strong>getDeclaredMethods</strong> 函数，它会获取到当前类中的public、default、protected、private 的所有方法; <strong>getDeclaredMethod(String name, Class…&lt;?&gt; parameterTypes)</strong>则是获取当前类中某个指定的方法</li>
+<li>Class 中的 <strong>getMethods</strong> 函数用于获取当前类以及父类中的所有 public 方法，而 <strong>getMethod(String name, Class…&lt;?&gt; parameterTypes)</strong> 则是获取某个指定的public方法</li>
+<li>Class 中的 <strong>getDeclaredFields</strong> 函数，它会获取到当前类中的public、default、protected、private 的所有属性; <strong>getDeclaredField(String name)</strong>则是获取当前类中某个指定的属性</li>
+<li>Class 中的 <strong>getFields</strong> 函数用于获取当前类以及父类中的所有 public 属性，而 <strong>getField(String name)</strong> 则是获取某个指定的public属性    </li>
+</ul>
+</li>
+<li><strong>RTTI(Run-Time Type Identification)</strong>：在运行时识别对象的类型；其主要限制是在编译时就必须已知对象类型，也就是知道类名，它的三种应用场景：①类型转换 如：Shape s = (Shape)circle　②Shape.class这种类字面常量　③instanceof判断某对象是否是某类或其之类的实例</li>
+<li><strong>RTTI和反射之间真正的区别</strong>在于：对RTTI来说，编译器在编译时打开和检查.class文件；对于反射机制来说，.class文件在编译时不可获取，只有等到运行时才能打开和检查。</li>
+</ol>
+<h3 id="枚举、注解与泛型">枚举、注解与泛型</h3><ol>
+<li><a href="http://www.cnblogs.com/happyPawpaw/archive/2013/04/09/3009553.html" target="_blank" rel="external">Java Enum用法</a></li>
+<li>注解又叫做元数据，一种在代码中添加信息的形式化方法，该信息可以在后期利用反射机制进行使用，我们可以通过编写注解处理器来解析代码中的注解，也可以使用apt来解析。</li>
+<li><strong>泛型</strong>主要是用于容器定义，泛型是通过类型擦除来实现的，编译器在编译时擦除了所有类型相关的信息，所以在运行时不存在任何类型相关的信息。例如 List<string>在运行时仅用一个List来表示。它提供了编译期的类型安全，确保你只能把正确类型的对象放入集合中，避免了在运行时出现ClassCastException。</string></li>
+</ol>
+<h3 id="字符串与数组">字符串与数组</h3><h3 id="持有对象的容器">持有对象的容器</h3><h3 id="java_I/O系统与并发">java I/O系统与并发</h3><h3 id="final、finally和finalize对比">final、finally和finalize对比</h3><ul>
+<li>final用于声明属性方法和类，分别表示：属性不可变，方法不可覆盖，类不可继承。可以用于关闭方法动态绑定</li>
+<li>finally是异常处理语句的一部分，表示总是执行。一般用于释放除内存之外的资源(例如已打开的文件或者网络连接)</li>
+<li>finalize是Object的一个方法，在垃圾收集器执行的时候会调用被回收对象的此方法。</li>
+</ul>
+<h3 id="String、StringBuffer和StringBuilder区别">String、StringBuffer和StringBuilder区别</h3><ul>
+<li>如果一个对象，在它创建完成之后，不能再改变它的状态，那么这个<strong>对象就是不可变的</strong>。不能改变状态的意思是，不能改变对象内的成员变量，包括基本数据类型的值不能改变，引用类型的变量不能指向其他的对象，引用类型指向的对象的状态也不能改变。</li>
+<li><strong>String类对象</strong>是不可变对象，其在创建之后不能再改变其所拥有的所有private final成员变量；因为String类本身就是final类而且其源码中的char[]数组引用，offset(记录字符串首字母在value数组中对应的下标),count(记录字符串的长度)，hash等变量也是final的(JDK1.7中只存在hash和char[]数组),除非使用反射机制去改变char[]引用指向的堆中的数组数据；而String的substring， replace， replaceAll， toLowerCase等函数都是新建一个堆中的String对象然后返回给String的引用，从而使得引用指向了新的String对象，并没有改变原来的String对象</li>
+<li><strong>字符串常量池</strong>：首先需要确认<strong>字符串常量池存放的是对象引用，不是对象，字符串常量池存在于方法区中(JDK8移到了堆中)，而对象都创建在堆内存中</strong>；<ul>
+<li>当代码中出现字面量形式(String str1 = “droid”;)创建字符串对象时，JVM首先会对这个字面量进行检查，如果字符串常量池中存在相同内容的字符串对象的引用，则将这个引用返回，否则新的字符串对象被创建，然后将这个引用放入字符串常量池，并返回该引用；</li>
+<li>当我们使用了new来构造字符串对象的时候，不管字符串常量池中有没有相同内容的对象的引用，新的字符串对象都会创建</li>
+<li>字符串常量池的<strong>好处</strong>就是减少相同内容字符串的创建，节省内存空间。<strong>坏处</strong>牺牲了CPU计算时间来换空间。CPU计算时间主要用于在字符串常量池中查找是否有内容相同对象的引用。不过其内部实现为HashTable，所以计算成本较低。 <a href="http://droidyue.com/blog/2014/12/21/string-literal-pool-in-java/" target="_blank" rel="external">Link</a></li>
+</ul>
+</li>
+<li><p>用反射可以反射出String对象中的私有 value属性， 进而改变通过获得的char[]引用去改变数组的结构，例如：</p>
+<pre><code><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testReflection</span><span class="params">()</span> throws Exception </span>{  
+
+<span class="comment">//创建字符串"Hello World"， 并赋给引用s  </span>
+String s = <span class="string">"Hello World"</span>;   
+
+System.<span class="keyword">out</span>.println(<span class="string">"s = "</span> + s); <span class="comment">//Hello World  </span>
+
+<span class="comment">//获取String类中的value字段  </span>
+Field valueFieldOfString = String.class.getDeclaredField(<span class="string">"value"</span>);  
+
+<span class="comment">//改变value属性的访问权限  </span>
+valueFieldOfString.setAccessible(<span class="keyword">true</span>);  
+
+<span class="comment">//获取s对象上的value属性的值  </span>
+<span class="keyword">char</span>[] <span class="keyword">value</span> = (<span class="keyword">char</span>[]) valueFieldOfString.<span class="keyword">get</span>(s);  
+
+<span class="comment">//改变value所引用的数组中的第5个字符  </span>
+<span class="keyword">value</span>[<span class="number">5</span>] = <span class="string">'_'</span>;  
+
+System.<span class="keyword">out</span>.println(<span class="string">"s = "</span> + s);  <span class="comment">//Hello_World  </span>
+}
+</code></pre></li>
+<li><p><strong>StringBuilder</strong>：非线程安全的可变字符串，单线程时字符串拼接最快</p>
+</li>
+<li><p><strong>StringBuffer</strong>：通过调用其append和insert方法来添加字符；线程安全的可变字符串，因为内部的方法都加了synchronized关键字; String 对象的字符串拼接其实是被 JVM 解释成了 StringBuffer 对象的拼接</p>
+<pre><code><span class="comment">// String +操作快</span>
+<span class="built_in">String</span> S1 = “This <span class="keyword">is</span> only a” + “ simple” + “test”; <span class="comment">//其实就是：String S1 = “This is only a simple test”</span>
+
+<span class="comment">// StringBuffer.append()更快</span>
+<span class="built_in">String</span> S2 = “This <span class="keyword">is</span> only a”;
+<span class="built_in">String</span> S3 = “ simple”;
+<span class="built_in">String</span> S4 = “ test”;
+<span class="built_in">String</span> S1 = S2 +S3 + S4;
+</code></pre></li>
+<li>JDK1.7中subString函数改变:String类中不再有offset和count变量;这意味着成员变量char[] value将不会被共享;String.substring方法会为每个子串创建一个新的char[] value（而不是共享母串的char[] value）。这意味着String.substring方法的时间复杂度由常数阶变为线性阶。这种变化的好处是String对象占用的内存稍微少了一些（比以前少8个字节），同时确保String.substring方法不会导致内存泄漏</li>
+</ul>
+<h3 id="[java中equals，hashcode，==分析]">[java中equals，hashcode，==分析]</h3><ul>
+<li>== : 对于基本类型的变量(int, char等), 只有==方法用于判断两者是否相等;==也可用于判断两个引用变量是否相等,但是引用变量相等只是说明两个引用变量引用了同一个对象</li>
+<li>equals(): 该方法继承自Object类,它在Object类中是用==实现的，跟==一样默认是比较两个引用是否相等;但是实际应用中它主要用于判断两个String,Integer等对象或者自定义对象在内存中的值是否相等; String等对象重载了equals方法，所以可以用来比较值是否相等;</li>
+<li>hashcode(): 哈希函数的作用是把不定长度的输入通过哈希算法将其压缩成固定长度的输出(int整数), 不同的输入可能转换成相同的输出;其在Object类中的默认实现是返回对象的内存地址的哈希码，不同的对象即使内容相同但引用不同也会返回不同的哈希码.主要用于HashMap等容器中的快速定位, 通过哈希值就可以直接定位到Map中Entry数组的某个位置，然后再循环该位置对应的链表用equals判断<key,value>是否都相等。</key,value></li>
+<li>set在使用add，remove等函数时会调用equals函数去判断两个自定义对象的地址是否相同，而不是比较两个对象的内容是否相同，需要重载hashcode和equals函数，类似于String类一样重载，才能够实现去重的目的！！ HashSet中的元素实际上是作为HashMap中的Key存放在HashMap中的，为了保证HashSet中的对象不会出现重复值，在被存放元素的类中必须要重写hashCode()和equals()这两个方法。</li>
+</ul>
+<h3 id="null判断将常量写在前面的好处">null判断将常量写在前面的好处</h3><ol>
+<li>if(val == null) 和 if(null == val)的区别：后一种方式的主要优点是防止将==写成=和将!=写成=，因为后一种方式如果出现漏写，编译器会提示报错便于检查出代码错误；而前一种不会报错，造成逻辑bug不能被编译器检查出来</li>
+<li>”abc”.equals(val)和val.equals(“abc”)的区别：前一种可以防止当val=null时编译器报空指针错误</li>
+</ol>
+<h3 id="java生成随机数的方法(返回1-6的六个随机数)">java生成随机数的方法(返回1-6的六个随机数)</h3><pre><code>Random <span class="keyword">rand</span> = new Random();  
+<span class="keyword">system</span>.out.println(<span class="keyword">rand</span>.nextInt(<span class="number">6</span>) + <span class="number">1</span>);
+</code></pre><h3 id="java反转字符串方法">java反转字符串方法</h3><pre><code><span class="keyword">String</span> <span class="built_in">reverse</span>(<span class="keyword">String</span> s)   
+{<span class="keyword">return</span> <span class="keyword">new</span> StringBuilder(s).<span class="built_in">reverse</span>().toString();}
+</code></pre><h3 id="函数参数的预防性检测">函数参数的预防性检测</h3><p>针对传入参数显式检测，throw相应的Exception；包括参数为null，数值溢出以及为负，数组下标越界</p>
+<h3 id="Java常见位操作">Java常见位操作</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/BitOperation.png" class="full-image"></p>
+<pre><code><span class="comment">// 1. 获得int型最大值</span>
+System.<span class="keyword">out</span>.println((1 &lt;&lt; 31) - 1);<span class="comment">// 2147483647， 由于优先级关系，括号不可省略</span>
+System.<span class="keyword">out</span>.println(~(1 &lt;&lt; 31));<span class="comment">// 2147483647</span>
+
+<span class="comment">// 2. 获得int型最小值</span>
+System.<span class="keyword">out</span>.println(1 &lt;&lt; 31);
+System.<span class="keyword">out</span>.println(1 &lt;&lt; -1);
+
+<span class="comment">// 3. 获得long类型的最大值</span>
+System.<span class="keyword">out</span>.println(((long)1 &lt;&lt; 127) - 1);
+
+<span class="comment">// 4. 乘以2运算</span>
+System.<span class="keyword">out</span>.println(x&lt;&lt;1);
+
+<span class="comment">// 5. 除以2运算(负奇数的运算不可用)</span>
+System.<span class="keyword">out</span>.println(x&gt;&gt;1);
+
+<span class="comment">// 6. 乘以2的m次方</span>
+System.<span class="keyword">out</span>.println(x&lt;&lt;<span class="keyword">m</span>);
+
+<span class="comment">// 7. 除以2的m次方</span>
+System.<span class="keyword">out</span>.println(x&gt;&gt;<span class="keyword">m</span>);
+
+<span class="comment">// 8. 判断一个数的奇偶性</span>
+System.<span class="keyword">out</span>.println((10 &amp; 1) == 1);
+System.<span class="keyword">out</span>.println((9 &amp; 1) == 1);
+
+<span class="comment">// 9. 不用临时变量交换两个数（面试常考）</span>
+a ^= b;
+b ^= a;
+a ^= b;
+
+<span class="comment">// 10. 取绝对值（某些机器上，效率比n&gt;0 ? n:-n 高）</span>
+int <span class="keyword">n</span> = -1;
+System.<span class="keyword">out</span>.println((<span class="keyword">n</span> ^ (<span class="keyword">n</span> &gt;&gt; 31)) - (<span class="keyword">n</span> &gt;&gt; 31));
+<span class="comment">/* n&gt;&gt;31 取得n的符号，若n为正数，n&gt;&gt;31等于0，若n为负数，n&gt;&gt;31等于-1
+若n为正数 n^0-0数不变，若n为负数n^-1 需要计算n和-1的补码，异或后再取补码，
+结果n变号并且绝对值减1，再减去-1就是绝对值 */</span>
+
+<span class="comment">// 11. 取两个数的最大值（某些机器上，效率比a&gt;b ? a:b高）</span>
+System.<span class="keyword">out</span>.println(b&amp;((a-b)&gt;&gt;31) | a&amp;(~(a-b)&gt;&gt;31));
+
+<span class="comment">// 12. 取两个数的最小值（某些机器上，效率比a&gt;b ? b:a高）</span>
+System.<span class="keyword">out</span>.println(a&amp;((a-b)&gt;&gt;31) | b&amp;(~(a-b)&gt;&gt;31));
+
+<span class="comment">// 13. 判断符号是否相同(true 表示 x和y有相同的符号， false表示x，y有相反的符号。)</span>
+System.<span class="keyword">out</span>.println((a ^ b) &gt; 0);
+
+<span class="comment">// 14. 计算2的n次方 n &gt; 0</span>
+System.<span class="keyword">out</span>.println(2&lt;&lt;(<span class="keyword">n</span>-1));
+
+<span class="comment">// 15. 判断一个数n是不是2的幂</span>
+System.<span class="keyword">out</span>.println((<span class="keyword">n</span> &amp; (<span class="keyword">n</span> - 1)) == 0);
+<span class="comment">/*如果是2的幂，n一定是100... n-1就是1111....
+所以做与运算结果为0*/</span>
+
+<span class="comment">// 16. 求两个整数的平均值</span>
+System.<span class="keyword">out</span>.println((a+b) &gt;&gt; 1);
+
+<span class="comment">// 17. 从低位到高位,取n的第m位</span>
+int <span class="keyword">m</span> = 2;
+System.<span class="keyword">out</span>.println((<span class="keyword">n</span> &gt;&gt; (<span class="keyword">m</span>-1)) &amp; 1);
+
+<span class="comment">// 18. 从低位到高位.将n的第m位置为1</span>
+System.<span class="keyword">out</span>.println(<span class="keyword">n</span> | (1&lt;&lt;(<span class="keyword">m</span>-1)));
+<span class="comment">/*将1左移m-1位找到第m位，得到000...1...000
+n在和这个数做或运算*/</span>
+
+<span class="comment">// 19. 从低位到高位,将n的第m位置为0</span>
+System.<span class="keyword">out</span>.println(<span class="keyword">n</span> &amp; ~(0&lt;&lt;(<span class="keyword">m</span>-1)));
+<span class="comment">/* 将1左移m-1位找到第m位，取反后变成111...0...1111
+n再和这个数做与运算*/</span>
+</code></pre>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/java/"> #java </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2015/05/27/Android开发常见bug解决方法及注意事项/">
                 Android开发常见bug解决方法及注意事项
               </a>
@@ -404,802 +1390,11 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/21/常见设计模式实例讲解/">
-                常见设计模式实例讲解
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-21
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/设计模式/">设计模式</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/21/常见设计模式实例讲解/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/21/常见设计模式实例讲解/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="单例模式的三种实现方式及其优缺点">单例模式的三种实现方式及其优缺点</h3><pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>{
-
-    <span class="javadoc">/**
-     *<span class="javadoctag"> @param</span> args
-     */</span>
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
-        SingletonEnum.INSTANCE.setmName(<span class="string">"enum"</span>);
-        SingletonInner.getInstance().setmName(<span class="string">"inner"</span>);
-        SingletonDoubleCheck.getInstance().setmName(<span class="string">"doubleCheck"</span>);
-    }
-
-    <span class="comment">/*
-     * 单例模式考虑点： 
-     * 1. 线程安全：Synchronized关键字，Enum，静态内部类 
-     * 2. 延迟加载：减少负载和消耗 
-     * 3. 自动序列化(Serializable和transient) 
-     * 4. 防止反射强行调用构造器
-     * 3、4点只有枚举可以实现
-     */</span>
-
-    <span class="comment">/*
-     * 枚举实现单例
-     */</span>
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">enum</span> SingletonEnum {
-        INSTANCE;
-        <span class="keyword">private</span> String mName;
-
-        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> mName;
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
-            <span class="keyword">this</span>.mName = mName;
-        }
-
-    }
-    <span class="comment">/*
-     * 双重检查锁：单例模式中需要new的情况非常少,第一层锁可以减少锁的次数
-     */</span>
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDoubleCheck</span> </span>{
-        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingletonDoubleCheck singleton = <span class="keyword">null</span>;
-
-        <span class="function"><span class="keyword">private</span> <span class="title">SingletonDoubleCheck</span><span class="params">()</span> </span>{
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDoubleCheck <span class="title">getInstance</span><span class="params">()</span> </span>{
-            <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) {
-                <span class="keyword">synchronized</span> (SingletonDoubleCheck.class) {
-                    <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) {
-                        singleton = <span class="keyword">new</span> SingletonDoubleCheck();
-                    }
-                }
-            }
-            <span class="keyword">return</span> singleton;
-        }
-
-        <span class="keyword">private</span> String mName;
-
-        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> mName;
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
-            <span class="keyword">this</span>.mName = mName;
-        }
-    }
-
-    <span class="comment">/*
-     * 内部类方式实现
-     */</span>
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonInner</span> </span>{
-
-        <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Holder</span> </span>{
-            <span class="keyword">private</span> <span class="keyword">static</span> SingletonInner singleton = <span class="keyword">new</span> SingletonInner();
-        }
-
-        <span class="function"><span class="keyword">private</span> <span class="title">SingletonInner</span><span class="params">()</span> </span>{
-
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonInner <span class="title">getInstance</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> Holder.singleton;
-        }
-
-        <span class="keyword">private</span> String mName;
-
-        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> mName;
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
-            <span class="keyword">this</span>.mName = mName;
-        }
-    }
-
-}
-</code></pre><h3 id="工厂模式实例">工厂模式实例</h3><h3 id="观察者模式">观察者模式</h3><ol>
-<li>在Java中通过Observable类和Observer接口实现了观察者模式，Observer对象监视着Observable对象的变化，当Observable对象发生变化时，Observer得到通知，就可以进行相应的工作。</li>
-<li><strong>Observable类</strong>—-程序中的被观察者类需要继承这个类</li>
-<li><strong>Observer接口</strong>—-观察者接口，观察者需要实现这个接口并重写其中的update()方法</li>
-<li>可以在main函数中通过调用被观察者的addObserver方法添加观察者，当被观察者发生变化时要调用<strong>setChanged()方法</strong>标记此Observable对象已改变，并调用<strong>notifyObservers()</strong>通知所有观察者</li>
-<li><p><strong>自定义代码实现观察者模式</strong>:</p>
-<pre><code><span class="comment">// 被观察者接口</span>
-<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Subject</span> </span>{
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerObserver</span><span class="params">(Observer o)</span></span>;
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer o)</span></span>;
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyAllObservers</span><span class="params">()</span></span>;
-}
-
-<span class="comment">// 观察者接口</span>
-<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Observer</span> </span>{
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Subject s)</span></span>;
-}
-
-    <span class="comment">// 猎头类</span>
-     <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HeadHunter</span> <span class="keyword">implements</span> <span class="title">Subject</span> </span>{
-        <span class="keyword">private</span> ArrayList&lt;Observer&gt; userList;
-        <span class="keyword">private</span> ArrayList&lt;String&gt; jobs;
-
-        <span class="function"><span class="keyword">public</span> <span class="title">HeadHunter</span><span class="params">()</span></span>{
-            userList = <span class="keyword">new</span> ArrayList&lt;Observer&gt;();
-            jobs = <span class="keyword">new</span> ArrayList&lt;String&gt;();
-        }
-
-        <span class="annotation">@Override</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerObserver</span><span class="params">(Observer o)</span> </span>{
-            userList.add(o);
-        }
-
-        <span class="annotation">@Override</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer o)</span> </span>{}
-
-        <span class="annotation">@Override</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyAllObservers</span><span class="params">()</span> </span>{
-            <span class="keyword">for</span>(Observer o: userList){
-                o.update(<span class="keyword">this</span>);
-            }
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addJob</span><span class="params">(String job)</span> </span>{
-            <span class="keyword">this</span>.jobs.add(job);
-            notifyAllObservers();
-        }
-
-        <span class="function"><span class="keyword">public</span> ArrayList&lt;String&gt; <span class="title">getJobs</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> jobs;
-        }
-
-        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>{
-            <span class="keyword">return</span> jobs.toString();
-        }
-    }
-
-<span class="comment">// 求职者类    </span>
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JobSeeker</span> <span class="keyword">implements</span> <span class="title">Observer</span> </span>{
-
-    <span class="keyword">private</span> String name;
-
-    <span class="function"><span class="keyword">public</span> <span class="title">JobSeeker</span><span class="params">(String name)</span></span>{
-        <span class="keyword">this</span>.name = name;
-    }
-    <span class="annotation">@Override</span>
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Subject s)</span> </span>{
-        System.out.println(<span class="keyword">this</span>.name + <span class="string">" got notified!"</span>);
-        <span class="comment">//print job list</span>
-        System.out.println(s);
-    }
-}
-
-<span class="comment">// 主函数</span>
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>{
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
-        HeadHunter hh = <span class="keyword">new</span> HeadHunter();
-        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Mike"</span>));
-        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Chris"</span>));
-        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Jeff"</span>));
-
-        <span class="comment">//每次添加一个个job，所有找工作人都可以得到通知。</span>
-        hh.addJob(<span class="string">"Google Job"</span>);
-        hh.addJob(<span class="string">"Yahoo Job"</span>);
-    }
-}
-</code></pre></li>
-</ol>
-<h3 id="代理模式">代理模式</h3><ol>
-<li><strong>代理模式</strong>就是为某个对象提供一个代理，以控制对这个对象的访问。 代理类和委托类有共同的父类或父接口，这样在任何使用委托类对象的地方都可以用代理对象替代。代理类负责请求的预处理、过滤、将请求分派给委托类处理、以及委托类执行完请求后的后续处理。</li>
-<li><strong>静态代理</strong> 由程序员创建或工具生成代理类的源码，再编译代理类。所谓静态也就是在程序运行前就已经存在代理类的字节码文件，代理类和委托类的关系在运行前就确定了。</li>
-<li><strong>动态代理</strong> 动态代理类的源码是在程序运行期间由JVM根据反射等机制动态的生成，所以不存在代理类的字节码文件。代理类和委托类的关系是在程序运行时确定。<ul>
-<li><strong>java.lang.reflect.Proxy</strong> ：Java 动态代理机制生成的所有动态代理类的父类，它提供了一组静态方法来为一组接口动态地生成代理类及其对象, 其中newProxyInstance方法用于为指定类装载器、一组接口及调用处理器生成动态代理类实例</li>
-<li><strong>java.lang.reflect.InvocationHandler</strong>：这是调用处理器接口，它自定义了一个 invoke 方法，用于集中处理在动态代理类对象上的方法调用，通常在该方法中实现对委托类的代理访问。每次生成动态代理类对象时都要指定一个对应的调用处理器对象。 </li>
-</ul>
-</li>
-</ol>
-<h3 id="适配器模式">适配器模式</h3><ol>
-<li><strong>适配器模式</strong>：将一个类的接口，转换成客户期望的另外一个接口。适配器让原本接口不兼容的类可以很好的合作;<br>两种方式：①类的适配器模式（采用继承实现）②对象适配器（采用对象组合方式实现）；</li>
-<li><strong>使用场景</strong><ul>
-<li>系统需要使用现有的类，而这些类的接口不符合系统的接口。</li>
-<li>想要建立一个可以重用的类，用于与一些彼此之间没有太大关联的一些类，包括一些可能在将来引进的类一起工作</li>
-<li>使用第三方组件，组件接口定义和自己定义的不同，不希望修改自己的接口，但是要使用第三方组件接口的功能。</li>
-</ul>
-</li>
-</ol>
-<h3 id="装饰器模式VS代理模式">装饰器模式VS代理模式</h3><ol>
-<li><strong>装饰器模式</strong>关注于在一个对象上动态的添加方法，是继承关系的一个替代方案；然而<strong>代理模式</strong>关注于控制对对象的访问，并不提供对象本身的增强功能。</li>
-<li>对<strong>装饰器模式</strong>来说，装饰者和被装饰者都实现同一个接口; 对<strong>代理模式</strong>来说，代理类和真实处理的类都实现同一个接口</li>
-<li><h3 id="参考链接">参考链接</h3></li>
-<li><a href="http://layznet.iteye.com/blog/1182924" target="_blank" rel="external">Java动态代理</a></li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/设计模式/"> #设计模式 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/19/数据库重难点集锦/">
-                数据库重难点集锦
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-19
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/数据库/">数据库</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/19/数据库重难点集锦/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/19/数据库重难点集锦/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="常见的Hash算法和一致性哈希">常见的Hash算法和一致性哈希</h3><ul>
-<li><p>线性哈希，平方取中法，随机数法，按位分割求和法  </p>
-</li>
-<li><p><strong>MD5和SHA</strong>这两种单向加密算法都是基于hash算法，前者产生128位的散列值，后者产生160位的散列值；两者都存在不同输入的散列值相同的情况，但是概率很低，为了防止被彩虹表破解，可以考虑加入Salt  </p>
-</li>
-<li><p>Hash算法主要用于文件校验、数字签名、鉴权协议等  </p>
-</li>
-<li><p><strong>一致性哈希算法</strong>主要应用在cache系统中，常用的hash(object)%N算法会计算object 的hash值，然后对N取模得到余数i，该Object就会被映射到编号为i的cache上;那么当增加或者减少n的值时会导致所有的n个对象的映射全部发生改变，但是一致性哈希算法却只需要重新hash K/n个元素，为什么呢？？？; 因为一致性哈希的内部原理是将Object和cache都使用同一种hash算法hash到同一个数值空间上，该空间为一个首尾相接的圆环；然后如何将Object映射到cache呢？顺着顺时针方向,将每一个Object映射到下一个最邻近的cache,这样当新增一个cache时，只需要将原本映射到下一个cache上的Object部分映射修改到新增的cache上；当减少cache时就将之前映射到该cache的Object都映射到下一个cache上.  </p>
-</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_pre.png" class="full-image"></p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_next.png" class="full-image"></p>
-<h3 id="数据库结构概览">数据库结构概览</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/db.png" width="100%"></p>
-<h3 id="数据库的事务、索引、范式和存储过程概念以及优缺点">数据库的事务、索引、范式和存储过程概念以及优缺点</h3><ol>
-<li><p>主键：数据库表中对储存数据对象予以唯一和完整标识的数据列或属性的组合。一个数据列只能有一个主键，且主键的取值不能缺失，即不能为空值（Null）。  </p>
-<p>超键：在关系中能唯一标识元组的属性集称为关系模式的超键。一个属性可以为作为一个超键，多个属性组合在一起也可以作为一个超键。超键包含候选键和主键。  </p>
-<p>候选键：能够确定全部属性的某个属性或某组属性，称为候选键。若候选键多于一个，则选定其中一个作为主键</p>
-<p>外键：在一个表中存在的另一个表的主键称此表的外键  </p>
-</li>
-</ol>
-<ol>
-<li><p><strong>事务</strong>：事务是数据库操作中的不可分割的逻辑单元,一个事务中的所有操作语句要么作为一个整体被执行，要么整体不被执行; 事务最重要的<strong>两个特性是事务的传播级别和数据隔离级别</strong>。传播级别定义的是事务的控制范围，事务隔离级别定义的是事务在数据库读写方面的控制范围。</p>
-<ul>
-<li>原子性：要么操作序列中全部语句都执行，要么全部不被执行,不可分割; 也就是说当事务的执行序列中某个语句执行错误，会回滚到该事务未执行时的状态</li>
-<li>一致性：事务执行之后数据库从一个一致性状态转化到另一个一致性状态</li>
-<li>隔离性：多个事务并行执行时互相之间不会影响</li>
-<li>持久性：事务成功执行之后会对数据库内容产生永久性影响</li>
-</ul>
-</li>
-<li><p><strong>范式</strong></p>
-<ul>
-<li>第一范式：数据库表里边的每一列都是不可分割的原子性基本数据项</li>
-<li>第二范式：数据库表里边每一个非关键字段都和任意一组候选关键字(主键)完全依赖，只有表的任意一组候选键有多个属性时才会出现部分依赖</li>
-<li>第三范式：数据库里边每一个非关键字段都和主键直接相关，而不能是间接相关(传递依赖)</li>
-<li>BC范式：数据里边每一列既不部分依赖于任何候选键也不传递依赖于任何候选键；一个关系满足BCNF则一定满足第三范式</li>
-</ul>
-</li>
-<li><p><strong>索引</strong> ：建立在数据库表的某些列上，例如需要搜索或者排序的列，主键列，外键列(用于连接的列),用在where语句中的列；<strong>有些列不应该建索引</strong>，比如：查询中很少使用或者参考的列， 只有很少数据值的列，定义为text, image和bit数据类型的列,当修改性能远远大于检索性能时，不应该创建索引；索引的实现通常使用B树及其变种B+树</p>
-<ul>
-<li>参考: 一般来说，<strong>应该在这些列上创建索引</strong>：在经常需要搜索的列上，可以加快搜索的速度；在作为主键的列上，强制该列的唯一性和组织表中数据的排列结构；在经常用在连接的列上，这些列主要是一些外键，可以加快连接的速度；在经常需要根据范围进行搜索的列上创建索引，因为索引已经排序，其指定的范围是连续的；在经常需要排序的列上创建索引，因为索引已经排序，这样查询可以利用索引的排序，加快排序查询时间；在经常使用在WHERE子句中的列上面创建索引，加快条件的判断速度。</li>
-<li><p><strong>复合索引</strong>就是索引建立在多个列上，<strong>唯一索引</strong>就是保证索引列中的所有数据都是唯一的，不会存在冗余数据;<strong>聚集索引</strong>是指表中行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能包含一个聚集索引</p>
-<p>优点：</p>
-</li>
-</ul>
-<ol>
-<li>通过创建唯一性索引，可以保证数据库表中每一行数据的唯一性 </li>
-<li>可以大大加快数据的检索速度    </li>
-<li>可以加速表和表之间的连接</li>
-<li>在使用分组和排序子句进行数据检索时，同样可以显著减少查询中分组和排序的时间</li>
-<li><p>通过使用索引，可以在查询的过程中，使用优化隐藏器，提高系统的性能</p>
-<p>缺点：</p>
-</li>
-<li>创建索引和维护索引要耗费时间和大量的物理空间</li>
-<li>对表中的数据进行增加、删除和修改的时候，索引也要动态的维护，这样就降低了数据的维护速度</li>
-</ol>
-</li>
-<li><p><strong>存储过程</strong></p>
-<ul>
-<li>它是一组存储在数据库中的编译后的SQL语句集，可以接受参数以及返回值，也可以包括程序流，查询语句等</li>
-<li>正常情况下,我们在code中写好SQL语句,连接数据库，SQL语句会被发送到服务器然后编译优化，数据库引擎执行编译后的查询语句，最后将查询结果返回给客户端；那么如果我们使用存储过程就可以省掉编译优化的过程，而且存储过程存储在database中，可以减少网络流量和传输时间；而且可以对存储过程授予制定权限，从而保证数据库操作安全</li>
-</ul>
-</li>
-<li><p><strong>View</strong></p>
-<ul>
-<li>视图是一种通过自定义查询语句去查询筛选数据库表中的数据然后呈现给用户的一种动态生成的虚拟表,他和表一样包含行列数据，但是来自于其引用的表；其优点主要是可以保证数据库安全性以及筛选隐藏部分重要数据;View与Table之间的关系类似于MVC，在View中对数据进行修改会影响到Table中的数据，在Table中进行数据修改同样会显示到View，因为他们用的是同一份数据。</li>
-</ul>
-</li>
-</ol>
-<h3 id="MySQL的隔离级别与锁">MySQL的隔离级别与锁</h3><ol>
-<li><strong>四种隔离级别</strong>: 隔离级别决定了一个会话中的事务可能对另一个会话的影响、并发会话对数据库的操作、一个会话中所见数据的一致性; MySQL的InnoDB支持四种隔离级别,默认是可重读隔离级别<ul>
-<li><strong>未提交读READ UNCOMMITTED</strong>：最低级别的隔离，也被称之为脏读，它允许一个事务读取还没commit的事务的执行结果，这样可能会提高性能，但是导致脏读   </li>
-<li><strong>提交读READ COMMITTED</strong>：在一个事务中只允许看见已经commit的事务所做的改变。如果一个session中select还在查询中，另一会话session此时insert一条记录，则新添加的数据不可见；只有该操作commit之后才可见，也就是说—-<strong>不可重复读</strong>   </li>
-<li><strong>可重读REPEATABLE READ</strong>：同一个事务的多个实例在并发读取数据时会看到同样的数据行。也就是说在一个事务中重复select的结果一样，除非本事务中添加新数据到数据库，可能导致<strong>幻读</strong>;也就说事务之间只是在新数据方面突破了隔离，对已存在的数据仍旧隔离。</li>
-<li><strong>可串行化SERIALIZABLE</strong>：最高级别的隔离，强制事务排序并且只允许事务串行执行。为了达到此目的，数据库会锁住每个读的数据行，减少了并发，增加了稳定性，但是可能导致超时和锁竞争现象</li>
-<li><strong>事务并发导致的几个问题</strong><ul>
-<li><strong>脏读(Drity Read)</strong>：某个事务已更新一份数据，另一个事务在此时读取了同一份数据，由于某些原因，前一个回滚了操作，则后一个事务所读取的数据就会是不正确的</li>
-<li><strong>不可重复读</strong>:在一个事务的两次查询之中数据不一致，这可能是两次查询过程中间插入了一个事务更新了原有的数据。</li>
-<li><strong>幻读</strong>：例如一个事务的两次查询过程中有另外一个事务插入数据造成第二次查询出现了在第一次查询中没有出现的数据；<strong>例如</strong>如果事务A运行”SELECT count(1) from TABLE_X” ，然后事务B在 TABLE_X 加入一条新数据并提交，当事务A再运行一次 count(1)结果不会是一样的，这就叫做<strong>幻读</strong></li>
-</ul>
-</li>
-<li>隔离级别越高，越能保证数据的完整性和一致性，但是对并发性能的影响也越大。对于多数应用程序，可以优先考虑把数据库系统的隔离级别设为Read Committed。它能够避免脏读取，而且具有较好的并发性能。尽管它会导致不可重复读和并发问题，可以由应用程序采用悲观锁或乐观锁来控制。</li>
-<li>性质<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/SQL隔离.png" class="full-image"></li>
-</ul>
-</li>
-<li><strong>共享锁</strong>：由读表操作加上的锁，加锁后其他用户只能获取该表或行的共享锁，不能获取排它锁，也就是说只能读不能写；一个事务获取了共享锁之后，可以对锁定范围内的数据执行读操作。</li>
-<li><strong>排它锁</strong>：由写表操作加上的锁，加锁后其他用户不能获取该表或行的任何锁;一个事务获取了排它锁之后，可以对锁定范围内的数据执行写操作。</li>
-<li><strong>乐观锁</strong>:读取数据时不锁，更新时检查是否数据已经被更新过，如果是则取消当前更新<br>一般在悲观锁的等待时间过长而不能接受时我们才会选择乐观锁；<strong>乐观锁适用于多读的应用类型</strong>，这样可以提高吞吐量<ul>
-<li><strong>乐观锁怎么实现和检查数据是否已经被更新？？？</strong>：</li>
-<li><strong>①使用数据版本记录机制实现</strong>也就是为数据增加一个版本标识，一般是通过为数据库表增加一个数字类型的 “version” 字段来实现。当读取数据时，将version字段的值一同读出，数据每更新一次，对此version值加一。当我们提交更新的时候，判断数据库表对应记录的当前版本信息与第一次取出来的version值进行比对，如果数据库表当前版本号与第一次取出来的version值相等，则予以更新，否则认为是过期数据</li>
-<li><strong>②在需要乐观锁控制的table中增加一个字段</strong>，字段名称无所谓，字段类型使用时间戳（timestamp）, 和版本记录类似，也是在更新提交的时候检查当前数据库中数据的时间戳和自己更新前取到的时间戳进行对比，如果一致则OK，否则就是版本冲突</li>
-</ul>
-</li>
-<li><strong>悲观锁</strong>:在读取数据时锁住那几行，其他对这几行的更新需要等到悲观锁结束时才能继续；比如行锁，表锁等，读锁 </li>
-<li><strong>表级锁</strong>：对整个表加锁，影响标准的所有记录；开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。</li>
-<li><strong>行级锁</strong>：对一行记录加锁，只影响一条记录；开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。</li>
-<li><strong>页面锁</strong>：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</li>
-<li><strong>锁管理器</strong>是添加和释放锁的进程，在内部使用一个哈希表来保存锁的相关信息(关键字是被锁的数据），并且了解每一块数据是被哪个事务加的锁,哪个事务在等待数据解锁;锁管理器还需要检查是否存在死锁，以及决定选择取消哪一个事务来消除死锁，<strong>检查死锁有两种方式</strong>一种是<strong>检查循环等待</strong>还有一种是<strong>使用超时设定</strong>。如果一个锁在超时时间内没有加上，那事务就进入了死锁状态。</li>
-<li><strong>数据库一般采用锁或者数据版本控制来进行并发控制</strong> 版本控制是每个事务可以在相同时刻修改相同的数据，每个事务有自己的数据拷贝（或者叫版本）；如果2个事务修改相同的数据，只接受一个修改，另一个将被拒绝，相关的事务回滚（或重新运行）；这将提高性能，因为：读事务不会阻塞写事务，写事务不会阻塞读，可以减少锁管理器带来的额外开销，但是磁盘空间消耗巨大，以空间换时间</li>
-</ol>
-<h3 id="MyISAM和InnoDB存储引擎之间的区别">MyISAM和InnoDB存储引擎之间的区别</h3><ol>
-<li>InnoDB支持事务、外键和行锁，而MyISAM不支持这些高级功能，但是<strong>MyISAM是默认引擎</strong>，InnoDB则需要指定(事务是一种高级的处理方式，如在一些列增删改中只要哪个出错还可以回滚还原)</li>
-<li>MyISAM适合SELECT为主的应用，InnoDB适合频繁修改(INSERT或UPDATE)以及涉及到安全性较高的应用,因为InnoDB数据库在进行update时表进行行锁，并发量相对较大;而MyISAM在进行updata时进行表锁，并发量相对较小</li>
-<li>InnoDB不支持FULLTEXT类型的索引; 虽然InnoDB支持行锁,但是某些情况下还是锁整表，如 update table set a=1 where user like ‘%lee%’，因为该SQL语句不能确定要扫描的范围</li>
-<li>DELETE清空整个表时，InnoDB是一行一行的删除，效率非常慢。MyISAM则会重建表</li>
-<li>MyISAM的索引和数据是分开的，并且索引是有压缩的，内存使用率就对应提高了不少。能加载更多索引，而Innodb是索引和数据是紧密捆绑的，没有使用压缩从而会造成Innodb比MyISAM体积庞大不小</li>
-<li>InnoDB中不保存表的具体行数，也就是说，执行select count ( <em> ) from table时，InnoDB要扫描一遍整个表来计算有多少行，但是MyISAM只要简单的读出保存好的行数即可。注意的是，当count(</em>) 语句包含where条件时，两种表的操作是一样的</li>
-<li>MyISAM<strong>缓存</strong>在内存的是索引，不是数据。而InnoDB缓存在内存的是数据  </li>
-<li><strong>MyISAM和InnoDB索引B+树结构的区别</strong>：<strong>MyISAM引擎</strong>使用B+Tree作为索引结构，叶节点的data域存放的是数据记录的地址，索引检索的算法为首先按照B+Tree搜索算法搜索索引，如果指定的Key存在，则取出其data域的值，然后以data域的值为地址，读取相应数据记录。这种索引方式就属于“非聚集索引”；<strong>InnoDB中</strong>，表数据文件本身就是按B+Tree组织的一个索引结构，这棵树的叶节点data域保存了完整的数据记录  </li>
-</ol>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/myisam.png" width="100%"><br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/innodb.png" width="100%">   </p>
-<h3 id="SQL语句">SQL语句</h3><ol>
-<li><p><strong>in和exists区别</strong></p>
-<ul>
-<li>mysql中的<strong>in语句</strong>是把外表和内表作hash 连接，而<strong>exists语句</strong>是对外表作loop循环，每次loop循环再对内表进行查询。一直大家都认为exists比in语句的效率要高，这种说法其实是不准确的，这个是要区分环境的。</li>
-<li><strong>效率对比</strong>：①如果查询的两个表大小相当，那么用in和exists差别不大；②如果两个表中一个较小，一个是大表，则子查询表大的用exists，子查询表小的用in</li>
-<li><strong>实例（A&lt;B）</strong>：①select <em> from A where cc in (select cc from B) 效率低，用到了A表上cc列的索引；②select </em> from A where exists(select cc from B where cc=A.cc) 效率高，用到了B表上cc列的索引。③select <em> from B where cc in (select cc from A) 效率高，用到了B表上cc列的索引；④select </em> from B where exists(select cc from A where cc=B.cc) 效率低，用到了A表上cc列的索引。</li>
-</ul>
-</li>
-<li><p><strong>not in和not exists区别</strong></p>
-<ul>
-<li>not in 和not exists如果查询语句使用了not in 那么内外表都进行全表扫描，没有用到索引；而not extsts 的子查询依然能用到表上的索引。所以无论那个表大，用not exists都比not in要快。 </li>
-<li>在含有NULL值的列的时候，not in 逻辑上不完全等同于not exists；应该尽量不要使用not in(它会调用子查询)，而尽量使用not exists(它会调用关联子查询)。如果not in子查询中返回的任意一条记录含有空值，则查询将不返回任何记录；因此除非子查询字段有非空限制，这时可以使用not in</li>
-</ul>
-</li>
-<li><p><strong>inner join、outer join和cross join的区别</strong><br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Join区别.png" width="100%"></p>
-</li>
-</ol>
-<h3 id="日志管理器">日志管理器</h3><p>为了提升性能，数据库把数据保存在内存缓冲区内。但如果当事务提交时服务器崩溃，崩溃时还在内存里的数据会丢失，这破坏了事务的持久性。你可以把所有数据都写在磁盘上，但是如果服务器崩溃，最终数据可能只有部分写入磁盘，这破坏了事务的原子性。因此我们采用<strong>事务日志</strong>是一个存储空间，在每次写盘之前，数据库在事务日志中写入一些信息，这样当事务崩溃或回滚，数据库知道如何移除或完成尚未完成的事务。<strong>事务的每一个操作（增/删/改）产生一条日志</strong>  </p>
-<h3 id="参考链接">参考链接</h3><ol>
-<li><a href="http://blog.jobbole.com/100349/" target="_blank" rel="external">数据库整体架构原理</a></li>
-<li><a href="http://www.codeceo.com/article/mysql-index-struct.html#0-tsina-1-46551-397232819ff9a47a7b7e80a40613cfe1" target="_blank" rel="external">MySQL数据库索引原理</a>  </li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/databse/"> #databse </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/15/Mac常用快捷键和Tips/">
-                Mac常用快捷键和Tips
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-15
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Mac系统/">Mac系统</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/15/Mac常用快捷键和Tips/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/15/Mac常用快捷键和Tips/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>在Mac系统中学会使用常用快捷键可以大大提高效率，以下为Mac系统中常用的快捷键和在Elipse开发中的常用快捷键(包含Mac和Win两个版本)。</p>
-<h3 id="Mac系统中常用快捷键">Mac系统中常用快捷键</h3><pre><code>cmd+alt+<span class="number">1</span>  <span class="comment">--- 自动整理当前文件夹中文件</span>
-ctrl+<span class="constant">space</span> <span class="comment">---  启动spotlight全局搜索</span>
-cmd+<span class="constant">space</span> <span class="comment">--- 切换输入法</span>
-cmd+向上/向下箭头 <span class="comment">--- 返回上级文件夹/打开当前文件夹或文件</span>
-cmd+T <span class="comment">--- 新建各种窗口(包括terminal窗口、finder窗口、chrome tab等)</span>
-cmd+shift+{/} <span class="comment">--- 切换tab(包括finder、terminal等窗口tab)</span>
-cmd+shift+<span class="number">3</span> <span class="comment">--- 屏幕截屏</span>
-cmd+shift+<span class="number">4</span> <span class="comment">---选取区域截图</span>
-cmd+<span class="built_in">delete</span> <span class="comment">--- 删除某个文件</span>
-enter <span class="comment">--- 修改文件名(类似于win中的F2)</span>
-cmd+I <span class="comment">--- 查看文件详细属性</span>
-cmd+option+esc <span class="comment">--- 打开进程管理窗口</span>
-</code></pre><h3 id="Mac常用设置方法">Mac常用设置方法</h3><h4 id="设置Eclipse中package_explorer窗口中项目列表字体大小">设置Eclipse中package explorer窗口中项目列表字体大小</h4><ul>
-<li><p>Step1: 下载安装TinkerTool的软件  </p>
-</li>
-<li><p>Step2: 点击fonts，修改Help tags的字体大小</p>
-</li>
-</ul>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Mac/"> #Mac </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/">
-                Mac设置环境变量(adb+NDK+sdk)
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-15
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Mac系统/">Mac系统</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>无论是在windows还是mac系统下，对于程序猿而言，在terminal中输入命令进行一些常用操作是比用鼠标更为快捷的方式。那么为了能够打开terminal就可以直接输入并执行命令，就需要进行环境变量的设置，这样就不必进入命令文件所在目录下执行该命令了。windows下配置环境变量较为简单，在此讲一下mac下配置环境变量的方法和注意事项。</p>
-<p><strong>1. 打开terminal，输入<code>cd ~</code>, 进入当前用户home目录</strong></p>
-<p><strong>2. 输入<code>touch .bash_profile</code>, 创建bash_profile文件(如果该文件已经存在则可以直接进入第3步)</strong></p>
-<p><strong>3. 打开记事本编辑bash_profile文件，示例如下</strong></p>
-<pre><code>方式一：用<span class="constant">SDK_HOME指</span>代一个通用路径，一处设置，多处使用，结构明晰，然后设置到<span class="constant">PATH</span>
-
-export <span class="constant">SDK_HOME=</span>“/usr/sdk”             
-export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:</span><span class="variable">${</span><span class="constant">SDK_HOME}</span><span class="symbol">:</span><span class="variable">${</span><span class="constant">SDK_HOME}</span>/<span class="symbol">tools:</span>/usr/ndk
-
-
-方式二：直接将各个命令的路径用<span class="symbol">:</span>连接起来设置到<span class="constant">PATH </span>形如--- export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:</span>路径<span class="number">1</span><span class="symbol">:</span>路径<span class="number">2</span><span class="symbol">:</span>路径<span class="number">3</span>
-
-export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:/usr/sdk</span><span class="symbol">:/usr/sdk/tools</span><span class="symbol">:/usr/ndk</span>
-</code></pre><p><strong>4. 保存修改，输入更新命令<code>source .bash_profile</code>,PATH变量配置完成</strong></p>
-<p><a href="http://blog.csdn.net/zf135792468/article/details/11926995" target="_blank" rel="external">参考链接</a></p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Android/"> #Android </a>
-          
-            <a href="../../tags/Mac/"> #Mac </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/12/如何阅读一本书/">
-                如何阅读一本书
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-12
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/读书札记/">读书札记</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/12/如何阅读一本书/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/12/如何阅读一本书/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>书籍使人进步！阅读使人明智！如何阅读一本书也是一门学问，读懂不同类型的书也是一件不容易的事情。美国教育家查尔斯-范多伦还特地写了一本《如何阅读一本书》来讲述读书的“方法论”，此文为部分书摘，闲来无事翻书，翻到哪儿写到哪儿，未完待续……
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2015/05/12/如何阅读一本书/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/阅读/"> #阅读 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
   <div class="pagination">
-    <a class="extend prev" rel="prev" href="../4/">&laquo;</a><a class="page-number" href="../..//">1</a><span class="space">&hellip;</span><a class="page-number" href="../4/">4</a><span class="page-number current">5</span><a class="page-number" href="../6/">6</a><a class="extend next" rel="next" href="../6/">&raquo;</a>
+    <a class="extend prev" rel="prev" href="../4/">&laquo;</a><a class="page-number" href="../..//">1</a><span class="space">&hellip;</span><a class="page-number" href="../4/">4</a><span class="page-number current">5</span><a class="page-number" href="../6/">6</a><a class="page-number" href="../7/">7</a><a class="extend next" rel="next" href="../6/">&raquo;</a>
   </div>
 
 
@@ -1233,21 +1428,21 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-count">51</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="../..//categories">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">53</span>
+              <span class="site-state-item-count">59</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
