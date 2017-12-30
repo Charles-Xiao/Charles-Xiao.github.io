@@ -239,20 +239,122 @@
 <h4 id="常用默认快捷键">常用默认快捷键</h4><p>tmux里边所有快捷键都默认以c-b作为前缀，也就是以ctrl+b开头，当然你也可以自行配置；</p>
 <ol>
 <li>基本命令<ul>
-<li><figure class="highlight"><figcaption><span>```创建一个tmux session</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#9;* ``` tmux new -s session_name ```&#21019;&#24314;&#19968;&#20010;&#21483;&#20570;session_name&#30340; session&#10;&#9;* ``` tmux ls\tmux list-sessions ```&#21015;&#20986;&#29616;&#26377;&#30340;&#25152;&#26377;session&#10;&#9;* ``` tmux info```&#21015;&#20986;&#25152;&#26377;&#30340; session, window, pane, &#36816;&#34892;&#30340;&#36827;&#31243;&#21495;&#31561;&#10;&#9;* ``` tmux list-keys ```&#21015;&#20986;&#25152;&#26377;&#21487;&#20197;&#30340;&#24555;&#25463;&#38190;&#21644;&#20854;&#36816;&#34892;&#30340; tmux &#21629;&#20196;&#10;&#9;* ``` tmux list-commands ```&#21015;&#20986;&#25152;&#26377;&#30340; tmux &#21629;&#20196;&#21450;&#20854;&#21442;&#25968;&#10;&#9;* ``` tmux at(attach) -t session_name ```&#36827;&#20837;&#21483;&#20570;session_name&#30340;session&#10;&#9;* ``` tmux detach\c-b-d ```&#31163;&#24320;&#24403;&#21069;&#24320;&#21551;&#30340;session&#10;&#9;* ``` tmux kill-session -t session ```&#20851;&#38381;&#24320;&#21551;&#30340;session&#10;2. &#22522;&#26412;&#25805;&#20316;&#10;&#9;* ``` d ```&#33073;&#31163;&#24182;&#20445;&#23384;&#24403;&#21069;&#20250;&#35805;,&#21487;&#26242;&#26102;&#36820;&#22238;Shell&#30028;&#38754;,tmux&#20173;&#22312;&#21518;&#21488;&#36816;&#34892;&#10;&#9;* ``` ctrl + z ```&#25346;&#36215;&#24403;&#21069;&#20250;&#35805;&#10;&#9;* ``` s ```&#36873;&#25321;&#24182;&#20999;&#25442;&#20250;&#35805;&#65307;&#22312;&#21516;&#26102;&#24320;&#21551;&#20102;&#22810;&#20010;&#20250;&#35805;&#26102;&#20351;&#29992;&#10;&#9;* ``` D ```&#36873;&#25321;&#35201;&#33073;&#31163;&#30340;&#20250;&#35805;&#65307;&#22312;&#21516;&#26102;&#24320;&#21551;&#20102;&#22810;&#20010;&#20250;&#35805;&#26102;&#20351;&#29992;&#10;&#9;* ```: ```&#36827;&#20837;&#21629;&#20196;&#34892;&#27169;&#24335;&#65307;&#27492;&#26102;&#21487;&#36755;&#20837;&#25903;&#25345;&#30340;&#21629;&#20196;&#65292;&#20363;&#22914; kill-server &#20851;&#38381;&#25152;&#26377;tmux&#20250;&#35805;&#10;&#9;* ``` t ```&#26174;&#31034;&#24403;&#21069;&#30340;&#26102;&#38388;&#10;&#10;2. &#31383;&#21475;&#25805;&#20316;&#10;&#9;* ``` c ```&#21019;&#24314;&#26032;&#31383;&#21475;&#10;&#9;* ``` &#38; ```&#20851;&#38381;&#24403;&#21069;&#31383;&#21475;&#10;&#9;* ``` [0-9] ```&#25968;&#23383;&#38190;&#20999;&#25442;&#21040;&#25351;&#23450;&#31383;&#21475;&#10;&#9;* ``` p ```&#20999;&#25442;&#33267;&#19978;&#19968;&#31383;&#21475;&#10;&#9;* ``` n ```&#20999;&#25442;&#33267;&#19979;&#19968;&#31383;&#21475;&#10;&#9;* ``` l ```&#20999;&#25442;&#21040;&#26368;&#21518;&#20351;&#29992;&#30340;&#31383;&#21475;&#10;&#9;* ``` l ```&#21069;&#21518;&#31383;&#21475;&#38388;&#20114;&#30456;&#20999;&#25442;&#10;&#9;* ``` w ```&#36890;&#36807;&#31383;&#21475;&#21015;&#34920;&#20999;&#25442;&#31383;&#21475;&#10;&#9;* ``` , ```&#37325;&#21629;&#21517;&#24403;&#21069;&#31383;&#21475;&#65292;&#20415;&#20110;&#35782;&#21035;&#10;&#9;* ``` . ```&#20462;&#25913;&#24403;&#21069;&#31383;&#21475;&#32534;&#21495;&#65292;&#30456;&#24403;&#20110;&#37325;&#26032;&#25490;&#24207;&#10;&#9;* ``` f ```&#22312;&#25152;&#26377;&#31383;&#21475;&#20013;&#26597;&#25214;&#20851;&#38190;&#35789;&#65292;&#20415;&#20110;&#31383;&#21475;&#22810;&#20102;&#20999;&#25442;&#10;3. (&#38754;&#26495;)&#20998;&#23631;&#25805;&#20316;&#10;&#9;* ``` ? ```&#26174;&#31034;&#24555;&#25463;&#38190;&#24110;&#21161;&#10;&#9;* ``` &#34; ```&#23558;&#24403;&#21069;&#38754;&#26495;&#19978;&#19979;&#20998;&#23631;&#65288;&#24314;&#35758;&#35774;&#32622;&#25104; |&#65289;&#10;&#9;* ``` % ```&#23558;&#24403;&#21069;&#38754;&#26495;&#24038;&#21491;&#20998;&#23631;&#65288;&#24314;&#35758;&#35774;&#32622;&#25104; -&#65289;&#10;&#9;* ``` x ```&#20851;&#38381;&#24403;&#21069;&#20998;&#23631;&#10;&#9;* ``` q ```&#26174;&#31034;&#38754;&#26495;&#32534;&#21495;&#10;&#9;* ``` o ```&#36873;&#25321;&#24403;&#21069;&#31383;&#21475;&#20013;&#19979;&#19968;&#20010;&#38754;&#26495;&#10;&#9;* ``` ; ```&#20999;&#25442;&#21040;&#26368;&#21518;&#19968;&#20010;&#20351;&#29992;&#30340;&#38754;&#26495;&#10;&#9;* ``` &#26041;&#21521;&#38190; ```&#31227;&#21160;&#20809;&#26631;&#36873;&#25321;&#23545;&#24212;&#38754;&#26495;&#10;&#9;* ``` z ```&#26368;&#22823;&#21270;&#24403;&#21069;&#25152;&#22312;&#38754;&#26495;&#10;&#9;* ``` ! ```&#38754;&#26495;&#36716;&#21464;&#25104;&#31383;&#21475;&#10;&#10;#### &#25512;&#33616;&#37197;&#32622;&#10;&#22914;&#26524;&#20320;&#26377;&#20010;&#24615;&#21270;&#37197;&#32622;&#30340;&#38656;&#35201;&#65292;&#21253;&#25324;&#24555;&#25463;&#38190;&#65292;&#29366;&#24577;&#26639;&#31561;&#65292;&#37027;&#20040;&#20462;&#25913;~/.tmux.conf&#25991;&#20214;&#21487;&#20197;&#36798;&#21040;&#20320;&#30340;&#30446;&#30340;&#65292;&#35753;&#20320;&#29992;&#36215;&#26469;&#26356;&#31526;&#21512;&#33258;&#24049;&#30340;&#20064;&#24815;; &#20063;&#21487;&#20197;&#36890;&#36807;&#37197;&#32622;~/.bashrc&#27599;&#27425;ssh&#30331;&#24405;&#26102;&#37117;&#40664;&#35748;attach&#25110;&#32773;&#26032;&#24314;tmux&#20250;&#35805;&#10;&#10;1. tmux.conf&#37197;&#32622;&#24555;&#25463;&#38190;&#65292;&#37197;&#33394;&#31561;</span><br></pre></td></tr></table></figure>
+<li><code>tmux</code>创建一个tmux session</li>
+<li><code>tmux new -s session_name</code>创建一个叫做session_name的 session</li>
+<li><code>tmux ls\tmux list-sessions</code>列出现有的所有session</li>
+<li><code>tmux info</code>列出所有的 session, window, pane, 运行的进程号等</li>
+<li><code>tmux list-keys</code>列出所有可以的快捷键和其运行的 tmux 命令</li>
+<li><code>tmux list-commands</code>列出所有的 tmux 命令及其参数</li>
+<li><code>tmux at(attach) -t session_name</code>进入叫做session_name的session</li>
+<li><code>tmux detach\c-b-d</code>离开当前开启的session</li>
+<li><code>tmux kill-session -t session</code>关闭开启的session</li>
+</ul>
 </li>
+<li><p>基本操作</p>
+<ul>
+<li><code>d</code>脱离并保存当前会话,可暂时返回Shell界面,tmux仍在后台运行</li>
+<li><code>ctrl + z</code>挂起当前会话</li>
+<li><code>s</code>选择并切换会话；在同时开启了多个会话时使用</li>
+<li><code>D</code>选择要脱离的会话；在同时开启了多个会话时使用</li>
+<li><code>:</code>进入命令行模式；此时可输入支持的命令，例如 kill-server 关闭所有tmux会话</li>
+<li><code>t</code>显示当前的时间</li>
+</ul>
+</li>
+<li><p>窗口操作</p>
+<ul>
+<li><code>c</code>创建新窗口</li>
+<li><code>&amp;</code>关闭当前窗口</li>
+<li><code>[0-9]</code>数字键切换到指定窗口</li>
+<li><code>p</code>切换至上一窗口</li>
+<li><code>n</code>切换至下一窗口</li>
+<li><code>l</code>切换到最后使用的窗口</li>
+<li><code>l</code>前后窗口间互相切换</li>
+<li><code>w</code>通过窗口列表切换窗口</li>
+<li><code>,</code>重命名当前窗口，便于识别</li>
+<li><code>.</code>修改当前窗口编号，相当于重新排序</li>
+<li><code>f</code>在所有窗口中查找关键词，便于窗口多了切换</li>
+</ul>
+</li>
+<li>(面板)分屏操作<ul>
+<li><code>?</code>显示快捷键帮助</li>
+<li><code>&quot;</code>将当前面板上下分屏（建议设置成 |）</li>
+<li><code>%</code>将当前面板左右分屏（建议设置成 -）</li>
+<li><code>x</code>关闭当前分屏</li>
+<li><code>q</code>显示面板编号</li>
+<li><code>o</code>选择当前窗口中下一个面板</li>
+<li><code>;</code>切换到最后一个使用的面板</li>
+<li><code>方向键</code>移动光标选择对应面板</li>
+<li><code>z</code>最大化当前所在面板</li>
+<li><code>!</code>面板转变成窗口</li>
 </ul>
 </li>
 </ol>
-<h1 id="开启鼠标生效">开启鼠标生效</h1><p>set-option -g mouse on</p>
-<h1 id="设置前缀为Ctrl_+_x">设置前缀为Ctrl + x</h1><p>set -g prefix C-x<br>unbind C-b</p>
-<h1 id="key_bindings_for_horizontal_and_vertical_panes">key bindings for horizontal and vertical panes</h1><p>unbind %<br>bind | split-window -h      # 使用|竖屏，方便分屏<br>unbind ‘“‘<br>bind - split-window -v      # 使用-横屏，方便分屏</p>
-<h1 id="status_bar_with_load_and_time">status bar with load and time</h1><p>set -g status-bg blue<br>set -g status-fg ‘#bbbbbb’<br>set -g status-left-fg green<br>set -g status-left-bg blue<br>set -g status-right-fg green<br>set -g status-right-bg blue<br>set -g status-left-length 90<br>set -g status-right-length 90<br>set -g status-left ‘[#(whoami)]’<br>set -g status-right ‘[#(date +” %m-%d %H:%M “)]’<br>set -g status-justify “centre”<br>set -g window-status-format ‘#I #W’<br>set -g window-status-current-format ‘ #I #W ‘<br>setw -g window-status-current-bg blue<br>setw -g window-status-current-fg green</p>
-<h1 id="pane_number_display">pane number display</h1><p>set -g display-panes-active-colour colour33 #blue<br>set -g display-panes-colour colour166 #orange<br>set -g base-index 1<br>set -g pane-base-index 1<br>set -g display-time 3000<br>set -g history-limit 10000</p>
-<h1 id="copy-mode_将快捷键设置为_vi_模式">copy-mode 将快捷键设置为 vi 模式</h1><p>setw -g mode-keys vi</p>
-<h1 id="选中窗口">选中窗口</h1><p>bind-key k select-pane -U<br>bind-key j select-pane -D<br>bind-key h select-pane -L<br>bind-key l select-pane -R<br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="bullet">2. </span>~/.bash_rc配置登录时自动进入tmux</span><br></pre></td></tr></table></figure></p>
-<p>tmux_init()<br>{<br>    tmux new-session -s “xiaoyong” -d -n “local”    # 开启一个会话<br>    tmux new-window -n “other”          # 开启一个窗口<br>    tmux split-window -h                # 开启一个竖屏<br>    tmux split-window -v                # 开启一个横屏<br>    tmux -2 attach-session -d           # tmux -2强制启用256color，连接已开启的tmux<br>}</p>
-<h1 id="判断是否已有开启的tmux会话，没有则开启">判断是否已有开启的tmux会话，没有则开启</h1><p>if which tmux 2&gt;&amp;1 &gt;/dev/null; then<br>    test -z “$TMUX” &amp;&amp; (tmux attach || tmux_init)<br>fi<br>```</p>
+<h4 id="推荐配置">推荐配置</h4><p>如果你有个性化配置的需要，包括快捷键，状态栏等，那么修改~/.tmux.conf文件可以达到你的目的，让你用起来更符合自己的习惯; 也可以通过配置~/.bashrc每次ssh登录时都默认attach或者新建tmux会话</p>
+<ol>
+<li>tmux.conf配置快捷键，配色等</li>
+</ol>
+<pre><code># 开启鼠标生效
+<span class="operator"><span class="keyword">set</span>-<span class="keyword">option</span> -g mouse <span class="keyword">on</span>
+
+#设置前缀为Ctrl + x
+<span class="keyword">set</span> -g prefix C-x
+unbind C-b
+
+# <span class="keyword">key</span> bindings <span class="keyword">for</span> horizontal <span class="keyword">and</span> vertical panes
+unbind %
+bind | split-window -h      # 使用|竖屏，方便分屏
+unbind <span class="string">'"'</span>
+bind - split-window -v      # 使用-横屏，方便分屏
+
+# <span class="keyword">status</span> bar <span class="keyword">with</span> <span class="keyword">load</span> <span class="keyword">and</span> <span class="keyword">time</span>
+<span class="keyword">set</span> -g <span class="keyword">status</span>-bg blue
+<span class="keyword">set</span> -g <span class="keyword">status</span>-fg <span class="string">'#bbbbbb'</span>
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">left</span>-fg green
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">left</span>-bg blue
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">right</span>-fg green
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">right</span>-bg blue
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">left</span>-length <span class="number">90</span>
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">right</span>-length <span class="number">90</span>
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">left</span> <span class="string">'[#(whoami)]'</span>
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">right</span> <span class="string">'[#(date +" %m-%d %H:%M ")]'</span>
+<span class="keyword">set</span> -g <span class="keyword">status</span>-justify <span class="string">"centre"</span>
+<span class="keyword">set</span> -g window-<span class="keyword">status</span>-<span class="keyword">format</span> <span class="string">'#I #W'</span>
+<span class="keyword">set</span> -g window-<span class="keyword">status</span>-<span class="keyword">current</span>-<span class="keyword">format</span> <span class="string">' #I #W '</span>
+setw -g window-<span class="keyword">status</span>-<span class="keyword">current</span>-bg blue
+setw -g window-<span class="keyword">status</span>-<span class="keyword">current</span>-fg green
+# pane <span class="built_in">number</span> display
+<span class="keyword">set</span> -g display-panes-active-colour colour33 #blue
+<span class="keyword">set</span> -g display-panes-colour colour166 #orange
+<span class="keyword">set</span> -g base-<span class="keyword">index</span> <span class="number">1</span>
+<span class="keyword">set</span> -g pane-base-<span class="keyword">index</span> <span class="number">1</span>
+<span class="keyword">set</span> -g display-<span class="keyword">time</span> <span class="number">3000</span>
+<span class="keyword">set</span> -g history-<span class="keyword">limit</span> <span class="number">10000</span>
+
+# copy-<span class="keyword">mode</span> 将快捷键设置为 vi 模式
+setw -g <span class="keyword">mode</span>-keys vi
+
+# 选中窗口
+bind-<span class="keyword">key</span> k <span class="keyword">select</span>-pane -U
+bind-<span class="keyword">key</span> j <span class="keyword">select</span>-pane -D
+bind-<span class="keyword">key</span> h <span class="keyword">select</span>-pane -L
+bind-<span class="keyword">key</span> l <span class="keyword">select</span>-pane -R</span>
+</code></pre><ol>
+<li><p>~/.bash_rc配置登录时自动进入tmux</p>
+<pre><code>tmux_init(<span class="function">)</span>
+{
+    tmux<span class="instruction"> new-session </span>-s <span class="string">"xiaoyong"</span> -d -n <span class="string">"local"</span>    <span class="comment"># 开启一个会话</span>
+    tmux<span class="instruction"> new-window </span>-n <span class="string">"other"</span>          <span class="comment"># 开启一个窗口</span>
+    tmux split-window -h                <span class="comment"># 开启一个竖屏</span>
+    tmux split-window -v                <span class="comment"># 开启一个横屏</span>
+    tmux -2 attach-session -d           <span class="comment"># tmux -2强制启用256color，连接已开启的tmux</span>
+}
+
+<span class="comment"># 判断是否已有开启的tmux会话，没有则开启</span><span class="instruction">
+if </span>which tmux 2&gt;&amp;1 &gt;/dev/null; then
+    test -z <span class="string">"$TMUX"</span> &amp;&amp;<span class="function"> (</span>tmux attach || tmux_init<span class="function">)</span>
+fi
+</code></pre></li>
+</ol>
 <h4 id="参考链接">参考链接</h4><ol>
 <li><a href="http://wdxtub.com/2016/03/30/tmux-guide/" target="_blank" rel="external">tmux指南</a></li>
 <li><strong> tmux如何将内容复制到系统clipboard ? </strong> Mac下如果用 iterm2 可以在 preference 下选择 Applications in terminal may access  clipboard</li>
@@ -402,7 +504,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#tmux简介"><span class="nav-number">1.</span> <span class="nav-text">tmux简介</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#安装方法"><span class="nav-number">1.1.</span> <span class="nav-text">安装方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#概念名词"><span class="nav-number">1.2.</span> <span class="nav-text">概念名词</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用场景和优点"><span class="nav-number">1.3.</span> <span class="nav-text">使用场景和优点</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用默认快捷键"><span class="nav-number">2.</span> <span class="nav-text">常用默认快捷键</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#开启鼠标生效"><span class="nav-number"></span> <span class="nav-text">开启鼠标生效</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设置前缀为Ctrl_+_x"><span class="nav-number"></span> <span class="nav-text">设置前缀为Ctrl + x</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#key_bindings_for_horizontal_and_vertical_panes"><span class="nav-number"></span> <span class="nav-text">key bindings for horizontal and vertical panes</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#status_bar_with_load_and_time"><span class="nav-number"></span> <span class="nav-text">status bar with load and time</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pane_number_display"><span class="nav-number"></span> <span class="nav-text">pane number display</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#copy-mode_将快捷键设置为_vi_模式"><span class="nav-number"></span> <span class="nav-text">copy-mode 将快捷键设置为 vi 模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#选中窗口"><span class="nav-number"></span> <span class="nav-text">选中窗口</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#判断是否已有开启的tmux会话，没有则开启"><span class="nav-number"></span> <span class="nav-text">判断是否已有开启的tmux会话，没有则开启</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#参考链接"><span class="nav-number">1.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#tmux简介"><span class="nav-number">1.</span> <span class="nav-text">tmux简介</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#安装方法"><span class="nav-number">1.1.</span> <span class="nav-text">安装方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#概念名词"><span class="nav-number">1.2.</span> <span class="nav-text">概念名词</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用场景和优点"><span class="nav-number">1.3.</span> <span class="nav-text">使用场景和优点</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用默认快捷键"><span class="nav-number">2.</span> <span class="nav-text">常用默认快捷键</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#推荐配置"><span class="nav-number">3.</span> <span class="nav-text">推荐配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
