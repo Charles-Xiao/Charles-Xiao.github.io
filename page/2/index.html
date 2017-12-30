@@ -148,6 +148,386 @@
           
           
             
+              <a class="post-title-link" href="../../2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/">
+                Mac安装配置mySQL/mongodb/Redis开发环境及开机自启动
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-12-23
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Mac系统/">Mac系统</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>后端开发中免不了和数据库、缓存打交道，最近所参与的项目用到的就包括MySQL、mongodb、Redis，配置相关环境是参与开发的第一步; 本文主要讲述安装配置MySQL、mongodb、Redis的相关命令以及如何在mac中设置开机自启，也会记录一些相关控制台命令。
+          <div class="post-more-link text-center">
+            <a class="btn" href="../../2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Mac/"> #Mac </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2016/12/23/MySQL基础知识/">
+                MySQL基础知识
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-12-23
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/12/23/MySQL基础知识/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/23/MySQL基础知识/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h4 id="MySQL函数">MySQL函数</h4><ol>
+<li>SQL中操作日期和年月的函数：SELECT DAYOFWEEK(‘2013-12-1’), DAYOFMONTH(‘2013-12-1’), WEEKDAY(‘2013-12-1’),DAYOFYEAR(‘2013-12-1’), DAYNAME(‘2013-12-1’), MONTHNAME(‘2013-12-1’), WEEK(‘2013-12-1’)\G;</li>
+<li>字符串操作函数：length(), concat(), concat_ws(), RTRIM(), LTRIM(), RPAD(), LPAD(), LOCATE(), SUBSTRING(), LCASE(), UCASE(), REPEAT();</li>
+<li>时间处理函数：HOUR(), MINUTE(), SECOND(); 时间格式处理函数：SELECT DATE_FORMAT(‘2013-12-01 02:02:00’, ‘%h:%i:%S’) AS sample_time</li>
+<li>日期算数函数：SELECT DATE_ADD(NOW(), INTERVAL 21 DAY); DATE_SUB(), CURDATE(), CURTIME(), NOW(), UNIX_TIMESTAMP(), FROM_UNIXTIME()</li>
+<li>SQL事务处理：BEGIN—-ROLLBACK—-COMMIT</li>
+<li><p>PHP与SQL交互：</p>
+<pre><code><span class="variable">$mysqli</span> = mysqli_connect(<span class="string">"hostname(localhost)"</span>, <span class="string">"uername"</span>, <span class="string">"password"</span>, <span class="string">"database"</span>);
+<span class="variable">$sql</span> = <span class="string">"SQL语句"</span>;
+<span class="variable">$res</span> = mysqli_query(<span class="variable">$mysqli</span>, <span class="variable">$sql</span>);<span class="regexp">//</span>执行mysqli_query函数，如果正确执行则返回<span class="keyword">true</span>，否则返回<span class="keyword">false</span>；
+可以使用mysqli_error(<span class="variable">$mysqli</span>)输出
+mysqli_free_result();<span class="regexp">//</span>在关闭之前释放空间
+mysqli_close(<span class="variable">$mysqli</span>)；
+mysqli_fetch_array()函数获取每一行记录作为一个数组，使用<span class="keyword">while</span>循环可以遍历一次所有记录
+</code></pre></li>
+</ol>
+<h4 id="MySQL概念">MySQL概念</h4><ol>
+<li><strong>主键</strong>—唯一标识一条记录，不能有重复的，不允许为空。一个表的主键只能有一个。用来保证数据完整性</li>
+<li><strong>外键</strong>—表的外键是另一表的主键, 外键可以有重复的, 可以是空值。一个表可以有多个外键。用来和其他表建立联系用的</li>
+<li><strong>索引</strong>—该字段没有重复值，但可以有一个空值。一个表可以有多个唯一索引。提高查询排序的速度</li>
+<li><p>外键取值规则：空值或参照的主键值。</p>
+<p> (1)插入非空值时，如果主键表中没有这个值，则不能插入。</p>
+<p> (2)更新时，不能改为主键表中没有的值。</p>
+<p> (3)删除主键表记录时，你可以在建外键时选定外键记录一起级联删除还是拒绝删除。</p>
+<p> (4)更新主键记录时，同样有级联更新和拒绝执行的选择</p>
+</li>
+</ol>
+<h4 id="MySQL常用操作">MySQL常用操作</h4><ol>
+<li><p>建立主键:</p>
+<pre><code><span class="operator"><span class="keyword">alter</span> <span class="keyword">table</span> 表名
+<span class="keyword">add</span> <span class="keyword">constraint</span> PK_字段名<span class="comment">--"PK"为主键的缩写，字段名为要在其上创建主键的字段名,'PK_字段名'就为约束名</span>
+<span class="keyword">primary</span> <span class="keyword">key</span> (字段名) <span class="comment">--字段名同上</span></span>
+</code></pre></li>
+<li><p>增加唯一约束:</p>
+<pre><code><span class="operator"><span class="keyword">alter</span> <span class="keyword">table</span> 表名
+<span class="keyword">add</span> <span class="keyword">constraint</span> UQ_字段名
+<span class="keyword">unique</span> (字段名)</span>
+</code></pre></li>
+<li><p>增加外键约束：</p>
+<pre><code><span class="operator"><span class="keyword">alter</span> <span class="keyword">table</span> 表名
+<span class="keyword">add</span> <span class="keyword">constraint</span> FK_字段名<span class="comment">--"FK"为外键的缩写</span>
+<span class="keyword">foreign</span> <span class="keyword">key</span> (字段名) <span class="keyword">references</span> 关联的表名(关联的字段名) <span class="comment">--注意'关联的表名'和'关联的字段名'</span></span>
+</code></pre></li>
+<li><p>常见join方式</p>
+<ul>
+<li>LEFT(OUTER) JOIN</li>
+<li>RIGHT(OUTER) JOIN</li>
+<li>INNER JOIN</li>
+</ul>
+</li>
+<li>建立索引：ALTER TABLE table_name ADD INDEX index_name(‘name’, ‘age’);</li>
+<li>删除索引的2种方法<ul>
+<li>DROP INDEX index_name on table_name;</li>
+<li>ALTER table table_name drop key index_name; 可以删除被外键约束的索引</li>
+</ul>
+</li>
+<li>select * from mysql.user \G; 查看数据库用户权限</li>
+<li>show warnings\G; —- 查看mysql优化过程 </li>
+</ol>
+<h4 id="MySQL索引的建立规则">MySQL索引的建立规则</h4><ol>
+<li>在 where 及 order by 涉及的列上建立索引,避免全表扫描</li>
+<li>应尽量避免在 where 子句中对字段进行 null 值判断，否则将导致引擎放弃使用索引而进行全表扫描，尤其是is not null会导致全表扫描，如： select id from t where num is null 可以在num上设置默认值0，确保表中num列没有null值，然后这样查询： select id from t where num=0</li>
+<li>当索引列有大量数据重复时,也就是选择性极低时，查询可能不会去利用索引，还不如直接全表扫描；如一表中有字段sex，male、female几乎各一半，那么即使在sex上建了索引也对查询效率起不了作用。</li>
+<li>索引固然可以提高相应的 select 的效率，但同时也降低了 insert 及 update 的效率，因为 insert 或 update 时有可能会重建索引；一个表的索引数最好不要超过6个，若太多则应考虑一些不常使用到的列上建的索引是否有必要。</li>
+<li>尽量使用数字型字段，若只含数值信息的字段尽量不要设计为字符型，这会降低查询和连接的性能，并会增加存储开销。这是因为引擎在处理查询和连接时会逐个比较字符串中每一个字符，而对于数字型而言只需要比较一次就够了</li>
+<li>尽可能的使用 varchar/nvarchar 代替 char/nchar ，因为首先变长字段存储空间小，可以节省存储空间，其次对于查询来说，在一个相对较小的字段内搜索效率显然要高些</li>
+<li>避免频繁创建和删除临时表，以减少系统表资源的消耗</li>
+<li>在新建临时表时，如果一次性插入数据量很大，那么可以使用 select into 代替 create table，避免造成大量 log ，以提高速度；如果数据量不大，为了缓和系统表的资源，应先create table，然后insert。</li>
+<li>如果使用到了临时表，在存储过程的最后务必将所有的临时表显式删除，先 truncate table ，然后 drop table ，这样可以避免系统表的较长时间锁定</li>
+<li>应尽量避免在 where 子句中使用!=或&lt;&gt;操作符，否则将引擎放弃使用索引而进行全表扫描</li>
+<li>(新版本已经会使用到索引)应尽量避免在 where 子句中使用 or 来连接条件，否则将导致引擎放弃使用索引而进行全表扫描，如： select id from t where num=10 or num=20 可以这样查询： select id from t where num=10 union all select id from t where num=20</li>
+<li>in 和 not in 也要慎用，否则会导致全表扫描，如： select id from t where num in(1,2,3) 对于连续的数值，能用 between 就不要用 in 了： select id from t where num between 1 and 3</li>
+<li>下面的查询也将导致全表扫描： select id from t where name like ‘%abc%’</li>
+<li>如果在 where 子句中使用参数，也会导致全表扫描。因为SQL只有在运行时才会解析局部变量，但优化程序不能将访问计划的选择推迟到运行时；它必须在编译时进行选择。然而，如果在编译时建立访问计划，变量的值还是未知的，因而无法作为索引选择的输入项。如下面语句将进行全表扫描： select id from t where num=@num 可以改为强制查询使用索引： select id from t with(index(索引名)) where num=@num</li>
+<li>应尽量避免在 where 子句中对字段进行表达式操作，这将导致引擎放弃使用索引而进行全表扫描。如： select id from t where num/2=100 应改为: select id from t where num=100*2</li>
+<li><p>应尽量避免在where子句中对字段进行函数操作，这将导致引擎放弃使用索引而进行全表扫描。如： </p>
+<pre><code>select <span class="property">id</span> <span class="keyword">from</span> t <span class="keyword">where</span> substring(<span class="property">name</span>,<span class="number">1</span>,<span class="number">3</span>)=’abc’   –<span class="property">name</span>以abc开头的<span class="property">id</span> 
+select <span class="property">id</span> <span class="keyword">from</span> t <span class="keyword">where</span> datediff(<span class="property">day</span>,createdate,’<span class="number">2005</span>-<span class="number">11</span>-<span class="number">30</span>′)=<span class="number">0</span>       –‘<span class="number">2005</span>-<span class="number">11</span>-<span class="number">30</span>’生成的<span class="property">id</span> 
+应改为: select <span class="property">id</span> <span class="keyword">from</span> t <span class="keyword">where</span> <span class="property">name</span> like ‘abc%’ select <span class="property">id</span> <span class="keyword">from</span> t <span class="keyword">where</span> createdate&gt;=’<span class="number">2005</span>-<span class="number">11</span>-<span class="number">30</span>′ <span class="keyword">and</span> createdate&lt;’<span class="number">2005</span>-<span class="number">12</span>-<span class="number">1</span>′
+</code></pre></li>
+<li><p>不要在 where 子句中的“=”左边进行函数、算术运算或其他表达式运算，否则系统将可能无法正确使用索引</p>
+</li>
+<li>很多时候用 exists 代替 in 是一个好的选择： select num from a where num in(select num from b) 用下面的语句替换： select num from a where<br>exists(select 1 from b where num=a.num)</li>
+<li>任何地方都不要使用 select <em> from t ，用具体的字段列表代替“</em>”，不要返回用不到的任何字段。</li>
+<li>尽量避免使用游标，因为游标的效率较差，如果游标操作的数据超过1万行，那么就应该考虑改写</li>
+<li>尽量避免向客户端返回大数据量，若数据量过大，应该考虑相应需求是否合理</li>
+<li>尽量避免大事务操作，提高系统并发能力。</li>
+<li>最有可能影响SQL性能的是磁盘和网络吞吐量</li>
+<li>能够采用存储过程实现的对数据库的操作尽量通过存储过程来实现</li>
+<li>不良的SQL往往来自于不恰当的索引设计、不充份的连接条件和不可优化的where子句。在对它们进行适当的优化后，其运行速度有了明显地提高</li>
+<li>在不加WHERE限制条件的情况下，COUNT(<em>)与COUNT(COL)基本可以认为是等价的；但是在有WHERE限制条件的情况下，COUNT(</em>)会比COUNT(COL)快非常多；</li>
+<li>COUNT(*)通常是对主键进行索引扫描，而COUNT(COL)就不一定了，另外前者是统计表中的所有符合的纪录总数，而后者是计算表中所有符合的COL的纪录数。</li>
+<li>两表join时，inner join 和 left join 差不多,都需要优化右表(join字段加索引)，而 right join 需要优化左表</li>
+</ol>
+<h4 id="MySQL_explain/explain_extended含义">MySQL explain/explain extended含义</h4><ol>
+<li><strong>id列</strong>：MySQL Query Optimizer 选定的执行计划中查询的序列号。表示查询中执行 select 子句或操作表的顺序,id值越大优先级越高,越先被执行。id 相同,执行顺序由上至下。</li>
+<li><p><strong>select_type 列</strong><br>MySQL 把 SELECT 查询分成简单和复杂两种类型，复杂类型又可以分成三个大类：简单子查询、所谓的衍生表（子查询在 FROM 子句里）和 UNION 。SIMPLE：查询中不包含子查询或者UNION；<br>PRIMARY:子查询上层；<br>SUBQUERY：子查询；<br>DERIVED：在FROM列表中包含子查询， MySQL会递归执行这些子查询，把结果放在临时表里</p>
+</li>
+<li><p><strong>type 列</strong><br>MySQL 在表里找到所需行的方式。包括（由左至右，由最差到最好）：| All | index | range | ref | eq_ref | const,system | null</p>
+<ul>
+<li>ALL：全表扫描，MySQL 从头到尾扫描整张表查找行  </li>
+<li>index：按索引次序扫描表，就是先读索引，再读实际的行，其实还是全表扫描。主要优点是避免了排序，因为索引是排好序的。  </li>
+<li>range：以范围的形式扫描索引</li>
+<li>ref：非唯一性索引访问</li>
+<li>eq_ref：使用有唯一性索引查找（主键或唯一性索引）；唯一性索引才会出现 eq_ref （非唯一性索引会出现 ref ），因为唯一，所以最多只返回一条记录，找到后无需继续查找，因此比 ref 更快。</li>
+<li>const：被称为“常量”，这个词不好理解，不过出现 const 的话就表示发生下面两种情况：在整个查询过程中这个表最多只会有一条匹配的行，比如主键 id=1 就肯定只有一行，只需读取一次表数据便能取得所需的结果，且表数据在分解执行计划时读取。例如：select * from a where id=1\G  ；只有唯一性索引才能保证表中最多只有一条记录，只有这样 type 才有可能为 const 。为 id 加普通索引后， type 变为 ref ，改为加唯一或主键索引后， type 便变为 const 了。  </li>
+<li>system：system 是 const 类型的特例，当表只有一行时就会出现 system 。  </li>
+<li>NULL：在优化过程中就已得到结果，不用再访问表或索引。例如：select min(a_id) from a\G  </li>
+</ul>
+</li>
+<li><p><strong>key_len 列</strong>：索引字段最大可能使用的长度。</p>
+</li>
+<li><strong>key 列</strong>：查询过程中实际使用的索引；可以在 SELECT 语句中使用 USE INDEX (indexname)来强制使用一个索引或者用 IGNORE INDEX(indexname)来强制 MYSQL 忽略索引</li>
+<li><strong>ref 列</strong>：指出对 key 列所选择的索引的查找方式，常见的值有 const, func, NULL, 具体字段名。当 key 列为 NULL ，即不使用索引时，此值也相应的为 NULL 。</li>
+<li><strong>rows 列</strong>：MySQL 估计的需要扫描的行数</li>
+<li><p><strong>Extra 列</strong>：</p>
+<ul>
+<li>Using index: 此查询使用了覆盖索引(Covering Index)，即通过索引就能返回结果，无需访问表  </li>
+<li>Using where：表示 MySQL 服务器从存储引擎收到行后再进行“后过滤”（Post-filter）。所谓“后过滤”，就是先读取整行数据，再检查此行是否符合 where 句的条件，符合就留下，不符合便丢弃。因为检查是在读取行后才进行的，所以称为“后过滤”。  </li>
+<li>Using temporary：使用到临时表；MySQL 使用临时表来实现 distinct 操作；常见于排序 order by 和分组查询 group by </li>
+<li>Using filesort：若查询所需的排序与使用的索引的排序一致，因为索引是已排序的，因此按索引的顺序读取结果返回，否则，在取得结果后，还需要按查询所需的顺序对结果进行排序，这时就会出现 Using filesort  </li>
+<li>当 type 为 rang、 ref 或者 index 的时候才有可能利用索引排序，其它，如 ALL ，都无法通过索引排序，此时若有 order by ，如上例，便会出现 Using filesort 。 但是当扫描的行过多时，MySQL 直接改用全表扫描，再 Using filesort ，不再使用索引。也就是说， MySQL 会根据表中的信息及查询来决定使用任种方式。</li>
+<li>Select tables optimized away：这个值意味着仅通过使用索引，优化器可能仅从聚合函数结果中返回一行。</li>
+<li><p>优化器会在索引存在的情况下，通过符合 RANGE 范围的条数和总数的比例来选择是使用索引还是进行全表遍历,这是为了避免过多的 random disk.  </p>
+<p>  — 不使用索引(customer_id)<br>  EXPLAIN SELECT <em> FROM rental WHERE customer_id&lt;103;<br>  — 使用索引<br>  EXPLAIN SELECT </em> FROM rental WHERE customer_id&lt;102;<br>  — 其中 id &lt; 103 的行数为 2767, id &lt; 102 的行数为 2734</p>
+</li>
+<li><p>“Using Index; Using where” it means that first the index is used to retrieve the records (an actual access to the table is not needed) and then on top of this result set the filtering of the where clause is done. For example: SELECT id FROM test WHERE id &gt; 5;</p>
+</li>
+<li>“Using index condition” 的理解是, 首先 mysql server 和 storage engine 是两个组件, server 负责 sql的parse, 执行; storage engine 去真正的 做 数据/index的 读取/写入. 以前是这样: server 命令 storage engine 按 index 把相应的 数据 从 数据表读出, 传给server, server来按 where条件 做选择; 现在 ICP则是在 可能的情况下, 让storage engine 根据index 做判断, 如果不符合 条件 则无须 读 数据表. 这样 节省了disk IO. <a href="https://dev.mysql.com/doc/refman/5.6/en/index-condition-pushdown-optimization.html" target="_blank" rel="external">Link</a></li>
+</ul>
+</li>
+</ol>
+<h4 id="MySQL数据类型选择">MySQL数据类型选择</h4><h5 id="varchar和text">varchar和text</h5><ol>
+<li><p>当超过255的长度之后，使用varchar和text没有本质区别，text没有默认值；推荐使用varchar（10000），毕竟这个还有截断，可以保证字段的最大值可控，如果使用text那么如果code有漏洞很有可能就写入数据库一个很大的内容，会造成风险；</p>
+</li>
+<li><p>当varchar大于某些数值的时候，其会自动转换为text，大概规则如下：</p>
+<ul>
+<li>大于varchar（255）变为 tinytext</li>
+<li>大于varchar（500）变为 text</li>
+<li>大于varchar（20000）变为 mediumtext  </li>
+</ul>
+</li>
+<li><p>char的上限为255字节，varchar的上限65535字节，text的上限为65535。char在存储的时候会截断尾部的空格，varchar和text不会。<a href="http://www.cnblogs.com/billyxp/p/3548540.html" target="_blank" rel="external">MySQL之char、varchar和text的设计</a></p>
+</li>
+</ol>
+<h4 id="参考链接">参考链接</h4><ol>
+<li><a href="http://blog.csdn.net/gevolution90/article/details/6856922" target="_blank" rel="external">Mysql explain结果解读</a></li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/MySQL/"> #MySQL </a>
+          
+            <a href="../../tags/数据库/"> #数据库 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2016/11/29/毕业求职漫漫路/">
+                毕业求职漫漫路
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-11-28
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/11/29/毕业求职漫漫路/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/29/毕业求职漫漫路/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>最近突然又开始面临一些抉择，本该尘埃落定的工作生活突然被一封邮件打乱了，想起来回顾一下自己的找工作历程。从16年4月份的开始找实习，一直到到16年11月底科大硕士毕业，中间一边在网易实习，一边准备各种面试，电面、视频面、现场面，一应俱全，个中滋味，五味杂陈，不足为外人道。可以说是一个艰难而又逐渐对自己认识明晰的过程。就好像当年本科毕业时一边在百度实习，一边DIY准备硕士申请一样，困难与压力并存却也收获颇丰。一旦有了一个明确的目标，那就只能不断地向它靠近再靠近，中间会有高低起伏，峰回路转，坚持就是胜利；所谓尽人事，安天命。 </p>
+<p>仔细算来，我是从大三才开始写代码，开始接触Java，第一份实习去了师兄的创业公司，接触到Android开发，后来到大四又去了百度移动搜索做Android开发；起初打算吃技术这碗饭，也只是想着将来不至于身无长技，流落街头，后来意识到这是不对的，做一行还是得精一行，虽然直到现在代码也是写的挺烂的，可能也是缺乏一定的技术激情，写代码会有兴奋感，也没有那么强，有待发掘。  </p>
+<p>直到硕士临近毕业参加校招，才发现真的需要靠专业技术来安身立命了，第一份工作既不想舍弃大学的专业，也很难再有码农之外的好的选择，即使有，也是和coding息息相关的了。一开始是实习面试，遭遇各种挫折，每天做的事情基本是投简历，改简历，准备面试，查漏补缺；这一段经历在之前的<a href="http://www.charles-xiao.top/2016/07/03/%E4%B8%80%E8%B7%AF%E5%90%91%E5%8C%97-%E4%BB%8E%E6%B8%AF%E6%BC%82%E5%88%B0%E5%8C%97%E6%BC%82/" target="_blank" rel="external">博文</a>中有提到过，暂且不表，幸好这段经历也为校招做好了铺垫。  </p>
+<p>校招分为几个部分，内推、统招、散招。<strong>内推</strong>的信息基本上都来自于部分实验室内部传播或者学校论坛内部传播，而且往往要求比较高，往往会专注于某个方向，因为一般都是某个方向的团队在招人，比如存储、广告、推荐这些具体的方向；内推这种形式对于MSC来说其实是毫无优势的，一方面没有实验室的内推人脉，信息相对比较闭塞，幸好还有北邮人论坛来获取这方面的信息，打进了内部；另一方面，授课型的master学业时间较短，也很难在某个方向上有深度研究，很难满足内推的要求；<strong>统招</strong>就是各大互联网公司的统一秋招了，一般是统一笔试再加上多轮面试了  </p>
+<p>所谓面试，三分运气，七分实力，八二定律展露无遗。校招中，20%的大牛收割掉了80%的special offer，剩下的80%的人去瓜分批发价和20%的sp，大家都各有各的纠结。最大的感触之一是如果你是一个90分以上水平的人，那么你可以凭你的实力去砍一堆offer,但是如果你是一个70到90分之间的候选人，从实力来讲，彼此并没有太大的区别，就靠那么三分运气了。  </p>
+<p>这次往沪，某种意义上来讲对我来说是一次很重要的选择，曾经的北上帝都，心里也只是把它当做人生的过渡之处，最终还是要南下回到珠三角这个离家乡、亲人、朋友比较近的地方。而这一次，确是抱着换个地方奋斗的念头了。这几年从妖都到鹏城，再到HK, 辗转帝都，现在又去魔都，真是凑齐了个大满贯。每次搬家寄行李都嫌麻烦，但有时候转念想想，还年轻，跑一跑也无妨，现在不转转，过几年之后估计更难换城市了，也就释然了。  </p>
+<p>换一个城市，就是一个新的开始。虽然成本很大，甚至要牺牲一些东西，比如金钱，当然这也可能只是暂时的（极力安慰自己目光要长远……)。</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2016/07/14/DuoBao项目代码学习笔记/">
                 DuoBao项目代码学习笔记
               </a>
@@ -686,307 +1066,6 @@ tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /ho
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/05/18/Android自定义View实现总结-以百度锁屏项目界面为例/">
-                Android自定义View实现总结---以百度锁屏项目界面为例
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-05-18
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/05/18/Android自定义View实现总结-以百度锁屏项目界面为例/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/18/Android自定义View实现总结-以百度锁屏项目界面为例/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p><strong>自定义View的原则</strong>：一个好的自定义控件应当和Android本身提供的控件一样，封装了一系列的功能以供开发者使用，不仅具有完备的功能，也需要高效的使用内存和CPU<br><strong>开发自定义View的步骤</strong>：</p>
-<ul>
-<li>编写继承自View的子类</li>
-<li>为自定义View类增加属性</li>
-<li>绘制自定义View</li>
-<li>响应用户消息和事件</li>
-<li>自定义回调函数</li>
-</ul>
-<h3 id="自定义View的三种形式">自定义View的三种形式</h3><ol>
-<li><strong>继承已有的控件</strong>: 往往继承自系统自带的控件，例如继承自ImageView, Viewpager等，例如ConstellationPager extends ViewPager，一个可以无限循环切换的ViewPager<ul>
-<li><strong>ConstellationPager</strong>: 在该ViewPager的构造函数中初始化页面布局，通过addView添加自定义View，并设置OnPageChangeListener</li>
-</ul>
-</li>
-<li><strong>组合已有的控件</strong>: 往往继承自Layout, 通过LayoutInflater inflate xml文件来组合多个控件。例如KeyguardLayout extends FrameLayout, 该界面包括MultiWaveView，WeatherView等多个View；例如WeatherView extends LinearLayout，该界面中同样包括多个基础View控件</li>
-<li><strong>完全自绘的控件</strong>: 往往继承View/ViewGroup,例如MultiWaveView extends View, 一个锁屏的控件，包括a handle and outer ring，内部的OnTriggerListener监听手指滑动响应解锁或者打开App的操作，内部还绘制了类似彗星划过效果的动画</li>
-</ol>
-<h3 id="自定义View的重载方法">自定义View的重载方法</h3><ul>
-<li><strong>measure</strong> 过程由measure(int, int)方法发起，从上到下有序的测量 View，在 measure 过程的最后，每个视图存储了自己的尺寸大小和测量规格(三种测量规格MeasureSpec 类);measure 过程会为一个 View 及所有子节点的 mMeasuredWidth 和 mMeasuredHeight 变量赋值；onMeasure方法中调用setMeasuredDimension方法来设置自定义视图的尺寸</li>
-<li><strong>layout</strong>子视图的具体位置都是相对于父视图而言的。View 的 onLayout 方法为空实现，而 ViewGroup 的 onLayout 为 abstract 的，因此，如果自定义的 View 要继承 ViewGroup 时，必须实现 onLayout 函数。在 layout 过程中，子视图会调用getMeasuredWidth()和getMeasuredHeight()方法获取到 measure 过程得到的 mMeasuredWidth 和mMeasuredHeight，作为自己的 width 和 height。然后调用每一个子视图的layout(l, t, r, b)函数，来确定每个子视图在父视图中的位置。</li>
-<li><strong>Draw</strong>所有的视图最终都是调用 View 的 draw 方法进行绘制的。在自定义的视图复写onDraw(Canvas) 方法进行绘制， 操作canvas对象对一个bitmap对象进行绘制;View 的onDraw（Canvas）默认是空实现，复写该方法绘制自身的内容; <em>过程：绘制背景—-绘制自身—-绘制子视图—-绘制Layer和ScrollBar</em></li>
-<li><strong>invalidate()</strong>请求重绘 View 树，即 draw 过程，假如视图发生大小没有变化就不会调用layout()过程，并且只绘制那些调用了invalidate()方法的 View</li>
-<li><strong>requestLayout()</strong>当布局变化的时候，比如方向变化，尺寸的变化，会调用该方法，在自定义的视图中，如果某些情况下希望重新测量尺寸大小，应该手动去调用该方法，它会触发measure()和layout()过程，但不会进行 draw。</li>
-<li><strong>onTouchEvent()</strong>：监听触摸事件的回调 </li>
-</ul>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/04/30/常见算法与数据结构/">
-                常见算法与数据结构
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-04-30
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/算法/">算法</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/04/30/常见算法与数据结构/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/30/常见算法与数据结构/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="DFS和BFS">DFS和BFS</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/DFS_BFS.jpg" class="full-image" width="100%"> </p>
-<h3 id="Tree">Tree</h3><ol>
-<li><p><strong>二叉查找树</strong>:（1）若左子树不空，则左子树上所有结点的值均小于它的根结点的值；（2）若右子树不空，则右子树上所有结点的值均大于它的根结点的值；（3）左、右子树也分别为二叉排序树；（4）没有键值相等的结点 (5) 特性就是”中序遍历“可以让结点有序.</p>
-<ul>
-<li><strong>范围查找</strong>是我们使用二叉树的最终目的，既然是范围查找，我们就知道了一个”min“和”max“，其实实现起来也很简单：</li>
-<li>我们要在树中找到min元素，当然min元素可能不存在，但是我们可以找到min的上界，耗费时间为O(logn)</li>
-<li>从min开始我们中序遍历寻找max的下界。耗费时间为m。m也就是匹配到的个数</li>
-</ul>
-</li>
-<li><p><strong>平衡二叉查找树(AVL)</strong>: 父节点的左子树和右子树的高度之差不能大于1的二叉查找树，平衡之后能够保证查找，添加，删除的平均和最差时间复杂度都是严格的O(logN) <a href="http://www.cnblogs.com/huangxincheng/archive/2012/07/22/2603956.html" target="_blank" rel="external">Link</a></p>
-<p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/AVL.jpg" class="full-image" width="100%"> </p>
-</li>
-<li><p><strong>B-Tree</strong>:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/B-Tree.png" class="full-image" width="100%"> </p>
-</li>
-<li><strong>B+ Tree</strong>:一棵m阶的B+树和m阶的B树的<strong>异同点</strong>在于：<ul>
-<li>所有的叶子结点中包含了全部关键字的信息，及指向含有这些关键字记录的指针，且叶子结点本身依关键字的大小自小而大的顺序链接。(而B 树的叶子节点并没有包括全部需要查找的信息)</li>
-<li>所有的非终端结点可以看成是索引部分，结点中仅含有其子树根结点中最大（或最小）关键字。(而B 树的非终节点也包含需要查找的有效信息)</li>
-</ul>
-</li>
-<li><strong>为什么说B+树比B 树更适合实际应用中操作系统的文件索引和数据库索引？</strong><ul>
-<li><strong>B+树的磁盘读写代价更低</strong>：B+树的内部结点并没有指向关键字具体信息的指针。因此其内部结点相对B树更小。如果把所有同一内部结点的关键字存放在同一盘块中，那么盘块所能容纳的关键字数量也越多。一次性读入内存中的需要查找的关键字也就越多。相对来说IO读写次数也就降低了。</li>
-<li><strong>B+树的查询效率更加稳定</strong>：由于非终结点并不是最终指向文件内容的结点，而只是叶子结点中关键字的索引。所以任何关键字的查找必须走一条从根结点到叶子结点的路。所有关键字查询的路径长度相同，导致每一个数据的查询效率相当。</li>
-</ul>
-</li>
-<li><strong>RB-Tree红黑树</strong>:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/RB-Tree.png" class="full-image" width="100%"> </li>
-</ol>
-<h3 id="KNN算法">KNN算法</h3><ol>
-<li><strong>基本思想</strong>: 从训练样本中找出K个与其最相近的样本，然后看这K个样本中哪个类别的样本多，则待判定的值（或说抽样）就属于这个类别</li>
-<li><p><strong>步骤</strong>:</p>
-<ul>
-<li>计算已知类别数据集中每个点与当前点的距离；</li>
-<li>选取与当前点距离最小的K个点；</li>
-<li>统计前K个点中每个类别的样本出现的频率；</li>
-<li>返回前K个点出现频率最高的类别作为当前点的预测分类</li>
-</ul>
-</li>
-<li><p><strong>算法关键</strong>:<a href="http://www.open-open.com/lib/view/open1420684852171.html" target="_blank" rel="external">Link</a></p>
-</li>
-<li><strong>优缺点和应用场景</strong></li>
-</ol>
-<h3 id="排序算法">排序算法</h3><h4 id="快排">快排</h4><h4 id="堆排">堆排</h4><h4 id="归并">归并</h4><h3 id="决策树算法">决策树算法</h3><h3 id="神经网络算法">神经网络算法</h3><h3 id="海量数据处理算法">海量数据处理算法</h3><h4 id="Top_K_问题解法">Top K 问题解法</h4>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/BFS/"> #BFS </a>
-          
-            <a href="../../tags/DFS/"> #DFS </a>
-          
-            <a href="../../tags/数据结构/"> #数据结构 </a>
-          
-            <a href="../../tags/算法/"> #算法 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/04/26/Android开源控件实现原理汇总/">
-                Android开源控件实现原理汇总
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-04-26
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Android开发/">Android开发</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/04/26/Android开源控件实现原理汇总/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/26/Android开源控件实现原理汇总/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="ListView下拉刷新和下拉加载">ListView下拉刷新和下拉加载</h3>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Android/"> #Android </a>
-          
-            <a href="../../tags/开源控件/"> #开源控件 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1025,7 +1104,7 @@ tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /ho
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">54</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1039,7 +1118,7 @@ tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /ho
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">59</span>
+              <span class="site-state-item-count">61</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

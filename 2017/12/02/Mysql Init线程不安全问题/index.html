@@ -1,0 +1,1096 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2"/>
+
+
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
+
+
+
+  <meta name="keywords" content="Mysql,bug,databse," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../..//favicon.ico?v=0.4.2" />
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6749450";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <title> Mysql初次Init线程不安全问题 // CharlesXiao‘s Blog </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">CharlesXiao‘s Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    <!--增加swiftype搜索功能-->
+    <form class="menu-item menu-item-search">
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+    </form>
+    
+    <script type="text/javascript">
+      (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+      (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+      e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+      })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+      _st('install','yxUhPQ2aHyszT_1btxX9','2.0.0');
+    </script>
+    <!--增加swiftype搜索功能end-->
+    
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="../../../..//">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="../../../..//categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          分类
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-about">
+        <a href="../../../..//about">
+          <i class="menu-item-icon icon-about"></i> <br />
+          关于
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="../../../..//archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="../../../..//tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Mysql初次Init线程不安全问题
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-12-02
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/02/Mysql Init线程不安全问题/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h4 id="现象描述">现象描述</h4><p>沙盒测试时发现的这个问题，在程序启动时偶发core，而且不稳定复现，查看core信息会发现core在了mysql连接上；而且最后发现的规律是每次程序启动时，如果多线程获取数据库连接，就可能出现core。core信息如图所示:</p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/mysql_core.png" class="full-image"></p>
+<h4 id="代码复现">代码复现</h4><p>在主线程内初始化mysql，在子线程内调用mysql_real_connect,就会导致coredump</p>
+<pre><code><span class="variable">#include</span> <span class="subst">&lt;</span>mysql<span class="built_in">.</span>h<span class="subst">&gt;</span>
+<span class="variable">#include</span> <span class="subst">&lt;</span>pthread<span class="built_in">.</span>h<span class="subst">&gt;</span>
+<span class="literal">void</span><span class="subst">*</span> func(<span class="literal">void</span><span class="subst">*</span> arg)
+{
+    MYSQL<span class="subst">*</span> mysql <span class="subst">=</span> (MYSQL <span class="subst">*</span>)arg;
+    mysql_real_connect(mysql, “<span class="number">127.0</span><span class="built_in">.0</span><span class="built_in">.1</span>″, “root”, “<span class="number">123456</span>″, “chen”, <span class="number">1234</span>, <span class="built_in">NULL</span>, <span class="number">0</span>);
+    mysql_close(mysql);
+    <span class="keyword">return</span> (<span class="literal">void</span> <span class="subst">*</span>)<span class="number">0</span>;
+}
+
+int main()
+{
+    MYSQL mysql;
+    <span class="keyword">if</span> (<span class="built_in">NULL</span> <span class="subst">==</span> mysql_init(<span class="subst">&amp;</span>mysql))
+    {
+        <span class="keyword">return</span> <span class="subst">-</span><span class="number">1</span>;
+    }
+    pthread_t <span class="keyword">thread</span>;
+    pthread_create(<span class="subst">&amp;</span><span class="keyword">thread</span>, <span class="built_in">NULL</span>, func, <span class="subst">&amp;</span>mysql);
+    pthread_join(<span class="keyword">thread</span>, <span class="built_in">NULL</span>);
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><h4 id="出现原因">出现原因</h4><p>如官网文档所说，当我们调用<code>mysql_real_connect()</code>函数去获取数据库连接时，需要先调用<code>mysql_init(MYSQL *mysql)函数</code>去获取一个MYSQL connection handler，然而mysql_init()不是完全线程安全的，但是只要成功调用一次后就线程安全了，如果有多线程并发调用mysql_init()，第一次init时如果刚好多线程并发调用，就会出core；为啥第一次调用mysql_init时线程不安全？我们可以来看看mysql源码:</p>
+<ol>
+<li><p>mysql.h文件预定义<code>mysql_library_init</code>函数</p>
+<pre><code><span class="hexcolor">#def</span>ine mysql_library_init mysql_server_init
+</code></pre></li>
+<li><p>client.c文件定义<code>mysql_init</code>函数,并调用<code>mysql_server_init</code>函数</p>
+<pre><code><span class="comment">// Init MySQL structure or allocate one</span>
+
+MYSQL <span class="subst">*</span> STDCALL
+mysql_init(MYSQL <span class="subst">*</span>mysql)
+{
+  <span class="keyword">if</span> (mysql_server_init(<span class="number">0</span>, <span class="built_in">NULL</span>, <span class="built_in">NULL</span>))
+    <span class="keyword">return</span> <span class="number">0</span>;
+  <span class="keyword">if</span> (<span class="subst">!</span>mysql)
+  {
+    <span class="keyword">if</span> (<span class="subst">!</span>(mysql<span class="subst">=</span>(MYSQL<span class="subst">*</span>) my_malloc(sizeof(<span class="subst">*</span>mysql),MYF(MY_WME <span class="subst">|</span> MY_ZEROFILL))))
+    {
+      set_mysql_error(<span class="built_in">NULL</span>, CR_OUT_OF_MEMORY, unknown_sqlstate);
+      <span class="keyword">return</span> <span class="number">0</span>;
+    }
+    mysql<span class="subst">-&gt;</span>free_me<span class="subst">=</span><span class="number">1</span>;
+  }
+  <span class="keyword">else</span>
+    memset(mysql, <span class="number">0</span>, sizeof(<span class="subst">*</span>(mysql)));
+  mysql<span class="subst">-&gt;</span>charset<span class="subst">=</span>default_client_charset_info;
+  strmov(mysql<span class="subst">-&gt;</span>net<span class="built_in">.</span>sqlstate, not_error_sqlstate);
+
+  <span class="comment">/*
+    Only enable LOAD DATA INFILE by default if configured with option
+    ENABLED_LOCAL_INFILE
+  */</span>
+
+<span class="variable">#if</span> defined(ENABLED_LOCAL_INFILE) <span class="subst">&amp;&amp;</span> <span class="subst">!</span>defined(MYSQL_SERVER)
+  mysql<span class="subst">-&gt;</span>options<span class="built_in">.</span>client_flag<span class="subst">|=</span> CLIENT_LOCAL_FILES;
+<span class="variable">#endif</span>
+
+<span class="variable">#ifdef</span> HAVE_SMEM
+  mysql<span class="subst">-&gt;</span>options<span class="built_in">.</span>shared_memory_base_name<span class="subst">=</span> (char<span class="subst">*</span>) def_shared_memory_base_name;
+<span class="variable">#endif</span>
+
+  mysql<span class="subst">-&gt;</span>options<span class="built_in">.</span>methods_to_use<span class="subst">=</span> MYSQL_OPT_GUESS_CONNECTION;
+  mysql<span class="subst">-&gt;</span>options<span class="built_in">.</span>report_data_truncation<span class="subst">=</span> <span class="literal">TRUE</span>;  <span class="comment">/* default */</span>
+
+  mysql<span class="subst">-&gt;</span>reconnect<span class="subst">=</span> <span class="number">0</span>;
+
+  mysql<span class="subst">-&gt;</span>options<span class="built_in">.</span>secure_auth<span class="subst">=</span> <span class="literal">TRUE</span>;
+
+  <span class="keyword">return</span> mysql;
+}
+</code></pre></li>
+<li><p>libmysql.c文件定义<code>mysql_server_init</code>函数, 问题就出在这个函数,用了<code>mysql_client_init</code>这个标记量来判断是否需要调用<code>my_thread_init</code>函数，如果<code>mysql_client_init==1</code>就直接为每个线程初始化私有变量，否则会先去初始化一些全局性的系统函数，资源和变量; 所以如果第一次init时出现多线程并发情景，线程A将<code>mysql_client_init</code>变量置为1，紧接着初始化全局资源，与此同时线程B走了else分支，直接开始调用<code>my_thread_init</code>函数，此时就会报错了，core由此产生。</p>
+<pre><code><span class="type">int</span> <span class="type">STDCALL</span> mysql_server_init(<span class="type">int</span> argc __attribute__((unused)),
+                  <span class="type">char</span> **argv __attribute__((unused)),
+                  <span class="type">char</span> **groups __attribute__((unused)))
+{
+  <span class="type">int</span> <span class="literal">result</span>= <span class="number">0</span>;
+  <span class="keyword">if</span> (!mysql_client_init)
+  {
+    mysql_client_init=<span class="number">1</span>;
+    org_my_init_done=my_init_done;
+    <span class="keyword">if</span> (my_init())                /* <span class="type">Will</span> init threads */
+      <span class="keyword">return</span> <span class="number">1</span>;
+    init_client_errs();
+    <span class="keyword">if</span> (mysql_client_plugin_init())
+      <span class="keyword">return</span> <span class="number">1</span>;
+    <span class="keyword">if</span> (!mysql_port)
+    {
+      <span class="type">char</span> *env;
+      struct servent *serv_ptr __attribute__((unused));
+
+      mysql_port = <span class="type">MYSQL_PORT</span>;
+
+      /*
+        <span class="keyword">if</span> builder specifically requested a default port, use that
+        (even <span class="keyword">if</span> it coincides <span class="keyword">with</span> our factory default).
+        only <span class="keyword">if</span> they didn't <span class="keyword">do</span> we check /etc/services (<span class="keyword">and</span>, failing
+        on that, fall back to the factory default <span class="keyword">of</span> <span class="number">3306</span>).
+        either default can be overridden by the environment variable
+        <span class="type">MYSQL_TCP_PORT</span>, which <span class="keyword">in</span> turn can be overridden <span class="keyword">with</span> command
+        line options.
+      */
+
+<span class="comment">#if MYSQL_PORT_DEFAULT == 0</span>
+      <span class="keyword">if</span> ((serv_ptr= getservbyname(<span class="string">"mysql"</span>, <span class="string">"tcp"</span>)))
+        mysql_port= (<span class="type">uint</span>) ntohs((ushort) serv_ptr-&gt;s_port);
+<span class="comment">#endif</span>
+      <span class="keyword">if</span> ((env= getenv(<span class="string">"MYSQL_TCP_PORT"</span>)))
+        mysql_port=(<span class="type">uint</span>) atoi(env);
+    }
+
+    <span class="keyword">if</span> (!mysql_unix_port)
+    {
+      <span class="type">char</span> *env;
+<span class="comment">#ifdef __WIN__</span>
+      mysql_unix_port = (<span class="type">char</span>*) <span class="type">MYSQL_NAMEDPIPE</span>;
+<span class="comment">#else</span>
+      mysql_unix_port = (<span class="type">char</span>*) <span class="type">MYSQL_UNIX_ADDR</span>;
+<span class="comment">#endif</span>
+      <span class="keyword">if</span> ((env = getenv(<span class="string">"MYSQL_UNIX_PORT"</span>)))
+    mysql_unix_port = env;
+    }
+    mysql_debug(<span class="type">NullS</span>);
+<span class="comment">#if defined(SIGPIPE) &amp;&amp; !defined(__WIN__)</span>
+    (<span class="type">void</span>) signal(<span class="type">SIGPIPE</span>, <span class="type">SIG_IGN</span>);
+<span class="comment">#endif</span>
+<span class="comment">#ifdef EMBEDDED_LIBRARY</span>
+    <span class="keyword">if</span> (argc &gt; -<span class="number">1</span>)
+       <span class="literal">result</span>= init_embedded_server(argc, argv, groups);
+<span class="comment">#endif</span>
+  }
+  <span class="keyword">else</span>
+    <span class="literal">result</span>= (<span class="type">int</span>)my_thread_init();         /* <span class="type">Init</span> <span class="keyword">if</span> new thread */
+  <span class="keyword">return</span> <span class="literal">result</span>;
+}
+</code></pre></li>
+<li><p>官方文档</p>
+<ul>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/mysql-real-connect.html" target="_blank" rel="external"><code>mysql_real_connect()</code></a> attempts to establish a connection to a MySQL database engine running on host. mysql_real_connect() must complete successfully before you can execute any other API functions that require a valid MYSQL connection handler structure.  </p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/mysql-init.html" target="_blank" rel="external"><code>MYSQL *mysql_init(MYSQL *mysql)</code></a>  </p>
+<p>  Allocates or initializes a MYSQL object suitable for <code>mysql_real_connect()</code>. If mysql is a NULL pointer, the function allocates, initializes, and returns a new object. Otherwise, the object is initialized and the address of the object is returned. If <code>mysql_init()</code> allocates a new object, it is freed when <code>mysql_close()</code> is called to close the connection.  </p>
+<p>  In a nonmulti-threaded environment, <code>mysql_init()</code> invokes <code>mysql_library_init()</code> automatically as necessary. However, <code>mysql_library_init()</code> is not thread-safe in a multi-threaded environment, and thus neither is <code>mysql_init()</code>. Before calling <code>mysql_init()</code>, either call <code>mysql_library_init()</code> prior to spawning any threads, or use a mutex to protect the <code>mysql_library_init()</code> call. This should be done prior to any other client library call.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="解决方案">解决方案</h4><ol>
+<li>每一次连接数据库时都先后加锁调用mysql_init()和mysql_real_connect()，确保init先于connect函数被调用过，而且不会被其他线程并发调用，以免初次连接数据库时多线程并发导致core</li>
+<li>在程序启动时先全局调用一次mysql_init()函数，确保初次调用mysql_init时是线程安全的，之后的调用mysql_real_connect函数就不会出core</li>
+<li>MySQL提供了线程安全的库libmysql_r，可以考虑替换原来的线程不安全的libmysql库</li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../../../tags/Mysql/"> #Mysql </a>
+          
+            <a href="../../../../tags/bug/"> #bug </a>
+          
+            <a href="../../../../tags/databse/"> #databse </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="../../07/Linux终端利器tmux指南/">Linux终端利器tmux指南</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="../../../02/19/Linux shell:目录基础知识/">Linux shell/目录基础知识</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2017/12/02/Mysql Init线程不安全问题/"
+               data-title="Mysql初次Init线程不安全问题" data-url="https://charles-xiao.github.io/2017/12/02/Mysql Init线程不安全问题/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+        <!-- 多说热评文章-->
+        <p>热评文章</p>
+        <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <p class="site-author-name">CharlesXiao</p>
+        </div>
+        <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="../../../..//archives">
+              <span class="site-state-item-count">54</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="../../../..//categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="../../../..//tags">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+              <a href="https://github.com/Charles-Xiao" target="_blank">github</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://weibo.com/2262300105/profile?topnav=1&wvr=6" target="_blank">weibo</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://daijiale.github.io/" target="_blank">Daijiale的个人站点</a>
+            </span>
+            
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#现象描述"><span class="nav-number">1.</span> <span class="nav-text">现象描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码复现"><span class="nav-number">2.</span> <span class="nav-text">代码复现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#出现原因"><span class="nav-number">3.</span> <span class="nav-text">出现原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决方案"><span class="nav-number">4.</span> <span class="nav-text">解决方案</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp;  2015.05.16 - 
+  2017
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">CharlesXiao</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="../../../../vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.content img').each(function () {
+        var $image = $(this);
+        var $imageWrapLink = $image.parent('a');
+
+        if ($imageWrapLink.size() < 1) {
+          $imageWrapLink = $image.wrap('<a href="' + this.getAttribute('src') + '"></a>').parent('a');
+        }
+        $imageWrapLink.addClass('fancybox');
+      });
+    });
+    $('.fancybox').fancybox({
+      helpers: {
+        overlay: {
+          locked: false
+        }
+      }
+    });
+  </script>
+
+
+  <script type="text/javascript">
+  function hasMobileUA () {
+    var nav = window.navigator;
+    var ua = nav.userAgent;
+    var pa = /iPad|iPhone|Android|Opera Mini|BlackBerry|webOS|UCWEB|Blazer|PSP|IEMobile|Symbian/g;
+
+    return pa.test(ua);
+  }
+
+  function isDesktop () {
+    return screen.width > 991 && !hasMobileUA();
+  }
+
+  function isTablet () {
+    return screen.width < 992 && screen.width > 767 && hasMobileUA();
+  }
+
+  function isMobile () {
+    return screen.width < 767 && hasMobileUA();
+  }
+
+  function escapeSelector (selector) {
+    return selector.replace(/[!"$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")
+  }
+</script>
+
+  
+
+  <script type="text/javascript" src="../../../../vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="../../../../vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" id="motion.global">
+  $(document).ready(function () {
+    var body = $('body');
+    var isSidebarVisible = false;
+    var sidebarToggle = $('.sidebar-toggle');
+    var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
+    var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
+    var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
+    var sidebar = $('.sidebar');
+
+    var SIDEBAR_WIDTH = '320px';
+    var SIDEBAR_DISPLAY_DURATION = 300;
+
+    var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
+
+    var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
+    var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
+
+    var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine2ndStatusArrow = {width: '90%'};
+    var sidebarToogleLine2ndStatusClose = {opacity: 0};
+
+    var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
+    var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
+
+    LogoAndMenuMotion();
+    sidebatToggleMotion();
+    postsListMotion();
+    backToTopMotion();
+
+
+    $(document)
+      .on('sidebar.isShowing', function () {
+        isDesktop() && body.velocity(
+          {paddingRight: SIDEBAR_WIDTH},
+          SIDEBAR_DISPLAY_DURATION
+        );
+        sidebarContentMotion();
+      })
+      .on('sidebar.isHiding', function () {});
+
+    function LogoAndMenuMotion() {
+      $.Velocity.RunSequence([
+        { e: $('.brand'), p: { opacity: 1 }, o: { duration: 100 } },
+        { e: $('.logo'), p: { opacity: 1, top: 0 }, o: { duration: 50} },
+        
+        { e: $('.logo-line-before i'), p: { translateX: "100%" }, o: { duration: 500, sequenceQueue: false } },
+        { e: $('.logo-line-after i'), p: { translateX: "-100%" }, o: { duration: 500, sequenceQueue: false } },
+        
+        { e: $('.site-title'), p: { opacity: 1, top: 0 }, o: { duration: 200 } }
+      ]);
+      $('.menu-item').velocity('transition.slideDownIn', {display: null});
+    }
+
+
+    function backToTopMotion () {
+      var b2top = $('.back-to-top');
+      b2top.on('click', function () {
+        body.velocity('scroll');
+      });
+    }
+
+    function sidebarShowMotion () {
+
+      sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
+      sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
+      sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
+
+      sidebar.velocity({width: SIDEBAR_WIDTH}, {
+        display: 'block',
+        duration: SIDEBAR_DISPLAY_DURATION,
+        complete: function () {
+          sidebar.addClass('sidebar-active');
+          sidebar.trigger('sidebar.didShow');
+        }
+      });
+      sidebar.trigger('sidebar.isShowing');
+    }
+
+    function sidebarHideMotion () {
+      isDesktop() && body.velocity({paddingRight: 0});
+      sidebar.velocity('reverse');
+
+      sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
+      sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
+      sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
+
+      sidebar.removeClass('sidebar-active');
+      sidebar.trigger('sidebar.isHiding');
+    };
+
+    function sidebarContentMotion () {
+      $('.sidebar .motion-element').velocity(
+        'transition.slideRightIn',
+        {stagger: 50, drag: true}
+      );
+    }
+
+    function postsListMotion () {
+      var postMotionOptions = window.postMotionOptions || {stagger: 300, drag: true};
+      $('.post').velocity('transition.slideDownIn', postMotionOptions);
+    }
+
+    function sidebatToggleMotion () {
+      sidebarToggle.on('click', function () {
+        isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
+        isSidebarVisible = !isSidebarVisible;
+      });
+
+      sidebarToggle.hover(function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
+      }, function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
+      });
+    }
+  });
+
+</script>
+
+
+
+
+
+  
+  
+<script type="text/javascript" id="bootstrap.scrollspy.custom">
+  /* ========================================================================
+  * Bootstrap: scrollspy.js v3.3.2
+  * http://getbootstrap.com/javascript/#scrollspy
+  * ========================================================================
+  * Copyright 2011-2015 Twitter, Inc.
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  * ======================================================================== */
+
+  /**
+   * Custom by iissnan
+   *
+   * - Add a `clear.bs.scrollspy` event.
+   * - Esacpe targets selector.
+   */
+
+
+  +function ($) {
+    'use strict';
+
+    // SCROLLSPY CLASS DEFINITION
+    // ==========================
+
+    function ScrollSpy(element, options) {
+      this.$body          = $(document.body)
+      this.$scrollElement = $(element).is(document.body) ? $(window) : $(element)
+      this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
+      this.selector       = (this.options.target || '') + ' .nav li > a'
+      this.offsets        = []
+      this.targets        = []
+      this.activeTarget   = null
+      this.scrollHeight   = 0
+
+      this.$scrollElement.on('scroll.bs.scrollspy', $.proxy(this.process, this))
+      this.refresh()
+      this.process()
+    }
+
+    ScrollSpy.VERSION  = '3.3.2'
+
+    ScrollSpy.DEFAULTS = {
+      offset: 10
+    }
+
+    ScrollSpy.prototype.getScrollHeight = function () {
+      return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
+    }
+
+    ScrollSpy.prototype.refresh = function () {
+      var that          = this
+      var offsetMethod  = 'offset'
+      var offsetBase    = 0
+
+      this.offsets      = []
+      this.targets      = []
+      this.scrollHeight = this.getScrollHeight()
+
+      if (!$.isWindow(this.$scrollElement[0])) {
+        offsetMethod = 'position'
+        offsetBase   = this.$scrollElement.scrollTop()
+      }
+
+      this.$body
+        .find(this.selector)
+        .map(function () {
+          var $el   = $(this)
+          var href  = $el.data('target') || $el.attr('href')
+          var $href = /^#./.test(href) && $(escapeSelector(href)) // Need to escape selector.
+
+          return ($href
+            && $href.length
+            && $href.is(':visible')
+            && [[$href[offsetMethod]().top + offsetBase, href]]) || null
+        })
+        .sort(function (a, b) { return a[0] - b[0] })
+        .each(function () {
+          that.offsets.push(this[0])
+          that.targets.push(this[1])
+        })
+
+
+    }
+
+    ScrollSpy.prototype.process = function () {
+      var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
+      var scrollHeight = this.getScrollHeight()
+      var maxScroll    = this.options.offset + scrollHeight - this.$scrollElement.height()
+      var offsets      = this.offsets
+      var targets      = this.targets
+      var activeTarget = this.activeTarget
+      var i
+
+      if (this.scrollHeight != scrollHeight) {
+        this.refresh()
+      }
+
+      if (scrollTop >= maxScroll) {
+        return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
+      }
+
+      if (activeTarget && scrollTop < offsets[0]) {
+        $(this.selector).trigger('clear.bs.scrollspy')  // Add a custom event.
+        this.activeTarget = null
+        return this.clear()
+      }
+
+      for (i = offsets.length; i--;) {
+        activeTarget != targets[i]
+          && scrollTop >= offsets[i]
+          && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
+          && this.activate(targets[i])
+      }
+    }
+
+    ScrollSpy.prototype.activate = function (target) {
+      this.activeTarget = target
+
+      this.clear()
+
+      var selector = this.selector +
+        '[data-target="' + target + '"],' +
+        this.selector + '[href="' + target + '"]'
+
+      var active = $(selector)
+        .parents('li')
+        .addClass('active')
+
+      if (active.parent('.dropdown-menu').length) {
+        active = active
+          .closest('li.dropdown')
+          .addClass('active')
+      }
+
+      active.trigger('activate.bs.scrollspy')
+    }
+
+    ScrollSpy.prototype.clear = function () {
+      $(this.selector)
+        .parentsUntil(this.options.target, '.active')
+        .removeClass('active')
+    }
+
+
+    // SCROLLSPY PLUGIN DEFINITION
+    // ===========================
+
+    function Plugin(option) {
+      return this.each(function () {
+        var $this   = $(this)
+        var data    = $this.data('bs.scrollspy')
+        var options = typeof option == 'object' && option
+
+        if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
+        if (typeof option == 'string') data[option]()
+      })
+    }
+
+    var old = $.fn.scrollspy
+
+    $.fn.scrollspy             = Plugin
+    $.fn.scrollspy.Constructor = ScrollSpy
+
+
+    // SCROLLSPY NO CONFLICT
+    // =====================
+
+    $.fn.scrollspy.noConflict = function () {
+      $.fn.scrollspy = old
+      return this
+    }
+
+
+    // SCROLLSPY DATA-API
+    // ==================
+
+    $(window).on('load.bs.scrollspy.data-api', function () {
+      $('[data-spy="scroll"]').each(function () {
+        var $spy = $(this)
+        Plugin.call($spy, $spy.data())
+      })
+    })
+
+  }(jQuery);
+</script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0 && isDesktop()) {
+        setTimeout(function () {
+          $('.sidebar-toggle').trigger('click');
+        }, 800);
+      }
+    });
+  </script>
+
+
+
+
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"charles-xiao"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"3","bdPos":"left","bdTop":"250"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+
+
+  
+</body>
+</html>

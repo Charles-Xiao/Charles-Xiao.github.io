@@ -148,6 +148,346 @@
           
           
             
+              <a class="post-title-link" href="../../2016/01/17/Html5、React-Native和Native应用开发方式的对比分析/">
+                Html5、React Native和Native应用开发方式的对比分析
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-01-16
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/转载/">转载</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/01/17/Html5、React-Native和Native应用开发方式的对比分析/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/17/Html5、React-Native和Native应用开发方式的对比分析/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="React_Native的出现">React Native的出现</h3><p>React Native的出现，似乎是扛起的反H5的旗子。就像当年Facebook放弃H5，全部转向Native一样。这一点，我们需要认同和保持高度的清醒。那么，React Native是否又是在吞食Native的领地呢？技术的发展，是用户风向标的导向起的作用。任何一门技术的出现，都是当时用户需求的体现。</p>
+<p>我们应该从以下几点看待React Native的出现。</p>
+<p>“鉴往知来”——从过去的教训中总结经验，从用户的角度开拓未来，用户更希望产品迭代和稳定寻求一种平衡<br>“HTML5差强人意，但是与原生应用相比还是有些差距”——为了更高的追求！ 用户体验！<br>“人才宝贵，快速迭代”——Web开发者相对较多，寻找平衡点<br>“跨平台！跨平台！跨平台！”——单一技术栈，开发者的福音<br>“xx是世界上最好的语言” ——工程学的范畴，没有最好，只有最适合，我还是补充一句，JS还是很好很好的。</p>
+<p>HTML5 vs React Native ? HTML5 : React Native<br>结论（React Native）:</p>
+<ol>
+<li><p>原生应用的用户体验</p>
+</li>
+<li><p>跨平台特性</p>
+</li>
+<li><p>开发人员单一技术栈</p>
+</li>
+<li><p>上手快，入门容易</p>
+</li>
+<li><p>社区繁荣</p>
+</li>
+</ol>
+<h3 id="3种方式开发应用效果对比(IOS平台)">3种方式开发应用效果对比(IOS平台)</h3><h3 id="工程方案对比">工程方案对比</h3><h3 id="详细参考链接"><a href="http://my.oschina.net/vczero/blog/597980?fromerr=efaLD7Dm" target="_blank" rel="external">详细参考链接</a></h3>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/React/"> #React </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2016/01/14/Palindrome-Reverse-Integer问题/">
+                Palindrome && Reverse Integer问题
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-01-14
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Leetcode/">Leetcode</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/01/14/Palindrome-Reverse-Integer问题/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/14/Palindrome-Reverse-Integer问题/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="Palindrome_Number问题">Palindrome Number问题</h3><p><a href="https://leetcode.com/problems/palindrome-number/" target="_blank" rel="external">题目链接</a></p>
+<p>解题思路：首先需要注意两点,①负数和小数都不是回文数 ②Integer有32位的范围限制，所以反转之后可能溢出. 对该整数循环除以10,取余数和商,余数则为从尾到头依次的digit number,并利用该digit number计算反转之后的结果，直到商为0结束循环；最终判断反转结构是否与原数相等。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
+    <span class="keyword">public</span> <span class="keyword">boolean</span> isPalindrome(<span class="keyword">int</span> x) {
+        <span class="keyword">if</span> (x &lt; <span class="number">0</span>)
+            <span class="keyword">return</span> <span class="keyword">false</span>;
+        <span class="keyword">int</span> <span class="keyword">reverse</span> = <span class="number">0</span>;
+        <span class="keyword">int</span> quotient = x;
+        <span class="keyword">while</span> (quotient != <span class="number">0</span>) {
+            <span class="keyword">reverse</span> = <span class="keyword">reverse</span>*<span class="number">10</span> + quotient%<span class="number">10</span>;
+            quotient = quotient/<span class="number">10</span>;
+        }
+        <span class="keyword">if</span> (<span class="keyword">reverse</span> == x)
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        <span class="keyword">else</span>
+            <span class="keyword">return</span> <span class="keyword">false</span>; 
+    }
+}
+</code></pre><p>优化解法: 分别从整数的首尾开始比对，第一位和最后一位比较，第二位和倒数第二位比较，一直比较到中间位置，如果发现全部都相等则说明是回文数,此方法可以避免溢出，例如对于:121,第一次比较1和1，剩下2；再比较2和2，发现它是回文数.</p>
+<h3 id="Reverse_Integer问题">Reverse Integer问题</h3><p><a href="https://leetcode.com/problems/reverse-integer/" target="_blank" rel="external">题目链接</a></p>
+<p>解题思路：这道题与上一题类似,也是个反转整数的题,在java中Integer占据4个bytes, 有32位的范围限制，对于正数,它的最高位是0,所以它最大能表示的数是01111….(后面共31个1),数化成十进制即是2147483647，Integer.MAX_VALUE = 2147483647[0x7fffffff]; 负数能表示的最小数的二进制数为1000..(后面共31个0),化为十进制数即为-int 类型的范围是 -2147483648,即为Integer.MIN_VALUE.当一个整数溢出时，变成一个与原数不相等的在int范围内的数，所以可以通过reverse/10 != tmp来判断是否溢出.</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
+    <span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">reverse</span>(<span class="keyword">int</span> x) {
+        <span class="comment">// Consider the case: reverse overflow int</span>
+        <span class="keyword">int</span> <span class="keyword">reverse</span> = <span class="number">0</span>;
+        <span class="keyword">int</span> quotient = x;
+        <span class="keyword">while</span> (quotient != <span class="number">0</span>) {
+            <span class="keyword">int</span> tmp = <span class="keyword">reverse</span>;
+            <span class="comment">// if (reverse &gt; Integer.MAX_VALUE || reverse &lt; Integer.MIN_VALUE)</span>
+            <span class="comment">//    return 0;</span>
+            <span class="keyword">reverse</span> = <span class="keyword">reverse</span> * <span class="number">10</span> + quotient % <span class="number">10</span>;
+            quotient = quotient / <span class="number">10</span>;
+            <span class="comment">// deal with overflow</span>
+            <span class="keyword">if</span> (<span class="keyword">reverse</span>/<span class="number">10</span> != tmp) {
+                <span class="keyword">return</span> <span class="number">0</span>;
+            }
+
+        }
+
+        <span class="keyword">return</span> <span class="keyword">reverse</span>;
+    }
+}
+</code></pre>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Leetcode/"> #Leetcode </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2016/01/13/Remove-element问题的简单优化/">
+                Remove element问题的简单优化
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-01-13
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Leetcode/">Leetcode</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/01/13/Remove-element问题的简单优化/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/13/Remove-element问题的简单优化/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>原题链接: <a href="https://leetcode.com/problems/remove-element/" target="_blank" rel="external">Remove Element</a>. 这是一道easy的水题，之所以拿出来讲，主要是其中有一个巧妙的小优化,可以因小见大体会到代码效率优化的无处不在，激励自己写出最优的代码.</p>
+<h3 id="最初解法">最初解法</h3><pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span> {
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> val)</span> </span>{
+        <span class="keyword">int</span> length = nums.length;
+        <span class="keyword">int</span> res = <span class="number">0</span>;
+        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length; ++i) {
+            <span class="keyword">if</span> (nums[i] != val) {
+                 nums[res] = nums[i];
+                 res++;
+            }
+        }
+        <span class="keyword">return</span> res;
+    }
+}
+</code></pre><p>思路讲解: 从头开始遍历数组元素length次，当元素nums[i]与val不相等，重新赋值, 相等则跳过，最终数组中前res个元素都是不等于val的元素</p>
+<p>效率:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/remove_element_0.png" class="full-image">  </p>
+<h3 id="改进解法">改进解法</h3><pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span> {
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> val)</span> </span>{
+        <span class="keyword">int</span> length = nums.length;
+        <span class="keyword">int</span> res = <span class="number">0</span>;
+        <span class="comment">// 减少i++操作引发70%的效率提升</span>
+        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length-res;) {
+            <span class="keyword">if</span> (nums[i] == val) {
+                 nums[i] = nums[length-res-<span class="number">1</span>];
+                 res++;
+            } <span class="keyword">else</span> {
+                i++;
+            }
+        }
+        <span class="keyword">return</span> length-res;
+    }
+}
+</code></pre><p>思路讲解: 从头开始遍历数组元素length-res次，当元素nums[i]与val相等，i不改变, 从末尾取出一个对应的将不再被循环遍历到的元素赋值到当前的nums[i], 再次与val比较；如果nums[i]与val不相等则i++，比较下一元素</p>
+<p>效率:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/remove_element_1.png" class="full-image">  </p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Array/"> #Array </a>
+          
+            <a href="../../tags/Leetcode/"> #Leetcode </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2016/01/13/Roman与Integer之间的相互转换/">
                 Roman与Integer之间的相互转换
               </a>
@@ -817,579 +1157,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/08/29/浅谈MVC、MVP、MVVM三种框架模式/">
-                浅谈MVC、MVP、MVVM三种框架模式
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-08-29
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/框架模式/">框架模式</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/08/29/浅谈MVC、MVP、MVVM三种框架模式/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/29/浅谈MVC、MVP、MVVM三种框架模式/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p><strong>MVC模式</strong>是一种非常经典的复合型软件架构模式，它把用户界面交互分拆到不同的三种角色中，应用程序被分成三个核心部件：Model（模型）、View（视图）、Controller（控制器）, 它们各自处理自己的任务，这样就可以把业务逻辑和视图显示解耦，提高了应用程序的灵活性和复用性。MVC模式不管是在web开发还是Android开发中都被广泛应用，最典型的MVC应用就是JSP + servlet + javabean的模式，例如SpringMVC开发框架。</p>
-<ul>
-<li><p>Model模型：模型持有所有的数据、状态和程序逻辑，一个模型可以有不同的多个视图表现形式，复用性高。例如数据库记录以及相应增删查改操作；Android中对数据库的操作、网络请求、格式转换、文件下载、大数据处理等的耗时操作都在Model里面处理</p>
-</li>
-<li><p>View视图：视图是用户看到并与之交互的页面，通常直接从模型中取得它需要显示的状态与数据，一个视图往往有一个相应的控制器，理论上也可以同不同的模型相关联。例如html、xml页面；Android中主要是layout布局xml文件，webview等</p>
-</li>
-<li><p>Controller控制器：位于视图和模型中间，负责接受用户的输入，将输入进行解析并反馈给模型，例如Android开发中的Activity</p>
-</li>
-<li><p>MVC模式图解析：Event(事件)导致Controller改变Model或View，或者同时改变两者。只要Controller改变了Model的数据或者属性，所有依赖的View都会自动更新。类似的，只要Controller改变了View，View会从潜在的Model中获取数据来刷新自己。</p>
-</li>
-</ul>
-<p>　　<img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/MVC.jpeg" class="full-image">  </p>
-<p>　<strong>android中mvc的具体体现</strong>如下：<br>  1)视图层（view）：一般采用xml文件进行界面的描述，使用的时候可以非常方便的引入，当然，如何你对android了解的比较的多了话，就一定 可以想到在android中也可以使用javascript+html等的方式作为view层，当然这里需要进行java和javascript之间的通 信，幸运的是，android提供了它们之间非常方便的通信实现。</p>
-<p>　2)控制层（controller）：android的控制层的重 任通常落在了众多的acitvity的肩上，这句话也就暗含了不要在acitivity中写代码，要通过activity交割model业务逻辑层处理， 这样做的另外一个原因是android中的acitivity的响应时间是5s，如果耗时的操作放在这里，程序就很容易被回收掉。</p>
-<p>　3)模型层（model）：对数据库的操作、对网络等的操作都应该在model里面处理，当然对业务计算等操作也是必须放在的该层的。</p>
-<p><strong>MVP模式</strong><br>View不再与model交互，所有的交互通过presenter实现，双方之间的交互都是双向的，view层作为被动视图非常薄，没有任何的业务逻辑，业务逻辑都在presenter里边；Presenter与View的交互是通过接口来进行的</p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/MVP.png" class="full-image">  </p>
-<p><a href="http://blog.csdn.net/vector_yi/article/details/24719873?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="external">MVP模式在Android开发中的应用</a></p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/MVC/"> #MVC </a>
-          
-            <a href="../../tags/MVP/"> #MVP </a>
-          
-            <a href="../../tags/MVVM/"> #MVVM </a>
-          
-            <a href="../../tags/框架模式/"> #框架模式 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/">
-                Android开发adb无法识别MX手机和部分平板设备的解决方法
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-08-16
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Android开发/">Android开发</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="mac安装adb命令">mac安装adb命令</h3><p><code>brew install android-platform-tools</code></p>
-<h3 id="adb无法识别设备">adb无法识别设备</h3><p>在Android开发过程中，当我们把移动设备连接到计算机进行真机测试时经常会出现部分设备无法被计算机识别的情况，比如魅族系列手机和部分国产android平板电脑，这种异常情况在mac系统和win系统中都会出现，在此讲述一下解决步骤：</p>
-<p><strong>1. 将移动设备连接到计算机，确保连接无误</strong></p>
-<p><strong>2. 打开terminal窗口，在当前用户home目录下输入<code>system_profiler SPUSBDataType</code>；可以看到该计算机连接的所有usb设备信息</strong></p>
-<p><strong>3. 记录你希望计算机识别的usb设备的Vendor ID参数，例如我的mx3手机Vendor ID参数为0x18d1</strong></p>
-<p><strong>4. 在terminal中输入 <code>echo &quot;0x18d1&quot; &gt;&gt; ~/.android/adb_usb.ini</code>即可(该命令会在adb_usb.ini文件中添加一行0x18d1，使得该usb设备可以被计算机识别)</strong></p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/adb/"> #adb </a>
-          
-            <a href="../../tags/bug/"> #bug </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/08/01/Python基础知识实例讲解/">
-                Python基础知识实例讲解
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-08-01
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Python开发/">Python开发</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/08/01/Python基础知识实例讲解/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/01/Python基础知识实例讲解/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>Python作为一种面向对象、解释型计算机程序设计语言，语法简洁而清晰，具有丰富和强大的类库，在网站开发，数据处理，网络编程，图形处理，网络爬虫、机器学习、科学计算、自动化测试、系统运维等方面应用广泛。也正是由于Python开发简洁、优雅、开发效率高，它能够在很多地方替代java、C++等语言从而提高程序猿编程效率。作为程序猿，掌握这样一门便捷的编程语言来作为工具显得十分必要。本文主要参考了“极客学院”相关Python入门视频教程，对Python基础入门知识进行了整合，采用代码实例展现的方式，语法知识全部体现在代码中，简洁明了易于理解；本文主要包括三个Python module，分别是hellopython.py、mylib.py、stackqueue.py，涵盖了Python数据类型，常量变量，判断循环，函数，类和对象，模块，数据结构等知识(Python开发编辑器为PyCharm)</p>
-<h3 id="hellopython-py">hellopython.py</h3><p>该模块为主模块，负责实现大部分Python基础语法及其测试，从该模块我们看到几乎所有的Python基础句法的使用方法  </p>
-<p>代码：  </p>
-<pre><code><span class="comment"># coding=UTF-8</span>
-__author__ = <span class="string">'xiaoyong'</span>
-
-<span class="keyword">from</span> math <span class="keyword">import</span> *
-<span class="keyword">from</span> stackqueue <span class="keyword">import</span> *
-<span class="keyword">from</span> mylib <span class="keyword">import</span> Hi
-<span class="keyword">from</span> collections <span class="keyword">import</span> Counter
-<span class="keyword">from</span> itertools <span class="keyword">import</span> combinations
-
-<span class="keyword">import</span> mylib
-<span class="keyword">import</span> sys
-
-<span class="class"><span class="keyword">class</span> <span class="title">HelloPy</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">helloPy</span><span class="params">(self, param)</span>:</span>
-        <span class="string">'''文档字符串：该函数用于测试变量定义，判断语句
-
-        循环语句'''</span>
-        <span class="comment"># 定义变量</span>
-        <span class="keyword">global</span> globalVar
-        globalVar = <span class="number">10</span>
-        var1 = <span class="number">10</span>
-        var2 = <span class="number">20</span>
-        var3 = var1 + var2
-        print(var3)
-
-        <span class="comment"># 判断语句</span>
-        <span class="keyword">if</span> param &gt;= <span class="number">60</span>:
-            print(<span class="string">"{0} &gt; 60"</span>.format(param))
-        <span class="keyword">elif</span> param &gt; <span class="number">0</span>:
-            print(<span class="string">"{0} &gt; 0"</span>.format(param))
-        <span class="keyword">else</span>:
-            print(<span class="string">"{0} &lt; 60 &amp;&amp; 0 &gt; {1}"</span>).format(param, <span class="string">"param"</span>)
-
-        <span class="comment"># 循环语句</span>
-        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>):
-            print(i)
-
-        var4 = <span class="number">0</span>
-        <span class="keyword">while</span> var4 &lt; <span class="number">3</span>:
-            print(var4)
-            var4 += <span class="number">1</span>
-        <span class="keyword">else</span>:
-            print(<span class="string">"else var4={0}"</span>.format(var4))
-
-
-<span class="comment"># 形参设置默认初始值</span>
-<span class="function"><span class="keyword">def</span> <span class="title">fuc1</span><span class="params">(a, b=<span class="number">1</span>, c=<span class="number">2</span>)</span>:</span>
-    print(a);print(b);print(c)
-
-
-<span class="function"><span class="keyword">def</span> <span class="title">fuc2</span><span class="params">(a, b=<span class="number">1</span>)</span>:</span>
-    print(a)
-    <span class="keyword">return</span> b
-
-
-<span class="function"><span class="keyword">def</span> <span class="title">fuc3</span><span class="params">()</span>:</span>
-    <span class="keyword">return</span> (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)
-
-<span class="comment"># Python常用tips </span>
-<span class="function"><span class="keyword">def</span> <span class="title">fuc_python_tips</span><span class="params">()</span>:</span>
-    print(<span class="string">'\nPython常用tips: '</span>)
-    <span class="comment"># 交换变量</span>
-    var1 = <span class="number">0</span>
-    var2 = <span class="number">1</span>
-    var1, var2 = var2, var1
-    <span class="keyword">print</span> var1, var2
-    <span class="comment"># if语句在行内</span>
-    print(<span class="string">'hello'</span>) <span class="keyword">if</span> <span class="number">1</span> != <span class="number">1</span> <span class="keyword">else</span> <span class="string">'world'</span>
-    print(<span class="string">'hello'</span> + str(var1))
-    <span class="comment"># 数字技巧</span>
-    <span class="keyword">print</span> <span class="number">5.0</span> // <span class="number">2</span>, <span class="number">5.0</span> / <span class="number">2</span>, <span class="number">2</span> ** <span class="number">5</span>, .<span class="number">3</span> / .<span class="number">1</span>, .<span class="number">3</span> // .<span class="number">1</span>
-    var3 = <span class="number">2</span>
-    <span class="keyword">if</span> <span class="number">1</span> &lt; var3 &lt; <span class="number">3</span>:
-        print(var3)
-    <span class="comment"># 列表迭代</span>
-    list1 = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]
-    list2 = [<span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>]
-    <span class="keyword">for</span> a, b <span class="keyword">in</span> zip(list1, list2):
-        <span class="keyword">print</span> a + <span class="string">" vs "</span> + b
-    <span class="keyword">for</span> index, a <span class="keyword">in</span> enumerate(list1):
-        <span class="keyword">print</span> index, a
-    list3 = [<span class="number">0</span>] * <span class="number">3</span>
-    list3.append(<span class="number">2</span>)
-    print(list3)
-    <span class="comment"># 列表--&gt;字符串</span>
-    print(<span class="string">','</span>.join(list1))
-    <span class="comment"># 获取列表子集</span>
-    x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]
-    <span class="comment"># 前3个</span>
-    <span class="keyword">print</span> x[:<span class="number">3</span>]
-    <span class="comment"># 中间4个</span>
-    <span class="keyword">print</span> x[<span class="number">1</span>:<span class="number">5</span>]
-    <span class="comment"># 最后3个</span>
-    <span class="keyword">print</span> x[-<span class="number">3</span>:]
-    <span class="comment"># 奇数项</span>
-    <span class="keyword">print</span> x[::<span class="number">2</span>]
-    <span class="comment"># 偶数项</span>
-    <span class="keyword">print</span> x[<span class="number">1</span>::<span class="number">2</span>]
-    <span class="comment"># 统计单个字母数目</span>
-    <span class="keyword">print</span> Counter(<span class="string">'hello'</span>)
-    <span class="comment"># 列出所有组合方式</span>
-    <span class="keyword">for</span> t <span class="keyword">in</span> combinations(x, <span class="number">2</span>):
-        print(t)
-
-<span class="comment"># python标识符首字符只能是下划线或者字母，其他部分可以是下划线、字母、数字；标识符对大小写敏感</span>
-
-print(sys.version);
-<span class="keyword">print</span> (<span class="string">"模块名：{0}"</span>).format(__name__)
-print(pi)
-help(HelloPy.helloPy)
-<span class="comment"># 列出模块定义的标识符,标识符有函数、类和变量</span>
-<span class="keyword">print</span> dir(sys)
-print(HelloPy.helloPy.__doc__)
-
-<span class="comment"># 引用mylib.py模块调用函数</span>
-h = mylib.Hello(<span class="string">"mylib"</span>)
-h.sayHello()
-
-h1 = Hi(<span class="string">"mylib"</span>)
-h1.sayHi()
-
-h2 = HelloPy()
-h2.helloPy(<span class="number">15</span>)
-<span class="comment"># 全局变量</span>
-print(globalVar)
-
-fuc1(b=<span class="number">2</span>, a=<span class="number">3</span>)
-var1 = fuc2(<span class="number">2</span>, <span class="number">3</span>)
-print(var1)
-var2 = fuc3()
-print(var2)
-m1, m2, m3 = fuc3()
-print(<span class="string">"{0} {1} {2}"</span>.format(m1, m2, m3))
-
-fuc_python_tips()
-
-<span class="comment"># 引号</span>
-str1 = <span class="string">'It is a "dog"'</span>
-str2 = <span class="string">"It's a dog"</span>
-str3 = <span class="string">'''she
-I
-you'''</span>
-print(<span class="string">"{0}  {1}"</span>.format(str1, str2))
-
-<span class="comment"># 字符串重复输出</span>
-print(str3) * <span class="number">3</span>
-
-<span class="comment"># 转义符</span>
-print(<span class="string">'It\'s a dog\nyou are not'</span>)
-<span class="keyword">print</span><span class="string">"women\
-doushihaohaizi"</span>
-
-<span class="comment"># 自然字符串</span>
-print(<span class="string">r"It's a dog \n you are not"</span>)
-
-<span class="comment"># 子字符串,索引和切片两种方式</span>
-print(str1[<span class="number">1</span>]);print(str1[<span class="number">0</span>:<span class="number">3</span>]);print(str1[:<span class="number">3</span>]);print(str1[<span class="number">3</span>:]);
-
-<span class="comment"># set,求两个set的&amp; | - 重复元素</span>
-print(<span class="string">"\n集合 列表 元组 字典测试:"</span>)
-var3 = set(<span class="string">'aaabbc'</span>)
-<span class="comment"># 集合中不能有重复元素</span>
-newVar = set(var3)
-print(newVar)
-<span class="comment"># 列表，数据可以修改</span>
-students = [<span class="string">"a"</span>, <span class="string">'b'</span>, <span class="string">"c"</span>]
-print(students[<span class="number">1</span>])
-
-<span class="comment"># 元组,数据不可修改</span>
-students = (<span class="string">"a"</span>, <span class="string">'b'</span>, <span class="string">"c"</span>)
-print(students[<span class="number">1</span>])
-
-<span class="comment"># 字典</span>
-dic = {<span class="string">'姓名'</span>: <span class="string">'xiaoyong'</span>, <span class="string">"性别"</span>: <span class="string">"男"</span>}
-dic[<span class="string">'兴趣'</span>] = <span class="string">'音乐'</span>
-print(dic[<span class="string">'兴趣'</span>])
-print(dic.get(<span class="string">'姓名'</span>))
-
-<span class="comment"># 栈测试</span>
-print(<span class="string">"\n栈测试:"</span>)
-stack = Stack()
-stack.push(<span class="number">1</span>)
-stack.push(<span class="number">2</span>)
-stack.push(<span class="number">3</span>)
-print(stack.length())
-print(stack.isEmpty())
-print(stack.top())
-stack.pop()
-print(stack.top())
-
-<span class="comment"># 队列测试</span>
-print(<span class="string">"\n队列测试:"</span>)
-queue = Queue()
-queue.enQueue(<span class="number">1</span>)
-queue.enQueue(<span class="number">2</span>)
-queue.enQueue(<span class="number">3</span>)
-print(queue.length())
-print(queue.isEmpty())
-print(queue.head())
-print(queue.tail())
-queue.deQueue()
-print(queue.head())
-print(queue.tail())
-</code></pre><h3 id="mylib-py">mylib.py</h3><p>该模块为引用模块，实现两个类，Hello为父类，Hi为子类  </p>
-<p>代码：</p>
-<pre><code><span class="comment"># coding=UTF-8</span>
-__author__ = <span class="string">'xiaoyong'</span>
-
-<span class="class"><span class="keyword">class</span> <span class="title">Hello</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span>
-        self._name = name
-
-    <span class="function"><span class="keyword">def</span> <span class="title">sayHello</span><span class="params">(self)</span>:</span>
-        print(<span class="string">"class Hello: sayHello"</span>)
-        <span class="keyword">print</span> (<span class="string">"模块名：{0}"</span>).format(__name__)
-
-<span class="comment"># 类的继承</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Hi</span><span class="params">(Hello)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span>
-        Hello.__init__(self, name)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">sayHi</span><span class="params">(self)</span>:</span>
-        print(<span class="string">"class Hi: sayHi"</span>)
-</code></pre><h3 id="stackqueue-py">stackqueue.py</h3><p>该模块为引用模块，Stack和Queue类分别实现栈和队列两种数据结构  </p>
-<p>代码：</p>
-<pre><code><span class="comment"># coding= utf-8</span>
-__author__ = <span class="string">'xiaoyong'</span>
-
-
-<span class="comment"># 栈实现</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Stack</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
-        self.stack = []
-
-    <span class="function"><span class="keyword">def</span> <span class="title">push</span><span class="params">(self, item)</span>:</span>
-        self.stack.append(item)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">pop</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.stack != []:
-            <span class="keyword">return</span> self.stack.pop(-<span class="number">1</span>)
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">top</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.stack != []:
-            <span class="keyword">return</span> self.stack[-<span class="number">1</span>]
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">length</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> len(self.stack)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">isEmpty</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.stack == []
-
-
-<span class="comment"># 队列实现</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Queue</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
-        self.queue = []
-
-    <span class="function"><span class="keyword">def</span> <span class="title">enQueue</span><span class="params">(self, item)</span>:</span>
-        self.queue.append(item)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">deQueue</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.queue != []:
-            <span class="keyword">return</span> self.queue.pop(<span class="number">0</span>)
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">head</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.queue != []:
-            <span class="keyword">return</span> self.queue[<span class="number">0</span>]
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">tail</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.queue != []:
-            <span class="keyword">return</span> self.queue[-<span class="number">1</span>]
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">length</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> len(self.queue)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">isEmpty</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.queue == []
-</code></pre><h3 id="结语">结语</h3><p>以上三个模块基本涵盖了Python所有基本语法的使用，仅作参考查询之用；如需深入学习Python相关知识，比如RESTful API开发，web2Py，Flask等框架使用，请Google之或参考相关官网。</p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Python/"> #Python </a>
-          
-            <a href="../../tags/栈/"> #栈 </a>
-          
-            <a href="../../tags/队列/"> #队列 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -1428,7 +1195,7 @@ __author__ = <span class="string">'xiaoyong'</span>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">54</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1442,7 +1209,7 @@ __author__ = <span class="string">'xiaoyong'</span>
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">59</span>
+              <span class="site-state-item-count">61</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

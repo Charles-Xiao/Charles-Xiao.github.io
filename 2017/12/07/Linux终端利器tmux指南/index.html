@@ -1,0 +1,967 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2"/>
+
+
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
+
+
+
+  <meta name="keywords" content="Linux,tmux," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../..//favicon.ico?v=0.4.2" />
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6749450";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <title> Linux终端利器tmux指南 // CharlesXiao‘s Blog </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">CharlesXiao‘s Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    <!--增加swiftype搜索功能-->
+    <form class="menu-item menu-item-search">
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+    </form>
+    
+    <script type="text/javascript">
+      (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+      (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+      e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+      })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+      _st('install','yxUhPQ2aHyszT_1btxX9','2.0.0');
+    </script>
+    <!--增加swiftype搜索功能end-->
+    
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="../../../..//">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="../../../..//categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          分类
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-about">
+        <a href="../../../..//about">
+          <i class="menu-item-icon icon-about"></i> <br />
+          关于
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="../../../..//archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="../../../..//tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Linux终端利器tmux指南
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-12-07
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/07/Linux终端利器tmux指南/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h4 id="tmux简介">tmux简介</h4><p>tmux是BSD实现的Screen替代品，相对于Screen，它更加先进：支持屏幕切分，而且具备丰富的命令行参数，使其可以灵活、动态的进行各种布局和操作。它可以做到一条命令就启动起来(强大的配置)</p>
+<h5 id="安装方法">安装方法</h5><table>
+<thead>
+<tr>
+<th>系统</th>
+<th>安装命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mac</td>
+<td><figure class="highlight"><figcaption><span>install tmux```（前提需要安装homebrew)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ubuntu | ```sudo apt-get install tmux</span><br></pre></td></tr></table></figure></td>
+</tr>
+</tbody>
+</table>
+<p>centos | <figure class="highlight"><figcaption><span>install -y tmux```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#20854;&#23427; | &#19979;&#36733;&#28304;&#30721;&#37197;&#32622;-&#32534;&#35793;-&#38142;&#25509;-&#23433;&#35013;&#10;&#10;##### &#27010;&#24565;&#21517;&#35789;&#10;&#22312;&#20320;&#36755;&#20837;tmux&#24320;&#21551;&#20102;tmux&#26381;&#21153;&#22120;&#21518;&#65292;&#20250;&#39318;&#20808;&#21019;&#24314;&#19968;&#20010;&#20250;&#35805;&#65292;&#32780;&#36825;&#20010;&#20250;&#35805;&#21017;&#20250;&#39318;&#20808;&#21019;&#24314;&#19968;&#20010;&#31383;&#21475;&#65292;&#20854;&#20013;&#20165;&#21253;&#21547;&#19968;&#20010;&#38754;&#26495;; &#20063;&#23601;&#26159;&#35828;&#65292;&#36825;&#37324;&#30475;&#21040;&#30340;&#25152;&#35859;&#32456;&#31471;&#25511;&#21046;&#21488;&#24212;&#35813;&#31216;&#20316;tmux&#30340;&#19968;&#20010;&#38754;&#26495;&#65292;&#34429;&#28982;&#20854;&#20351;&#29992;&#26041;&#27861;&#19982;&#32456;&#31471;&#25511;&#21046;&#21488;&#23436;&#20840;&#30456;&#21516;&#12290;&#10;&#10;| &#27010;&#24565; | &#35828;&#26126; |&#10;| --- | --- |&#10;| server&#26381;&#21153;&#22120; | &#36755;&#20837;tmux&#21629;&#20196;&#26102;&#23601;&#24320;&#21551;&#20102;&#19968;&#20010;&#26381;&#21153;&#22120; |&#10;| session&#20250;&#35805; | &#19968;&#20010;&#26381;&#21153;&#22120;&#21487;&#20197;&#21253;&#21547;&#22810;&#20010;&#20250;&#35805; |&#10;| window&#31383;&#21475; | &#36890;&#36807;c-b-c&#21019;&#24314;&#65292;&#25152;&#26377;&#31383;&#21475;&#30340;&#21517;&#31216;&#26174;&#31034;&#22312;&#24213;&#37096;&#29366;&#24577;&#26639;&#19978;&#65292;&#19968;&#20010;&#20250;&#35805;&#21487;&#20197;&#21253;&#21547;&#22810;&#20010;&#31383;&#21475; |&#10;| pane&#38754;&#26495; | &#31383;&#21475;&#37324;&#38754;&#30340;&#20998;&#23631;&#65292;&#21487;&#36890;&#36807;c-b-%&#21019;&#24314;&#65292;&#19968;&#20010;&#31383;&#21475;&#21487;&#20197;&#21253;&#21547;&#22810;&#20010;&#38754;&#26495; |&#10;&#10;##### &#20351;&#29992;&#22330;&#26223;&#21644;&#20248;&#28857;&#10;1. tmux&#21629;&#20196;&#24320;&#21551;&#19968;&#20010;&#32456;&#31471;&#20043;&#21518;&#65292;&#21487;&#20197;&#22312;&#36825;&#20010;&#32456;&#31471;&#37324;&#24320;&#21551;&#22810;&#20010;windows&#65292;&#21516;&#26102;&#36824;&#21487;&#20197;&#25226;windows split&#25104;&#22810;&#20010;pane&#65292;&#24182;&#34892;&#24037;&#20316;&#10;2. ssh&#30331;&#24405;&#36828;&#31243;&#20027;&#26426;&#30340;&#24773;&#26223;&#19979;&#65292;&#19968;&#26086;ssh&#26029;&#24320;&#65292;&#37027;&#20040;&#24403;&#21069;&#36134;&#25143;&#30331;&#24405;&#30340;&#20219;&#21153;&#23601;&#34987;&#21462;&#28040;&#20102;&#65292;&#20294;&#26159;&#20351;&#29992; tmux &#21487;&#20197;&#22312;&#26029;&#24320;&#20043;&#21518;&#32487;&#32493;&#24037;&#20316;&#65292;&#19979;&#27425;&#30331;&#24405;&#21487;&#20197;&#26597;&#30475;&#10;&#10;#### &#24120;&#29992;&#40664;&#35748;&#24555;&#25463;&#38190;&#10;tmux&#37324;&#36793;&#25152;&#26377;&#24555;&#25463;&#38190;&#37117;&#40664;&#35748;&#20197;c-b&#20316;&#20026;&#21069;&#32512;&#65292;&#20063;&#23601;&#26159;&#20197;ctrl+b&#24320;&#22836;&#65292;&#24403;&#28982;&#20320;&#20063;&#21487;&#20197;&#33258;&#34892;&#37197;&#32622;&#65307;&#10;&#10;1. &#22522;&#26412;&#21629;&#20196;&#10;&#9;* ``` tmux ```&#21019;&#24314;&#19968;&#20010;tmux session&#10;&#9;* ``` tmux new -s session_name ```&#21019;&#24314;&#19968;&#20010;&#21483;&#20570;session_name&#30340; session&#10;&#9;* ``` tmux ls\tmux list-sessions ```&#21015;&#20986;&#29616;&#26377;&#30340;&#25152;&#26377;session&#10;&#9;* ``` tmux info```&#21015;&#20986;&#25152;&#26377;&#30340; session, window, pane, &#36816;&#34892;&#30340;&#36827;&#31243;&#21495;&#31561;&#10;&#9;* ``` tmux list-keys ```&#21015;&#20986;&#25152;&#26377;&#21487;&#20197;&#30340;&#24555;&#25463;&#38190;&#21644;&#20854;&#36816;&#34892;&#30340; tmux &#21629;&#20196;&#10;&#9;* ``` tmux list-commands ```&#21015;&#20986;&#25152;&#26377;&#30340; tmux &#21629;&#20196;&#21450;&#20854;&#21442;&#25968;&#10;&#9;* ``` tmux at(attach) -t session_name ```&#36827;&#20837;&#21483;&#20570;session_name&#30340;session&#10;&#9;* ``` tmux detach\c-b-d ```&#31163;&#24320;&#24403;&#21069;&#24320;&#21551;&#30340;session&#10;&#9;* ``` tmux kill-session -t session ```&#20851;&#38381;&#24320;&#21551;&#30340;session&#10;2. &#22522;&#26412;&#25805;&#20316;&#10;&#9;* ``` d ```&#33073;&#31163;&#24182;&#20445;&#23384;&#24403;&#21069;&#20250;&#35805;,&#21487;&#26242;&#26102;&#36820;&#22238;Shell&#30028;&#38754;,tmux&#20173;&#22312;&#21518;&#21488;&#36816;&#34892;&#10;&#9;* ``` ctrl + z ```&#25346;&#36215;&#24403;&#21069;&#20250;&#35805;&#10;&#9;* ``` s ```&#36873;&#25321;&#24182;&#20999;&#25442;&#20250;&#35805;&#65307;&#22312;&#21516;&#26102;&#24320;&#21551;&#20102;&#22810;&#20010;&#20250;&#35805;&#26102;&#20351;&#29992;&#10;&#9;* ``` D ```&#36873;&#25321;&#35201;&#33073;&#31163;&#30340;&#20250;&#35805;&#65307;&#22312;&#21516;&#26102;&#24320;&#21551;&#20102;&#22810;&#20010;&#20250;&#35805;&#26102;&#20351;&#29992;&#10;&#9;* ```: ```&#36827;&#20837;&#21629;&#20196;&#34892;&#27169;&#24335;&#65307;&#27492;&#26102;&#21487;&#36755;&#20837;&#25903;&#25345;&#30340;&#21629;&#20196;&#65292;&#20363;&#22914; kill-server &#20851;&#38381;&#25152;&#26377;tmux&#20250;&#35805;&#10;&#9;* ``` t ```&#26174;&#31034;&#24403;&#21069;&#30340;&#26102;&#38388;&#10;&#10;2. &#31383;&#21475;&#25805;&#20316;&#10;&#9;* ``` c ```&#21019;&#24314;&#26032;&#31383;&#21475;&#10;&#9;* ``` &#38; ```&#20851;&#38381;&#24403;&#21069;&#31383;&#21475;&#10;&#9;* ``` [0-9] ```&#25968;&#23383;&#38190;&#20999;&#25442;&#21040;&#25351;&#23450;&#31383;&#21475;&#10;&#9;* ``` p ```&#20999;&#25442;&#33267;&#19978;&#19968;&#31383;&#21475;&#10;&#9;* ``` n ```&#20999;&#25442;&#33267;&#19979;&#19968;&#31383;&#21475;&#10;&#9;* ``` l ```&#20999;&#25442;&#21040;&#26368;&#21518;&#20351;&#29992;&#30340;&#31383;&#21475;&#10;&#9;* ``` l ```&#21069;&#21518;&#31383;&#21475;&#38388;&#20114;&#30456;&#20999;&#25442;&#10;&#9;* ``` w ```&#36890;&#36807;&#31383;&#21475;&#21015;&#34920;&#20999;&#25442;&#31383;&#21475;&#10;&#9;* ``` , ```&#37325;&#21629;&#21517;&#24403;&#21069;&#31383;&#21475;&#65292;&#20415;&#20110;&#35782;&#21035;&#10;&#9;* ``` . ```&#20462;&#25913;&#24403;&#21069;&#31383;&#21475;&#32534;&#21495;&#65292;&#30456;&#24403;&#20110;&#37325;&#26032;&#25490;&#24207;&#10;&#9;* ``` f ```&#22312;&#25152;&#26377;&#31383;&#21475;&#20013;&#26597;&#25214;&#20851;&#38190;&#35789;&#65292;&#20415;&#20110;&#31383;&#21475;&#22810;&#20102;&#20999;&#25442;&#10;3. (&#38754;&#26495;)&#20998;&#23631;&#25805;&#20316;&#10;&#9;* ``` ? ```&#26174;&#31034;&#24555;&#25463;&#38190;&#24110;&#21161;&#10;&#9;* ``` &#34; ```&#23558;&#24403;&#21069;&#38754;&#26495;&#19978;&#19979;&#20998;&#23631;&#65288;&#24314;&#35758;&#35774;&#32622;&#25104; |&#65289;&#10;&#9;* ``` % ```&#23558;&#24403;&#21069;&#38754;&#26495;&#24038;&#21491;&#20998;&#23631;&#65288;&#24314;&#35758;&#35774;&#32622;&#25104; -&#65289;&#10;&#9;* ``` x ```&#20851;&#38381;&#24403;&#21069;&#20998;&#23631;&#10;&#9;* ``` q ```&#26174;&#31034;&#38754;&#26495;&#32534;&#21495;&#10;&#9;* ``` o ```&#36873;&#25321;&#24403;&#21069;&#31383;&#21475;&#20013;&#19979;&#19968;&#20010;&#38754;&#26495;&#10;&#9;* ``` ; ```&#20999;&#25442;&#21040;&#26368;&#21518;&#19968;&#20010;&#20351;&#29992;&#30340;&#38754;&#26495;&#10;&#9;* ``` &#26041;&#21521;&#38190; ```&#31227;&#21160;&#20809;&#26631;&#36873;&#25321;&#23545;&#24212;&#38754;&#26495;&#10;&#9;* ``` z ```&#26368;&#22823;&#21270;&#24403;&#21069;&#25152;&#22312;&#38754;&#26495;&#10;&#9;* ``` ! ```&#38754;&#26495;&#36716;&#21464;&#25104;&#31383;&#21475;&#10;&#10;#### &#25512;&#33616;&#37197;&#32622;&#10;&#22914;&#26524;&#20320;&#26377;&#20010;&#24615;&#21270;&#37197;&#32622;&#30340;&#38656;&#35201;&#65292;&#21253;&#25324;&#24555;&#25463;&#38190;&#65292;&#29366;&#24577;&#26639;&#31561;&#65292;&#37027;&#20040;&#20462;&#25913;~/.tmux.conf&#25991;&#20214;&#21487;&#20197;&#36798;&#21040;&#20320;&#30340;&#30446;&#30340;&#65292;&#35753;&#20320;&#29992;&#36215;&#26469;&#26356;&#31526;&#21512;&#33258;&#24049;&#30340;&#20064;&#24815;; &#20063;&#21487;&#20197;&#36890;&#36807;&#37197;&#32622;~/.bashrc&#27599;&#27425;ssh&#30331;&#24405;&#26102;&#37117;&#40664;&#35748;attach&#25110;&#32773;&#26032;&#24314;tmux&#20250;&#35805;&#10;1. tmux.conf&#37197;&#32622;&#24555;&#25463;&#38190;&#65292;&#37197;&#33394;&#31561;</span><br></pre></td></tr></table></figure></p>
+<h1 id="开启鼠标生效">开启鼠标生效</h1><p>set-option -g mouse on</p>
+<h1 id="设置前缀为Ctrl_+_x">设置前缀为Ctrl + x</h1><p>set -g prefix C-x<br>unbind C-b</p>
+<h1 id="key_bindings_for_horizontal_and_vertical_panes">key bindings for horizontal and vertical panes</h1><p>unbind %<br>bind | split-window -h      # 使用|竖屏，方便分屏<br>unbind ‘“‘<br>bind - split-window -v      # 使用-横屏，方便分屏</p>
+<h1 id="status_bar_with_load_and_time">status bar with load and time</h1><p>set -g status-bg blue<br>set -g status-fg ‘#bbbbbb’<br>set -g status-left-fg green<br>set -g status-left-bg blue<br>set -g status-right-fg green<br>set -g status-right-bg blue<br>set -g status-left-length 90<br>set -g status-right-length 90<br>set -g status-left ‘[#(whoami)]’<br>set -g status-right ‘[#(date +” %m-%d %H:%M “)]’<br>set -g status-justify “centre”<br>set -g window-status-format ‘#I #W’<br>set -g window-status-current-format ‘ #I #W ‘<br>setw -g window-status-current-bg blue<br>setw -g window-status-current-fg green</p>
+<h1 id="pane_number_display">pane number display</h1><p>set -g display-panes-active-colour colour33 #blue<br>set -g display-panes-colour colour166 #orange<br>set -g base-index 1<br>set -g pane-base-index 1<br>set -g display-time 3000<br>set -g history-limit 10000</p>
+<h1 id="copy-mode_将快捷键设置为_vi_模式">copy-mode 将快捷键设置为 vi 模式</h1><p>setw -g mode-keys vi</p>
+<h1 id="选中窗口">选中窗口</h1><p>bind-key k select-pane -U<br>bind-key j select-pane -D<br>bind-key h select-pane -L<br>bind-key l select-pane -R<br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">2. </span>~/.bash_rc配置登录时自动进入tmux</span><br></pre></td></tr></table></figure></p>
+<p>tmux_init()<br>{<br>    tmux new-session -s “xiaoyong” -d -n “local”    # 开启一个会话<br>    tmux new-window -n “other”          # 开启一个窗口<br>    tmux split-window -h                # 开启一个竖屏<br>    tmux split-window -v                # 开启一个横屏<br>    tmux -2 attach-session -d           # tmux -2强制启用256color，连接已开启的tmux<br>}</p>
+<h1 id="判断是否已有开启的tmux会话，没有则开启">判断是否已有开启的tmux会话，没有则开启</h1><p>if which tmux 2&gt;&amp;1 &gt;/dev/null; then<br>    test -z “$TMUX” &amp;&amp; (tmux attach || tmux_init)<br>fi<br>```</p>
+<h4 id="参考链接">参考链接</h4><ol>
+<li><a href="http://wdxtub.com/2016/03/30/tmux-guide/" target="_blank" rel="external">tmux指南</a></li>
+<li><strong> tmux如何将内容复制到系统clipboard ? </strong> Mac下如果用 iterm2 可以在 preference 下选择 Applications in terminal may access  clipboard</li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../../../tags/Linux/"> #Linux </a>
+          
+            <a href="../../../../tags/tmux/"> #tmux </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="../../09/Mysql 长连接与短连接/">Mysql 长连接与短连接</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="../../02/Mysql Init线程不安全问题/">Mysql初次Init线程不安全问题</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2017/12/07/Linux终端利器tmux指南/"
+               data-title="Linux终端利器tmux指南" data-url="https://charles-xiao.github.io/2017/12/07/Linux终端利器tmux指南/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+        <!-- 多说热评文章-->
+        <p>热评文章</p>
+        <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <p class="site-author-name">CharlesXiao</p>
+        </div>
+        <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="../../../..//archives">
+              <span class="site-state-item-count">54</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="../../../..//categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="../../../..//tags">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+              <a href="https://github.com/Charles-Xiao" target="_blank">github</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://weibo.com/2262300105/profile?topnav=1&wvr=6" target="_blank">weibo</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://daijiale.github.io/" target="_blank">Daijiale的个人站点</a>
+            </span>
+            
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#tmux简介"><span class="nav-number">1.</span> <span class="nav-text">tmux简介</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#安装方法"><span class="nav-number">1.1.</span> <span class="nav-text">安装方法</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#开启鼠标生效"><span class="nav-number"></span> <span class="nav-text">开启鼠标生效</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设置前缀为Ctrl_+_x"><span class="nav-number"></span> <span class="nav-text">设置前缀为Ctrl + x</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#key_bindings_for_horizontal_and_vertical_panes"><span class="nav-number"></span> <span class="nav-text">key bindings for horizontal and vertical panes</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#status_bar_with_load_and_time"><span class="nav-number"></span> <span class="nav-text">status bar with load and time</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pane_number_display"><span class="nav-number"></span> <span class="nav-text">pane number display</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#copy-mode_将快捷键设置为_vi_模式"><span class="nav-number"></span> <span class="nav-text">copy-mode 将快捷键设置为 vi 模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#选中窗口"><span class="nav-number"></span> <span class="nav-text">选中窗口</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#判断是否已有开启的tmux会话，没有则开启"><span class="nav-number"></span> <span class="nav-text">判断是否已有开启的tmux会话，没有则开启</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#参考链接"><span class="nav-number">1.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp;  2015.05.16 - 
+  2017
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">CharlesXiao</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="../../../../vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.content img').each(function () {
+        var $image = $(this);
+        var $imageWrapLink = $image.parent('a');
+
+        if ($imageWrapLink.size() < 1) {
+          $imageWrapLink = $image.wrap('<a href="' + this.getAttribute('src') + '"></a>').parent('a');
+        }
+        $imageWrapLink.addClass('fancybox');
+      });
+    });
+    $('.fancybox').fancybox({
+      helpers: {
+        overlay: {
+          locked: false
+        }
+      }
+    });
+  </script>
+
+
+  <script type="text/javascript">
+  function hasMobileUA () {
+    var nav = window.navigator;
+    var ua = nav.userAgent;
+    var pa = /iPad|iPhone|Android|Opera Mini|BlackBerry|webOS|UCWEB|Blazer|PSP|IEMobile|Symbian/g;
+
+    return pa.test(ua);
+  }
+
+  function isDesktop () {
+    return screen.width > 991 && !hasMobileUA();
+  }
+
+  function isTablet () {
+    return screen.width < 992 && screen.width > 767 && hasMobileUA();
+  }
+
+  function isMobile () {
+    return screen.width < 767 && hasMobileUA();
+  }
+
+  function escapeSelector (selector) {
+    return selector.replace(/[!"$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")
+  }
+</script>
+
+  
+
+  <script type="text/javascript" src="../../../../vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="../../../../vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" id="motion.global">
+  $(document).ready(function () {
+    var body = $('body');
+    var isSidebarVisible = false;
+    var sidebarToggle = $('.sidebar-toggle');
+    var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
+    var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
+    var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
+    var sidebar = $('.sidebar');
+
+    var SIDEBAR_WIDTH = '320px';
+    var SIDEBAR_DISPLAY_DURATION = 300;
+
+    var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
+
+    var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
+    var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
+
+    var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine2ndStatusArrow = {width: '90%'};
+    var sidebarToogleLine2ndStatusClose = {opacity: 0};
+
+    var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
+    var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
+
+    LogoAndMenuMotion();
+    sidebatToggleMotion();
+    postsListMotion();
+    backToTopMotion();
+
+
+    $(document)
+      .on('sidebar.isShowing', function () {
+        isDesktop() && body.velocity(
+          {paddingRight: SIDEBAR_WIDTH},
+          SIDEBAR_DISPLAY_DURATION
+        );
+        sidebarContentMotion();
+      })
+      .on('sidebar.isHiding', function () {});
+
+    function LogoAndMenuMotion() {
+      $.Velocity.RunSequence([
+        { e: $('.brand'), p: { opacity: 1 }, o: { duration: 100 } },
+        { e: $('.logo'), p: { opacity: 1, top: 0 }, o: { duration: 50} },
+        
+        { e: $('.logo-line-before i'), p: { translateX: "100%" }, o: { duration: 500, sequenceQueue: false } },
+        { e: $('.logo-line-after i'), p: { translateX: "-100%" }, o: { duration: 500, sequenceQueue: false } },
+        
+        { e: $('.site-title'), p: { opacity: 1, top: 0 }, o: { duration: 200 } }
+      ]);
+      $('.menu-item').velocity('transition.slideDownIn', {display: null});
+    }
+
+
+    function backToTopMotion () {
+      var b2top = $('.back-to-top');
+      b2top.on('click', function () {
+        body.velocity('scroll');
+      });
+    }
+
+    function sidebarShowMotion () {
+
+      sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
+      sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
+      sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
+
+      sidebar.velocity({width: SIDEBAR_WIDTH}, {
+        display: 'block',
+        duration: SIDEBAR_DISPLAY_DURATION,
+        complete: function () {
+          sidebar.addClass('sidebar-active');
+          sidebar.trigger('sidebar.didShow');
+        }
+      });
+      sidebar.trigger('sidebar.isShowing');
+    }
+
+    function sidebarHideMotion () {
+      isDesktop() && body.velocity({paddingRight: 0});
+      sidebar.velocity('reverse');
+
+      sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
+      sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
+      sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
+
+      sidebar.removeClass('sidebar-active');
+      sidebar.trigger('sidebar.isHiding');
+    };
+
+    function sidebarContentMotion () {
+      $('.sidebar .motion-element').velocity(
+        'transition.slideRightIn',
+        {stagger: 50, drag: true}
+      );
+    }
+
+    function postsListMotion () {
+      var postMotionOptions = window.postMotionOptions || {stagger: 300, drag: true};
+      $('.post').velocity('transition.slideDownIn', postMotionOptions);
+    }
+
+    function sidebatToggleMotion () {
+      sidebarToggle.on('click', function () {
+        isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
+        isSidebarVisible = !isSidebarVisible;
+      });
+
+      sidebarToggle.hover(function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
+      }, function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
+      });
+    }
+  });
+
+</script>
+
+
+
+
+
+  
+  
+<script type="text/javascript" id="bootstrap.scrollspy.custom">
+  /* ========================================================================
+  * Bootstrap: scrollspy.js v3.3.2
+  * http://getbootstrap.com/javascript/#scrollspy
+  * ========================================================================
+  * Copyright 2011-2015 Twitter, Inc.
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  * ======================================================================== */
+
+  /**
+   * Custom by iissnan
+   *
+   * - Add a `clear.bs.scrollspy` event.
+   * - Esacpe targets selector.
+   */
+
+
+  +function ($) {
+    'use strict';
+
+    // SCROLLSPY CLASS DEFINITION
+    // ==========================
+
+    function ScrollSpy(element, options) {
+      this.$body          = $(document.body)
+      this.$scrollElement = $(element).is(document.body) ? $(window) : $(element)
+      this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
+      this.selector       = (this.options.target || '') + ' .nav li > a'
+      this.offsets        = []
+      this.targets        = []
+      this.activeTarget   = null
+      this.scrollHeight   = 0
+
+      this.$scrollElement.on('scroll.bs.scrollspy', $.proxy(this.process, this))
+      this.refresh()
+      this.process()
+    }
+
+    ScrollSpy.VERSION  = '3.3.2'
+
+    ScrollSpy.DEFAULTS = {
+      offset: 10
+    }
+
+    ScrollSpy.prototype.getScrollHeight = function () {
+      return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
+    }
+
+    ScrollSpy.prototype.refresh = function () {
+      var that          = this
+      var offsetMethod  = 'offset'
+      var offsetBase    = 0
+
+      this.offsets      = []
+      this.targets      = []
+      this.scrollHeight = this.getScrollHeight()
+
+      if (!$.isWindow(this.$scrollElement[0])) {
+        offsetMethod = 'position'
+        offsetBase   = this.$scrollElement.scrollTop()
+      }
+
+      this.$body
+        .find(this.selector)
+        .map(function () {
+          var $el   = $(this)
+          var href  = $el.data('target') || $el.attr('href')
+          var $href = /^#./.test(href) && $(escapeSelector(href)) // Need to escape selector.
+
+          return ($href
+            && $href.length
+            && $href.is(':visible')
+            && [[$href[offsetMethod]().top + offsetBase, href]]) || null
+        })
+        .sort(function (a, b) { return a[0] - b[0] })
+        .each(function () {
+          that.offsets.push(this[0])
+          that.targets.push(this[1])
+        })
+
+
+    }
+
+    ScrollSpy.prototype.process = function () {
+      var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
+      var scrollHeight = this.getScrollHeight()
+      var maxScroll    = this.options.offset + scrollHeight - this.$scrollElement.height()
+      var offsets      = this.offsets
+      var targets      = this.targets
+      var activeTarget = this.activeTarget
+      var i
+
+      if (this.scrollHeight != scrollHeight) {
+        this.refresh()
+      }
+
+      if (scrollTop >= maxScroll) {
+        return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
+      }
+
+      if (activeTarget && scrollTop < offsets[0]) {
+        $(this.selector).trigger('clear.bs.scrollspy')  // Add a custom event.
+        this.activeTarget = null
+        return this.clear()
+      }
+
+      for (i = offsets.length; i--;) {
+        activeTarget != targets[i]
+          && scrollTop >= offsets[i]
+          && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
+          && this.activate(targets[i])
+      }
+    }
+
+    ScrollSpy.prototype.activate = function (target) {
+      this.activeTarget = target
+
+      this.clear()
+
+      var selector = this.selector +
+        '[data-target="' + target + '"],' +
+        this.selector + '[href="' + target + '"]'
+
+      var active = $(selector)
+        .parents('li')
+        .addClass('active')
+
+      if (active.parent('.dropdown-menu').length) {
+        active = active
+          .closest('li.dropdown')
+          .addClass('active')
+      }
+
+      active.trigger('activate.bs.scrollspy')
+    }
+
+    ScrollSpy.prototype.clear = function () {
+      $(this.selector)
+        .parentsUntil(this.options.target, '.active')
+        .removeClass('active')
+    }
+
+
+    // SCROLLSPY PLUGIN DEFINITION
+    // ===========================
+
+    function Plugin(option) {
+      return this.each(function () {
+        var $this   = $(this)
+        var data    = $this.data('bs.scrollspy')
+        var options = typeof option == 'object' && option
+
+        if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
+        if (typeof option == 'string') data[option]()
+      })
+    }
+
+    var old = $.fn.scrollspy
+
+    $.fn.scrollspy             = Plugin
+    $.fn.scrollspy.Constructor = ScrollSpy
+
+
+    // SCROLLSPY NO CONFLICT
+    // =====================
+
+    $.fn.scrollspy.noConflict = function () {
+      $.fn.scrollspy = old
+      return this
+    }
+
+
+    // SCROLLSPY DATA-API
+    // ==================
+
+    $(window).on('load.bs.scrollspy.data-api', function () {
+      $('[data-spy="scroll"]').each(function () {
+        var $spy = $(this)
+        Plugin.call($spy, $spy.data())
+      })
+    })
+
+  }(jQuery);
+</script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0 && isDesktop()) {
+        setTimeout(function () {
+          $('.sidebar-toggle').trigger('click');
+        }, 800);
+      }
+    });
+  </script>
+
+
+
+
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"charles-xiao"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"3","bdPos":"left","bdTop":"250"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+
+
+  
+</body>
+</html>

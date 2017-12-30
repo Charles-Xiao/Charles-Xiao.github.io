@@ -210,12 +210,12 @@
 </li>
 </ol>
 <ol>
-<li><p><strong>事务</strong>：事务是数据库操作中的不可分割的逻辑单元,一个事务中的所有操作语句要么作为一个整体被执行，要么整体不被执行; 事务最重要的<strong>两个特性是事务的传播级别和数据隔离级别</strong>。传播级别定义的是事务的控制范围，事务隔离级别定义的是事务在数据库读写方面的控制范围。</p>
+<li><p><strong>事务</strong>：事务是数据库操作中的不可分割的逻辑单元,事务也是并发控制的基本单位，一个事务中的所有操作语句要么作为一个整体被执行，要么整体不被执行; 事务最重要的<strong>两个特性是事务的传播级别和数据隔离级别</strong>。传播级别定义的是事务的控制范围，事务隔离级别定义的是事务在数据库读写方面的控制范围。</p>
 <ul>
-<li>原子性：要么操作序列中全部语句都执行，要么全部不被执行,不可分割; 也就是说当事务的执行序列中某个语句执行错误，会回滚到该事务未执行时的状态</li>
-<li>一致性：事务执行之后数据库从一个一致性状态转化到另一个一致性状态</li>
-<li>隔离性：多个事务并行执行时互相之间不会影响</li>
-<li>持久性：事务成功执行之后会对数据库内容产生永久性影响</li>
+<li>原子性Atomicity：要么操作序列中全部语句都执行，要么全部不被执行,不可分割; 也就是说当事务的执行序列中某个语句执行错误，会回滚到该事务未执行时的状态</li>
+<li>一致性Consistency：事务执行之后数据库从一个一致性状态转化到另一个一致性状态；数据库 ACID 中的一致性对事务的要求不止包含对数据完整性以及合法性的检查，还包含应用层面逻辑的正确。</li>
+<li>隔离性Isolation：多个事务并行执行时互相之间不会影响</li>
+<li>持久性Durability：事务成功执行之后会对数据库内容产生永久性影响，当事务已经被提交之后，就无法再次回滚了，唯一能够撤回已经提交的事务的方式就是创建一个相反的事务对原操作进行『补偿』</li>
 </ul>
 </li>
 <li><p><strong>范式</strong></p>
@@ -258,12 +258,12 @@
 </li>
 </ol>
 <h3 id="MySQL的隔离级别与锁">MySQL的隔离级别与锁</h3><ol>
-<li><strong>四种隔离级别</strong>: 隔离级别决定了一个会话中的事务可能对另一个会话的影响、并发会话对数据库的操作、一个会话中所见数据的一致性; MySQL的InnoDB支持四种隔离级别,默认是可重读隔离级别<ul>
+<li><strong><a href="https://www.kancloud.cn/hx78/sql/379624" target="_blank" rel="external">四种隔离级别</a></strong>: 隔离级别决定了一个会话中的事务可能对另一个会话的影响、并发会话对数据库的操作、一个会话中所见数据的一致性; MySQL的InnoDB支持四种隔离级别,默认是可重读隔离级别<ul>
 <li><strong>未提交读READ UNCOMMITTED</strong>：最低级别的隔离，也被称之为脏读，它允许一个事务读取还没commit的事务的执行结果，这样可能会提高性能，但是导致脏读   </li>
 <li><strong>提交读READ COMMITTED</strong>：在一个事务中只允许看见已经commit的事务所做的改变。如果一个session中select还在查询中，另一会话session此时insert一条记录，则新添加的数据不可见；只有该操作commit之后才可见，也就是说—-<strong>不可重复读</strong>   </li>
 <li><strong>可重读REPEATABLE READ</strong>：同一个事务的多个实例在并发读取数据时会看到同样的数据行。也就是说在一个事务中重复select的结果一样，除非本事务中添加新数据到数据库，可能导致<strong>幻读</strong>;也就说事务之间只是在新数据方面突破了隔离，对已存在的数据仍旧隔离。</li>
 <li><strong>可串行化SERIALIZABLE</strong>：最高级别的隔离，强制事务排序并且只允许事务串行执行。为了达到此目的，数据库会锁住每个读的数据行，减少了并发，增加了稳定性，但是可能导致超时和锁竞争现象</li>
-<li><strong>事务并发导致的几个问题</strong><ul>
+<li><strong>事务并发导致的几个问题</strong><a href="https://draveness.me/mysql-transaction" target="_blank" rel="external">事务实现</a><ul>
 <li><strong>脏读(Drity Read)</strong>：某个事务已更新一份数据，另一个事务在此时读取了同一份数据，由于某些原因，前一个回滚了操作，则后一个事务所读取的数据就会是不正确的</li>
 <li><strong>不可重复读</strong>:在一个事务的两次查询之中数据不一致，这可能是两次查询过程中间插入了一个事务更新了原有的数据。</li>
 <li><strong>幻读</strong>：例如一个事务的两次查询过程中有另外一个事务插入数据造成第二次查询出现了在第一次查询中没有出现的数据；<strong>例如</strong>如果事务A运行”SELECT count(1) from TABLE_X” ，然后事务B在 TABLE_X 加入一条新数据并提交，当事务A再运行一次 count(1)结果不会是一样的，这就叫做<strong>幻读</strong></li>
@@ -287,6 +287,11 @@
 <li><strong>页面锁</strong>：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</li>
 <li><strong>锁管理器</strong>是添加和释放锁的进程，在内部使用一个哈希表来保存锁的相关信息(关键字是被锁的数据），并且了解每一块数据是被哪个事务加的锁,哪个事务在等待数据解锁;锁管理器还需要检查是否存在死锁，以及决定选择取消哪一个事务来消除死锁，<strong>检查死锁有两种方式</strong>一种是<strong>检查循环等待</strong>还有一种是<strong>使用超时设定</strong>。如果一个锁在超时时间内没有加上，那事务就进入了死锁状态。</li>
 <li><strong>数据库一般采用锁或者数据版本控制来进行并发控制</strong> 版本控制是每个事务可以在相同时刻修改相同的数据，每个事务有自己的数据拷贝（或者叫版本）；如果2个事务修改相同的数据，只接受一个修改，另一个将被拒绝，相关的事务回滚（或重新运行）；这将提高性能，因为：读事务不会阻塞写事务，写事务不会阻塞读，可以减少锁管理器带来的额外开销，但是磁盘空间消耗巨大，以空间换时间</li>
+<li>乐观锁不会存在死锁的问题，但是由于更新后验证，所以当冲突频率和重试成本较高时更推荐使用悲观锁，而需要非常高的响应速度并且并发量非常大的时候使用乐观锁就能较好的解决问题，在这时使用悲观锁就可能出现严重的性能问题；在选择并发控制机制时，需要综合考虑上面的四个方面（冲突频率、重试成本、响应速度和并发量）进行选择。</li>
+<li><strong>共享锁（读锁）</strong>：允许事务对一条行数据进行读取；<strong>互斥锁（写锁）</strong>：允许事务对一条行数据进行删除或更新；</li>
+</ol>
+<h3 id="MySQL_InnoDB实现">MySQL InnoDB实现</h3><ol>
+<li><a href="https://draveness.me/mysql-innodb" target="_blank" rel="external">『浅入浅出』MySQL 和 InnoDB</a></li>
 </ol>
 <h3 id="MyISAM和InnoDB存储引擎之间的区别">MyISAM和InnoDB存储引擎之间的区别</h3><ol>
 <li>InnoDB支持事务、外键和行锁，而MyISAM不支持这些高级功能，但是<strong>MyISAM是默认引擎</strong>，InnoDB则需要指定(事务是一种高级的处理方式，如在一些列增删改中只要哪个出错还可以回滚还原)</li>
@@ -316,7 +321,14 @@
 <li><p><strong>inner join、outer join和cross join的区别</strong><br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Join区别.png" width="100%"></p>
 </li>
 </ol>
-<h3 id="日志管理器">日志管理器</h3><p>为了提升性能，数据库把数据保存在内存缓冲区内。但如果当事务提交时服务器崩溃，崩溃时还在内存里的数据会丢失，这破坏了事务的持久性。你可以把所有数据都写在磁盘上，但是如果服务器崩溃，最终数据可能只有部分写入磁盘，这破坏了事务的原子性。因此我们采用<strong>事务日志</strong>是一个存储空间，在每次写盘之前，数据库在事务日志中写入一些信息，这样当事务崩溃或回滚，数据库知道如何移除或完成尚未完成的事务。<strong>事务的每一个操作（增/删/改）产生一条日志</strong>  </p>
+<h3 id="日志管理器">日志管理器</h3><ol>
+<li>为了提升性能，数据库把数据保存在内存缓冲区内。但如果当事务提交时服务器崩溃，崩溃时还在内存里的数据会丢失，这破坏了事务的持久性。你可以把所有数据都写在磁盘上，但是如果服务器崩溃，最终数据可能只有部分写入磁盘，这破坏了事务的原子性。因此我们采用<strong>事务日志</strong>是一个存储空间，在每次写盘之前，数据库在事务日志中写入一些信息，这样当事务崩溃或回滚，数据库知道如何移除或完成尚未完成的事务。<strong>事务的每一个操作（增/删/改）产生一条日志</strong>，</li>
+<li>MySQL中的两种日志，数据库恢复机制是通过回滚日志（undo log）或者重做日志(redo log)实现的；在数据库系统中，事务的原子性和持久性是由事务日志（transaction log）保证的，在实现时也就是上面提到的两种日志，前者用于对事务的影响进行撤销，后者在错误处理时对已经提交的事务进行重做，它们能保证两点：①发生错误或者需要回滚的事务能够成功回滚（原子性）；②在事务提交后，数据没来得及写会磁盘就宕机时，在下次重新启动后能够成功恢复数据（持久性）</li>
+</ol>
+<h3 id="其它概念">其它概念</h3><ol>
+<li>Transaction2 依赖于 Transaction1，而 Transaction3 又依赖于 Transaction1，当 Transaction1 由于执行出现问题发生回滚时，为了保证事务的原子性，就会将 Transaction2 和 Transaction3 中的工作全部回滚，这种情况也叫做<strong>级联回滚（Cascading Rollback）</strong>，级联回滚的发生会导致大量的工作需要撤回，是我们难以接受的。</li>
+<li></li>
+</ol>
 <h3 id="参考链接">参考链接</h3><ol>
 <li><a href="http://blog.jobbole.com/100349/" target="_blank" rel="external">数据库整体架构原理</a></li>
 <li><a href="http://www.codeceo.com/article/mysql-index-struct.html#0-tsina-1-46551-397232819ff9a47a7b7e80a40613cfe1" target="_blank" rel="external">MySQL数据库索引原理</a>  </li>
@@ -412,7 +424,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">51</span>
+              <span class="site-state-item-count">54</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -426,7 +438,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">59</span>
+              <span class="site-state-item-count">61</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -464,7 +476,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的Hash算法和一致性哈希"><span class="nav-number">1.</span> <span class="nav-text">常见的Hash算法和一致性哈希</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库结构概览"><span class="nav-number">2.</span> <span class="nav-text">数据库结构概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库的事务、索引、范式和存储过程概念以及优缺点"><span class="nav-number">3.</span> <span class="nav-text">数据库的事务、索引、范式和存储过程概念以及优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL的隔离级别与锁"><span class="nav-number">4.</span> <span class="nav-text">MySQL的隔离级别与锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM和InnoDB存储引擎之间的区别"><span class="nav-number">5.</span> <span class="nav-text">MyISAM和InnoDB存储引擎之间的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL语句"><span class="nav-number">6.</span> <span class="nav-text">SQL语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志管理器"><span class="nav-number">7.</span> <span class="nav-text">日志管理器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">8.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见的Hash算法和一致性哈希"><span class="nav-number">1.</span> <span class="nav-text">常见的Hash算法和一致性哈希</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库结构概览"><span class="nav-number">2.</span> <span class="nav-text">数据库结构概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库的事务、索引、范式和存储过程概念以及优缺点"><span class="nav-number">3.</span> <span class="nav-text">数据库的事务、索引、范式和存储过程概念以及优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL的隔离级别与锁"><span class="nav-number">4.</span> <span class="nav-text">MySQL的隔离级别与锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL_InnoDB实现"><span class="nav-number">5.</span> <span class="nav-text">MySQL InnoDB实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM和InnoDB存储引擎之间的区别"><span class="nav-number">6.</span> <span class="nav-text">MyISAM和InnoDB存储引擎之间的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL语句"><span class="nav-number">7.</span> <span class="nav-text">SQL语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志管理器"><span class="nav-number">8.</span> <span class="nav-text">日志管理器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其它概念"><span class="nav-number">9.</span> <span class="nav-text">其它概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">10.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
