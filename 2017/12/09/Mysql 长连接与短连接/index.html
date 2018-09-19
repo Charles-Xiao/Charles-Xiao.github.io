@@ -207,15 +207,6 @@
 </ol>
 <h4 id="常用工具">常用工具</h4><ol>
 <li>查看mysql连接数：<code>mysqladmin -uroot -p  processlist</code></li>
-<li>查看linux系统端口占用信息和进程信息：<ul>
-<li><code>ps aux</code>只能看到pid等信息，不能看到端口号</li>
-<li><code>lsof | grep pid/pname</code> 查看进程信息</li>
-<li><code>lsof -i :port</code>查看端口号port使用的进程号和连接情况</li>
-<li><code>lsof -i@ip:port</code>使用@host:port来显示指定到指定主机的连接</li>
-<li><code>lsof -iTCP</code>显示TCP连接</li>
-<li><code>netstat -np/c/atux | grep pid/port/pname</code>查看进程号所占用的端口号和端口占用情况</li>
-</ul>
-</li>
 </ol>
 
       
@@ -236,11 +227,13 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
+              <a href="../../../../2018/01/04/大型分布式网站架构设计与实践/">大型分布式网站架构设计与实践</a>
+            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="../../07/Linux终端利器tmux指南/">Linux终端利器tmux指南</a>
+              <a href="../如何实现多个数据库分片的list_objects操作/">如何实现多个数据库分片的list_objects操作</a>
             
           </div>
         </div>
@@ -308,7 +301,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">54</span>
+              <span class="site-state-item-count">67</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -322,7 +315,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-count">69</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -378,7 +371,7 @@
         <div class="copyright">
   
   &copy; &nbsp;  2015.05.16 - 
-  2017
+  2018
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>

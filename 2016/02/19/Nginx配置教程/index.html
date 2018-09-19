@@ -196,6 +196,38 @@
 <li>他们之间的关系式：server继承main，location继承server,upstream既不会继承指令也不会被继承,它有自己的特殊指令，不需要在其他地方的应用</li>
 <li><a href="https://www.zybuluo.com/phper/note/89391" target="_blank" rel="external">参考链接</a></li>
 </ol>
+<h5 id="Nginx限速和超时配置">Nginx限速和超时配置</h5><ol>
+<li>nginx可以通过<figure class="highlight"><figcaption><span>两个模块都能够对客户端访问进行限制。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2. [nginx&#35775;&#38382;&#38480;&#21046;&#27169;&#22359;limit_conn_zone &#21644;limit_req_zone&#37197;&#32622;&#20351;&#29992;&#35814;&#35299;](http://blog.51cto.com/michaelkang/1257476)&#10;3. [nginx&#36229;&#26102;&#35774;&#32622;](http://blog.csdn.net/liujiyong7/article/details/18228915)&#10;4. **&#38480;&#36895;&#37197;&#32622;&#23454;&#20363;**&#10;&#9;&#10;&#9;&#62; * ```limit_req_log_level```: &#35774;&#32622;&#26085;&#24535;&#32423;&#21035;&#65292;&#40664;&#35748;&#20540;&#20026;error&#32423;&#21035;&#65292;&#24403;&#26381;&#21153;&#22120;&#22240;&#20026;&#39057;&#29575;&#36807;&#39640;&#25298;&#32477;&#25110;&#32773;&#24310;&#36831;&#22788;&#29702;&#35831;&#27714;&#26102;&#21487;&#20197;&#35760;&#19979;&#30456;&#24212;&#32423;&#21035;&#30340;&#26085;&#24535;&#12290;&#24310;&#36831;&#35760;&#24405;&#30340;&#26085;&#24535;&#32423;&#21035;&#27604;&#25298;&#32477;&#30340;&#20302;&#19968;&#20010;&#32423;&#21035;&#65292;&#22914;&#26524;&#35774;&#32622;&#8220;limit_req_log_level notice&#8221;&#65292; &#21017;&#24310;&#36831;&#30340;&#26085;&#24535;&#23601;&#26159;info&#32423;&#21035;&#10;&#9;&#10;&#9;&#62; * ```limit_req_status```: &#35774;&#32622;&#25298;&#32477;&#35831;&#27714;&#30340;&#21709;&#24212;&#29366;&#24577;&#30721;,&#20363;&#22914;```limit_req_status 503</span><br></pre></td></tr></table></figure></li>
+</ol>
+<pre><code><span class="xml">&gt; * <span class="comment"><figure class="highlight"><figcaption><span>zone=name [burst=number] [nodelay]```: 设置对应的共享内存限制域和允许被处理的最大请求数阈值。 如果请求的频率超过了限制域配置的值，请求处理会被延迟，所以所有的请求都是以定义的频率被处理的, 直到被延迟的请求数超过了定义的阈值，这时，这个请求会被终止，并返回503 (Service Temporarily Unavailable) 错误。这个阈值的默认值为0;如果不希望超过的请求被延迟，可以用nodelay参数</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62;&#62; &#35774;&#32622;&#20869;&#23384;&#38480;&#21046;&#22495;&#20026;10M(1M&#23384;&#20648;&#21306;&#21487;&#20197;&#20445;&#23384;32000&#20010;32&#23383;&#33410;&#25110;16000&#20010;64&#23383;&#33410;&#30340;&#29366;&#24577;&#12290;&#22914;&#26524;&#23384;&#20648;&#21306;&#28385;&#65292;&#26381;&#21153;&#22120;&#23558;&#23545;&#20854;&#20182;&#35831;&#27714;&#30456;&#24212;503&#29366;&#24577;&#30721;)&#65292;&#38480;&#21046;&#24179;&#22343;&#27599;&#31186;&#19981;&#36229;&#36807;1&#20010;&#35831;&#27714;&#65292;&#21516;&#26102;&#20801;&#35768;&#36229;&#36807;&#39057;&#29575;&#38480;&#21046;&#30340;&#35831;&#27714;&#25968;&#19981;&#22810;&#20110;5&#20010;</span><br></pre></td></tr></table></figure></span>
+
+            limit_req_zone $binary_remote_addr zone=ttlsa_com:10m rate=1r/s;
+        server </span><span class="expression">{
+            <span class="variable">location</span> <span class="end-block">/www.ttlsa.com</span><span class="end-block">/ </span>{
+                <span class="variable">limit</span>_<span class="variable">req</span> <span class="variable">zone</span>=<span class="variable">ttlsa</span>_<span class="variable">com</span> <span class="variable">burst</span>=5;
+            }</span><span class="xml">
+        }
+        ```</span>
+</code></pre><h5 id="Nginx日志配置">Nginx日志配置</h5><ol>
+<li><p>error.log日志配置，主要用于排查错误。</p>
+<blockquote>
+<p>配置语法：error_log /path/file level;</p>
+<p>默认配置：error_log logs/error.log error;</p>
+<blockquote>
+<ul>
+<li><p>level是日志的输出等级，取值范围从小到大为(debug,info,notice,warn,error,crit,alert,emerg)。当设定为一个级别时，大于或者等于该级别的日志都会被输出到/path/file文件中，小于该级别的日志则不会输出。例如：当设定为error级别时，error，crit，alert，emerg级别的日志都会输出;如果设定的日志级别是debug，则会输出所有的日志。</p>
+</li>
+<li><p>/path/file也可以是/dev/null，这样就不会输出任何日志，这也是关闭error日志的唯一手段。</p>
+</li>
+<li><p>/path/file也可以是stderr，这样日志会输出到标准错误文件中。</p>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+</li>
+<li><p>access.log: nginx请求日志</p>
+</li>
+</ol>
 
       
     </div>
@@ -287,7 +319,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">54</span>
+              <span class="site-state-item-count">67</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -301,7 +333,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-count">69</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -339,7 +371,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#nginx反向代理/负载均衡"><span class="nav-number">1.</span> <span class="nav-text">nginx反向代理/负载均衡</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nginx的多进程并发模型"><span class="nav-number">2.</span> <span class="nav-text">nginx的多进程并发模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nginx配置文件"><span class="nav-number">3.</span> <span class="nav-text">nginx配置文件</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#nginx反向代理/负载均衡"><span class="nav-number">1.</span> <span class="nav-text">nginx反向代理/负载均衡</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nginx的多进程并发模型"><span class="nav-number">2.</span> <span class="nav-text">nginx的多进程并发模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nginx配置文件"><span class="nav-number">3.</span> <span class="nav-text">nginx配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Nginx限速和超时配置"><span class="nav-number">3.1.</span> <span class="nav-text">Nginx限速和超时配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Nginx日志配置"><span class="nav-number">3.2.</span> <span class="nav-text">Nginx日志配置</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -357,7 +389,7 @@
         <div class="copyright">
   
   &copy; &nbsp;  2015.05.16 - 
-  2017
+  2018
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>

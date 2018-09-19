@@ -178,7 +178,8 @@
       
 
       
-        <h4 id="bash配置文件(Linux_or_Mac)">bash配置文件(Linux or Mac)</h4><h5 id="全局配置文件">全局配置文件</h5><ol>
+        <h4 id="Unix/Linux/GNU_Linux">Unix/Linux/GNU Linux</h4><p>Linux本质是指 Linux 内核，而GNU/Linux则代表这是一个发行版系统(内核+GNU工具), GNU的全称又是：Gnu’s Not Unix, 本质上这些都属于类unix系统。</p>
+<h4 id="bash配置文件(Linux_or_Mac)">bash配置文件(Linux or Mac)</h4><h5 id="全局配置文件">全局配置文件</h5><ol>
 <li>/etc/profile 和 /rtc/profile.d/*.sh : 此文件为系统的每个用户设置环境信息,当用户第一次登录时该文件被执行，并从/etc/profile.d目录的配置文件中搜集shell的设置</li>
 <li>/etc/bashrc : 为每一个运行bash shell的用户执行此文件，当bash shell被打开时,该文件被读取</li>
 </ol>
@@ -202,6 +203,10 @@
 <span class="variable">$ </span><span class="constant">PATH=</span><span class="variable">$PATH</span><span class="symbol">:PATH1</span><span class="symbol">:PATH</span> <span class="number">2</span><span class="symbol">:PATH</span> <span class="number">3</span><span class="symbol">:</span> ... <span class="symbol">:PATH</span> <span class="constant">N</span>
 <span class="comment"># 打印当前搜索路径的两种方法</span>
 <span class="variable">$ </span>echo <span class="variable">$PATH</span> 或者 <span class="variable">$ </span>export
+<span class="comment"># 打印全局变量的两种方法，printenv HOME打印变量值</span>
+<span class="variable">$ </span>env 或者printenv
+<span class="comment"># 显示所有的全局变量，局部变量以及用户自定义变量</span>
+<span class="variable">$set</span>
 </code></pre></li>
 <li><p>export : 该命令将新变量添加到环境中 ; 在命令行直接执行可以设置一个新的临时环境变量, 变量在关闭shell时失效</p>
 </li>
@@ -215,7 +220,7 @@
 <p><strong>ksh、csh、zsh等不常用的解释器</strong></p>
 <h4 id="shell脚本实例">shell脚本实例</h4><pre><code><span class="shebang">#!/bin/sh</span>
 <span class="built_in">cd</span> ~
-mkdir shell_tut
+ret=`mkdir shell_tut`
 <span class="built_in">cd</span> shell_tut
 
 <span class="keyword">for</span> ((i=<span class="number">0</span>; i&lt;<span class="number">10</span>; i++)); <span class="keyword">do</span>
@@ -227,6 +232,7 @@ mkdir shell_tut
 <li>单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的；单引号字串中不能出现单引号（对单引号使用转义符后也不行）</li>
 <li>双引号里可以有变量，双引号里可以出现转义字符</li>
 <li>以“#”开头的行就是注释，会被解释器忽略</li>
+<li>bash shell提供了一个组合键来生成 EOF(End-of-File)字符。Ctrl+D组合键会在bash中产生一个EOF字符</li>
 </ol>
 <h4 id="运行Shell脚本的两种方法">运行Shell脚本的两种方法</h4><pre><code>chmod +x <span class="keyword">test</span>.<span class="keyword">sh</span>
 ./<span class="keyword">test</span>.<span class="keyword">sh</span>
@@ -234,16 +240,311 @@ mkdir shell_tut
 bin/<span class="keyword">sh</span> <span class="keyword">test</span>.<span class="keyword">sh</span>
 /bin/php <span class="keyword">test</span>.php
 第一种必须要带上.才能在当前目录寻找脚本，否则会去PATH寻找；第二种不需要指定#!/bin/<span class="keyword">sh</span>
-</code></pre><h4 id="Linux/Mac常见目录">Linux/Mac常见目录</h4><ol>
-<li>/bin 存放系统管理员和普通用户都要使用的程序</li>
-<li>/sbin 存放用于系统恢复，系统启动，系统维护等程序</li>
-<li>/usr/bin 登录用户可以使用的预装程序一般都放在这里,会随着系统升级而改变</li>
-<li>/usr/share/bin 可以通过web访问的程序一般放在这里</li>
-<li>/usr/local/bin 目录是给用户放置自己的可执行程序的地方，是手动编译或者安装的程序, 不会被系统升级而覆盖同名文件</li>
-<li>usr 指 Unix System Resource，而不是User</li>
-<li>/lib目录都是为/bin, /sbin准备的;一个应用程序启动的时候，会在/lib 和 /usr/lib库中查找动态库</li>
+</code></pre><h4 id="Shell日志分析常用命令">Shell日志分析常用命令</h4><ol>
+<li><p>查看内容</p>
+<pre><code>who - show who is logged <span class="command"><span class="keyword">on</span></span>
+
+    <span class="comment"># 多个命令可以用分号隔开，同时执行</span>
+    who; <span class="built_in">date</span>
+
+    <span class="comment"># 通配符？代表一个字符，*代表多个字符</span>
+    ls -alh
+    ll <span class="operator">a</span>*.txt  
+    ll <span class="operator">a</span>?.txt
+
+    <span class="comment"># 符号链接(软链接):指向源文件的新的独立文件，与原文件完全不同，inode也不同</span>
+    <span class="built_in">ln</span> -s <span class="operator">a</span> a_link
+    <span class="comment"># 硬链接:与原文件本质上是同一个文件，大小一样</span>
+    <span class="built_in">ln</span> <span class="operator">a</span> a_link
+    <span class="comment"># 查看inode编号</span>
+    ls -li <span class="operator">a</span>*
+
+    <span class="comment"># 查看目录的树形结构</span>
+    tree dir
+
+    <span class="comment"># 查看文件内容，显示行数和进度; 输入v可以直接进入vim编辑模式</span>
+    less -NM <span class="built_in">file</span> 
+
+    <span class="comment"># cat新建、合并文件</span>
+    cat &gt; <span class="built_in">file</span>
+    cat f1 f2 &gt; f 
+
+    <span class="comment"># 显示行数</span>
+    cat -n/-b <span class="built_in">file</span>
+
+    <span class="comment"># 使用两个 &gt; 符时, 会将第一个文件中的内容追加到第二个文件的末尾</span>
+    cat /root/linux &gt;&gt; /root/desktop
+
+    <span class="comment"># ps,top,du,df查看系统信息</span>
+    lsblk -f: 可以查看未挂载的文件系统类型
+    parted -l 命令会输出文件系统类型（File <span class="keyword">system</span>）， 其中参数l表示列出所有设备的分区信息
+    parted /dev/sdg
+    fdisk -l
+
+    df -T 查看已经挂载的分区和文件系统类型
+
+    killall <span class="operator">a</span>* 杀死所有以<span class="operator">a</span>开头的进程
+    mount 查看系统挂载的设备列表
+    umount 卸载设备
+
+    <span class="comment"># 测试url联通性</span>
+    wget -nv <span class="comment">--spider $url</span>
+</code></pre></li>
+<li><p>数据提取处理</p>
+<pre><code># <span class="keyword">sort</span> -n可以识别每行开头的数字，并按其大小对文本行进行排序；-t设置分隔符
+    # <span class="keyword">sort</span>默认是按升序排列，如果想要按降序要加-r选项(<span class="keyword">sort</span> -rn), <span class="keyword">sort</span>命令按照第<span class="number">1</span>个、第<span class="number">2</span>个、第N个字段依次排序，如果第一个字段相同，就按第<span class="number">2</span>个字段的顺序排列，直到最后。
+    # 用命令cut -c <span class="number">9</span>- 取出每行第<span class="number">9</span>个及其以后的字符
+    # uniq命令只能对相邻行进行去重操作,所以要先<span class="keyword">sort</span>；uniq -c显示每一行出现次数，-u只显示单独出现的行，-d只显示重复出现的行
+
+    # 排序+去重并显示次数+按开头数字降序+取出第<span class="number">9</span>个之后的字符
+    <span class="keyword">sort</span> <span class="keyword">file</span> | uniq -c | <span class="keyword">sort</span> -rn | cut -c <span class="number">9</span>- 
+
+    # 先对第<span class="number">2</span>列<span class="keyword">sort</span>，然后对第<span class="number">3</span>列<span class="keyword">sort</span>
+    <span class="keyword">sort</span> t.txt -k2,<span class="number">2</span>n -k3,<span class="number">3</span>n
+
+    # <span class="keyword">grep</span>或操作
+    <span class="keyword">grep</span> <span class="string">'word1\|word2'</span>
+    <span class="keyword">grep</span> -E <span class="string">'word1|word2'</span>
+    # 非操作
+    <span class="keyword">grep</span> -v <span class="string">'word1\|word2'</span>
+    # <span class="keyword">grep</span>正则匹配
+    <span class="keyword">grep</span> -o regex FILENAME  正则匹配
+    # 例如匹配vip=ip地址形式文本
+    <span class="keyword">grep</span> -o <span class="string">'vip=[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'</span>
+
+    <span class="keyword">grep</span> -n pattern <span class="keyword">file</span> 显示行号
+    <span class="keyword">grep</span> -c pattern <span class="keyword">file</span> 显示匹配到的行数
+
+    # 压缩文件相关的搜索
+    zgrep <span class="string">"/api"</span> access_log.gz access_log_1.gz
+
+    zcat access.tar.gz | <span class="keyword">grep</span> -a <span class="string">'/api'</span>
+    zgrep -a <span class="string">"/api"</span> access.tar.gz
+
+    zcat  解压文件并将内容输出到标准输出
+    zcmp  解压文件并且 <span class="keyword">byte</span> by <span class="keyword">byte</span> 比较两个文件
+    zdiff 解压文件并且 line by line 比较两个文件
+    zgrep 解压文件并且根据正则搜索文件内容
+</code></pre></li>
 </ol>
-<h4 id="Linux常用的查找命令"><a href="http://www.ruanyifeng.com/blog/2009/10/5_ways_to_search_for_files_using_the_terminal.html" target="_blank" rel="external">Linux常用的查找命令</a></h4><p>find/locate, whereis/which/ps -ef, grep</p>
+<pre><code><span class="comment"># 根据进程路径查找pid并kill</span>
+<span class="built_in">kill</span> `ps -ef | grep bos/nginx | grep master | awk <span class="string">'{print $2}'</span>` 
+
+<span class="comment"># 去除每一行中的重复空格，输出 'a b c'</span>
+<span class="built_in">echo</span> <span class="string">'a     b c'</span> | tr <span class="operator">-s</span> <span class="string">' '</span>
+
+<span class="comment"># 数学表达式,例如计算10*10的结果, 只支持整数运算</span>
+<span class="built_in">echo</span> $[<span class="number">10</span>*<span class="number">10</span>]
+
+expr <span class="number">5</span> / <span class="number">2</span>  不支持浮点数计算
+<span class="built_in">echo</span> <span class="string">'scale=3;5/2'</span> | bc
+
+<span class="comment"># bc进入计算器模式，可以进行浮点数运算，scale=4代表保留4位小数，quit退出</span>
+</code></pre><ol>
+<li><p><strong>cut</strong>：按行剪切数据，cut命令主要是接受三个定位方法: ①字节（bytes），用选项-b，例如; ②字符（characters），用选项-c; ③域（fields），用选项-f; -n选项，-n用于告诉cut不要将多字节字符拆开</p>
+<pre><code># 提取每一行的第3个字节,-3表示从第一个字节到第三个字节，而3-表示从第三个字节到行尾
+<span class="keyword">cat</span> <span class="keyword">file</span> | cut -b 3
+# 提取每一行的第3,4,5,8个字节,执行此命令时，cut会先把-b后面所有的定位进行从小到大排序
+<span class="keyword">cat</span> <span class="keyword">file</span> | cut -b 3-5,8
+
+# -<span class="keyword">d</span>来设置间隔符为空格，然后用-f来设置我要取的是第一个域(用awk也可以取出指定列)
+<span class="keyword">cat</span> <span class="keyword">file</span> | cut -<span class="keyword">d</span> ' ' -f 1
+
+# cut的-<span class="keyword">d</span>选项的默认间隔符就是制表符，当要使用制表符的时候，可以省略-<span class="keyword">d</span>选项，直接用－f来取域;cut -<span class="keyword">d</span>只允许间隔符是一个字符。
+</code></pre></li>
+<li><p><strong>sed</strong>：一种流编辑器，会在编辑器处理数据之前基于预先提供的一组规则来编辑数据流。sed按行处理文本，默认从STDIN读取文本并将处理结果输出到STDOUT，不改变输入文本内容。</p>
+<pre><code><span class="preprocessor"># 显示空格和制表符的区别，-n选项是禁止编辑器输出,l是将特殊符以直观形式输出</span>
+sed -n l file
+
+<span class="preprocessor"># sed 替换字符串，把文本中第一个dog替换成big cat</span>
+echo <span class="string">"This is a dog"</span> | sed <span class="string">'s/dog/big cat/'</span>
+
+<span class="preprocessor"># 删除前N个字符  </span>
+sed -i <span class="string">'s/^..//'</span> file   (N个.表示N个字符)
+
+<span class="preprocessor"># substitute替换，通用格式：s/pattern/replace/flags, 选项可以是g,p,w,数字</span>
+sed <span class="string">'s/dog/big cat/g'</span> data.txt
+<span class="preprocessor"># -n + p 等价于w选项，只输出被替换命令修改过的行</span>
+
+<span class="preprocessor"># 包含特殊字符/的字符串替换，可使用\转义或者指定分隔符！</span>
+sed <span class="string">'s!/bin/bash!/bin/csh!'</span> /etc/passwd
+sed <span class="string">'s/\/bin\/bash/\/bin\/csh/'</span> /etc/passwd
+
+<span class="preprocessor"># -e执行多条命令到每行数据上</span>
+sed -e <span class="string">'s/brown/green/; s/dog/cat/'</span> data1.txt
+
+<span class="preprocessor"># -f选项读取script1.sed文件中所有sed命令并执行，每行都是一条单独的命令</span>
+sed -f script1.sed data1.txt
+
+<span class="preprocessor"># sed行寻址，也就是讲命令只作用于特定行or某些行</span>
+sed <span class="string">'2s/dog/cat/'</span> data1.txt
+sed <span class="string">'2,3s/dog/cat/'</span> data1.txt 
+<span class="preprocessor"># 只作用于第2行到最后一行</span>
+sed <span class="string">'2,$s/dog/cat/'</span> data1.txt 
+
+<span class="preprocessor"># 只作用于包含Samantha的行</span>
+sed <span class="string">'/Samantha/s/bash/csh/'</span> /etc/passwd
+
+<span class="preprocessor"># sed删除行</span>
+sed <span class="string">'2,3d'</span> data1.txt 
+<span class="preprocessor"># 只作用于第2行到最后一行</span>
+sed <span class="string">'2,$d'</span> data1.txt 
+
+<span class="preprocessor"># 只作用于包含Samantha的行</span>
+sed <span class="string">'/Samantha/d'</span> /etc/passwd
+
+<span class="preprocessor"># 插入行, 最后一行之后插入</span>
+sed <span class="string">'$a\This is a new line of text.'</span> data1.txt
+<span class="preprocessor"># 第三行之前插入</span>
+sed <span class="string">'3i\This is a new line of text.'</span> data1.txt
+
+<span class="preprocessor"># 修改包含'number 3'内容的行</span>
+sed <span class="string">'/number 3/c\
+&gt; This is a changed line of text.'</span> data6.txt
+
+<span class="preprocessor"># 修改第3行</span>
+sed <span class="string">'3c\
+&gt; This is a changed line of text.'</span> data6.txt
+
+<span class="preprocessor"># sed transform转换命令会对inchars和outchars值进行一对一的映射</span>
+$ echo <span class="string">"This 1 is a test of 1 try."</span> | sed <span class="string">'y/123/456/'</span> 
+This <span class="number">4</span> is a test of <span class="number">4</span> <span class="keyword">try</span>.
+
+<span class="preprocessor"># 禁止输出其他行，只打印包含匹配文本模式的行</span>
+sed -n <span class="string">'/number 3/p'</span> data6.txt
+<span class="preprocessor"># 非操作!</span>
+sed -n <span class="string">'/number 3/!p'</span> data6.txt
+
+提取内容并写入文件
+<span class="preprocessor"># 将data6.txt数据流中的前两行打印到一个文本文件test.txt中</span>
+sed <span class="string">'1,2w test.txt'</span> data6.txt
+
+<span class="preprocessor"># 只将包含文本模式的数据行写入目标文件Browncoats.txt</span>
+sed -n <span class="string">'/Browncoat/w Browncoats.txt'</span> data11.txt
+
+从文件读数据
+<span class="preprocessor"># 读取data12.txt所有内容，并写入data6.txt文件第三行之后</span>
+sed <span class="string">'3r data12.txt'</span> data6.txt
+<span class="preprocessor"># 写入包含number 2的一行之后并删除number 2行</span>
+sed <span class="string">'/number 2/r data12.txt'</span> data6.txt
+sed <span class="string">'$r data12.txt d'</span> data6.txt
+
+<span class="preprocessor"># sed多行命令</span>
+<span class="preprocessor"># next，n命令会让sed编辑器移动到文本的下一行</span>
+<span class="preprocessor"># N命令将下一行合并到当前行</span>
+sed <span class="string">'/first/{ N ; s/\n/ / }'</span> data2.txt
+<span class="preprocessor"># 合并行号和行内容</span>
+sed <span class="string">'='</span> data2.txt | sed <span class="string">'N; s/\n/ /'</span>
+
+<span class="preprocessor"># 向文本文件的行间插入空白行</span>
+sed <span class="string">'G'</span> data2.txt
+<span class="preprocessor"># 删除连续的空白行，保留单个空白行</span>
+sed <span class="string">'/./,/^$/!d'</span> data8.txt
+<span class="preprocessor"># 用排除符号(!)和尾行符号($)来确保脚本不会将空白行加到数据流的最后一行后面</span>
+sed <span class="string">'$!G'</span> data2.txt
+</code></pre></li>
+<li><p><strong>awk</strong>: gawk程序是Unix中的原始awk程序的GNU版本。gawk程序让流编辑迈上了一个新的台阶，它提供了一种编程语言而不只是编辑器命令。awk是一种文本处理和模式匹配语言，数据驱动的语言。gawk程序脚本用一对花括号来定义，你必须将脚本命令放到两个花括号{}中</p>
+<pre><code># 强制awk在读取数据前执行BEGIN关键字后指定的程序脚本；END关键字允许你指定一个程序脚本，awk会在读完数据后执行它
+awk 'BEGIN {<span class="keyword">print</span> <span class="string">"Hello World!"</span>}'
+# awk默认以任意的空白字符(例如空格或制表符)分割每一行，也可以用-F指定分隔符(也可以定义FS的特殊变量来指定字段分隔符)，<span class="label">$0</span>代表整行，<span class="label">$n</span>代表第<span class="keyword">n</span>列内容
+# 打印<span class="keyword">file</span>的第五列
+<span class="keyword">cat</span> <span class="keyword">file</span> | awk '{<span class="keyword">print</span> <span class="label">$5}</span>'
+awk -F: '{<span class="keyword">print</span> <span class="label">$1}</span>' <span class="keyword">file</span>
+
+# 通过设置OFS变量，可以在输出中使用任意字符串来分隔字段
+# 以,为分隔符，读取1-3列，然后以-连接，输出；相当于替换分隔符
+awk 'BEGIN{FS=<span class="string">","</span>; OFS=<span class="string">"-"</span>} {<span class="keyword">print</span> <span class="label">$1</span>,<span class="label">$2</span>,<span class="label">$3}</span>' data1
+
+# 记录分隔符设置，例如把文件中的每行都当成一个字段，把空白行当作记录分隔符，可以起到合并多行成1行的效果
+awk 'BEGIN{FS=<span class="string">"\n"</span>; RS=<span class="string">""</span>} {<span class="keyword">print</span> <span class="label">$1</span>,<span class="label">$4}</span>' data2
+
+# awk自带的ARGC，ARGV，NF，FNR等数据变量
+
+# awk自定义变量，进行计算
+awk 'BEGIN{x=4; x= x * 2 + 13 % 2 + 3^2; <span class="keyword">print</span> x}'
+
+# awk 遍历数组变量
+gawk 'BEGIN{
+&gt; <span class="keyword">var</span>[<span class="string">"a"</span>] = 1
+&gt; <span class="keyword">var</span>[<span class="string">"g"</span>] = 2
+&gt; <span class="keyword">for</span> (<span class="keyword">test</span> <span class="keyword">in</span> <span class="keyword">var</span>) &gt;{
+&gt; <span class="keyword">print</span> <span class="string">"Index:"</span>,<span class="keyword">test</span>,<span class="string">" - Value:"</span>,<span class="keyword">var</span>[<span class="keyword">test</span>] &gt;}'
+
+# awk 匹配操作符/……/，例如筛选出包含11的行做对应处理，用逗号做分隔符
+gawk 'BEGIN{FS=<span class="string">","</span>} /11/{<span class="keyword">print</span> <span class="label">$1}</span>' data1
+
+# 在每行第一个数据字段中查找以文本rich开头的行，打印第一个和最后一个字段
+awk -F: '<span class="label">$1</span> ~ /^rich/{<span class="keyword">print</span> <span class="label">$1</span>,<span class="label">$NF}</span>' /etc/passwd
+# 非操作!
+gawk –F: '<span class="label">$1</span> !~ /^rich/{<span class="keyword">print</span> <span class="label">$1</span>,<span class="label">$NF}</span>' /etc/passwd
+# 数学表达式，==，&lt;=……
+gawk -F, '<span class="label">$1</span> == <span class="string">"data"</span>{<span class="keyword">print</span> <span class="label">$1}</span>' data1
+
+# awk使用<span class="keyword">if</span> <span class="keyword">else</span>，<span class="keyword">while</span>，<span class="keyword">for</span>等结构化语句
+awk '{<span class="keyword">if</span> (<span class="label">$1</span> &gt; 20) <span class="keyword">print</span> <span class="label">$1</span> * 2; <span class="keyword">else</span> <span class="keyword">print</span> <span class="label">$1</span> / 2}' data4
+
+# printf格式化输出，例如用几个单独的printf命令在同一行上打印多个输出
+gawk 'BEGIN{FS=<span class="string">","</span>} {printf <span class="string">"%s "</span>, <span class="label">$1}</span> END{printf <span class="string">"\n"</span>}' data1
+
+# rand()产生随机数只在0和1之间(不包括0或1)，int会生成该值和0之间最接近该值的整数
+x = int(10 * rand())
+
+# 字符串函数，时间函数，自定义函数
+# 在定义函数时，它必须出现在所有代码块之前(包括BEGIN代码块)，例如
+awk '
+&gt; function myprint() 
+&gt; {
+&gt; printf <span class="string">"%-16s - %s\n"</span>, <span class="label">$1</span>, <span class="label">$4</span>
+&gt; }
+&gt; BEGIN{FS=<span class="string">"\n"</span>; RS=<span class="string">""</span>}
+&gt; {
+&gt; myprint()
+&gt; }' data2
+
+# 也可以把函数定义到文件中，然后用-f引用函数
+
+# 求<span class="keyword">sum</span>和average，使用awk变量时不需要带$
+<span class="keyword">cat</span> <span class="keyword">file</span> | awk '{<span class="keyword">sum</span>+=<span class="label">$1}</span> END {<span class="keyword">print</span> <span class="string">"Sum = "</span>, <span class="keyword">sum</span>}'
+<span class="keyword">cat</span> <span class="keyword">file</span> | awk '{<span class="keyword">sum</span>+=<span class="label">$1}</span> END {<span class="keyword">print</span> <span class="string">"Average = "</span>, <span class="keyword">sum</span>/NR}'
+
+# a.txt中每一行为一个单词，按行读取a.txt, <span class="label">$1</span>代表第一列，统计出出现次数前3名的单词
+# <span class="keyword">sort</span> -<span class="keyword">n</span> -r -k 2 -t ':' xx.txt -<span class="keyword">n</span>数字排序方式， -r倒序, -t ':'以冒号分隔, -k 2表示以冒号分隔后的第2列
+awk '{<span class="keyword">sum</span>[<span class="label">$1</span>]+=1} END {<span class="keyword">for</span>(k <span class="keyword">in</span> <span class="keyword">sum</span>) <span class="keyword">print</span> k <span class="string">":"</span> <span class="keyword">sum</span>[k]}' a.txt | <span class="keyword">sort</span> -<span class="keyword">n</span> -r -k 2 -t ':' | head -<span class="keyword">n</span> 3
+</code></pre></li>
+<li><p>权限相关(Linux文件权限以八进制表示)</p>
+<pre><code><span class="literal">umask</span> 设置文件(<span class="number">666</span>-x)<span class="keyword">or</span>目录(<span class="number">777</span>-x)默认权限的掩码
+
+权限的八进制表示：wr- --&gt; <span class="number">110</span> --&gt; <span class="number">6</span>
+
+<span class="comment"># 八进制修改权限</span>
+chmod -<span class="constant">R</span> <span class="number">777</span> dir
+chmod <span class="number">777</span> <span class="keyword">file</span>
+
+<span class="comment">#符号模式修改权限</span>
+chmod u+w <span class="keyword">file</span>   给文件<span class="keyword">user</span>增加write权限
+
+<span class="comment"># 改变文件的属主和属组；只有root可以改变文件属主，任何属主可以改变属组</span>
+chown <span class="keyword">user</span>.<span class="literal">group</span> <span class="keyword">file</span>
+</code></pre></li>
+<li><p>处理脚本控制信号和特殊参数  </p>
+<blockquote>
+<p>默认情况下，脚本以最后一个命令的退出状态码退出；当然也可以通过<figure class="highlight"><figcaption><span>0```来指定退出状态码，范围为0-255，如果大于255，则以num % 256返回给用户</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#9;&#10;&#9;&#9;# &#36755;&#20986;&#19978;&#19968;&#21629;&#20196;&#30340;&#36864;&#20986;&#30721;&#10;&#9;&#9;echo $? &#10;&#9;&#9;&#10;&#9;&#9;# shell&#30340;&#20301;&#32622;&#21442;&#25968;&#21464;&#37327;&#26159;&#26631;&#20934;&#30340;&#25968;&#23383;:$0&#26159;&#31243;&#24207;&#21517;&#65292;$1&#26159;&#31532;&#19968;&#20010;&#21442;&#25968;&#65292;$2&#26159;&#31532;&#20108;&#20010;&#21442;&#25968;&#65292;&#20381;&#27425;&#31867;&#25512;&#65292;&#30452;&#21040;&#31532;&#20061;&#20010;&#21442;&#25968;$9&#10;&#9;&#9;# $0&#21442;&#25968;&#33719;&#21462;shell&#22312;&#21629;&#20196;&#34892;&#21551;&#21160;&#30340;&#33050;&#26412;&#21517;&#10;&#9;&#9;echo $0&#10;&#9;&#9;&#10;&#9;&#9;# basename&#33719;&#21462;&#32477;&#23545;&#36335;&#24452;&#19979;&#30340;&#25991;&#20214;&#21517;or&#25991;&#20214;&#22841;&#21517;&#10;&#9;&#9;echo $(basename $0)&#10;&#9;&#9;&#10;&#9;&#9;# &#23450;&#26102;&#20219;&#21153;&#10;&#9;&#9;cron,crontab,anacron&#21644;at&#10;&#9;&#9;# &#36827;&#31243;&#20248;&#20808;&#32423;&#35843;&#24230;&#10;&#9;&#9;nice&#21644;renice&#10;&#9;&#9;# &#21518;&#21488;&#21069;&#21488;&#20219;&#21153;&#65306;jobs -l&#65292;bg,fg,&#38;,nohup&#10;&#10;#### Linux/Mac&#24120;&#35265;&#30446;&#24405;&#10;1. /bin &#23384;&#25918;&#31995;&#32479;&#31649;&#29702;&#21592;&#21644;&#26222;&#36890;&#29992;&#25143;&#37117;&#35201;&#20351;&#29992;&#30340;&#31243;&#24207;&#10;2. /sbin &#23384;&#25918;&#29992;&#20110;&#31995;&#32479;&#24674;&#22797;&#65292;&#31995;&#32479;&#21551;&#21160;&#65292;&#31995;&#32479;&#32500;&#25252;&#31561;&#31243;&#24207;&#10;3. /usr/bin &#30331;&#24405;&#29992;&#25143;&#21487;&#20197;&#20351;&#29992;&#30340;&#39044;&#35013;&#31243;&#24207;&#19968;&#33324;&#37117;&#25918;&#22312;&#36825;&#37324;,&#20250;&#38543;&#30528;&#31995;&#32479;&#21319;&#32423;&#32780;&#25913;&#21464;&#10;4. /usr/share/bin &#21487;&#20197;&#36890;&#36807;web&#35775;&#38382;&#30340;&#31243;&#24207;&#19968;&#33324;&#25918;&#22312;&#36825;&#37324;&#10;5. /usr/local/bin &#30446;&#24405;&#26159;&#32473;&#29992;&#25143;&#25918;&#32622;&#33258;&#24049;&#30340;&#21487;&#25191;&#34892;&#31243;&#24207;&#30340;&#22320;&#26041;&#65292;&#26159;&#25163;&#21160;&#32534;&#35793;&#25110;&#32773;&#23433;&#35013;&#30340;&#31243;&#24207;, &#19981;&#20250;&#34987;&#31995;&#32479;&#21319;&#32423;&#32780;&#35206;&#30422;&#21516;&#21517;&#25991;&#20214;&#10;6. usr &#25351; Unix System Resource&#65292;&#32780;&#19981;&#26159;User&#10;7. /lib&#30446;&#24405;&#37117;&#26159;&#20026;/bin, /sbin&#20934;&#22791;&#30340;;&#19968;&#20010;&#24212;&#29992;&#31243;&#24207;&#21551;&#21160;&#30340;&#26102;&#20505;&#65292;&#20250;&#22312;/lib &#21644; /usr/lib&#24211;&#20013;&#26597;&#25214;&#21160;&#24577;&#24211;&#10;&#10;#### Linux&#26816;&#27979;&#31243;&#24207;&#10;&#10;#### Linux&#30913;&#30424;&#25346;&#36733;/&#21368;&#36733;/&#26684;&#24335;&#21270;&#25805;&#20316;&#10;linux&#31995;&#32479;&#20013;&#21482;&#33021;&#22312;root&#26435;&#38480;&#29992;&#25143;&#19979;&#25346;&#36733;&#35774;&#22791;&#12290;&#10;##### BIOS vs UEFI&#10;BIOS&#65288;Basic Input/Output System&#65289;&#21644; UEFI&#65288;Unified Extensible Firmware Interface &#65289;&#26159;&#19981;&#21516;&#30340;&#35745;&#31639;&#26426;&#21551;&#21160;&#22266;&#20214;&#65288;Fireware&#65289;&#65292;&#38656;&#35201;&#30828;&#20214;&#65288;&#36890;&#24120;&#20026;&#20027;&#26495;&#65289;&#25903;&#25345;&#65292;&#30456;&#20114;&#20195;&#26367;&#65292;&#20854;&#20013; UEFI &#26159;&#27604;&#36739;&#26032;&#30340;&#26041;&#24335;&#12290;&#10;&#10;* BIOS&#65306;&#32463;&#20856;&#30340;&#21551;&#21160;&#22266;&#20214;&#65292;&#20250;&#35843;&#29992;&#30913;&#30424;&#30340; MBR&#65292;&#28982;&#21518;&#30001; MBR &#20013;&#30340; loader &#32487;&#32493;&#21152;&#36733;&#25805;&#20316;&#31995;&#32479;&#12290;&#10;* UEFI&#65306;UEFI &#29992;&#26469;&#20195;&#26367; BIOS&#65292;&#24182;&#20811;&#26381; BIOS &#30340;&#32570;&#28857;&#65292;&#22823;&#22810;&#25968;&#30340; UEFI &#22266;&#20214;&#20250;&#25552;&#20379;&#20860;&#23481; BIOS &#30340;&#21551;&#21160;&#26041;&#24335;&#12290;&#10;&#10;##### MBR vs GPT&#10;* MBR &#19982; GPT &#29992;&#20110;&#23384;&#20648;&#30828;&#30424;&#30340;&#20998;&#21306;&#20449;&#24687;&#65292;&#26159;&#19981;&#21516;&#30340;&#30828;&#30424;&#20998;&#21306;&#34920;&#31867;&#22411;&#12290;MBR&#25903;&#25345;&#26368;&#22823;&#32422;2T&#30340;&#30828;&#30424;&#65292;&#26368;&#22810;&#33021;&#21010;&#20998;4&#20010;&#20027;&#20998;&#21306;&#65292;&#26356;&#22810;&#20998;&#21306;&#38656;&#35201;&#20351;&#29992;&#25299;&#23637;&#20998;&#21306;&#23454;&#29616;&#12290;&#10;* GPT &#34920;&#31034; GUID&#65288;Globally Unique Identifier&#65289; &#20998;&#21306;&#34920;&#65292;&#26159; UEFI &#35268;&#33539;&#30340;&#19968;&#37096;&#20998;&#65292;&#29992;&#20110;&#26367;&#25442; MBR &#30340;&#20998;&#21306;&#26041;&#24335;&#12290;GPT &#27809;&#26377;&#20998;&#21306;&#25968;&#21644;&#20998;&#21306;&#22823;&#23567;&#38480;&#21046;&#12290;&#10;* BIOS/UEFI &#36319; MBR/GPT &#26159;&#19981;&#21516;&#23618;&#32423;&#30340;&#65292;BIOS/UEFI &#26159; Fireware&#65292;MBR/GPT &#26159;&#20998;&#21306;&#34920;&#12290;&#10;&#10;##### File System&#65288;&#25991;&#20214;&#31995;&#32479;&#65289;&#26159;&#23384;&#20648;&#23186;&#20171;&#20013;&#25991;&#20214;&#23384;&#20648;&#30340;&#32452;&#32455;&#26041;&#24335;&#12290;&#10;&#19981;&#21516;&#30340;&#25991;&#20214;&#31995;&#32479;&#31867;&#22411;&#26377;&#19981;&#21516;&#30340;&#36895;&#24230;&#65292;&#28789;&#27963;&#24615;&#65292;&#23433;&#20840;&#24615;&#21644;&#21344;&#29992;&#31354;&#38388;&#12290;&#19981;&#21516;&#25805;&#20316;&#31995;&#32479;&#21482;&#25903;&#25345;&#29305;&#23450;&#30340;&#25991;&#20214;&#31995;&#32479;&#31867;&#22411;&#12290;&#24120;&#35265;&#30340;&#25991;&#20214;&#31995;&#32479;&#31867;&#22411;&#26377; FAT16&#65292;FAT32&#65292;NTFS&#65292;EXT3&#65292;EXT4&#65292;HFS &#31561;&#12290;&#10;&#10;* **&#30913;&#30424;&#25991;&#20214;&#31995;&#32479;**&#21253;&#25324;&#30828;&#30424;&#12289;U&#30424;&#12289;&#30913;&#30424;&#38453;&#21015;&#12289;CDROM&#12289;DVD&#31561;&#12290;&#24120;&#35265;&#25991;&#20214;&#31995;&#32479;&#26377;autofs&#12289;coda&#12289;Ext2&#12289;Ext3&#12289;Ext4&#12289;VFAT&#12289;ISO9660&#65288;&#20809;&#30424;&#25110;&#32773;&#20809;&#30424;&#38236;&#20687;&#65289;&#12289;UFS&#65288;Unix File System&#65292;Unix&#25991;&#20214;&#31995;&#32479;&#65289;&#12289;FAT&#65288;File Allocation Table&#65292;&#25991;&#20214;&#20998;&#37197;&#34920;&#65289;&#12289;FAT16&#12289;FAT32&#12289;NTFS&#65288;New TechnologyFile System&#65289;&#31561;&#12290;&#10;* **&#32593;&#32476;&#25991;&#20214;&#31995;&#32479;**&#21487;&#20197;&#36828;&#31243;&#35775;&#38382;&#30340;&#25991;&#20214;&#31995;&#32479;&#65292;&#36825;&#31181;&#25991;&#20214;&#31995;&#32479;&#22312;&#26381;&#21153;&#22120;&#31471;&#20173;&#26159;&#26412;&#22320;&#30340;&#30913;&#30424;&#25991;&#20214;&#31995;&#32479;&#65292;&#23458;&#25143;&#26426;&#36890;&#36807;&#32593;&#32476;&#36828;&#31243;&#35775;&#38382;&#25968;&#25454;&#12290;&#24120;&#35265;&#25991;&#20214;&#31995;&#32479;&#26684;&#24335;&#26377;&#65306;NFS&#65288;Network File System&#65292;&#32593;&#32476;&#25991;&#20214;&#31995;&#32479;&#65289;&#12289;Samba&#65288;SMB/CIFS&#65289;&#12289;AFP&#65288;Apple FillingProtocol&#65292;Apple&#25991;&#20214;&#24402;&#26723;&#21327;&#35758;&#65289;&#21644;WebDAV&#31561;&#12290;&#10;* **&#19987;&#26377;/&#34394;&#25311;&#25991;&#20214;&#31995;&#32479;**&#19981;&#39547;&#30041;&#22312;&#30913;&#30424;&#19978;&#30340;&#25991;&#20214;&#31995;&#32479;&#12290;&#24120;&#35265;&#26684;&#24335;&#26377;&#65306;TMPFS&#65288;&#20020;&#26102;&#25991;&#20214;&#31995;&#32479;&#65289;&#12289;PROCFS&#65288;Process FileSystem&#65292;&#36827;&#31243;&#25991;&#20214;&#31995;&#32479;&#65289;&#21644;LOOPBACKFS&#65288;Loopback File System&#65292;&#22238;&#36865;&#25991;&#20214;&#31995;&#32479;&#65289;&#12290;&#10;&#10;##### GRUB&#65288;Grand Unified Boot loader&#65289;&#10;GRUB&#26159;&#30828;&#30424;&#20013;&#30340;&#36719;&#20214;&#65292;&#24341;&#23548;&#22120;&#65288;loader&#65289;&#30340;&#19968;&#31181;&#12290;&#30446;&#21069;&#20027;&#27969;&#29256;&#26412;&#26159; GRUB2&#65292;GRUB &#29992;&#20110;&#20174;&#22810;&#25805;&#20316;&#31995;&#32479;&#30340;&#35745;&#31639;&#26426;&#20013;&#36873;&#25321;&#19968;&#20010;&#31995;&#32479;&#26469;&#21551;&#21160;&#65292;&#25110;&#20174;&#31995;&#32479;&#20998;&#21306;&#20013;&#36873;&#25321;&#29305;&#27530;&#30340;&#20869;&#26680;&#37197;&#32622;&#12290;&#10;&#10;#### [Linux&#24120;&#29992;&#30340;&#26597;&#25214;&#21629;&#20196;](http://www.ruanyifeng.com/blog/2009/10/5_ways_to_search_for_files_using_the_terminal.html)&#10;find/locate, whereis/which/ps -ef, grep&#10;&#10;* find&#25991;&#20214;&#26597;&#25214;&#65306;`find path_name -name file_name -exec rm -f &#123;&#125; \;`&#10;&#10;  `find /&#160;&#65293;name &#39;*abvd*&#39;`  &#26597;&#25214;&#21253;&#21547;abvd&#23383;&#31526;&#20018;&#30340;&#25991;&#20214;&#21517;&#25991;&#20214;&#10;&#10;* grep&#25628;&#32034;&#30446;&#24405;&#21644;&#23376;&#30446;&#24405;&#65306; `grep -R &#39;&#25991;&#26412;&#39; ./*`&#10;&#10;* whereis&#23450;&#20301;&#21487;&#25191;&#34892;&#25991;&#20214;&#20301;&#32622;&#10;&#10;#### Linux&#23567;&#25216;&#24039;&#10;1. &#29983;&#25104;&#38543;&#26426;&#23494;&#30721;&#30340;&#20004;&#31181;&#26041;&#24335;&#65306;&#9312; `date | md5 | cut -b -8` &#9313; `openssl rand -base64 8`&#10;2. **&#38543;&#26426;&#29983;&#25104;10&#20010;8&#20301;&#23494;&#30721;shell&#33050;&#26412;**: &#39318;&#20301;&#22823;&#20889;&#23383;&#27597;, &#20013;&#38388;&#20845;&#20301;&#22823;&#23567;&#20889;&#23383;&#27597;&#25968;&#23383;&#38543;&#26426;&#28151;&#21512;, &#31532;&#20843;&#20301;[0-9]</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+</li>
+</ol>
+<h1 id="!/bin-bash">!/bin.bash</h1><p>for i in {1..10}<br>do<br>A=<code>head -c 500 /dev/urandom | tr -dc A-Z |head -c 1</code></p>
+<h1 id="随机生成500字符|只取大写字母|取第一个字符">随机生成500字符|只取大写字母|取第一个字符</h1><p>B=<code>head -c 500 /dev/urandom | tr -dc [:alnum:]| head -c 6</code></p>
+<h1 id="随机生成500字符|取英文大小写字节及数字，亦即_0-9,_A-Z,_a-z|取6位">随机生成500字符|取英文大小写字节及数字，亦即 0-9, A-Z, a-z|取6位</h1><p>C=<code>echo $RANDOM$RANDOM|cut -c 2</code></p>
+<h1 id="取第二位随机数字,第一位随机性不高大多数是1或2,所以取第二位-">取第二位随机数字,第一位随机性不高大多数是1或2,所以取第二位.</h1><p>echo $A$B$C<br>done<br>```</p>
+<ol>
+<li><code>source /path/to/filename</code> 在当前 shell 里执行一个文件里的命令</li>
+<li><code>wget -r --no-parent --reject &quot;index.html*&quot; http://hostname/ -P /home/user/dirs</code> 用 wget 抓取完整的网站目录结构，存放到本地目录中</li>
+<li>diff和cmp命令，分别比对两个file的逐行和逐字节</li>
+<li><a href="https://cnbin.github.io/blog/2015/06/15/shell-qian-hou-tai-jin-cheng-qie-huan/" target="_blank" rel="external">Shell 前后台进程切换</a></li>
+<li><code>dd if=/dev/zero of=obj_900k bs=1024 count=0 seek=$[9*1024/10]</code> 生成900k的文件</li>
+<li><code>mv /usr/cbu/ * .</code>  将/usr/cbu中的所有文件移到当前目录（用“.”表示）中</li>
+<li><code>at －f data 15:30 +2 days</code>  让系统在两天后的17：30执行文件data中指明的作业</li>
+</ol>
 
       
     </div>
@@ -263,13 +564,13 @@ bin/<span class="keyword">sh</span> <span class="keyword">test</span>.<span clas
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="../../../12/02/Mysql Init线程不安全问题/">Mysql初次Init线程不安全问题</a>
+              <a href="../Linux expect自动交互脚本入门/">Linux expect自动交互脚本入门</a>
             
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="../../05/Git使用指南/">Git使用指南</a>
+              <a href="../Linux正则表达式:通配符揭秘/">Linux正则表达式/通配符揭秘</a>
             
           </div>
         </div>
@@ -337,7 +638,7 @@ bin/<span class="keyword">sh</span> <span class="keyword">test</span>.<span clas
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">54</span>
+              <span class="site-state-item-count">67</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -351,7 +652,7 @@ bin/<span class="keyword">sh</span> <span class="keyword">test</span>.<span clas
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-count">69</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -389,7 +690,7 @@ bin/<span class="keyword">sh</span> <span class="keyword">test</span>.<span clas
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#bash配置文件(Linux_or_Mac)"><span class="nav-number">1.</span> <span class="nav-text">bash配置文件(Linux or Mac)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#全局配置文件"><span class="nav-number">1.1.</span> <span class="nav-text">全局配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#个人配置文件"><span class="nav-number">1.2.</span> <span class="nav-text">个人配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#shell如何读取配置文件"><span class="nav-number">1.3.</span> <span class="nav-text">shell如何读取配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置变量和命令"><span class="nav-number">1.4.</span> <span class="nav-text">配置变量和命令</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shell和shell脚本的概念"><span class="nav-number">2.</span> <span class="nav-text">shell和shell脚本的概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#脚本解释器"><span class="nav-number">3.</span> <span class="nav-text">脚本解释器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shell脚本实例"><span class="nav-number">4.</span> <span class="nav-text">shell脚本实例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行Shell脚本的两种方法"><span class="nav-number">5.</span> <span class="nav-text">运行Shell脚本的两种方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux/Mac常见目录"><span class="nav-number">6.</span> <span class="nav-text">Linux/Mac常见目录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux常用的查找命令"><span class="nav-number">7.</span> <span class="nav-text">Linux常用的查找命令</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Unix/Linux/GNU_Linux"><span class="nav-number">1.</span> <span class="nav-text">Unix/Linux/GNU Linux</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bash配置文件(Linux_or_Mac)"><span class="nav-number">2.</span> <span class="nav-text">bash配置文件(Linux or Mac)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#全局配置文件"><span class="nav-number">2.1.</span> <span class="nav-text">全局配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#个人配置文件"><span class="nav-number">2.2.</span> <span class="nav-text">个人配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#shell如何读取配置文件"><span class="nav-number">2.3.</span> <span class="nav-text">shell如何读取配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置变量和命令"><span class="nav-number">2.4.</span> <span class="nav-text">配置变量和命令</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shell和shell脚本的概念"><span class="nav-number">3.</span> <span class="nav-text">shell和shell脚本的概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#脚本解释器"><span class="nav-number">4.</span> <span class="nav-text">脚本解释器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shell脚本实例"><span class="nav-number">5.</span> <span class="nav-text">shell脚本实例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行Shell脚本的两种方法"><span class="nav-number">6.</span> <span class="nav-text">运行Shell脚本的两种方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Shell日志分析常用命令"><span class="nav-number">7.</span> <span class="nav-text">Shell日志分析常用命令</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#!/bin-bash"><span class="nav-number"></span> <span class="nav-text">!/bin.bash</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#随机生成500字符|只取大写字母|取第一个字符"><span class="nav-number"></span> <span class="nav-text">随机生成500字符|只取大写字母|取第一个字符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#随机生成500字符|取英文大小写字节及数字，亦即_0-9,_A-Z,_a-z|取6位"><span class="nav-number"></span> <span class="nav-text">随机生成500字符|取英文大小写字节及数字，亦即 0-9, A-Z, a-z|取6位</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#取第二位随机数字,第一位随机性不高大多数是1或2,所以取第二位-"><span class="nav-number"></span> <span class="nav-text">取第二位随机数字,第一位随机性不高大多数是1或2,所以取第二位.</span></a></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -407,7 +708,7 @@ bin/<span class="keyword">sh</span> <span class="keyword">test</span>.<span clas
         <div class="copyright">
   
   &copy; &nbsp;  2015.05.16 - 
-  2017
+  2018
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>

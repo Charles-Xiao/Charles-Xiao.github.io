@@ -148,8 +148,8 @@
           
           
             
-              <a class="post-title-link" href="../../2015/04/23/Java语言基础知识点/">
-                Java语言基础知识点
+              <a class="post-title-link" href="../../2015/07/29/浅析java内存管理机制/">
+                浅析java内存管理机制
               </a>
             
           
@@ -158,7 +158,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-04-23
+          发表于 2015-07-28
         </span>
 
         
@@ -178,8 +178,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2015/04/23/Java语言基础知识点/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/23/Java语言基础知识点/"></span>
+            <a href="../../2015/07/29/浅析java内存管理机制/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/29/浅析java内存管理机制/"></span>
             </a>
           </span>
           
@@ -194,52 +194,114 @@
 
       
         
-          <ol>
-<li><strong>Switch语句参数</strong>: JDK7之前，switch 只能支持 byte、short、char、int 这几个基本数据类型和其对应的封装类型;如果想用String，需要将String包装成枚举类型作为参数；JDK7之后支持String类型直接作为参数<a href="http://blog.csdn.net/amazing7/article/details/51219315" target="_blank" rel="external">参考</a></li>
-<li><strong>for循环和foreach的区别</strong>: for循环效率高于foreach; for循环可以间隔遍历，步伐可以自由设置，但是foreach只能用于遍历读取每一个元素，还不能进行修改</li>
-<li><strong>Java和C++区别</strong>：①Java有接口，有垃圾回收机制②C++有引用，有多重继承，有操作符重载</li>
-<li><strong>JNI</strong><br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JNI.png" class="full-image" width="100%"></li>
-<li><strong>Java泛型</strong>：泛型是指在定义接口或者类时可以使用类型参数，泛型提供了编译期的类型安全检查，确保你只能把正确类型的对象放入集合中，避免了在运行时出现ClassCastException。Java中的泛型基本上都是在编译器这个层次来实现的。在生成的Java字节代码中是不包含泛型中的类型信息的。使用泛型的时候加上的类型参数，会被编译器在编译的时候去掉，JVM看到的只是List，而由泛型附加的类型信息对JVM来说是不可见的。这个过程就称为<strong>类型擦除</strong>。比如一个方法如果接收List<object>作为形式参数，那么如果尝试将一个List<string>的对象作为实际参数传进去，却发现无法通过编译；因为这会产生隐含的类型转换问题，编译器直接就禁止这样的行为；Array不支持泛型，所以不能保证编译期的类型安全保证。</string></object></li>
-<li><p><strong>BIO、NIO、AIO</strong>：三者之间的区别，类似于resin、apache、nginx在IO处理上的区别，从多线程互不干扰的阻塞式执行(resin)，到轮询式的同步非阻塞式（apache），再到异步非阻塞式（nginx）,现在这三种IO都在JDK中予以了支持</p>
+          <p>内存管理是计算机编程中的一个重要问题，一般来说，内存管理主要包括<strong>内存分配</strong>和<strong>内存回收</strong>两个部分。不同的编程语言有不同的内存管理机制，本文在对比C++和java语言内存管理机制的不同的基础上，浅析java中的内存分配和内存回收机制，包括java对象初始化及其内存分配，内存回收方法及其注意事项等…… </p>
+<h2 id="java与C++内存管理机制对比">java与C++内存管理机制对比</h2><p><strong>在C++中</strong>，所有的对象都会被销毁，局部对象的销毁发生在以右花括号为界的对象作用域的末尾处，而程序猿new出来的对象则应该主动调用delete操作符从而调用析构函数去回收对象占用的内存。但是C++这种直接操作内存的方式存在很大内存泄露风险，而且人为管理内存复杂且困难。  </p>
+<p><strong>在java中</strong>，内存管理由JVM完全负责，java中的“垃圾回收器”负责自动回收无用对象占据的内存资源，这样可以大大减少程序猿在内存管理上花费的时间，可以更集中于业务逻辑和具体功能实现；但这并不是说java有了垃圾回收器程序猿就可以高枕无忧，将内存管理抛之脑外了！一方面，实际上java中还存在垃圾回收器没法回收以某种“特殊方式”分配的内存的情况(这种特殊方式我们将在下文中进行详细描述)；另一方面，java的垃圾回收是不能保证一定发生的，除非JVM面临内存耗尽的情况。所以java中部分对象内存还是需要程序猿手动进行释放，合理地对部分对象进行管理可以减少内存占用与资源消耗。</p>
+<h2 id="java内存分配">java内存分配</h2><h3 id="java程序执行过程">java程序执行过程</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Java程序执行过程.jpg" class="full-image"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JVM编译执行顺序.png" class="full-image"></p>
+<ol>
+<li><p>首先Java源代码文件(.java后缀)会被Java编译器<strong>编译</strong>为字节码文件(.class后缀)，然后由JVM中的类加载器<strong>加载</strong>各个类的字节码文件，加载完毕之后，交由JVM执行引擎<strong>执行</strong>(执行过程还包括将字节码编译成机器码)，JVM执行引擎在执行字节码时首先会扫描四趟class文件来保证定义的类型的安全性，再检查空引用，数据越界，自动垃圾收集等。在整个程序执行过程中，JVM会用一段空间来存储程序执行期间需要用到的数据和相关信息，这段空间一般被称作为<strong>Runtime Data Area（运行时数据区），也就是我们常说的JVM内存</strong></p>
+</li>
+<li><p>类加载器分为<strong>启动类加载器</strong>(不继承classLoader，属于虚拟机的一部分；负责加载原生代码实现的Java核心库,包括加载JAVA_HOME中jre/lib/rt.jar里所有的 class)；<strong>扩展类加载器</strong>(负责在JVM中扩展库目录中去寻找加载Java扩展库,包括JAVA_HOME中jre/lib/ext/xx.jar或-Djava.ext.dirs指定目录下的 jar 包)；<strong>应用程序类加载器</strong>(ClassLoader.getSystemClassLoader()负责加载Java类路径classpath中的类)</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Classloader.png" class="full-image"></p>
+<ol>
+<li>类加载机制的流程：包括了<strong>加载、连接(验证、准备、解析)、初始化五个阶段</strong><ul>
+<li><strong>加载</strong>：查找装载二进制文件，通过一个类的全限定名获取类的二进制字节流，并将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构；在 Java 堆中生成一个代表这个类的 java.lang.Class 对象，作为对方法区中这些数据的访问入口。</li>
+<li><strong>验证</strong>：为了确保Class文件中的字节流包含的信息符合当前虚拟机的要求，完成以下四个阶段的验证：文件格式的验证、元数据的验证、字节码验证和符号引用验证。</li>
+<li><strong>准备</strong>：准备阶段是正式为类变量分配内存并设置类变量初始值的阶段，这些内存都将在方法区中分配</li>
+<li><strong>解析</strong>：解析阶段是虚拟机将常量池中的符号引用转化为直接引用的过程</li>
+<li><strong>初始化</strong>：初始化阶段是根据程序员通过程序指定的主观计划去初始化类变量和其他资源，也就是执行类构造器()方法的过程</li>
+</ul>
+</li>
+</ol>
+<h3 id="现代硬件内存架构">现代硬件内存架构</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/硬件内存架构.png" class="full-image"></p>
+<ol>
+<li>一个有两个或者多个 CPU 的现代计算机上同时运行多个线程是可能的，如果你的 Java 程序是多线程的，在你的 Java 程序中每个 CPU 上一个线程可能同时（并发）执行</li>
+<li>CPU在寄存器上的执行操作速度稍微大于CPU缓存层的执行速度，远大于在主存上的执行速度</li>
+<li>Java内存模型中的堆栈分布在硬件内存结构中的CPU寄存器，CPU缓存层，CPU主存中，大部分分布在主存中</li>
+</ol>
+<h3 id="java内存模型划分">java内存模型划分</h3><p>一般来讲，我们将java内存划分为以下几个区域, 如图：</p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JVM内存分配与回收.png" class="full-image" width="100%"></p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Java对象访问方式.png" class="full-image" width="100%"></p>
+<p><strong>GC备注</strong>:  </p>
+<ol>
+<li>年轻对象存放在年轻代，采用Minor GC(指从年轻代空间（包括 Eden 和 Survivor 区域）回收内存); 长期存活的年老对象以及大对象直接存放在年老代，采用Full GC(Full GC == Major GC指的是对老年代/永久代的stop the world的GC)，回收速度慢;JVM维护一个对象的年龄来进行对象的内存区域转移，从Eden-Survivor-老年代</li>
+<li>新生代包括一个Eden区，两个survivor的from和to区（8:1:1）,负责年轻小对象的回收;Eden区存放新创建的大量对象,回收频繁,所以区域大;Survivor存放每次垃圾回收后存活的对象</li>
+<li>一个对象的成员变量可能随着这个对象自身存放在堆上</li>
+<li>一个Object的大小计算方法:一个引用4byte+空Object本身占据8byte+其它数据类型占据自身大小byte(例如char占用2byte);然而由于系统分配以8byte为单位，所以每个Object占据的大小必须为8的倍数，比如一个空的Object应该占据4+8=12，也就是说需要占据16byte</li>
+</ol>
+<p>下文中将要提到的内存分配与回收主要是指对象所占据的堆内存的释放与回收。</p>
+<h3 id="java对象创建及初始化">java对象创建及初始化</h3><p>java对象创建之后，就会在堆内存拥有自己的一块区域，接着就是对象的初始化过程。对象一般通过<strong>构造器来进行初始化</strong>，构造器是一种与类名相同的没有返回值的特殊方法；如果一个类中没有定义构造函数，则系统会自动生成一个不接受任何参数的默认构造器；但是如果已经定义一个构造器(无论是否有参数)，编译器就不会再自动创建默认构造器了；我们可以对构造函数进行多次重载(即传递不同数目或不同顺序的参数列表),也可以在一个构造器中调用另一个构造器，但是只能调用一次，并且必须将构造器放在最起始处，否则编译器会报错。  </p>
+<p>那么<strong>类成员初始化</strong>又是怎么做的呢？顺序是怎样的呢？java中所有变量在使用前都应该得到恰当的初始化，即使是方法的局部变量，如果不进行初始化就会发生编译错误；而如果是类的成员变量，即使你不进行初始化赋值，系统也是会给与其一个初始值的，例如char、int类型的初始值都是0，对象引用不进行初始化则默认为null。</p>
+<p><strong>类成员初始化顺序</strong>总结：先静态后普通再构造, 先父类后子类，同级看书写顺序 </p>
+<pre><code><span class="number">1.</span>先执行父类静态变量和静态代码块，再执行子类静态变量和静态代码块
+<span class="number">2.</span>先执行父类普通变量和代码块，再执行父类构造器(<span class="keyword">static</span>方法) 
+<span class="number">3.</span>先执行子类普通变量和代码块，再执行子类构造器(<span class="keyword">static</span>方法) 
+<span class="number">4.</span><span class="keyword">static</span>方法初始化先于普通方法，静态初始化只有在必要时刻才进行且只初始化一次。
+
+注意:子类的构造方法，不管这个构造方法带不带参数，默认的它都会先去寻找父类的不带参数的构造方法。如果父类没有不带参数的构造方法，那么子类必须用supper关键子来调用父类带参数的构造方法，否则编译不能通过。
+</code></pre><h2 id="java内存回收">java内存回收</h2><h3 id="垃圾回收器(4种收集器)和finalize()方法">垃圾回收器(4种收集器)和finalize()方法</h3><p>java中垃圾回收器可以帮助程序猿自动回收无用对象占据的内存，但它只负责释放java中创建的对象所占据的所有内存，通过某种创建对象之外的方式为对象分配的内存空间则无法被垃圾回收器回收；而且垃圾回收本身也有开销，GC的优先级比较低，所以如果JVM没有面临内存耗尽，它是不会去浪费资源进行垃圾回收以恢复内存的。最后我们会发现，只要程序没有濒临存储空间用完那一刻，对象占用的空间就总也得不到释放。我们可以通过代码System.gc()来主动启动一个垃圾回收器(虽然JVM不会立刻去回收)，在释放new分配内存空间之前，将会通过finalize()释放用其他方法分配的内存空间。  </p>
+<ol>
+<li><strong>Serial收集器</strong>：一个单线程的新生代收集器，它进行垃圾收集时，必须暂停其他所有的工作线程，直到它收集结束。简单高效</li>
+<li><strong>Parallel（并行）收集器</strong>：JVM缺省收集器，其最大的优点是使用多个线程来通过扫描并压缩堆。串行收集器在GC时会停止其他所有工作线程（stop-the-world），CPU利用率是最高的，所以适用于要求高吞吐量（throughput）的应用，但停顿时间（pause time）会比较长，所以对web应用来说就不适合，因为这意味着用户等待时间会加长。而并行收集器可以理解是多线程串行收集，在串行收集基础上采用多线程方式进行GC，很好的弥补了串行收集的不足，可以大幅缩短停顿时间，因此对于空间不大的区域（如young generation），采用并行收集器停顿时间很短，回收效率高，适合高频率执行。</li>
+<li><strong>CMS收集器</strong>：基于“标记-清除”算法实现的，它使用多线程的算法去扫描老生代堆（标记）并对发现的待回收对象进行回收（清除），容易产生大量内存碎片使得大对象无法创建然后不得不提前触发full GC。CPU资源占用过大，标记之后容易产生浮动垃圾只能留到下一次GC处理</li>
+<li><strong>G1收集器</strong>：G1收集器是基于“标记-整理”算法实现的收集器，也就是说它不会产生空间碎片。G1是一个针对多处理器大容量内存的服务器端的垃圾收集器，其目标是在实现高吞吐量的同时，尽可能的满足垃圾收集暂停时间的要求。它可以非常精确地控制停顿，既能让使用者明确指定在一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒，具备了一些实时Java（RTSJ）的垃圾收集器的特征。<a href="http://www.zicheng.net/article/55.htm" target="_blank" rel="external">垃圾收集器</a></li>
+</ol>
+<p>finalize()方法的工作原理是：一旦垃圾回收器准备好释放对象占用的存储空间，将首先调用并且只能调用一次该对象的finalize()方法(通过代码System.gc()实现)，并且在下一次垃圾回收动作发生时，才会真正回收对象占用的内存。所以如果我们重载finalize()方法就能在垃圾回收时刻做一些重要的清理工作或者自救该对象一次(只要在finalize()方法中让该对象重新和引用链上的任何一个对象建立关联即可)。finalize()方法用于释放用特殊方式分配的内存空间，这是因为我们可能在java中调用非java代码来分配内存，比如Android开发中调用NDK。那么，当我们调用C中的malloc()函数分配了存储空间，我们就只能用free()函数来释放这些内存，这样就需要我们在finalize()函数中用本地方法调用它。</p>
+<h3 id="对象内存状态&amp;&amp;引用形式及回收时机">对象内存状态&amp;&amp;引用形式及回收时机</h3><ul>
+<li><p>java对象内存状态转换图</p>
+<p>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/对象状态转换图.png" class="full-image"></p>
+</li>
+<li><p><strong>如何判断java对象需要被回收？GC判断方法</strong></p>
 <ul>
-<li><strong>BIO</strong>是面向流的同步阻塞式IO方式，<strong>对于每一个客户端Socket连接，服务端都会新开一个线程处理</strong>,在此期间线程一直被占用,直到socket关闭,其中tcp的连接、数据的读取read、数据的返回都是被阻塞的。也就是说这期间会大量的浪费cpu的时间片和线程占用的内存资源。<strong>优缺点和适应情景</strong>BIO方式具有很高的响应速度，并且控制起来简单，在连接数较少且固定的架构非常有效，但是如果对每一个连接都产生一个线程的无疑是对系统资源的一种浪费，如果连接数较多将会出现资源不足的情况。</li>
-<li><strong>NIO(new IO从JDK1.4开始)</strong>是面向缓冲区的同步非阻塞式IO方式, <strong>对于每一个客户端请求，服务端新开一个线程处理</strong>；即客户端发送的连接请求都会注册到多路复用器上，多路复用器轮询到连接有I/O请求时才启动一个线程进行处理,当连接没有数据时，是没有工作线程来处理的; 它的非阻塞模式使用一个专用的reactor来处理分发IO事件，数据处理采用双通道模式，client和server各自维护一个选择器用于检测通道上的事件，通过访问选择器来处理感兴趣事件。<strong>优缺点和适应情景</strong>NIO方式适用于连接数目多且连接比较短（轻操作）的架构，比如聊天服务器，并发局限于应用中，编程比较复杂</li>
-<li><strong>AIO(Asynchronous IO从JDK1.7开始)</strong>是一种异步非阻塞的IO方式;<strong>对于每一个客户端的有效请求，服务端新开一个线程处理</strong>;即客户端的I/O请求都是由OS先完成了再通知服务器应用去启动线程进行处理，每个线程不必亲自处理IO，而是委派OS来处理，并且也不需要等待IO完成了，如果完成后，OS会通知的;<strong>优缺点和适应情景</strong>AIO方式使用于连接数目多且连接比较长（重操作）的架构，比如相册服务器，充分调用OS参与并发操作，编程比较复杂</li>
+<li><strong>引用计数</strong>，引用计数法记录着每一个对象被其它对象所持有的引用数，被引用一次就加一，引用失效就减一；引用计数器为0则说明该对象不再可用；当一个对象被回收后，被该对象所引用的其它对象的引用计数都应该相应减少，它很难解决对象之间的相互循环引用问题<a href="http://blog.csdn.net/jiasike/article/details/51355729" target="_blank" rel="external">循环引用实例</a></li>
+<li><strong>可达性分析算法</strong>：从GC Root对象向下搜索其所走过的路径称为引用链，当一个对象不再被任何的GC root对象引用链相连时说明该对象不再可用，GC root对象包括四种：方法区中常量和静态变量引用的对象，虚拟机栈中变量引用的对象，本地方法栈中引用的对象; <strong>解决循环引用是因为</strong>GC Root通常是一组特别管理的指针，这些指针是tracing GC的trace的起点。它们不是对象图里的对象，对象也不可能引用到这些“外部”的指针。</li>
+<li>采用引用计数算法的系统只需在每个实例对象创建之初，通过计数器来记录所有的引用次数即可。而可达性算法，则需要再次GC时，遍历整个GC根节点来判断是否回收</li>
 </ul>
 </li>
-<li><p><strong>为什么匿名内部类和局部内部类只能访问final变量？</strong>：因为虽然匿名内部类在方法的内部，但实际编译的时候，内部类编译成Outer.Inner,这说明内部类所处的位置和外部类中的方法处在同一个等级上，外部类中的方法中的变量或参数只是方法的局部变量，这些变量或参数的作用域只在这个方法内部有效。因为编译的时候内部类和方法在同一级别上，所以方法中的变量或参数只有为final，内部类才可以引用，因为Java采用了一种copy local variable的方式来实现，也就是说把定义为final的局部变量拷贝过来用，而引用的也可以拿过来用，只是不能重新赋值。</p>
-</li>
-<li><strong>JDK8的新特性</strong>:<ul>
-<li><strong>新增函数接口</strong>，引入注解@FunctionalInterface，函数式接口就是只有一个方法的普通接口</li>
-<li><strong>接口可以有默认方法和实现以及静态方法</strong></li>
-<li>取消方法区/永久代，采用元空间取代</li>
-<li>新的Date-Time API</li>
-<li>引入Optional类来防止空指针异常，它可以保存类型T的值，或者保存null。使用Optional类我们就不用显式进行空指针检查，主要是利用orElseGet(),flatMap()等函数</li>
-<li>Process类现在增加了两个新的方法用于<strong>终止进程</strong>；第一个是isAlive()方法，有了它你可以判断进程是否还活着。第二个方法则更加强大，它叫destroyForcibly()，你可以用它来强制的杀掉一个已经超时或者不再需要的进程</li>
-<li>Java8引入了一个<strong>新的读写锁StampedLock</strong>。它不仅更快，同时还提供了一系列强大的API来实现乐观锁，这样如果没有写操作在访问临界区域的话，你只需很低的开销就能获取到一个读锁。访问结束后你可以查询锁来判断这期间是否发生了写操作，如果有的话再选择进行重试，升级锁，或者放弃这个操作</li>
-<li><strong>新的增强的随机数生成方法SecureRandom.getinstanceStrong()</strong>，它能自动选择出当前JVM可用的最佳的随机数生成器。这样减少了获取失败的机率，同时也避免了默认的弱随机数生成器可能会导致密钥或者加密值容易被黑客攻破的问题</li>
+<li>java对象的四种引用<br>1.<strong>强引用</strong> ：创建一个对象并把这个对象直接赋给一个变量，eg ：Person person = new Person(“sunny”); 不管系统资源有么的紧张，强引用的对象都绝对不会被回收，即使他以后不会再用到。<br>2.<strong>软引用</strong> ：通过SoftReference类实现，eg : SoftReference<person> p = new SoftReference<person>(new Person(“Rain”));内存非常紧张的时候会被回收，其他时候不会被回收，所以在使用之前要判断是否为null从而判断他是否已经被回收了。<br>3.<strong>弱引用</strong> ：通过WeakReference类实现，eg : WeakReference<person> p = new WeakReference<person>(new Person(“Rain”));不管内存是否足够，系统垃圾回收时必定会回收<br>4.<strong>虚引用</strong> ：不能单独使用，主要是用于追踪对象被垃圾回收的状态，为一个对象设置虚引用关联的唯一目的是希望能在这个对象被收集器回收时收到一个系统通知。通过PhantomReference类和引用队列ReferenceQueue类联合使用实现</person></person></person></person></li>
 </ul>
+<h3 id="常见垃圾回收算法参考图">常见垃圾回收算法<a href="https://yq.aliyun.com/articles/14411" target="_blank" rel="external">参考图</a></h3><ul>
+<li><strong>停止-复制算法</strong><br>这是一种非后台回收算法，将可用内存按容量划分为大小相等的两块，每次只使用其中的一块，内存浪费严重.它先暂停程序的运行，然后将所有存活的对象从当前堆复制到另外一个堆，没被复制的死对象则全部是垃圾，存活对象被复制到新堆之后全部紧密排列，就可以直接分配新空间了。此方法耗费空间且效率低，适用于存活对象少。</li>
+<li><strong>标记-清扫算法</strong><br>同样是非后台回收算法，该算法从堆栈区和静态域出发，遍历每一个引用去寻找所有需要回收的对象，对每个找到需要回收对象都进行标记。标记结束之后，开始清理工作，被标记的对象都会被释放掉，如果需要连续堆空间，则还需要对剩下的存货对象进行整理;否则会产生大量内存碎片</li>
+<li><p><strong>标记-整理算法</strong><br>先标记需要回收的对象，但是不会直接清理那些可回收的对象，而是将存活对象向内存区域的一端移动，然后清理掉端以外的内存。适用于存活对象多。</p>
 </li>
-<li><p><strong>Java 8 中的 Stream</strong> 是对集合（Collection）对象功能的增强，它专注于对集合对象进行各种非常便利、高效的聚合操作（aggregate operation），或者大批量数据操作 (bulk data operation)。Stream API 借助于同样新出现的 Lambda 表达式，极大的提高编程效率和程序可读性。同时它提供串行和并行两种模式进行汇聚操作，并发模式能够充分利用多核处理器的优势。通常编写并行代码很难而且容易出错, 但使用 Stream API 无需编写一行多线程的代码，就可以很方便地写出高性能的并发程序；Stream 可以并行化遍历操作，使用并行去遍历时，数据会被分成多个段，其中每一个都在不同的线程中处理，然后将结果一起输出; Stream 的并行操作依赖于 Java7 中引入的 Fork/Join 框架（JSR166y）来拆分任务和加速处理过程</p>
-<pre><code><span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> nums <span class="subst">=</span> Lists<span class="built_in">.</span>newArrayList(<span class="number">1</span>,<span class="built_in">null</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="built_in">null</span>,<span class="number">6</span>);
-<span class="comment">// 创建stream --&gt; map转换stream --&gt; reduce聚合函数</span>
-<span class="comment">// 含义：给定一个Integer类型的List，获取其对应的Stream对象，然后进行过滤掉null，再去重，再每个元素乘以2，再每个元素被消费的时候打印自身，在跳过前两个元素，最后取前四个元素进行加和运算</span>
-nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter(num <span class="subst">-&gt; </span>num <span class="subst">!=</span> <span class="built_in">null</span>)<span class="built_in">.
-               </span>distinct()<span class="built_in">.</span>mapToInt(num <span class="subst">-&gt; </span>num <span class="subst">*</span> <span class="number">2</span>)<span class="built_in">.
-               </span>peek(System<span class="built_in">.</span>out<span class="tag">::println</span>)<span class="built_in">.</span><span class="keyword">skip</span>(<span class="number">2</span>)<span class="built_in">.</span>limit(<span class="number">4</span>)<span class="built_in">.</span><span class="keyword">sum</span>();
-</code></pre></li>
-<li><p><strong>Java 8 中的 Lambda</strong> : 一段带有输入参数的可执行语句块,Lambda表达式取代了匿名类，取消了模板，允许用函数式风格编写代码。这样有时可读性更好，表达更清晰。书写形式：</p>
-<pre><code><span class="function"><span class="params">(params)</span> -&gt;</span> expression
-<span class="function"><span class="params">(params)</span> -&gt;</span> statement
-<span class="function"><span class="params">(params)</span> -&gt;</span> { statements }                      
-</code></pre></li>
-<li><strong>自动装箱</strong>就是Java自动将原始类型值转换成对应的对象，比如将int的变量转换成Integer对象，这个过程叫做装箱，反之将Integer对象转换成int类型值，这个过程叫做<strong>拆箱</strong>。自动装箱时编译器调用valueOf将原始类型值转换成对象，同时自动拆箱时，编译器通过调用类似intValue(),doubleValue()这类的方法将对象转换成原始类型值。原始类型byte,short,char,int,long,float,double和boolean对应的封装类为Byte,Short,Character,Integer,Long,Float,Double,Boolean。<strong><a href="http://www.importnew.com/15712.html" target="_blank" rel="external">存在问题</a></strong>: ①自动装箱会隐式地创建对象，如果在一个循环体中，会创建无用的中间对象，这样会增加GC压力，拉低程序的性能 ② 缓存对象，在Java中，会对-128到127的Integer对象进行缓存，当创建新的Integer对象时，如果符合这个这个范围，并且已有存在的相同值的对象，则返回这个对象，否则创建新的Integer对象。</li>
-<li>JDK             </li>
+<li><p><strong>分代算法</strong><br>在新生代中，每次垃圾收集时都会发现有大量对象死去，只有少量存活，因此可选用停止复制算法来完成收集，而老年代中因为对象存活率高、没有额外空间对它进行分配担保，就必须使用标记—清除算法或标记—整理算法来进行回收。</p>
+</li>
+</ul>
+<h3 id="JVM性能调优">JVM性能调优</h3><ol>
+<li>JVM分配超大堆（前提是物理机的内存足够大）来提升服务器的响应速度，但分配超大堆的前提是有把握把应用程序的 Full GC 频率控制得足够低，因为一次 Full GC 的时间造成比较长时间的停顿。控制 Full GC 频率的关键是保证应用中绝大多数对象的生存周期不应太长，尤其不能产生批量的、生命周期长的大对象，这样才能保证老年代的稳定</li>
+<li>分配超大堆时，如果用到了 NIO 机制分配使用了很多的 Direct Memory，则有可能导致 Direct Memory 的 OutOfMemoryError 异常，这时可以通过-XX:MaxDirectMemorySize 参数调整 Direct Memory 的大小</li>
+<li>调整线程堆栈，socket缓冲区，JNI占用的内存以及虚拟机、GC消耗的内存</li>
+<li><strong>“-Xms and -Xmx (or: -XX:InitialHeapSize and -XX:MaxHeapSize)”参数</strong>：分别指定初始堆和最大堆大小，Xms一般代表着堆内存的最小值，JVM在运行时可以动态调整堆内存大小，如果我们 设置Xms=Xmx就相当于设置了一个固定大小的堆内存；例如：“java -Xms128m -Xmx2g MyApp”启动一个初始化堆内存为 128M，最大堆内存为 2G，名叫 “MyApp” 的 Java 应用程序；当我们设置Xmx最大堆内存不恰当时就很容易发生内存溢出，这样我们可以通过设置 - XX:+HeapDumpOnOutOfMemoryError 让 JVM 在发生内存溢出时自动生成堆内存快照，默认保存在JVM的启动目录下名为 java_pid.hprof 的文件里，分析它可以很好地定位到溢出位置</li>
+</ol>
+<h3 id="Linux下面查看Jvm性能信息的命令">Linux下面查看Jvm性能信息的命令</h3><ol>
+<li><strong>jstat</strong>： 用于查看Jvm的堆栈信息，能够查看eden,survivor,old,perm等堆区的的容量，利用率信息，对于查看系统是不是有内存泄漏以及参数设置是否合理有不错的意义。例如’’’ jstat -gc 12538 5000 —- 即会每5秒一次显示进程号为12538的java进成的GC情况 ‘’’</li>
+<li><strong>jstack</strong>：用来查看Jvm当前的线程dump的，可以看到当前Jvm里面的线程状况，对于查找blocked线程比较有意义</li>
+<li><strong>jmap</strong>：用来查看Jvm当前的heap dump的，可以看出当前Jvm中各种对象的数量，所占空间等等；尤其值得一提的是这个命令可以导出一份binary heap dump的bin文件，这个文件能够直接用Eclipse Memory Anayliser来分析，并找出潜在的内存泄漏的地方。</li>
+<li><strong>非jvm命令—netstat</strong>：通过这个命令可以看到Linux系统当前在各个端口的链接状态，比如查看数据库连接数等</li>
+</ol>
+<h3 id="内存相关问题">内存相关问题</h3><ol>
+<li><strong>内存泄露</strong>是指分配出去的内存没有被回收回来，由于失去了对该内存区域的控制(例如你把它的地址给弄丢了)，因而造成了资源的浪费。Java 中一般不会产生内存泄露，因为有垃圾回收器自动回收垃圾，但这也不绝对，Java堆内也可能发生内存泄露（Memory Leak; 当我们 new 了对象，并保存了其引用，但是后面一直没用它，而垃圾回收器又不会去回收它，这边会造成内存泄露</li>
+<li><strong>内存溢出</strong>是指程序所需要的内存超出了系统所能分配的内存（包括动态扩展）的上限</li>
+<li><strong>符号引用</strong>：符号引用以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可。符号引用与虚拟机实现的内存布局无关，引用的目标并不一定已经加载到了内存中。</li>
+<li><strong>直接引用</strong>：直接引用可以是直接指向目标的指针、相对偏移量或是一个能间接定位到目标的句柄。直接引用是与虚拟机实现的内存布局相关的，同一个符号引用在不同虚拟机实例上翻译出来的直接引用一般不会相同。如果有了直接引用，那说明引用的目标必定已经存在于内存之中了。</li>
+<li><strong>双亲委派模型</strong>：表示类加载器之间的加载顺序从顶至下的层次关系，加载器之间的父子关系一般都是通过组合来实现，而不是继承。可以防止内存中出现多份同样的字节码，并确保加载顺序</li>
+<li><strong>双亲委派模型的工作过程</strong>是：在loadClass函数中，首先会判断该类是否被加载过，加载过则进行下一步—-解析，否则进行加载；如果一个类加载器收到了类加载器的请求，先不会自己尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父类加载器反馈自己无法完成这个加载请求（它的搜说范围中没有找到所需的类时，子加载类才会尝试自己去加载）</li>
+<li><strong>静态分派和动态分派</strong>：静态分派发生在编译阶段，是指依据静态类型(变量声明时定义的变量类型)来决定方法的执行版本，例如方法重载中依据参数的定义类型来定位具体应该执行的方法；动态分派发生在运行期，根据变量实例化时的实际类型来决定方法的执行版本，例如方法重写；目前的 Java 语言（JDK1.6）是一门<strong>静态多分派、动态单分派</strong>的语言。</li>
+<li><strong>动态分派具体实现</strong>Java虚拟机是通过在方法区中建立一个虚方法表，通过使用方法表的索引来代替元数据查找以提高性能。虚方法表中存放着各个方法的实际入口地址，如果子类没有覆盖父类的方法，那么子类的虚方法表里面的地址入口与父类是一致的；如果重写父类的方法，那么子类的方法表的地址将会替换为子类实现版本的地址。方法表是在类加载的连接阶段（验证、准备、解析）进行初始化，准备了子类的初始化值后，虚拟机会把该类的虚方法表也进行初始化。</li>
+<li><strong>JDK7和8中内存模型变化</strong>：JDK7中把String常量池从永久代移到了堆中，并通过intern方法来保证不在堆中重复创建一个对象；JDK7开始使用G1收集器替代CMS收集器。JDK8使用元空间来替代原来的方法区，并且提供了字符串去重功能，也就是G1收集器可以识别出堆中那些重复出现的字符串并让他们指向同一个内部char[]数组，而不是在堆中存在多份拷贝</li>
 </ol>
 <h3 id="参考链接">参考链接</h3><ol>
-<li><a href="http://ifeve.com/lambda/" target="_blank" rel="external">Java8初体验（一）lambda表达式语法</a></li>
-<li><a href="http://ifeve.com/stream/" target="_blank" rel="external">Java8初体验（二）Stream语法详解</a></li>
-<li><a href="http://www.importnew.com/16436.html" target="_blank" rel="external">Java8 lambda表达式10个示例</a></li>
+<li>《Java编程思想》</li>
+<li><a href="http://blog.jobbole.com/37273/" target="_blank" rel="external">Java的内存回收机制</a></li>
+<li><a href="http://blog.csdn.net/tutngfei1129287460/article/details/7383473" target="_blank" rel="external">java内存空间详解</a></li>
+<li><a href="http://www.jayfeng.com/2016/03/11/%E7%90%86%E8%A7%A3Java%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" target="_blank" rel="external">理解Java垃圾回收机制</a></li>
+<li><a href="http://howiefh.github.io/2015/04/08/jvm-note-2/" target="_blank" rel="external">深入理解Java虚拟机</a></li>
+<li><a href="http://286.iteye.com/blog/1931174" target="_blank" rel="external">Java堆内存和JVM参数</a></li>
+<li><a href="http://www.importnew.com/18961.html" target="_blank" rel="external">Java内存划分</a></li>
 </ol>
 
         
@@ -250,7 +312,9 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
       
         <div class="post-tags">
           
-            <a href="../../tags/Java/"> #Java </a>
+            <a href="../../tags/java/"> #java </a>
+          
+            <a href="../../tags/内存管理/"> #内存管理 </a>
           
         </div>
       
@@ -277,8 +341,8 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
           
           
             
-              <a class="post-title-link" href="../../2015/04/13/Java多线程同步方法/">
-                Java多线程同步方法
+              <a class="post-title-link" href="../../2015/07/26/利用Python框架Flask实现RESTful架构服务端/">
+                利用Python框架Flask实现RESTful架构服务端
               </a>
             
           
@@ -287,7 +351,471 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-04-13
+          发表于 2015-07-26
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/07/26/利用Python框架Flask实现RESTful架构服务端/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/26/利用Python框架Flask实现RESTful架构服务端/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>不管是进行app开发还是web开发，server端的开发都是必不可少的部分，最近打算尝试一下服务端开发；考虑到开发效率以及目前主流的前后端API标准，我打算采用python的flask框架来搭建一个简单server端作为移动app的Web Service来使用，API格式采用RESTful标准，本文将讲述RESTful架构服务端的大致实现过程。</p>
+<h2 id="RESTful架构">RESTful架构</h2><ol>
+<li><p><strong>什么是RESTful架构</strong>：</p>
+<ul>
+<li>每一个URI代表一种资源；</li>
+<li>客户端和服务器之间，传递这种资源的某种表现层</li>
+<li>客户端通过四个HTTP动词，对服务器端资源进行操作，实现”表现层状态转化”。</li>
+</ul>
+</li>
+<li><p><strong>Representational State Transfer 表现层状态转化</strong></p>
+<ul>
+<li>Resoure：资源—-所谓”资源”，就是网络上的一个实体，或者说是网络上的一个具体信息。它可以是一段文本、一张图片、一首歌曲、一种服务</li>
+<li>URL：统一资源定位符—-要获取资源，访问它的URL就可以了    * URI：统一资源标识符—-每种资源对应一个特定的URI</li>
+<li>Representation：表现层 —- 资源呈现形式，如json，text，html</li>
+<li>State Trasfer：状态转移 —- http无状态协议中的GET、POST、PUT、DELETE</li>
+</ul>
+</li>
+<li><p>REST架构设计六原则</p>
+<ul>
+<li>前后端统一接口</li>
+<li>无状态 —- 每次客户端请求必需包含完整的信息</li>
+<li>可缓存 —- 服务器端必需指定哪些请求是可以缓存的</li>
+<li>服务端客户端业务分离</li>
+<li>分层系统</li>
+<li>按需编码</li>
+</ul>
+</li>
+<li><p>优点</p>
+<ul>
+<li>可以利用缓存Cache来提高响应速度</li>
+<li>通讯本身的无状态性可以让不同的服务器的处理一系列请求中的不同请求，提高服务器的扩展性</li>
+<li>浏览器即可作为客户端，简化软件需求</li>
+<li>相对于其他叠加在HTTP协议之上的机制，REST的软件依赖性更小<br>*不需要额外的资源发现机制，在软件技术演进中的长期的兼容性更好</li>
+</ul>
+</li>
+</ol>
+<h2 id="API的设计实现">API的设计实现</h2><ol>
+<li><strong>注册登录的Token实现</strong><ul>
+<li><strong>Token是什么</strong>：是服务端生成的一串字符串，作为客户端进行请求的一个令牌；当客户端第一次登录时，服务端会去数据库查询用户名和密码并进行对比是否正确，如果正确服务器就会生成一个Token返回给客户端，并将该token存到服务器的session里边，以后客户端只需带上这个Token前来请求数据即可，通过比对session就可以验证登录，无需再次带上用户名和密码，也不需要再查询数据库。</li>
+<li><strong>Token有什么好处</strong>：可以减轻服务器的压力，减少频繁的查询数据库，使服务器更加健壮</li>
+<li><strong>Token的生成方式</strong>：服务端通过把客户端第一次登录时传输的部分参数(例如deviceId,MAC地址)+时间戳+随机salt进行拼接之后然后生成一个散列值，返回给客户端使用sharepreference保存，以后请求数据都要带上token</li>
+</ul>
+</li>
+<li><strong>传输数据的加密算法</strong>: 对用户名，密码，deviceID等重要隐私信息进行拼接然后RSA加密<ul>
+<li><strong>RSA算法</strong>: RSA是一种公钥加密算法(非对称加密)，它的加密和解密使用不同密钥。具体做法是这样，客户端在登录前先向服务器请求一个公钥密钥，然后用这个公钥密钥加密需要传输的数据(数据是指根据密码,用户名等生成的散列值)，然后发送给服务器。服务器使用私钥密钥解密，然后与根据数据库中的用户名和密码计算出来的散列值进行比较，一致的话，登录成功。然后服务端生成token返还给客户端，该token也需要进行加密比较安全，采用<a href="http://www.jianshu.com/p/ce79ce9d5dfd" target="_blank" rel="external">AES对称加密</a>，采用同一个密钥可以同时用作信息的加密和解密。</li>
+<li><strong>摘要算法</strong>主要有MD5和SHA-1，又叫作Hash算法或散列算法，是一种将任意长度的输入浓缩成固定长度的字符串的算法，这个过程是不可逆的； 保证不同内容的文件生成的散列值一定不同，相同内容的文件生成的散列值一定相同</li>
+<li><strong>数字签名</strong>主要经过以下几个过程： 信息发送者使用一单向散列函数（HASH函数）对信息生成信息摘要； 信息发送者使用自己的私钥签名信息摘要； 信息发送者把信息本身和已签名的信息摘要一起发送出去； 信息接收者通过使用与信息发送者使用的同一个单向散列函数（HASH函数）对接收的信息本身生成新的信息摘要，再使用信息发送者的公钥对信息摘要进行验证，以确认信息发送者的身份和信息是否被修改过。 </li>
+<li><strong>数字加密</strong>主要经过以下几个过程： 当信息发送者需要发送信息时，首先生成一个对称密钥，用该对称密钥加密要发送的报文； 信息发送者用信息接收者的公钥加密上述对称密钥； 信息发送者将第一步和第二步的结果结合在一起传给信息接收者，称为数字信封； 信息接收者使用自己的私钥解密被加密的对称密钥，再用此对称密钥解密被发送方加密的密文，得到真正的原文。 </li>
+<li><strong>区别</strong>数字签名和数字加密的过程虽然都使用公开密钥体系，但实现的过程正好相反，使用的密钥对也不同。<strong>数字签名</strong>使用的是发送方的密钥对，发送方用自己的私有密钥进行加密，接收方用发送方的公开密钥进行解密，这是一个一对多的关系，任何拥有发送方公开密钥的人都可以验证数字签名的正确性。<strong>数字加密</strong>则使用的是接收方的密钥对，这是多对一的关系，任何知道接收方公开密钥的人都可以向接收方发送加密信息，只有唯一拥有接收方私有密钥的人才能对信息解密。另外，数字签名只采用了非对称密钥加密算法，它能保证发送信息的完整性、身份认证和不可否认性，而数字加密采用了对称密钥加密算法和非对称密钥加密算法相结合的方法，它能保证发送信息保密性。</li>
+</ul>
+</li>
+</ol>
+<h2 id="Flask框架">Flask框架</h2><p>Flask框架是一个Python编写的基于Werkzeug WSGI工具箱和Jinja2模板引擎的轻量级web开发框架。Flask只保留了简单的核心，但是有着丰富的extension来实现其他功能模块以达到类似于Django这种全栈式框架的功能效果。例如ORM需要使用SQLAlchemy扩展、Oauth需要使用Oauthlib扩展, 此外还有大量的扩展用以支持数据库整合、表单验证、上传处理、缓存、生成后台和各种开放验证等等。</p>
+<h2 id="代码实现">代码实现</h2><p>下面我们将通过具体代码来运用Flask框架实现一个RESTful Web Service返回json数据以及template前端页面。该项目中有两个路由，一个用Flask-RESTful的路由形式返回json数据，另一个用Flask原生路由形式返回一个基于Jinja2模板的Flask-Bootstrap风格的注册登录页面；其中json数据通过SQLAlchemy插件从MySQL数据库中获取，然后显示到浏览器中。</p>
+<h3 id="配置Flask环境">配置Flask环境</h3><ol>
+<li><p><strong>新建一个Flask项目</strong>，步骤如下</p>
+<ul>
+<li>打开PyCharm编辑器(安装教程请Google)，点击File按钮，选择new project</li>
+<li>选择左侧列表中Flask选项，修改Location中的”untitled”为你想要的项目名称，选择合适的interpreter，一般默认即可，Pycharm会自动下载安装Flask框架</li>
+<li>点击Create，可以看到项目结构:static文件夹、templates文件夹、py文件；Flask项目创建成功</li>
+</ul>
+</li>
+<li><p><strong>Mac安装Flask框架遇到的小bug</strong><br>Pycharm自动安装Flask框架时使用的是”pip install Flask”命令，但是在mac中会因为没有sudo权限导致无法安装成功，Pycharm会提示我们去terminal中输入命令行安装；然而，当我们在命令行中输入”sudo pip install Flask”时却会发现下载安装过程中依然会出现“bad md5 hash mismatch”的报错，解决步骤如下:</p>
+<ul>
+<li>Step1:更新pip到1.3以上，输入命令”sudo pip install —upgrade pip”</li>
+<li>Step2:安装Flask不使用缓存，输入命令”sudo pip install —no-cache-dir Flask”</li>
+</ul>
+</li>
+<li><p><strong>部分需要用到的Flask插件pip安装命令</strong>  </p>
+<pre><code><span class="comment"># Flask-RESTful插件: 用于快速开发REST API</span>
+sudo pip <span class="keyword">install</span> flask-restful
+
+<span class="comment"># Flask-Bootstrap插件: 用于构建Bootsrap风格的网页；也可以直接下载引用Bootstrap</span>
+sudo pip <span class="keyword">install</span> flask-bootstrap
+
+<span class="comment"># Flask-Pymysql插件: 一个类似于mysqldb的Python数据库驱动插件</span>
+sudo pip <span class="keyword">install</span> flask-pymysql 
+
+<span class="comment"># Flask-SQLAlchemy插件: 一个用于操作SQL数据库的ORM</span>
+sudo pip <span class="keyword">install</span> flask-sqlalchemy
+</code></pre></li>
+</ol>
+<h3 id="配置MySQL数据库">配置MySQL数据库</h3><p>在该项目中，我们连接MySQL中的test数据库(如果该数据库不存在请自行创建)，然后新建一个user表，包含id和name两个属性，后面要显示到浏览器中的json数据就是从这个表中提取。我们可以通过直接执行MySQL命令来操作数据库，也可以在Python文件中通过SQLAlchemy来执行SQL语句操作数据库；当然这一切的前提是在你的计算机上安装MySQL并开启服务，我们推荐使用xampp集成安装环境，非常方便，而且同时适用于win和mac。下面列出<strong>常用的MySQL命令</strong>：</p>
+<pre><code># 创建表user，包含id(主键)、name两个字段
+<span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">user</span> (
+id <span class="built_in">int</span>(<span class="number">4</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">primary</span> <span class="keyword">key</span>, name <span class="built_in">varchar</span>(<span class="number">20</span>)
+) <span class="keyword">engine</span>=<span class="keyword">innodb</span> <span class="keyword">default</span> <span class="keyword">charset</span>=utf8;</span>
+
+# 创建表book，包含id(主键)、name、user_id三个字段，其中user_id字段为book表的外键字段名
+对应user表中的id字段，一个user可能有一本或多本book
+<span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> book (
+id <span class="built_in">int</span>(<span class="number">4</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">primary</span> <span class="keyword">key</span>, name <span class="built_in">varchar</span>(<span class="number">20</span>), user_id <span class="built_in">varchar</span>(<span class="number">20</span>)
+) <span class="keyword">engine</span>=<span class="keyword">innodb</span> <span class="keyword">default</span> <span class="keyword">charset</span>=utf8;</span>
+
+# 给book表增加一个category字段
+<span class="operator"><span class="keyword">alter</span> <span class="keyword">table</span> book <span class="keyword">add</span> category <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">primary</span> <span class="keyword">key</span>;</span>
+
+# 列出表book的结构
+desc book;
+
+# 列出表book所有数据
+<span class="operator"><span class="keyword">select</span> * <span class="keyword">from</span> book
+
+# 清空表book所有数据
+<span class="keyword">truncate</span> <span class="keyword">table</span> book
+
+# 添加外键
+<span class="keyword">alter</span> <span class="keyword">table</span> book <span class="keyword">add</span> <span class="keyword">constraint</span> FK_ID <span class="keyword">foreign</span> <span class="keyword">key</span>(user_id) <span class="keyword">REFERENCES</span> <span class="keyword">user</span>(id);</span>
+
+# 删除外键, FK_ID为外键名
+<span class="operator"><span class="keyword">alter</span> <span class="keyword">TABLE</span> book <span class="keyword">DROP</span> <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> FK_ID;</span>
+</code></pre><h3 id="app-py">app.py</h3><p>在app.py中:<br>一方面: 我们通过SQLAlchemy连接数据库并查询user表中的用户数据信息，作为json数据返回给浏览器；这一部分采用RESTful插件实现, 通过访问localhost://5000/restful就可以看到返回的json数据<br>另一方面: 我们在flaskTest函数中加载login.html页面，该页面通过采用bootstrap框架实现.</p>
+<pre><code><span class="comment"># coding=utf-8</span>
+__author__ = <span class="string">'xiaoyong'</span>
+
+<span class="keyword">from</span> flask <span class="keyword">import</span> Flask, request, render_template
+<span class="keyword">from</span> flask.ext.bootstrap <span class="keyword">import</span> Bootstrap
+<span class="keyword">from</span> flask_restful <span class="keyword">import</span> fields, marshal_with, Api, Resource
+
+<span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> Column, String, create_engine, ForeignKey
+<span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> sessionmaker, relationship
+<span class="keyword">from</span> sqlalchemy.ext.declarative <span class="keyword">import</span> declarative_base
+
+<span class="keyword">import</span> json
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+app = Flask(__name__)
+api = Api(app)
+bootstrap = Bootstrap(app)
+
+<span class="comment"># 初始化MySQL数据库连接引擎</span>
+db_engine = create_engine(<span class="string">'mysql+pymysql://root:@localhost:3306/test'</span>)
+
+Base = declarative_base()
+
+
+<span class="comment"># 数据库表user对应的User对象</span>
+<span class="class"><span class="keyword">class</span> <span class="title">User</span><span class="params">(Base)</span>:</span>
+    __tablename__ = <span class="string">'user'</span>
+
+    id = Column(String(<span class="number">20</span>), primary_key=<span class="keyword">True</span>)
+    name = Column(String(<span class="number">20</span>))
+
+    <span class="comment"># 一对多外键关系</span>
+    books = relationship(<span class="string">'Book'</span>)
+
+
+<span class="class"><span class="keyword">class</span> <span class="title">Book</span><span class="params">(Base)</span>:</span>
+    __tablename__ = <span class="string">'book'</span>
+
+    id = Column(String(<span class="number">20</span>), primary_key=<span class="keyword">True</span>)
+    name = Column(String(<span class="number">20</span>))
+
+    user_id = Column(String(<span class="number">20</span>), ForeignKey(<span class="string">'user.id'</span>))
+
+
+<span class="comment"># 创建DBSession类型</span>
+DBSession = sessionmaker(bind=db_engine)
+<span class="comment"># 创建DBsession对象</span>
+session = DBSession()
+
+<span class="comment"># Query user表中的所有行数据</span>
+db_users = session.query(User).all()
+session.close()
+
+
+<span class="decorator">@app.route('/flask/&lt;user_name&gt;', methods=['GET', 'POST'])</span>
+<span class="function"><span class="keyword">def</span> <span class="title">flaskTest</span><span class="params">(user_name)</span>:</span>
+    <span class="comment"># 访问http://localhost:5000/flask/xy,进入登陆页</span>
+    <span class="keyword">if</span> user_name == <span class="string">'xy'</span> <span class="keyword">and</span> request.method == <span class="string">'GET'</span>:
+        <span class="keyword">return</span> render_template(<span class="string">'login.html'</span>)
+    <span class="comment"># 点击login，返回用户json数据</span>
+    <span class="keyword">if</span> request.method == <span class="string">'POST'</span> <span class="keyword">and</span> request.form[<span class="string">'user'</span>]:
+        u = request.form[<span class="string">'user'</span>]
+        p = request.form[<span class="string">'pw'</span>]
+        dic = {<span class="string">'user'</span>: u, <span class="string">'password'</span>: p}
+        <span class="keyword">return</span> json.dumps(dic)
+    <span class="keyword">else</span>:
+        <span class="keyword">return</span> <span class="string">'error url'</span>
+
+<span class="comment"># 返回的json数据模型</span>
+<span class="class"><span class="keyword">class</span> <span class="title">restfulModel</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, users, state)</span>:</span>
+        self.users = users
+        self.state = state
+
+
+<span class="comment"># marshal-蒙版</span>
+resource_fileds = {
+    <span class="string">'users'</span>: fields.List(fields.String),
+    <span class="string">'state'</span>: fields.String(default=<span class="string">''</span>),
+    <span class="string">'expires'</span>: fields.Float(default=<span class="number">0.0</span>),
+    <span class="string">'date'</span>: fields.DateTime(default=str(datetime.now()))
+
+}
+<span class="comment"># RESTful插件</span>
+<span class="class"><span class="keyword">class</span> <span class="title">restfulTest</span><span class="params">(Resource)</span>:</span>
+    <span class="decorator">@marshal_with(resource_fileds)</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span>
+        user_list = []
+        <span class="keyword">for</span> user <span class="keyword">in</span> db_users:
+            user_dic = {}
+            user_dic[<span class="string">'name'</span>] = user.name
+            user_dic[<span class="string">'id'</span>] = user.id
+            user_list.append(str(user_dic))
+        <span class="keyword">return</span> restfulModel(user_list, <span class="string">'OK'</span>)
+
+api.add_resource(restfulTest, <span class="string">'/restful'</span>)
+<span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:
+    app.run(debug=<span class="keyword">True</span>)
+</code></pre><h3 id="login-html">login.html</h3><p>该注册登录页面是基于Jinja2模板和bootstrap框架实现</p>
+<p>PS：实现该页面注册框居中的css代码:<br>form.form-signin {<br>        width: 20%;<br>        margin-left: auto;<br>        margin-right: auto;<br>    }</p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/login1.png" class="full-image">   </p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/login2.png" class="full-image">  </p>
+<h2 id="结语">结语</h2><p>上述即为通过Flask框架搭建资源服务器的大致过程，涉及到RESTful架构，SQLAlchemy ORM，Bootstrap，json处理等相关知识；我们可以看出利用Python框架搭建服务器的便捷性，很容易上手，如果需要深入学习相关知识请参考flask官网和相关extensions官网教程。</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/REST/"> #REST </a>
+          
+            <a href="../../tags/python/"> #python </a>
+          
+            <a href="../../tags/服务端开发/"> #服务端开发 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/06/12/五代十国史/">
+                五代十国史
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-06-12
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/读书札记/">读书札记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/06/12/五代十国史/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/12/五代十国史/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>在分分合合的中国历史上，除了耳熟能详的三国鼎立之外，五代十国绝对可以称得上是一段动乱不堪的战乱史。在这介于唐宋之间的五十多年里，政权更替，藩镇割据，骄兵悍将，自立弑主，层出不穷；几乎每个政权都逃脱不了短命的轮回。</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/五代十国/"> #五代十国 </a>
+          
+            <a href="../../tags/历史/"> #历史 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/06/12/彩云之南/">
+                彩云之南
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-06-12
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/在路上/">在路上</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/06/12/彩云之南/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/12/彩云之南/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>筹划已久的毕业旅行终于在6月初拉开帷幕~~~第一站便是为期9天的云南之行(6.3-6.11)。从昆明滇池到大理双廊，登苍山游洱海，沿三十公里洱海线骑行小普陀；夜宿丽江束河，古镇却多喧嚣；颠簸数百里山路只为一睹泸沽湖美貌，深入藏区一探香格里拉峡谷幽深。一路下来，各种奔波，各种惊艳，也遇上各种趣闻趣事趣人，的确不虚此行。
+          <div class="post-more-link text-center">
+            <a class="btn" href="../../2015/06/12/彩云之南/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/云南攻略/"> #云南攻略 </a>
+          
+            <a href="../../tags/毕业游记/"> #毕业游记 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/05/27/java重难点知识集锦/">
+                java重难点知识集锦
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-27
         </span>
 
         
@@ -307,8 +835,8 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2015/04/13/Java多线程同步方法/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/13/Java多线程同步方法/"></span>
+            <a href="../../2015/05/27/java重难点知识集锦/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/27/java重难点知识集锦/"></span>
             </a>
           </span>
           
@@ -323,298 +851,254 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 
       
         
-          <h3 id="同步VS异步_and_阻塞VS非阻塞_Link">同步VS异步 and 阻塞VS非阻塞 <a href="http://elf8848.iteye.com/blog/1739611" target="_blank" rel="external">Link</a></h3><ol>
-<li><strong>同步/异步与阻塞/非阻塞是两组不同的概念,它们可以共存组合,同步和异步与消息的通知机制有关,阻塞和非阻塞与程序等待消息(无所谓同步或者异步)时的状态有关</strong> <strong>同步</strong>：就是在发出一个功能调用时，在没有得到结果之前，该调用就不返回(<strong>与阻塞的区别</strong>很多时候当前线程还是激活的，只是从逻辑上当前函数没有返回而已)。<strong>异步</strong>：当一个异步过程调用发出后，调用者不能立刻得到结果；这个调用的部件在处理完成后，通过状态、通知和回调来通知调用者。<strong>阻塞</strong>：是指调用结果返回之前，当前线程会被挂起，函数只有在得到结果之后才会返回。<strong>非阻塞</strong>指在不能立刻得到结果之前，该函数不会阻塞当前线程，而会立刻返回。</li>
-<li>举例: 我去买一本书，立即买到了，这就是<strong>非阻塞</strong>；如果恰好书店没有，我就等一直等到书店有了这本书买到了才走，这就是<strong>阻塞</strong>；这两种情况，非阻塞和阻塞都可以称为<strong>同步</strong>。如果书店恰好没有，我就告诉书店老板，书来了告诉我一声让我来取或者直接送到我家，然后我就走了，这就是<strong>异步</strong>。</li>
+          <h3 id="复用类(继承组合)与多态">复用类(继承组合)与多态</h3><ol>
+<li><p>Java面向对象编程思想的三种基本特征：<strong>继承、封装、复合和多态</strong></p>
+<ul>
+<li><strong>封装</strong>：只公开代码的访问接口，隐藏其内部的数据和具体实现；通常采用public，protected，private来进行访问权限控制；封装可以隐藏实现细节，还可以使得代码模块化以对象形式呈现</li>
+<li><strong>继承、组合与代理之间的区别与联系</strong>：<strong>组合</strong>只是将对象引用置于新类中即可，表述的是一种has-a的关系，而<strong>继承</strong>通过extends关键字实现，自动得到基类中所有域和方法，表述的是一种is-a的关系；而<strong>代理</strong>是介于两者之间的一种关系，首先将对象引用置于新类中，然后在新类中构建同名方法来暴露该对象的所有方法(类似于继承)；<strong>继承</strong>可以扩展已存在的代码模块，并且表达出层次逻辑和归属关系</li>
+<li><strong>多态</strong>与向上转型相反，通常通过接口和抽象类来实现(覆盖重写方法)，我们把<strong>重载（overloading）称为编译时多态，把覆盖（overriding）称为运行时多态</strong>；多态可以达到接口重用的目的，深刻地体现了一种设计原则里-依赖倒置原则；程序要依赖超类（抽象类、接口）不要依赖具体类，基于接口的开发，而不是基于实现的开发。</li>
+<li><strong>运行时多态(也被称作动态绑定)</strong>是指允许将子类类型的引用赋值给父类类型的引用，赋值之后，父对象在执行期间(而非编译期间)就可以根据当前赋值给它的子对象的特性以不同的方式运作,根据实际类型判断并调用相应的属性和方法;<strong>编译时的多态</strong>是指参数列表的不同, 来区分不同的函数, 在编译后, 就自动变成两个不同的函数名.</li>
+<li><strong>动态绑定的底层实现</strong>是指针,我们知道程序中的方法是一段代码,存放在专门的内存区域(代码区),当我们在程序执行期间new 出一个对象后调用其方法的时候,JVM动态的把指针指向实际的对象重写的方法,从而实现了动态绑定.</li>
+<li><strong>动态绑定的最大好处</strong>就是给我们的程序的可扩展性带来了相当大的提高；如果没有动态绑定,我们一般情况下的做法是在子类中用instanceof判断一个对象是不是我们需要的当前具体对象,但当我们定义好多个子类的时候,每次都要判断,现在有了动态绑定,我们不需要再去判断,而是JVM动态给我们指向具体的对象并调用相应的属性和方法.</li>
+</ul>
+</li>
+<li><p><strong>继承与初始化</strong>：导出类继承自基类，构造器调用顺序是从上至下基类到导出类层层调用，若是默认构造器则不需要在导出类中显式调用基类构造器，否则需要首先在导出类构造器中使用super关键字调用基类构造器。见《Java编程思想P146和P158》</p>
+</li>
 </ol>
-<h3 id="Java对象锁和类锁">Java对象锁和类锁</h3><ol>
-<li>在Java程序运行时环境中，JVM需要对两类线程共享的数据进行协调：①保存在堆中的实例变量 ②保存在方法区中的类变量。</li>
-<li>一个线程可以多次对同一个对象上锁。对于每一个对象，java虚拟机维护一个加锁计数器，线程每获得一次该对象，计数器就加1，每释放一次，计数器就减 1，当计数器值为0时，对象就被完全释放了。</li>
-<li>对于同一个类A，线程1争夺A对象实例的对象锁，线程2争夺类A的类锁，这两者不存在竞争关系。也就说对象锁和类锁互补干预内政</li>
+<h3 id="接口与内部类">接口与内部类</h3><ol>
+<li><strong>接口与抽象类的区别联系</strong>：<ul>
+<li>一个类可以实现多个接口但是只能实现一个抽象类 </li>
+<li>接口中都是抽象方法，抽象类中可以有实现的方法</li>
+<li>接口中方法都是public的，属性都是public static final的;但是抽象类中方法和属性都可以自由定义修饰符</li>
+<li>接口不能有构造器，抽象类可以有构造器，但是两者都不能实例化</li>
+</ul>
+</li>
+<li><p><strong>静态内部类(嵌套类)与非静态内部类，方法内部类，匿名内部类区别</strong>：</p>
+<ul>
+<li>嵌套类不需要内部类对象与外围类对象之间有联系，而内部类自动拥有其外围类所有成员的访问权(因为内部类对象拥有一个指向其外围类对象的引用);创建内部类对象之前需要先创建外围类对象，而创建嵌套类对象则不需要</li>
+<li>嵌套类不能访问外围类的非静态属性，但是内部类可以访问外围类的所有属性和方法(包括private)，内部类不能有static变量</li>
+<li>局部内部类: 该类被创建在外围类的方法或者作用域中，局部内部类的访问仅限于方法内或者该作用域内</li>
+<li><p>匿名内部类: 在java Listener中出现的非常多，必须继承某个接口或者父类，在其中只能重写一个方法；没有修饰符;匿名内部类是唯一一种没有构造器的类。正因为其没有构造器，所以匿名内部类的使用范围非常有限，大部分匿名内部类用于接口回调。匿名内部类在编译的时候由系统自动起名为Outter$1.class；多线程的实现也是匿名内部类的一种</p>
+<pre><code>scan_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {
+    @<span class="type">Override</span>
+    public <span class="type">void</span> onClick(<span class="type">View</span> v) {
+        // <span class="type">TODO</span> <span class="type">Auto</span>-generated <span class="keyword">method</span> stub
+
+    }
+});
+
+history_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {       
+    @<span class="type">Override</span>
+    public <span class="type">void</span> onClick(<span class="type">View</span> v) {
+        // <span class="type">TODO</span> <span class="type">Auto</span>-generated <span class="keyword">method</span> stub
+
+    }
+});
+</code></pre></li>
+<li>成员内部类，就是作为外部类的成员，可以直接使用外部类的所有成员和方法，即使是private的。虽然成员内部类可以无条件地访问外部类的成员，而外部类想访问成员内部类的成员却不是这么随心所欲了。在外部类中如果要访问成员内部类的成员，必须先创建一个成员内部类的对象，再通过指向这个对象的引用来访问</li>
+</ul>
+</li>
+<li><strong>为什么需要内部类？</strong><ul>
+<li>内部类提供了进入和操作外围类的窗口，可以直接调用外部类的private方法和属性，但是外部类却不可以调用内部类的方法和属性</li>
+<li>内部类完善了“多重继承”机制，他能提供继承多个具体类或抽象类的能力</li>
+<li>内部类可以更好地封装，它被封装在外部类里，不允许同包其他类访问</li>
+</ul>
+</li>
+<li><strong>内部类的继承与覆盖</strong> —- 见《Java编程思想P212》</li>
 </ol>
-<h3 id="互斥锁与读写锁">互斥锁与读写锁</h3><ol>
-<li><strong>互斥锁</strong>：任意时刻，只能有一个线程持有锁。即假设A线程已经获取了锁，在A线程释放这个锁之前，B线程是无法获取到这个锁的，B要获取这个锁就会进入阻塞状态。例如synchronized和ReentrantLock都属于互斥锁</li>
-<li><strong>读写锁ReadWriteLock</strong>：Java并发包中实现<strong>ReadWriteLock接口的ReentrantReadWriteLock</strong>，它并没有实现Lock接口，是其内部类ReadLock和WriteLock实现了Lock的接口<ul>
-<li>在真实的业务场景中，通常会出现<strong>对一份数据的读取操作次数远高于写入操作</strong>这种读多写少的场景，而线程与线程间的读读操作是不涉及到线程安全的问题，没有必要加入互斥锁</li>
-<li>所以读写锁只要满足<strong>“读-读”不互斥 ，”读-写”互斥 ，”写-写”互斥</strong>；也就是说只要在任何时候必须保证：①只有一个线程在写入；②线程正在读取的时候，写入操作等待；③线程正在写入的时候，其他线程的写入操作和读取操作都要等待；这样，使用读写锁就可以大大提高效率</li>
-<li><a href="http://www.cnblogs.com/Gordon-YangYiBao/archive/2012/09/12/2681874.html" target="_blank" rel="external">读写锁实例讲解</a></li>
+<h3 id="异常处理与类型信息">异常处理与类型信息</h3><ol>
+<li>异常处理是java中唯一正式的错误报告机制，用于解决运行期间遇到的问题；可以用try……catch进行捕获也可以在定义方法或者类时使用throws声明。</li>
+<li><strong>Error类和Exception类区别</strong>它们的父类都是throwable类，他们的区别是：<ul>
+<li><strong>Error类</strong>一般是指与虚拟机相关的问题，如系统崩溃，虚拟机错误，内存空间不足，方法调用栈溢等。对于这类错误的导致的应用程序中断，仅靠程序本身无法恢复和和预防，遇到这样的错误，建议让程序终止。</li>
+<li><strong>Exception类</strong>表示程序可以处理的异常，可以捕获且可能恢复。遇到这类异常，应该尽可能处理异常，使程序恢复运行，而不应该随意终止异常。</li>
+<li>Exception类又分为<strong>运行时异常（Runtime Exception）</strong>和<strong>受检查的异常(Checked Exception )</strong>，运行时异常;ArithmaticException算术异常,IllegalArgumentException非法参数异常，NullPointerException 空指针异常，编译能通过，但是一运行就终止了，程序不会处理运行时异常，出现这类异常，程序会终止。而受检查的异常，要么用try……catch捕获，要么用throws字句声明抛出，交给它的父类处理，否则编译不会通过，SQLException</li>
+</ul>
+</li>
+<li><strong>return与finally</strong>：<ul>
+<li>在try里边return会先return再执行finally；在catch里边return则先执行finally再return</li>
+<li>在finally里边return会导致异常丢失，不再抛出异常(另一种异常丢失是因为前一个异常还没处理就抛出下一个异常，前一个异常就丢失了)</li>
 </ul>
 </li>
 </ol>
-<h3 id="Synchronized代码块和方法">Synchronized代码块和方法</h3><ol>
-<li>synchronized关键字强制实施一个<strong>互斥锁</strong>，使得被保护的代码块在同一时间只能有一个线程进入并执行，用于防止多线程访问临界共享资源出现数据不一致性；但是<strong>同步是一种高开销的操作</strong>(因为在锁竞争激烈的情况下，各个线程不断在阻塞和运行状态之间切换会导致操作系统的上下文切换开销非常大)，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；</li>
-<li><p>Synchronized锁住的是对象或者类,对象被锁住时，该对象所有的其他同步方法和代码块不能被执行；类被锁住时，该类所有的其他同步静态方法和代码块不能被执行</p>
-<pre><code><span class="class"><span class="keyword">class</span> <span class="title">Bank</span> </span>{
-    <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
+<h3 id="Java反射机制">Java反射机制</h3><ol>
+<li><p><strong>反射</strong>：反射机制不但可以让我们在程序运行时获取类的函数、属性、父类、接口等 Class 内部信息，还可以让我们在运行期实例化对象，调用方法，通过调用get/set方法获取变量的值，即使方法或属性是私有的的也可以通过反射的形式调用，可以用于使用在编译器为程序生成代码之后很久才会出现的类，比如基于构建编程和远程方法调用，主要是通过Class类和java.lang.reflect类库来实现</p>
+<pre><code>//记载指定路径中的<span class="class"><span class="keyword">class</span>对象的两个方法</span>
+<span class="class"><span class="keyword">Class</span>.<span class="title">forName</span>(<span class="title">String</span> <span class="title">className</span>);</span>
+<span class="keyword">public</span> static <span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">forName</span> (<span class="title">String</span> <span class="title">className</span>, <span class="title">boolean</span> <span class="title">shouldInitialize</span>, <span class="title">ClassLoader</span> <span class="title">classLoader</span>)</span>
 
-    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
-        <span class="keyword">return</span> account;
-    }
+//编译器获取类的<span class="class"><span class="keyword">class</span>对象</span>
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">myObjectClass</span> = <span class="title">MyObject</span>.<span class="title">class</span>;</span>
+//编译器获取对象的<span class="class"><span class="keyword">class</span>对象</span>
+Student me = <span class="keyword">new</span> Student(<span class="string">"mr.simple"</span>);    
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">clazz</span> = <span class="title">me</span>.<span class="title">getClass</span>();</span>
 
-    <span class="javadoc">/**
-     * 用同步方法实现
-     * 
-     *<span class="javadoctag"> @param</span> money
-     */</span>
-    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
-        account += money;
-    }
+// 运行期获取指定路径的 <span class="class"><span class="keyword">Class</span> 对象</span>
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">clz</span> = <span class="title">Class</span>.<span class="title">forName</span>("<span class="title">org</span>.<span class="title">java</span>.<span class="title">advance</span>.<span class="title">reflect</span>.<span class="title">Student</span>");</span>
+// 通过 <span class="class"><span class="keyword">Class</span> 对象获取 <span class="title">Constructor</span>，<span class="title">Student</span> 的构造函数有一个字符串参数</span>
+// 因此这里需要传递参数的类型 ( Student 类见后面的代码 )
+Constructor&lt;?&gt; constructor = clz.getConstructor(String.class);
+// 通过 Constructor 来创建 Student 对象
+Object obj = constructor.newInstance(<span class="string">"mr.simple"</span>);
+//获取父类和接口
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">superClass</span> = <span class="title">obj</span>.<span class="title">getClass</span>().<span class="title">getSuperclass</span>();</span>
+<span class="class"><span class="keyword">Class</span>&lt;?&gt;[] <span class="title">interfaceses</span> = <span class="title">obj</span>.<span class="title">getClass</span>().<span class="title">getInterfaces</span>();</span>
 
-    <span class="javadoc">/**
-     * 用同步代码块实现
-     * 
-     *<span class="javadoctag"> @param</span> money
-     */</span>
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save1</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
-        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) {
-            account += money;
-        }
-    }
+System.out.println(<span class="string">" obj :  "</span> + obj.toString());
+</code></pre><ul>
+<li>Class 中的 <strong>getDeclaredMethods</strong> 函数，它会获取到当前类中的public、default、protected、private 的所有方法; <strong>getDeclaredMethod(String name, Class…&lt;?&gt; parameterTypes)</strong>则是获取当前类中某个指定的方法</li>
+<li>Class 中的 <strong>getMethods</strong> 函数用于获取当前类以及父类中的所有 public 方法，而 <strong>getMethod(String name, Class…&lt;?&gt; parameterTypes)</strong> 则是获取某个指定的public方法</li>
+<li>Class 中的 <strong>getDeclaredFields</strong> 函数，它会获取到当前类中的public、default、protected、private 的所有属性; <strong>getDeclaredField(String name)</strong>则是获取当前类中某个指定的属性</li>
+<li>Class 中的 <strong>getFields</strong> 函数用于获取当前类以及父类中的所有 public 属性，而 <strong>getField(String name)</strong> 则是获取某个指定的public属性    </li>
+</ul>
+</li>
+<li><strong>RTTI(Run-Time Type Identification)</strong>：在运行时识别对象的类型；其主要限制是在编译时就必须已知对象类型，也就是知道类名，它的三种应用场景：①类型转换 如：Shape s = (Shape)circle　②Shape.class这种类字面常量　③instanceof判断某对象是否是某类或其之类的实例</li>
+<li><strong>RTTI和反射之间真正的区别</strong>在于：对RTTI来说，编译器在编译时打开和检查.class文件；对于反射机制来说，.class文件在编译时不可获取，只有等到运行时才能打开和检查。</li>
+</ol>
+<h3 id="枚举、注解与泛型">枚举、注解与泛型</h3><ol>
+<li><a href="http://www.cnblogs.com/happyPawpaw/archive/2013/04/09/3009553.html" target="_blank" rel="external">Java Enum用法</a></li>
+<li>注解又叫做元数据，一种在代码中添加信息的形式化方法，该信息可以在后期利用反射机制进行使用，我们可以通过编写注解处理器来解析代码中的注解，也可以使用apt来解析。</li>
+<li><strong>泛型</strong>主要是用于容器定义，泛型是通过类型擦除来实现的，编译器在编译时擦除了所有类型相关的信息，所以在运行时不存在任何类型相关的信息。例如 List<string>在运行时仅用一个List来表示。它提供了编译期的类型安全，确保你只能把正确类型的对象放入集合中，避免了在运行时出现ClassCastException。</string></li>
+</ol>
+<h3 id="字符串与数组">字符串与数组</h3><h3 id="持有对象的容器">持有对象的容器</h3><h3 id="java_I/O系统与并发">java I/O系统与并发</h3><h3 id="final、finally和finalize对比">final、finally和finalize对比</h3><ul>
+<li>final用于声明属性方法和类，分别表示：属性不可变，方法不可覆盖，类不可继承。可以用于关闭方法动态绑定</li>
+<li>finally是异常处理语句的一部分，表示总是执行。一般用于释放除内存之外的资源(例如已打开的文件或者网络连接)</li>
+<li>finalize是Object的一个方法，在垃圾收集器执行的时候会调用被回收对象的此方法。</li>
+</ul>
+<h3 id="String、StringBuffer和StringBuilder区别">String、StringBuffer和StringBuilder区别</h3><ul>
+<li>如果一个对象，在它创建完成之后，不能再改变它的状态，那么这个<strong>对象就是不可变的</strong>。不能改变状态的意思是，不能改变对象内的成员变量，包括基本数据类型的值不能改变，引用类型的变量不能指向其他的对象，引用类型指向的对象的状态也不能改变。</li>
+<li><strong>String类对象</strong>是不可变对象，其在创建之后不能再改变其所拥有的所有private final成员变量；因为String类本身就是final类而且其源码中的char[]数组引用，offset(记录字符串首字母在value数组中对应的下标),count(记录字符串的长度)，hash等变量也是final的(JDK1.7中只存在hash和char[]数组),除非使用反射机制去改变char[]引用指向的堆中的数组数据；而String的substring， replace， replaceAll， toLowerCase等函数都是新建一个堆中的String对象然后返回给String的引用，从而使得引用指向了新的String对象，并没有改变原来的String对象</li>
+<li><strong>字符串常量池</strong>：首先需要确认<strong>字符串常量池存放的是对象引用，不是对象，字符串常量池存在于方法区中(JDK8移到了堆中)，而对象都创建在堆内存中</strong>；<ul>
+<li>当代码中出现字面量形式(String str1 = “droid”;)创建字符串对象时，JVM首先会对这个字面量进行检查，如果字符串常量池中存在相同内容的字符串对象的引用，则将这个引用返回，否则新的字符串对象被创建，然后将这个引用放入字符串常量池，并返回该引用；</li>
+<li>当我们使用了new来构造字符串对象的时候，不管字符串常量池中有没有相同内容的对象的引用，新的字符串对象都会创建</li>
+<li>字符串常量池的<strong>好处</strong>就是减少相同内容字符串的创建，节省内存空间。<strong>坏处</strong>牺牲了CPU计算时间来换空间。CPU计算时间主要用于在字符串常量池中查找是否有内容相同对象的引用。不过其内部实现为HashTable，所以计算成本较低。 <a href="http://droidyue.com/blog/2014/12/21/string-literal-pool-in-java/" target="_blank" rel="external">Link</a></li>
+</ul>
+</li>
+<li><p>用反射可以反射出String对象中的私有 value属性， 进而改变通过获得的char[]引用去改变数组的结构，例如：</p>
+<pre><code><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testReflection</span><span class="params">()</span> throws Exception </span>{  
+
+<span class="comment">//创建字符串"Hello World"， 并赋给引用s  </span>
+String s = <span class="string">"Hello World"</span>;   
+
+System.<span class="keyword">out</span>.println(<span class="string">"s = "</span> + s); <span class="comment">//Hello World  </span>
+
+<span class="comment">//获取String类中的value字段  </span>
+Field valueFieldOfString = String.class.getDeclaredField(<span class="string">"value"</span>);  
+
+<span class="comment">//改变value属性的访问权限  </span>
+valueFieldOfString.setAccessible(<span class="keyword">true</span>);  
+
+<span class="comment">//获取s对象上的value属性的值  </span>
+<span class="keyword">char</span>[] <span class="keyword">value</span> = (<span class="keyword">char</span>[]) valueFieldOfString.<span class="keyword">get</span>(s);  
+
+<span class="comment">//改变value所引用的数组中的第5个字符  </span>
+<span class="keyword">value</span>[<span class="number">5</span>] = <span class="string">'_'</span>;  
+
+System.<span class="keyword">out</span>.println(<span class="string">"s = "</span> + s);  <span class="comment">//Hello_World  </span>
 }
 </code></pre></li>
-</ol>
-<h3 id="ReentrantLock可重入锁">ReentrantLock可重入锁</h3><ol>
-<li>可重入锁，也叫做递归锁，指的是同一线程外层函数获得锁之后，内层递归函数仍然有获取该锁的代码，但不受影响;即被同一个线程多次获取，而不会产生死锁。在JAVA环境下 ReentrantLock 和synchronized 都是可重入锁</li>
-<li>ReentrantLock是可重入、互斥、实现了Lock接口的锁，需要自己手动加锁与释放；要注意及时释放锁，否则会出现死锁，通常在finally代码释放锁；它能完成Synchronized所实现的所有功能,而且性能上有一定提升</li>
-<li><strong>ReentrantLock的常用方法</strong>:<ul>
-<li>lock(), 如果获取了锁立即返回，如果别的线程持有锁，当前线程则一直处于休眠状态，直到获取锁</li>
-<li>lockInterruptibly -&gt; 调用后一直阻塞到获得锁(和lock()一样)，但是接受中断信号</li>
-<li>tryLock(), 如果获取了锁立即返回true，如果别的线程正持有锁，立即返回false</li>
-<li>tryLock(long timeout,TimeUnit unit)，如果获取了锁定立即返回true，如果别的线程正持有锁，会等待参数给定的时间，在等待的过程中，如果获取了锁定，就返回true，如果等待超时，返回false</li>
-</ul>
+<li><p><strong>StringBuilder</strong>：非线程安全的可变字符串，单线程时字符串拼接最快</p>
 </li>
-<li><strong>synchronized和ReentrantLock的主要区别</strong><ul>
-<li><strong>ReentrantLock新特性</strong><ol>
-<li>等待可中断—-在持有锁的线程长时间不释放锁的时候,等待的线程可以选择放弃等待. 使用tryLock(long timeout, TimeUnit unit)方法</li>
-<li>公平锁(按照申请锁的顺序来依次获得锁称为公平锁)—-synchronized的是非公平锁,ReentrantLock可以通过构造函数实现公平锁. new RenentrantLock(boolean fair)</li>
-<li>可绑定多个Condition—-通过多次newCondition可以获得多个Condition对象,可以简单的通过await(),signal()方法实现比较复杂的线程同步的功能</li>
-</ol>
-</li>
-<li><strong>使用场景</strong>并发量比较小的情况下，Synchronized的性能要优于ReetrantLock，但是在并发量比较高，资源竞争很激烈的情况下，其性能下降很严重，此时ReentrantLock是个不错的方案;如果synchronized关键字能满足用户的需求，就用synchronized，因为它能简化代码，可读性高，而且编译器会尽可能优化synchronize</li>
-</ul>
-</li>
-</ol>
-<pre><code><span class="keyword">class</span> <span class="title">Bank</span> {
-<span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
-<span class="comment">// 创建一个ReentrantLock锁</span>
-<span class="keyword">private</span> Lock <span class="keyword">lock</span> = <span class="keyword">new</span> ReentrantLock();
+<li><p><strong>StringBuffer</strong>：通过调用其append和insert方法来添加字符；线程安全的可变字符串，因为内部的方法都加了synchronized关键字; String 对象的字符串拼接其实是被 JVM 解释成了 StringBuffer 对象的拼接</p>
+<pre><code><span class="comment">// String +操作快</span>
+<span class="built_in">String</span> S1 = “This <span class="keyword">is</span> only a” + “ simple” + “test”; <span class="comment">//其实就是：String S1 = “This is only a simple test”</span>
 
-<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
-    <span class="keyword">return</span> account;
-}
-
-<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
-    <span class="keyword">lock</span>.<span class="keyword">lock</span>();    <span class="comment">// 获得锁 </span>
-    <span class="keyword">try</span> {
-        account += money;
-    } <span class="keyword">finally</span> {
-        <span class="keyword">lock</span>.unlock();    <span class="comment">// 释放锁</span>
-    }
-}
-}
-</code></pre><h3 id="自旋锁">自旋锁</h3><ol>
-<li><strong>自旋锁</strong>是对线程阻塞的一种优化，他的原理是当线程争用锁失败的时候不立即进入阻塞状态，而是再等一会，因为对于执行时间短的代码这一会可能就会释放锁，而线程就不需要进行一次阻塞与唤醒。这个等待操作就是让线程多执行几个空指令，至于等待多久这跟具体的处理器实现有关，也有可能处理器根本不支持自旋锁，具体实现的时候我们可以设置一个临界值，当超过了这个临界值之后我们就不自旋了，就乖乖进入阻塞状态吧。这种优化对于执行时间短的代码是很有效的。synchronized使用自旋锁的时机是线程进入等待队列即阻塞的前一步。</li>
-<li><strong>无锁</strong>例如Disruptor并发框架，Disruptor底层依赖一个RingBuffer来进行线程之间的数据交换，在并发条件下，多线程对RingBuffer的读和写不会涉及到锁，然而因为RingBuffer满或者RingBuffer中没有可消费内容引发的线程等待，那就要另当别论了。<strong>Disruptor无锁原理</strong>RingBuffer维护者可读和可写的指针，也叫游标，它指向生产者或消费者需要写或读的位置，而对于指针的更新是由CAS来完成的，这个过程中我们不需要加锁/解锁的过程。<h3 id="ThreadLocal线程局部变量">ThreadLocal线程局部变量</h3></li>
-<li><strong>ThreadLocal与同步机制区别</strong>：a.ThreadLocal与同步机制都是为了解决多线程中相同变量的访问冲突问题。b.前者采用以”空间换时间”的方法，后者采用以”时间换空间”的方式</li>
-<li><strong>性质</strong>每一个使用ThreadLocal变量的线程都获得该变量的副本，副本之间相互独立，这样每一个线程都可以随意修改自己的变量副本，而不会对其他线程产生影响</li>
-<li><strong>四个函数</strong>：initialValue函数用于获取此线程局部变量的初始值；get用于获取此线程局部变量在当前线程中的副本值，set用于设置，remove用于移除此线程局部变量在当前线程中的副本值；<strong>顺序</strong>在进行get之前，必须先set，否则会报空指针异常；如果想在get之前不需要调用set就能正常访问的话，必须重写initialValue()方法</li>
-<li><p><strong>实现原理</strong>：内部持有一个叫做ThreadLocalMap的内部类，从源码可以看出这个ThreadLocalMap的Entry继承了WeakReference，并且使用ThreadLocal作为键值，以键值对形式存储着[ThreadLocal对象, 存放的值]，每个线程中可有多个threadLocal变量</p>
-<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Bank</span> {
-    <span class="comment">// 使用ThreadLocal类管理共享变量account</span>
-    <span class="keyword">private</span> ThreadLocal&lt;Integer&gt; account = <span class="keyword">new</span> ThreadLocal&lt;Integer&gt;() {
-        @<span class="function">Override
-        <span class="keyword">protected</span> Integer <span class="title">initialValue</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> <span class="number">100</span>;
-        }
-    };
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
-        account.<span class="keyword">set</span>(account.<span class="keyword">get</span>() + money);
-    }
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
-        <span class="keyword">return</span> account.<span class="keyword">get</span>();
-    }
-}
+<span class="comment">// StringBuffer.append()更快</span>
+<span class="built_in">String</span> S2 = “This <span class="keyword">is</span> only a”;
+<span class="built_in">String</span> S3 = “ simple”;
+<span class="built_in">String</span> S4 = “ test”;
+<span class="built_in">String</span> S1 = S2 +S3 + S4;
 </code></pre></li>
-</ol>
-<h3 id="volatile变量可见性">volatile变量可见性</h3><p><strong>volatile</strong>: 在需要同步的变量上加上修饰符volatile，例如：private volatile int account = 100;volatile可以保证变量的可见性但是不保证原子性，不能用于修饰final常量，线程每一次对volatile变量的修改都会即时刷新到主存和通知到其他线程，也就是说每一次每个线程读取volatile变量时都会从主存中去取而不会从缓存寄存器中获取，以确保变量的值都是最新获取的;该关键字在JDK1.6开始可以保证指令不被重排序；但是他<strong>不能保证原子性，比如n++这种复合型操作</strong>;java虚拟机规范（jvm spec）中，规定了声明为volatile的long和double变量的get和set操作是原子的,所以将long和double类型的变量用volatile修饰，就可以保证对他们的赋值操作的原子性。<strong>适用场景</strong>：作为状态标识量适用，也在双重检查的单例中使用；适用于一个线程写，多个线程读的情况；两个条件:①对线程的写操作不依赖于当前值 ② 该变量没有包含在具有其他变量的不等式中 </p>
-<p><strong>CAS比较并交换操作</strong>：CAS 操作包含三个操作数 —— 内存位置（V）、预期原值（A）和新值(B). CAS有效地说明了“我认为位置 V 应该包含值 A；如果包含该值，则更新值为B；否则，不要更改该位置，只告诉我这个位置现在的值即可。” <strong>处理ABA情况</strong>，引入[引用, 版本号]机制来确保ABA也说明该数据已经被其他线程修改过</p>
-<p>例如，有一个变量i=0，Thread-1和Thread-2都对这个变量执行自增操作。 可能会出现Thread-1与Thread-2同时读取i=0到各自的工作内存中，然后各自执行+1，最后将结果赋予i。这样，虽然两个线程都对i执行了自增操作，但是最后i的值为1，而不是2。<br>解决这个问题使用互斥锁自然可以。但是也可以使用CAS来实现，思路如下：<br><strong>自增操作可以分为三步</strong>：（1）从内存中读取这个变量的当前值（2）执行（变量=上一步取到的当前值+1）的赋值操作 (3)将自增后的值写入变量</p>
-<p>多线程情况下，自增操作出现问题的原因就是执行（2）的时候，变量在主内存中的值已经不等于上一步取到的当前值了，所以赋值时，用CompareAndSet操作代替Set操作：首先比较一下内存中这个变量的值是否等于上一步取到的当前值，如果等于，则说明可以执行+1运算，并赋值；如果不等于，则说明有其他线程在此期间更改了主内存中此变量的值，上一步取出的当前值已经失效，此时，不再执行+1运算及后续的赋值操作，而是返回主内存中此变量的最新值。<strong>“比较并交换（compare_and_swap）”操作是原子操作，它使用平台提供的CPU级别上的用于并发操作的硬件原语</strong>。</p>
-<p><strong>原子（atom）</strong>本意是“不能被进一步分割的最小粒子”，而原子操作（atomic operation）意为”不可被中断的一个或一系列操作”  </p>
-<p><strong>基于CAS的并发算法称为“无锁定算法”，因为线程不必再等待锁定。“无锁定算法”要求某个线程总是执行操作</strong></p>
-<h3 id="Wait_&amp;&amp;_Notify同步(生产者消费者模式实现)">Wait &amp;&amp; Notify同步(生产者消费者模式实现)</h3><ol>
-<li><strong>Wait</strong>调用任意对象的wait()方法导致该线程阻塞，并释放该对象上的锁，进入等待对象同步锁的状态;<strong>Notify</strong>随机唤醒一个等待对象同步锁的线程</li>
-<li><strong>wait()方法</strong>：当缓冲区已满/空时，生产者/消费者线程停止自己的执行，放弃锁，使自己处于等待状态，让其他线程执行。<strong>notify()方法</strong>：当生产者/消费者向缓冲区放入/取出一个产品时，向其他等待的线程发出可执行的通知，同时放弃锁，使自己处于等待状态。</li>
-<li><strong>生产者-消费者（producer-consumer）问题</strong>，也称作有界缓冲区（bounded-buffer）问题，两个进程共享一个公共的固定大小的缓冲区。其中一个是生产者，用于将消息放入缓冲区；另外一个是消费者，用于从缓冲区中取出消息。问题出现在当缓冲区已经满了，而此时生产者还想向其中放入一个新的数据项的情形，其解决方法是让生产者此时进行休眠，等待消费者从缓冲区中取走了一个或者多个数据后再去唤醒它。同样地，当缓冲区已经空了，而消费者还想去取消息，此时也可以让消费者进行休眠，等待生产者放入一个或者多个数据时再唤醒它</li>
-<li><strong>如何停止消费者</strong>: 第一种方法: <strong>设置一个Volatile的boolean类型变量</strong>作为flag, 生产者结束后标示该变量为true, 消费者轮询这个变量来决定自己是否退出; 第二种方法: <strong>经典的“毒丸”策略</strong>，生产者结束后，把一个特别的对象：“毒丸”对象放入队列。消费者从队列中拿到对象后，判断是否是毒丸对象。如果是普通非毒丸对象，则正常消费。如果是毒丸对象，则放回队列（并杀死其他消费者），然后结束自己。  </li>
-<li>代码实现: </li>
-</ol>
-<pre><code><span class="keyword">public</span> class ProducerCustomer {
-
-<span class="comment">/**
- * @param args
- */</span>
-<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) {
-    Product product = <span class="keyword">new</span> Product(); <span class="comment">// 实例化产品对象</span>
-    Producer p = <span class="keyword">new</span> Producer(product); <span class="comment">// 实例化一个生产者</span>
-    Consumer c = <span class="keyword">new</span> Consumer(product); <span class="comment">// 实例化一个消费者</span>
-    <span class="keyword">new</span> Thread(p).start(); <span class="comment">// 开启生产者线程</span>
-    <span class="keyword">new</span> Thread(c).start(); <span class="comment">// 开启消费者线程</span>
-}
-
-<span class="comment">/**
- * 生产者线程
- */</span>
-<span class="keyword">static</span> class Producer implements Runnable {
-    <span class="keyword">private</span> Product product;
-
-    <span class="keyword">public</span> Producer(Product product) {
-        <span class="keyword">this</span>.product = product;
-    }
-
-    <span class="keyword">public</span> <span class="keyword">void</span> run() {
-        <span class="keyword">while</span> (<span class="keyword">true</span>) {
-            <span class="comment">// 同步代码锁</span>
-            <span class="keyword">synchronized</span> (product) {
-                <span class="keyword">try</span> {
-                    <span class="keyword">while</span> (product.getMax() == product.<span class="built_in">size</span>()) {
-                        <span class="comment">// 产品栈已经满,不需要再生产,执行线程等待操作</span>
-                        System.out.<span class="built_in">println</span>(<span class="string">"产品栈已满，生产者休息中......"</span>);
-                        product.wait();
-                    }
-                    <span class="comment">// 产品栈不足,开始生产</span>
-                    <span class="keyword">Object</span> newObj = <span class="keyword">new</span> <span class="keyword">Object</span>();
-                    product.<span class="built_in">add</span>(newObj);
-                    System.out.<span class="built_in">println</span>(<span class="string">"Producer 生产了一个产品，目前产品栈大小为："</span>
-                            + product.<span class="built_in">size</span>());
-                    <span class="comment">// 生产一个产品之后,线程开始睡眠</span>
-                    Thread.sleep((<span class="keyword">long</span>) Math.<span class="built_in">random</span>() * <span class="number">3000</span>);
-                    <span class="comment">// 通知消费者,有新产品</span>
-                    product.notify();
-                } <span class="keyword">catch</span> (Exception e) {
-                }
-            }
-        }
-    }
-}
-
-<span class="comment">/**
- * 消费者线程
- */</span>
-<span class="keyword">static</span> class Consumer implements Runnable {
-    <span class="keyword">private</span> Product product;
-
-    <span class="keyword">public</span> Consumer(Product product) {
-        <span class="keyword">this</span>.product = product;
-    }
-
-    <span class="keyword">public</span> <span class="keyword">void</span> run() {
-        <span class="keyword">while</span> (<span class="keyword">true</span>) {
-            <span class="comment">// 同步代码锁</span>
-            <span class="keyword">synchronized</span> (product) {
-                <span class="keyword">try</span> {
-                    <span class="keyword">while</span> (product.<span class="built_in">size</span>() == <span class="number">0</span>) {
-                        <span class="comment">// 产品栈已空,不可以再消费,执行线程等待操作</span>
-                        System.out.<span class="built_in">println</span>(<span class="string">"产品栈为空，消费者等待中......"</span>);
-                        product.wait();
-                    }
-                    <span class="comment">// 产品栈有商品,开始消费</span>
-                    product.remove();
-                    System.out.<span class="built_in">println</span>(<span class="string">"Consumer 消费了一个产品，目前产品栈大小为："</span>
-                            + product.<span class="built_in">size</span>());
-                    <span class="comment">// 消费一个产品之后,线程开始睡眠</span>
-                    Thread.sleep((<span class="keyword">long</span>) Math.<span class="built_in">random</span>() * <span class="number">3000</span>);
-                    <span class="comment">// 通知生产者,消费了一个产品</span>
-                    product.notify();
-                } <span class="keyword">catch</span> (Exception e) {
-                }
-            }
-        }
-    }
-}
-
-<span class="keyword">static</span> class Product {
-    <span class="comment">// 使用list集合模拟一个产品栈</span>
-    <span class="keyword">private</span> List&lt;<span class="keyword">Object</span>&gt; goods = <span class="keyword">new</span> LinkedList&lt;<span class="keyword">Object</span>&gt;();
-    <span class="keyword">private</span> <span class="built_in">int</span> <span class="built_in">max</span> = <span class="number">10</span>; <span class="comment">// 最大产品数量</span>
-
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="built_in">add</span>(<span class="keyword">Object</span> obj) {
-        goods.<span class="built_in">add</span>(obj);
-    }
-
-    <span class="keyword">public</span> <span class="keyword">void</span> remove() {
-        <span class="keyword">if</span> (goods.<span class="built_in">size</span>() &gt; <span class="number">0</span>) {
-            goods.remove(goods.<span class="built_in">size</span>() - <span class="number">1</span>);
-        }
-    }
-
-    <span class="keyword">public</span> <span class="built_in">int</span> <span class="built_in">size</span>() {
-        <span class="keyword">return</span> goods.<span class="built_in">size</span>();
-    }
-
-    <span class="keyword">public</span> <span class="built_in">int</span> getMax() {
-        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="built_in">max</span>;
-    }
-
-    <span class="keyword">public</span> <span class="keyword">void</span> setMax(<span class="built_in">int</span> <span class="built_in">max</span>) {
-        <span class="keyword">this</span>.<span class="built_in">max</span> = <span class="built_in">max</span>;
-    }
-}
-}
-</code></pre><h3 id="java-util-concurrent并发包">java.util.concurrent并发包</h3><p>几乎java.util.concurrent 中的所有类都是在 ReentrantLock 之上构建的，ReentrantLock 则是在原子变量类的基础上构建的</p>
-<h4 id="Semaphore（信号量）">Semaphore（信号量）</h4><ol>
-<li>Semaphore（信号量）是用来控制同时访问特定资源的线程数量，它通过协调各个线程，以保证合理的使用公共资源。</li>
-<li><strong>应用场景</strong><ul>
-<li><strong>Semaphore可以用于做流量控制，特别公用资源有限的应用场景，比如数据库连接</strong>。假如有一个需求，要读取几万个文件的数据，因为都是IO密集型任务，我们可以启动几十个线程并发的读取，但是如果读到内存后，还需要存储到数据库中，而数据库的连接数只有10个，这时我们必须控制只有十个线程同时获取数据库连接保存数据，否则会报错无法获取数据库连接。这个时候，我们就可以使用Semaphore来做流控</li>
+<li>JDK1.7中subString函数改变:String类中不再有offset和count变量;这意味着成员变量char[] value将不会被共享;String.substring方法会为每个子串创建一个新的char[] value（而不是共享母串的char[] value）。这意味着String.substring方法的时间复杂度由常数阶变为线性阶。这种变化的好处是String对象占用的内存稍微少了一些（比以前少8个字节），同时确保String.substring方法不会导致内存泄漏</li>
 </ul>
-</li>
-<li><strong>使用方法</strong>Semaphore的构造方法Semaphore(int permits) 接受一个整型的数字，表示可用的许可证数量。Semaphore(10)表示允许10个线程获取许可证，也就是最大并发数是10。Semaphore的用法也很简单，首先线程使用Semaphore的acquire()获取一个许可证，使用完之后调用release()归还许可证。还可以用tryAcquire()方法尝试获取许可证。</li>
-</ol>
-<h4 id="原子变量">原子变量</h4><p>java.util.concurrent.atomic包中提供了原子变量的9种风格（AtomicInteger、AtomicLong、 AtomicReference、AtomicBoolean等，其原子地更新一对值）</p>
-<h4 id="CountDownLatch">CountDownLatch</h4><ul>
-<li>利用它可以实现类似计数器的功能; 比如有一个任务A，它要等待其他4个任务执行完毕之后才能执行，就可以利用CountDownLatch来实现</li>
-<li><p>例：假如有Thread1、Thread2、Thread3、Thread4四条线程分别统计C、D、E、F四个盘的大小，所有线程都统计完毕交给Thread5线程去做汇总，实现代码如下：</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CountDownLatchTest</span> </span>{
-    <span class="keyword">private</span> <span class="keyword">static</span> CountDownLatch <span class="keyword">count</span> = <span class="keyword">new</span> CountDownLatch(<span class="number">4</span>);
-    <span class="keyword">private</span> <span class="keyword">static</span> ExecutorService service = Executors.newFixedThreadPool(<span class="number">6</span>);
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String args[]) throws InterruptedException {
-        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) {
-            service.execute(() -&gt; {
-                <span class="comment">// 模拟任务耗时</span>
-                <span class="keyword">try</span> {
-                    <span class="keyword">int</span> timer = <span class="keyword">new</span> Random().nextInt(<span class="number">5</span>);
-                    TimeUnit.SECONDS.sleep(timer);
-                    System.out.printf(<span class="string">"%s时完成磁盘的统计任务,耗费%d秒.\n"</span>, <span class="keyword">new</span> Date().toString(), timer);
-                    <span class="comment">// 任务完成之后,计数器减一</span>
-                    <span class="keyword">count</span>.countDown();
-                } <span class="keyword">catch</span> (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-        <span class="comment">// 主线程一直被阻塞,知道count的计数器被设置为0</span>
-        <span class="keyword">count</span>.await();
-        System.out.printf(<span class="string">"%s时全部任务都完成,执行合并计算.\n"</span>, <span class="keyword">new</span> Date().toString());
-        service.shutdown();
-    }
-}
-</code></pre></li>
+<h3 id="[java中equals，hashcode，==分析]">[java中equals，hashcode，==分析]</h3><ul>
+<li>== : 对于基本类型的变量(int, char等), 只有==方法用于判断两者是否相等;==也可用于判断两个引用变量是否相等,但是引用变量相等只是说明两个引用变量引用了同一个对象</li>
+<li>equals(): 该方法继承自Object类,它在Object类中是用==实现的，跟==一样默认是比较两个引用是否相等;但是实际应用中它主要用于判断两个String,Integer等对象或者自定义对象在内存中的值是否相等; String等对象重载了equals方法，所以可以用来比较值是否相等;</li>
+<li>hashcode(): 哈希函数的作用是把不定长度的输入通过哈希算法将其压缩成固定长度的输出(int整数), 不同的输入可能转换成相同的输出;其在Object类中的默认实现是返回对象的内存地址的哈希码，不同的对象即使内容相同但引用不同也会返回不同的哈希码.主要用于HashMap等容器中的快速定位, 通过哈希值就可以直接定位到Map中Entry数组的某个位置，然后再循环该位置对应的链表用equals判断<key,value>是否都相等。</key,value></li>
+<li>set在使用add，remove等函数时会调用equals函数去判断两个自定义对象的地址是否相同，而不是比较两个对象的内容是否相同，需要重载hashcode和equals函数，类似于String类一样重载，才能够实现去重的目的！！ HashSet中的元素实际上是作为HashMap中的Key存放在HashMap中的，为了保证HashSet中的对象不会出现重复值，在被存放元素的类中必须要重写hashCode()和equals()这两个方法。</li>
 </ul>
-<h4 id="CyclicBarrier回环栅栏">CyclicBarrier回环栅栏</h4><ul>
-<li>通过它可以实现让一组线程等待至某个状态之后再全部同时执行。叫做回环是因为当所有等待线程都被释放以后，CyclicBarrier可以被重用。我们暂且把这个状态就叫做barrier，当调用await()方法之后，线程就处于barrier了</li>
-<li><strong>例子</strong>：假若有若干个线程都要进行写数据操作，并且只有所有线程都完成写数据操作之后，这些线程才能继续做后面的事情</li>
-</ul>
-<h4 id="CountDownLatch_VS_CyclicBarrier">CountDownLatch VS CyclicBarrier</h4><ol>
-<li>CountDownLatch和CyclicBarrier都能够实现线程之间的等待，只不过它们侧重点不同：CountDownLatch一般用于某个线程A等待若干个其他线程执行完任务之后，它才执行；而CyclicBarrier一般用于一组线程互相等待至某个状态，然后这一组线程再同时执行</li>
-<li>CountDownLatch是不能够重用的，而CyclicBarrier是可以重用的。</li>
+<h3 id="null判断将常量写在前面的好处">null判断将常量写在前面的好处</h3><ol>
+<li>if(val == null) 和 if(null == val)的区别：后一种方式的主要优点是防止将==写成=和将!=写成=，因为后一种方式如果出现漏写，编译器会提示报错便于检查出代码错误；而前一种不会报错，造成逻辑bug不能被编译器检查出来</li>
+<li>”abc”.equals(val)和val.equals(“abc”)的区别：前一种可以防止当val=null时编译器报空指针错误</li>
 </ol>
-<h4 id="Fork-Join_框架：">Fork-Join 框架：</h4><p>并行分解方法，执行一个任务将首先分解（fork）为多个子任务，完成之后再合并（join）</p>
-<h4 id="Callable和FutureTask">Callable和FutureTask</h4><h3 id="参考链接">参考链接</h3><ol>
-<li><a href="http://www.itdadao.com/articles/c15a210800p0.html" target="_blank" rel="external">Concurrent并发包</a></li>
-</ol>
+<h3 id="java生成随机数的方法(返回1-6的六个随机数)">java生成随机数的方法(返回1-6的六个随机数)</h3><pre><code>Random <span class="keyword">rand</span> = new Random();  
+<span class="keyword">system</span>.out.println(<span class="keyword">rand</span>.nextInt(<span class="number">6</span>) + <span class="number">1</span>);
+</code></pre><h3 id="java反转字符串方法">java反转字符串方法</h3><pre><code><span class="keyword">String</span> <span class="built_in">reverse</span>(<span class="keyword">String</span> s)   
+{<span class="keyword">return</span> <span class="keyword">new</span> StringBuilder(s).<span class="built_in">reverse</span>().toString();}
+</code></pre><h3 id="函数参数的预防性检测">函数参数的预防性检测</h3><p>针对传入参数显式检测，throw相应的Exception；包括参数为null，数值溢出以及为负，数组下标越界</p>
+<h3 id="Java常见位操作">Java常见位操作</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/BitOperation.png" class="full-image"></p>
+<pre><code><span class="comment">// 1. 获得int型最大值</span>
+System.<span class="keyword">out</span>.println((1 &lt;&lt; 31) - 1);<span class="comment">// 2147483647， 由于优先级关系，括号不可省略</span>
+System.<span class="keyword">out</span>.println(~(1 &lt;&lt; 31));<span class="comment">// 2147483647</span>
 
+<span class="comment">// 2. 获得int型最小值</span>
+System.<span class="keyword">out</span>.println(1 &lt;&lt; 31);
+System.<span class="keyword">out</span>.println(1 &lt;&lt; -1);
+
+<span class="comment">// 3. 获得long类型的最大值</span>
+System.<span class="keyword">out</span>.println(((long)1 &lt;&lt; 127) - 1);
+
+<span class="comment">// 4. 乘以2运算</span>
+System.<span class="keyword">out</span>.println(x&lt;&lt;1);
+
+<span class="comment">// 5. 除以2运算(负奇数的运算不可用)</span>
+System.<span class="keyword">out</span>.println(x&gt;&gt;1);
+
+<span class="comment">// 6. 乘以2的m次方</span>
+System.<span class="keyword">out</span>.println(x&lt;&lt;<span class="keyword">m</span>);
+
+<span class="comment">// 7. 除以2的m次方</span>
+System.<span class="keyword">out</span>.println(x&gt;&gt;<span class="keyword">m</span>);
+
+<span class="comment">// 8. 判断一个数的奇偶性</span>
+System.<span class="keyword">out</span>.println((10 &amp; 1) == 1);
+System.<span class="keyword">out</span>.println((9 &amp; 1) == 1);
+
+<span class="comment">// 9. 不用临时变量交换两个数（面试常考）</span>
+a ^= b;
+b ^= a;
+a ^= b;
+
+<span class="comment">// 10. 取绝对值（某些机器上，效率比n&gt;0 ? n:-n 高）</span>
+int <span class="keyword">n</span> = -1;
+System.<span class="keyword">out</span>.println((<span class="keyword">n</span> ^ (<span class="keyword">n</span> &gt;&gt; 31)) - (<span class="keyword">n</span> &gt;&gt; 31));
+<span class="comment">/* n&gt;&gt;31 取得n的符号，若n为正数，n&gt;&gt;31等于0，若n为负数，n&gt;&gt;31等于-1
+若n为正数 n^0-0数不变，若n为负数n^-1 需要计算n和-1的补码，异或后再取补码，
+结果n变号并且绝对值减1，再减去-1就是绝对值 */</span>
+
+<span class="comment">// 11. 取两个数的最大值（某些机器上，效率比a&gt;b ? a:b高）</span>
+System.<span class="keyword">out</span>.println(b&amp;((a-b)&gt;&gt;31) | a&amp;(~(a-b)&gt;&gt;31));
+
+<span class="comment">// 12. 取两个数的最小值（某些机器上，效率比a&gt;b ? b:a高）</span>
+System.<span class="keyword">out</span>.println(a&amp;((a-b)&gt;&gt;31) | b&amp;(~(a-b)&gt;&gt;31));
+
+<span class="comment">// 13. 判断符号是否相同(true 表示 x和y有相同的符号， false表示x，y有相反的符号。)</span>
+System.<span class="keyword">out</span>.println((a ^ b) &gt; 0);
+
+<span class="comment">// 14. 计算2的n次方 n &gt; 0</span>
+System.<span class="keyword">out</span>.println(2&lt;&lt;(<span class="keyword">n</span>-1));
+
+<span class="comment">// 15. 判断一个数n是不是2的幂</span>
+System.<span class="keyword">out</span>.println((<span class="keyword">n</span> &amp; (<span class="keyword">n</span> - 1)) == 0);
+<span class="comment">/*如果是2的幂，n一定是100... n-1就是1111....
+所以做与运算结果为0*/</span>
+
+<span class="comment">// 16. 求两个整数的平均值</span>
+System.<span class="keyword">out</span>.println((a+b) &gt;&gt; 1);
+
+<span class="comment">// 17. 从低位到高位,取n的第m位</span>
+int <span class="keyword">m</span> = 2;
+System.<span class="keyword">out</span>.println((<span class="keyword">n</span> &gt;&gt; (<span class="keyword">m</span>-1)) &amp; 1);
+
+<span class="comment">// 18. 从低位到高位.将n的第m位置为1</span>
+System.<span class="keyword">out</span>.println(<span class="keyword">n</span> | (1&lt;&lt;(<span class="keyword">m</span>-1)));
+<span class="comment">/*将1左移m-1位找到第m位，得到000...1...000
+n在和这个数做或运算*/</span>
+
+<span class="comment">// 19. 从低位到高位,将n的第m位置为0</span>
+System.<span class="keyword">out</span>.println(<span class="keyword">n</span> &amp; ~(0&lt;&lt;(<span class="keyword">m</span>-1)));
+<span class="comment">/* 将1左移m-1位找到第m位，取反后变成111...0...1111
+n再和这个数做与运算*/</span>
+</code></pre>
         
       
     </div>
@@ -623,9 +1107,7 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
       
         <div class="post-tags">
           
-            <a href="../../tags/Java/"> #Java </a>
-          
-            <a href="../../tags/多线程/"> #多线程 </a>
+            <a href="../../tags/java/"> #java </a>
           
         </div>
       
@@ -652,8 +1134,8 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
           
           
             
-              <a class="post-title-link" href="../../2015/04/09/Android基础知识总结/">
-                Android基础知识总结
+              <a class="post-title-link" href="../../2015/05/27/Android开发常见bug解决方法及注意事项/">
+                Android开发常见bug解决方法及注意事项
               </a>
             
           
@@ -662,7 +1144,7 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-04-09
+          发表于 2015-05-27
         </span>
 
         
@@ -682,8 +1164,8 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2015/04/09/Android基础知识总结/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/09/Android基础知识总结/"></span>
+            <a href="../../2015/05/27/Android开发常见bug解决方法及注意事项/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/27/Android开发常见bug解决方法及注意事项/"></span>
             </a>
           </span>
           
@@ -698,386 +1180,14 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 
       
         
-          <h3 id="Android架构层次">Android架构层次</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/android_framework.png" class="full-image" width="100%"></p>
-<p><strong>android系统架构分从下往上为Linux内核层、运行库、应用程序框架层和应用程序层</strong></p>
-<ol>
-<li>Linux内核层：负责硬件的驱动程序、网络、电源、系统安全以及内存管理等功能。</li>
-<li>运行库和android runtion：运行库：即c/c++函数库部分，大多数都是开放源代码的函数库，例如webkit，该函数库负责android网页浏览器的运行；例如标准的c函数库libc、openssl、sqlite等，当然也包括支持游戏开发的2dsgl和3dopengles，在多媒体方面有mediaframework框架来支持各种影音和图形文件的播放与显示，如mpeg4、h.264、mp3、aac、amr、jpg和png等众多的多媒体文件格式。Androidruntion负责解释和执行生成的dalvik格式的字节码</li>
-<li>应用软件架构：java应用程序开发人员主要是使用该层封装好的api进行快速开发的。</li>
-<li>应用程序层：该层是java的应用程序层，android内置的googlemaps、email、IM、浏览器等，都处于该层，java开发人员工发的程序也处于该层，而且和内置的应用程序具有平等的地位，可以调用内置的应用程序，也可以替换内置的应用程序</li>
-</ol>
-<h3 id="ANR的产生原因以及解决方法">ANR的产生原因以及解决方法</h3><ol>
-<li>ANR由Activity manager和windows manager来负责监听，你的应用程序所做的事情如果在主线程里占用了大长时间的话，就会引发ANR对话框，因为你的应用程序并没有给自己机会来处理输入事件或者Intent广播</li>
-<li><strong>产生原因</strong>: ①Activity 5s没有响应输入事件，比如按键，触摸事件②广播接收器在10s没有处理完毕事件 ③Service在20s之类没有完成事件处理</li>
-<li>解决方法: 不在主线程进行网络请求,磁盘读取，位图修改，更新UI等耗时操作，而应该采用子线程来完成，完成之后通过Handler通知主线程</li>
-<li><strong>如何定位ANR</strong>：①检查log文件并分析LogCat输出，查看CPU使用量等信息; ②从/data/anr/目录下的trace.txt文件查看app调用栈信息; ③代码检查</li>
-</ol>
-<h3 id="Android_界面卡顿怎么处理？Link">Android 界面卡顿怎么处理？<a href="http://charles-xiao.github.io/2015/08/30/Android%E5%BA%94%E7%94%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" target="_blank" rel="external">Link</a></h3><h3 id="Android子线程和UI线程交互的5种方式">Android子线程和UI线程交互的5种方式</h3><ol>
-<li><p><strong>handler</strong>: 参考“实习项目总结”</p>
-</li>
-<li><p><strong>AsyncTask</strong>: 参考“实习项目总结”</p>
-</li>
-<li><p><strong>Activity.runOnUIThread(Runnable)</strong>  </p>
-<p> <strong>子线程更新UI</strong>  </p>
-<pre><code><span class="keyword">new</span> Thread() {  
-    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{  
-        <span class="comment">//这儿是耗时操作，完成之后更新UI；  </span>
-        runOnUiThread(<span class="keyword">new</span> Runnable(){  
-
-            <span class="annotation">@Override</span>  
-            <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{  
-                <span class="comment">//更新UI  </span>
-                imageView.setImageBitmap(bitmap);  
-            }  
-
-        });  
-    }  
-}.start(); 
-</code></pre><p> <strong>非Activity更新UI</strong></p>
-<pre><code>Activity activity = (Activity) imageView.getContext();  
-        activity.runOnUiThread(<span class="keyword">new</span> Runnable() {  
-
-            <span class="annotation">@Override</span>  
-            <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{  
-                imageView.setImageBitmap(bitmap);  
-            }  
-});  
-</code></pre></li>
-<li><p><strong>View.Post(Runnable)</strong></p>
-<pre><code>imageView.post(<span class="keyword">new</span> Runnable(){  
-
-            <span class="annotation">@Override</span>  
-            <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{  
-                imageView.setImageBitmap(bitmap);  
-            }  
-
-});  
-</code></pre></li>
-<li><p><strong>View.PostDelayed(Runnabe,long)</strong></p>
-</li>
-</ol>
-<h3 id="Activity四种启动模式和生命周期">Activity四种启动模式和生命周期</h3><ol>
-<li><strong>Application</strong>: 应用程序是组件的集合，manifest文件中展现了application中组件的结构,加载app时会根据manifest去加载和实例化组件</li>
-<li><strong>Process</strong>: 一个应用程序占据一个进程，一个运行中的dalvik虚拟机实例就占据一个进程; 但是我们可以给组件设置android:process = “name”来让组件运行在独立进程中</li>
-<li><strong>Task</strong>: 一组以栈的形式来进行管理的相互关联的activity的集合，它是存在于framework层的一个跨应用的概念，控制界面的跳转和返回；task中所有的activity在一个叫做back stack的栈中进行管理</li>
-<li><strong>四种启动模式</strong><ul>
-<li><strong>standard</strong>: 默认的lauchmode, 同一个activity可以被实例化多次，在一个task栈中可以同时存在一个activity的多个实例，每次startActivity就新建一个实例入栈<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/standard.png" class="full-image"></li>
-<li><strong>singleTop</strong>: 先检查栈顶是否是该activity的实例，是则重用该实例，并且调用该实例的onNewIntent()方法，否则要新建实例压入栈顶<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/singleTop.png" class="full-image">  </li>
-<li><strong>singleTask</strong>: 先检查栈中是否包含该activity的实例，是则重用该实例，清理该实例上的所有activity并将其显示给用户；否则新建实例压入back stack<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/singleTask.png" class="full-image"></li>
-<li><strong>singleInstance</strong>: 以singleInstance模式启动的Activity具有全局唯一性，即整个系统中只会存在一个这样的实例；而且具备独占性，以该模式启动的Activity不能与其他Activity共存在一个task中<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/singleInstance.png" class="full-image"></li>
-</ul>
-</li>
-<li><p><strong>Activity以及Fragment生命周期</strong>:</p>
-<p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/activity_life.png" class="full-image" width="100%"></p>
-<p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/fragment_life.png" class="full-image" width="100%"></p>
-</li>
-<li><p><strong>Activity切换时生命周期交集</strong></p>
-<ul>
-<li><strong>当一个activity A启动了另外一个activity B，它们的生命周期是有交叉的</strong></li>
-<li>首先A的onPause()被调用；之后B的onCrate(), onStart()及onResume() 方法会被调用（此时B拥有用户焦点）；最后，如果A在屏幕上不可见，onStop()方法被调用；</li>
-<li>因此，我们在两个activities中传递数据，或者共享资源时（如数据库连接），需要在前一个activity的onPause()方法而不是onStop()方法中进行</li>
-</ul>
-</li>
-<li><p><strong>onSaveInstanceState() 和 onRestoreInstanceState()</strong>： <a href="http://www.cnblogs.com/hanyonglu/archive/2012/03/28/2420515.html" target="_blank" rel="external">Link</a><br> ①当某个activity变得”容易”被系统销毁时，该activity的<strong>onSaveInstanceState()</strong>就会被执行，除非该activity是被用户主动销毁的，例如当用户按BACK键的时候；他的调用有<strong>5种情况</strong>：(1)、<strong>当用户按下HOME键时</strong>：这是显而易见的，系统不知道你按下HOME后要运行多少其他的程序，自然也不知道activity A是否会被销毁，因此系统会调用onSaveInstanceState()，让用户有机会保存某些非永久性的数据。以下几种情况的分析都遵循该原则 (2)、<strong>长按HOME键，选择运行其他的程序时</strong>。(3)、<strong>按下电源按键（关闭屏幕显示）时</strong>。(4)、<strong>从activity A中启动一个新的activity时</strong>。(5)、<strong>屏幕方向切换时，例如从竖屏切换到横屏时</strong>。在屏幕切换之前，系统会销毁activity A，在屏幕切换之后系统又会自动地创建activity A，所以onSaveInstanceState()一定会被执行，且也一定会执行onRestoreInstanceState()。<br> ②<strong>onRestoreInstanceState()</strong>被调用的前提是，activity A“确实”被系统销毁了，而如果仅仅是停留在有这种可能性的情况下，则该方法不会被调用，例如，当正在显示activity A的时候，用户按下HOME键回到主界面，然后用户紧接着又返回到activity A，这种情况下activity A一般不会因为内存的原因被系统销毁，故activity A的onRestoreInstanceState方法不会被执行 此也说明上二者，大多数情况下不成对被使用。</p>
-</li>
-<li><p><strong>如果一个以SingleTask启动的的Activity实例，再新建一个该实例，Activity的执行流程？？？</strong>singleTask保证了在栈中Activity的唯一性，如果被SingleTask标记的Activity处于栈底，上面的Activity都会被pop出栈，这个时候被标记过SingleTask的Activity生命周期会做出调整：onNewIntent-&gt;onStart-&gt;onResume, 不再调用onCreate函数</p>
-</li>
-<li><strong>android:taskAffinity</strong>：每个Activity都有taskAffinity属性，这个属性指出了它希望进入的Task。如果一个Activity没有显式的指明该 Activity的taskAffinity，那么它的这个属性就等于Application指明的taskAffinity，如果 Application也没有指明，那么该taskAffinity的值就等于包名；例如 android:taskAffinity=””的意思是不依附于任何task，也就是自己新建一个task</li>
-</ol>
-<h3 id="Service">Service</h3><p><strong>Service</strong>默认运行在主线程，Service主要运行在后台执行一些监测行为或者其他加载网页等后台操作，可以通过iBinder或者广播与Activity进行交互</p>
-<ol>
-<li><strong>Service两种类型:本地和远程service</strong>: <ul>
-<li><strong>本地服务</strong>运行于主进程上的主线程,主进程被杀死后，服务便会终止;因为是在同一进程，因此不需要IPC，也不需要AIDL.</li>
-<li><strong>远程服务</strong>运行于独立进程的主线程,不受其他进程影响，有利于为多个进程提供服务;但是会占用一定资源，并且使用AIDL进行IPC通信;对应的独立进程的名字格式为所在包名加上指定android:process字符串。</li>
-</ul>
-</li>
-<li><strong>两种启动模式</strong>: <a href="http://www.jianshu.com/p/2fb6eb14fdec" target="_blank" rel="external">具体区别Link</a><ul>
-<li><strong>startService</strong>方法一旦服务开启跟开启者就没有任何关系了;开启者退出了，服务还在后台长期的运行;开启者不能调用服务里面的方法</li>
-<li>多次调用startService，该Service只能被创建一次，即该Service的onCreate方法只会被调用一次。但是每次调用startService，onStartCommand方法都会被调用;通过只能调用Context.stopService()方法结束服务</li>
-<li><strong>bindService</strong>的方式开启并绑定服务，绑定者挂了，服务也会跟着挂掉.绑定者可以调用服务里面的方法</li>
-<li>第一次执行bindService时，onCreate和onBind方法会被调用，但是多次执行bindService时，onCreate和onBind方法并不会被多次调用，即并不会多次创建服务和绑定服务;可以通过调用unbindService()方法来结束服务，调用该方法也会导致系统调用服务的onUnbind()—&gt;onDestroy()方法</li>
-<li><strong>注意:对于既使用了startService同时也使用了bindService启动的服务我们如果需要停止该服务，应该同时调用stopService与unbindService方法;单独调用unbindService将不会停止Service，而必须调用stopService或Service的stopSelf 来停止服务</strong></li>
-<li><strong>onDestroy方法中做清理工作</strong>例如停止在Service中创建并运行的线程。</li>
-<li><strong>绑定者Activity如何调用service里的方法呢？</strong> <ul>
-<li><strong>第一步</strong>自定义Service，在其内部重写onBind函数返回一个实现IBinder接口或者继承Binder的对象给绑定者—-这个自定义Binder是一个内部类，提供一个可以间接调用服务或者直接返回service对象的方法</li>
-<li><strong>第二步</strong>在Activity中调用bindService方法,服务成功绑定之后，新建一个ServiceConnection的匿名内部类对象，在回调方法onServiceConnected中会传递过来一个IBinder对象给Activity使用</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>Service生命周期</strong></p>
-<p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/service_life.png" class="full-image" width="100%"></p>
-</li>
-<li><p><strong>Service与Activity的通信机制</strong></p>
-<ul>
-<li>广播接收器: </li>
-<li>iBinder机制: </li>
-</ul>
-</li>
-<li><strong>IntentService</strong><ul>
-<li><strong>为什么要用IntentService</strong>如果Service将要运行耗时或者可能被阻塞的操作时，例如直接把耗时操作放在 Service 的 onStartCommand()方法中可能会出现ANR错误；所以应该在Service中重新启动一个新的线程来进行这些操作，这时我们就可以用IntentService</li>
-<li><strong>IntentService内部原理</strong>IntentService是一个用来处理异步请求的Service类的子类，当客户端通过startService(Intent)方法传递多个请求给IntentService；IntentService会在onCreate函数中新建HandlerThread去执行这些耗时操作，并新建ServiceHandler对象处理消息，当启动一个IntentService的时候接下来会调用onstart方法，该方法会给ServiceHandler发送消息，在ServiceHandler的handleMessage回调函数中调用onHandleIntent函数，<strong>因此我们可以在这个onHandleIntent方法里面处理我们的耗时工作</strong>；所以IntentService不仅有Service的功能,还有Handler处理和循环消息的功能  </li>
-<li><strong>IntentService对多个异步请求的处理流程</strong>IntentService使用队列的方式将请求的Intent加入队列，然后开启一个工作线程来处理队列中的Intent，对于异步的多次startService请求，IntentService会处理完成一个之后再处理第二个，每一个请求都会在一个单独的worker thread中处理，不会阻塞应用程序的主线程;当任务执行完后，IntentService 会自动停止，而不需要我们去手动控制。</li>
-</ul>
-</li>
-<li><strong>Service后台保活</strong>: <ul>
-<li><strong>提高Service的优先级或者提高Service所在进程的优先级</strong>：这个，也只能说在系统内存不足需要回收资源的时候，优先级较高，不容易被回收；实现方法有<br>①startForeground()方法来设置 Service为前台服务，优先级和正在运行的 Activity类似<br>②在AndroidManifest.xml文件中对于intent-filter可以通过android:priority = “1000”这个属性设置最高优先级，1000是最高值，如果数字越小则优先级越低</li>
-<li><strong>在onDestroy方法里重启service</strong>：这个倒还算挺有效的一个方法，但是，直接干掉进程的时候，onDestroy方法都进不来，更别想重启了</li>
-<li><strong>broadcast广播</strong>：和第3种一样，没进入onDestroy，就不知道什么时候发广播了，另外，在Android4.4以上，程序完全退出后，就不好接收广播了，需要在发广播的地方特定处理</li>
-<li><strong>Service的onStartCommand方法返回START_STICKY</strong>，这个也主要是针对系统资源不足而导致的服务被关闭。四个返回值<a href="http://www.jianshu.com/p/a9360c282ef0" target="_blank" rel="external">参考link</a>：start_sticky、start_no_sticky、START_REDELIVER_INTENT、START_STICKY_COMPATIBILITY</li>
-<li><strong>App进程之间互相唤醒</strong></li>
-<li><strong>通过JNI的方式（NDK编程），fork()出一个子线程作为守护进程，轮询监听服务状态</strong>。守护进程（Daemon）是运行在后台的一种特殊进程。它独立于控制终端并且周期性地执行某种任务或等待处理某些发生的事件。而守护进程的会话组和当前目录，文件描述符都是独立的。后台运行只是终端进行了一次fork，让程序在后台执行，这些都没有改变。</li>
-</ul>
-</li>
-</ol>
-<h3 id="BroadcastReceiver">BroadcastReceiver</h3><p><strong>广播接收器</strong>用于过滤接收并响应来自其他应用程序或者系统的广播消息；每次广播到来时, 会重新创建 BroadcastReceiver对象,并且调用onReceive()方法,执行完以后,该对象即被销毁。当onReceive()方法在 10 秒内没有执行完毕，就会导致ANR。如果需要执行长任务，那么就有必要使用Service；BroadcastReceiver会堵塞主线程。唯有onReceive()结束，主线程才得以继续进行。</p>
-<ol>
-<li><strong>种类和特点</strong>: <ul>
-<li><strong>全局广播包括有序广播、同步广播等</strong>，即发出去的广播可以被其他任何应用程序接收到，并且我们也可以接收来自于其他任何应用程序的广播。</li>
-<li>全局广播跨进程必然会造成安全问题，于是便有了<strong>本地广播</strong>：即只能在本应用程序中发送和接收广播。这就要使用到了LocalBroadcastManager这个类来对广播进行管理。</li>
-</ul>
-</li>
-<li><strong>静态注册和动态注册</strong>：</li>
-</ol>
-<h3 id="ContentProvider">ContentProvider</h3><h3 id="Android_View事件分发机制">Android View事件分发机制</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/scroller.png" class="full-image" width="100%"></p>
-<h3 id="Android_Touch事件分发">Android Touch事件分发</h3><ol>
-<li>Touch事件传递的相关函数有dispatchTouchEvent(决定是否分发事件的函数)、onInterceptTouchEvent(决定是否截停事件的函数)、onTouchEvent(决定是否消费本次事件的函数)   </li>
-<li>Touch事件会被封装成MotionEvent对象，该对象封装了手势按下、移动、松开等动作;事件类型分为ACTION_DOWN, ACTION_UP, ACTION_MOVE, ACTION_POINTER_DOWN, ACTION_POINTER_UP, ACTION_CANCEL，每个事件都是以ACTION_DOWN开始ACTION_UP结束。</li>
-<li>Touch事件通常从Activity#dispatchTouchEvent发出，只要没有被消费，会一直往下传递，到最底层的View; 如果Touch事件传递到的每个View都不消费事件，那么Touch事件会反向向上传递,最终交由Activity#onTouchEvent处理. </li>
-<li>Touch事件相关的类有View、ViewGroup、Activity, onInterceptTouchEvent为ViewGroup特有，可以拦截事件; Down事件到来时，如果一个View没有消费该事件，那么后续的MOVE/UP事件都不会再给它;OnTouchListener优先于onTouchEvent()对事件进行消费</li>
-<li><strong>Touch事件分发详细图示</strong><br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/touch.png" class="full-image" width="100%"></li>
-</ol>
-<h3 id="Android平台中实现数据存储的5种方式">Android平台中实现数据存储的5种方式</h3><ol>
-<li><strong>使用SharedPreferences存储数据</strong>：SharedPreferences是Android平台上一个轻量级的存储类，本质是基于XML文件存储key-value键值对数据，主要是保存一些常用的配置信息，提供了Long长整形、Int整形、String字符串型的保存。它分为多种权限，可以全局共享访问，最终是以xml方式来保存。SharedPreferences对象本身只能获取数据而不支持存储和修改，存储修改是通过Editor对象实现。<ul>
-<li><strong>存储步骤</strong>:①根据Context获取SharedPreferences对象 ②利用edit()方法获取Editor对象。 ③通过Editor对象存储key-value键值对数据。 ④通过commit()方法提交数据。</li>
-</ul>
-</li>
-<li><strong>文件存储数据</strong></li>
-<li><strong>SQLite数据库存储数据</strong></li>
-<li><strong>使用ContentProvider存储数据</strong></li>
-<li><strong>网络存储数据</strong></li>
-</ol>
-<h3 id="Android_屏幕适配方法总结"><a href="http://www.jianshu.com/p/ec5a1a30694b" target="_blank" rel="external">Android 屏幕适配方法总结</a></h3><h3 id="Android进程间通信方法">Android进程间通信方法</h3><ol>
-<li><strong>AIDL+Binder机制</strong><ul>
-<li><strong>AIDL</strong>：即Android接口定义语言，一种帮助实现Binder通信的工具。由于<strong>Android不同的进程不能共享内存</strong>，所以为了解决进程间通讯的问题，Android使用一种接口定义语言来公开服务的接口，本质上，AIDL非常像一个接口，通过公开接口，让别的进程调用该接口，从而实现进程间的通讯。<strong>具体用法</strong>: 只要用几条简单的函数声明，AIDL就会帮忙生成一个JAVA文件，包括了一个Proxy和Stub的访问接口，以及用于它们之间通信的Parcel，并保证Parcel的输入输出的顺序一致性，其中Proxy用于客户端进程，Stub用于Service端进程.<a href="http://www.jianshu.com/p/b9b15252b3d6" target="_blank" rel="external">AIDL基本用法</a></li>
-<li><strong>Binder机制</strong>：Android进程间通信是通过Binder来实现的，Binder机制使本地对象能够调用远程对象的方法，在不同进程中传递单向/双向消息。远程Service在Client绑定服务时，会在onBind()的回调中返回一个Binder，当Client调用bindService()与远程Service建立连接成功时，会拿到远程Binder实例，从而使用远程Service提供的服务。<strong>Binder优点</strong>是基于C/S通信模式，传输过程只需要一次拷贝，且为Client添加UID/PID身份，性能和安全性更好，并且Binder可以建立私有通道，这是linux的通信机制所无法实现的,因此Android进程间通信使用了Binder。</li>
-<li><strong>Binder通信模型</strong>: Android系统Binder机制中的四个组件Client、Server、Service Manager和Binder驱动程序的关系如下图<ol>
-<li>Client、Server和Service Manager实现在用户空间中，Binder驱动程序实现在内核空间中<ol>
-<li>Binder驱动程序和Service Manager在Android平台中已经实现，开发者只需要在用户空间实现自己的Client和Server</li>
-<li>Binder驱动程序提供设备文件/dev/binder与用户空间交互，Client、Server和Service Manager通过open和ioctl文件操作函数与Binder驱动程序进行通信</li>
-<li>Client和Server之间的进程间通信通过Binder驱动程序间接实现</li>
-<li>Service Manager是一个守护进程，用来管理Server，并向Client提供查询Server接口的能力<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Binder.jpg" class="full-image" width="100%"></li>
-</ol>
-</li>
-</ol>
-</li>
-<li><strong>Binder CS通信流程</strong>:<ol>
-<li><strong>Server</strong>作为众多Service的拥有者，当它想向Client提供服务时，得先去Service Manager（以后缩写成SM）那儿注册自己的服务。Server可以向SM注册一个或多个服务。</li>
-<li><strong>Client</strong>作为Service的使用者，当它想使用服务时，得向SM申请自己所需要的服务。Client可以申请一个或多个服务。</li>
-<li><strong>ServiceManager</strong>SM一方面管理Server所提供的服务，同时又响应Client的请求并为之分配相应的服务。</li>
-</ol>
-</li>
-</ul>
-</li>
-<li><strong>Messenger</strong>：Messenger是基于AIDL实现的，服务端（被动方）提供一个Service来处理客户端（主动方）连接，维护一个Handler来创建Messenger，在onBind时返回Messenger的binder。<br>双方用Messenger来发送数据，用Handler来处理数据。Messenger处理数据依靠Handler，所以是串行的，也就是说，Handler接到多个message时，就要排队依次处理</li>
-<li><strong>Socket通信</strong>: 在服务端定义ServerSocket并使用一个while循环监听客户端端口，客户端使用Socket来请求端口，连通后就可以进行通信<h3 id="Android数据共享">Android数据共享</h3></li>
-<li><strong>ContentProvider</strong>: 系统四大组件之一，底层也是Binder实现，主要用来为不同应用程序之间提供数据共享；可以用文件，内存数据，数据库等一切来充当数据源</li>
-<li><strong>Bundle/Intent传递数据</strong>：可传递基本类型，String，实现了Serializable或Parcellable接口的数据结构。Serializable是Java的序列化方法，Parcellable是Android的序列化方法，前者代码量少，但I/O开销较大，一般用于输出到磁盘或网卡；后者实现代码多，效率高，一般用户内存间序列化和反序列化传输</li>
-<li><strong>本地文件共享</strong>：对同一个文件先后写读，从而实现传输，Linux机制下，可以对文件并发写，所以要注意同步。顺便一提，Windows下不支持并发读或写。</li>
-<li><p><strong>SharedPreferences</strong>：Preference提供了一种轻量级的数据存取方法，应用场合主要是数据比较少的配置信息。它以“键-值”（是一个Map）对的方式将数据保存在一个XML配置文件中</p>
-<pre><code><span class="keyword">Context</span> otherAppContext = createPackageContext(<span class="string">"com.gary.appdisplaycontrol"</span>, <span class="keyword">Context</span>.CONTEXT_IGNORE_SECURITY);
-SharedPreferences sharedPreferences = otherAppContext.getSharedPreferences(<span class="string">"preferences"</span>,<span class="keyword">Context</span>.MODE_WORLD_READABLE|<span class="keyword">Context</span>.MODE_MULTI_PROCESS)
-</code></pre></li>
-</ol>
-<h3 id="Json_VS_XML">Json VS XML</h3><p><a href="http://blog.csdn.net/wei78008023/article/details/44940579" target="_blank" rel="external">XML解析和Json解析简介以及两者的区别</a></p>
-<h3 id="Android安全">Android安全</h3><ol>
-<li>错误导出组件 </li>
-<li>参数校验不严 </li>
-<li>WebView引入各种安全问题,webview中的js注入 </li>
-<li>不混淆、不防二次打包 </li>
-<li>明文存储关键信息 </li>
-<li>错误使用HTTPS </li>
-<li>山寨加密方法 </li>
-<li>滥用权限、内存泄露、使用debug签名</li>
-</ol>
-<h3 id="设备横竖屏切换的时候，接下来会发生什么？">设备横竖屏切换的时候，接下来会发生什么？</h3><ol>
-<li>不设置Activity的android:configChanges时，切屏会重新调用各个生命周期，切横屏时会执行一次，切竖屏时会执行两次 </li>
-<li>设置Activity的android:configChanges=”orientation”时，切屏还是会重新调用各个生命周期，切横、竖屏时只会执行一次 </li>
-<li>设置Activity的android:configChanges=”orientation|keyboardHidden”时，切屏不会重新调用各个生命周期，只会执行onConfigurationChanged方法</li>
-</ol>
-<h3 id="谈谈你对Android中Context的理解?">谈谈你对Android中Context的理解?</h3><p>Context:包含上下文信息(外部值) 的一个参数. Android 中的 Context 分三种,Application Context ,Activity Context ,Service Context.<br>它描述的是一个应用程序环境的信息，通过它我们可以获取应用程序的资源和类，也包括一些应用级别操作，例如：启动一个Activity，发送广播，接受Intent信息等</p>
-<h3 id="如何缩减APK包大小？">如何缩减APK包大小？</h3><ol>
-<li><strong>代码</strong><br> 保持良好的编程习惯，不要重复或者不用的代码，谨慎添加libs，移除使用不到的libs。<br>使用proguard混淆代码，它会对不用的代码做优化，并且混淆后也能够减少安装包的大小。<br>native code的部分，大多数情况下只需要支持armabi与x86的架构即可。如果非必须，可以考虑拿掉x86的部分。 </li>
-<li><strong>资源</strong><br>使用Lint工具查找没有使用到的资源。去除不使用的图片，String，XML等等。 assets目录下的资源请确保没有用不上的文件。<br>生成APK的时候，aapt工具本身会对png做优化，但是在此之前还可以使用其他工具如tinypng对图片进行进一步的压缩预处理。<br>jpeg还是png，根据需要做选择，在某些时候jpeg可以减少图片的体积。 对于9.png的图片，可拉伸区域尽量切小，另外可以通过使用9.png拉伸达到大图效果的时候尽量不要使用整张大图。 </li>
-<li>策略<br>有选择性的提供hdpi，xhdpi，xxhdpi的图片资源。建议优先提供xhdpi的图片，对于mdpi，ldpi与xxxhdpi根据需要提供有差异的部分即可。<br>尽可能的重用已有的图片资源。例如对称的图片，只需要提供一张，另外一张图片可以通过代码旋转的方式实现。<br>能用代码绘制实现的功能，尽量不要使用大量的图片。例如减少使用多张图片组成animate-list的AnimationDrawable，这种方式提供了多张图片很占空间。</li>
-</ol>
-<h3 id="Android插件化与动态加载">Android插件化与动态加载</h3><ol>
-<li><strong>为什么要插件化？？？And它是什么？有什么好处？</strong>当一个app的方法数超过了一个 Dex 最大方法数 65535 的上限，因而便有了插件化的概念，<strong>Android插件化</strong>指将一个程序划分为不同的部分，也就是将一个App划分为多个插件（Apk或相关格式）比如一般App的皮肤样式就可以看成一个插件; <strong>插件化的好处</strong>包括：(1) 模块解耦(2) 可以动态升级(3) 高效并行开发(编译速度更快) (4) 按需加载，内存占用更低 (5) 节省升级流量</li>
-<li><strong>插件化的原理实际是 Java ClassLoader 的原理</strong>: Android 有自己的 ClassLoader，分为 dalvik.system.DexClassLoader 和 dalvik.system.PathClassLoader，区别在于: <ul>
-<li><strong>PathClassLoader</strong>: 不能直接从 zip 包中得到 dex，因此只支持直接操作 dex 文件或者已经安装过的 apk（因为安装过的 apk 在 cache 中存在缓存的 dex 文件）</li>
-<li><strong>DexClassLoader</strong> 可以加载外部文件系统中的 apk、jar 或 dex文件，并且会在指定的 outpath 路径存放其 dex 文件。</li>
-<li><strong>此外还有URLClassLoader</strong> ：可以加载java中的jar，但是由于dalvik不能直接识别jar，所以此方法在Android中无法使用，尽管还有这个类</li>
-</ul>
-</li>
-<li><strong>Android热加载或Android动态部署</strong>指App在运⾏状态下动态加载某个模块，从而新增功能或改变某⼀部分行为. 例如一个app（称之为宿主程序）去本地文件中动态加载apk文件并将其放在自己的进程中执行 </li>
-<li><strong>为什么有dex文件以及为什么要有DexClassLoader？？？</strong>Android应用程序，本质上使用的是java开发，使用标准的java编译器编译出Class文件，和普通的java开发不同的地方是把class文件再重新打包成dex类型的文件，这种重新打包会对Class文件内部的各种函数表、变量表等进行优化，最终产生了dex文件。dex文件是一种经过android打包工具优化后的Class文件，因此加载这样特殊的Class文件就需要特殊的类装载器；所以android中提供了DexClassLoader类</li>
-</ol>
-<h3 id="AsyncTask和Handler,Looper">AsyncTask和Handler,Looper</h3><ol>
-<li><strong>网络请求交互</strong>：参见百度锁屏项目</li>
-<li><strong>Android AsynTask实现多任务下载管理</strong>:</li>
-</ol>
-<pre><code><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoAsyncTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">String</span>, <span class="title">Integer</span>, <span class="title">Bitmap</span>&gt; </span>{
-    <span class="annotation">@Override</span>
-    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPreExecute</span><span class="params">()</span> </span>{
-        <span class="keyword">super</span>.onPreExecute();
-    }
-
-    <span class="annotation">@Override</span>
-    <span class="function"><span class="keyword">protected</span> Bitmap <span class="title">doInBackground</span><span class="params">(String... params)</span> </span>{
-        <span class="keyword">return</span> <span class="keyword">null</span>;
-    }   
-
-    <span class="annotation">@Override</span>
-    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(Bitmap result)</span> </span>{
-        <span class="keyword">super</span>.onPostExecute(result);
-    }
-
-    <span class="annotation">@Override</span>
-    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onProgressUpdate</span><span class="params">(Integer... progress)</span> </span>{
-        <span class="keyword">super</span>.onProgressUpdate(progress);
-    }
-
-    <span class="annotation">@Override</span>
-    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCancelled</span><span class="params">()</span> </span>{
-        <span class="keyword">super</span>.onCancelled();
-    }
-}
-</code></pre><ul>
-<li><strong>AsyncTask<string,integer,bitmap>参数解析</string,integer,bitmap></strong><ol>
-<li>params 启动任务执行的输入参数，比如HTTP请求的URL(doInBackground函数的参数类型)</li>
-<li>progress 后台任务执行的百分比（onProgressUpdate函数的参数类型）</li>
-<li>result 后台执行任务最终返回的结果，比如String(doInBackground返回的参数类型</li>
-<li>new AsynTask.execute(url); execute方法内部调用executeOnExecutor()方法，执行之后AsyncTask会把任务交给线程池，由线程池来管理创建Thread和运行Therad执行任务</li>
-<li>使用AsyncTask类，以下是几条必须遵守的准则：AsyncTask的实例必须在UI thread中创建; execute方法必须在UI thread中调用,并且只能调用一次；3.0版本之后的AsyncTask同时只能执行一个任务，但是提供executeOnExecutor(executor)来接收自定义ThreadPoolExecutor线程池，3.0之前默认为SerialExecutor，其核心线程池的大小是5，线程池总大小为128，缓存任务队列是10</li>
-</ol>
-</li>
-<li><p><strong>AsyncTask内部实现原理</strong></p>
-<ol>
-<li>AsyncTask的本质是一个线程池，AsyncTask在构造函数中新建一个继承Callable接口的WorkerRunnable类对象，重载call方法，在call方法中执行语句<strong>return postResult(doInBackground(mParams));</strong>执行doInBackground中的异步任务；然后新建FutureTask接受WorkerRunnable作为参数，提交到线程池执行；在FutureTask的重载done函数中调用get方法接收线程执行的返回结果并定义任务状态变化后的操作（包括失败和成功），再调用postResult方法利用handler(一个static class InternalHandler extends Handler对象)发送message给UI线程 </li>
-<li>AsyncTask派生出的子类可以实现不同的异步任务，这些任务都是提交到静态的线程池中执行; 线程池中的工作线程执行doInBackground(mParams)方法执行异步任务</li>
-<li>当任务状态改变(例如进度更新，执行成功，取消)之后，线程池中的工作线程会向UI线程发送消息，UI线程中的AsyncTask内部的InternalHandler响应这些消息并进行处理；例如：如果当前任务被取消掉了，就会调用onCancelled()方法不再调用onPostExecute方法，如果没有被取消，则调用onPostExecute()方法，这样当前任务的执行就全部结束了</li>
-</ol>
-</li>
-<li><p><strong>AsyncTask和Handler,Looper之间的区别联系</strong></p>
-<ol>
-<li>AsyncTask是对Handler与Thread的封装。</li>
-<li>AsyncTask在代码上比Handler要轻量级别，但实际上比Handler更耗资源，因为AsyncTask底层是一个线程池，而Handler仅仅就是发送了一个消息队列。但是，如果异步任务的数据特别庞大，AsyncTask线程池比Handler节省开销，因为Handler需要不停的new Thread执行</li>
-<li>AsyncTask的实例化只能在主线程，Handler可以随意，只和Looper有关系</li>
-</ol>
-</li>
-</ul>
-<ol>
-<li><p><strong>Handler+Looper+MessageQueue异步信息处理系统模型</strong> <a href="http://m.blog.csdn.net/article/details?id=38377229" target="_blank" rel="external">Link</a></p>
-<ul>
-<li><strong>Handler+Looper+MessageQueue概念</strong> <strong>Looper</strong>本质是一个ThreadLocal变量，它持有一个MessageQueue消息队列，负责实现消息循环和消息派发; <strong>Handler</strong>通过post和sendMessage方法去负责收发Message,包括push新消息到MessageQueue或者接收Looper从其持有的MessageQueue中取出来的消息; MessageQueue是一个FIFO消息队列</li>
-<li><p><strong>异步通信流程</strong>：<br>  ① <strong>消息分发和处理</strong>: 首先一个线程通过调用Looper.prepare()，为自己创建一个唯一的Looper对象，在该Looper对象的构造函数中会执行<strong>mQueue = new MessageQueue(quitAllowed);</strong>去创建一个消息队列；然后我们新建一个或者多个Handler并重载他们的handleMessage回调函数，用于处理其他线程中发送过来的消息；接下来我们调用<strong>Looper.loop</strong>方法，在该方法中会建立一个无限循环体，通过调用<strong>msg.target.dispatchMessage(msg);</strong>函数(其内部调用Handler的handleMessage回调函数)不断地从消息队列中取出message，分发给不同的Handler target.<br>  (注：在主线程中默认新建Looper对象不需要显示调用prepare和loop函数，Looper、MessageQueue和Handler都是在同一个线程中)  </p>
-<p>  ② <strong>Handler发送消息</strong>: Handler在初始化时就会调用<strong>mLooper = Looper.myLooper(); mQueue = mLooper.mQueue;</strong>和Looper以及消息队列相关联，然后在子线程中调用post或者sendMessage方法发送消息插入到消息队列中，这两个函数内部的调用顺序大致为sendMessageDelayed—&gt; sendMessageAtTime—&gt; enqueueMessage，在enqueueMessage函数中会执行<em>msg.target = this;</em>这样Looper就可以识别每条信息来自于哪个Handler，以便于分发消息的正确性</p>
-<p>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Looper.jpg" class="full-image" width="100%"></p>
-</li>
-<li><p><strong>Handler更新UI</strong>：Android系统中耗时操作不能放在主线程进行，例如网络请求、数据库操作、复杂计算等逻辑；所以他们一般放在AsyncTask或者新建子线程进行，然后通过Handler发送消息通知主线程；如果这些耗时操作涉及到UI界面的更新，可以借助于(Android系统UI的更新必须放在主线程进行)Handler发送消息给UI线程更新UI</p>
-</li>
-<li><p><strong>Handler更新UI实例</strong>：</p>
-<pre><code> <span class="comment">// UI线程新建的Handler，在handleMessage()中更新UI</span>
- <span class="keyword">private</span> Handler mHandler = <span class="keyword">new</span> Handler() {
-    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">handleMessage</span> <span class="params">(Message msg)</span> </span>{
-        <span class="keyword">switch</span>(msg.what) {
-        <span class="keyword">case</span> MSG_SUCCESS:
-            mImageView.setImageBitmap((Bitmap) msg.obj);
-            <span class="keyword">break</span>;
-        <span class="keyword">case</span> MSG_FAILURE:
-            <span class="keyword">break</span>;
-        }
-    }
-};
-
-<span class="comment">// 子线程中获取网络图片并发送message通知UI线程更新显示图片</span>
-Runnable runnable = <span class="keyword">new</span> Runnable() {
-
-    <span class="annotation">@Override</span>
-    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
-        HttpClient hc = <span class="keyword">new</span> DefaultHttpClient();
-        HttpGet hg = <span class="keyword">new</span> HttpGet(<span class="string">"http://www.oschina.net/img/logo.gif"</span>);
-        <span class="keyword">final</span> Bitmap bm;
-
-        <span class="keyword">try</span> {
-            HttpResponse hr = hc.execute(hg);
-            bm = BitmapFactory.decodeStream(hr.getEntity().getContent());
-        } <span class="keyword">catch</span> (Exception e) { 
-            mHandler.obtainMessage(MSG_FAILURE).sendToTarget();     
-            <span class="keyword">return</span>;
-        }
-        <span class="comment">// Handler发送消息可以new但是最好使用obtainMessage，因为Message内部</span>
-        <span class="comment">// 通过next实现一个缓存消息链表,使用obtain方法获取Message使用完之后系统</span>
-        <span class="comment">// 会调用recycle方法进行回收，节省内存</span>
-        mHandler.obtainMessage(MSG_SUCCESS,bm).sendToTarget();
-        }
-};
-
-<span class="keyword">new</span> Thread(runnable).start();                        
-</code></pre></li>
-<li><p><strong>子线程中Handler结合Looper处理其他线程发送过来的消息实例</strong></p>
-<pre><code><span class="class"><span class="keyword">class</span> <span class="title">LooperThread</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Thread</span> {</span>
-      public <span class="type">Handler</span> mHandler;
-      public void run() {
-             <span class="type">Looper</span>.prepare();
-
-             mHandler = <span class="keyword">new</span> <span class="type">Handler</span>() {
-                      public void handleMessage(<span class="type">Message</span> msg) {
-
-                      }                                                                                                                                                                                                                     };
-
-             <span class="type">Looper</span>.loop();
-
-      }
-}
-</code></pre></li>
-<li><p>一个线程只能拥有一个Looper实例(该Looper对象可以通过Looper.myLooper()来获取)，对应着一个MessageQueue消息队列，但是可以拥有多个Handler; 主线程初始化时默认创建一个Looper对象，可以通过Looper.getMainLooper()来获取他；</p>
-</li>
-<li>主线程中可以直接新建Handler，但是子线程中新建Handler需要先调用Looper.prepare()</li>
-<li>消息队列其实内部实现是一个管道通信机制，当队列为空时线程进入等待状态，不为空时才进入处理消息状态；enqueueMessage方法也分为2种情况，队列为空直接将新message添加到队列头部，否则需要将消息按照时间先后顺序插入到合适位置，因为消息要按照处理时间排序</li>
-<li><p><strong>handler可能引发的内存泄露和解决方案</strong></p>
-<ol>
-<li>当使用内部类（包括匿名类）来创建Handler的时候，Handler对象会隐式地持有一个外部类对象（通常是一个Activity）的引用。而Handler通常会伴随着一个耗时的后台线程一起出现，这个后台线程在任务执行完毕之后，通过消息机制通知Handler，然后Handler把消息发送到UI线程。然而，如果用户在耗时线程执行过程中关闭了Activity（正常情况下Activity不再被使用，它就有可能在GC检查时被回收掉），由于这时线程尚未执行完，而该线程持有Handler的引用，这个Handler又持有Activity的引用，就导致该Activity暂时无法被回收（即内存泄露）</li>
-<li><p>解决方案:</p>
-<ul>
-<li><p>Handler声明为静态内部类,不再持有外部类Activity,在其内部声明一个Activity的弱引用来操作Activity中的对象</p>
-<pre><code>static <span class="class"><span class="keyword">class</span> <span class="title">TestHandler</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Handler</span> {</span>
-    <span class="type">WeakReference</span>&lt;<span class="type">Activity</span> &gt; mActivityReference;
-
-    <span class="type">TestHandler</span>(<span class="type">Activity</span> activity) {
-        mActivityReference= <span class="keyword">new</span> <span class="type">WeakReference</span>&lt;<span class="type">Activity</span>&gt;(activity);
-    }
-
-    <span class="annotation">@Override</span>
-    public void handleMessage(<span class="type">Message</span> msg) {
-        <span class="keyword">final</span> <span class="type">Activity</span> activity = mActivityReference.get();
-        <span class="keyword">if</span> (activity != <span class="literal">null</span>) {
-            mImageView.setImageBitmap(mBitmap);
-        }
-    }
-}
-</code></pre></li>
-<li><p>①在关闭Activity的时候停掉你的后台线程。线程停掉了，就相当于切断了Handler和外部连接的线，Activity自然会在合适的时候被回收；②如果你的Handler是被delay的Message持有了引用，那么使用相应的Handler的removeCallbacks()方法，把消息对象从消息队列移除        </p>
-</li>
-</ul>
-</li>
-</ol>
-</li>
-<li><strong>HandlerThread</strong>是一个Looper,Handler,Thread的组合实现；在其构造函数中对Looper进行初始化，并提供一个Looper对象给新创建的Handler对象，使得Handler处理消息事件在子线程中处理</li>
-</ul>
-</li>
-</ol>
-
+          <h3 id="xml文件出现找不到相应类">xml文件出现找不到相应类</h3><p>例如ViewPager类找不到，应该检查类名单词拼写是否错误，是否写错包名以及是否导入jar包并勾选</p>
+<h3 id="xml文件布局merge标签">xml文件布局merge标签</h3><p><merge>标签能百分百代替<FrameLayout>这个布局组件， 对于不复杂的其他布局组件如线性布局等组合组件中，可以在继承子类中对其属性进行设置后也可以使用<merge>标 签，<merge>标签不占资源，自然在生成界面时也不会生成对应的组件。另外需要注意一点是<merge>只能作为根元素，对 于需要用inflate生成布局文件时，必须指定一个ViewGroup作为其父元素，并且要设置inflate的attachToRoot参数为 true</p>
+<h3 id="DEXpathlist错误">DEXpathlist错误</h3><p>往往是因为重复导入jar或者第三方依赖包
+          <div class="post-more-link text-center">
+            <a class="btn" href="../../2015/05/27/Android开发常见bug解决方法及注意事项/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -1088,397 +1198,7 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
           
             <a href="../../tags/Android/"> #Android </a>
           
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/04/08/实习项目总结/">
-                实习项目总结
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-04-08
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/04/08/实习项目总结/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/08/实习项目总结/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="自我介绍_1min_慢，停顿">自我介绍 1min 慢，停顿</h3><ol>
-<li>姓名 —-&gt; 学习经历(中大科大软件专业) 基于兴趣和职业规划 —-&gt; 本科到硕士都注重计算机基础知识积累，对Java语言基础，计算机网络/MySQL数据库原理，常见数据结构和算法比较熟悉，例如常见排序，链表，二叉树，队列栈等；平常对移动端和web端研发也具有浓厚兴趣</li>
-<li>一直以来也比较注重实践，陆续参加了几个实习和项目，提现学习和工作能力(先后参与3份实习和2个校内科研项目，选择与岗位相符的两段经历进行1-2句话简述，做了什么和达到了什么成就) </li>
-<li>业余爱好，羽毛球，健身，阅读和利用coursera进行业余学习</li>
-<li>对目标岗位的理解和想法，应聘该岗位的强烈意愿以及自身吻合度</li>
-<li>经历：前期社会活动兴趣的广泛性+后期对专业的专注性；性格：程序员中的外向型</li>
-</ol>
-<h3 id="网易">网易</h3><ol>
-<li>学习Spring框架使用和原理</li>
-<li>接口实现</li>
-<li>网易实习时有挑战性的地方以及，最大的贡献<ul>
-<li>自己扮演的角色应该是<strong>需求开发者和主动学习者的角色</strong> ①快速学习能力的体现以及快速学习的方法，学习使用redis，Spring框架开发restful 数据接口②沟通与合作：与产品，前端，测试之间分工合作②贡献818的部分核心需求，开奖时服务端通过张连接WebSocket主动推送给app开奖信息；设置一个观察者观察开奖数据；然后查表中未中奖用户的信息进行推送</li>
-</ul>
-</li>
-</ol>
-<h3 id="Kactus">Kactus</h3><ol>
-<li>ECO餐厅食用油回收系统<ul>
-<li>Android端缓存机制的实现，采用二级缓存，LRUcache内存缓存和DiskLruCache文件缓存，同时模拟浏览器缓存机制来分析http请求过程的请求头内容来确定cache-control策略<ol>
-<li><strong>App请求server数据流程</strong>: 当我们第一次打开应用获取图片时，先到网络去下载图片，然后依次存入内存缓存，磁盘缓存;以后每次加载图片的时候都优先去LRUCache内存缓存当中读取，当读取不到的时候则回去DiskLruCache硬盘缓存中读取，而如果硬盘缓存仍然读取不到的话，就从网络上请求原始数据。</li>
-<li><strong>App的二级缓存实现</strong>: 变化频繁的小数据(例如订单列表)都采用LRUCache,以<url, data="">的键值对形式存储数据, 缓存时间为应用开启到关闭时间段; 稳定的大文件数据(例如图片)采用DiskLruCache,缓存时间可以根据需求自定义;LruCache和DiskLruCache的原理实际上是LinkedHashMap和File;</url,></li>
-<li><strong>缓存管理和清理策略</strong>：<ul>
-<li>① <strong>现用方法</strong>App根据服务器响应头部里边的expires(缓存过期的时间（绝对时间）),Last-Modified(服务器响应的资源最终修改时间), Cache-Control(资源的有效期)等内容来确定是否需要将数据缓存到DiskLruCache中，以及缓存的保留时间，<strong>具体实现</strong> 每次请求url得到响应结果时会解析头部Cache-Control去判断该响应资源是否需要缓存以及缓存过期时间等内容；然后将资源URL和这些缓存时间相关的http头部信息(比如expires(缓存过期的时间))一起存储到SQLite数据库，然后每次加载资源都会先根据url查询数据库看本地缓存是否过期，是否需要重新发送网络请求并更新缓存        </li>
-<li>② <strong>其它方法</strong>每次去读取缓存文件时先调用File.lastModified()方法得到文件的最后修改时间，与当前时间相减得到已缓存时间,然后根据自定义的缓存时间判断该缓存是否过期，如果过期则重新请求文件，不然直接从缓存加载，这样就能实现缓存文件定时清理</li>
-<li>③ <strong>每次服务器资源变化时客户端怎么得到通知？</strong>, 客户端定时轮询请求某个指定url并解析返回的json判断某些数据是否变化，变化就重新请求该数据; 或者手动刷新，socket长连接</li>
-</ul>
-</li>
-<li><ul>
-<li><strong>FIFO</strong>First In First Out，先进先出;核心原则就是：如果一个数据最先进入缓存中，则应该最早淘汰掉。也就是说，当缓存满的时候，应当把最先进入缓存的数据给淘汰掉。</li>
-<li><strong>LFU</strong>：Least Frequently Used，最不经常使用;在一段时间内，数据被使用次数最少的，优先被淘汰。</li>
-<li><strong>LRU</strong>: Least Recently Used，最近最少使用策略，其核心思想是“如果数据最近被访问过，那么将来被访问的几率也更高”；简单的说就是缓存一定量的数据，当超过设定的阈值时就把一些<strong>最近最少使用的数据</strong>删除掉;<strong>最常见的实现算法</strong>是使用一个链表保存缓存数据，①新数据插入到链表头部；②每当缓存命中（即缓存数据被访问），则将数据移到链表头部；③当链表满的时候，将链表尾部的数据丢弃。<a href="https://segmentfault.com/a/1190000003743083" target="_blank" rel="external">LRUCache双向链表+HashMap实现</a> <a href="https://segmentfault.com/a/1190000005922083" target="_blank" rel="external">LRUCache LinkedHashMap实现</a></li>
-<li><strong>LRU-K</strong>中的K代表最近使用的次数，因此LRU可以认为是LRU-1。LRU-K的主要目的是为了解决LRU算法“缓存污染”的问题，其核心思想是将“最近使用过1次”的判断标准扩展为“最近使用过K次”。<strong>实现</strong>：相比LRU，LRU-K需要多维护一个队列，用于记录所有缓存数据被访问的历史。只有当数据的访问次数达到K次的时候，才将数据放入缓存。当需要淘汰数据时，LRU-K会淘汰第K次访问时间距当前时间最大的数据</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-</li>
-</ol>
-<pre><code>缓存图片举例：
-
-
-        <span class="comment">// 获取应用可占内存的1/8作为缓存</span>
-        <span class="built_in">int</span> maxSize = (<span class="built_in">int</span>) (Runtime.getRuntime().maxMemory() / <span class="number">8</span>);
-        <span class="comment">// 实例化LruCaceh对象</span>
-        mLruCache = <span class="keyword">new</span> LruCache&lt;<span class="keyword">String</span>, Bitmap&gt;(maxSize) {
-            @Override
-            <span class="keyword">protected</span> <span class="built_in">int</span> sizeOf(<span class="keyword">String</span> <span class="variable">key</span>, Bitmap bitmap) {
-                <span class="keyword">return</span> bitmap.getRowBytes() * bitmap.getHeight();
-            }
-        };
-         mDiskLruCache=DiskLruCache.<span class="built_in">open</span>(getDiskCacheDir(context.getApplicationContext(),
-         <span class="string">"xxxxx"</span>),     getAppVersion(context), <span class="number">1</span>, DISKMAXSIZE);
-        <span class="comment">// 缓存操作</span>
-        mLruCache.<span class="built_in">get</span>(url);
-        mLruCache.put(url, bitmap);
-        bitmap = BitmapFactory.decodeStream(mDiskLruCache.<span class="built_in">get</span>(url).getInputStream(<span class="number">0</span>));
-        DiskLruCache.Editor editor = mDiskLruCache.edit(<span class="variable">key</span>);
-        OutputStream outputStream = editor.newOutputStream(<span class="number">0</span>);
-        editor.commit();
-</code></pre><ol>
-<li><p>采用Java WebSocket编程取代传统的非实时http请求连接模式</p>
-<ul>
-<li><p><strong>为什么要用WebSocket实时交互数据？</strong>: 传统Web应用的信息交互过程通常是客户端发出一个请求，服务器端接收和审核完请求后进行处理并返回结果给客户端，然后客户端浏览器将信息呈现出来，但是对于那些实时要求比较高的应用来说，比如说在线游戏、新闻在线播报、RSS 订阅推送等等，当客户端浏览器准备呈现这些信息的时候，这些信息在服务器端可能已经过时了;所以我们考虑采用webSocket    <strong>常见的模拟实时应用方法</strong> </p>
-<p>  <strong>轮询</strong>：最早的一种实现实时 Web 应用的方案。客户端以一定的时间间隔向服务端发出请求，以频繁请求的方式来保持客户端和服务器端的同步。服务器端的数据可能并没有更新但是依然请求，会带来很多无谓的网络传输，所以这是一种非常低效的实时方案。  </p>
-<p>  <strong>长轮询</strong>：为了降低无效的网络传输，当服务器端没有数据更新的时候，连接会保持一段时间周期直到数据或状态改变或者时间过期，通过这种机制来减少无效的客户端和服务器间的交互  </p>
-<p>  <strong>流</strong>： 流技术方案通常就是在客户端的页面使用一个隐藏的窗口向服务端发出一个长连接的请求。服务器端接到这个请求后作出回应并不断更新连接状态以保证客户端和服务器端的连接不过期。通过这种机制可以将服务器端的信息源源不断地推向客户端。这种机制需要针对不同的浏览器设计不同的方案来改进用户体验，同时这种机制在并发比较大的情况下，对服务器端的资源是一个极大的考验。</p>
-<p>  <strong>WebSocket原理和建立过程</strong>: WebSocket是一个基于TCP连接的双向通道；为了建立一个 WebSocket 连接，客户端浏览器首先要向服务器发起一个 HTTP 请求，这个请求和通常的 HTTP 请求不同，包含了一些附加头信息，其中附加头信息”Upgrade: WebSocket”表明这是一个申请协议升级的 HTTP 请求，服务器端解析这些附加的头信息然后产生应答信息返回给客户端，客户端和服务器端的 WebSocket 连接就建立起来了，双方就可以通过这个连接通道自由的传递信息，并且这个连接会持续存在直到客户端或者服务器端的某一方主动的关闭连接。    </p>
-<pre><code><span class="annotation">@ServerEndpoint</span>(<span class="string">"/websocket"</span>)
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebSocketTest</span> </span>{
-
-  <span class="annotation">@OnMessage</span>
-  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onMessage</span><span class="params">(String message, Session session)</span>
-    <span class="keyword">throws</span> IOException, InterruptedException </span>{
-
-    System.out.println(<span class="string">"Received: "</span> + message);
-
-    <span class="comment">// Send the first message to the client</span>
-    session.getBasicRemote().sendText(<span class="string">"This is the first server message"</span>);
-
-    <span class="comment">// Send 3 messages to the client every 5 seconds</span>
-    <span class="keyword">int</span> sentMessages = <span class="number">0</span>;
-    <span class="keyword">while</span>(sentMessages &lt; <span class="number">3</span>){
-      Thread.sleep(<span class="number">5000</span>);
-      session.getBasicRemote().
-        sendText(<span class="string">"This is an intermediate server message. Count: "</span>
-          + sentMessages);
-      sentMessages++;
-    }
-
-    <span class="comment">// Send a final message to the client</span>
-    session.getBasicRemote().sendText(<span class="string">"This is the last server message"</span>);
-  }
-
-  <span class="annotation">@OnOpen</span>
-  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onOpen</span><span class="params">()</span> </span>{
-    System.out.println(<span class="string">"Client connected"</span>);
-  }
-
-  <span class="annotation">@OnClose</span>
-  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClose</span><span class="params">()</span> </span>{
-    System.out.println(<span class="string">"Connection closed"</span>);
-  }
-
-}
-</code></pre><p>  <strong>如何使用Encoder和Decoder传输更复杂的数据</strong>：Websocket使用Decoder将文本消息转换成Java对象，然后传给@OnMessage方法处理; 而当对象写入到session中时，Websocket将使用Encoder将Java对象转换成文本，再发送给客户端。</p>
-</li>
-<li><p>整个项目从简单的多线程优化到采用线程池来实现xml数据文件的获取</p>
-</li>
-<li>总体项目图<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/kactus项目.JPG" width="100%"></li>
-</ul>
-</li>
-</ol>
-<h3 id="Baidu">Baidu</h3><ol>
-<li><p>Duwear项目短信管理模块: 目的是将手机短信库的变化情况通知到wear端</p>
-<ol>
-<li><strong>SMSObserver</strong>继承ContentProvider类实现观察者模式，注册了一个短信数据库的观察者，发生变化该类都会被通知；在重载函数onChange中进行操作比对判断数据库变化情况，只知道变化，但是不知道具体操作？如何判断用户是标为已读还是删除，新建短信</li>
-<li><strong>SmsReceivedListener接口</strong>：两个回调函数，作为一个接口参数传到SMSObserver的构造函数中，然后一旦判断是新短信还是短信已读，就调用其回调函数</li>
-<li><strong>SmsRpcService类</strong>：继承自上边的接口，在回调函数中将这个操作判断出来发送给手表</li>
-<li><strong>SmsUtils</strong>: 4个函数，查询短信数据库，标为已读的数据库操作函数</li>
-<li><p>SMSObserver类中的具体的判断方式和优化过程</p>
-<ul>
-<li>从维护所有信息的set到只维护未读信息的内容，信息实体占用内存很大，内存优化；</li>
-<li><p>ArrayList到HashSet对比与区别：防止出现重复信息，去重速度很快因为使用HashTable中的hashCode()以及equals进行查找去重；</p>
-</li>
-<li><p>多次读取unreadSet并对两个set进行比对，removeAll和AddAll求补集并集来比对两个未读信息集合;两个方法都用到了hashCode和equals，所以SmsEntity对象中hashcode和equals方法的同时重载；直接removeAll新set可以判断出哪些信息被标为已读，AddAll新set再removeAll旧set可以判断得到新增加的短信；比如1，2，3和1，2，4，5</p>
-</li>
-<li><p><strong>java集合中的浅复制和深复制，clone集合不影响原集合</strong></p>
-<ol>
-<li><p><strong>浅复制</strong>: 复制后的对象与原对象所有变量的值相同，包括引用变量，浅复制时只会复制引用变量本身，不会复制它指向的对象本身</p>
-</li>
-<li><p><strong>深复制</strong>: 复制后的对象与原对象所有变量的值相同，但是不包括引用变量，深复制时会复制引用变量指向的对象本身，所以引用值发生改变</p>
-</li>
-<li><p><strong>Clone()方法和Cloneable接口</strong>: Cloneable接口是一个不包含方法的标志接口，一个类必须先继承它才能在其内部调用super.clone()方法，否则会抛出不支持clone的异常;clone()方法是一个native方法，拷贝对象时已经包括一部分原对象信息，效率优于使用新建对象再一一复制变量的方式;重写clone()方法需要先调用super.clone()方法，该方法会开辟一块新的内存用于拷贝原对象，将原对象的内容一一复制到新对象的内存空间中，它是一种浅复制;如果要实现深复制，需要对复制的对象中的所有引用变量对应的对象也进行复制(具体操作:重写引用对象的clone方法，在其中调用super.clone，然后在上层对象的重载clone方法中调用该对象的clone方法)</p>
-</li>
-<li><p><strong>序列化实现深复制</strong>: 序列化主要用于将内存中对象状态写入数据库或者文件，以及利用Socket在网络中传输对象;一个对象要能够被序列化需要该类实现Serializable接口，可序列化类的子类默认也是可以被序列化的，不需要再次实现Serializable接口；利用序列化进行深复制的前提是该对象及其内部的引用到的对象都是可序列化的，这样对对象序列化时才能递归地保存对象及其引用对象的数据</p>
-<pre><code>deepClone() {    
-   <span class="comment">//序列化:将内存中对象状态转化为字节流，写入目标输出流</span>
-   ByteArrayOutoutStream bo=<span class="keyword">new</span> ByteArrayOutputStream();    
-   ObjectOutputStream oo=<span class="keyword">new</span> ObjectOutputStream(bo);
-   <span class="comment">//    </span>
-   oo.writeObject(<span class="keyword">this</span>);    
-   <span class="comment">//反序列化:读取源输入流中的字节流重建一个内存中相同状态的对象     </span>
-   ByteArrayInputStream bi=<span class="keyword">new</span> ByteArrayInputStream(bo.toByteArray());    
-   ObjectInputStream oi=<span class="keyword">new</span> ObjectInputStream(bi);    
-   <span class="keyword">return</span>(oi.readObject());    
-}
-</code></pre></li>
-<li><p>当一个类声明要实现Serializable接口时，只是表明该类参加序列化协议;Java提供的ObjectInputStream和ObjectOutputStream将数据流功能扩展至可读写对象 。在ObjectInputStream中用readObject()方法可以直接读取一个对象，ObjectOutputStream中用writeObject()方法可以直接将对象保存到输出流中; 序列化只能保存对象的非静态成员变量，不能保存任何的成员方法和静态成员变量，而且序列化保存的只是变量的值，对于变量的任何修饰符都不能保存。          </p>
-</li>
-</ol>
-</li>
-</ul>
-</li>
-<li><strong>工厂模式</strong>生产手表View：需要生成许多不同的CardView，利用CardFactory中的BuildPage函数<ul>
-<li>简单工厂模式:工程类+抽象产品类+具体产品类；根据参数的不同返回不同类的实例。专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类</li>
-<li>工厂方法模式: 抽象产品角色，具体产品角色，抽象工厂角色，具体工厂角色;工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，这样做的目的是将产品类的实例化操作延迟到工厂子类中完成，即通过工厂子类来确定究竟应该实例化哪一个具体产品类;一个抽象产品类，可以派生出多个具体产品类。一个抽象工厂类，可以派生出多个具体工厂类。每个具体工厂类只能创建一个具体产品类的实例。</li>
-<li>抽象工厂模式: 多个抽象产品类，每个抽象产品类可以派生出多个具体产品类。一个抽象工厂类，可以派生出多个具体工厂类。每个具体工厂类可以创建多个具体产品类的实例。</li>
-</ul>
-</li>
-</ol>
-</li>
-<li><p>百度锁屏项目: <a href="https://charles-xiao.github.io/2016/05/18/Android%E8%87%AA%E5%AE%9A%E4%B9%89View%E5%AE%9E%E7%8E%B0%E6%80%BB%E7%BB%93-%E4%BB%A5%E7%99%BE%E5%BA%A6%E9%94%81%E5%B1%8F%E9%A1%B9%E7%9B%AE%E7%95%8C%E9%9D%A2%E4%B8%BA%E4%BE%8B/" target="_blank" rel="external">View的自定义绘制与组合原理过程</a></p>
-</li>
-</ol>
-<ol>
-<li><p><strong>网络通信的优化和实现过程</strong>http从同步的主线程发送get请求优化为异步的子线程发送post请求, 加强了数据传输的安全性和长度，解决了应用程序无响应的应用体验问题; httpClient和HttpUrlConnection的区别对比;最后学习和使用Volley以及OkHttp通信库<br><a href="http://www.jianshu.com/p/3141d4e46240#Volley&amp;OkHttp" target="_blank" rel="external">参考链接</a></p>
-<ol>
-<li><p>异步的get和post请求实现过程(HttpUrlConnection)</p>
-</li>
-<li><p><strong>httpClient和httpUrlConnection, OKHttp对比</strong>：</p>
-<ul>
-<li>httpClient是apache的开源实现，API数量多，非常稳定</li>
-<li>httpUrlConnection是java自带的模块: ①可以直接支持GZIP压缩,而HttpClient虽然也支持GZIP，但要自己写代码处理 ②httpUrlConnection直接在系统层面做了缓存策略处理，加快重复请求的速度 ③API简单，体积较小,而且直接支持系统级连接池，即打开的连接不会直接关闭，在一段时间内所有程序可共用</li>
-<li>HttpURLConnection在Android2.2之前有个重大Bug，调用close()函数会影响连接池，导致连接复用失效，需要关闭keepAlive;因此在2.2之前http请求都是用httpClient，2.2之后则是使用HttpURLConnection</li>
-<li>但是!!!现在!!!Android不再推荐这两种方式！二是直接使用OKHttp这种成熟方案！支持Android 2.3及其以上版本; 什么是OKHttp?</li>
-</ul>
-</li>
-<li><strong>Volley原理和OkHttp实现原理和应用方法以及优缺点</strong> <ul>
-<li><strong>Volley的调用过程</strong>，通过 newRequestQueue(…) 函数新建并启动一个请求队列RequestQueue后，只需要往这个RequestQueue不断 add Request 即可</li>
-<li><strong>Volley</strong>：Volley 对外暴露的 API，通过 newRequestQueue(…) 函数新建并启动一个请求队列RequestQueue。</li>
-<li><strong>Request</strong>：表示一个请求的抽象类。StringRequest、JsonRequest、ImageRequest 都是它的子类，表示某种类型的请求。</li>
-<li><strong>RequestQueue</strong>：表示请求队列，里面包含一个CacheDispatcher(用于处理走缓存请求的调度线程)、NetworkDispatcher数组(用于处理走网络请求的调度线程)，一个ResponseDelivery(返回结果分发接口)，通过 start() 函数启动时会启动CacheDispatcher和NetworkDispatchers。        </li>
-<li><strong>HttpStack</strong>：处理 Http 请求，返回请求结果。目前 Volley 中有基于 HttpURLConnection 的HurlStack和 基于 Apache HttpClient 的HttpClientStack，也可以内部采用OKHttp实现 </li>
-<li><strong>CacheDispatcher.java</strong>：继承自Thread，用于调度处理「缓存请求」。启动后会不断从缓存请求队列中取请求处理，队列为空则等待，请求处理结束则将结果传递给ResponseDelivery去执行后续处理。当结果未缓存过、缓存失效或缓存需要刷新的情况下，该请求都需要重新进入NetworkDispatcher去调度处理。</li>
-<li><strong>NetworkDispatcher.java</strong>：继承自Thread，用于调度处理「网络请求」。启动后会不断从网络请求队列中取请求处理，队列为空则等待，请求处理结束则将结果传递给ResponseDelivery去执行后续处理，并判断结果是否要进行缓存。 </li>
-</ul>
-</li>
-</ol>
-<ul>
-<li><p><strong>Volley与Activity生命周期联动与取消请求</strong>:为了在Activity退出或销毁的时候，取消对应的网络请求，避免网络请求在后台浪费资源；我们使用Volley的话，可以在Activity停止的时候，同时取消所有或部分未完成的网络请求，这些请求将不会被返回给主线程，取消操作一般在onStop()函数里边执行</p>
-<pre><code> <span class="comment">// 遍历整个Activity中的请求集合，例如List</span>
- <span class="keyword">for</span> (Request &lt;?&gt; req : mRequestQueue) {  
-    req.cancel();  
-}
-<span class="comment">// 取消整个队列中的请求 </span>
-mRequestQueue.cancelAll(<span class="keyword">this</span>);
-<span class="comment">// 根据RequestFilter或者Tag来终止某些请求</span>
-mRequestQueue.cancelAll( <span class="keyword">new</span> RequestFilter() {});    
-mRequestQueue.cancelAll(<span class="keyword">new</span> <span class="built_in">Object</span>());
-</code></pre></li>
-<li><p><strong>流程图解</strong>：<br>  第一步：主线程根据优先级把请求加入缓存队列<br>  第二步：「缓存调度线程」CacheDispatcher从缓存队列中取出一个请求，如果缓存命中，就读取缓存响应并解析，然后将结果返回到主线程<br>  第三步：缓存未命中，该请求被加入网络请求队列，「网络调度线程」NetworkDispatcher(一个默认值为4的线程池)从网络队列中轮询取出请求，进行HTTP请求传输，解析响应，写入缓存，然后将结果返回到主线程  </p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Volley.png" class="full-image" width="100%">    </p>
-<p><a href="http://a.codekk.com/detail/Android/grumoon/Volley%20%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90" target="_blank" rel="external">Volley源码分析</a></p>
-<p><strong>Volley用法</strong>  </p>
-<pre><code> RequestQueue mQueue <span class="subst">=</span> Volley<span class="built_in">.</span>newRequestQueue(context);
- StringRequest stringRequest <span class="subst">=</span> <span class="literal">new</span> StringRequest
- (Method<span class="built_in">.</span>POST, <span class="string">"http://www.baidu.com"</span>,  
-<span class="literal">new</span> Response<span class="built_in">.</span>Listener<span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span>() {  
-    @Override  
-    <span class="keyword">public</span> <span class="literal">void</span> onResponse(<span class="built_in">String</span> response) {  
-        <span class="keyword">Log</span><span class="built_in">.</span>d(<span class="string">"TAG"</span>, response);  
-    }  
-}, <span class="literal">new</span> Response<span class="built_in">.</span>ErrorListener() {  
-    @Override  
-    <span class="keyword">public</span> <span class="literal">void</span> onErrorResponse(VolleyError error) {  
-        <span class="keyword">Log</span><span class="built_in">.</span>e(<span class="string">"TAG"</span>, error<span class="built_in">.</span>getMessage(), error);  
-    }  
-}){
-@Override  
- <span class="keyword">protected</span> <span class="built_in">Map</span><span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">&gt;</span> getParams() throws AuthFailureError {  
-     <span class="built_in">Map</span><span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">&gt;</span> <span class="built_in">map</span> <span class="subst">=</span> <span class="literal">new</span> HashMap<span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">&gt;</span>();  
-     <span class="built_in">map</span><span class="built_in">.</span>put(<span class="string">"params1"</span>, <span class="string">"value1"</span>);  
-     <span class="built_in">map</span><span class="built_in">.</span>put(<span class="string">"params2"</span>, <span class="string">"value2"</span>);  
-     <span class="keyword">return</span> <span class="built_in">map</span>;  
- }  
-}; 
- mQueue<span class="built_in">.</span>add(stringRequest); 
-</code></pre></li>
-</ul>
-</li>
-</ol>
-<p><strong>OkHttp用法</strong><a href="http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0326/2643.html" target="_blank" rel="external">源码分析</a></p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/OkHttp.png" class="full-image"></p>
-<pre><code>OkHttpClient mOkHttpClient = <span class="keyword">new</span> OkHttpClient();
-FormEncodingBuilder builder = <span class="keyword">new</span> FormEncodingBuilder();   
-builder.add(<span class="string">"username"</span>,<span class="string">"value"</span>);
-
-Request request = <span class="keyword">new</span> Request.Builder()
-                   .url(url)
-                .post(builder.build())
-                .build();
-mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback(){
-    <span class="annotation">@Override</span>
-    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Request request, IOException e)</span>
-    </span>{
-    }
-
-    <span class="annotation">@Override</span>
-    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(<span class="keyword">final</span> Response response)</span> <span class="keyword">throws</span> IOException
-    </span>{
-            <span class="comment">//String htmlStr =  response.body().string();</span>
-    }
-});
-</code></pre><h3 id="毕设-WebCrawler项目">毕设-WebCrawler项目</h3><p>java优先级队列；Java多线程处理，线程池，html页面解析等</p>
-<p>单例模式enum实现对MySQL数据库操作的优势</p>
-<h3 id="开放性问题">开放性问题</h3><ol>
-<li>说一个你曾独立或者作为核心去解决了的一个“有趣有难度”且过程很详细的步步深入优化的<strong>技术问题or项目</strong><ul>
-<li>贡献和成果: 核心问题的效率优化过程与方法</li>
-<li>困难:体现解决问题的方法与能力</li>
-<li><strong>思路</strong>：如果说有趣有难度的项目的话，我想说说kactus的食用油回收项目；在这个项目中参与时间长达半年，技术成长较大；<strong>这个项目主要是用来开发</strong>一个后台管理系统和Android app，包括司机和经理，用于订单处理和发布；在这个项目中，<strong>我参与了整个项目的研发</strong>，包括3个主要部分，①通过Java http和WebSocket请求订单数据，利用生产者消费者模式和多线程池提高并发读写效率 ②操作数据库制作RESTful API给移动端app使用 ③移动端app的开发以及二级缓存的优化实现</li>
-</ul>
-</li>
-<li><strong>成就感最大的一件事</strong>: 比如学习,比赛,需要体现<strong>创新性的成果和idea</strong>：高德LBS的比赛全国八强，做了什么？为什么有成就感？从日常生活出发想出一个创新的idea，然后结合课程理论进行实践，到最后拿奖这样一个过程。</li>
-<li>团队合作沟通能力和Team领导力</li>
-<li><p><strong>如何白板写代码？？？</strong></p>
-<ul>
-<li>Show your idea,，例如白板写代码，遇到新问题即使不知道也可以开始分析，手动画图描述问题的解决过程，从思路到设计测试用例手动输入，一步步归纳出最终解法，转化成代码</li>
-<li>解决问题的多角度性，从小问题和具体性问题开始入手，一步步递进归纳算法；遇到细节性或者较难实现的问题，可以先声明一个函数及其相应功能，留到后边再完善，代码效率的优化同样可以放到后边再做，思路的流畅性和清晰很重要。</li>
-<li>主动单元测试，边缘情况测试，null，空字符串，StringUtils.isBlank(str)</li>
-</ul>
-</li>
-<li><p>遇到生活学习上的<strong>印象中最大的困难或者挫折</strong>？最后怎么解决的？</p>
-<ul>
-<li>留学的DIY过程是一个比较困难的过程。为什么？绝大多数人会选择找中介，会省事很多，整个流程和材料的准备都不需要自己动手，但是我选择了自己DIY，所以在这一路的申请过程中遇到不少的挫折和困难，①对于留学的讯息了解不够 , ②准备考雅思 ③文书材料的撰写和修改；</li>
-<li>最终这一路申请过程中虽然遇到各种困难，但是最终还是受益颇多，其实我本来自己DIY的原因就是我自己觉得申请过程其实是一次很好的审视自我的过程，也为我自己才是最了解我自己的人；不管结果如何，申请这个过程就是一段很好的人生经历，虽然遇到各种困难，但是一一克服，最终也有了一个比较好的结果，拿到了几家不错的offer</li>
-</ul>
-</li>
-<li><p><strong>最大缺点</strong>: 这个问题好难回答啊！我想想……</p>
-<pre><code><span class="bullet">* </span>我的缺点是比较专注和执着，比如在技术方面比较爱钻研，有的时候会为了研究一个技术问题，不断地沉浸在里边，不弄明白不罢休，到饭点了都能忘，晚上在公司研究到很晚才撤退。最近出的那个电脑端和手机端同步功能就很好，可以利用零碎时间看博客解决问题了
-<span class="bullet">* </span>还有就是，工作比较按部就班，总是按照项目经管的要求完成任务。另外的缺点是，总在息的工作范围内有创新意识，并没有扩展给其他同事。这些问题我想我可以进入公司后以最短的时间来解决，我的学习能力很强，我相信可以很快融入公司的企业文化，进入工作状态。我想就这些吧。
-</code></pre></li>
-<li><strong>最大的特点或者优势</strong>：基础知识+创新能力</li>
-<li><strong>最感兴趣的课程</strong> 本科阶段的话，最感兴趣的是移动端开发，</li>
-<li><strong>最感兴趣的运动或者业余爱好，长期坚持的爱好</strong>: 羽毛球，吉他</li>
-<li><strong>性格特征</strong><ul>
-<li><strong>对感兴趣的技术会在业余时间去主动学习</strong>，刷刷coursera学习普林斯顿的算法课程学习常见算法堆排，买机器学习的书学KNN, 决策树 mapreduce相关知识</li>
-<li><strong>学习和做工程时愿意深入了解和钻研，多问为什么？</strong>例如做Kactus的回收油系统，从做移动端应用开发，我就会去考虑我拿的数据怎么来的，所以就会自己写程序去拿数据，拿到数据存到数据库，怎么做API把数据给移动端用，也自己做了，还会主动考虑着怎么去优化客户端体验，做二级缓存，怎么并行化收发数据来提高效率，怎么比较不同的http库去提高网络请求效率</li>
-<li><strong>能够发现生活细节，主动去发现问题，提出想法</strong>:比如高德项目，项目来源就是出去旅游发现人文景点不知道典故不好玩，看到有导游，怎么不用手机APP来做？，当时也有一些其他想法，比如运动分享记录APP</li>
-<li><strong>程序员中的外向者，善于与人交流沟通和参与社会活动</strong>从本科阶段的支教，社会调研等社会活动可以看出来</li>
-</ul>
-</li>
-<li><strong>三个词形容自己</strong>：专注深入，发现问题(细心)，淡定(有耐心的解决问题)</li>
-<li><strong>职业规划</strong>: ：我希望从现在开始，1-2年之内能够在我目前的这个职位上沉淀下来，通过不断的努力后，最好能有晋升，希望3-5年内可以通过在现有的开发岗位上的不断学习和历练，基于现在的项目和平台，包括现在项目所提供的数据背景，条件，能够培养自己的大局观，逐步地从开发到架构，提升自己的业务水平</li>
-<li>对比一下网易和百度的不同？整体的规范性，团队年轻，沟通非常顺利</li>
-<li><strong>这么多实习过程中最大的收获？</strong>①将理论和实践相结合的机会，了解到为什么学理论，并将学到的付诸于实践，做出真正可用的给成千上万的用户带去便利的产品，是件很有成就感的事情②大公司的开发规范和流程</li>
-<li><strong>为什么来北京？</strong>一方面是因为北京互联网工作机会多，类似于BAT之类的好公司好平台都在北京，是一个增长见识，锻炼自我的环境；二. 最优秀的人也在北京，在这样一个充满竞争的平台里，把握机会，成就自我。</li>
-<li><strong>你对薪资的要求？</strong>关于薪资的话，我个人倒是没有什么特别的要求，首先，我觉得公司提供的平台和成长更为重要，我会更加关注在这个良好的平台带来的自我能力的提升，这个才是比较长远的；另外，我也相信XX作为一家知名公司，在薪酬待遇上肯定不会差，而且校招也有一个合理的市场offer价格，如果公司对我的能力认同的话，肯定能协商出一个双方满意的offer待遇</li>
-<li><strong>如果公司录用你，你将怎样融入新团队开展工作？</strong>作为一个开发工程师而言，进入一个新的工作环境，参与一个新的产品项目我想我首先要积极融入团队，不管是生活上还是工作上，积极主动的沟通才能让我更快地了解整个团队，整个项目，多提问，多思考才能快速进步；然后要对部门的主营业务要有一个了解，了解公司的业务组成部分、业务的发展方向。第二了解我参与项目的开发方式，开发技术栈，架构方式，尽快投入具体的开发工作中。</li>
-<li>加入新团队的挑战？你怎么融入？？？新的大模块的从无到有的项目接手的挑战；融入初期的担忧；技术的全局了解和深入快速学习；和团队人员之间的磨合，怎么磨合？</li>
-<li>对公司的了解如何？希望获得什么？看中技术沉淀和业务前景；加班多么？压力大么？</li>
-</ol>
-<h3 id="Tips">Tips</h3><ol>
-<li>面试时不要有“我记得 我认为 应该”，可以说我回想一下！一定要慢！声音大！有停顿！</li>
-<li>不要说自己的工作简单！！！应该说自己快速高效完成，游刃有余，还能挤出时间自学；这是一个有难度的工作</li>
-<li>压力面试时一定要淡定，即使不会也要有自信，有条不紊的回答问题，遭受质疑时要有理有据地说出自己的观点和自己知道的内容，并主动询问面试官的建议</li>
-<li>记得问问题。</li>
-</ol>
-<h3 id="QA">QA</h3><ol>
-<li><p>如果在贵司移动开发部门做开发，主要是做哪些产品研发以及需要用到哪些技术知识和基础，我需要在哪些方面进行努力</p>
-</li>
-<li><p>面试过程中有没有什么地方讲得太快或者不清楚的地方，我可以补充的</p>
-</li>
-<li><p>如果可以，可否评价一下面试表现，提供一下您的建议和看法</p>
-</li>
-<li><p>跨平台应用研发，web轻应用和native app的开发前景比较看法</p>
-</li>
-<li><p>他们做什么业务，用些什么技术，希望面试者具备哪些方面的能力，对于做这个方向的人有什么建议，觉得我在技术上有什么优点和不足这种</p>
-</li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/实习/"> #实习 </a>
-          
-            <a href="../../tags/项目/"> #项目 </a>
+            <a href="../../tags/bug/"> #bug </a>
           
         </div>
       
@@ -1505,8 +1225,8 @@ mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback
           
           
             
-              <a class="post-title-link" href="../../2015/03/10/计算机网络基础知识/">
-                计算机网络基础知识
+              <a class="post-title-link" href="../../2015/05/24/耒阳支教之行有感/">
+                耒阳支教之行有感
               </a>
             
           
@@ -1515,14 +1235,14 @@ mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-03-10
+          发表于 2015-05-24
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="../../categories/编程知识/">编程知识</a>
+              <a href="../../categories/生活随笔/">生活随笔</a>
 
               
               
@@ -1535,8 +1255,8 @@ mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2015/03/10/计算机网络基础知识/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/10/计算机网络基础知识/"></span>
+            <a href="../../2015/05/24/耒阳支教之行有感/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/24/耒阳支教之行有感/"></span>
             </a>
           </span>
           
@@ -1551,118 +1271,12 @@ mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback
 
       
         
-          <h2 id="OSI分层模型">OSI分层模型</h2><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/OSI.png" class="full-image" width="100%"></p>
-<h2 id="TCP/IP四层参考模型">TCP/IP四层参考模型</h2><p><a href="http://www.cnblogs.com/BlueTzar/articles/811160.html" target="_blank" rel="external">TCP/IP四层参考模型，每一层对应的协议， TCP/IP报文格式，UDP和TCP数据段格式，IP头部（报头）格式以及各字段含义，TCP头部结构,套接字</a></p>
-<h2 id="Http/Https/UDP/TCP/Socket区别与联系">Http/Https/UDP/TCP/Socket区别与联系</h2><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/http0.png" class="full-image" width="100%"></p>
-<h2 id="TCP协议">TCP协议</h2><h3 id="TCP报文Header">TCP报文Header</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/TCP-header.jpg" class="full-image" width="100%"></p>
-<ol>
-<li><strong>ACK</strong> ：TCP协议规定，只有ACK=1时有效，也规定连接建立后所有发送的报文的ACK必须为1</li>
-<li><strong>SYN(SYNchronization)</strong> ： 在连接建立时用来同步序号。当SYN=1而ACK=0时，表明这是一个连接请求报文。对方若同意建立连接，则应在响应报文中使SYN=1和ACK=1. 因此,  SYN置1就表示这是一个连接请求或连接接受报文。</li>
-<li><strong>FIN （finis）</strong>即完，终结的意思，用来释放一个连接。当 FIN = 1 时，表明此报文段的发送方的数据已经发送完毕，并要求释放连接。</li>
-</ol>
-<h3 id="TCP协议中的三次握手和四次挥手"><a href="http://blog.csdn.net/oney139/article/details/8103223" target="_blank" rel="external">TCP协议中的三次握手和四次挥手</a></h3><ol>
-<li><p><strong>TCP三次握手</strong>：实质是client和server之间的报文段交换过程，三次握手之后client和server之间才能相互发送包含数据的报文段</p>
-<ul>
-<li><strong>第一次握手</strong>：客户端发送一个SYN报文段(该报文段头部SYN标志位=1, ACK标志位=0,起始序号seq=x)到服务器进行连接请求，等待服务器回复确认；此时客户端进入SYN_SENT状态</li>
-<li><strong>第二次握手</strong>：服务器收到客户端发送的连接请求报文段之后,给这个TCP连接分配TCP缓存和变量等资源，并回复一个允许连接的确认报文段叫做SYNACK报文段(SYN=1,ACK=1,seq=y，确认号ack=x+1)，此时服务器进入SYN_RECV状态</li>
-<li><strong>第三次握手</strong>：客户端收到服务器的SYNACK报文段之后，也给这个TCP连接分配TCP缓存和变量等资源，并向服务器发送确认ACK报文段(ack=y+1，ACK=1,seq=x+1)，发送完毕之后客户端和服务器进入ESTABLISHED状态，完成三次握手</li>
-<li><strong>如图所示</strong>：<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/TCP3.jpg" class="full-image" width="100%"></li>
-</ul>
-</li>
-<li><p><strong>TCP四次挥手</strong>：实质是client和server之间的报文段交换过程,TCP是全双工模式需要client和server双方各自关闭,比如server接收到client发来的FIN报文段时只意味client将没有数据再发来，但是自己还是可以继续发送数据，client不能发送数据但是依旧可以接收数据。</p>
-<p> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/TCP4.jpg" class="full-image" width="100%"></p>
-</li>
-<li><p><strong>相关问题</strong>：</p>
-<ul>
-<li><strong>为什么连接的时候是三次握手，关闭的时候却是四次握手？</strong><br>答：因为在三次握手时，当Server端收到Client端的SYN连接请求报文后，可以直接发送SYN+ACK报文，其中ACK报文是用来应答的，SYN报文是用来同步的。但是关闭连接时，当Server端收到FIN报文时，很可能并不会立即关闭SOCKET，所以只能先回复一个ACK报文，告诉Client端，”你发的FIN报文我收到了”。只有等到我Server端所有的报文都发送完了，我才能发送FIN报文，因此不能一起发送。故需要四步握手</li>
-<li><strong>为什么需要三次握手而不是两次，客户端为什么最后还要发送一次确认？</strong><br>答：主要目的是为了防止已失效的连接请求报文段突然又传送到了服务端，因而产生错误；<strong>例如</strong>：当client发出的第一个连接请求报文段并没有丢失，而是在某个网络结点长时间的滞留了，以致延误到连接释放以后的某个时间才到达server。本来这是一个早已失效的报文段，但server收到此失效的连接请求报文段后，就误认为是client再次发出的一个新的连接请求。于是就向client发出确认报文段，同意建立连接。假设不采用“三次握手”，那么只要server发出确认，新的连接就建立了。由于现在client并没有发出建立连接的请求，因此不会理睬server的确认，也不会向server发送数据。但server却以为新的运输连接已经建立，并一直等待client发来数据。这样，server的很多资源就白白浪费掉了。采用“三次握手”的办法可以防止上述现象发生。例如刚才那种情况，client不会向server的确认发出确认。server由于收不到确认，就知道client并没有要求建立连接。</li>
-<li><strong>为什么需要图中的起始序号seq=x是一个随机值？</strong><br>答：采用随机产生的初始化序列号进行请求，这样做主要是出于网络安全的因素着想；如果不是随机产生初始序列号，黑客将会以很容易的方式获取到你与其他主机之间通信的初始化序列号，并且伪造序列号进行攻击，这已经成为一种很常见的网络攻击手段</li>
-<li><strong>为什么TIME_WAIT状态需要经过2MSL(最大报文段生存时间)才能返回到CLOSE状态？</strong><br>答：虽然按道理，四次握手之后四个报文都发送完毕，我们可以直接进入CLOSE状态了，但是我们必须假设网络是不可靠的，有可能最后一个ACK丢失。所以TIME_WAIT状态就是用来重发可能丢失的ACK报文</li>
-</ul>
-</li>
-</ol>
-<h3 id="TCP流量控制和拥塞控制"><a href="http://blog.csdn.net/yechaodechuntian/article/details/25429143" target="_blank" rel="external">TCP流量控制和拥塞控制</a></h3><h3 id="发展历程">发展历程</h3><ol>
-<li>最开始的TCP拥塞控制由“慢启动（slow start）”和“拥塞避免（congestion avoidance）”组成；后来TCP Reno版本中又针对性的加入了“快速重传”、“快速恢复”算法；再后来TCP NewReno中又改进了“快速恢复”；最近又出现了选择性应答（SACK）的算法。</li>
-<li>TCP拥塞控制主要依赖于“拥塞窗口（cwnd）”，TCP还有一个对端通告的接收窗口(rwnd)用于流量控制。窗口值的大小就代表能够发送出去的但还没有收到ACK的最大数据报文段，显然窗口越大那么数据发送的速度也就越快，但是也有越可能使得网络出现拥塞。TCP的拥塞控制算法就是要在这两者之间权衡，选取最好的cwnd值，从而使得网络吞吐量最大化且不产生拥塞。</li>
-<li>由于需要考虑拥塞控制和流量控制两个方面的内容，因此TCP的真正的发送窗口=min(rwnd, cwnd)。但是rwnd是由对端确定的，网络环境对其没有影响，所以在考虑拥塞的时候我们一般不考虑rwnd的值。我们暂时只讨论如何确定cwnd值的大小。关于cwnd的单位，在TCP中是以Byte来做单位的，我们假设TCP每次传输都是按照MSS大小来发送数据的，因此你可以认为cwnd按照数据包个数来做单位也可以理解，所以有时我们说cwnd增加1也就是相当于字节数增加1个MSS大小。</li>
-</ol>
-<h3 id="慢启动">慢启动</h3><p>   方法：根据网络情况逐步增加每次发送的数据量。</p>
-<p>   原因：最初的TCP在连接建立成功后会向网络中发送大量的数据包，这样很容易导致网络中路由器缓存空间耗尽，从而发生拥塞。</p>
-<p>   描述：当新建连接时，cwnd初始化为1个最大报文段(MSS)大小，发送端开始按照拥塞窗口大小发送数据，每当有一个报文段被确认，cwnd就增加1个MSS大小。这样cwnd的值就随着网络往返时间(Round Trip Time,RTT)呈指数级增长，事实上，慢启动的速度一点也不慢，只是它的起点比较低一点而已。如果带宽为W，那么经过RTT*log2W时间就可以占满带宽。</p>
-<p>   &lt; img src=”<a href="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ssca1.png" target="_blank" rel="external">https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ssca1.png</a>“ class=”full-image” width=”100%”/&gt;</p>
-<p>   <strong>慢启动引发的性能问题</strong></p>
-<p>   在海量用户高并发访问的大型网站后台，有一些基本的系统维护需求。比如迁移海量小文件，就是从一些机器拷贝海量小碎文件到另一些机器，来完成一些系统维护的基本需求。</p>
-<p>   举个简单的例子，我们对每个文件都采用独立的TCP连接来传输（循环使用scp拷贝就是这个例子的实际场景，很常见的用法）。那么工作过程应该是，每传输一个文件建立一个连接，然后连接处于慢启动阶段，传输小文件，每个小文件几乎都处于独立连接的慢启动阶段被传输，这样传输过程所用的TCP包的总量就会增多。更细致的说一说这个事，如果在慢启动过程中传输一个小文件，我们可能需要2至3个小包，而在一个已经完成慢启动的TCP通道中（TCP通道已进入在高速传输阶段），我们传输这个文件可能只需要1个大包。网络拷贝文件的时间基本上全部消耗都在网络传输的过程中（发数据过去等对端ACK，ACK确认归来继续再发，这样的数据来回交互相比较本机的文件读写非常耗时间），撇开三次握手和四次握手那些包，粗略来说，慢启动阶段传输这些文件所用的包的数目是高速通道传输这些文件的包的数目的2-3倍！那么时间上应该也是2-3倍的关系！如果文件的量足够大，这个总时间就会被放大到需求难以忍受的地步。</p>
-<p>   因此，在迁移海量小文件的需求下，我们不能使用“对每个文件都采用独立的TCP连接来传输（循环使用scp拷贝）“这样的策略，它会使每个文件的传输都处于在一个独立TCP的慢启动阶段。</p>
-<p>   <strong>如何避免慢启动，提升性能</strong></p>
-<p>   很简单，尽量把大量小文件放在一个TCP连接中排队传输。起初的一两个文件处于慢启动过程传输，后续的文件传输全部处于高速通道中传输，用这样的方式来减少发包的数目，进而降低时间消耗。</p>
-<p>   实际上这种传输策略带来的性能提升的功劳不仅仅归于避免慢启动，事实上也避免了大量的3次握手和四次握手，这个对海量小文件传输的性能消耗也非常致命。</p>
-<p>   随着多核服务器的兴起，以及现代网卡的多通道技术的迅猛发展，现在我们解决这一问题的通常做法是绑定多CPU的多核到网卡的多个通道，然后由CPU的核来均分传输这些小文件，每个核用一个TCP连接来排队发送分到的小文件。</p>
-<ol>
-<li><p><strong>拥塞避免</strong></p>
-<p>条件：TCP使用了一个叫慢启动门限(ssthresh)的变量，当cwnd超过该值后，慢启动过程结束，进入拥塞避免阶段。对于大多数TCP实现来说，ssthresh的值是65536(同样以字节计算)。</p>
-<p>原因：从慢启动可以看到，cwnd可以很快的增长上来，从而最大程度利用网络带宽资源，但是cwnd不能一直这样无限增长下去，一定需要某个限制。</p>
-<p>描述：拥塞避免的主要思想是加法增大，也就是cwnd的值不再指数级往上升，开始加法增加。此时当窗口中所有的报文段都被确认时，cwnd的大小加1，cwnd的值就随着RTT开始线性增加，这样就可以避免增长过快导致网络拥塞，慢慢的增加调整到网络的最佳值。<br><strong>发生拥塞以后怎么办</strong></p>
-<p>拥塞发生：TCP认为网络拥塞的主要依据是它重传了一个报文段。上面提到过，TCP对每一个报文段都有一个定时器，称为重传定时器(RTO)，当RTO超时且还没有得到数据确认，那么TCP就会对该报文段进行重传，当发生超时时，那么出现拥塞的可能性就很大，某个报文段可能在网络中某处丢失，并且后续的报文段也没有了消息。</p>
-<p>TCP反应：<br>&lt; img src=”<a href="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ssca2.png" target="_blank" rel="external">https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ssca2.png</a>“ class=”full-image” width=”100%”/&gt;</p>
-</li>
-<li><p><strong>快速重传</strong></p>
-<p>条件：其实TCP还有一种情况会进行重传：那就是收到3个相同的ACK。TCP在收到乱序到达包时就会立即发送ACK，TCP利用3个相同的ACK来判定数据包的丢失，此时进行快速重传。</p>
-<p>描述：<br>   &lt; img src=”<a href="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ssca3.png" target="_blank" rel="external">https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ssca3.png</a>“ class=”full-image” width=”100%”/&gt;</p>
-</li>
-<li><strong>快速恢复</strong></li>
-</ol>
-<ul>
-<li><p>当收到3个重复ACK时，TCP最后进入的不是拥塞避免阶段，而是快速恢复阶段。快速重传和快速恢复算法一般同时使用。</p>
-<p> 思想：“数据包守恒”原则，即同一个时刻在网络中的数据包数量是恒定的，只有当“老”数据包离开了网络后，才能向网络中发送一个“新”的数据包，如果发送方收到一个重复的ACK，那么根据TCP的ACK机制就表明有一个数据包离开了网络，于是cwnd加1。如果能够严格按照该原则那么网络中很少会发生拥塞，事实上拥塞控制的目的也就在修正违反该原则的地方。</p>
-<p> 描述：</p>
-<pre><code>&lt; img <span class="variable">src=</span><span class="string">"https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ssca4.png"</span> <span class="variable">class=</span><span class="string">"full-image"</span> <span class="variable">width=</span><span class="string">"100%"</span>/&gt;
-</code></pre></li>
-<li>快速重传算法首次出现在4.3BSD的Tahoe版本，快速恢复首次出现在4.3BSD的Reno版本，也称之为Reno版的TCP拥塞控制算法。<br>可以看出Reno的快速重传算法是针对一个包的重传情况的，然而在实际中，一个重传超时可能导致许多的数据包的重传，因此当多个数据包从一个数据窗口中丢失时并且触发快速重传和快速恢复算法时，问题就产生了。因此NewReno出现了，它在Reno快速恢复的基础上稍加了修改，可以恢复一个窗口内多个包丢失的情况。具体来讲就是：Reno在收到一个新的数据的ACK时就退出了快速恢复状态了，而NewReno需要收到该窗口内所有数据包的确认后才会退出快速恢复状态，从而更一步提高吞吐量。</li>
-</ul>
-<h2 id="UDP协议">UDP协议</h2><h2 id="HTTP协议">HTTP协议</h2><h3 id="Http1-0,_1-1，2-0和https之间的区别">Http1.0, 1.1，2.0和https之间的区别</h3><ol>
-<li><strong>HTTP1.0</strong>：规定浏览器与服务器只保持短暂的连接，浏览器的每次请求都需要与服务器建立一个单独的TCP连接，服务器完成请求处理后立即断开释放TCP连接，服务器不跟踪每个客户也不记录过去的请求。此外，由于大多数网页的流量都比较小，一次TCP连接很少能通过slow-start区，不利于提高带宽利用率。HTTP1.0要建立长连接，可以在请求消息中包含Connection: Keep-Alive头域</li>
-<li><strong>HTTP 1.1</strong>支持长连接（PersistentConnection）和请求的流水线（Pipelining）处理，在一个TCP连接上可以传送多个HTTP请求和响应，减少了建立和关闭连接的消耗和延迟。例如：一个包含有许多图像的网页文件的多个请求和应答可以在一个连接中传输，但每个单独的网页文件的请求和应答仍然需要使用各自的连接</li>
-<li><strong>HTTP 1.1</strong>还允许客户端不用等待上一次请求结果返回，就可以发出下一次请求，但服务器端必须按照接收到客户端请求的先后顺序依次回送响应结果，以保证客户端能够区分出每次请求的响应内容，这样也显著地减少了整个过程所需要的时间</li>
-</ol>
-<h3 id="Http的get和post之间的区别">Http的get和post之间的区别</h3><h3 id="Header和响应码">Header和响应码</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/http1.png" class="full-image" width="100%"></p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HttpRequest.jpeg" class="full-image" width="100%"></p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HttpResponse.png" class="full-image" width="100%"></p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/http头部字段.png" class="full-image" width="100%"></p>
-<h3 id="缓存对应的响应头部字段">缓存对应的响应头部字段</h3><ol>
-<li><strong><a href="http://www.cnblogs.com/skynet/archive/2012/11/28/2792503.html" target="_blank" rel="external">浏览器缓存机制</a></strong><ul>
-<li><strong>Expires</strong>是Web服务器响应消息头字段，在响应http请求时告诉浏览器在过期时间前浏览器可以直接从浏览器缓存取数据，而无需再次请求;不过Expires 是HTTP 1.0的东西，现在默认浏览器均默认使用HTTP 1.1，所以它的作用基本忽略</li>
-<li><strong>Cache-Control</strong>与Expires的作用一致，都是指明当前资源的有效期，控制浏览器是否直接从浏览器缓存取数据还是重新发请求到服务器取数据。只不过Cache-Control的选择更多，设置更细致，如果同时设置的话，其优先级高于Expires</li>
-<li><strong>Last-Modified</strong>：标示这个响应资源的最后修改时间。web服务器在响应请求时，告诉浏览器资源的最后修改时间。</li>
-<li><strong>Etag</strong>：web服务器响应请求时，告诉浏览器当前资源在服务器的唯一标识（生成规则由服务器觉得）。Apache中，ETag的值，默认是对文件的索引节（INode），大小（Size）和最后修改时间（MTime）进行Hash后得到的。</li>
-<li><strong>既生Last-Modified何生Etag？</strong>：<ul>
-<li>Last-Modified标注的最后修改只能精确到秒级，如果某些文件在1秒钟以内，被修改多次的话，它将不能准确标注文件的修改时间</li>
-<li>如果某些文件会被定期生成，当有时内容并没有任何变化，但Last-Modified却改变了，导致文件没法使用缓存</li>
-<li>有可能存在服务器没有准确获取文件修改时间，或者与代理服务器时间不一致等情形</li>
-<li>Etag是服务器自动生成或者由开发者生成的对应资源在服务器端的唯一标识符，能够更加准确的控制缓存。Last-Modified与ETag是可以一起使用的，服务器会优先验证ETag，一致的情况下，才会继续比对Last-Modified，最后才决定是否返回304</li>
-</ul>
-</li>
-<li><strong>浏览器缓存检查流程</strong><br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/browser_cache.png" class="full-image" width="100%"></li>
-</ul>
-</li>
-</ol>
-<h2 id="Socket协议">Socket协议</h2><ol>
-<li><strong>套接字（socket）</strong>是支持TCP/IP协议的网络通信的基本操作单元，也可以说是应用层和传输层之间的一个软件抽象层；<strong>它包含进行网络通信必须的五种信息</strong>：连接使用的协议，本地主机的IP地址，本地进程的协议端口，远程主机的IP地址，远程进程的协议端口。在创建Socket连接时，可以指定使用的传输层协议，Socket可以支持不同的传输层协议（TCP或UDP），当使用TCP协议进行连接时，该Socket连接就是一个TCP连接</li>
-<li><strong>应用层通过传输层进行数据通信时，TCP会遇到同时为多个应用程序进程提供并发服务的问题</strong>：多个TCP连接或多个应用程序进程可能需要通过同一个TCP协议端口传输数据。为了区别不同的应用程序进程和连接，许多计算机操作系统为应用程序与TCP／IP协议交互提供了套接字(Socket)接口。应用层可以和传输层通过Socket接口，区分来自不同应用程序进程或网络连接的通信，实现数据传输的并发服务</li>
-<li><strong>套接字之间的连接过程分为三个步骤：服务器监听，客户端请求，连接确认。</strong><ul>
-<li><strong>服务器监听</strong>：服务器端套接字并不定位具体的客户端套接字，而是处于等待连接的状态，实时监控网络状态，等待客户端的连接请求。</li>
-<li><strong>客户端请求</strong>：指客户端的套接字提出连接请求，要连接的目标是服务器端的套接字。为此，客户端的套接字必须首先描述它要连接的服务器的套接字，指出服务器端套接字的地址和端口号，然后就向服务器端套接字提出连接请求。</li>
-<li><strong>连接确认</strong>：当服务器端套接字监听到或者说接收到客户端套接字的连接请求时，就响应客户端套接字的请求，建立一个新的线程，把服务器端套接字的描述发给客户端，一旦客户端确认了此描述，双方就正式建立连接。而服务器端套接字继续处于监听状态，继续接收其他客户端套接字的连接请求</li>
-</ul>
-</li>
-<li><strong>Socket连接与HTTP连接相结合</strong><ul>
-<li>通常情况下Socket连接其实就是一个TCP连接，因此Socket连接一旦建立，通信双方即可开始相互发送数据内容，直到双方连接断开。但在实际网络应用中，客户端到服务器之间的通信往往需要穿越多个中间节点，例如路由器、网关、防火墙等，大部分防火墙默认会关闭长时间处于非活跃状态的连接而导致 Socket 连接断连，因此也需要通过http轮询告诉网络，该连接处于活跃状态。</li>
-<li>HTTP连接使用的是“请求—响应”的方式，不仅在请求时需要先建立连接，而且需要客户端向服务器发出请求后，服务器端才能回复数据。</li>
-<li>很多情况下，我们需要服务器端主动向客户端推送数据，保持客户端与服务器数据的实时与同步。此时若双方建立的是Socket连接，服务器就可以直接将数据传送给客户端；若双方建立的是HTTP连接，则服务器需要等到客户端发送一次请求后才能将数据传回给客户端，因此，客户端定时向服务器端发送连接请求，不仅可以保持在线，同时也是在“询问”服务器是否有新的数据，如果有就将数据传给客户端<h2 id="其它协议">其它协议</h2></li>
-</ul>
-</li>
-</ol>
-
+          <p>　　当我坐在电脑前，开始敲击键盘来记录与回忆这短短7天的支教的日子时，鲜活的记忆一样样蹦出在我的脑海中，一幕幕的上课场景、一张张鲜活的稚嫩面孔、一段段烈日下的家访历程，无一不让我怀念不已，我想，即使是多年后，当我回想起这段日子，我还是会觉得这是一段舒适惬意、欢乐轻松的日子，这是一个值得一提、值得缅怀的人生经历与选择，即便有辛苦有艰难有沮丧，但是却充满欢乐，充满收获。这种收获与欢乐，是一种给予带来的自我满足与自我实现，这种快乐不在乎我得到什么，而只在乎我能够带给孩子们什么。看着孩子们天真的脸庞，无所求，只希望孩子们能够更好；和孩子们一起玩闹嬉戏，玩小时候玩过的游戏，仿佛看见自己儿时的影子，一下子就能把思绪拉回到多年前无忧无虑的童年时光。在短短几天里与孩子们建立起来的单纯的友谊与信任弥足珍贵，这是一种我在成人世界寻找不到的关系，可以让我感动不已。<br>　　这次支教也算是机缘巧合，因为在我的脑海里之前是并没有支教这样一个想法的，而且学院的假期太晚，时间也不怎么允许；而且像我这种经常把时间安排得太满，假期里总是忙于奔波四处的人，对于支教并不具备热情，也并不热衷；况且，在没去支教之前，对于支教，并无深入的了解，反而时常在网上看到有人数落支教的弊端，所以并不认为支教是件对孩子们很有益的事情；可是当我自己切身体验完之后，发现支教并不像我想得那么简单，它的利弊也不是一两句话可以说清，以前见过微博上的各种愤青针砭支教之弊，各种文青抒发支教感想，觉得貌似有道理，却没有切身感受，有句话说“纸上得来终觉浅，绝知此事要躬行”，的确，只有经历过，才有发言权，才会有你自己的看法。利弊从来都是任何事物必备的两面，就好像一个硬币的两面，不会分离。支教要给孩纸们带去什么？我们能帮到孩纸们什么？利是什么？弊是什么？这些问题应该是始终萦绕支教队每个成员心头的头等大问！在支教的过程中，我们慢慢找到这些问题的答案，也仅是我们的答案……
+          <div class="post-more-link text-center">
+            <a class="btn" href="../../2015/05/24/耒阳支教之行有感/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -1671,7 +1285,9 @@ mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback
       
         <div class="post-tags">
           
-            <a href="../../tags/Network/"> #Network </a>
+            <a href="../../tags/支教/"> #支教 </a>
+          
+            <a href="../../tags/耒阳/"> #耒阳 </a>
           
         </div>
       
@@ -1698,8 +1314,8 @@ mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback
           
           
             
-              <a class="post-title-link" href="../../2015/03/09/Java多进程和多线程编程总结/">
-                Java多进程和多线程编程总结
+              <a class="post-title-link" href="../../2015/05/24/读《1988-我想和这个世界谈谈》/">
+                读《1988-我想和这个世界谈谈》
               </a>
             
           
@@ -1708,14 +1324,14 @@ mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-03-09
+          发表于 2015-05-24
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="../../categories/java学习笔记/">java学习笔记</a>
+              <a href="../../categories/读书札记/">读书札记</a>
 
               
               
@@ -1728,8 +1344,8 @@ mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2015/03/09/Java多进程和多线程编程总结/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/09/Java多进程和多线程编程总结/"></span>
+            <a href="../../2015/05/24/读《1988-我想和这个世界谈谈》/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/24/读《1988-我想和这个世界谈谈》/"></span>
             </a>
           </span>
           
@@ -1744,295 +1360,12 @@ mOkHttpClient.newCall(request).enqueue(<span class="keyword">new</span> Callback
 
       
         
-          <h3 id="进程与线程之间关系">进程与线程之间关系</h3><p>一个进程对应一个程序的执行，它具有文本、数据、堆栈片段以及它自己的资源；而一个线程则是进程执行过程中的一个单独的执行序列，线程有时候也被称为轻量级进程. 一个进程可以包含多个线程，这些线程共享进程的资源。  </p>
-<p>首先我们明确一点，就是我们创建的每一个Java程序都是运行在一个单独的Java虚拟机进程中的，每启动一个java程序就会同时开启一个单独对应的JVM进程(也叫做JVM实例)，然后JVM进程会开始初始化类，包括初始化静态变量和静态代码块，普通变量，构造器等；然后再去寻找main()主线程作为程序执行入口,继续执行其他线程直至结束.(Android应用程序和dalvik虚拟机的关系也一样如此)</p>
-<h3 id="常见的进程间通信方式(IPC)">常见的进程间通信方式(IPC)</h3><ol>
-<li><strong>管道与命名管道</strong>：管道允许一个进程和另一个与它有共同祖先的进程之间进行通信，命名管道允许无亲缘关系的进程间的通信,命名管道在文件系统中有对应的文件名,通过命令mkfifo或系统调用mkfifo来创建</li>
-<li><strong>套接字</strong>：可用于不同机器之间的进程间通信</li>
-<li><strong>共享内存</strong>：多个进程可以访问同一块内存空间，是最快的可用IPC形式</li>
-<li><strong>内存映射</strong>：内存映射允许任何多个进程间通信，每一个使用该机制的进程通过把一个共享的文件映射到自己的进程地址空间来实现它。</li>
-<li><strong>信号量</strong>：主要作为进程间以及同一进程不同线程之间的同步手段</li>
-<li><strong>信号（Signal）</strong>：信号是比较复杂的通信方式，用于通知接受进程有某种事件发生，除了用于进程间通信外，进程还可以发送信号给进程本身</li>
-<li><strong>消息队列</strong>：消息队列是消息的链接表，包括Posix消息队列和system V消息队列。有足够权限的进程可以向队列中添加消息，被赋予读权限的进程则可以读走队列中的消息</li>
-</ol>
-<h3 id="进程的状态:就绪-运行-阻塞">进程的状态:就绪-运行-阻塞</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Linux_ps.png" class="full-image" width="100%"></p>
-<h3 id="多线程之间通信方式">多线程之间通信方式</h3><ol>
-<li>“共享变量”：实现Runnable接口实现线程的共享变量或者内部类共享外围类的变量</li>
-<li><p>“管道流”：</p>
-<pre><code><span class="comment">/* 管道输出流和生产者线程绑定, 管道输入流和消费者线程绑定,输入输出流绑定，启动两个线程互相之间通过write和read函数就行通信 */</span>
-<span class="type">PipedOutputStream</span> pos = <span class="keyword">new</span> <span class="type">PipedOutputStream</span>();
-<span class="type">Producer</span> p = <span class="keyword">new</span> <span class="type">Producer</span>(pos);
-<span class="type">PipedInputStream</span> pis = <span class="keyword">new</span> <span class="type">PipedInputStream</span>();
-<span class="type">Consumer</span> c = <span class="keyword">new</span> <span class="type">Consumer</span>(pis);
-pos.connect(pis);
-p.start();
-c.start();
-
-<span class="class"><span class="keyword">class</span> <span class="title">Producer</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Thread</span> {</span>
-    <span class="keyword">private</span> <span class="type">PipedOutputStream</span> pos;
-    public <span class="type">Producer</span>(<span class="type">PipedOutputStream</span> pos) {
-        <span class="keyword">this</span>.pos = pos;
-    }
-    public void run() {
-        int i = <span class="number">8</span>;
-        <span class="keyword">try</span> {
-            pos.write(i);
-            <span class="comment">// pis.read()</span>
-        } <span class="keyword">catch</span> (<span class="type">IOException</span> e) {
-            e.printStackTrace();
-        }
-    }
-}
-</code></pre></li>
-</ol>
-<h3 id="线程的四种创建方式">线程的四种创建方式</h3><ol>
-<li>定义<strong>Thread类</strong>的子类，并重写该类的run()方法；创建Thread子类的实例，即创建了线程对象，调用线程对象的start()方法来启动该线程</li>
-<li>定义<strong>Runnable接口</strong>的实现类，并重写该接口的run()方法，创建Runnable实现类的实例，并以此实例作为Thread的参数来创建Thread对象，该Thread对象才是真正的线程对象；然后调用线程对象的start()方法来启动线程</li>
-<li><p>创建<strong>Callable接口</strong>的实现类，并实现call()方法，该call()方法有返回值；创建Callable实现类的实例，使用FutureTask类来包装Callable对象，该FutureTask对象封装了该Callable对象的call()方法的返回值，使用FutureTask对象作为Thread对象的target创建并启动新线程，调用FutureTask对象的get()方法来获得子线程执行结束后的返回值</p>
-<pre><code><span class="keyword">public</span> <span class="keyword">class</span> MyCallableTest <span class="keyword">implements</span> Callable&lt;Integer&gt;{
-    <span class="comment">// 实现call方法，作为线程执行体</span>
-    <span class="keyword">public</span> Integer <span class="keyword">call</span>(){
-        <span class="keyword">int</span> i = <span class="number">0</span>;
-        <span class="keyword">for</span> ( ; i &lt; <span class="number">100</span> ; i++ ){
-            System.out.<span class="keyword">println</span>(Thread.currentThread().getName()+ <span class="string">"\t"</span> + i);
-        }
-        <span class="comment">// call()方法可以有返回值，而且可以抛出异常</span>
-        <span class="keyword">return</span> i;
-    }
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) {
-        <span class="comment">// 创建Callable对象</span>
-        MyCallableTest myCallableTest = <span class="keyword">new</span> MyCallableTest();
-        <span class="comment">// 使用FutureTask来包装Callable对象</span>
-        FutureTask&lt;Integer&gt; <span class="keyword">task</span> = <span class="keyword">new</span> FutureTask&lt;Integer&gt;(myCallableTest);
-        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">100</span> ; i++){
-            System.out.<span class="keyword">println</span>(Thread.currentThread().getName()+ <span class="string">" \t"</span> + i);
-            <span class="keyword">if</span> (i == <span class="number">20</span>){
-                <span class="comment">// 实质还是以Callable对象来创建、并启动线程</span>
-                <span class="keyword">new</span> Thread(<span class="keyword">task</span> , <span class="string">"callable"</span>).start();
-                <span class="comment">// 线程池执行FutureTask</span>
-                Executor executor = Executors.newSingleThreadExecutor();
-                executor.execute(<span class="keyword">task</span>);
-            }
-        }
-        <span class="keyword">try</span>{
-            <span class="comment">// 获取线程返回值</span>
-            System.out.<span class="keyword">println</span>(<span class="string">"callable返回值："</span> + <span class="keyword">task</span>.get());
-        }
-        <span class="keyword">catch</span> (Exception ex){
-            ex.printStackTrace();
-        }
-    }
-}
-</code></pre></li>
-<li><p><strong>线程池</strong>: </p>
-<ul>
-<li>线程池的<strong>好处1</strong>在于可以更好地控制并发线程数目，提高资源利用率并防止阻塞</li>
-<li><strong>好处2</strong>可以更好地重用线程, 减少线程创建和销毁带来的系统开销,可以设置线程定时定期执行</li>
-<li><strong>核心构造函数ThreadPoolExecutor</strong>,可以在参数中设置核心池大小，最大线程数等</li>
-<li><strong>ExecutorService接口用于实现和管理线程池,其生命周期包括三种状态：运行、关闭、终止</strong>。</li>
-<li><strong>线程池四个基本组成部分</strong>：<ol>
-<li><strong>线程池管理器（ThreadPool）</strong>：用于创建并管理线程池，包括 创建线程池，销毁线程池，添加新任务；</li>
-<li><strong>工作线程（PoolWorker）</strong>：线程池中线程，在没有任务时处于等待状态，可以循环的执行任务；</li>
-<li><strong>任务接口（Task）</strong>：每个任务必须实现的接口，以供工作线程调度任务的执行，它主要规定了任务的入口，任务执行完后的收尾工作，任务的执行状态等；</li>
-<li><strong>任务队列（taskQueue）</strong>：用于存放没有处理的任务, 提供一种缓冲机制。</li>
-</ol>
-</li>
-<li><p>四种Executors接口提供的通过ThreadFactory新建的线程池</p>
-<ol>
-<li><p>newFixedThreadPool(): 固定数目线程池，任意时间点最多只能有固定数目的活动线程存在；有新任务到达时创建线程，只能放在另外的队列中等待，直到达到线程池最大大小为止，有异常则补充    </p>
-<pre><code>ExecutorService threadPool = Executor.newFixedThreadPool(<span class="number">3</span>);
-Runnable r = <span class="keyword">new</span> Runnable() {
-    <span class="annotation">@Override</span>
-    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
-
-    }
-};
-<span class="comment">// 参数可以是Thread以及Runnable对象</span>
-threadPool.execute(r);
-</code></pre></li>
-<li><p>newCachedThreadPool：缓存型线程池，新任务到达则新建线程，当线程数目大于处理需要时，则回收空闲的线程，无大小限制</p>
-</li>
-<li>newSingleThreadExecutor: 单线程池，只创建唯一的工作线程来执行任务，保证任务被顺序执行</li>
-<li>newScheduledThreadPool: 调度型线程池，固定线程数目，而且提供任务被定时和周期性执行的功能</li>
-</ol>
-</li>
-<li><p><strong>自定义线程池</strong></p>
-<pre><code> ThreadPoolExecutor(<span class="keyword">int</span> corePoolSize, <span class="keyword">int</span> maximumPoolSize, <span class="keyword">long</span> keepAliveTime, TimeUnit unit, BlockingQueue&lt;Runnable&gt; workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler)
-
-<span class="comment">/*
-corePoolSize - 核心池中所保存的线程数，包括空闲线程；也就是正在运行的线程数目。
-maximumPoolSize-线程池中允许的最大线程数
-keepAliveTime - 当线程池的工作线程空闲后，保持存活的时间
-unit - keepAliveTime 参数的时间单位
-workQueue - 执行前用于保持任务的队列。此队列仅保持由 execute方法提交的 Runnable任务
-threadFactory - 执行程序创建新线程时使用的工厂
-handler - 由于超出线程范围和队列容量而使新到达的任务被阻塞时采取的处理策略，
-默认为AbortPolicy，表示无法处理新任务时抛出异常；DiscardPolicy：不能执行的任务将被删除
-ThreadPoolExecutor是Executors类的底层实现
-*/</span>
-
- <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadPoolTest</span></span>{   
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>{   
-        <span class="comment">//创建等待队列   </span>
-        BlockingQueue&lt;Runnable&gt; bqueue = <span class="keyword">new</span> ArrayBlockingQueue&lt;Runnable&gt;(<span class="number">20</span>);   
-        <span class="comment">//创建线程池，池中保存的线程数为3，允许的最大线程数为5  </span>
-        ThreadPoolExecutor pool = <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">3</span>,<span class="number">5</span>,<span class="number">50</span>,TimeUnit.MILLISECONDS,bqueue);   
-        <span class="comment">//创建七个任务   </span>
-        Runnable t1 = <span class="keyword">new</span> MyThread();   
-        Runnable t2 = <span class="keyword">new</span> MyThread();   
-        Runnable t3 = <span class="keyword">new</span> MyThread();   
-        Runnable t4 = <span class="keyword">new</span> MyThread();   
-        Runnable t5 = <span class="keyword">new</span> MyThread();   
-        Runnable t6 = <span class="keyword">new</span> MyThread();   
-        Runnable t7 = <span class="keyword">new</span> MyThread();   
-        <span class="comment">//每个任务会在一个线程上执行  </span>
-        pool.execute(t1);   
-        pool.execute(t2);   
-        pool.execute(t3);   
-        pool.execute(t4);   
-        pool.execute(t5);   
-        pool.execute(t6);   
-        pool.execute(t7);   
-        <span class="comment">//关闭线程池   </span>
-        pool.shutdown();   
-    }   
-}   
-
-<span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>{   
-    <span class="annotation">@Override</span>   
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>{   
-        System.out.println(Thread.currentThread().getName() + <span class="string">"正在执行。。。"</span>);   
-        <span class="keyword">try</span>{   
-            Thread.sleep(<span class="number">100</span>);   
-        }<span class="keyword">catch</span>(InterruptedException e){   
-            e.printStackTrace();   
-        }   
-    }   
-}  
-</code></pre></li>
-<li><strong>线程池工作流程</strong><br>   <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/threadpool-procedure.jpg" class="full-image">    </li>
-<li><p><strong>线程池的排队策略</strong>    </p>
-<ol>
-<li><strong>默认选项是SynchronousQueue</strong>，它将任务直接提交给线程而不保持它们，一个不存储元素的阻塞队列，每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态</li>
-<li><strong>无界队列</strong>。使用无界队列（例如，不具有预定义容量的 LinkedBlockingQueue）将导致在所有 corePoolSize 线程都忙时新任务在队列中等待。这样，创建的线程就不会超过corePoolSize。（因此，maximumPoolSize的值也就无效了。）当每个任务完全独立于其他任务，即任务执行互不影响时，适合于使用无界队列；例如，在 Web页服务器中。这种排队可用于处理瞬态突发请求，当命令以超过队列所能处理的平均数连续到达时，此策略允许无界线程具有增长的可能性。</li>
-<li><strong>有界队列</strong>。当使用有限的 maximumPoolSizes时，有界队列（如 ArrayBlockingQueue）有助于防止资源耗尽，但是可能较难调整和控制。队列大小和最大池大小可能需要相互折衷：使用大型队列和小型池可以最大限度地降低 CPU 使用率、操作系统资源和上下文切换开销，但是可能导致人工降低吞吐量。如果任务频繁阻塞（例如，如果它们是 I/O边界），则系统可能为超过您许可的更多线程安排时间。使用小型队列通常要求较大的池大小，CPU使用率较高，但是可能遇到不可接受的调度开销，这样也会降低吞吐量。 </li>
-<li><strong>PriorityBlockingQueue</strong>: 一个具有优先级的无限阻塞队列</li>
-</ol>
-</li>
-<li><p><strong>线程池的风险</strong></p>
-<ol>
-<li>死锁: 死锁的产生是因为一组线程或者进程互相等待资源的释放而永远互相等待;线程池中容易产生一种新的死锁: 当核心池中所有线程都在等待阻塞队列中的某个线程的执行结果，但是该线程却因为池中没有空闲线程而没有办法执行，这样就导致互相等待的死锁.</li>
-<li>并发错误: 线程池和其它排队机制依靠使用 wait() 和 notify() 方法,易出现问题 </li>
-</ol>
-</li>
-<li><p><strong>线程池的执行</strong>: execute和submit两个方法都可以向线程池提交任务， <strong>execute()方法</strong>的返回类型是void，它定义在Executor接口中；<strong>submit()方法</strong>可以返回持有计算结果的Future对象，它定义在ExecutorService接口中，它扩展了Executor接口，便于捕获异常，利用FutureTask.get()函数</p>
-</li>
-<li><p><strong>线程池的关闭</strong></p>
-<ol>
-<li>通过调用线程池的shutdown或shutdownNow方法来关闭线程池，它们的原理是遍历线程池中的工作线程，然后逐个调用线程的interrupt方法来中断线程，所以无法响应中断的任务可能永远无法终止。但是它们存在一定的区别，shutdownNow首先将线程池的状态设置成STOP，然后尝试停止所有的正在执行或暂停任务的线程，并返回等待执行任务的列表，而shutdown只是将线程池的状态设置成SHUTDOWN状态，然后中断所有没有正在执行任务的线程。</li>
-</ol>
-</li>
-</ul>
-<ol>
-<li>只要调用了这两个关闭方法的其中一个，isShutdown方法就会返回true。当所有的任务都已关闭后,才表示线程池关闭成功，这时调用isTerminaed方法会返回true。至于我们应该调用哪一种方法来关闭线程池，应该由提交到线程池的任务特性决定，通常调用shutdown来关闭线程池，如果任务不一定要执行完，则可以调用shutdownNow。 </li>
-</ol>
-<ul>
-<li><strong>合理配置线程池</strong>       <ol>
-<li>任务的性质：CPU密集型任务，IO密集型任务和混合型任务；CPU密集型任务配置尽可能小的线程，如配置Ncpu+1个线程的线程池。IO密集型任务则由于线程并不是一直在执行任务，则配置尽可能多的线程，如2*Ncpu</li>
-<li>任务的优先级：高，中和低；PriorityBlockingQueue会导致优先级低的线程永远不被执行</li>
-<li>任务的执行时间：长，中和短；</li>
-<li>任务的依赖性：是否依赖其他系统资源，如数据库连接：依赖数据库连接池的任务，因为线程提交SQL后需要等待数据库返回结果，如果等待的时间越长CPU空闲时间就越长，那么线程数应该设置越大，这样才能更好的利用CPU。    </li>
-</ol>
-</li>
-</ul>
-</li>
-</ol>
-<h3 id="线程的状态变化">线程的状态变化</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/multiThread.png" class="full-image"></p>
-<h3 id="死锁及其解决办法">死锁及其解决办法</h3><pre><code><span class="comment">/**
- * 一个简单的死锁类 当DeadLock类的对象flag==1时（td1），先锁定o1,睡眠500毫秒
- * 而td1在睡眠的时候另一个flag==0的对象（td2）线程启动，先锁定o2,睡眠500毫秒
- * td1睡眠结束后需要锁定o2才能继续执行，而此时o2已被td2锁定； td2睡眠结束后需要锁定o1才能继续执行，而此时o1已被td1锁定；
- * td1、td2相互等待，都需要得到对方锁定的资源才能继续执行，从而死锁
- */</span>
-<span class="keyword">public</span> class DeadLock implements Runnable {
-    <span class="keyword">public</span> <span class="built_in">int</span> flag = <span class="number">1</span>;
-    <span class="comment">// 静态对象是类的所有对象共享的</span>
-    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">Object</span> o1 = <span class="keyword">new</span> <span class="keyword">Object</span>(), o2 = <span class="keyword">new</span> <span class="keyword">Object</span>();
-
-    <span class="keyword">public</span> <span class="keyword">void</span> run() {
-        System.out.<span class="built_in">println</span>(<span class="string">"flag="</span> + flag);
-        <span class="keyword">if</span> (flag == <span class="number">1</span>) {
-            <span class="keyword">synchronized</span> (o1) {
-                System.out.<span class="built_in">println</span>(<span class="string">"thread1锁定 o1"</span>);
-                <span class="keyword">try</span> {
-                    Thread.sleep(<span class="number">500</span>);
-                } <span class="keyword">catch</span> (Exception e) {
-                    e.printStackTrace();
-                }
-                <span class="comment">// thread1等待资源o2释放</span>
-                <span class="keyword">synchronized</span> (o2) {
-                    System.out.<span class="built_in">println</span>(<span class="string">"1"</span>);
-                }
-            }
-        }
-        <span class="keyword">if</span> (flag == <span class="number">2</span>) {
-            <span class="keyword">synchronized</span> (o2) {
-                System.out.<span class="built_in">println</span>(<span class="string">"thread2锁定 o2"</span>);
-                <span class="keyword">try</span> {
-                    Thread.sleep(<span class="number">500</span>);
-                } <span class="keyword">catch</span> (Exception e) {
-                    e.printStackTrace();
-                }
-                <span class="comment">// thread2等待资源o1释放</span>
-                <span class="keyword">synchronized</span> (o1) {
-                    System.out.<span class="built_in">println</span>(<span class="string">"2"</span>);
-                }
-            }
-        }
-    }
-
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) {
-
-        DeadLock td1 = <span class="keyword">new</span> DeadLock();
-        DeadLock td2 = <span class="keyword">new</span> DeadLock();
-        td1.flag = <span class="number">1</span>;
-        td2.flag = <span class="number">2</span>;
-        <span class="comment">// td1,td2都处于可执行状态，但JVM线程调度先执行哪个线程是不确定的。</span>
-        <span class="comment">// td2的run()可能在td1的run()之前运行</span>
-        <span class="keyword">new</span> Thread(td1).start();
-        <span class="keyword">new</span> Thread(td2).start();
-
-    }
-}
-</code></pre><ol>
-<li><strong>死锁的必要条件</strong>死锁是指是指两个或两个以上的进程在执行过程中，因争夺资源而造成的一种互相等待对方占有的资源的现象，若无外力作用，它们都将无法推进下去。<ul>
-<li><strong>互斥条件</strong>：指进程对所分配到的资源进行排它性使用，即在一段时间内某资源只由一个进程占用。如果此时还有其它进程请求资源，则请求者只能等待，直至占有资源的进程用毕释放。</li>
-<li><strong>请求和保持条件</strong>：指进程请求新资源发生阻塞时对自己已经获得的其它资源保持不放。</li>
-<li><strong>不剥夺条件</strong>：指进程已获得的资源，在未使用完之前，不能被剥夺，只能在使用完时由自己释放。</li>
-<li><strong>环路等待条件</strong>：指在发生死锁时，进程之间会形成一种头尾相接的循环等待资源关系，即进程集合{P0，P1，P2，···，Pn}中的P0正在等待一个P1占用的资源；P1正在等待P2占用的资源，……，Pn正在等待已被P0占用的资源。</li>
-</ul>
-</li>
-<li><strong>死锁的避免、预防和解决方法</strong><ul>
-<li>采用资源有序分配法，破坏环路等待形成</li>
-<li>允许进程剥夺其他进程占有的资源</li>
-<li>银行家算法:把操作系统看作是银行家，操作系统管理的资源相当于银行家管理的资金，进程向操作系统请求分配资源相当于用户向银行家贷款。操作系统按照银行家制定的规则为进程分配资源，当进程首次申请资源时，要测试该进程对资源的最大需求量，如果系统现存的资源可以满足它的最大需求量则按当前的申请量分配资源，否则就推迟分配。当进程在执行中继续申请资源时，先测试该进程已占用的资源数与本次申请的资源数之和是否超过了该进程对资源的最大需求量。若超过则拒绝分配资源，若没有超过则再测试系统现存的资源能否满足该进程尚需的最大资源量，若能满足则按当前的申请量分配资源，否则也要推迟分配。</li>
-<li>互斥条件无法被破坏</li>
-</ul>
-</li>
-</ol>
-<h3 id="多线程相关问题">多线程相关问题</h3><ol>
-<li><strong>yield</strong>表示暂停当前线程，执行其他线程(包括自身线程)由cpu决定</li>
-<li><strong>join</strong>：阻塞所在线程，等调用它的线程执行完毕，再向下执行</li>
-<li><strong>sleep()方法</strong>属于Thread类中的，而<strong>wait()方法</strong>则是属于Object类；sleep()方法导致了程序暂停执行指定的时间，让出cpu给其他线程，但是他的监控状态依然保持，当指定的时间到了又会自动恢复运行状态，线程不会释放对象锁；而当调用wait()方法的时候，线程会放弃对象锁，只有针对此对象调用notify()方法后本线程才进入对象锁定池准备就绪</li>
-</ol>
-<h3 id="多线程同步的方法">多线程同步的方法</h3><ol>
-<li>Synchronized代码块</li>
-<li>Synchronized方法</li>
-<li>RetrantLock可重入锁</li>
-<li>ThreadLocal线程局部变量</li>
-<li>Volatile可见变量</li>
-</ol>
-
+          <p>　　最近花了2天左右的时间看完了韩寒的这本书，总体感觉，嗯，很抽象的小说，却也有着很鲜明的现实意义，把社会现实和人性揭露得都很透彻，在此写写我读到了什么。<br>　　主人公貌似叫做路子野，而1988则是他的那辆由朋友帮忙改装好的旅游车，因为那辆车是1988年出厂，1988就是这么来的；他开着这辆车上路去接他的刚出狱的朋友，途中接受了已怀孕妓女娜娜的“特殊服务”却被警察查到，由此结缘，娜娜成为了他旅途的唯一伴侣；两个本来有着不同的目标、不同的社会经历和身份的人，在这个漫长的旅途中，他们互相交谈，聊着自己的人生经历，再加上这一路的经历，就组成了这么一本小说。<br>　　写到这儿，我想我是应该按小说中不同的事件来叙说感想，还是按照小说叙述的先后顺序来写呢？还是按照前者来写吧，应该会清楚一些。
+          <div class="post-more-link text-center">
+            <a class="btn" href="../../2015/05/24/读《1988-我想和这个世界谈谈》/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -2041,9 +1374,7 @@ ThreadPoolExecutor是Executors类的底层实现
       
         <div class="post-tags">
           
-            <a href="../../tags/java/"> #java </a>
-          
-            <a href="../../tags/多线程/"> #多线程 </a>
+            <a href="../../tags/阅读/"> #阅读 </a>
           
         </div>
       
@@ -2063,7 +1394,7 @@ ThreadPoolExecutor是Executors类的底层实现
 
   
   <div class="pagination">
-    <a class="extend prev" rel="prev" href="../6/">&laquo;</a><a class="page-number" href="../..//">1</a><span class="space">&hellip;</span><a class="page-number" href="../6/">6</a><span class="page-number current">7</span>
+    <a class="extend prev" rel="prev" href="../6/">&laquo;</a><a class="page-number" href="../..//">1</a><span class="space">&hellip;</span><a class="page-number" href="../6/">6</a><span class="page-number current">7</span><a class="page-number" href="../8/">8</a><a class="page-number" href="../9/">9</a><a class="extend next" rel="next" href="../8/">&raquo;</a>
   </div>
 
 
@@ -2097,7 +1428,7 @@ ThreadPoolExecutor是Executors类的底层实现
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">54</span>
+              <span class="site-state-item-count">67</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -2111,7 +1442,7 @@ ThreadPoolExecutor是Executors类的底层实现
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-count">69</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -2156,7 +1487,7 @@ ThreadPoolExecutor是Executors类的底层实现
         <div class="copyright">
   
   &copy; &nbsp;  2015.05.16 - 
-  2017
+  2018
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>

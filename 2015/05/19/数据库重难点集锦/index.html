@@ -208,8 +208,6 @@
 <p>候选键：能够确定全部属性的某个属性或某组属性，称为候选键。若候选键多于一个，则选定其中一个作为主键</p>
 <p>外键：在一个表中存在的另一个表的主键称此表的外键  </p>
 </li>
-</ol>
-<ol>
 <li><p><strong>事务</strong>：事务是数据库操作中的不可分割的逻辑单元,事务也是并发控制的基本单位，一个事务中的所有操作语句要么作为一个整体被执行，要么整体不被执行; 事务最重要的<strong>两个特性是事务的传播级别和数据隔离级别</strong>。传播级别定义的是事务的控制范围，事务隔离级别定义的是事务在数据库读写方面的控制范围。</p>
 <ul>
 <li>原子性Atomicity：要么操作序列中全部语句都执行，要么全部不被执行,不可分割; 也就是说当事务的执行序列中某个语句执行错误，会回滚到该事务未执行时的状态</li>
@@ -292,6 +290,7 @@
 </ol>
 <h3 id="MySQL_InnoDB实现">MySQL InnoDB实现</h3><ol>
 <li><a href="https://draveness.me/mysql-innodb" target="_blank" rel="external">『浅入浅出』MySQL 和 InnoDB</a></li>
+<li><a href="https://draveness.me/database-concurrency-control" target="_blank" rel="external">浅谈数据库并发控制 - 锁和 MVCC</a></li>
 </ol>
 <h3 id="MyISAM和InnoDB存储引擎之间的区别">MyISAM和InnoDB存储引擎之间的区别</h3><ol>
 <li>InnoDB支持事务、外键和行锁，而MyISAM不支持这些高级功能，但是<strong>MyISAM是默认引擎</strong>，InnoDB则需要指定(事务是一种高级的处理方式，如在一些列增删改中只要哪个出错还可以回滚还原)</li>
@@ -327,7 +326,13 @@
 </ol>
 <h3 id="其它概念">其它概念</h3><ol>
 <li>Transaction2 依赖于 Transaction1，而 Transaction3 又依赖于 Transaction1，当 Transaction1 由于执行出现问题发生回滚时，为了保证事务的原子性，就会将 Transaction2 和 Transaction3 中的工作全部回滚，这种情况也叫做<strong>级联回滚（Cascading Rollback）</strong>，级联回滚的发生会导致大量的工作需要撤回，是我们难以接受的。</li>
-<li></li>
+<li><strong>读写分离：</strong><ul>
+<li>Mysql有一个master-slave功能，可以实现主库与从库数据的自动同步，是基于二进制日志复制来实现的。</li>
+<li>读写路由规则：编码使用不同数据源或者使用proxy层，MySQL-Proxy 是Mysql提供的一个中间件，用于实现读写分离请求，还有MyCat、ProxySQL 等</li>
+</ul>
+</li>
+<li><strong>CQRS：Command Query Responsibility Segregation</strong>：Command 主要做业务逻辑的执行，Query来负责数据查询和展示，两者可以来自不同的数据源</li>
+<li><strong>数据库sharding分片</strong>：</li>
 </ol>
 <h3 id="参考链接">参考链接</h3><ol>
 <li><a href="http://blog.jobbole.com/100349/" target="_blank" rel="external">数据库整体架构原理</a></li>
@@ -424,7 +429,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">54</span>
+              <span class="site-state-item-count">67</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -438,7 +443,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-count">69</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -494,7 +499,7 @@
         <div class="copyright">
   
   &copy; &nbsp;  2015.05.16 - 
-  2017
+  2018
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>

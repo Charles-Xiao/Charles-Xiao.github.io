@@ -148,8 +148,8 @@
           
           
             
-              <a class="post-title-link" href="../../2015/05/27/Android开发常见bug解决方法及注意事项/">
-                Android开发常见bug解决方法及注意事项
+              <a class="post-title-link" href="../../2016/01/13/Roman与Integer之间的相互转换/">
+                Roman与Integer之间的相互转换
               </a>
             
           
@@ -158,7 +158,793 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-05-27
+          发表于 2016-01-13
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Leetcode/">Leetcode</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/01/13/Roman与Integer之间的相互转换/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/13/Roman与Integer之间的相互转换/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>罗马数字与阿拉伯数字之间的简单转换方法,首先需要了解罗马数字计数法，在这两道转换题里我们只用到了前三项规则</p>
+<ol>
+<li><p>罗马数字共有7个，即I（1）、V（5）、X（10）、L（50）、C（100）、D（500）和M（1000）</p>
+</li>
+<li><p>右加左减: 较大的罗马数字的右边记上较小的罗马数字，表示大数字加小数字; 较大的罗马数字的左边记上较小的罗马数字，表示大数字减小数字</p>
+</li>
+<li>左减有一定限制: 只有I, X, C可以放到左边当做减数使用,而且左减不能越位,I的右边只能是VX, X右边只能是LC, C的右边只能是DM; 左减数字必须为一位</li>
+<li>其他规则: 加线乘千、重复数次、右加数字不可连续超过三位、同一数码最多只能连续出现三次</li>
+</ol>
+<h3 id="Roman_to_Integer">Roman to Integer</h3><p>解题思路:  对于每一个roman字符,除了I，X，C三种情况会出现减去对应数值，其他情况都是加上该字符对应的数值; 针对I、X、C，我们可以总结发现只需要考察他们的下一位是否满足减的条件,是则减，否则加。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
+    <span class="keyword">public</span> <span class="function"><span class="keyword">int</span> <span class="title">romanToInt</span><span class="params">(String s)</span> </span>{
+        <span class="keyword">int</span> res = <span class="number">0</span>;
+        <span class="keyword">int</span> len = s.length();
+        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) {
+            <span class="keyword">char</span> tmp = s.charAt(i);
+            <span class="keyword">switch</span> (tmp) {
+                <span class="keyword">case</span> <span class="string">'I'</span>:
+                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'V' || s.charAt(i+1) == 'X')) {
+                        res -= <span class="number">1</span>;
+                        <span class="keyword">break</span>;
+                    }
+                    res += <span class="number">1</span>;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'V'</span>:
+                    res += 5;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'X'</span>:
+                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'L' || s.charAt(i+1) == 'C')) {
+                        res -= <span class="number">10</span>;
+                        <span class="keyword">break</span>;
+                    }
+                    res += <span class="number">10</span>;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'L'</span>:
+                    res += 50;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'C'</span>:
+                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'D' || s.charAt(i+1) == 'M')) {
+                        res -= <span class="number">100</span>;
+                        <span class="keyword">break</span>;
+                    }
+                    res += <span class="number">100</span>;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'D'</span>:
+                    res += 500;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'M'</span>:
+                    res += 1000;
+                    <span class="keyword">break</span>;
+                <span class="keyword">default</span>:
+                    <span class="keyword">break</span>;
+            }
+        }
+        <span class="keyword">return</span> res;
+    }
+}
+</code></pre><h3 id="Integer_To_Roman">Integer To Roman</h3><p>解题思路: 对于输入的数值进行取商处理，从大的计数单位到小的计数单位依次取商, 商则是该计数单位对应的roman字符的个数。</p>
+<pre><code>public <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
+    public <span class="built_in">String</span> intToRoman(<span class="built_in">int</span> <span class="built_in">num</span>) {
+        <span class="comment">// igr存储的是从大到小每一个基本计数单位,与roman一一对应</span>
+        <span class="built_in">String</span>[] roman = {<span class="string">"M"</span>, <span class="string">"CM"</span>, <span class="string">"D"</span>, <span class="string">"CD"</span>, <span class="string">"C"</span>, <span class="string">"XC"</span>, <span class="string">"L"</span>, <span class="string">"XL"</span>, <span class="string">"X"</span>, <span class="string">"IX"</span>, <span class="string">"V"</span>, <span class="string">"IV"</span>, <span class="string">"I"</span>};
+        <span class="built_in">int</span>[] igr = {<span class="number">1000</span>, <span class="number">900</span>, <span class="number">500</span>, <span class="number">400</span>, <span class="number">100</span>, <span class="number">90</span>, <span class="number">50</span>, <span class="number">40</span>, <span class="number">10</span>, <span class="number">9</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">1</span>};
+        StringBuilder res = <span class="keyword">new</span> StringBuilder();
+        <span class="keyword">for</span> (<span class="built_in">int</span> i=<span class="number">0</span>; i&lt;roman.length; i++) {
+            <span class="built_in">int</span> quotient = <span class="built_in">num</span> / igr[i];
+            <span class="keyword">for</span> (<span class="built_in">int</span> j=<span class="number">0</span>; j&lt;quotient; j++) {
+                res.append(roman[i]);
+            }
+            <span class="built_in">num</span> -= quotient * igr[i];
+        }
+        <span class="keyword">return</span> res.toString();
+    }
+}
+</code></pre>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Leetcode/"> #Leetcode </a>
+          
+            <a href="../../tags/String/"> #String </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/12/24/Google-Compute-Engine配置LAMP环境以及部署Web项目/">
+                Google Compute Engine配置LAMP环境以及部署Web项目
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-12-24
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/12/24/Google-Compute-Engine配置LAMP环境以及部署Web项目/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/24/Google-Compute-Engine配置LAMP环境以及部署Web项目/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/10/20/Java容器类库的学习研究/">
+                Java容器类库的学习研究
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-10-20
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/java学习笔记/">java学习笔记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/10/20/Java容器类库的学习研究/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/20/Java容器类库的学习研究/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="Comparable和Comparator接口区别"><a href="http://fuxueliang.com/tech/2013/05/26/java-sorting-comparator-vs-comparable-tutorial/" target="_blank" rel="external">Comparable和Comparator接口区别</a></h3><ol>
+<li>Comparable &amp; Comparator 都是用来实现集合中元素的比较、排序的，只是 Comparable 是在集合内部定义的方法实现的排序，Comparator 是在集合外部实现的排序，所以，如想实现排序，就需要在集合外定义 Comparator 接口的方法或在集合内实现 Comparable 接口的方法</li>
+<li><p><strong>Comparable</strong>:一个实现了comparable接口的对象的实例可以被用于和相同类的不同实例做对比。它本身必须实现java.lang.Comparable的接口，这样它就拥有了对比的能力;java.util.Collections.sort(List) 和 java.util.Arrays.sort(Object[]) 方法被用来排列使用内在排序（natural ordering）方式的对象.</p>
+</li>
+<li><p><strong>Comparator</strong>:一个实现了comparator接口的对象能够对比不同的对象。它不能用于同一个类的不同实例的对比，但是可以用于其他的类的实例做对比。它必须实现java.util.Comparator的接口;java.util.Collections.sort(List, Comparator) 和 java.util.Arrays.sort(Object[], Comparator)方法在Comparator如果可供比较的时候会被用到.</p>
+</li>
+<li><p>两者的接口实现差异:<br> <strong>java.lang.Comparable: int compareTo(Object o1)</strong></p>
+<p> 当前对象与o1对象做对比，返回int值：  </p>
+<p> positive – 当前对象大于o1  </p>
+<p> zero – 当前对象等于o1  </p>
+<p> negative – 当前对象小于o1  </p>
+<p> <strong>java.util.Comparator: int compare(Object o1, Objecto2)</strong></p>
+<p> 用于o1与o2对象做对比，返回int值：</p>
+<p> positive – o1大于o2  </p>
+<p> zero – o1等于o2  </p>
+<p> negative – o1小于o2</p>
+</li>
+<li><p>实例:<br> 内在ID顺序排序</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Employee</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Employee</span>&gt; </span>{
+    <span class="keyword">private</span> <span class="keyword">int</span> empId;
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> <span class="keyword">int</span> age;
+
+    <span class="comment">/**
+    * Compare a given Employee with this object.
+    * If employee id of this object is 
+    * greater than the received object,
+    * then this object is greater than the other.
+    */</span>
+    <span class="keyword">public</span> <span class="keyword">int</span> compareTo(Employee o) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.empId - o.empId ;
+    }
+….
+}
+</code></pre></li>
+</ol>
+<pre><code>按照name排序
+
+    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EmpSortByName</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Employee</span>&gt;</span>{
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Employee o1, Employee o2)</span> </span>{
+            <span class="keyword">return</span> o1.getName().compareTo(o2.getName());
+        }
+    }     
+</code></pre><h3 id="Collections-sort()与Arrays-sort()">Collections.sort()与Arrays.sort()</h3><ol>
+<li><p>Arrays.sort()在其内部实现上针对数组元素的不同类型采用不同的排序方式: ①基本类型数据(int, short, long, float, double等)采用QuickSort， 而对对象类型采取MergeSort. Why? 我们知道QuickSort在统计意义上效率比MergeSort高，为何不都采用 QuickSort ？<br> Answer: 概括的说，一个是稳定性，一个是移动次数。使用不同类型的排序算法主要是由于 quick sort 是不稳定的，而 merge sort 是 stable 的。这里的 stable 是指比较相等的数据在排序之后仍然按照排序之前的前后顺序排列（保序性）。对于基本数据类型，稳定性没有意义。而<strong>对于对象类型，稳定性是比较重要的</strong>，因为对象相等的判断可能只是判断关键属性，最好保持相等对象的非关键属性的顺序与排序前一直；另外一个原因是由于<strong>合并排序相对而言比较次数比快速排序少，移动（对象引用的移动）次数比快速排序多</strong>，而对于对象来说，比较一般比移动耗时。  </p>
+<p> MergeSort:（）1）最坏时间复杂度是 O(nlgn)；（2）平均时间复杂度是 O(nlgn)；（3）空间复杂度是 O(n)。  </p>
+<p> QuickSort: （1）最坏时间复杂度是 O(n^2)；（2）平均时间复杂度是 O(nlgn)；（3）空间复杂度最坏是 O(n)，均匀就是O(logn)。</p>
+</li>
+</ol>
+<ol>
+<li><p>Collections.sort()主要是针对集合的排序,比如List, 其内部实现如下:</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Comparable&lt;? super T&gt;&gt; <span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(List&lt;T&gt; <span class="built_in">list</span>)</span> </span>{
+    Object[] a = <span class="built_in">list</span>.toArray();
+    Arrays.sort(a);
+    ListIterator&lt;T&gt; i = <span class="built_in">list</span>.listIterator();
+    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;a.length; j++) {
+        i.next();
+        i.<span class="built_in">set</span>((T)a[j]);
+    }
+}
+</code></pre><p> 可以看出其内部实际采用的就是Arrays.sort()</p>
+</li>
+</ol>
+<h3 id="HashMap与LinkedHashMap，TreeMap">HashMap与LinkedHashMap，TreeMap</h3><ol>
+<li><p><strong>HashMap实现原理</strong>内部对键值对的存储结构使用的是数组+链表+红黑树的形式（JDK1.8增加了红黑树部分,当一个链表长度&gt;8就转换为红黑树，利用红黑树快速增删改查的特点提高HashMap的性能),每一个数组元素都是一个键值对，分别都对应着一个链表结构</p>
+<ul>
+<li><strong>put存储元素</strong>HashMap在存储Entry对象的时候，首先根据Key的hashCode()方法得到其hashCode值，然后根据高位运算和取模运算来判定将存储到Entry[]数组的哪一个位置对应的链表上O(1),然后调用key的Equals方法去遍历链表比较key值，如果找到则更新value并返回旧址，否则将新的Entry加入到该链表头部</li>
+<li><strong>内部结构图</strong>：<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HashMap.jpg" class="full-image" width="100%"></li>
+<li><strong>遍历顺序</strong>也就是说Entry<key,value>对象随机地分配到某个Entry[] table数组的元素表示的链表上, HashMap内部Entry<k,v>的遍历顺序是对Entry[] table 数组，从index=0开始，依次遍历table[i]上的链表上的Entry对象;所以对HashMap遍历Entry对象的顺序和Entry对象的存储顺序之间没有任何关系.</k,v></key,value></li>
+<li><strong>重新hash调节大小</strong>HashMap允许null键插入，其内部会将null存到table[0]中进行处理. 内部有负载因子和数组长度、size等参数，当map中元素达到16*0.75=12时，因为链表长度可能很长导致查找效率降低，hashmap会对原来的所有元素重新进行hash,数组容量变为原来的2倍，当然Java里的数组是无法自动扩容的，方法是使用一个新的数组代替已有的容量小的数组；重新hash时链表顺序会被反转，可以避免尾部遍历(1.8中不会倒置，也不会重新计算哈希).<a href="http://www.xuebuyuan.com/2231227.html" target="_blank" rel="external">HashMap</a>; 在HashMap调整大小时会出现条件竞争，也就是多个线程同时来调整大小，出现死循环.如果内存空间很多而又对时间效率要求很高，可以降低负载因子Load factor的值；相反，如果内存空间紧张而对时间效率要求不高，可以增加负载因子loadFactor的值，这个值可以大于1。</li>
+<li><strong>key不可变</strong>Map的key值应该使用不可变对象，以防put和get的时候对象发生变化从而导致hashcode变化，取不到正确的对象；HashMap也可以声明为同步的，使用Map m = Collections.synchronizeMap(hashMap);</li>
+<li><strong>Fail-Fast机制</strong>:在使用迭代器的过程中有其他线程修改了map结构，那么将抛出ConcurrentModificationException，这就是所谓fail-fast机制。这一机制在源码中的实现是通过modCount域，modCount顾名思义就是修改次数，对HashMap元素个数的修改都将增加这个值;在迭代器初始化过程中会将这个值赋给迭代器的expectedModCount。在迭代过程中，判断modCount跟expectedModCount是否相等，如果不相等就表示已经有其他线程修改了Map中元素个数.例如：HashMap在foreach迭代器循环遍历时如果其他线程对该map进行结构上的更改(比如进行add和map.remove元素操作,而不是简单的修改集合元素的内容)会导致ConcurrrentModificationEaception</li>
+<li><strong>遍历区别</strong>①for循环遍历时删除或者增加某个元素只会导致数组越界(rangeCheck函数)，或者一直add生成无穷序列以及遍历不完整 ②使用Iterator遍历或者foreach遍历时如果采用iterator.remove()不会报错，因为他会重新设置expectedModCount=modCount，如果采用list.remove()则会出现ConcurrrentModificationException</li>
+</ul>
+</li>
+<li><p><strong>LinkedHashMap</strong>是HashMap的子类，它可以实现对容器内Entry的存储顺序和对Entry的遍历顺序保持一致; LinkedHashMap内部使用了一个Entry类型的双向链表，用这个双向链表记录Entry的存储顺序。当需要对该Map进行遍历的时候，实际上是遍历的是这个双向链表。</p>
+<p>内部结构图：<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/LinkedHashMap.png" class="full-image" width="100%"></p>
+<p>遍历方式:  </p>
+<pre><code>//构造函数的默认值为<span class="literal">false</span>，按照插入顺序排序，先进先出；
+//<span class="literal">true</span>代表按照访问顺序排序，那么调用get方法后，内部会调用recordAccess方法记录访问顺序，将最新访问的元素添加到双向链表的表头，并从原来的位置删除，不断访问可以形成按访问顺序排序的链表;可以重写removeEldestEntry方法返回<span class="literal">true</span>值指定插入元素时移除最老的元素。 
+<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; linkedHashMap = new <span class="type">LinkedHashMap</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt;(<span class="number">16</span>,<span class="number">0</span>.<span class="number">75</span>f,<span class="literal">true</span>);
+
+<span class="type">Iterator</span>&lt;<span class="type">Map</span>.<span class="type">Entry</span>&gt; <span class="keyword">iterator</span>= linkedHashMap.entrySet().<span class="keyword">iterator</span>();  
+
+<span class="keyword">while</span>(<span class="keyword">iterator</span>.hasNext())  
+{  
+    <span class="type">Map</span>.<span class="type">Entry</span> entry = <span class="keyword">iterator</span>.next();  
+    <span class="type">System</span>.<span class="keyword">out</span>.println(entry.getKey()+<span class="string">":"</span>+entry.getValue());  
+} 
+
+<span class="keyword">for</span>(<span class="type">Entry</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; entry : linkedHashMap.entrySet()) {
+    <span class="type">System</span>.<span class="keyword">out</span>.println(entry.getKey() + <span class="string">": "</span> + entry.getValue());
+}
+</code></pre></li>
+<li><p><strong>TreeMap</strong>实现SortedMap接口，可以保证元素的排列以key值有序，默认是按键值的升序排序，也可以指定排序的比较器，当用Iterator遍历TreeMap时，得到的记录是排过序的。内部实现采用红黑树(一种平衡排序二叉树)，循环遍历时直接中序遍历树输出。在使用TreeMap时，key必须实现Comparable接口或者在构造TreeMap传入自定义的Comparator，否则会在运行时抛出java.lang.ClassCastException类型的异常。</p>
+</li>
+</ol>
+<h3 id="HashTable，Hashset和ConcurrentHashMap">HashTable，Hashset和ConcurrentHashMap</h3><ol>
+<li><strong>HashTable</strong>实现Map接口(和HashMap一样)不允许null键的存在，他是一个synchronized的map,因为内部的put,get方法进行了同步所以导致效率降低,线程安全性强于ConcurrentHashMap</li>
+<li><strong>HashSet</strong>实现set接口，不允许重复元素的存在，但是允许null存在；每次add之前会先调用hashcode和equals方法去判断该对象是否已经存在，已存在则返回false,不会更改set中任何内容;存取速度没有HashMap快；但是其内部实现就是一个HashMap,只是每一个<key,value>中的value都是PRESET</key,value></li>
+<li><strong>HashMap和 HashTable 的区别</strong>：<ul>
+<li>两者都实现Map接口，但是HashTable继承Dictionary类，HashMap则是继承AbstractMap接口;</li>
+<li>HashTable是线程安全的(通过直接对get,put等方法加Synchronized锁来实现),HashMap则是线程不安全的;</li>
+<li>HashMap可以让你将空值作为一个表的条目的key或value，但是HashTable不可以；</li>
+<li>哈希值的使用不同，HashTable直接使用对象的hashCode。而HashMap重新计算hash值；</li>
+<li>两个遍历方式的内部实现上不同，Hashtable、HashMap都使用了 Iterator。而由于历史原因，Hashtable还使用了Enumeration的方式</li>
+</ul>
+</li>
+<li><strong>ConcurrentHashMap</strong>是一个Java5以后才提供的同步容器,其内部实现采用二次hash,分区同步的方式，内部默认维护一个包含16个segment对象的数组,每个数组对象又对应一个桶数组(相当于一个HashMap)，每个桶数组对象又维护着一个HashEntry链表;对于put的hashcode相同的key会出现同步阻塞，因为它会将当前hashcode对应的segment锁住，但是hashcode不相同的key插入时是不会出现同步阻塞的，这样相对于HashTable(同一时间点，只能有一个线程持有锁，也就是说在同一时间点，只能有一个线程能访问容器)就可以大大提高效率，提高了并发性，相当于16个线程同时操作。  <ul>
+<li>ConcurrentHashMap 针对读操作做了大量的优化。通过 HashEntry 对象的不变性和用 volatile 型变量协调线程间的内存可见性，使得大多数时候，<strong>读操作不需要加锁就可以正确获得值</strong></li>
+<li>其内部的结构可以让其在进行<strong>写操作的时候能够将锁的粒度保持地尽量地小</strong>，不用对整个ConcurrentHashMap加锁，而是分段加锁</li>
+<li><strong>源码中containsValue和size操作实现原理</strong>: ConcurrentHashMap的size操作是在多个Segment中进行,但是也采用了一种比较巧的方式，来尽量避免对所有的Segment都加锁。具体怎么做的呢？？？Segment中的有一个modCount变量，代表的是对Segment中元素的数量造成影响的操作的次数，这个值只增不减，size操作就是遍历了两次Segment，每次记录Segment的modCount值，然后将两次的modCount进行比较，如果相同，则表示期间没有发生过写入操作，就将原先遍历的结果返回，如果不相同，则把这个过程再重复做一次，如果再不相同，则就需要将所有的Segment都锁住，然后一个一个遍历了</li>
+<li><strong>hash函数</strong>: 用到了Wang/Jenkins hash算法的变种，主要的目的是为了减少哈希冲突，使元素能够均匀的分布在不同的Segment上，从而提高容器的存取效率。假如哈希的质量差到极点，那么所有的元素都在一个Segment中，不仅存取元素缓慢，分段锁也会失去意义  </li>
+</ul>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConcurrentHashMap.jpg" class="full-image" width="100%"></p>
+<h3 id="ArrayList，CopyOnWriteArrayList和LinkedList">ArrayList，CopyOnWriteArrayList和LinkedList</h3><ol>
+<li><strong>ArrayList、LinkedList、Vector的区别</strong>：ArrayList 和Vector底层是采用数组方式存储数据，ArrayList可以通过<code>List list = Collections.synchronizeList(arrayList);</code>实现同步；Vector由于使用了synchronized方法（线程安全）所以性能上比ArrayList要差，LinkedList使用双向链表实现存储，随机存取比较慢，但是增删非常快，LinkedList中包含了 first 和 last 两个指针(Node)。Node 中包含了上一个节点和下一个节点的引用，这样就构成了双向的链表</li>
+<li><strong>CopyOnWriteArrayList</strong>: CopyOnWriteArrayList的核心思想是利用高并发往往是读多写少的特性，对读操作不加锁，对写操作加锁，进行写操作时先复制一份新的集合，在新的集合上面修改，然后将新集合赋值给旧的引用，并通过volatile 保证其可见性。这种“写入时复制”策略，对容器的写操作将导致的容器中基本数组的复制，性能开销较大。所以在有写操作的情况下CopyOnWriteArrayList性能不佳，而且如果容器容量较大的话容易造成溢出</li>
+<li><strong>LinkedBlockingQueue</strong>: 它是线程安全的阻塞队列，是<strong>作为生产者消费者的首选</strong>，LinkedBlockingQueue 可以指定容量，也可以不指定，不指定的话，默认最大是Integer.MAX_VALUE，其中主要用到put和take方法，put方法在队列满的时候会阻塞直到有队列成员被消费，take方法在队列空的时候会阻塞，直到有队列成员被放进来</li>
+<li><strong>ConcurrentLinkedQueue</strong>: ConcurrentLinkedQueue是一个无锁的并发线程安全的非阻塞队列；Queue中元素按FIFO原则进行排序．采用CAS操作，来保证元素的一致性</li>
+</ol>
+<h3 id="参考链接">参考链接</h3><ol>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477291&amp;idx=1&amp;sn=68fd7ee467eb60bb984b3c6136cea039&amp;scene=0#wechat_redirect" target="_blank" rel="external">Java8系列之重新认识HashMap</a></li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/java/"> #java </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/09/04/OpenWrt/">
+                OpenWrt
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-09-04
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/09/04/OpenWrt/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/04/OpenWrt/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>Power consumption will be higher if a USB device is attached to its USB port!  </p>
+<p>scp command：  </p>
+<p>scp libmysqlclient_5.1.73-1_ar71xx.ipk root@192.168.1.1:  </p>
+<p><strong>scp error: Host key verification failed</strong></p>
+<p>cd ~/.ssh<br>rm known_hosts</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/08/30/Android应用性能优化/">
+                Android应用性能优化
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-08-30
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Android/">Android</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/08/30/Android应用性能优化/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/30/Android应用性能优化/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>Android手机由于其本身的后台机制和硬件特点，性能上一直被诟病，所以软件开发者对软件本身的性能优化就显得尤为重要；本文将对Android开发过程中性能优化的各个方面做一个回顾与总结。</p>
+<h2 id="Cache优化">Cache优化</h2><ol>
+<li><p><strong>ListView缓存</strong>：</p>
+<ul>
+<li>ListView中有一个回收器，Item滑出界面的时候View会回收到这里，需要显示新的Item的时候，就尽量重用回收器里面的View；每次在getView函数中inflate新的item之前会先判断回收器中是否有缓存的view，即判断<strong>convertView</strong>是否为null，是则inflate一个新的item View，否则重用回收器中的item。</li>
+<li>此外，ListView还使用静态的<strong>ViewHolder减少findViewById的次数</strong></li>
+<li>ListView中有<strong>getViewTypeCount()函数用于获取列表有几种布局类型</strong>，<strong>getItemViewType(int position)用于获取在position位置上的布局类型</strong>; 我们可以利用ViewType来给不同类型的item创建不同的View，这样可以利于ListView的回收</li>
+<li>对Item中图片进行适当压缩, 并进行异步加载；如果快速滑动，不加载图片；实现数据的分页加载</li>
+</ul>
+</li>
+<li><p><strong>IO缓存</strong>：在文件和网络IO中使用具有缓存策略的输入流，BufferedInputStream替代InputStream，BufferedReader替代Reader，BufferedReader替代BufferedInputStream</p>
+</li>
+<li><p><strong>data缓存(空间换时间)</strong>：①缓存数据库的查询结果，比如缓存数据库表中的数据条数，这样就可以避免多次的select count查询 ②缓存磁盘文件中需要频繁访问的数据到内存中 ③缓存耗时计算的结果</p>
+</li>
+</ol>
+<h2 id="Battery优化">Battery优化</h2><ul>
+<li>cpu的使用率和使用频率将直接或间接的影响电量的分配和使用，<strong>cpu降频</strong>可以节约电量</li>
+<li><p><strong>service优化</strong>  </p>
+<ul>
+<li>service作为一个运行在主线程中的后台服务，应该尽量避免耗时动作，而应该尽量新开线程去处理耗时动作</li>
+<li><p>监听系统广播看service是否存活，否则kill掉；降低service优先级使得系统内存吃紧时会被自动kill掉</p>
+</li>
+<li><p>使用Android提供的IntentService代替service，因为IntentService会在运行完成之后自动停止，而service需要手动调用stopService()才能停止运行</p>
+</li>
+<li><p>定时执行任务的Alarm机制：<strong>Android的定时任务有两种实现方式，Timer类和Alarm机制</strong>；Timer不适合长期后台运行的定时任务。因为每种手机都会有自己的休眠策略，Android手机就会在长时间不操作的情况下自动让CPU进入到睡眠状态，这就有可能导致Timer中的定时任务无法正常运行。而Alarm机制则不存在这种情况，它具有唤醒CPU的功能，即可以保证每次需要执行定时任务的时候CPU能正常工作。然而从Android4.4之后，Alarm任务的触发时间将会变得不准确，有可能会延迟一段时间后任务才能得到执行。这不是bug，而是系统在耗电性方面进行的优化。系统会自动检测目前有多少Alarm任务存在，然后将触发时间将近的几个任务放在一起执行，这就可以大幅度的减少CPU被唤醒的次数，从而有效延长电池的使用时间</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="渲染层优化">渲染层优化</h2><ol>
+<li><p><strong>Android 界面卡顿的原因？</strong></p>
+<ul>
+<li>UI线程中做耗时操作，比如进行网络请求,磁盘读取，位图修改，更新UI等耗时操作，从而导致UI线程卡顿</li>
+<li>布局Layout过于复杂，无法在16ms内完成渲染，或者嵌套层次过深</li>
+<li>View过度绘制或者频繁的触发measure、layout，同一时间动画执行的次数过多，导致CPU或GPU负载过重</li>
+<li>冗余资源及逻辑等导致加载和执行缓慢</li>
+</ul>
+</li>
+<li><p><strong>Android 界面卡顿怎么处理？</strong></p>
+<ul>
+<li><strong>xml布局优化</strong>：尽量使用include、merge、ViewStub标签，尽量不存在冗余嵌套及过于复杂布局（譬如10层就会直接异常），例如使用RelativeLayout代替LinearLayout可以减少布局层次和复杂性，View的嵌套层次不能过深，尽量使用GONE替换INVISIBLE，使用weight后尽量将width和heigh设置为0dp，减少运算，Item存在非常复杂的嵌套时考虑使用自定义Item View来取代，减少measure与layout次数等。</li>
+<li><strong>ListView及Adapter优化</strong>；尽量复用getView方法中的相关View，不重复获取实例导致卡顿，列表尽量在滑动过程中不进行UI元素刷新等。</li>
+<li><strong>背景和图片等内存分配优化</strong>；尽量减少不必要的背景设置，图片尽量压缩处理显示，尽量避免频繁内存抖动等问题出现；尽可能为不同分辨率创建资源，以减少不必要的硬件缩放</li>
+<li><strong>自定义View等绘图与布局优化</strong>；尽量避免在draw、measure、layout中做过于耗时及耗内存操作，尤其是draw方法中，尽量减少draw、measure、layout等执行次数，避免过度渲染和绘制；减少不必要的inflate，尽量使用全局变量缓存View</li>
+<li><strong>避免ANR</strong>，不要在UI线程中做耗时操作，譬如多次数据库操作等</li>
+</ul>
+</li>
+<li><p><strong>Layout常用的标签</strong></p>
+<ul>
+<li><p><strong>include标签</strong>：该标签可以用于将布局文件中的公共部分提取出来给其它布局文件复用，从而使得布局模块化，代码轻量化; <strong>注意点</strong>: ①如果<include>标签已经定义了id，而嵌入布局文件的root布局文件也定义了id，<include>标签的id会覆盖掉嵌入布局文件root的id，如果include标签没有定义id则会使用嵌入文件root的id ②如果想使用<include>标签覆盖嵌入布局root布局属性，必须同时覆盖layout_height和layout_width属性，否则会直接报编译时语法错误</include></include></include></p>
+</li>
+<li><p><strong>viewstub标签</strong>：该标签与include一样用于引入布局模块，只是引入的布局默认不会扩张，既不会占用显示也不会占用位置，从而在解析layout时节省cpu和内存，只有通过调用setVisibility函数或者Inflate函数才会将其要装载的目标布局给加载出来，从而达到延迟加载的效果；例如条目详情、进度条标识或者未读消息等，这些情况如果在一开始初始化，虽然设置可见性View.GONE,但是在Inflate的时候View仍然会被Inflate，仍然会创建对象。</p>
+</li>
+<li><p><strong>merge标签</strong>：该标签在layout中会被自动忽略，从而减少一层布局嵌套，其主要用处是当一个布局作为子布局被其他布局include时，使用merge当作该布局的顶节点来代替layout顶节点就可以减少一层嵌套</p>
+</li>
+<li><p><strong>hierarchy viewer</strong>：该工具可以方便的查看Activity的布局，各个View的属性、measure、layout、draw的时间，如果耗时较多会用红色标记，否则显示绿色</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="网络优化">网络优化</h2><ul>
+<li>异步请求网络数据，避免频繁请求数据（例如如果某个页面内请求过多，可以考虑做一定的请求合并），尽可能的减少网络请求次数和减小网络请求时间间隔</li>
+<li>网络应用传输中使用高效率的数据格式，譬如使用JSON代替XML，使用WebP代替其他图片格式,并对数据进行Gzip压缩数据，比如post请求的body和header内容</li>
+<li>及时缓存数据到内存/文件/数据库</li>
+<li><p>执行某些操作前尽量先进行网络状态判断，比如wifi传输数据比蜂窝数据更省电，所以尽量在wifi下进行数据的预加载</p>
+</li>
+<li><p><strong>httpClient和httpUrlConnection对比</strong>： </p>
+<ol>
+<li>httpClient是apache的开源实现，API数量多，非常稳定</li>
+<li>httpUrlConnection是java自带的模块: ①可以直接支持GZIP压缩,而HttpClient虽然也支持GZIP，但要自己写代码处理 ②httpUrlConnection直接在系统层面做了缓存策略处理，加快重复请求的速度 ③API简单，体积较小,而且直接支持系统级连接池，即打开的连接不会直接关闭，在一段时间内所有程序可共用</li>
+<li>HttpURLConnection在Android2.2之前有个重大Bug，调用close()函数会影响连接池，导致连接复用失效，需要关闭keepAlive;因此在2.2之前http请求都是用httpClient，2.2之后则是使用HttpURLConnection</li>
+<li>但是!!!现在!!!Android不再推荐这两种方式！二是直接使用OKHttp这种成熟方案！支持Android 2.3及其以上版本</li>
+</ol>
+</li>
+</ul>
+<h2 id="数据结构优化">数据结构优化</h2><ul>
+<li><p><strong>ArrayList和LinkedList的选择</strong>：ArrayList根据index取值更快，LinkedList更占内存、随机插入删除更快速、扩容效率更高</p>
+</li>
+<li><p><strong>ArrayList、HashMap、LinkedHashMap、HashSet的选择</strong>：hash系列数据结构查询速度更优，ArrayList存储有序元素，HashMap为键值对数据结构，LinkedHashMap可以记住加入次序的hashMap，HashSet不允许重复元素</p>
+</li>
+<li><p><strong>HashMap、WeakHashMap选择</strong>：WeakHashMap中元素可在适当时候被系统垃圾回收器自动回收，所以适合在内存紧张时使用</p>
+</li>
+<li><p><strong>Collections.synchronizedMap和ConcurrentHashMap的选择</strong>：ConcurrentHashMap为细分锁，锁粒度更小，并发性能更优；Collections.synchronizedMap为对象锁，自己添加函数进行锁控制更方便</p>
+</li>
+<li><p><strong>Android中性能更优的数据类型</strong>：如SparseArray、SparseBooleanArray、SparseIntArray、Pair；Sparse系列的数据结构是为key为int情况的特殊处理，采用二分查找及简单的数组存储，加上不需要泛型转换的开销，相对Map来说性能更优</p>
+</li>
+</ul>
+<h2 id="内存优化">内存优化</h2><ol>
+<li><strong>Android应用内存溢出OOM</strong><ul>
+<li><strong>内存溢出的主要导致原因有如下几类</strong>：①应用代码存在内存泄露，长时间积累无法释放导致OOM；②应用的某些逻辑操作疯狂的消耗掉大量内存（譬如加载一张不经过处理的超大超高清图片等）导致超过阈值OOM</li>
+<li><strong>解决思路</strong>①在内存引用上做些处理，常用的有软引用、弱引用 ②在内存中加载图片时直接在内存中做处理，如：边界压缩 ③动态回收内存，手动recyle bitmap，回收对象 ④优化Dalvik虚拟机的堆内存分配 ⑤自定义堆内存大小</li>
+</ul>
+</li>
+</ol>
+<p><a href="http://www.trinea.cn/android/android-performance-demo/" target="_blank" rel="external">参考链接1</a>   </p>
+<p><a href="http://blog.csdn.net/jdsjlzx/article/details/44600477" target="_blank" rel="external">参考链接2</a></p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/优化/"> #优化 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/08/29/浅谈MVC、MVP、MVVM三种框架模式/">
+                浅谈MVC、MVP、MVVM三种框架模式
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-08-29
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/框架模式/">框架模式</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/08/29/浅谈MVC、MVP、MVVM三种框架模式/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/29/浅谈MVC、MVP、MVVM三种框架模式/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p><strong>MVC模式</strong>是一种非常经典的复合型软件架构模式，它把用户界面交互分拆到不同的三种角色中，应用程序被分成三个核心部件：Model（模型）、View（视图）、Controller（控制器）, 它们各自处理自己的任务，这样就可以把业务逻辑和视图显示解耦，提高了应用程序的灵活性和复用性。MVC模式不管是在web开发还是Android开发中都被广泛应用，最典型的MVC应用就是JSP + servlet + javabean的模式，例如SpringMVC开发框架。</p>
+<ul>
+<li><p>Model模型：模型持有所有的数据、状态和程序逻辑，一个模型可以有不同的多个视图表现形式，复用性高。例如数据库记录以及相应增删查改操作；Android中对数据库的操作、网络请求、格式转换、文件下载、大数据处理等的耗时操作都在Model里面处理</p>
+</li>
+<li><p>View视图：视图是用户看到并与之交互的页面，通常直接从模型中取得它需要显示的状态与数据，一个视图往往有一个相应的控制器，理论上也可以同不同的模型相关联。例如html、xml页面；Android中主要是layout布局xml文件，webview等</p>
+</li>
+<li><p>Controller控制器：位于视图和模型中间，负责接受用户的输入，将输入进行解析并反馈给模型，例如Android开发中的Activity</p>
+</li>
+<li><p>MVC模式图解析：Event(事件)导致Controller改变Model或View，或者同时改变两者。只要Controller改变了Model的数据或者属性，所有依赖的View都会自动更新。类似的，只要Controller改变了View，View会从潜在的Model中获取数据来刷新自己。</p>
+</li>
+</ul>
+<p>　　<img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/MVC.jpeg" class="full-image">  </p>
+<p>　<strong>android中mvc的具体体现</strong>如下：<br>  1)视图层（view）：一般采用xml文件进行界面的描述，使用的时候可以非常方便的引入，当然，如何你对android了解的比较的多了话，就一定 可以想到在android中也可以使用javascript+html等的方式作为view层，当然这里需要进行java和javascript之间的通 信，幸运的是，android提供了它们之间非常方便的通信实现。</p>
+<p>　2)控制层（controller）：android的控制层的重 任通常落在了众多的acitvity的肩上，这句话也就暗含了不要在acitivity中写代码，要通过activity交割model业务逻辑层处理， 这样做的另外一个原因是android中的acitivity的响应时间是5s，如果耗时的操作放在这里，程序就很容易被回收掉。</p>
+<p>　3)模型层（model）：对数据库的操作、对网络等的操作都应该在model里面处理，当然对业务计算等操作也是必须放在的该层的。</p>
+<p><strong>MVP模式</strong><br>View不再与model交互，所有的交互通过presenter实现，双方之间的交互都是双向的，view层作为被动视图非常薄，没有任何的业务逻辑，业务逻辑都在presenter里边；Presenter与View的交互是通过接口来进行的</p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/MVP.png" class="full-image">  </p>
+<p><a href="http://blog.csdn.net/vector_yi/article/details/24719873?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="external">MVP模式在Android开发中的应用</a></p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/MVC/"> #MVC </a>
+          
+            <a href="../../tags/MVP/"> #MVP </a>
+          
+            <a href="../../tags/MVVM/"> #MVVM </a>
+          
+            <a href="../../tags/框架模式/"> #框架模式 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/">
+                Android开发adb无法识别MX手机和部分平板设备的解决方法
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-08-16
         </span>
 
         
@@ -178,8 +964,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2015/05/27/Android开发常见bug解决方法及注意事项/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/27/Android开发常见bug解决方法及注意事项/"></span>
+            <a href="../../2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/"></span>
             </a>
           </span>
           
@@ -194,14 +980,13 @@
 
       
         
-          <h3 id="xml文件出现找不到相应类">xml文件出现找不到相应类</h3><p>例如ViewPager类找不到，应该检查类名单词拼写是否错误，是否写错包名以及是否导入jar包并勾选</p>
-<h3 id="xml文件布局merge标签">xml文件布局merge标签</h3><p><merge>标签能百分百代替<FrameLayout>这个布局组件， 对于不复杂的其他布局组件如线性布局等组合组件中，可以在继承子类中对其属性进行设置后也可以使用<merge>标 签，<merge>标签不占资源，自然在生成界面时也不会生成对应的组件。另外需要注意一点是<merge>只能作为根元素，对 于需要用inflate生成布局文件时，必须指定一个ViewGroup作为其父元素，并且要设置inflate的attachToRoot参数为 true</p>
-<h3 id="DEXpathlist错误">DEXpathlist错误</h3><p>往往是因为重复导入jar或者第三方依赖包
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2015/05/27/Android开发常见bug解决方法及注意事项/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          <h3 id="mac安装adb命令">mac安装adb命令</h3><p><code>brew install android-platform-tools</code></p>
+<h3 id="adb无法识别设备">adb无法识别设备</h3><p>在Android开发过程中，当我们把移动设备连接到计算机进行真机测试时经常会出现部分设备无法被计算机识别的情况，比如魅族系列手机和部分国产android平板电脑，这种异常情况在mac系统和win系统中都会出现，在此讲述一下解决步骤：</p>
+<p><strong>1. 将移动设备连接到计算机，确保连接无误</strong></p>
+<p><strong>2. 打开terminal窗口，在当前用户home目录下输入<code>system_profiler SPUSBDataType</code>；可以看到该计算机连接的所有usb设备信息</strong></p>
+<p><strong>3. 记录你希望计算机识别的usb设备的Vendor ID参数，例如我的mx3手机Vendor ID参数为0x18d1</strong></p>
+<p><strong>4. 在terminal中输入 <code>echo &quot;0x18d1&quot; &gt;&gt; ~/.android/adb_usb.ini</code>即可(该命令会在adb_usb.ini文件中添加一行0x18d1，使得该usb设备可以被计算机识别)</strong></p>
+
         
       
     </div>
@@ -210,7 +995,7 @@
       
         <div class="post-tags">
           
-            <a href="../../tags/Android/"> #Android </a>
+            <a href="../../tags/adb/"> #adb </a>
           
             <a href="../../tags/bug/"> #bug </a>
           
@@ -239,8 +1024,8 @@
           
           
             
-              <a class="post-title-link" href="../../2015/05/24/耒阳支教之行有感/">
-                耒阳支教之行有感
+              <a class="post-title-link" href="../../2015/08/01/Python基础知识实例讲解/">
+                Python基础知识实例讲解
               </a>
             
           
@@ -249,14 +1034,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-05-24
+          发表于 2015-08-01
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="../../categories/生活随笔/">生活随笔</a>
+              <a href="../../categories/Python开发/">Python开发</a>
 
               
               
@@ -269,8 +1054,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2015/05/24/耒阳支教之行有感/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/24/耒阳支教之行有感/"></span>
+            <a href="../../2015/08/01/Python基础知识实例讲解/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/01/Python基础知识实例讲解/"></span>
             </a>
           </span>
           
@@ -285,390 +1070,297 @@
 
       
         
-          <p>　　当我坐在电脑前，开始敲击键盘来记录与回忆这短短7天的支教的日子时，鲜活的记忆一样样蹦出在我的脑海中，一幕幕的上课场景、一张张鲜活的稚嫩面孔、一段段烈日下的家访历程，无一不让我怀念不已，我想，即使是多年后，当我回想起这段日子，我还是会觉得这是一段舒适惬意、欢乐轻松的日子，这是一个值得一提、值得缅怀的人生经历与选择，即便有辛苦有艰难有沮丧，但是却充满欢乐，充满收获。这种收获与欢乐，是一种给予带来的自我满足与自我实现，这种快乐不在乎我得到什么，而只在乎我能够带给孩子们什么。看着孩子们天真的脸庞，无所求，只希望孩子们能够更好；和孩子们一起玩闹嬉戏，玩小时候玩过的游戏，仿佛看见自己儿时的影子，一下子就能把思绪拉回到多年前无忧无虑的童年时光。在短短几天里与孩子们建立起来的单纯的友谊与信任弥足珍贵，这是一种我在成人世界寻找不到的关系，可以让我感动不已。<br>　　这次支教也算是机缘巧合，因为在我的脑海里之前是并没有支教这样一个想法的，而且学院的假期太晚，时间也不怎么允许；而且像我这种经常把时间安排得太满，假期里总是忙于奔波四处的人，对于支教并不具备热情，也并不热衷；况且，在没去支教之前，对于支教，并无深入的了解，反而时常在网上看到有人数落支教的弊端，所以并不认为支教是件对孩子们很有益的事情；可是当我自己切身体验完之后，发现支教并不像我想得那么简单，它的利弊也不是一两句话可以说清，以前见过微博上的各种愤青针砭支教之弊，各种文青抒发支教感想，觉得貌似有道理，却没有切身感受，有句话说“纸上得来终觉浅，绝知此事要躬行”，的确，只有经历过，才有发言权，才会有你自己的看法。利弊从来都是任何事物必备的两面，就好像一个硬币的两面，不会分离。支教要给孩纸们带去什么？我们能帮到孩纸们什么？利是什么？弊是什么？这些问题应该是始终萦绕支教队每个成员心头的头等大问！在支教的过程中，我们慢慢找到这些问题的答案，也仅是我们的答案……
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2015/05/24/耒阳支教之行有感/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/支教/"> #支教 </a>
-          
-            <a href="../../tags/耒阳/"> #耒阳 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/24/读《1988-我想和这个世界谈谈》/">
-                读《1988-我想和这个世界谈谈》
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-24
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/读书札记/">读书札记</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/24/读《1988-我想和这个世界谈谈》/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/24/读《1988-我想和这个世界谈谈》/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>　　最近花了2天左右的时间看完了韩寒的这本书，总体感觉，嗯，很抽象的小说，却也有着很鲜明的现实意义，把社会现实和人性揭露得都很透彻，在此写写我读到了什么。<br>　　主人公貌似叫做路子野，而1988则是他的那辆由朋友帮忙改装好的旅游车，因为那辆车是1988年出厂，1988就是这么来的；他开着这辆车上路去接他的刚出狱的朋友，途中接受了已怀孕妓女娜娜的“特殊服务”却被警察查到，由此结缘，娜娜成为了他旅途的唯一伴侣；两个本来有着不同的目标、不同的社会经历和身份的人，在这个漫长的旅途中，他们互相交谈，聊着自己的人生经历，再加上这一路的经历，就组成了这么一本小说。<br>　　写到这儿，我想我是应该按小说中不同的事件来叙说感想，还是按照小说叙述的先后顺序来写呢？还是按照前者来写吧，应该会清楚一些。
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2015/05/24/读《1988-我想和这个世界谈谈》/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/阅读/"> #阅读 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/21/常见设计模式实例讲解/">
-                常见设计模式实例讲解
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-21
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/设计模式/">设计模式</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/21/常见设计模式实例讲解/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/21/常见设计模式实例讲解/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="单例模式的三种实现方式及其优缺点">单例模式的三种实现方式及其优缺点</h3><pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>{
-
-    <span class="javadoc">/**
-     *<span class="javadoctag"> @param</span> args
-     */</span>
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
-        SingletonEnum.INSTANCE.setmName(<span class="string">"enum"</span>);
-        SingletonInner.getInstance().setmName(<span class="string">"inner"</span>);
-        SingletonDoubleCheck.getInstance().setmName(<span class="string">"doubleCheck"</span>);
-    }
-
-    <span class="comment">/*
-     * 单例模式考虑点： 
-     * 1. 线程安全：Synchronized关键字，Enum，静态内部类 
-     * 2. 延迟加载：减少负载和消耗 
-     * 3. 自动序列化(Serializable和transient) 
-     * 4. 防止反射强行调用构造器
-     * 3、4点只有枚举可以实现
-     */</span>
-
-    <span class="comment">/*
-     * 枚举实现单例
-     */</span>
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">enum</span> SingletonEnum {
-        INSTANCE;
-        <span class="keyword">private</span> String mName;
-
-        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> mName;
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
-            <span class="keyword">this</span>.mName = mName;
-        }
-
-    }
-    <span class="comment">/*
-     * 双重检查锁：单例模式中需要new的情况非常少,第一层锁可以减少锁的次数
-     */</span>
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDoubleCheck</span> </span>{
-        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingletonDoubleCheck singleton = <span class="keyword">null</span>;
-
-        <span class="function"><span class="keyword">private</span> <span class="title">SingletonDoubleCheck</span><span class="params">()</span> </span>{
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDoubleCheck <span class="title">getInstance</span><span class="params">()</span> </span>{
-            <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) {
-                <span class="keyword">synchronized</span> (SingletonDoubleCheck.class) {
-                    <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) {
-                        singleton = <span class="keyword">new</span> SingletonDoubleCheck();
-                    }
-                }
-            }
-            <span class="keyword">return</span> singleton;
-        }
-
-        <span class="keyword">private</span> String mName;
-
-        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> mName;
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
-            <span class="keyword">this</span>.mName = mName;
-        }
-    }
-
-    <span class="comment">/*
-     * 内部类方式实现
-     */</span>
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonInner</span> </span>{
-
-        <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Holder</span> </span>{
-            <span class="keyword">private</span> <span class="keyword">static</span> SingletonInner singleton = <span class="keyword">new</span> SingletonInner();
-        }
-
-        <span class="function"><span class="keyword">private</span> <span class="title">SingletonInner</span><span class="params">()</span> </span>{
-
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonInner <span class="title">getInstance</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> Holder.singleton;
-        }
-
-        <span class="keyword">private</span> String mName;
-
-        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> mName;
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
-            <span class="keyword">this</span>.mName = mName;
-        }
-    }
-
-}
-</code></pre><h3 id="工厂模式实例">工厂模式实例</h3><h3 id="观察者模式">观察者模式</h3><ol>
-<li>在Java中通过Observable类和Observer接口实现了观察者模式，Observer对象监视着Observable对象的变化，当Observable对象发生变化时，Observer得到通知，就可以进行相应的工作。</li>
-<li><strong>Observable类</strong>—-程序中的被观察者类需要继承这个类</li>
-<li><strong>Observer接口</strong>—-观察者接口，观察者需要实现这个接口并重写其中的update()方法</li>
-<li>可以在main函数中通过调用被观察者的addObserver方法添加观察者，当被观察者发生变化时要调用<strong>setChanged()方法</strong>标记此Observable对象已改变，并调用<strong>notifyObservers()</strong>通知所有观察者</li>
-<li><p><strong>自定义代码实现观察者模式</strong>:</p>
-<pre><code><span class="comment">// 被观察者接口</span>
-<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Subject</span> </span>{
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerObserver</span><span class="params">(Observer o)</span></span>;
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer o)</span></span>;
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyAllObservers</span><span class="params">()</span></span>;
-}
-
-<span class="comment">// 观察者接口</span>
-<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Observer</span> </span>{
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Subject s)</span></span>;
-}
-
-    <span class="comment">// 猎头类</span>
-     <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HeadHunter</span> <span class="keyword">implements</span> <span class="title">Subject</span> </span>{
-        <span class="keyword">private</span> ArrayList&lt;Observer&gt; userList;
-        <span class="keyword">private</span> ArrayList&lt;String&gt; jobs;
-
-        <span class="function"><span class="keyword">public</span> <span class="title">HeadHunter</span><span class="params">()</span></span>{
-            userList = <span class="keyword">new</span> ArrayList&lt;Observer&gt;();
-            jobs = <span class="keyword">new</span> ArrayList&lt;String&gt;();
-        }
-
-        <span class="annotation">@Override</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerObserver</span><span class="params">(Observer o)</span> </span>{
-            userList.add(o);
-        }
-
-        <span class="annotation">@Override</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer o)</span> </span>{}
-
-        <span class="annotation">@Override</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyAllObservers</span><span class="params">()</span> </span>{
-            <span class="keyword">for</span>(Observer o: userList){
-                o.update(<span class="keyword">this</span>);
-            }
-        }
-
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addJob</span><span class="params">(String job)</span> </span>{
-            <span class="keyword">this</span>.jobs.add(job);
-            notifyAllObservers();
-        }
-
-        <span class="function"><span class="keyword">public</span> ArrayList&lt;String&gt; <span class="title">getJobs</span><span class="params">()</span> </span>{
-            <span class="keyword">return</span> jobs;
-        }
-
-        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>{
-            <span class="keyword">return</span> jobs.toString();
-        }
-    }
-
-<span class="comment">// 求职者类    </span>
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JobSeeker</span> <span class="keyword">implements</span> <span class="title">Observer</span> </span>{
-
-    <span class="keyword">private</span> String name;
-
-    <span class="function"><span class="keyword">public</span> <span class="title">JobSeeker</span><span class="params">(String name)</span></span>{
-        <span class="keyword">this</span>.name = name;
-    }
-    <span class="annotation">@Override</span>
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Subject s)</span> </span>{
-        System.out.println(<span class="keyword">this</span>.name + <span class="string">" got notified!"</span>);
-        <span class="comment">//print job list</span>
-        System.out.println(s);
-    }
-}
-
-<span class="comment">// 主函数</span>
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>{
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
-        HeadHunter hh = <span class="keyword">new</span> HeadHunter();
-        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Mike"</span>));
-        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Chris"</span>));
-        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Jeff"</span>));
-
-        <span class="comment">//每次添加一个个job，所有找工作人都可以得到通知。</span>
-        hh.addJob(<span class="string">"Google Job"</span>);
-        hh.addJob(<span class="string">"Yahoo Job"</span>);
-    }
-}
-</code></pre></li>
-</ol>
-<h3 id="代理模式">代理模式</h3><ol>
-<li><strong>代理模式</strong>就是为某个对象提供一个代理，以控制对这个对象的访问。 代理类和委托类有共同的父类或父接口，这样在任何使用委托类对象的地方都可以用代理对象替代。代理类负责请求的预处理、过滤、将请求分派给委托类处理、以及委托类执行完请求后的后续处理。</li>
-<li><strong>静态代理</strong> 由程序员创建或工具生成代理类的源码，再编译代理类。所谓静态也就是在程序运行前就已经存在代理类的字节码文件，代理类和委托类的关系在运行前就确定了。</li>
-<li><strong>动态代理</strong> 动态代理类的源码是在程序运行期间由JVM根据反射等机制动态的生成，所以不存在代理类的字节码文件。代理类和委托类的关系是在程序运行时确定。<ul>
-<li><strong>java.lang.reflect.Proxy</strong> ：Java 动态代理机制生成的所有动态代理类的父类，它提供了一组静态方法来为一组接口动态地生成代理类及其对象, 其中newProxyInstance方法用于为指定类装载器、一组接口及调用处理器生成动态代理类实例</li>
-<li><strong>java.lang.reflect.InvocationHandler</strong>：这是调用处理器接口，它自定义了一个 invoke 方法，用于集中处理在动态代理类对象上的方法调用，通常在该方法中实现对委托类的代理访问。每次生成动态代理类对象时都要指定一个对应的调用处理器对象。 </li>
-</ul>
-</li>
-</ol>
-<h3 id="适配器模式">适配器模式</h3><ol>
-<li><strong>适配器模式</strong>：将一个类的接口，转换成客户期望的另外一个接口。适配器让原本接口不兼容的类可以很好的合作;<br>两种方式：①类的适配器模式（采用继承实现）②对象适配器（采用对象组合方式实现）；</li>
-<li><strong>使用场景</strong><ul>
-<li>系统需要使用现有的类，而这些类的接口不符合系统的接口。</li>
-<li>想要建立一个可以重用的类，用于与一些彼此之间没有太大关联的一些类，包括一些可能在将来引进的类一起工作</li>
-<li>使用第三方组件，组件接口定义和自己定义的不同，不希望修改自己的接口，但是要使用第三方组件接口的功能。</li>
-</ul>
-</li>
-</ol>
-<h3 id="装饰器模式VS代理模式">装饰器模式VS代理模式</h3><ol>
-<li><strong>装饰器模式</strong>关注于在一个对象上动态的添加方法，是继承关系的一个替代方案；然而<strong>代理模式</strong>关注于控制对对象的访问，并不提供对象本身的增强功能。</li>
-<li>对<strong>装饰器模式</strong>来说，装饰者和被装饰者都实现同一个接口; 对<strong>代理模式</strong>来说，代理类和真实处理的类都实现同一个接口</li>
-<li><h3 id="参考链接">参考链接</h3></li>
-<li><a href="http://layznet.iteye.com/blog/1182924" target="_blank" rel="external">Java动态代理</a></li>
-</ol>
+          <p>Python作为一种面向对象、解释型计算机程序设计语言，语法简洁而清晰，具有丰富和强大的类库，在网站开发，数据处理，网络编程，图形处理，网络爬虫、机器学习、科学计算、自动化测试、系统运维等方面应用广泛。也正是由于Python开发简洁、优雅、开发效率高，它能够在很多地方替代java、C++等语言从而提高程序猿编程效率。作为程序猿，掌握这样一门便捷的编程语言来作为工具显得十分必要。本文主要参考了“极客学院”相关Python入门视频教程，对Python基础入门知识进行了整合，采用代码实例展现的方式，语法知识全部体现在代码中，简洁明了易于理解；本文主要包括三个Python module，分别是hellopython.py、mylib.py、stackqueue.py，涵盖了Python数据类型，常量变量，判断循环，函数，类和对象，模块，数据结构等知识(Python开发编辑器为PyCharm)</p>
+<h3 id="hellopython-py">hellopython.py</h3><p>该模块为主模块，负责实现大部分Python基础语法及其测试，从该模块我们看到几乎所有的Python基础句法的使用方法  </p>
+<p>代码：  </p>
+<pre><code><span class="comment"># coding=UTF-8</span>
+__author__ = <span class="string">'xiaoyong'</span>
+
+<span class="keyword">from</span> math <span class="keyword">import</span> *
+<span class="keyword">from</span> stackqueue <span class="keyword">import</span> *
+<span class="keyword">from</span> mylib <span class="keyword">import</span> Hi
+<span class="keyword">from</span> collections <span class="keyword">import</span> Counter
+<span class="keyword">from</span> itertools <span class="keyword">import</span> combinations
+
+<span class="keyword">import</span> mylib
+<span class="keyword">import</span> sys
+
+<span class="class"><span class="keyword">class</span> <span class="title">HelloPy</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">helloPy</span><span class="params">(self, param)</span>:</span>
+        <span class="string">'''文档字符串：该函数用于测试变量定义，判断语句
+
+        循环语句'''</span>
+        <span class="comment"># 定义变量</span>
+        <span class="keyword">global</span> globalVar
+        globalVar = <span class="number">10</span>
+        var1 = <span class="number">10</span>
+        var2 = <span class="number">20</span>
+        var3 = var1 + var2
+        print(var3)
+
+        <span class="comment"># 判断语句</span>
+        <span class="keyword">if</span> param &gt;= <span class="number">60</span>:
+            print(<span class="string">"{0} &gt; 60"</span>.format(param))
+        <span class="keyword">elif</span> param &gt; <span class="number">0</span>:
+            print(<span class="string">"{0} &gt; 0"</span>.format(param))
+        <span class="keyword">else</span>:
+            print(<span class="string">"{0} &lt; 60 &amp;&amp; 0 &gt; {1}"</span>).format(param, <span class="string">"param"</span>)
+
+        <span class="comment"># 循环语句</span>
+        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>):
+            print(i)
+
+        var4 = <span class="number">0</span>
+        <span class="keyword">while</span> var4 &lt; <span class="number">3</span>:
+            print(var4)
+            var4 += <span class="number">1</span>
+        <span class="keyword">else</span>:
+            print(<span class="string">"else var4={0}"</span>.format(var4))
+
+
+<span class="comment"># 形参设置默认初始值</span>
+<span class="function"><span class="keyword">def</span> <span class="title">fuc1</span><span class="params">(a, b=<span class="number">1</span>, c=<span class="number">2</span>)</span>:</span>
+    print(a);print(b);print(c)
+
+
+<span class="function"><span class="keyword">def</span> <span class="title">fuc2</span><span class="params">(a, b=<span class="number">1</span>)</span>:</span>
+    print(a)
+    <span class="keyword">return</span> b
+
+
+<span class="function"><span class="keyword">def</span> <span class="title">fuc3</span><span class="params">()</span>:</span>
+    <span class="keyword">return</span> (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)
+
+<span class="comment"># Python常用tips </span>
+<span class="function"><span class="keyword">def</span> <span class="title">fuc_python_tips</span><span class="params">()</span>:</span>
+    print(<span class="string">'\nPython常用tips: '</span>)
+    <span class="comment"># 交换变量</span>
+    var1 = <span class="number">0</span>
+    var2 = <span class="number">1</span>
+    var1, var2 = var2, var1
+    <span class="keyword">print</span> var1, var2
+    <span class="comment"># if语句在行内</span>
+    print(<span class="string">'hello'</span>) <span class="keyword">if</span> <span class="number">1</span> != <span class="number">1</span> <span class="keyword">else</span> <span class="string">'world'</span>
+    print(<span class="string">'hello'</span> + str(var1))
+    <span class="comment"># 数字技巧</span>
+    <span class="keyword">print</span> <span class="number">5.0</span> // <span class="number">2</span>, <span class="number">5.0</span> / <span class="number">2</span>, <span class="number">2</span> ** <span class="number">5</span>, .<span class="number">3</span> / .<span class="number">1</span>, .<span class="number">3</span> // .<span class="number">1</span>
+    var3 = <span class="number">2</span>
+    <span class="keyword">if</span> <span class="number">1</span> &lt; var3 &lt; <span class="number">3</span>:
+        print(var3)
+    <span class="comment"># 列表迭代</span>
+    list1 = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]
+    list2 = [<span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>]
+    <span class="keyword">for</span> a, b <span class="keyword">in</span> zip(list1, list2):
+        <span class="keyword">print</span> a + <span class="string">" vs "</span> + b
+    <span class="keyword">for</span> index, a <span class="keyword">in</span> enumerate(list1):
+        <span class="keyword">print</span> index, a
+    list3 = [<span class="number">0</span>] * <span class="number">3</span>
+    list3.append(<span class="number">2</span>)
+    print(list3)
+    <span class="comment"># 列表--&gt;字符串</span>
+    print(<span class="string">','</span>.join(list1))
+    <span class="comment"># 获取列表子集</span>
+    x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]
+    <span class="comment"># 前3个</span>
+    <span class="keyword">print</span> x[:<span class="number">3</span>]
+    <span class="comment"># 中间4个</span>
+    <span class="keyword">print</span> x[<span class="number">1</span>:<span class="number">5</span>]
+    <span class="comment"># 最后3个</span>
+    <span class="keyword">print</span> x[-<span class="number">3</span>:]
+    <span class="comment"># 奇数项</span>
+    <span class="keyword">print</span> x[::<span class="number">2</span>]
+    <span class="comment"># 偶数项</span>
+    <span class="keyword">print</span> x[<span class="number">1</span>::<span class="number">2</span>]
+    <span class="comment"># 统计单个字母数目</span>
+    <span class="keyword">print</span> Counter(<span class="string">'hello'</span>)
+    <span class="comment"># 列出所有组合方式</span>
+    <span class="keyword">for</span> t <span class="keyword">in</span> combinations(x, <span class="number">2</span>):
+        print(t)
+
+<span class="comment"># python标识符首字符只能是下划线或者字母，其他部分可以是下划线、字母、数字；标识符对大小写敏感</span>
+
+print(sys.version);
+<span class="keyword">print</span> (<span class="string">"模块名：{0}"</span>).format(__name__)
+print(pi)
+help(HelloPy.helloPy)
+<span class="comment"># 列出模块定义的标识符,标识符有函数、类和变量</span>
+<span class="keyword">print</span> dir(sys)
+print(HelloPy.helloPy.__doc__)
+
+<span class="comment"># 引用mylib.py模块调用函数</span>
+h = mylib.Hello(<span class="string">"mylib"</span>)
+h.sayHello()
+
+h1 = Hi(<span class="string">"mylib"</span>)
+h1.sayHi()
+
+h2 = HelloPy()
+h2.helloPy(<span class="number">15</span>)
+<span class="comment"># 全局变量</span>
+print(globalVar)
+
+fuc1(b=<span class="number">2</span>, a=<span class="number">3</span>)
+var1 = fuc2(<span class="number">2</span>, <span class="number">3</span>)
+print(var1)
+var2 = fuc3()
+print(var2)
+m1, m2, m3 = fuc3()
+print(<span class="string">"{0} {1} {2}"</span>.format(m1, m2, m3))
+
+fuc_python_tips()
+
+<span class="comment"># 引号</span>
+str1 = <span class="string">'It is a "dog"'</span>
+str2 = <span class="string">"It's a dog"</span>
+str3 = <span class="string">'''she
+I
+you'''</span>
+print(<span class="string">"{0}  {1}"</span>.format(str1, str2))
+
+<span class="comment"># 字符串重复输出</span>
+print(str3) * <span class="number">3</span>
+
+<span class="comment"># 转义符</span>
+print(<span class="string">'It\'s a dog\nyou are not'</span>)
+<span class="keyword">print</span><span class="string">"women\
+doushihaohaizi"</span>
+
+<span class="comment"># 自然字符串</span>
+print(<span class="string">r"It's a dog \n you are not"</span>)
+
+<span class="comment"># 子字符串,索引和切片两种方式</span>
+print(str1[<span class="number">1</span>]);print(str1[<span class="number">0</span>:<span class="number">3</span>]);print(str1[:<span class="number">3</span>]);print(str1[<span class="number">3</span>:]);
+
+<span class="comment"># set,求两个set的&amp; | - 重复元素</span>
+print(<span class="string">"\n集合 列表 元组 字典测试:"</span>)
+var3 = set(<span class="string">'aaabbc'</span>)
+<span class="comment"># 集合中不能有重复元素</span>
+newVar = set(var3)
+print(newVar)
+<span class="comment"># 列表，数据可以修改</span>
+students = [<span class="string">"a"</span>, <span class="string">'b'</span>, <span class="string">"c"</span>]
+print(students[<span class="number">1</span>])
+
+<span class="comment"># 元组,数据不可修改</span>
+students = (<span class="string">"a"</span>, <span class="string">'b'</span>, <span class="string">"c"</span>)
+print(students[<span class="number">1</span>])
+
+<span class="comment"># 字典</span>
+dic = {<span class="string">'姓名'</span>: <span class="string">'xiaoyong'</span>, <span class="string">"性别"</span>: <span class="string">"男"</span>}
+dic[<span class="string">'兴趣'</span>] = <span class="string">'音乐'</span>
+print(dic[<span class="string">'兴趣'</span>])
+print(dic.get(<span class="string">'姓名'</span>))
+
+<span class="comment"># 栈测试</span>
+print(<span class="string">"\n栈测试:"</span>)
+stack = Stack()
+stack.push(<span class="number">1</span>)
+stack.push(<span class="number">2</span>)
+stack.push(<span class="number">3</span>)
+print(stack.length())
+print(stack.isEmpty())
+print(stack.top())
+stack.pop()
+print(stack.top())
+
+<span class="comment"># 队列测试</span>
+print(<span class="string">"\n队列测试:"</span>)
+queue = Queue()
+queue.enQueue(<span class="number">1</span>)
+queue.enQueue(<span class="number">2</span>)
+queue.enQueue(<span class="number">3</span>)
+print(queue.length())
+print(queue.isEmpty())
+print(queue.head())
+print(queue.tail())
+queue.deQueue()
+print(queue.head())
+print(queue.tail())
+</code></pre><h3 id="mylib-py">mylib.py</h3><p>该模块为引用模块，实现两个类，Hello为父类，Hi为子类  </p>
+<p>代码：</p>
+<pre><code><span class="comment"># coding=UTF-8</span>
+__author__ = <span class="string">'xiaoyong'</span>
+
+<span class="class"><span class="keyword">class</span> <span class="title">Hello</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span>
+        self._name = name
+
+    <span class="function"><span class="keyword">def</span> <span class="title">sayHello</span><span class="params">(self)</span>:</span>
+        print(<span class="string">"class Hello: sayHello"</span>)
+        <span class="keyword">print</span> (<span class="string">"模块名：{0}"</span>).format(__name__)
+
+<span class="comment"># 类的继承</span>
+<span class="class"><span class="keyword">class</span> <span class="title">Hi</span><span class="params">(Hello)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span>
+        Hello.__init__(self, name)
+
+    <span class="function"><span class="keyword">def</span> <span class="title">sayHi</span><span class="params">(self)</span>:</span>
+        print(<span class="string">"class Hi: sayHi"</span>)
+</code></pre><h3 id="stackqueue-py">stackqueue.py</h3><p>该模块为引用模块，Stack和Queue类分别实现栈和队列两种数据结构  </p>
+<p>代码：</p>
+<pre><code><span class="comment"># coding= utf-8</span>
+__author__ = <span class="string">'xiaoyong'</span>
+
+
+<span class="comment"># 栈实现</span>
+<span class="class"><span class="keyword">class</span> <span class="title">Stack</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
+        self.stack = []
+
+    <span class="function"><span class="keyword">def</span> <span class="title">push</span><span class="params">(self, item)</span>:</span>
+        self.stack.append(item)
+
+    <span class="function"><span class="keyword">def</span> <span class="title">pop</span><span class="params">(self)</span>:</span>
+        <span class="keyword">if</span> self.stack != []:
+            <span class="keyword">return</span> self.stack.pop(-<span class="number">1</span>)
+        <span class="keyword">else</span>:
+            <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="function"><span class="keyword">def</span> <span class="title">top</span><span class="params">(self)</span>:</span>
+        <span class="keyword">if</span> self.stack != []:
+            <span class="keyword">return</span> self.stack[-<span class="number">1</span>]
+        <span class="keyword">else</span>:
+            <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="function"><span class="keyword">def</span> <span class="title">length</span><span class="params">(self)</span>:</span>
+        <span class="keyword">return</span> len(self.stack)
+
+    <span class="function"><span class="keyword">def</span> <span class="title">isEmpty</span><span class="params">(self)</span>:</span>
+        <span class="keyword">return</span> self.stack == []
+
+
+<span class="comment"># 队列实现</span>
+<span class="class"><span class="keyword">class</span> <span class="title">Queue</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
+        self.queue = []
+
+    <span class="function"><span class="keyword">def</span> <span class="title">enQueue</span><span class="params">(self, item)</span>:</span>
+        self.queue.append(item)
+
+    <span class="function"><span class="keyword">def</span> <span class="title">deQueue</span><span class="params">(self)</span>:</span>
+        <span class="keyword">if</span> self.queue != []:
+            <span class="keyword">return</span> self.queue.pop(<span class="number">0</span>)
+        <span class="keyword">else</span>:
+            <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="function"><span class="keyword">def</span> <span class="title">head</span><span class="params">(self)</span>:</span>
+        <span class="keyword">if</span> self.queue != []:
+            <span class="keyword">return</span> self.queue[<span class="number">0</span>]
+        <span class="keyword">else</span>:
+            <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="function"><span class="keyword">def</span> <span class="title">tail</span><span class="params">(self)</span>:</span>
+        <span class="keyword">if</span> self.queue != []:
+            <span class="keyword">return</span> self.queue[-<span class="number">1</span>]
+        <span class="keyword">else</span>:
+            <span class="keyword">return</span> <span class="keyword">None</span>
+
+    <span class="function"><span class="keyword">def</span> <span class="title">length</span><span class="params">(self)</span>:</span>
+        <span class="keyword">return</span> len(self.queue)
+
+    <span class="function"><span class="keyword">def</span> <span class="title">isEmpty</span><span class="params">(self)</span>:</span>
+        <span class="keyword">return</span> self.queue == []
+</code></pre><h3 id="结语">结语</h3><p>以上三个模块基本涵盖了Python所有基本语法的使用，仅作参考查询之用；如需深入学习Python相关知识，比如RESTful API开发，web2Py，Flask等框架使用，请Google之或参考相关官网。</p>
 
         
       
@@ -678,520 +1370,11 @@
       
         <div class="post-tags">
           
-            <a href="../../tags/设计模式/"> #设计模式 </a>
+            <a href="../../tags/Python/"> #Python </a>
           
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
+            <a href="../../tags/栈/"> #栈 </a>
           
-          
-            
-              <a class="post-title-link" href="../../2015/05/19/数据库重难点集锦/">
-                数据库重难点集锦
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-19
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/数据库/">数据库</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/19/数据库重难点集锦/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/19/数据库重难点集锦/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="常见的Hash算法和一致性哈希">常见的Hash算法和一致性哈希</h3><ul>
-<li><p>线性哈希，平方取中法，随机数法，按位分割求和法  </p>
-</li>
-<li><p><strong>MD5和SHA</strong>这两种单向加密算法都是基于hash算法，前者产生128位的散列值，后者产生160位的散列值；两者都存在不同输入的散列值相同的情况，但是概率很低，为了防止被彩虹表破解，可以考虑加入Salt  </p>
-</li>
-<li><p>Hash算法主要用于文件校验、数字签名、鉴权协议等  </p>
-</li>
-<li><p><strong>一致性哈希算法</strong>主要应用在cache系统中，常用的hash(object)%N算法会计算object 的hash值，然后对N取模得到余数i，该Object就会被映射到编号为i的cache上;那么当增加或者减少n的值时会导致所有的n个对象的映射全部发生改变，但是一致性哈希算法却只需要重新hash K/n个元素，为什么呢？？？; 因为一致性哈希的内部原理是将Object和cache都使用同一种hash算法hash到同一个数值空间上，该空间为一个首尾相接的圆环；然后如何将Object映射到cache呢？顺着顺时针方向,将每一个Object映射到下一个最邻近的cache,这样当新增一个cache时，只需要将原本映射到下一个cache上的Object部分映射修改到新增的cache上；当减少cache时就将之前映射到该cache的Object都映射到下一个cache上.  </p>
-</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_pre.png" class="full-image"></p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_next.png" class="full-image"></p>
-<h3 id="数据库结构概览">数据库结构概览</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/db.png" width="100%"></p>
-<h3 id="数据库的事务、索引、范式和存储过程概念以及优缺点">数据库的事务、索引、范式和存储过程概念以及优缺点</h3><ol>
-<li><p>主键：数据库表中对储存数据对象予以唯一和完整标识的数据列或属性的组合。一个数据列只能有一个主键，且主键的取值不能缺失，即不能为空值（Null）。  </p>
-<p>超键：在关系中能唯一标识元组的属性集称为关系模式的超键。一个属性可以为作为一个超键，多个属性组合在一起也可以作为一个超键。超键包含候选键和主键。  </p>
-<p>候选键：能够确定全部属性的某个属性或某组属性，称为候选键。若候选键多于一个，则选定其中一个作为主键</p>
-<p>外键：在一个表中存在的另一个表的主键称此表的外键  </p>
-</li>
-</ol>
-<ol>
-<li><p><strong>事务</strong>：事务是数据库操作中的不可分割的逻辑单元,事务也是并发控制的基本单位，一个事务中的所有操作语句要么作为一个整体被执行，要么整体不被执行; 事务最重要的<strong>两个特性是事务的传播级别和数据隔离级别</strong>。传播级别定义的是事务的控制范围，事务隔离级别定义的是事务在数据库读写方面的控制范围。</p>
-<ul>
-<li>原子性Atomicity：要么操作序列中全部语句都执行，要么全部不被执行,不可分割; 也就是说当事务的执行序列中某个语句执行错误，会回滚到该事务未执行时的状态</li>
-<li>一致性Consistency：事务执行之后数据库从一个一致性状态转化到另一个一致性状态；数据库 ACID 中的一致性对事务的要求不止包含对数据完整性以及合法性的检查，还包含应用层面逻辑的正确。</li>
-<li>隔离性Isolation：多个事务并行执行时互相之间不会影响</li>
-<li>持久性Durability：事务成功执行之后会对数据库内容产生永久性影响，当事务已经被提交之后，就无法再次回滚了，唯一能够撤回已经提交的事务的方式就是创建一个相反的事务对原操作进行『补偿』</li>
-</ul>
-</li>
-<li><p><strong>范式</strong></p>
-<ul>
-<li>第一范式：数据库表里边的每一列都是不可分割的原子性基本数据项</li>
-<li>第二范式：数据库表里边每一个非关键字段都和任意一组候选关键字(主键)完全依赖，只有表的任意一组候选键有多个属性时才会出现部分依赖</li>
-<li>第三范式：数据库里边每一个非关键字段都和主键直接相关，而不能是间接相关(传递依赖)</li>
-<li>BC范式：数据里边每一列既不部分依赖于任何候选键也不传递依赖于任何候选键；一个关系满足BCNF则一定满足第三范式</li>
-</ul>
-</li>
-<li><p><strong>索引</strong> ：建立在数据库表的某些列上，例如需要搜索或者排序的列，主键列，外键列(用于连接的列),用在where语句中的列；<strong>有些列不应该建索引</strong>，比如：查询中很少使用或者参考的列， 只有很少数据值的列，定义为text, image和bit数据类型的列,当修改性能远远大于检索性能时，不应该创建索引；索引的实现通常使用B树及其变种B+树</p>
-<ul>
-<li>参考: 一般来说，<strong>应该在这些列上创建索引</strong>：在经常需要搜索的列上，可以加快搜索的速度；在作为主键的列上，强制该列的唯一性和组织表中数据的排列结构；在经常用在连接的列上，这些列主要是一些外键，可以加快连接的速度；在经常需要根据范围进行搜索的列上创建索引，因为索引已经排序，其指定的范围是连续的；在经常需要排序的列上创建索引，因为索引已经排序，这样查询可以利用索引的排序，加快排序查询时间；在经常使用在WHERE子句中的列上面创建索引，加快条件的判断速度。</li>
-<li><p><strong>复合索引</strong>就是索引建立在多个列上，<strong>唯一索引</strong>就是保证索引列中的所有数据都是唯一的，不会存在冗余数据;<strong>聚集索引</strong>是指表中行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能包含一个聚集索引</p>
-<p>优点：</p>
-</li>
-</ul>
-<ol>
-<li>通过创建唯一性索引，可以保证数据库表中每一行数据的唯一性 </li>
-<li>可以大大加快数据的检索速度    </li>
-<li>可以加速表和表之间的连接</li>
-<li>在使用分组和排序子句进行数据检索时，同样可以显著减少查询中分组和排序的时间</li>
-<li><p>通过使用索引，可以在查询的过程中，使用优化隐藏器，提高系统的性能</p>
-<p>缺点：</p>
-</li>
-<li>创建索引和维护索引要耗费时间和大量的物理空间</li>
-<li>对表中的数据进行增加、删除和修改的时候，索引也要动态的维护，这样就降低了数据的维护速度</li>
-</ol>
-</li>
-<li><p><strong>存储过程</strong></p>
-<ul>
-<li>它是一组存储在数据库中的编译后的SQL语句集，可以接受参数以及返回值，也可以包括程序流，查询语句等</li>
-<li>正常情况下,我们在code中写好SQL语句,连接数据库，SQL语句会被发送到服务器然后编译优化，数据库引擎执行编译后的查询语句，最后将查询结果返回给客户端；那么如果我们使用存储过程就可以省掉编译优化的过程，而且存储过程存储在database中，可以减少网络流量和传输时间；而且可以对存储过程授予制定权限，从而保证数据库操作安全</li>
-</ul>
-</li>
-<li><p><strong>View</strong></p>
-<ul>
-<li>视图是一种通过自定义查询语句去查询筛选数据库表中的数据然后呈现给用户的一种动态生成的虚拟表,他和表一样包含行列数据，但是来自于其引用的表；其优点主要是可以保证数据库安全性以及筛选隐藏部分重要数据;View与Table之间的关系类似于MVC，在View中对数据进行修改会影响到Table中的数据，在Table中进行数据修改同样会显示到View，因为他们用的是同一份数据。</li>
-</ul>
-</li>
-</ol>
-<h3 id="MySQL的隔离级别与锁">MySQL的隔离级别与锁</h3><ol>
-<li><strong><a href="https://www.kancloud.cn/hx78/sql/379624" target="_blank" rel="external">四种隔离级别</a></strong>: 隔离级别决定了一个会话中的事务可能对另一个会话的影响、并发会话对数据库的操作、一个会话中所见数据的一致性; MySQL的InnoDB支持四种隔离级别,默认是可重读隔离级别<ul>
-<li><strong>未提交读READ UNCOMMITTED</strong>：最低级别的隔离，也被称之为脏读，它允许一个事务读取还没commit的事务的执行结果，这样可能会提高性能，但是导致脏读   </li>
-<li><strong>提交读READ COMMITTED</strong>：在一个事务中只允许看见已经commit的事务所做的改变。如果一个session中select还在查询中，另一会话session此时insert一条记录，则新添加的数据不可见；只有该操作commit之后才可见，也就是说—-<strong>不可重复读</strong>   </li>
-<li><strong>可重读REPEATABLE READ</strong>：同一个事务的多个实例在并发读取数据时会看到同样的数据行。也就是说在一个事务中重复select的结果一样，除非本事务中添加新数据到数据库，可能导致<strong>幻读</strong>;也就说事务之间只是在新数据方面突破了隔离，对已存在的数据仍旧隔离。</li>
-<li><strong>可串行化SERIALIZABLE</strong>：最高级别的隔离，强制事务排序并且只允许事务串行执行。为了达到此目的，数据库会锁住每个读的数据行，减少了并发，增加了稳定性，但是可能导致超时和锁竞争现象</li>
-<li><strong>事务并发导致的几个问题</strong><a href="https://draveness.me/mysql-transaction" target="_blank" rel="external">事务实现</a><ul>
-<li><strong>脏读(Drity Read)</strong>：某个事务已更新一份数据，另一个事务在此时读取了同一份数据，由于某些原因，前一个回滚了操作，则后一个事务所读取的数据就会是不正确的</li>
-<li><strong>不可重复读</strong>:在一个事务的两次查询之中数据不一致，这可能是两次查询过程中间插入了一个事务更新了原有的数据。</li>
-<li><strong>幻读</strong>：例如一个事务的两次查询过程中有另外一个事务插入数据造成第二次查询出现了在第一次查询中没有出现的数据；<strong>例如</strong>如果事务A运行”SELECT count(1) from TABLE_X” ，然后事务B在 TABLE_X 加入一条新数据并提交，当事务A再运行一次 count(1)结果不会是一样的，这就叫做<strong>幻读</strong></li>
-</ul>
-</li>
-<li>隔离级别越高，越能保证数据的完整性和一致性，但是对并发性能的影响也越大。对于多数应用程序，可以优先考虑把数据库系统的隔离级别设为Read Committed。它能够避免脏读取，而且具有较好的并发性能。尽管它会导致不可重复读和并发问题，可以由应用程序采用悲观锁或乐观锁来控制。</li>
-<li>性质<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/SQL隔离.png" class="full-image"></li>
-</ul>
-</li>
-<li><strong>共享锁</strong>：由读表操作加上的锁，加锁后其他用户只能获取该表或行的共享锁，不能获取排它锁，也就是说只能读不能写；一个事务获取了共享锁之后，可以对锁定范围内的数据执行读操作。</li>
-<li><strong>排它锁</strong>：由写表操作加上的锁，加锁后其他用户不能获取该表或行的任何锁;一个事务获取了排它锁之后，可以对锁定范围内的数据执行写操作。</li>
-<li><strong>乐观锁</strong>:读取数据时不锁，更新时检查是否数据已经被更新过，如果是则取消当前更新<br>一般在悲观锁的等待时间过长而不能接受时我们才会选择乐观锁；<strong>乐观锁适用于多读的应用类型</strong>，这样可以提高吞吐量<ul>
-<li><strong>乐观锁怎么实现和检查数据是否已经被更新？？？</strong>：</li>
-<li><strong>①使用数据版本记录机制实现</strong>也就是为数据增加一个版本标识，一般是通过为数据库表增加一个数字类型的 “version” 字段来实现。当读取数据时，将version字段的值一同读出，数据每更新一次，对此version值加一。当我们提交更新的时候，判断数据库表对应记录的当前版本信息与第一次取出来的version值进行比对，如果数据库表当前版本号与第一次取出来的version值相等，则予以更新，否则认为是过期数据</li>
-<li><strong>②在需要乐观锁控制的table中增加一个字段</strong>，字段名称无所谓，字段类型使用时间戳（timestamp）, 和版本记录类似，也是在更新提交的时候检查当前数据库中数据的时间戳和自己更新前取到的时间戳进行对比，如果一致则OK，否则就是版本冲突</li>
-</ul>
-</li>
-<li><strong>悲观锁</strong>:在读取数据时锁住那几行，其他对这几行的更新需要等到悲观锁结束时才能继续；比如行锁，表锁等，读锁 </li>
-<li><strong>表级锁</strong>：对整个表加锁，影响标准的所有记录；开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。</li>
-<li><strong>行级锁</strong>：对一行记录加锁，只影响一条记录；开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。</li>
-<li><strong>页面锁</strong>：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</li>
-<li><strong>锁管理器</strong>是添加和释放锁的进程，在内部使用一个哈希表来保存锁的相关信息(关键字是被锁的数据），并且了解每一块数据是被哪个事务加的锁,哪个事务在等待数据解锁;锁管理器还需要检查是否存在死锁，以及决定选择取消哪一个事务来消除死锁，<strong>检查死锁有两种方式</strong>一种是<strong>检查循环等待</strong>还有一种是<strong>使用超时设定</strong>。如果一个锁在超时时间内没有加上，那事务就进入了死锁状态。</li>
-<li><strong>数据库一般采用锁或者数据版本控制来进行并发控制</strong> 版本控制是每个事务可以在相同时刻修改相同的数据，每个事务有自己的数据拷贝（或者叫版本）；如果2个事务修改相同的数据，只接受一个修改，另一个将被拒绝，相关的事务回滚（或重新运行）；这将提高性能，因为：读事务不会阻塞写事务，写事务不会阻塞读，可以减少锁管理器带来的额外开销，但是磁盘空间消耗巨大，以空间换时间</li>
-<li>乐观锁不会存在死锁的问题，但是由于更新后验证，所以当冲突频率和重试成本较高时更推荐使用悲观锁，而需要非常高的响应速度并且并发量非常大的时候使用乐观锁就能较好的解决问题，在这时使用悲观锁就可能出现严重的性能问题；在选择并发控制机制时，需要综合考虑上面的四个方面（冲突频率、重试成本、响应速度和并发量）进行选择。</li>
-<li><strong>共享锁（读锁）</strong>：允许事务对一条行数据进行读取；<strong>互斥锁（写锁）</strong>：允许事务对一条行数据进行删除或更新；</li>
-</ol>
-<h3 id="MySQL_InnoDB实现">MySQL InnoDB实现</h3><ol>
-<li><a href="https://draveness.me/mysql-innodb" target="_blank" rel="external">『浅入浅出』MySQL 和 InnoDB</a></li>
-</ol>
-<h3 id="MyISAM和InnoDB存储引擎之间的区别">MyISAM和InnoDB存储引擎之间的区别</h3><ol>
-<li>InnoDB支持事务、外键和行锁，而MyISAM不支持这些高级功能，但是<strong>MyISAM是默认引擎</strong>，InnoDB则需要指定(事务是一种高级的处理方式，如在一些列增删改中只要哪个出错还可以回滚还原)</li>
-<li>MyISAM适合SELECT为主的应用，InnoDB适合频繁修改(INSERT或UPDATE)以及涉及到安全性较高的应用,因为InnoDB数据库在进行update时表进行行锁，并发量相对较大;而MyISAM在进行updata时进行表锁，并发量相对较小</li>
-<li>InnoDB不支持FULLTEXT类型的索引; 虽然InnoDB支持行锁,但是某些情况下还是锁整表，如 update table set a=1 where user like ‘%lee%’，因为该SQL语句不能确定要扫描的范围</li>
-<li>DELETE清空整个表时，InnoDB是一行一行的删除，效率非常慢。MyISAM则会重建表</li>
-<li>MyISAM的索引和数据是分开的，并且索引是有压缩的，内存使用率就对应提高了不少。能加载更多索引，而Innodb是索引和数据是紧密捆绑的，没有使用压缩从而会造成Innodb比MyISAM体积庞大不小</li>
-<li>InnoDB中不保存表的具体行数，也就是说，执行select count ( <em> ) from table时，InnoDB要扫描一遍整个表来计算有多少行，但是MyISAM只要简单的读出保存好的行数即可。注意的是，当count(</em>) 语句包含where条件时，两种表的操作是一样的</li>
-<li>MyISAM<strong>缓存</strong>在内存的是索引，不是数据。而InnoDB缓存在内存的是数据  </li>
-<li><strong>MyISAM和InnoDB索引B+树结构的区别</strong>：<strong>MyISAM引擎</strong>使用B+Tree作为索引结构，叶节点的data域存放的是数据记录的地址，索引检索的算法为首先按照B+Tree搜索算法搜索索引，如果指定的Key存在，则取出其data域的值，然后以data域的值为地址，读取相应数据记录。这种索引方式就属于“非聚集索引”；<strong>InnoDB中</strong>，表数据文件本身就是按B+Tree组织的一个索引结构，这棵树的叶节点data域保存了完整的数据记录  </li>
-</ol>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/myisam.png" width="100%"><br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/innodb.png" width="100%">   </p>
-<h3 id="SQL语句">SQL语句</h3><ol>
-<li><p><strong>in和exists区别</strong></p>
-<ul>
-<li>mysql中的<strong>in语句</strong>是把外表和内表作hash 连接，而<strong>exists语句</strong>是对外表作loop循环，每次loop循环再对内表进行查询。一直大家都认为exists比in语句的效率要高，这种说法其实是不准确的，这个是要区分环境的。</li>
-<li><strong>效率对比</strong>：①如果查询的两个表大小相当，那么用in和exists差别不大；②如果两个表中一个较小，一个是大表，则子查询表大的用exists，子查询表小的用in</li>
-<li><strong>实例（A&lt;B）</strong>：①select <em> from A where cc in (select cc from B) 效率低，用到了A表上cc列的索引；②select </em> from A where exists(select cc from B where cc=A.cc) 效率高，用到了B表上cc列的索引。③select <em> from B where cc in (select cc from A) 效率高，用到了B表上cc列的索引；④select </em> from B where exists(select cc from A where cc=B.cc) 效率低，用到了A表上cc列的索引。</li>
-</ul>
-</li>
-<li><p><strong>not in和not exists区别</strong></p>
-<ul>
-<li>not in 和not exists如果查询语句使用了not in 那么内外表都进行全表扫描，没有用到索引；而not extsts 的子查询依然能用到表上的索引。所以无论那个表大，用not exists都比not in要快。 </li>
-<li>在含有NULL值的列的时候，not in 逻辑上不完全等同于not exists；应该尽量不要使用not in(它会调用子查询)，而尽量使用not exists(它会调用关联子查询)。如果not in子查询中返回的任意一条记录含有空值，则查询将不返回任何记录；因此除非子查询字段有非空限制，这时可以使用not in</li>
-</ul>
-</li>
-<li><p><strong>inner join、outer join和cross join的区别</strong><br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Join区别.png" width="100%"></p>
-</li>
-</ol>
-<h3 id="日志管理器">日志管理器</h3><ol>
-<li>为了提升性能，数据库把数据保存在内存缓冲区内。但如果当事务提交时服务器崩溃，崩溃时还在内存里的数据会丢失，这破坏了事务的持久性。你可以把所有数据都写在磁盘上，但是如果服务器崩溃，最终数据可能只有部分写入磁盘，这破坏了事务的原子性。因此我们采用<strong>事务日志</strong>是一个存储空间，在每次写盘之前，数据库在事务日志中写入一些信息，这样当事务崩溃或回滚，数据库知道如何移除或完成尚未完成的事务。<strong>事务的每一个操作（增/删/改）产生一条日志</strong>，</li>
-<li>MySQL中的两种日志，数据库恢复机制是通过回滚日志（undo log）或者重做日志(redo log)实现的；在数据库系统中，事务的原子性和持久性是由事务日志（transaction log）保证的，在实现时也就是上面提到的两种日志，前者用于对事务的影响进行撤销，后者在错误处理时对已经提交的事务进行重做，它们能保证两点：①发生错误或者需要回滚的事务能够成功回滚（原子性）；②在事务提交后，数据没来得及写会磁盘就宕机时，在下次重新启动后能够成功恢复数据（持久性）</li>
-</ol>
-<h3 id="其它概念">其它概念</h3><ol>
-<li>Transaction2 依赖于 Transaction1，而 Transaction3 又依赖于 Transaction1，当 Transaction1 由于执行出现问题发生回滚时，为了保证事务的原子性，就会将 Transaction2 和 Transaction3 中的工作全部回滚，这种情况也叫做<strong>级联回滚（Cascading Rollback）</strong>，级联回滚的发生会导致大量的工作需要撤回，是我们难以接受的。</li>
-<li></li>
-</ol>
-<h3 id="参考链接">参考链接</h3><ol>
-<li><a href="http://blog.jobbole.com/100349/" target="_blank" rel="external">数据库整体架构原理</a></li>
-<li><a href="http://www.codeceo.com/article/mysql-index-struct.html#0-tsina-1-46551-397232819ff9a47a7b7e80a40613cfe1" target="_blank" rel="external">MySQL数据库索引原理</a>  </li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/databse/"> #databse </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/15/Mac常用快捷键和Tips/">
-                Mac常用快捷键和Tips
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-15
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Mac系统/">Mac系统</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/15/Mac常用快捷键和Tips/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/15/Mac常用快捷键和Tips/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>在Mac系统中学会使用常用快捷键可以大大提高效率，以下为Mac系统中常用的快捷键和在Elipse开发中的常用快捷键(包含Mac和Win两个版本)。</p>
-<h3 id="Mac系统中常用快捷键">Mac系统中常用快捷键</h3><pre><code>cmd+alt+<span class="number">1</span>  <span class="comment">--- 自动整理当前文件夹中文件</span>
-ctrl+<span class="constant">space</span> <span class="comment">---  启动spotlight全局搜索</span>
-cmd+<span class="constant">space</span> <span class="comment">--- 切换输入法</span>
-cmd+向上/向下箭头 <span class="comment">--- 返回上级文件夹/打开当前文件夹或文件</span>
-cmd+T <span class="comment">--- 新建各种窗口(包括terminal窗口、finder窗口、chrome tab等)</span>
-cmd+shift+{/} <span class="comment">--- 切换tab(包括finder、terminal等窗口tab)</span>
-cmd+shift+<span class="number">3</span> <span class="comment">--- 屏幕截屏</span>
-cmd+shift+<span class="number">4</span> <span class="comment">---选取区域截图</span>
-cmd+<span class="built_in">delete</span> <span class="comment">--- 删除某个文件</span>
-enter <span class="comment">--- 修改文件名(类似于win中的F2)</span>
-cmd+I <span class="comment">--- 查看文件详细属性</span>
-cmd+option+esc <span class="comment">--- 打开进程管理窗口</span>
-</code></pre><h3 id="Mac常用设置方法">Mac常用设置方法</h3><h4 id="设置Eclipse中package_explorer窗口中项目列表字体大小">设置Eclipse中package explorer窗口中项目列表字体大小</h4><ul>
-<li><p>Step1: 下载安装TinkerTool的软件  </p>
-</li>
-<li><p>Step2: 点击fonts，修改Help tags的字体大小</p>
-</li>
-</ul>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Mac/"> #Mac </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/">
-                Mac设置环境变量(adb+NDK+sdk)
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-15
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Mac系统/">Mac系统</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>无论是在windows还是mac系统下，对于程序猿而言，在terminal中输入命令进行一些常用操作是比用鼠标更为快捷的方式。那么为了能够打开terminal就可以直接输入并执行命令，就需要进行环境变量的设置，这样就不必进入命令文件所在目录下执行该命令了。windows下配置环境变量较为简单，在此讲一下mac下配置环境变量的方法和注意事项。</p>
-<p><strong>1. 打开terminal，输入<code>cd ~</code>, 进入当前用户home目录</strong></p>
-<p><strong>2. 输入<code>touch .bash_profile</code>, 创建bash_profile文件(如果该文件已经存在则可以直接进入第3步)</strong></p>
-<p><strong>3. 打开记事本编辑bash_profile文件，示例如下</strong></p>
-<pre><code>方式一：用<span class="constant">SDK_HOME指</span>代一个通用路径，一处设置，多处使用，结构明晰，然后设置到<span class="constant">PATH</span>
-
-export <span class="constant">SDK_HOME=</span>“/usr/sdk”             
-export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:</span><span class="variable">${</span><span class="constant">SDK_HOME}</span><span class="symbol">:</span><span class="variable">${</span><span class="constant">SDK_HOME}</span>/<span class="symbol">tools:</span>/usr/ndk
-
-
-方式二：直接将各个命令的路径用<span class="symbol">:</span>连接起来设置到<span class="constant">PATH </span>形如--- export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:</span>路径<span class="number">1</span><span class="symbol">:</span>路径<span class="number">2</span><span class="symbol">:</span>路径<span class="number">3</span>
-
-export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:/usr/sdk</span><span class="symbol">:/usr/sdk/tools</span><span class="symbol">:/usr/ndk</span>
-</code></pre><p><strong>4. 保存修改，输入更新命令<code>source .bash_profile</code>,PATH变量配置完成</strong></p>
-<p><a href="http://blog.csdn.net/zf135792468/article/details/11926995" target="_blank" rel="external">参考链接</a></p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Android/"> #Android </a>
-          
-            <a href="../../tags/Mac/"> #Mac </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/12/如何阅读一本书/">
-                如何阅读一本书
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-12
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/读书札记/">读书札记</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/12/如何阅读一本书/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/12/如何阅读一本书/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>书籍使人进步！阅读使人明智！如何阅读一本书也是一门学问，读懂不同类型的书也是一件不容易的事情。美国教育家查尔斯-范多伦还特地写了一本《如何阅读一本书》来讲述读书的“方法论”，此文为部分书摘，闲来无事翻书，翻到哪儿写到哪儿，未完待续……
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2015/05/12/如何阅读一本书/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/阅读/"> #阅读 </a>
+            <a href="../../tags/队列/"> #队列 </a>
           
         </div>
       
@@ -1211,7 +1394,7 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 
   
   <div class="pagination">
-    <a class="extend prev" rel="prev" href="../5/">&laquo;</a><a class="page-number" href="../..//">1</a><span class="space">&hellip;</span><a class="page-number" href="../5/">5</a><span class="page-number current">6</span><a class="page-number" href="../7/">7</a><a class="extend next" rel="next" href="../7/">&raquo;</a>
+    <a class="extend prev" rel="prev" href="../5/">&laquo;</a><a class="page-number" href="../..//">1</a><span class="space">&hellip;</span><a class="page-number" href="../5/">5</a><span class="page-number current">6</span><a class="page-number" href="../7/">7</a><span class="space">&hellip;</span><a class="page-number" href="../9/">9</a><a class="extend next" rel="next" href="../7/">&raquo;</a>
   </div>
 
 
@@ -1245,7 +1428,7 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">54</span>
+              <span class="site-state-item-count">67</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1259,7 +1442,7 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-count">69</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -1304,7 +1487,7 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
         <div class="copyright">
   
   &copy; &nbsp;  2015.05.16 - 
-  2017
+  2018
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>

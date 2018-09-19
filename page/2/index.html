@@ -148,8 +148,8 @@
           
           
             
-              <a class="post-title-link" href="../../2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/">
-                Mac安装配置mySQL/mongodb/Redis开发环境及开机自启动
+              <a class="post-title-link" href="../../2017/12/09/Mysql 长连接与短连接/">
+                Mysql 长连接与短连接
               </a>
             
           
@@ -158,28 +158,17 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2016-12-23
+          发表于 2017-12-09
         </span>
 
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Mac系统/">Mac系统</a>
-
-              
-              
-
-            
-          </span>
         
 
         
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/"></span>
+            <a href="../../2017/12/09/Mysql 长连接与短连接/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/09/Mysql 长连接与短连接/"></span>
             </a>
           </span>
           
@@ -194,12 +183,37 @@
 
       
         
-          <p>后端开发中免不了和数据库、缓存打交道，最近所参与的项目用到的就包括MySQL、mongodb、Redis，配置相关环境是参与开发的第一步; 本文主要讲述安装配置MySQL、mongodb、Redis的相关命令以及如何在mac中设置开机自启，也会记录一些相关控制台命令。
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          <h4 id="概念说明">概念说明</h4><ol>
+<li><strong>短连接</strong>：是指程序和数据库通信时需要建立连接，执行操作后，连接关闭。短连接简单来说就是每一次操作数据库，都要打开和关闭数据库连接，基本步骤是：连接→数据传输→关闭连接。</li>
+<li><strong>长连接</strong>：是指程序之间的连接在建立之后，就一直打开，被后续程序重用，基本步骤是：连接→数据传输→保持连接→数据传输……。使用长连接的初衷是减少连接的开销，尽管MySQL的连接比其他数据库要快得多。长连接在没有数据通信时，定时发送数据包，以维持连接状态。</li>
+<li><strong>数据库连接池</strong>：是一些网络代理服务或应用服务器实现的特性，如J2EE服务器，它实现了一个持久连接的“池”，允许其他程序、客户端来连接，这个连接池将被所有连接的客户端共享使用，连接池可以节省打开数据库的时间，加速连接，也可以减少数据库连接，降低数据库服务器的负载；它是预先打开N个数据库连接，把它们缓存起来，当需要使用数据库的时候就直接使用这些已经打开的连接，节省时间</li>
+<li><strong>J2EE数据库连接池的原理</strong>：<ul>
+<li>J2EE服务器启动时会建立一定数量的池连接，并一直维持不少于此数目的池连接。</li>
+<li>客户端程序需要连接时，池驱动程序会返回一个未使用的池连接并将其表记为忙。</li>
+<li>如果当前没有空闲连接，池驱动程序就新建一定数量的连接，新建连接的数量由配置参数决定。</li>
+<li>当使用的池连接调用完成后，池驱动程序将此连接表记为空闲，其他调用就可以使用这个连接。</li>
+</ul>
+</li>
+</ol>
+<h4 id="适用场景">适用场景</h4><ol>
+<li><strong>长连接优劣势</strong><ul>
+<li>从客户端的角度来说，使用长连接可以不用每次创建新连接，若客户端对MySQL服务器的连接请求很频繁，永久连接将更加高效。</li>
+<li>从服务器的角度来看，情况则略有不同，它可以节省创建连接的开销，但维持连接也是需要内存的。如果滥用长连接的话，可能会使用过多的MySQL服务器连接。现代的操作系统可以拥有几千个MySQL连接，但很有可能绝大部分都是睡眠（sleep）状态的，这样的工作方式不够高效，而且连接占据内存，也会导致内存的浪费。</li>
+</ul>
+</li>
+<li><strong>长连接主要用于在少数客户端与服务端的频繁通信</strong>，因为这时候如果用短连接频繁通信常会发生Socket出错，并且频繁创建Socket连接也是对资源的浪费；但是对于服务端来说，长连接也会耗费一定的资源，需要专门的线程（unix下可以用进程管理）来负责维护连接状态。</li>
+<li><strong>长连接</strong>是一些驱动、驱动框架、ORM工具的特性，由驱动来保持连接句柄的打开，以便后续的数据库操作可以重用连接，从而减少数据库的连接开销。而<strong>连接池</strong>是应用服务器的组件，它可以通过参数来配置连接数、连接检测、连接的生命周期等。</li>
+</ol>
+<h4 id="注意事项">注意事项</h4><ol>
+<li>我们一般使用mysql -uroot -p只不过是使用了管理员的身份来创建一个connection，从而登录mysql，mysql的连接过程，内部实际上是经过tcp/ip协议的，当然mysql封装了tcp/ip有自己的一套协议。mysql是会创建一个线程来处理到来的连接的，我们可以在mysql中show status;然后在连接mysql，再次show status就可以看到Thread_connected的数量会增加1</li>
+<li>在生产繁忙的系统中，连接也可能会受到系统端口数的限制，如果要每秒建立几千个连接，那么连接断开后，端口不会被马上回收利用，必须经历一个“FIN”阶段的等待，直到可被回收利用为止，这样就可能会导致端口资源不够用。</li>
+<li>如果客户端和MySQL数据库之间有连接池或Proxy代理，一般在客户端推荐使用短连接。对于长连接的使用一定要慎重，不可滥用</li>
+<li>如果使用了长连接而长期没有对数据库进行任何操作，那么在timeout值(默认8小时)后，mysql server就会关闭此连接，而客户端在执行查询的时候就会得到一个类似于“MySQL server has gone away“这样的错误。在使用mysql_real_connect连接数据库之后，再使用mysql_options( &amp;mysql, MYSQL_OPT_RECONNECT, … ) 来设置为自动重连。</li>
+</ol>
+<h4 id="常用工具">常用工具</h4><ol>
+<li>查看mysql连接数：<code>mysqladmin -uroot -p  processlist</code></li>
+</ol>
+
         
       
     </div>
@@ -208,7 +222,9 @@
       
         <div class="post-tags">
           
-            <a href="../../tags/Mac/"> #Mac </a>
+            <a href="../../tags/Mysql/"> #Mysql </a>
+          
+            <a href="../../tags/databse/"> #databse </a>
           
         </div>
       
@@ -235,8 +251,8 @@
           
           
             
-              <a class="post-title-link" href="../../2016/12/23/MySQL基础知识/">
-                MySQL基础知识
+              <a class="post-title-link" href="../../2017/12/09/如何实现多个数据库分片的list_objects操作/">
+                如何实现多个数据库分片的list_objects操作
               </a>
             
           
@@ -245,7 +261,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2016-12-23
+          发表于 2017-12-09
         </span>
 
         
@@ -254,8 +270,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2016/12/23/MySQL基础知识/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/23/MySQL基础知识/"></span>
+            <a href="../../2017/12/09/如何实现多个数据库分片的list_objects操作/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/09/如何实现多个数据库分片的list_objects操作/"></span>
             </a>
           </span>
           
@@ -270,613 +286,128 @@
 
       
         
-          <h4 id="MySQL函数">MySQL函数</h4><ol>
-<li>SQL中操作日期和年月的函数：SELECT DAYOFWEEK(‘2013-12-1’), DAYOFMONTH(‘2013-12-1’), WEEKDAY(‘2013-12-1’),DAYOFYEAR(‘2013-12-1’), DAYNAME(‘2013-12-1’), MONTHNAME(‘2013-12-1’), WEEK(‘2013-12-1’)\G;</li>
-<li>字符串操作函数：length(), concat(), concat_ws(), RTRIM(), LTRIM(), RPAD(), LPAD(), LOCATE(), SUBSTRING(), LCASE(), UCASE(), REPEAT();</li>
-<li>时间处理函数：HOUR(), MINUTE(), SECOND(); 时间格式处理函数：SELECT DATE_FORMAT(‘2013-12-01 02:02:00’, ‘%h:%i:%S’) AS sample_time</li>
-<li>日期算数函数：SELECT DATE_ADD(NOW(), INTERVAL 21 DAY); DATE_SUB(), CURDATE(), CURTIME(), NOW(), UNIX_TIMESTAMP(), FROM_UNIXTIME()</li>
-<li>SQL事务处理：BEGIN—-ROLLBACK—-COMMIT</li>
-<li><p>PHP与SQL交互：</p>
-<pre><code><span class="variable">$mysqli</span> = mysqli_connect(<span class="string">"hostname(localhost)"</span>, <span class="string">"uername"</span>, <span class="string">"password"</span>, <span class="string">"database"</span>);
-<span class="variable">$sql</span> = <span class="string">"SQL语句"</span>;
-<span class="variable">$res</span> = mysqli_query(<span class="variable">$mysqli</span>, <span class="variable">$sql</span>);<span class="regexp">//</span>执行mysqli_query函数，如果正确执行则返回<span class="keyword">true</span>，否则返回<span class="keyword">false</span>；
-可以使用mysqli_error(<span class="variable">$mysqli</span>)输出
-mysqli_free_result();<span class="regexp">//</span>在关闭之前释放空间
-mysqli_close(<span class="variable">$mysqli</span>)；
-mysqli_fetch_array()函数获取每一行记录作为一个数组，使用<span class="keyword">while</span>循环可以遍历一次所有记录
-</code></pre></li>
-</ol>
-<h4 id="MySQL概念">MySQL概念</h4><ol>
-<li><strong>主键</strong>—唯一标识一条记录，不能有重复的，不允许为空。一个表的主键只能有一个。用来保证数据完整性</li>
-<li><strong>外键</strong>—表的外键是另一表的主键, 外键可以有重复的, 可以是空值。一个表可以有多个外键。用来和其他表建立联系用的</li>
-<li><strong>索引</strong>—该字段没有重复值，但可以有一个空值。一个表可以有多个唯一索引。提高查询排序的速度</li>
-<li><p>外键取值规则：空值或参照的主键值。</p>
-<p> (1)插入非空值时，如果主键表中没有这个值，则不能插入。</p>
-<p> (2)更新时，不能改为主键表中没有的值。</p>
-<p> (3)删除主键表记录时，你可以在建外键时选定外键记录一起级联删除还是拒绝删除。</p>
-<p> (4)更新主键记录时，同样有级联更新和拒绝执行的选择</p>
-</li>
-</ol>
-<h4 id="MySQL常用操作">MySQL常用操作</h4><ol>
-<li><p>建立主键:</p>
-<pre><code><span class="operator"><span class="keyword">alter</span> <span class="keyword">table</span> 表名
-<span class="keyword">add</span> <span class="keyword">constraint</span> PK_字段名<span class="comment">--"PK"为主键的缩写，字段名为要在其上创建主键的字段名,'PK_字段名'就为约束名</span>
-<span class="keyword">primary</span> <span class="keyword">key</span> (字段名) <span class="comment">--字段名同上</span></span>
-</code></pre></li>
-<li><p>增加唯一约束:</p>
-<pre><code><span class="operator"><span class="keyword">alter</span> <span class="keyword">table</span> 表名
-<span class="keyword">add</span> <span class="keyword">constraint</span> UQ_字段名
-<span class="keyword">unique</span> (字段名)</span>
-</code></pre></li>
-<li><p>增加外键约束：</p>
-<pre><code><span class="operator"><span class="keyword">alter</span> <span class="keyword">table</span> 表名
-<span class="keyword">add</span> <span class="keyword">constraint</span> FK_字段名<span class="comment">--"FK"为外键的缩写</span>
-<span class="keyword">foreign</span> <span class="keyword">key</span> (字段名) <span class="keyword">references</span> 关联的表名(关联的字段名) <span class="comment">--注意'关联的表名'和'关联的字段名'</span></span>
-</code></pre></li>
-<li><p>常见join方式</p>
-<ul>
-<li>LEFT(OUTER) JOIN</li>
-<li>RIGHT(OUTER) JOIN</li>
-<li>INNER JOIN</li>
-</ul>
-</li>
-<li>建立索引：ALTER TABLE table_name ADD INDEX index_name(‘name’, ‘age’);</li>
-<li>删除索引的2种方法<ul>
-<li>DROP INDEX index_name on table_name;</li>
-<li>ALTER table table_name drop key index_name; 可以删除被外键约束的索引</li>
-</ul>
-</li>
-<li>select * from mysql.user \G; 查看数据库用户权限</li>
-<li>show warnings\G; —- 查看mysql优化过程 </li>
-</ol>
-<h4 id="MySQL索引的建立规则">MySQL索引的建立规则</h4><ol>
-<li>在 where 及 order by 涉及的列上建立索引,避免全表扫描</li>
-<li>应尽量避免在 where 子句中对字段进行 null 值判断，否则将导致引擎放弃使用索引而进行全表扫描，尤其是is not null会导致全表扫描，如： select id from t where num is null 可以在num上设置默认值0，确保表中num列没有null值，然后这样查询： select id from t where num=0</li>
-<li>当索引列有大量数据重复时,也就是选择性极低时，查询可能不会去利用索引，还不如直接全表扫描；如一表中有字段sex，male、female几乎各一半，那么即使在sex上建了索引也对查询效率起不了作用。</li>
-<li>索引固然可以提高相应的 select 的效率，但同时也降低了 insert 及 update 的效率，因为 insert 或 update 时有可能会重建索引；一个表的索引数最好不要超过6个，若太多则应考虑一些不常使用到的列上建的索引是否有必要。</li>
-<li>尽量使用数字型字段，若只含数值信息的字段尽量不要设计为字符型，这会降低查询和连接的性能，并会增加存储开销。这是因为引擎在处理查询和连接时会逐个比较字符串中每一个字符，而对于数字型而言只需要比较一次就够了</li>
-<li>尽可能的使用 varchar/nvarchar 代替 char/nchar ，因为首先变长字段存储空间小，可以节省存储空间，其次对于查询来说，在一个相对较小的字段内搜索效率显然要高些</li>
-<li>避免频繁创建和删除临时表，以减少系统表资源的消耗</li>
-<li>在新建临时表时，如果一次性插入数据量很大，那么可以使用 select into 代替 create table，避免造成大量 log ，以提高速度；如果数据量不大，为了缓和系统表的资源，应先create table，然后insert。</li>
-<li>如果使用到了临时表，在存储过程的最后务必将所有的临时表显式删除，先 truncate table ，然后 drop table ，这样可以避免系统表的较长时间锁定</li>
-<li>应尽量避免在 where 子句中使用!=或&lt;&gt;操作符，否则将引擎放弃使用索引而进行全表扫描</li>
-<li>(新版本已经会使用到索引)应尽量避免在 where 子句中使用 or 来连接条件，否则将导致引擎放弃使用索引而进行全表扫描，如： select id from t where num=10 or num=20 可以这样查询： select id from t where num=10 union all select id from t where num=20</li>
-<li>in 和 not in 也要慎用，否则会导致全表扫描，如： select id from t where num in(1,2,3) 对于连续的数值，能用 between 就不要用 in 了： select id from t where num between 1 and 3</li>
-<li>下面的查询也将导致全表扫描： select id from t where name like ‘%abc%’</li>
-<li>如果在 where 子句中使用参数，也会导致全表扫描。因为SQL只有在运行时才会解析局部变量，但优化程序不能将访问计划的选择推迟到运行时；它必须在编译时进行选择。然而，如果在编译时建立访问计划，变量的值还是未知的，因而无法作为索引选择的输入项。如下面语句将进行全表扫描： select id from t where num=@num 可以改为强制查询使用索引： select id from t with(index(索引名)) where num=@num</li>
-<li>应尽量避免在 where 子句中对字段进行表达式操作，这将导致引擎放弃使用索引而进行全表扫描。如： select id from t where num/2=100 应改为: select id from t where num=100*2</li>
-<li><p>应尽量避免在where子句中对字段进行函数操作，这将导致引擎放弃使用索引而进行全表扫描。如： </p>
-<pre><code>select <span class="property">id</span> <span class="keyword">from</span> t <span class="keyword">where</span> substring(<span class="property">name</span>,<span class="number">1</span>,<span class="number">3</span>)=’abc’   –<span class="property">name</span>以abc开头的<span class="property">id</span> 
-select <span class="property">id</span> <span class="keyword">from</span> t <span class="keyword">where</span> datediff(<span class="property">day</span>,createdate,’<span class="number">2005</span>-<span class="number">11</span>-<span class="number">30</span>′)=<span class="number">0</span>       –‘<span class="number">2005</span>-<span class="number">11</span>-<span class="number">30</span>’生成的<span class="property">id</span> 
-应改为: select <span class="property">id</span> <span class="keyword">from</span> t <span class="keyword">where</span> <span class="property">name</span> like ‘abc%’ select <span class="property">id</span> <span class="keyword">from</span> t <span class="keyword">where</span> createdate&gt;=’<span class="number">2005</span>-<span class="number">11</span>-<span class="number">30</span>′ <span class="keyword">and</span> createdate&lt;’<span class="number">2005</span>-<span class="number">12</span>-<span class="number">1</span>′
-</code></pre></li>
-<li><p>不要在 where 子句中的“=”左边进行函数、算术运算或其他表达式运算，否则系统将可能无法正确使用索引</p>
-</li>
-<li>很多时候用 exists 代替 in 是一个好的选择： select num from a where num in(select num from b) 用下面的语句替换： select num from a where<br>exists(select 1 from b where num=a.num)</li>
-<li>任何地方都不要使用 select <em> from t ，用具体的字段列表代替“</em>”，不要返回用不到的任何字段。</li>
-<li>尽量避免使用游标，因为游标的效率较差，如果游标操作的数据超过1万行，那么就应该考虑改写</li>
-<li>尽量避免向客户端返回大数据量，若数据量过大，应该考虑相应需求是否合理</li>
-<li>尽量避免大事务操作，提高系统并发能力。</li>
-<li>最有可能影响SQL性能的是磁盘和网络吞吐量</li>
-<li>能够采用存储过程实现的对数据库的操作尽量通过存储过程来实现</li>
-<li>不良的SQL往往来自于不恰当的索引设计、不充份的连接条件和不可优化的where子句。在对它们进行适当的优化后，其运行速度有了明显地提高</li>
-<li>在不加WHERE限制条件的情况下，COUNT(<em>)与COUNT(COL)基本可以认为是等价的；但是在有WHERE限制条件的情况下，COUNT(</em>)会比COUNT(COL)快非常多；</li>
-<li>COUNT(*)通常是对主键进行索引扫描，而COUNT(COL)就不一定了，另外前者是统计表中的所有符合的纪录总数，而后者是计算表中所有符合的COL的纪录数。</li>
-<li>两表join时，inner join 和 left join 差不多,都需要优化右表(join字段加索引)，而 right join 需要优化左表</li>
-</ol>
-<h4 id="MySQL_explain/explain_extended含义">MySQL explain/explain extended含义</h4><ol>
-<li><strong>id列</strong>：MySQL Query Optimizer 选定的执行计划中查询的序列号。表示查询中执行 select 子句或操作表的顺序,id值越大优先级越高,越先被执行。id 相同,执行顺序由上至下。</li>
-<li><p><strong>select_type 列</strong><br>MySQL 把 SELECT 查询分成简单和复杂两种类型，复杂类型又可以分成三个大类：简单子查询、所谓的衍生表（子查询在 FROM 子句里）和 UNION 。SIMPLE：查询中不包含子查询或者UNION；<br>PRIMARY:子查询上层；<br>SUBQUERY：子查询；<br>DERIVED：在FROM列表中包含子查询， MySQL会递归执行这些子查询，把结果放在临时表里</p>
-</li>
-<li><p><strong>type 列</strong><br>MySQL 在表里找到所需行的方式。包括（由左至右，由最差到最好）：| All | index | range | ref | eq_ref | const,system | null</p>
-<ul>
-<li>ALL：全表扫描，MySQL 从头到尾扫描整张表查找行  </li>
-<li>index：按索引次序扫描表，就是先读索引，再读实际的行，其实还是全表扫描。主要优点是避免了排序，因为索引是排好序的。  </li>
-<li>range：以范围的形式扫描索引</li>
-<li>ref：非唯一性索引访问</li>
-<li>eq_ref：使用有唯一性索引查找（主键或唯一性索引）；唯一性索引才会出现 eq_ref （非唯一性索引会出现 ref ），因为唯一，所以最多只返回一条记录，找到后无需继续查找，因此比 ref 更快。</li>
-<li>const：被称为“常量”，这个词不好理解，不过出现 const 的话就表示发生下面两种情况：在整个查询过程中这个表最多只会有一条匹配的行，比如主键 id=1 就肯定只有一行，只需读取一次表数据便能取得所需的结果，且表数据在分解执行计划时读取。例如：select * from a where id=1\G  ；只有唯一性索引才能保证表中最多只有一条记录，只有这样 type 才有可能为 const 。为 id 加普通索引后， type 变为 ref ，改为加唯一或主键索引后， type 便变为 const 了。  </li>
-<li>system：system 是 const 类型的特例，当表只有一行时就会出现 system 。  </li>
-<li>NULL：在优化过程中就已得到结果，不用再访问表或索引。例如：select min(a_id) from a\G  </li>
-</ul>
-</li>
-<li><p><strong>key_len 列</strong>：索引字段最大可能使用的长度。</p>
-</li>
-<li><strong>key 列</strong>：查询过程中实际使用的索引；可以在 SELECT 语句中使用 USE INDEX (indexname)来强制使用一个索引或者用 IGNORE INDEX(indexname)来强制 MYSQL 忽略索引</li>
-<li><strong>ref 列</strong>：指出对 key 列所选择的索引的查找方式，常见的值有 const, func, NULL, 具体字段名。当 key 列为 NULL ，即不使用索引时，此值也相应的为 NULL 。</li>
-<li><strong>rows 列</strong>：MySQL 估计的需要扫描的行数</li>
-<li><p><strong>Extra 列</strong>：</p>
-<ul>
-<li>Using index: 此查询使用了覆盖索引(Covering Index)，即通过索引就能返回结果，无需访问表  </li>
-<li>Using where：表示 MySQL 服务器从存储引擎收到行后再进行“后过滤”（Post-filter）。所谓“后过滤”，就是先读取整行数据，再检查此行是否符合 where 句的条件，符合就留下，不符合便丢弃。因为检查是在读取行后才进行的，所以称为“后过滤”。  </li>
-<li>Using temporary：使用到临时表；MySQL 使用临时表来实现 distinct 操作；常见于排序 order by 和分组查询 group by </li>
-<li>Using filesort：若查询所需的排序与使用的索引的排序一致，因为索引是已排序的，因此按索引的顺序读取结果返回，否则，在取得结果后，还需要按查询所需的顺序对结果进行排序，这时就会出现 Using filesort  </li>
-<li>当 type 为 rang、 ref 或者 index 的时候才有可能利用索引排序，其它，如 ALL ，都无法通过索引排序，此时若有 order by ，如上例，便会出现 Using filesort 。 但是当扫描的行过多时，MySQL 直接改用全表扫描，再 Using filesort ，不再使用索引。也就是说， MySQL 会根据表中的信息及查询来决定使用任种方式。</li>
-<li>Select tables optimized away：这个值意味着仅通过使用索引，优化器可能仅从聚合函数结果中返回一行。</li>
-<li><p>优化器会在索引存在的情况下，通过符合 RANGE 范围的条数和总数的比例来选择是使用索引还是进行全表遍历,这是为了避免过多的 random disk.  </p>
-<p>  — 不使用索引(customer_id)<br>  EXPLAIN SELECT <em> FROM rental WHERE customer_id&lt;103;<br>  — 使用索引<br>  EXPLAIN SELECT </em> FROM rental WHERE customer_id&lt;102;<br>  — 其中 id &lt; 103 的行数为 2767, id &lt; 102 的行数为 2734</p>
-</li>
-<li><p>“Using Index; Using where” it means that first the index is used to retrieve the records (an actual access to the table is not needed) and then on top of this result set the filtering of the where clause is done. For example: SELECT id FROM test WHERE id &gt; 5;</p>
-</li>
-<li>“Using index condition” 的理解是, 首先 mysql server 和 storage engine 是两个组件, server 负责 sql的parse, 执行; storage engine 去真正的 做 数据/index的 读取/写入. 以前是这样: server 命令 storage engine 按 index 把相应的 数据 从 数据表读出, 传给server, server来按 where条件 做选择; 现在 ICP则是在 可能的情况下, 让storage engine 根据index 做判断, 如果不符合 条件 则无须 读 数据表. 这样 节省了disk IO. <a href="https://dev.mysql.com/doc/refman/5.6/en/index-condition-pushdown-optimization.html" target="_blank" rel="external">Link</a></li>
-</ul>
-</li>
-</ol>
-<h4 id="MySQL数据类型选择">MySQL数据类型选择</h4><h5 id="varchar和text">varchar和text</h5><ol>
-<li><p>当超过255的长度之后，使用varchar和text没有本质区别，text没有默认值；推荐使用varchar（10000），毕竟这个还有截断，可以保证字段的最大值可控，如果使用text那么如果code有漏洞很有可能就写入数据库一个很大的内容，会造成风险；</p>
-</li>
-<li><p>当varchar大于某些数值的时候，其会自动转换为text，大概规则如下：</p>
-<ul>
-<li>大于varchar（255）变为 tinytext</li>
-<li>大于varchar（500）变为 text</li>
-<li>大于varchar（20000）变为 mediumtext  </li>
-</ul>
-</li>
-<li><p>char的上限为255字节，varchar的上限65535字节，text的上限为65535。char在存储的时候会截断尾部的空格，varchar和text不会。<a href="http://www.cnblogs.com/billyxp/p/3548540.html" target="_blank" rel="external">MySQL之char、varchar和text的设计</a></p>
-</li>
-</ol>
-<h4 id="参考链接">参考链接</h4><ol>
-<li><a href="http://blog.csdn.net/gevolution90/article/details/6856922" target="_blank" rel="external">Mysql explain结果解读</a></li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/MySQL/"> #MySQL </a>
-          
-            <a href="../../tags/数据库/"> #数据库 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/11/29/毕业求职漫漫路/">
-                毕业求职漫漫路
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-11-28
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/11/29/毕业求职漫漫路/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/29/毕业求职漫漫路/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>最近突然又开始面临一些抉择，本该尘埃落定的工作生活突然被一封邮件打乱了，想起来回顾一下自己的找工作历程。从16年4月份的开始找实习，一直到到16年11月底科大硕士毕业，中间一边在网易实习，一边准备各种面试，电面、视频面、现场面，一应俱全，个中滋味，五味杂陈，不足为外人道。可以说是一个艰难而又逐渐对自己认识明晰的过程。就好像当年本科毕业时一边在百度实习，一边DIY准备硕士申请一样，困难与压力并存却也收获颇丰。一旦有了一个明确的目标，那就只能不断地向它靠近再靠近，中间会有高低起伏，峰回路转，坚持就是胜利；所谓尽人事，安天命。 </p>
-<p>仔细算来，我是从大三才开始写代码，开始接触Java，第一份实习去了师兄的创业公司，接触到Android开发，后来到大四又去了百度移动搜索做Android开发；起初打算吃技术这碗饭，也只是想着将来不至于身无长技，流落街头，后来意识到这是不对的，做一行还是得精一行，虽然直到现在代码也是写的挺烂的，可能也是缺乏一定的技术激情，写代码会有兴奋感，也没有那么强，有待发掘。  </p>
-<p>直到硕士临近毕业参加校招，才发现真的需要靠专业技术来安身立命了，第一份工作既不想舍弃大学的专业，也很难再有码农之外的好的选择，即使有，也是和coding息息相关的了。一开始是实习面试，遭遇各种挫折，每天做的事情基本是投简历，改简历，准备面试，查漏补缺；这一段经历在之前的<a href="http://www.charles-xiao.top/2016/07/03/%E4%B8%80%E8%B7%AF%E5%90%91%E5%8C%97-%E4%BB%8E%E6%B8%AF%E6%BC%82%E5%88%B0%E5%8C%97%E6%BC%82/" target="_blank" rel="external">博文</a>中有提到过，暂且不表，幸好这段经历也为校招做好了铺垫。  </p>
-<p>校招分为几个部分，内推、统招、散招。<strong>内推</strong>的信息基本上都来自于部分实验室内部传播或者学校论坛内部传播，而且往往要求比较高，往往会专注于某个方向，因为一般都是某个方向的团队在招人，比如存储、广告、推荐这些具体的方向；内推这种形式对于MSC来说其实是毫无优势的，一方面没有实验室的内推人脉，信息相对比较闭塞，幸好还有北邮人论坛来获取这方面的信息，打进了内部；另一方面，授课型的master学业时间较短，也很难在某个方向上有深度研究，很难满足内推的要求；<strong>统招</strong>就是各大互联网公司的统一秋招了，一般是统一笔试再加上多轮面试了  </p>
-<p>所谓面试，三分运气，七分实力，八二定律展露无遗。校招中，20%的大牛收割掉了80%的special offer，剩下的80%的人去瓜分批发价和20%的sp，大家都各有各的纠结。最大的感触之一是如果你是一个90分以上水平的人，那么你可以凭你的实力去砍一堆offer,但是如果你是一个70到90分之间的候选人，从实力来讲，彼此并没有太大的区别，就靠那么三分运气了。  </p>
-<p>这次往沪，某种意义上来讲对我来说是一次很重要的选择，曾经的北上帝都，心里也只是把它当做人生的过渡之处，最终还是要南下回到珠三角这个离家乡、亲人、朋友比较近的地方。而这一次，确是抱着换个地方奋斗的念头了。这几年从妖都到鹏城，再到HK, 辗转帝都，现在又去魔都，真是凑齐了个大满贯。每次搬家寄行李都嫌麻烦，但有时候转念想想，还年轻，跑一跑也无妨，现在不转转，过几年之后估计更难换城市了，也就释然了。  </p>
-<p>换一个城市，就是一个新的开始。虽然成本很大，甚至要牺牲一些东西，比如金钱，当然这也可能只是暂时的（极力安慰自己目光要长远……)。</p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/07/14/DuoBao项目代码学习笔记/">
-                DuoBao项目代码学习笔记
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-07-14
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/07/14/DuoBao项目代码学习笔记/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/14/DuoBao项目代码学习笔记/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="Dubbo框架">Dubbo框架</h3><ol>
-<li><strong>Dubbo</strong>是一个Alibaba开源的远程服务调用RPC分布式框架，<strong>基于TCP传输协议和高性能NIO框架Netty</strong>；它最大的优点是<strong>按照分层的方式来架构，使用这种方式可以使各个层之间解耦合</strong>。从服务模型的角度来看，Dubbo采用的是一种非常简单的模型，要么是提供方提供服务，要么是消费方消费服务，可以抽象出服务提供方（Provider）和服务消费方（Consumer）两个角色。
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2016/07/14/DuoBao项目代码学习笔记/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/07/07/SpringMVC-Mybatis开发框架学习笔记/">
-                SpringMVC+Mybatis开发框架学习笔记
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-07-07
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Java开发/">Java开发</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/07/07/SpringMVC-Mybatis开发框架学习笔记/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/07/SpringMVC-Mybatis开发框架学习笔记/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="Spring,_SpringMVC,_Struts和Mybatis联系与区别">Spring, SpringMVC, Struts和Mybatis联系与区别</h3><h4 id="Spring">Spring</h4><ol>
-<li><strong>Spring</strong>是一个轻量级的控制反转IOC和面向切面AOP的容器框架，它有许多优点:<ul>
-<li>降低了组件之间的耦合性 ，实现了软件各层之间的解耦</li>
-<li>容器提供单例模式支持,以及事务管理，消息服务等众多服务</li>
-<li>容器提供了AOP面向切面编程，利用它很容易实现如权限拦截，运行期监控等功能</li>
-<li>spring对于主流的应用框架提供了集成支持，如hibernate，Struts等，高度开放</li>
-<li>spring的DI机制降低了业务对象替换的复杂性
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2016/07/07/SpringMVC-Mybatis开发框架学习笔记/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Mybatis/"> #Mybatis </a>
-          
-            <a href="../../tags/Spring/"> #Spring </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/07/03/一路向北-从港漂到北漂/">
-                一路向北---从港漂到北漂
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-07-03
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/在路上/">在路上</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/07/03/一路向北-从港漂到北漂/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/03/一路向北-从港漂到北漂/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>人生真是尴尬！五年前的我，甚至于一年前的我，也不曾想过我最终会去北漂; 在我大四在北京实习的四个月里，说实话，我对北京城的印象一点儿也算不上好，甚至于在我离开北京的时候，心里还在暗暗想着，嗯，以后应该是不会来这边发展了。然而现在的我却正在北上的高铁上。
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2016/07/03/一路向北-从港漂到北漂/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/毕业/"> #毕业 </a>
-          
-            <a href="../../tags/随感/"> #随感 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/06/12/二叉树的前序、中序、后序和层次遍历方法/">
-                二叉树的前序、中序、后序和层次遍历方法
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-06-12
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/算法/">算法</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/06/12/二叉树的前序、中序、后序和层次遍历方法/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/12/二叉树的前序、中序、后序和层次遍历方法/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="前序遍历">前序遍历</h3><pre><code><span class="comment">/**
- * 递归实现
- * @param root
- * @return
- */</span>
-<span class="keyword">public</span> static <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> preorderTraversal(TreeNode root) {
-    <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> resultList <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span>();
-    preorderTraveralHelper(root, resultList);
-    <span class="keyword">return</span> resultList;
+          <h4 id="业务场景">业务场景</h4><p>我们需要实现一个类似于Linux中ls命令的功能，用户可以用该功能来查看的bucket里边object列表，这些object信息存储在mysql meta表和shard meta表中；正常情况下一个bucket中的所有object存储在一张meta表中；然而当一个bucket中的object数量十分庞大时，我们采用了水平分表的方式，将这些object通过哈希方式分散到了1024个shard meta表中，以避免单表行数过大带来的性能问题。  </p>
+<p>因此，ls功能的实现需要考虑以上两种情景，分别是单表和多表的list；list功能需要支持delimiter来折叠文件夹(类似于linux中ls命令，根据该参数来决定是否展开当前目录下的子目录)，marker来指定每次查询的起始位置，maxKeys来指定每次返回数目，prefix来筛选出以前缀开头的object。单表list我们可以直接采用mysql order来保证结果有序；如果object分散在了1024个shard meta表中，要每次拿出前n个就比较困难了，因为数据只是单表有序的，要想全局有序，就还得做一些处理。</p>
+<h4 id="分表hash方式">分表hash方式</h4><p>如何把很多object通过哈希方式分散到了1024个shard meta表中？如下代码所示，我们根据bucket和object构建一个url字符串，然后求MD5值，然后按4位做异或操作，最后对shard数目取模，就可以把object都随机分散到1024个表里了；MD5算法对原信息进行数学变换后得到的一个128位(bit)的特征码作为数据摘要，具有高度的离散性，原信息的一点点变化就会导致MD5的巨大变化。</p>
+<pre><code><span class="function"><span class="keyword">void</span> <span class="title">GenUrl</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; bucket, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; object, <span class="built_in">std</span>::<span class="built_in">string</span>&amp; url)</span> </span>{
+    url.append(<span class="string">"bs://"</span>);
+    url.append(bucket);
+    url.append(<span class="string">"/"</span>);
+    url.append(object);
 }
 
-<span class="keyword">private</span> static <span class="literal">void</span> preorderTraveralHelper(TreeNode root, <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> <span class="built_in">list</span>) {
-    <span class="keyword">if</span>(root <span class="subst">==</span> <span class="built_in">null</span>)
-        <span class="keyword">return</span>;
-    <span class="built_in">list</span><span class="built_in">.</span>add(root<span class="built_in">.</span>val);
-    preorderTraveralHelper(root<span class="built_in">.</span>left, <span class="built_in">list</span>);
-    preorderTraveralHelper(root<span class="built_in">.</span>right, <span class="built_in">list</span>);
+<span class="function"><span class="keyword">int32_t</span> <span class="title">GetShardKey</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;bucket, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;object)</span> </span>{
+    <span class="built_in">std</span>::<span class="built_in">string</span> url = <span class="string">""</span>;
+    GenUrl(bucket, object, url);
+    <span class="built_in">std</span>::<span class="built_in">string</span> md5sum = MD5(url);
+    <span class="keyword">const</span> <span class="keyword">uint32_t</span> *p = <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">uint32_t</span>*&gt;(md5sum.data());
+    <span class="keyword">return</span> <span class="keyword">static_cast</span>&lt;<span class="keyword">int32_t</span>&gt;((p[<span class="number">0</span>]^p[<span class="number">1</span>]^p[<span class="number">2</span>]^p[<span class="number">3</span>]) % BUCKET_SHARD_NUM);
 }
-
-<span class="comment">/**
- * 利用栈的非递归实现
- * @param root
- * @return
- */</span>
-<span class="keyword">private</span> static <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> preorderTraveralIter(TreeNode root) {
-    <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> <span class="built_in">list</span> <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span>();
-    LinkedList<span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span> <span class="built_in">stack</span> <span class="subst">=</span> <span class="literal">new</span> LinkedList<span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span>();
-    <span class="keyword">if</span>(root <span class="subst">==</span> <span class="built_in">null</span>)
-        <span class="keyword">return</span> <span class="built_in">list</span>;
-    <span class="keyword">while</span>(root <span class="subst">!=</span> <span class="built_in">null</span> <span class="subst">||</span> <span class="subst">!</span><span class="built_in">stack</span><span class="built_in">.</span>isEmpty()) {
-        <span class="keyword">if</span> (root <span class="subst">!=</span> <span class="built_in">null</span>) {
-            <span class="built_in">list</span><span class="built_in">.</span>add(root<span class="built_in">.</span>val);
-            <span class="built_in">stack</span><span class="built_in">.</span>push(root);
-            root <span class="subst">=</span> root<span class="built_in">.</span>left;
+</code></pre><h4 id="单表list">单表list</h4><ul>
+<li><p><strong>解决方案</strong></p>
+<ul>
+<li>每次查询都是根据请求参数组装成一条SQL，查出需要的object  <code>select object, etag, size,…… from meta where bucket_id = * and shard_key = * order by object limit 0,1001</code></li>
+<li>针对子文件夹的折叠处理：<ul>
+<li>ls操作需要支持折叠文件夹操作，以免一个文件夹下边有很多子文件夹，而且子文件夹里有很多文件的时候，会导致多次ls也一直在一个子文件夹里边，支持折叠子文件夹，用户才可以ls出文件夹下边的所有子文件夹</li>
+<li>解决方案：当遇到子文件夹中文件多的时候，每次都能list出指定数目的objects，这些objects可能都是一个子文件中的文件；因为用户需要折叠子文件夹，因此我们进行跳过子文件夹的处理，极端情况下这批objects都在一个子文件夹中，此时我们需要根据最后一个object name来判断是否在子文件中，如果该批objects在子文件中，此时我们会对下次查询的起始位置做一个++操作，确保下次查询跳过这个已经获取了的子文件夹；如此进行三次重试，至少保证一次请求可以拿出3个子文件夹给用户</li>
+</ul>
+</li>
+<li>marker的处理：如果需要跳过文件夹，对marker++；例如正常情况下，object &gt; marker；如果要跳过文件夹，变成object &gt;= marker++</li>
+</ul>
+</li>
+<li><p><strong>核心代码</strong></p>
+<pre><code><span class="comment">// 需要跳过文件夹时对marker的处理</span>
+<span class="built_in">string</span> BucketModel::ProcessMarkerWithDelimiter(<span class="keyword">const</span> <span class="built_in">string</span>&amp; marker,
+                    <span class="keyword">const</span> <span class="built_in">string</span>&amp; prefix, <span class="keyword">char</span> delimiter) {
+    <span class="comment">//prefix empty, or prefix not empty and marker start with prefix</span>
+    <span class="keyword">if</span> (prefix.empty() || marker.compare(<span class="number">0</span>, prefix.length(), prefix) == <span class="number">0</span>) {
+        size_t pos = marker.find_first_of(delimiter, prefix.length());
+        <span class="built_in">string</span> new_marker;
+        <span class="keyword">if</span> (<span class="built_in">std</span>::<span class="built_in">string</span>::npos != pos) {
+            ++pos;
+            new_marker = marker.substr(<span class="number">0</span>, pos);
+            new_marker[new_marker.length()-<span class="number">1</span>]++;
+            <span class="keyword">return</span> new_marker;
         } <span class="keyword">else</span> {
-            root <span class="subst">=</span> <span class="built_in">stack</span><span class="built_in">.</span>pop();
-            <span class="comment">//中序遍历：list.add(root.val);</span>
-            root <span class="subst">=</span> root<span class="built_in">.</span>right;
+            <span class="keyword">return</span> marker;
         }
     }
-    <span class="keyword">return</span> <span class="built_in">list</span>;
+    <span class="keyword">return</span> marker;
 }
-</code></pre>
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2016/06/12/二叉树的前序、中序、后序和层次遍历方法/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
+</code></pre></li>
+</ul>
+<h4 id="多表list">多表list</h4><ul>
+<li><p><strong>解决方案</strong></p>
+<ul>
+<li>利用Golang携程并发发送1024个shardMeta的list请求，也就是1024次SQL查询，拿到1024个请求结果之后，对结果做归并和提取处理，最终得出与单表listObject接口逻辑一致的结果。</li>
+</ul>
+</li>
+<li><p><strong>核心代码</strong></p>
+<pre><code>// merge two <span class="type">ObjectInfo</span> struct <span class="keyword">type</span> slice, max length <span class="keyword">is</span> maxKeys
+func merge(maxKeys <span class="type">int</span>, left, right []<span class="type">ObjectInfo</span>) []<span class="type">ObjectInfo</span> {
+    <span class="keyword">var</span> <span class="literal">result</span> []<span class="type">ObjectInfo</span>
+
+    <span class="keyword">for</span> len(left) &gt; <span class="number">0</span> || len(right) &gt; <span class="number">0</span> {
+        <span class="keyword">if</span> len(left) == <span class="number">0</span> {
+            <span class="literal">result</span> = append(<span class="literal">result</span>, right...)
+            <span class="keyword">break</span>
+        }
+        <span class="keyword">if</span> len(right) == <span class="number">0</span> {
+            <span class="literal">result</span> = append(<span class="literal">result</span>, left...)
+            <span class="keyword">break</span>
+        }
+        <span class="keyword">if</span> left[<span class="number">0</span>].<span class="type">Key</span> &lt;= right[<span class="number">0</span>].<span class="type">Key</span> {
+            <span class="literal">result</span> = append(<span class="literal">result</span>, left[<span class="number">0</span>])
+            left = left[<span class="number">1</span>:]
+        } <span class="keyword">else</span> {
+            <span class="literal">result</span> = append(<span class="literal">result</span>, right[<span class="number">0</span>])
+            right = right[<span class="number">1</span>:]
+        }
+        <span class="keyword">if</span> len(<span class="literal">result</span>) &gt;= maxKeys {
+            <span class="keyword">return</span> <span class="literal">result</span>[<span class="number">0</span>:maxKeys]
+        }
+    }
+    <span class="keyword">if</span> len(<span class="literal">result</span>) &gt;= maxKeys {
+        <span class="keyword">return</span> <span class="literal">result</span>[<span class="number">0</span>:maxKeys]
+    }
+    <span class="keyword">return</span> <span class="literal">result</span>
+}
+</code></pre></li>
+<li><p><strong>方案重难点</strong></p>
+<ul>
+<li><p><strong>Cache嗅探机制</strong>：<br>List ShardMeta每次会通过VIP从Bucket取回1024个表数据，为了提高请求响应速度，当请求频率达到阈值时，这1024个表的数据会分别以ApiType+Bucket+ShardKey为key保存到Cache中，如何在充分利用Cache降低请求响应速度和对数据库压力的同时，也尽量减少与Cache之间的通信显得尤为重要。  </p>
+<p>  在充分考虑了系统Cache的实现机制之后，设计了预读取方案来降低与Cache之间的通信次数，将1024个ShardMeta的请求任务队列切割出一小部分(10个)作为嗅探Cache的任务，多个goroutine并发去读Cache，如果嗅探Cache的ShardMeta都能读取到，说明Cache中能读到1024个表数据，可以继续读Cache，否则后续请求都直接请求数据库，不再读Cache，这样可以把每次List Shard请求<span style="color:red">读Cache的次数从1024次降低到10次</span>。  </p>
+</li>
+<li><p><strong>性能优化</strong>：<br>List ShardMeta是一个重请求，相当于所有操作开销都放大1024倍，然而又必须满足客户对耗时的要求，我主要从以下几个方面做了性能优化 </p>
+<p>  <strong>减少互斥锁粒度，充分利用Golang atomic函数</strong>：在归并1024个表数据时，只给归并过程和写最终结果的少量代码加锁，利用atomic变量做全局信号量，保证变量操作的原子性  </p>
+<p>  <strong>并发Goroutine发送请求和进行Json-Struct转换</strong>：利用Golang Goroutine给Bucket并发发请求，加快网络请求速度；归并结果时需要多次进行byte数组和Struct之间的转换，而Golang自带json库函数效率低，也将该过程利用Goroutine来并发完成，加快转换速度</p>
+<p>  <strong>通过VIP分发请求</strong>：1024个请求如果并发到本机Bucket服务，会对本机服务造成巨大压力，而且由于单进程资源有限，会导致响应速度很慢。因此采用了将1024个请求发送给VIP的方式，均衡地分散到服务集群数千台机器上，保证了处理速度，降低了单机压力 </p>
+</li>
+<li><p><strong>异常处理机制</strong>：<br>List ShardMeta每次1024个数据库请求，如果有一个请求遇到网络超时等错误，返回结果不正常，就会导致整个请求返回结果有误；因此我采用了标志量和超时机制来实现异常处理，一旦单个请求出现异常，标志量置位TRUE，其他请求不再继续；同时采用Goroutine等待超时信号量的方式来处理超时情况，如果工作任务出现错误，一旦从任务通道取不到任务超过50ms，Goroutine自动结束操作，给用户返回错误提示</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="json转换函数性能低的解决方案">json转换函数性能低的解决方案</h4><p>Golang自带json Unmarshal函数转化包含1000个obj的list object接口返回结果时，耗时10ms，效率很低；主要有<strong>两种解决方案</strong>：</p>
+<ul>
+<li>一种是减少转化次数以及缩小锁的范围，并发地去做转化</li>
+<li>另一种是使用开源库，性能能够提升2-4倍，例如easyjson，ffjson</li>
+</ul>
+<h4 id="并发等待是等goroutine还是Channel">并发等待是等goroutine还是Channel</h4><p>Goroutine一般会结合WaitGroup来使用，wg相当于一个同步信号量，等到wg减到0，才开始下一步的逻辑</p>
+<ul>
+<li>如果wg等待goroutine，也就是说先给wg.add(Goroutine数目)，然后使用<code>defer this.wg.Done()</code>和<code>return</code>来指定当函数结束(也意味着Goroutine结束)时就给wg减一，这样能确保最终协程都结束时，wg也不再等待，开始下一步的逻辑</li>
+<li>如果wg等待channel里边的任务，会存在一些异常问题，例如channel任务没被消费完，Goroutine都异常中止了，那么wg永远等不到减到0的那一刻，程序就会hang住了</li>
+</ul>
+<h4 id="耗时正比例增加因为多打了log">耗时正比例增加因为多打了log</h4><p>上线之后从某一天开始发现list请求耗时突增到上线时的6倍，非常奇怪，而且耗时随着每次请求数据量的增加而增加，经过git diff版本分析代码，发现是后续debug增加了几行日志打印，打印数据为每个shardMeta返回的数据，而且打印日志的代码被mutex互斥锁锁住，也就意味着每次要串行打印n个object数据，打印1024次，每次耗时10ms，从而导致耗时剧增；后来删除log之后耗时恢复到正常水平 </p>
+<h4 id="Golang相关技术和踩坑">Golang相关技术和踩坑</h4><h5 id="defer和WaitGroup">defer和WaitGroup</h5><ol>
+<li>在Golang中，defer表达式通常用来处理一些清理和释放资源的操作。defer后面的表达式会被放入一个列表中，在当前方法返回的时候，列表中的表达式就会被执行。一个方法中可以在一个或者多个地方使用defer表达式</li>
+<li>defer表达式中变量的值在defer表达式被定义时就已经明确</li>
+<li>defer表达式的调用顺序是按照先进后出的方式</li>
+<li>defer还可以用于在 return 之后修改函数的返回值</li>
+<li>Go语言中, panic用于抛出异常, recover用于捕获异常. </li>
+</ol>
+<h4 id="参考链接">参考链接</h4><p>1.<a href="https://xiaozhou.net/something-about-defer-2014-05-25.html" target="_blank" rel="external">Golang中defer的那些事</a></p>
+
         
       
     </div>
@@ -885,11 +416,11 @@ select <span class="property">id</span> <span class="keyword">from</span> t <spa
       
         <div class="post-tags">
           
-            <a href="../../tags/二叉树/"> #二叉树 </a>
+            <a href="../../tags/Golang/"> #Golang </a>
           
-            <a href="../../tags/数据结构/"> #数据结构 </a>
+            <a href="../../tags/Mysql/"> #Mysql </a>
           
-            <a href="../../tags/递归/"> #递归 </a>
+            <a href="../../tags/databse/"> #databse </a>
           
         </div>
       
@@ -916,8 +447,8 @@ select <span class="property">id</span> <span class="keyword">from</span> t <spa
           
           
             
-              <a class="post-title-link" href="../../2016/05/26/Linux操作系统基础知识/">
-                Linux操作系统基础知识
+              <a class="post-title-link" href="../../2017/12/07/Linux终端利器tmux指南/">
+                Linux终端利器tmux指南
               </a>
             
           
@@ -926,28 +457,17 @@ select <span class="property">id</span> <span class="keyword">from</span> t <spa
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2016-05-26
+          发表于 2017-12-07
         </span>
 
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/编程知识/">编程知识</a>
-
-              
-              
-
-            
-          </span>
         
 
         
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2016/05/26/Linux操作系统基础知识/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/26/Linux操作系统基础知识/"></span>
+            <a href="../../2017/12/07/Linux终端利器tmux指南/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/07/Linux终端利器tmux指南/"></span>
             </a>
           </span>
           
@@ -962,85 +482,187 @@ select <span class="property">id</span> <span class="keyword">from</span> t <spa
 
       
         
-          <h3 id="Linux进程调度机制">Linux进程调度机制</h3><ol>
-<li>Linux的进程调度算法基本上是<strong>基于优先级的时间片轮转法</strong>，将CPU时间分片，给每个可运行进程分配一片，目的就是既能够实现进程之间的抢占，又不至于让低优先级的进程被饿死。。每个进程在创建之初有一个基本的优先级，执行期间调度系统会动态调整它的优先级，交互性高的任务会获得一个高的动态优先级，而交互性低的任务获得一个低的动态优先级；在较长的时间间隔内没有使用CPU的进程，通过动态地增加它们的优先级来提升它们。相应地，对于已经在CPU上运行了较长时间的进程，通过减少它们的优先级来处罚它们。</li>
-<li>Linux系统中进程调度操作由一个只在内核态运行的函数schedule()函数执行，该函数代码为所有进程共享；进程控制块PCB(Process ControlBlock)是系统中最为重要的数据结构之一。用来存放进程所必需的各种信息，PCB用结构task—struct来表示，包括进程的类型、进程状态、优先级、时钟信息等。</li>
-<li>Linux中设置了进程调度标志need—resched ，当标志为1时，可执行调度程序．通常，Linux 调度时机分以下两种情况：(1)<strong>主动调度</strong>：指显式调用schedule() 函数明确释放CPU ，引起新一轮调度．一般发生在当前进程状态改变，如：进程终止、进程睡眠、进程对某些信号处理过程中等(2)<strong>被动调度</strong>：指不显示调用schedule() 函数，只是PCB 中的need_resched 进程调度标志，该域置位为1 将引起新的进程调度  (3)三种情况：<strong>中断处理过程（包括时钟中断、I/O中断、系统调用和异常）</strong>中，直接调用schedule()，或者返回用户态时根据need_resched标记调用schedule()；<strong>内核线程</strong>可以直接调用schedule()进行进程切换，也可以在中断处理过程中进行调度，也就是说内核线程作为一类的特殊的进程可以主动调度，也可以被动调度；<strong>用户态进程</strong>无法实现主动调度，仅能通过陷入内核态后的某个时机点进行调度，即在中断处理过程中进行调度 </li>
-<li>Linux将进程分为<strong>实时进程和普通进程(又称非实时进程或一般进程)</strong>，实时进程的优先级要高于其他进程，如果一个实时进程处于可执行状态，它将先得到执行．实时进程又有两种策略：<strong>SCHED—RR时间片轮转和和SCHED—FIFO先进先出</strong>，在时间片轮转策略中每个可执行实时进程轮流执行一个时间片，而先进先出策略每个进程按各自在运行队列中的顺序执行且顺序不能变化。普通进程SCHED_OTHER也按照轮转调度策略处理</li>
-<li><p><strong>进程生命周期</strong>依次定义的数据结构为：TASK—RUNNING，TASK—INTERRUPTIBLE。TASK—UNINTERRUPTIBLE，TASK—ZOMBIE和TASK—STOPPED，一个进程在其生存期间，状态会发生多次变化。与其数据结构相对应的即是Linux进程的状态，分别是：运行态、等待态、暂停态和僵死态。<br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Linux_process.png" class="full-image" width="100%"></p>
+          <h4 id="tmux简介">tmux简介</h4><p>tmux是BSD实现的Screen替代品，相对于Screen，它更加先进：支持屏幕切分，而且具备丰富的命令行参数，使其可以灵活、动态的进行各种布局和操作。它可以做到一条命令就启动起来(强大的配置)</p>
+<h5 id="安装方法">安装方法</h5><table>
+<thead>
+<tr>
+<th>系统</th>
+<th>安装命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mac</td>
+<td><code>brew install tmux</code>（前提需要安装homebrew)</td>
+</tr>
+<tr>
+<td>ubuntu</td>
+<td><code>sudo apt-get install tmux</code></td>
+</tr>
+<tr>
+<td>centos</td>
+<td><code>yum install -y tmux</code></td>
+</tr>
+<tr>
+<td>其它</td>
+<td>下载源码配置-编译-链接-安装</td>
+</tr>
+</tbody>
+</table>
+<h5 id="概念名词">概念名词</h5><p>在你输入tmux开启了tmux服务器后，会首先创建一个会话，而这个会话则会首先创建一个窗口，其中仅包含一个面板; 也就是说，这里看到的所谓终端控制台应该称作tmux的一个面板，虽然其使用方法与终端控制台完全相同。</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>server服务器</td>
+<td>输入tmux命令时就开启了一个服务器</td>
+</tr>
+<tr>
+<td>session会话</td>
+<td>一个服务器可以包含多个会话</td>
+</tr>
+<tr>
+<td>window窗口</td>
+<td>通过c-b-c创建，所有窗口的名称显示在底部状态栏上，一个会话可以包含多个窗口</td>
+</tr>
+<tr>
+<td>pane面板</td>
+<td>窗口里面的分屏，可通过c-b-%创建，一个窗口可以包含多个面板</td>
+</tr>
+</tbody>
+</table>
+<h5 id="使用场景和优点">使用场景和优点</h5><ol>
+<li>tmux命令开启一个终端之后，可以在这个终端里开启多个windows，同时还可以把windows split成多个pane，并行工作</li>
+<li>ssh登录远程主机的情景下，一旦ssh断开，那么当前账户登录的任务就被取消了，但是使用 tmux 可以在断开之后继续工作，下次登录可以查看</li>
+</ol>
+<h4 id="常用默认快捷键">常用默认快捷键</h4><p>tmux里边所有快捷键都默认以c-b作为前缀，也就是以ctrl+b开头，当然你也可以自行配置；</p>
+<ol>
+<li>基本命令<ul>
+<li><code>tmux</code>创建一个tmux session</li>
+<li><code>tmux new -s session_name</code>创建一个叫做session_name的 session</li>
+<li><code>tmux ls\tmux list-sessions</code>列出现有的所有session</li>
+<li><code>tmux info</code>列出所有的 session, window, pane, 运行的进程号等</li>
+<li><code>tmux list-keys</code>列出所有可以的快捷键和其运行的 tmux 命令</li>
+<li><code>tmux list-commands</code>列出所有的 tmux 命令及其参数</li>
+<li><code>tmux at(attach) -t session_name</code>进入叫做session_name的session</li>
+<li><code>tmux detach\c-b-d</code>离开当前开启的session</li>
+<li><code>tmux kill-session -t session</code>关闭开启的session</li>
+</ul>
 </li>
-<li><p><strong>中断和异常</strong>：</p>
+<li><p>基本操作</p>
 <ul>
-<li><strong>中断</strong>又叫异步中断，是指CPU在正常运行程序时，由于程序的预先安排或内外部事件，引起CPU中断正在运行的程序，而转到发生中断事件程序中。这些引起程序中断的事件称为中断源</li>
-<li><strong>异常</strong>是指CPU内部控制单元出现的中断，即在CPU执行特定指令时出现的非法情况。异常也称为同步中断，因此只有在一条指令执行后才会发出中断(程序执行异常或者系统调用)，不可能在指令执行期间发生异常</li>
+<li><code>d</code>脱离并保存当前会话,可暂时返回Shell界面,tmux仍在后台运行</li>
+<li><code>ctrl + z</code>挂起当前会话</li>
+<li><code>s</code>选择并切换会话；在同时开启了多个会话时使用</li>
+<li><code>D</code>选择要脱离的会话；在同时开启了多个会话时使用</li>
+<li><code>:</code>进入命令行模式；此时可输入支持的命令，例如 kill-server 关闭所有tmux会话</li>
+<li><code>t</code>显示当前的时间</li>
+</ul>
+</li>
+<li><p>窗口操作</p>
+<ul>
+<li><code>c</code>创建新窗口</li>
+<li><code>&amp;</code>关闭当前窗口</li>
+<li><code>[0-9]</code>数字键切换到指定窗口</li>
+<li><code>p</code>切换至上一窗口</li>
+<li><code>n</code>切换至下一窗口</li>
+<li><code>l</code>切换到最后使用的窗口</li>
+<li><code>l</code>前后窗口间互相切换</li>
+<li><code>w</code>通过窗口列表切换窗口</li>
+<li><code>,</code>重命名当前窗口，便于识别</li>
+<li><code>.</code>修改当前窗口编号，相当于重新排序</li>
+<li><code>f</code>在所有窗口中查找关键词，便于窗口多了切换</li>
+</ul>
+</li>
+<li>(面板)分屏操作<ul>
+<li><code>?</code>显示快捷键帮助</li>
+<li><code>&quot;</code>将当前面板上下分屏（建议设置成 |）</li>
+<li><code>%</code>将当前面板左右分屏（建议设置成 -）</li>
+<li><code>x</code>关闭当前分屏</li>
+<li><code>q</code>显示面板编号</li>
+<li><code>o</code>选择当前窗口中下一个面板</li>
+<li><code>;</code>切换到最后一个使用的面板</li>
+<li><code>方向键</code>移动光标选择对应面板</li>
+<li><code>z</code>最大化当前所在面板</li>
+<li><code>!</code>面板转变成窗口</li>
 </ul>
 </li>
 </ol>
-<h3 id="Linux内存管理机制">Linux内存管理机制</h3><p>Linux中无论物理内存有多大，都将其充份利用，将一些程序调用过的硬盘数据读入内存，利用内存读写的高速特性来提高Linux系统的数据访问性能；<strong>页高速缓存(cache)</strong>是Linux内核实现的一种主要磁盘缓存。它主要用来减少对磁盘的I/O操作。是通过把磁盘中的数据缓存到物理内存中，把对磁盘的访问变为对物理内存的访问。查看内存状态命令<code>top，free，vmstat</code><a href="https://blog.linuxeye.com/362.html" target="_blank" rel="external">Link</a></p>
+<h4 id="推荐配置">推荐配置</h4><p>如果你有个性化配置的需要，包括快捷键，状态栏等，那么修改~/.tmux.conf文件可以达到你的目的，让你用起来更符合自己的习惯; 也可以通过配置~/.bashrc每次ssh登录时都默认attach或者新建tmux会话</p>
 <ol>
-<li><strong>物理内存</strong>就是系统硬件提供的内存大小，是真正的内存，相对于物理内存，<strong>虚拟内存</strong>就是为了满足物理内存的不足而提出的策略，它是利用磁盘空间虚拟出的一块逻辑内存，用作虚拟内存的磁盘空间被称为<strong>交换空间（Swap Space)</strong>;<strong>虚拟内存</strong>作为物理内存的扩展，linux会在物理内存不足时，使用虚拟内存，更详细的说，就是Linux内核会将暂时不用的物理内存块信息写到交换空间，这样以来，物理内存得到了释放，这块内存就可以用于其它目的，当需要用到原始的内容时，这些信息会被重新从交换空间读入物理内存。</li>
-<li>Linux的内存管理采取的是<strong>分页存取机制</strong>，为了保证物理内存能得到充分的利用，内核会在适当的时候将物理内存中不经常使用的数据块自动交换到虚拟内存中，而将经常使用的信息保留到物理内存。Linux系统会不时的进行页面交换操作，以保持尽可能多的空闲物理内存，即使并没有什么事情需要内存，Linux也会交换出暂时不用的内存页面。这可以避免等待交换所需的时间；Linux进行<strong>页面交换</strong>是有条件的，不是所有页面在不用时都交换到虚拟内存，linux内核根据”最近最经常使用“算法，仅仅将一些不经常使用的页面文件交换到虚拟内存</li>
-<li><strong>逻辑地址</strong>是对应用程序而言的，一般以Seg:Offset段内偏移来表示；<strong>线性地址</strong>是CPU所能寻址的空间或者范围，是逻辑地址到物理地址变换之间的中间层；<strong>物理地址</strong>是机器中实际的内存地址,换言之，是机器中的内存容量范围</li>
-<li><strong>逻辑地址 -（段表）-&gt; 线性地址 — （页表）—&gt; 物理地址的转换过程(由大到小)</strong>：CPU将一个虚拟内存空间中的地址转换为物理地址，需要进行两步：首先将一个逻辑地址（其实是段内偏移量），CPU要利用其段式内存管理单元，先将逻辑地址加上相应段的基地址转换成一个线性地址；如果启用了分页机制，再利用其页式内存管理单元，通过查询页表来将线性地址转换为最终物理地址；若没有启用分页机制，那么线性地址直接就是物理地址 <a href="http://laoxu.blog.51cto.com/4120547/1166661" target="_blank" rel="external">Link</a></li>
-<li>不同的逻辑地址可以映射到同一个线性地址上；不同的线性地址也可以映射到同一个物理地址上；所以是多对一的关系。另外，同一个线性地址，在发生换页以后，也可能被重新装载到另外一个物理地址上。所以这种多对一的映射关系也会随时间发生变化。</li>
+<li>tmux.conf配置快捷键，配色等</li>
 </ol>
-<h3 id="Linux常用command">Linux常用command</h3><ol>
-<li><strong>ps -ef|grep java</strong> ：查找运行中的Java进程</li>
-<li><strong>top -p 345</strong>: 查看指定pid=345的进程,在mac中用-pid代替-p</li>
-<li><strong>ps -A</strong>: 显示所有程序</li>
-<li><strong>ps -a</strong>: 显示所有终端机下执行的程序，除了阶段作业领导者之外</li>
-<li><strong>kill -9 345</strong>: 杀死pid=345的进程</li>
-<li><strong>ifconfig</strong>: 查看自己的IP地址 </li>
-<li><strong>telnet</strong>: 远程登录; telnet hostname</li>
-<li><p><strong>其他</strong>    </p>
-<pre><code>touch创建文件  
-<span class="keyword">mkdir</span>创建文件夹 
-nano编辑文件   —编辑完成后 用 Ctrl ＋O 存盘，Ctrl＋X 退出  
-<span class="keyword">rm</span> 文件名 —删除文件 ：<span class="keyword">rm</span> -rf <span class="keyword">dir</span>              ，          <span class="keyword">rm</span> -f <span class="keyword">file</span>
-df -<span class="keyword">h</span> 查看服务器空间占用情况
-tail -f tmp.txt   查看文件尾部
-du -<span class="keyword">h</span> * 查看当前目录下文件夹大小
+<pre><code># 开启鼠标生效
+<span class="operator"><span class="keyword">set</span>-<span class="keyword">option</span> -g mouse <span class="keyword">on</span>
 
-push本地文件夹到远程主机： scp -r ./emailAccount/ release@210.209.103.130:/home/httpd/html/caspar.kactus.com.hk/emailAccount/
+#设置前缀为Ctrl + x
+<span class="keyword">set</span> -g prefix C-x
+unbind C-b
 
-push本地文件到远程主机：
-scp KFS_xy.jar evarist.f@test2-1.kactus.com.hk:/home/evarist.f/<span class="keyword">CAP</span>-IDA/gateway/KFS_xy.jar
+# <span class="keyword">key</span> bindings <span class="keyword">for</span> horizontal <span class="keyword">and</span> vertical panes
+unbind %
+bind | split-window -h      # 使用|竖屏，方便分屏
+unbind <span class="string">'"'</span>
+bind - split-window -v      # 使用-横屏，方便分屏
 
-对当前目录下所有文件夹添加读写权限：
-chmod -R 777 * 或者chmod -R 777 . 
-chown -R a:b:c * 修改ower, group， others
+# <span class="keyword">status</span> bar <span class="keyword">with</span> <span class="keyword">load</span> <span class="keyword">and</span> <span class="keyword">time</span>
+<span class="keyword">set</span> -g <span class="keyword">status</span>-bg blue
+<span class="keyword">set</span> -g <span class="keyword">status</span>-fg <span class="string">'#bbbbbb'</span>
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">left</span>-fg green
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">left</span>-bg blue
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">right</span>-fg green
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">right</span>-bg blue
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">left</span>-length <span class="number">90</span>
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">right</span>-length <span class="number">90</span>
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">left</span> <span class="string">'[#(whoami)]'</span>
+<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">right</span> <span class="string">'[#(date +" %m-%d %H:%M ")]'</span>
+<span class="keyword">set</span> -g <span class="keyword">status</span>-justify <span class="string">"centre"</span>
+<span class="keyword">set</span> -g window-<span class="keyword">status</span>-<span class="keyword">format</span> <span class="string">'#I #W'</span>
+<span class="keyword">set</span> -g window-<span class="keyword">status</span>-<span class="keyword">current</span>-<span class="keyword">format</span> <span class="string">' #I #W '</span>
+setw -g window-<span class="keyword">status</span>-<span class="keyword">current</span>-bg blue
+setw -g window-<span class="keyword">status</span>-<span class="keyword">current</span>-fg green
+# pane <span class="built_in">number</span> display
+<span class="keyword">set</span> -g display-panes-active-colour colour33 #blue
+<span class="keyword">set</span> -g display-panes-colour colour166 #orange
+<span class="keyword">set</span> -g base-<span class="keyword">index</span> <span class="number">1</span>
+<span class="keyword">set</span> -g pane-base-<span class="keyword">index</span> <span class="number">1</span>
+<span class="keyword">set</span> -g display-<span class="keyword">time</span> <span class="number">3000</span>
+<span class="keyword">set</span> -g history-<span class="keyword">limit</span> <span class="number">10000</span>
 
-ssh连接： ssh charlesxiao@test2-1.kactus.com.hk 
-<span class="keyword">ls</span> -<span class="keyword">l</span> 显示文件和详细信息;  <span class="keyword">ls</span> -<span class="keyword">la</span>; <span class="keyword">ls</span> -Z
-cp -rf dir1 dir2
-grep -Hlr AlertEmail *  当前目录下查找所有包含AlertEmail字符串的文件
-ps aux | grep php 查询
-<span class="keyword">pwd</span> 显示当前位置全路径
+# copy-<span class="keyword">mode</span> 将快捷键设置为 vi 模式
+setw -g <span class="keyword">mode</span>-keys vi
 
-进程前后台运行切换命令： http:<span class="comment">//www.cnblogs.com/highfly2012/archive/2013/05/04/3059727.html</span>
-    1. command  &amp; 让进程在后台运行
+# 选中窗口
+bind-<span class="keyword">key</span> k <span class="keyword">select</span>-pane -U
+bind-<span class="keyword">key</span> j <span class="keyword">select</span>-pane -D
+bind-<span class="keyword">key</span> h <span class="keyword">select</span>-pane -L
+bind-<span class="keyword">key</span> l <span class="keyword">select</span>-pane -R</span>
+</code></pre><ol>
+<li><p>~/.bash_rc配置登录时自动进入tmux</p>
+<pre><code>tmux_init(<span class="function">)</span>
+{
+    tmux<span class="instruction"> new-session </span>-s <span class="string">"xiaoyong"</span> -d -n <span class="string">"local"</span>    <span class="comment"># 开启一个会话</span>
+    tmux<span class="instruction"> new-window </span>-n <span class="string">"other"</span>          <span class="comment"># 开启一个窗口</span>
+    tmux split-window -h                <span class="comment"># 开启一个竖屏</span>
+    tmux split-window -v                <span class="comment"># 开启一个横屏</span>
+    tmux -2 attach-session -d           <span class="comment"># tmux -2强制启用256color，连接已开启的tmux</span>
+}
 
-    2. jobs –<span class="keyword">l</span> 查看后台运行的进程
-
-    3. fg %<span class="keyword">n</span> 让后台运行的进程<span class="keyword">n</span>到前台来
-
-    4. bg %<span class="keyword">n</span> 让进程<span class="keyword">n</span>到后台去
-
-    5. 暂停程序运行CTRL+Z
-
-    6. kill %<span class="keyword">n</span> 杀死进程<span class="keyword">n</span>
-
-<span class="keyword">ls</span> -<span class="keyword">la</span> | grep php  查看php真实路径
-
-find . -name “start*”  查找以某某开头或者结尾的文件,区分大小写
-
-<span class="comment">// grep命令是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来</span>
-grep 'linux' <span class="keyword">test</span>.txt  从文件中查找关键词
-
-tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /home/httpd/html/<span class="keyword">CAP</span>-IDA/Data IDASUBSTAT   绝对路径压缩文件夹IDASUBSTAT，使用-C指定相对路径去除多余层次
+<span class="comment"># 判断是否已有开启的tmux会话，没有则开启</span><span class="instruction">
+if </span>which tmux 2&gt;&amp;1 &gt;/dev/null; then
+    test -z <span class="string">"$TMUX"</span> &amp;&amp;<span class="function"> (</span>tmux attach || tmux_init<span class="function">)</span>
+fi
 </code></pre></li>
 </ol>
-<h3 id="Linux_/proc_文件系统">Linux /proc 文件系统</h3><p>Linux 内核提供了一种通过 /proc 文件系统，在运行时访问内核内部数据结构、改变内核设置的机制。proc文件系统是一个伪文件系统，它只存在内存当中，而不占用外存空间。它以文件系统的方式为访问系统内核数据的操作提供接口。<br>用户和应用程序可以通过proc得到系统的信息，并可以改变内核的某些参数。由于系统的信息，如进程，是动态改变的，所以用户或应用程序读取proc文件时，proc文件系统是动态从系统内核读出所需信息并提交的。另外，在/proc下还有三个很重要的目录：net，scsi和sys。 Sys目录是可写的，可以通过它来访问或修改内核的参数，而net和scsi则依赖于内核配置。例如，如果系统不支持scsi，则scsi 目录不存在</p>
+<h4 id="参考链接">参考链接</h4><ol>
+<li><a href="http://wdxtub.com/2016/03/30/tmux-guide/" target="_blank" rel="external">tmux指南</a></li>
+<li><strong> tmux如何将内容复制到系统clipboard ? </strong> Mac下如果用 iterm2 可以在 preference 下选择 Applications in terminal may access  clipboard</li>
+</ol>
 
         
       
@@ -1051,6 +673,1054 @@ tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /ho
         <div class="post-tags">
           
             <a href="../../tags/Linux/"> #Linux </a>
+          
+            <a href="../../tags/tmux/"> #tmux </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2017/12/02/Mysql Init线程不安全问题/">
+                Mysql初次Init线程不安全问题
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-12-02
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/12/02/Mysql Init线程不安全问题/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/02/Mysql Init线程不安全问题/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h4 id="现象描述">现象描述</h4><p>沙盒测试时发现的这个问题，在程序启动时偶发core，而且不稳定复现，查看core信息会发现core在了mysql连接上；而且最后发现的规律是每次程序启动时，如果多线程获取数据库连接，就可能出现core。core信息如图所示:</p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/mysql_core.png" class="full-image"></p>
+<h4 id="代码复现">代码复现</h4><p>在主线程内初始化mysql，在子线程内调用mysql_real_connect,就会导致coredump</p>
+<pre><code><span class="variable">#include</span> <span class="subst">&lt;</span>mysql<span class="built_in">.</span>h<span class="subst">&gt;</span>
+<span class="variable">#include</span> <span class="subst">&lt;</span>pthread<span class="built_in">.</span>h<span class="subst">&gt;</span>
+<span class="literal">void</span><span class="subst">*</span> func(<span class="literal">void</span><span class="subst">*</span> arg)
+{
+    MYSQL<span class="subst">*</span> mysql <span class="subst">=</span> (MYSQL <span class="subst">*</span>)arg;
+    mysql_real_connect(mysql, “<span class="number">127.0</span><span class="built_in">.0</span><span class="built_in">.1</span>″, “root”, “<span class="number">123456</span>″, “chen”, <span class="number">1234</span>, <span class="built_in">NULL</span>, <span class="number">0</span>);
+    mysql_close(mysql);
+    <span class="keyword">return</span> (<span class="literal">void</span> <span class="subst">*</span>)<span class="number">0</span>;
+}
+
+int main()
+{
+    MYSQL mysql;
+    <span class="keyword">if</span> (<span class="built_in">NULL</span> <span class="subst">==</span> mysql_init(<span class="subst">&amp;</span>mysql))
+    {
+        <span class="keyword">return</span> <span class="subst">-</span><span class="number">1</span>;
+    }
+    pthread_t <span class="keyword">thread</span>;
+    pthread_create(<span class="subst">&amp;</span><span class="keyword">thread</span>, <span class="built_in">NULL</span>, func, <span class="subst">&amp;</span>mysql);
+    pthread_join(<span class="keyword">thread</span>, <span class="built_in">NULL</span>);
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><h4 id="出现原因">出现原因</h4><p>如官网文档所说，当我们调用<code>mysql_real_connect()</code>函数去获取数据库连接时，需要先调用<code>mysql_init(MYSQL *mysql)函数</code>去获取一个MYSQL connection handler，然而mysql_init()不是完全线程安全的，但是只要成功调用一次后就线程安全了，如果有多线程并发调用mysql_init()，第一次init时如果刚好多线程并发调用，就会出core；为啥第一次调用mysql_init时线程不安全？我们可以来看看mysql源码:</p>
+<ol>
+<li><p>mysql.h文件预定义<code>mysql_library_init</code>函数</p>
+<pre><code><span class="hexcolor">#def</span>ine mysql_library_init mysql_server_init
+</code></pre></li>
+<li><p>client.c文件定义<code>mysql_init</code>函数,并调用<code>mysql_server_init</code>函数</p>
+<pre><code><span class="comment">// Init MySQL structure or allocate one</span>
+
+MYSQL <span class="subst">*</span> STDCALL
+mysql_init(MYSQL <span class="subst">*</span>mysql)
+{
+  <span class="keyword">if</span> (mysql_server_init(<span class="number">0</span>, <span class="built_in">NULL</span>, <span class="built_in">NULL</span>))
+    <span class="keyword">return</span> <span class="number">0</span>;
+  <span class="keyword">if</span> (<span class="subst">!</span>mysql)
+  {
+    <span class="keyword">if</span> (<span class="subst">!</span>(mysql<span class="subst">=</span>(MYSQL<span class="subst">*</span>) my_malloc(sizeof(<span class="subst">*</span>mysql),MYF(MY_WME <span class="subst">|</span> MY_ZEROFILL))))
+    {
+      set_mysql_error(<span class="built_in">NULL</span>, CR_OUT_OF_MEMORY, unknown_sqlstate);
+      <span class="keyword">return</span> <span class="number">0</span>;
+    }
+    mysql<span class="subst">-&gt;</span>free_me<span class="subst">=</span><span class="number">1</span>;
+  }
+  <span class="keyword">else</span>
+    memset(mysql, <span class="number">0</span>, sizeof(<span class="subst">*</span>(mysql)));
+  mysql<span class="subst">-&gt;</span>charset<span class="subst">=</span>default_client_charset_info;
+  strmov(mysql<span class="subst">-&gt;</span>net<span class="built_in">.</span>sqlstate, not_error_sqlstate);
+
+  <span class="comment">/*
+    Only enable LOAD DATA INFILE by default if configured with option
+    ENABLED_LOCAL_INFILE
+  */</span>
+
+<span class="variable">#if</span> defined(ENABLED_LOCAL_INFILE) <span class="subst">&amp;&amp;</span> <span class="subst">!</span>defined(MYSQL_SERVER)
+  mysql<span class="subst">-&gt;</span>options<span class="built_in">.</span>client_flag<span class="subst">|=</span> CLIENT_LOCAL_FILES;
+<span class="variable">#endif</span>
+
+<span class="variable">#ifdef</span> HAVE_SMEM
+  mysql<span class="subst">-&gt;</span>options<span class="built_in">.</span>shared_memory_base_name<span class="subst">=</span> (char<span class="subst">*</span>) def_shared_memory_base_name;
+<span class="variable">#endif</span>
+
+  mysql<span class="subst">-&gt;</span>options<span class="built_in">.</span>methods_to_use<span class="subst">=</span> MYSQL_OPT_GUESS_CONNECTION;
+  mysql<span class="subst">-&gt;</span>options<span class="built_in">.</span>report_data_truncation<span class="subst">=</span> <span class="literal">TRUE</span>;  <span class="comment">/* default */</span>
+
+  mysql<span class="subst">-&gt;</span>reconnect<span class="subst">=</span> <span class="number">0</span>;
+
+  mysql<span class="subst">-&gt;</span>options<span class="built_in">.</span>secure_auth<span class="subst">=</span> <span class="literal">TRUE</span>;
+
+  <span class="keyword">return</span> mysql;
+}
+</code></pre></li>
+<li><p>libmysql.c文件定义<code>mysql_server_init</code>函数, 问题就出在这个函数,用了<code>mysql_client_init</code>这个标记量来判断是否需要调用<code>my_thread_init</code>函数，如果<code>mysql_client_init==1</code>就直接为每个线程初始化私有变量，否则会先去初始化一些全局性的系统函数，资源和变量; 所以如果第一次init时出现多线程并发情景，线程A将<code>mysql_client_init</code>变量置为1，紧接着初始化全局资源，与此同时线程B走了else分支，直接开始调用<code>my_thread_init</code>函数，此时就会报错了，core由此产生。</p>
+<pre><code><span class="type">int</span> <span class="type">STDCALL</span> mysql_server_init(<span class="type">int</span> argc __attribute__((unused)),
+                  <span class="type">char</span> **argv __attribute__((unused)),
+                  <span class="type">char</span> **groups __attribute__((unused)))
+{
+  <span class="type">int</span> <span class="literal">result</span>= <span class="number">0</span>;
+  <span class="keyword">if</span> (!mysql_client_init)
+  {
+    mysql_client_init=<span class="number">1</span>;
+    org_my_init_done=my_init_done;
+    <span class="keyword">if</span> (my_init())                /* <span class="type">Will</span> init threads */
+      <span class="keyword">return</span> <span class="number">1</span>;
+    init_client_errs();
+    <span class="keyword">if</span> (mysql_client_plugin_init())
+      <span class="keyword">return</span> <span class="number">1</span>;
+    <span class="keyword">if</span> (!mysql_port)
+    {
+      <span class="type">char</span> *env;
+      struct servent *serv_ptr __attribute__((unused));
+
+      mysql_port = <span class="type">MYSQL_PORT</span>;
+
+      /*
+        <span class="keyword">if</span> builder specifically requested a default port, use that
+        (even <span class="keyword">if</span> it coincides <span class="keyword">with</span> our factory default).
+        only <span class="keyword">if</span> they didn't <span class="keyword">do</span> we check /etc/services (<span class="keyword">and</span>, failing
+        on that, fall back to the factory default <span class="keyword">of</span> <span class="number">3306</span>).
+        either default can be overridden by the environment variable
+        <span class="type">MYSQL_TCP_PORT</span>, which <span class="keyword">in</span> turn can be overridden <span class="keyword">with</span> command
+        line options.
+      */
+
+<span class="comment">#if MYSQL_PORT_DEFAULT == 0</span>
+      <span class="keyword">if</span> ((serv_ptr= getservbyname(<span class="string">"mysql"</span>, <span class="string">"tcp"</span>)))
+        mysql_port= (<span class="type">uint</span>) ntohs((ushort) serv_ptr-&gt;s_port);
+<span class="comment">#endif</span>
+      <span class="keyword">if</span> ((env= getenv(<span class="string">"MYSQL_TCP_PORT"</span>)))
+        mysql_port=(<span class="type">uint</span>) atoi(env);
+    }
+
+    <span class="keyword">if</span> (!mysql_unix_port)
+    {
+      <span class="type">char</span> *env;
+<span class="comment">#ifdef __WIN__</span>
+      mysql_unix_port = (<span class="type">char</span>*) <span class="type">MYSQL_NAMEDPIPE</span>;
+<span class="comment">#else</span>
+      mysql_unix_port = (<span class="type">char</span>*) <span class="type">MYSQL_UNIX_ADDR</span>;
+<span class="comment">#endif</span>
+      <span class="keyword">if</span> ((env = getenv(<span class="string">"MYSQL_UNIX_PORT"</span>)))
+    mysql_unix_port = env;
+    }
+    mysql_debug(<span class="type">NullS</span>);
+<span class="comment">#if defined(SIGPIPE) &amp;&amp; !defined(__WIN__)</span>
+    (<span class="type">void</span>) signal(<span class="type">SIGPIPE</span>, <span class="type">SIG_IGN</span>);
+<span class="comment">#endif</span>
+<span class="comment">#ifdef EMBEDDED_LIBRARY</span>
+    <span class="keyword">if</span> (argc &gt; -<span class="number">1</span>)
+       <span class="literal">result</span>= init_embedded_server(argc, argv, groups);
+<span class="comment">#endif</span>
+  }
+  <span class="keyword">else</span>
+    <span class="literal">result</span>= (<span class="type">int</span>)my_thread_init();         /* <span class="type">Init</span> <span class="keyword">if</span> new thread */
+  <span class="keyword">return</span> <span class="literal">result</span>;
+}
+</code></pre></li>
+<li><p>官方文档</p>
+<ul>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/mysql-real-connect.html" target="_blank" rel="external"><code>mysql_real_connect()</code></a> attempts to establish a connection to a MySQL database engine running on host. mysql_real_connect() must complete successfully before you can execute any other API functions that require a valid MYSQL connection handler structure.  </p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/mysql-init.html" target="_blank" rel="external"><code>MYSQL *mysql_init(MYSQL *mysql)</code></a>  </p>
+<p>  Allocates or initializes a MYSQL object suitable for <code>mysql_real_connect()</code>. If mysql is a NULL pointer, the function allocates, initializes, and returns a new object. Otherwise, the object is initialized and the address of the object is returned. If <code>mysql_init()</code> allocates a new object, it is freed when <code>mysql_close()</code> is called to close the connection.  </p>
+<p>  In a nonmulti-threaded environment, <code>mysql_init()</code> invokes <code>mysql_library_init()</code> automatically as necessary. However, <code>mysql_library_init()</code> is not thread-safe in a multi-threaded environment, and thus neither is <code>mysql_init()</code>. Before calling <code>mysql_init()</code>, either call <code>mysql_library_init()</code> prior to spawning any threads, or use a mutex to protect the <code>mysql_library_init()</code> call. This should be done prior to any other client library call.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="解决方案">解决方案</h4><ol>
+<li>每一次连接数据库时都先后加锁调用mysql_init()和mysql_real_connect()，确保init先于connect函数被调用过，而且不会被其他线程并发调用，以免初次连接数据库时多线程并发导致core</li>
+<li>在程序启动时先全局调用一次mysql_init()函数，确保初次调用mysql_init时是线程安全的，之后的调用mysql_real_connect函数就不会出core</li>
+<li>MySQL提供了线程安全的库libmysql_r，可以考虑替换原来的线程不安全的libmysql库</li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Mysql/"> #Mysql </a>
+          
+            <a href="../../tags/bug/"> #bug </a>
+          
+            <a href="../../tags/databse/"> #databse </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2017/11/11/区块链技术探秘/">
+                区块链技术探秘
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-11-11
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/11/11/区块链技术探秘/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/区块链技术探秘/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="区块链">区块链</h3><p>技术角度来讲，<strong>区块链</strong>是分布式数据存储、P2P网络传输、共识机制、加密算法等技术的集成应用。区块链技术是利用块链式数据结构来验证与存储数据、利用分布式节点共识算法来生成和更新数据、利用密码学的方式保证数据传输和访问安全、利用智能化合约来编程和操作数据的一种全新的分布式基础架构与计算范式。  </p>
+<p>通俗来讲，<strong>区块链</strong>是一个收录所有历史交易的分布式账本，每个区块中包含若干笔交易记录。如果说区块链是账本，那么区块就是账本的每一页。交易的细节都被记录在一个网络里任何人都可以看得到的公开账簿上，而且这个账本会保存在每个节点中。</p>
+<p><strong>区块链的核心能力</strong>在于“大大降低了达成存在性证明的成本”：对于当前区块记录，采用一台矿机记录，成千上万矿机鉴证的模式，保证着没有非法区块被正确记录，当然理论上51%的矿机如果共同决定要做假，事实是可以记录假数据，只是在当前的算力下，准备如此大的算力来记录假数据，成本极高。</p>
+<h4 id="主体架构">主体架构</h4><p>从架构设计上来说，区块链可以简单的分为三个层次，协议层、扩展层和应用层。</p>
+<h4 id="核心概念">核心概念</h4><ol>
+<li><strong>共识机制</strong>：我们知道，比特币系统中每十分钟产生一个区块，同时有n个节点在收到了这个区块，那么由谁去负责打包这个区块，将其纳入区块链呢？为了达到这种共识，决定最终打包权，需要一种共识机制，例如比特币就采用了POW，看谁的计算力强大，哈希计算速度更快，谁就更有可能获得打包权，也就相应的获得打包的奖励以及交易的手续费用。</li>
+<li><strong>挖矿过程</strong>：每一个比特币的节点都会收集所有尚未确认的交易，并将其归集到一个资料块中，比特币系统会在系统节点上将他生成一个随机代码，任何人都有权通过计算机去寻找此代码，争夺具有记账权的节点，挖矿节点不断重复进行尝试；矿工找到此代码，就会产生一个可记账区块，随即得到一个比特币的奖励报酬；当一个节点找到了符合要求的解，那么它就可以向全网广播自己的结果。其他节点就可以接收这个新解出来的资料块，并检验其是否符合规则。如果其他节点通过计算杂凑值发现确实满足要求（比特币要求的运算目标），那么该资料块有效，其他的节点就会接受该资料块。每隔一个时间点（10分钟），比特币系统会在系统节点上重新生成一个随机代码。具体计算随机数的流程：</li>
+</ol>
+<h4 id="传统分布式一致性算法和区块链共识过程的异同点">传统分布式一致性算法和区块链共识过程的异同点</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">—-</th>
+<th style="text-align:left">传统一致性算法</th>
+<th style="text-align:left">区块链共识算法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">主流算法</td>
+<td style="text-align:left">paxos算法<br>raft算法</td>
+<td style="text-align:left">pos(proof of stake)股权证明机制<br>pow(proof of work)工作量证明机制<br>瑞波共识机制(Ripple Consensus)</td>
+</tr>
+<tr>
+<td style="text-align:center">相同点</td>
+<td style="text-align:left">追加式写<br>强调序列化<br>长链覆盖短链区块，多节点覆盖少数节点日志<br>少数服从多数</td>
+<td style="text-align:left">—-</td>
+</tr>
+<tr>
+<td style="text-align:center">不同点</td>
+<td style="text-align:left">1. 不考虑拜占庭容错(Byzanetine Paxos除外)，即假设所有节点只发生宕机、网络故障等非人为问题<br>2. 面向日志（数据库）的，即更通用的情况</td>
+<td style="text-align:left">1. 需要考虑恶意节点篡改数据的问题<br>2. 区块链共识模型面向交易</td>
+</tr>
+</tbody>
+</table>
+<h3 id="比特币">比特币</h3><p>最初中本聪在2009年提出的白皮书是这么定义的 —- 《比特币：一种点对点的电子现金系统》，but，演变至今，比特币逐渐被理解为一种虚拟货币，而抽象出一种通用的技术框架—-区块链技术；比特币可以说是区块链技术的第一个应用，也是目前最成功的一个应用。比特币是一种P2P形式的数字货币，数量有限，一共只有2100万枚，有着类似于黄金的稀缺性。  </p>
+<p>比特币协议规定：第0个 – 第21万个Block,每个Block里有50个比特币，第21万-第42万个Block，每个Block里有25个比特币，依次递减，最后比特币全网中只会有2100万个比特币。 </p>
+<p>比特币系统中的几个常用概念与现有货币系统的类比：</p>
+<blockquote>
+<p>比特币钱包 —&gt; 电子银行的客户端</p>
+<p>比特币地址 —&gt; 银行卡号</p>
+<p>比特币密钥 —&gt; 银行卡密码</p>
+</blockquote>
+<h3 id="解决的问题">解决的问题</h3><p>如果说互联网技术解决了人类的信息获取问题，那边区块链技术则解决了人类之间的信任问题。传统人与与人之间的交易，一般都通过一个权威的中心进行，如通过银行转账，通过中介，政府的介入才能进行房屋买卖。而<strong>区块链让全网所有的节点共同维护一个账本，每个节点都有一份账本，交易记录一旦确定就无法修改等特点保证了交易记录的真实可靠，无法篡改。</strong>所以陌生人之间可以基于区块链技术直接进行各种交易，并保证交易的真实可靠和完全可信。</p>
+<h3 id="应用场景">应用场景</h3><ol>
+<li><p><strong>银行业</strong></p>
+<blockquote>
+<p>作为一种数字化，安全防干扰的帐户，区块链实现了银行业的核心功能：即价值的安全储存和转移中心。也就是说，在将来的几年内，一波基于区块链技术的公司或将影响到银行业。</p>
+</blockquote>
+</li>
+<li><p><strong>支付和转账</strong></p>
+<blockquote>
+<p>区块链技术能够避开繁杂的系统，在付款人和收款人之间创造更直接的付款流程，不管是境内转账还是跨境转账，这种方式都有着低价、迅速的特点，而且无需中间手续费。</p>
+</blockquote>
+</li>
+<li><p><strong>网络安全</strong></p>
+<blockquote>
+<p>虽然区块链的系统是公开的，但其核验、发送等数据交流过程却采用了先进的加密技术。这种技术不仅确保了数据的正确来源，也确保了数据在中间过程不被人拦截。如果区块链技术的应用更为广泛，那么其遭受黑客袭击的概率也可能会下降，因此人们认为区块链系统要比传统系统更为稳妥。区块链系统之所以能降低传统网络安全风险，一大原因就是它解除了对中间人的需求。</p>
+</blockquote>
+</li>
+<li><p><strong>选举</strong></p>
+<blockquote>
+<p>大家的投票“绝不可能被我们——即程序员，学校管理员或学生修改、删除。”，信任代价降低。</p>
+</blockquote>
+</li>
+<li><p><strong>智能合同</strong></p>
+<blockquote>
+<p>智能合同实际上是在另一个物体的行动上发挥功能的电脑程序。和普通电脑程序一样，智能合同也是一种“如果-然后”功能，但区块链技术实现了这些“合同”的自动填写，无需人工介入。这种合同最终可能会取代法律行业的核心业务，即在商业和民事领域起草和管理合同的业务。</p>
+</blockquote>
+</li>
+<li><p><strong>股票交易</strong></p>
+<blockquote>
+<p>许多年来，各个公司都在想方设法简化股票的购买、销售和交易过程，新兴的区块链技术创企认为他们能够超越以往，实现整个流程的自动化，提高安全性和效率。</p>
+</blockquote>
+</li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/分布式系统/"> #分布式系统 </a>
+          
+            <a href="../../tags/区块链/"> #区块链 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2017/11/11/C++编译之CMake工具/">
+                C++常用数据结构
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-11-11
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/11/11/C++编译之CMake工具/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/C++编译之CMake工具/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h4 id="什么是CMake">什么是CMake</h4><ol>
+<li>CMake 是一个比make 更高级的编译配置工具，允许开发者编写一种平台无关的 CMakeList.txt 文件来定制整个编译流程，然后再根据目标用户的平台进一步生成所需的本地化 Makefile 和工程文件，如 Unix 的 Makefile 或 Windows 的 Visual Studio 工程，从而做到“Write once, run everywhere”。</li>
+<li>linux 平台下使用 CMake 生成 Makefile 并编译的流程：<ol>
+<li>编写 CMake 配置文件 CMakeLists.txt</li>
+<li>执行命令 <code>cmake PATH</code>，<code>PATH</code>是CMakeLists.txt 所在的目录，cmake命令会生成Makefile文件</li>
+<li>再使用 <code>make</code> 命令进行编译，make命令会编译链接生成可执行文件</li>
+</ol>
+</li>
+</ol>
+<h4 id="编译的四个阶段">编译的四个阶段</h4><p>执行 make 命令默认执行的是 make all，make all 有四个阶段: prepare test compile package。我们也可以只执行某一个阶段的命令。下面是针对每个命令的说明:</p>
+<ul>
+<li><strong>make prepare</strong>    :  只会执行prepare阶段，这个阶段主要是下载编译依赖</li>
+<li><strong>make test</strong>          :  只会执行test阶段，这个阶段主要是做单元测试</li>
+<li><strong>make compile</strong>   :  只会执行compile阶段，这个阶段主要是进行编译</li>
+<li><strong>make  package</strong> : 只会执行packege阶段，这个阶段会把编译产出都copy到output目录中</li>
+<li><strong>make install</strong>      :  只会执行install阶段，这个阶段是把编译产出放到$GOPATH/bin目录下，这个不是必须的</li>
+<li><strong>make clean</strong>       : 只会执行clean阶段，这个阶段把编译输出的一些文件删除，恢复到编译之前的状态</li>
+</ul>
+<h4 id="实例分析">实例分析</h4><p>leveldb CMakeLists.txt文件</p>
+<h4 id="参考链接">参考链接</h4><ol>
+<li><a href="http://www.hahack.com/codes/cmake/" target="_blank" rel="external">CMake实战入门</a></li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/C/"> #C++ </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2017/02/19/Linux expect自动交互脚本入门/">
+                Linux expect自动交互脚本入门
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-02-19
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/02/19/Linux expect自动交互脚本入门/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/19/Linux expect自动交互脚本入门/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p><strong>Expect</strong> is a program that “talks” to other interactive programs according to a script. Following the script, Expect knows what can be expected from a program and what the correct response should be. An interpreted language provides branching and high-level control structures to direct the dialogue. In addition, the user can take control and interact directly when desired, afterward returning control to the script.</p>
+<h4 id="expect基础语法">expect基础语法</h4><p>示例：</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 命令行参数 </span></span><br><span class="line"><span class="comment"># $argv，参数数组，使用[lindex $argv n]获取，$argv 0初始化为脚本名字</span></span><br><span class="line"><span class="comment"># $argc，参数个数</span></span><br><span class="line"><span class="keyword">set</span> username [<span class="keyword">lindex</span> <span class="variable">$argv</span> <span class="number">0</span>]  # 获取第<span class="number">0</span>个参数</span><br><span class="line"><span class="keyword">set</span> passwd [<span class="keyword">lindex</span> <span class="variable">$argv</span> <span class="number">1</span>]    # 获取第<span class="number">1</span>个参数</span><br><span class="line"><span class="keyword">set</span> TOKEN <span class="variable">$expect_out(buffer)</span>: 获取上一个键盘输入保存到TOKEN变量中</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span> timeout <span class="number">30</span> # 设置超时<span class="number">30</span>s</span><br><span class="line"> </span><br><span class="line"><span class="comment"># spawn是expect内部命令，开启ssh连接</span></span><br><span class="line">spawn ssh -l username <span class="number">192.168</span>.1.1</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 判断上次输出结果里是否包含以“password:”开头的字符串，如果有则立即返回，否则就等待一段时间(timeout)后返回</span></span><br><span class="line">expect <span class="string">"password:*"</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 发送内容ispass(密码)，与手工输入密码ispass的动作等效</span></span><br><span class="line">send <span class="string">"ispass\r"</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 发送内容给用户</span></span><br><span class="line">send_user <span class="string">"$argv0 [lrange $argv 0 2]\n"</span></span><br><span class="line">send_user <span class="string">"It's OK\r"</span></span><br><span class="line"><span class="comment"># 执行完成后保持交互状态，控制权交给控制台(可以继续手工输入等操作)。否则会完成后会退出。</span></span><br><span class="line">interact</span><br></pre></td></tr></table></figure>
+<h5 id="spwan命令">spwan命令</h5><p>spawn命令用于启动一个进程, 后边接上你要执行的命令，例如<code>spawn ssh relay01.baidu.com</code></p>
+<h5 id="interact命令">interact命令</h5><p>interact命令用于脚本执行完简单的命令后人手动介入,只在所属的spawn进程空间有效</p>
+<h5 id="expect的三种使用格式">expect的三种使用格式</h5><ul>
+<li><p>并行：只要其中的任何一个pattern能够匹配，那么这个expect就算是完成了一次匹配</p>
+<pre><code>expect {
+    pattern1 {
+        command2 }
+    pattern2 {
+        command2 }
+}
+
+<span class="comment"># 示例</span>
+expect {
+   <span class="string">"hi"</span>    { <span class="built_in">send</span> <span class="string">"You said hi\r"</span> }
+   <span class="string">"hello"</span> { <span class="built_in">send</span> <span class="string">"Hello yourself\r"</span> }
+   <span class="string">"bye"</span>   { <span class="built_in">send</span> <span class="string">"That was unexpected\r"</span> }
+}
+</code></pre></li>
+</ul>
+<ul>
+<li><p>串行：所有的匹配被依次满足了之后才算整个语句完成</p>
+<pre><code>expect pattern command
+expect pattern2 command2
+
+<span class="comment"># 串行示例</span>
+expect <span class="string">"username:"</span>
+<span class="keyword">send</span> <span class="string">"<span class="variable">$userid</span>\r"</span>
+expect <span class="string">"password:"</span> { <span class="keyword">send</span> <span class="string">"<span class="variable">$mypassword</span>\r"</span> }
+
+<span class="comment"># 利用exp_continue并行实现串行，continue执行下一个pattern</span>
+expect {   
+    <span class="string">"*yes/no"</span> { <span class="keyword">send</span> <span class="string">"yes\r"</span>; exp_continue }
+     <span class="string">"*password:"</span> { <span class="keyword">send</span> <span class="string">"<span class="variable">$mypassword</span>\r"</span> }   
+}
+</code></pre></li>
+</ul>
+<h5 id="shell脚本接收多个参数">shell脚本接收多个参数</h5><ol>
+<li>expect脚本可以接受从bash传递过来的参数.可以使用[lindex $argv n]获得，n从0开始，分别表示第一个,第二个,第三个….参数</li>
+<li>$argc为命令行参数的个数，$argv0为脚本名字本身，$argv为命令行参数。[lrange $argv 0 0]表示第1个参数，[lrange $argv 0 4]为第一个到第五个参数。</li>
+<li>执行<code>./test.sh 1 2 3</code>,脚本内容如下：</li>
+</ol>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/expect -d</span></span><br><span class="line"><span class="keyword">set</span> username [<span class="keyword">lindex</span> <span class="variable">$argv</span> <span class="number">0</span>]</span><br><span class="line"><span class="keyword">set</span> password [<span class="keyword">lindex</span> <span class="variable">$argv</span> <span class="number">1</span>]</span><br><span class="line"><span class="keyword">set</span> server [<span class="keyword">lindex</span> <span class="variable">$argv</span> <span class="number">2</span>]</span><br><span class="line">send_user  <span class="string">"UserName is $username\n"</span></span><br><span class="line">send_user  <span class="string">"PassWord is $password\n"</span></span><br><span class="line">send_user  <span class="string">"Server is $server\n"</span></span><br><span class="line">send_user <span class="string">"Total arg num is $argc\n"</span></span><br></pre></td></tr></table></figure>
+<h4 id="bash脚本直接调用expect进行交互">bash脚本直接调用expect进行交互</h4><ul>
+<li>Here document实现, expect脚本可以使用bash中定义的变量</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#!/bin/bash</span></span><br><span class="line">host=<span class="string">"USER@HOST"</span></span><br><span class="line">password=<span class="string">"PASSWORD"</span></span><br><span class="line">cmd=<span class="string">"command_list"</span></span><br><span class="line"></span><br><span class="line">expect &lt;&lt;EOF </span><br><span class="line">spawn ssh <span class="variable">$host</span> <span class="string">"<span class="variable">$cmd</span>"</span></span><br><span class="line">expect &#123;</span><br><span class="line"><span class="string">"*(yes/no)?"</span> &#123; send <span class="string">"yes\r"</span>;exp_<span class="built_in">continue</span> &#125;</span><br><span class="line"><span class="string">"*assword:"</span> &#123; send <span class="string">"<span class="variable">$password</span>\r"</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line">expect eof</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<ul>
+<li>直接使用set来定义变量并在expect脚本中使用</li>
+</ul>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#!/bin/bash</span></span><br><span class="line">expect -c '</span><br><span class="line">set $PASSWORD=<span class="string">"123qwe"</span></span><br><span class="line">spawn ssh USER<span class="keyword">@HOST</span> <span class="string">"commands"</span></span><br><span class="line">expect &#123;</span><br><span class="line"><span class="string">"*(yes/no)?"</span> &#123; send <span class="string">"yes\r"</span>;exp_continue &#125;</span><br><span class="line"><span class="string">"*assword:"</span> &#123; send <span class="string">"$PASSWORD\r"</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line">expect eof</span><br><span class="line">'</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果希望保持登录，去掉上面代码的ssh后的命令列表并且将expect eof改成interact即可</p>
+</blockquote>
+<h4 id="更多示例">更多示例</h4><ol>
+<li><a href="http://xstarcd.github.io/wiki/shell/expect.html" target="_blank" rel="external">expect交互脚本示例</a></li>
+<li><a href="https://www.jianshu.com/p/70556b1ce932" target="_blank" rel="external">Linux Expect 简介和使用实例</a></li>
+</ol>
+<h4 id="开发机登陆脚本示例">开发机登陆脚本示例</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/expect</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 登录relay</span></span><br><span class="line">spawn ssh relay01.baidu.com</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义变量</span></span><br><span class="line"><span class="built_in">set</span> PIN <span class="string">"123321"</span></span><br><span class="line"><span class="built_in">set</span> HOST <span class="string">"hz01-bos-dev-r15-01-005.hz01"</span></span><br><span class="line"><span class="built_in">set</span> PASSWORD <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行脚本时带上参数,以空格分开</span></span><br><span class="line"><span class="comment"># set TOKEN [lindex $argv 0]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 打开调试模式</span></span><br><span class="line"><span class="comment">#exp_internal 1</span></span><br><span class="line"><span class="comment"># relay PIN码 + Token(Token需手动输入)</span></span><br><span class="line">expect &#123;</span><br><span class="line">    -re <span class="string">"password:*"</span> &#123;</span><br><span class="line">        send_user <span class="string">"PIN:****** + Token:"</span></span><br><span class="line">        expect_user &#123;</span><br><span class="line">            -timeout -<span class="number">1</span></span><br><span class="line">            -re <span class="string">"(.*)\n"</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">set</span> TOKEN <span class="variable">$expect_out</span>(buffer)</span><br><span class="line">        send <span class="string">"<span class="variable">$PIN</span><span class="variable">$TOKEN</span>\r"</span></span><br><span class="line">        exp_<span class="built_in">continue</span></span><br><span class="line">    &#125;</span><br><span class="line">   <span class="comment"># 自动登录开发机</span></span><br><span class="line">    -re <span class="string">"-bash-baidu-ssl*"</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> &#123; <span class="string">"<span class="variable">$HOST</span>"</span> != <span class="string">""</span> &#125; &#123;</span><br><span class="line">            send <span class="string">"ssh --silent <span class="variable">$HOST</span>\r"</span></span><br><span class="line">            <span class="comment"># [可选]自动开发机输入密码</span></span><br><span class="line">            <span class="keyword">if</span> &#123; <span class="string">"<span class="variable">$PASSWORD</span>"</span> != <span class="string">""</span> &#125; &#123;</span><br><span class="line">                expect -re <span class="string">"password:"</span> &#123; send <span class="string">"<span class="variable">$PASSWORD</span>\r"</span> &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 关闭调试模式</span></span><br><span class="line"><span class="comment">#exp_internal 0</span></span><br><span class="line">interact</span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Linux/"> #Linux </a>
+          
+            <a href="../../tags/shell/"> #shell </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2017/02/19/Linux shell:目录基础知识/">
+                Linux shell/目录基础知识
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-02-19
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/02/19/Linux shell:目录基础知识/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/19/Linux shell:目录基础知识/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h4 id="Unix/Linux/GNU_Linux">Unix/Linux/GNU Linux</h4><p>Linux本质是指 Linux 内核，而GNU/Linux则代表这是一个发行版系统(内核+GNU工具), GNU的全称又是：Gnu’s Not Unix, 本质上这些都属于类unix系统。</p>
+<h4 id="bash配置文件(Linux_or_Mac)">bash配置文件(Linux or Mac)</h4><h5 id="全局配置文件">全局配置文件</h5><ol>
+<li>/etc/profile 和 /rtc/profile.d/*.sh : 此文件为系统的每个用户设置环境信息,当用户第一次登录时该文件被执行，并从/etc/profile.d目录的配置文件中搜集shell的设置</li>
+<li>/etc/bashrc : 为每一个运行bash shell的用户执行此文件，当bash shell被打开时,该文件被读取</li>
+</ol>
+<h5 id="个人配置文件">个人配置文件</h5><ol>
+<li>~/.bash_profile : 每个用户都可使用该文件输入专用于自己使用的shell信息；当用户登录时,该文件仅仅执行一次；默认情况下,他设置一些环境变量,执行用户的.bashrc文件</li>
+<li>~/.bashrc : 该文件包含专用于你的bash shell的bash信息,当登录时以及每次打开新的shell时,该文件被读取</li>
+<li>~/.bash_history : </li>
+<li>~/.bash_logout : 当每次退出系统(退出bash shell)时,执行该文件</li>
+</ol>
+<h5 id="shell如何读取配置文件">shell如何读取配置文件</h5><ol>
+<li><p><strong>登录式shell如何读取配置文件</strong>  </p>
+<pre><code><span class="comment">/etc/profile</span> <span class="literal">-</span><span class="literal">-</span>&gt; <span class="comment">/etc/profile</span><span class="string">.</span><span class="comment">d/*</span><span class="string">.</span><span class="comment">sh</span> <span class="literal">-</span><span class="literal">-</span>&gt; <span class="comment">~/</span><span class="string">.</span><span class="comment">bash_profile</span> <span class="literal">-</span><span class="literal">-</span>&gt; <span class="comment">~/</span><span class="string">.</span><span class="comment">bashrc</span> <span class="literal">-</span><span class="literal">-</span>&gt; <span class="comment">/etc/bashrc</span>
+</code></pre></li>
+<li><p>非登录式shell如何配置文件</p>
+<pre><code>~<span class="regexp">/.bashrc --&gt; /etc</span><span class="regexp">/bashrc --&gt; /etc</span><span class="regexp">/profile.d/</span>*.sh  
+</code></pre></li>
+</ol>
+<h5 id="配置变量和命令">配置变量和命令</h5><ol>
+<li><p>$PATH : 决定了shell将到哪些目录中寻找命令或程序，PATH的值是一系列目录，当您运行一个程序时，Linux在这些目录下进行搜寻编译链接  </p>
+<pre><code><span class="comment"># 设置PATH, PATH N 为自己加上指定路径，中间用冒号隔开</span>
+<span class="variable">$ </span><span class="constant">PATH=</span><span class="variable">$PATH</span><span class="symbol">:PATH1</span><span class="symbol">:PATH</span> <span class="number">2</span><span class="symbol">:PATH</span> <span class="number">3</span><span class="symbol">:</span> ... <span class="symbol">:PATH</span> <span class="constant">N</span>
+<span class="comment"># 打印当前搜索路径的两种方法</span>
+<span class="variable">$ </span>echo <span class="variable">$PATH</span> 或者 <span class="variable">$ </span>export
+<span class="comment"># 打印全局变量的两种方法，printenv HOME打印变量值</span>
+<span class="variable">$ </span>env 或者printenv
+<span class="comment"># 显示所有的全局变量，局部变量以及用户自定义变量</span>
+<span class="variable">$set</span>
+</code></pre></li>
+<li><p>export : 该命令将新变量添加到环境中 ; 在命令行直接执行可以设置一个新的临时环境变量, 变量在关闭shell时失效</p>
+</li>
+<li>source .bash_profile : 使设置的PATH生效</li>
+<li>每次重新打开终端的时候，.bashrc会自动执行一次，而.bash_profile不会</li>
+</ol>
+<h4 id="shell和shell脚本的概念">shell和shell脚本的概念</h4><p><strong>shell</strong>是指一种应用程序，这个应用程序提供了一个界面，用户通过这个界面访问操作系统内核的服务。Ken Thompson的sh是第一种Unix Shell，Windows Explorer是一个典型的图形界面Shell。</p>
+<p><strong>shell脚本（shell script）</strong>，是一种为shell编写的脚本程序。业界所说的shell通常都是指shell脚本，但读者朋友要知道，shell和shell script是两个不同的概念。本文出现的“shell编程”都是指shell脚本编程，不是指开发shell自身（如Windows Explorer扩展开发）</p>
+<h4 id="脚本解释器">脚本解释器</h4><p><strong>sh</strong> —- 即Bourne shell，POSIX（Portable Operating System Interface）标准的shell解释器，它的二进制文件路径通常是/bin/sh，由Bell Labs开发。</p>
+<p><strong>Bash</strong> —- 是Bourne shell的替代品，属GNU Project，二进制文件路径通常是/bin/bash。</p>
+<p><strong>ksh、csh、zsh等不常用的解释器</strong></p>
+<h4 id="shell脚本实例">shell脚本实例</h4><pre><code><span class="shebang">#!/bin/sh</span>
+<span class="built_in">cd</span> ~
+ret=`mkdir shell_tut`
+<span class="built_in">cd</span> shell_tut
+
+<span class="keyword">for</span> ((i=<span class="number">0</span>; i&lt;<span class="number">10</span>; i++)); <span class="keyword">do</span>
+    touch <span class="built_in">test</span>_<span class="variable">$i</span>.txt
+<span class="keyword">done</span>
+</code></pre><ol>
+<li>定义变量时，变量名不加美元符号（$）</li>
+<li>变量名和等号之间不能有空格</li>
+<li>单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的；单引号字串中不能出现单引号（对单引号使用转义符后也不行）</li>
+<li>双引号里可以有变量，双引号里可以出现转义字符</li>
+<li>以“#”开头的行就是注释，会被解释器忽略</li>
+<li>bash shell提供了一个组合键来生成 EOF(End-of-File)字符。Ctrl+D组合键会在bash中产生一个EOF字符</li>
+</ol>
+<h4 id="运行Shell脚本的两种方法">运行Shell脚本的两种方法</h4><pre><code>chmod +x <span class="keyword">test</span>.<span class="keyword">sh</span>
+./<span class="keyword">test</span>.<span class="keyword">sh</span>
+或者
+bin/<span class="keyword">sh</span> <span class="keyword">test</span>.<span class="keyword">sh</span>
+/bin/php <span class="keyword">test</span>.php
+第一种必须要带上.才能在当前目录寻找脚本，否则会去PATH寻找；第二种不需要指定#!/bin/<span class="keyword">sh</span>
+</code></pre><h4 id="Shell日志分析常用命令">Shell日志分析常用命令</h4><ol>
+<li><p>查看内容</p>
+<pre><code>who - show who is logged <span class="command"><span class="keyword">on</span></span>
+
+    <span class="comment"># 多个命令可以用分号隔开，同时执行</span>
+    who; <span class="built_in">date</span>
+
+    <span class="comment"># 通配符？代表一个字符，*代表多个字符</span>
+    ls -alh
+    ll <span class="operator">a</span>*.txt  
+    ll <span class="operator">a</span>?.txt
+
+    <span class="comment"># 符号链接(软链接):指向源文件的新的独立文件，与原文件完全不同，inode也不同</span>
+    <span class="built_in">ln</span> -s <span class="operator">a</span> a_link
+    <span class="comment"># 硬链接:与原文件本质上是同一个文件，大小一样</span>
+    <span class="built_in">ln</span> <span class="operator">a</span> a_link
+    <span class="comment"># 查看inode编号</span>
+    ls -li <span class="operator">a</span>*
+
+    <span class="comment"># 查看目录的树形结构</span>
+    tree dir
+
+    <span class="comment"># 查看文件内容，显示行数和进度; 输入v可以直接进入vim编辑模式</span>
+    less -NM <span class="built_in">file</span> 
+
+    <span class="comment"># cat新建、合并文件</span>
+    cat &gt; <span class="built_in">file</span>
+    cat f1 f2 &gt; f 
+
+    <span class="comment"># 显示行数</span>
+    cat -n/-b <span class="built_in">file</span>
+
+    <span class="comment"># 使用两个 &gt; 符时, 会将第一个文件中的内容追加到第二个文件的末尾</span>
+    cat /root/linux &gt;&gt; /root/desktop
+
+    <span class="comment"># ps,top,du,df查看系统信息</span>
+    lsblk -f: 可以查看未挂载的文件系统类型
+    parted -l 命令会输出文件系统类型（File <span class="keyword">system</span>）， 其中参数l表示列出所有设备的分区信息
+    parted /dev/sdg
+    fdisk -l
+
+    df -T 查看已经挂载的分区和文件系统类型
+
+    killall <span class="operator">a</span>* 杀死所有以<span class="operator">a</span>开头的进程
+    mount 查看系统挂载的设备列表
+    umount 卸载设备
+
+    <span class="comment"># 测试url联通性</span>
+    wget -nv <span class="comment">--spider $url</span>
+</code></pre></li>
+<li><p>数据提取处理</p>
+<pre><code># <span class="keyword">sort</span> -n可以识别每行开头的数字，并按其大小对文本行进行排序；-t设置分隔符
+    # <span class="keyword">sort</span>默认是按升序排列，如果想要按降序要加-r选项(<span class="keyword">sort</span> -rn), <span class="keyword">sort</span>命令按照第<span class="number">1</span>个、第<span class="number">2</span>个、第N个字段依次排序，如果第一个字段相同，就按第<span class="number">2</span>个字段的顺序排列，直到最后。
+    # 用命令cut -c <span class="number">9</span>- 取出每行第<span class="number">9</span>个及其以后的字符
+    # uniq命令只能对相邻行进行去重操作,所以要先<span class="keyword">sort</span>；uniq -c显示每一行出现次数，-u只显示单独出现的行，-d只显示重复出现的行
+
+    # 排序+去重并显示次数+按开头数字降序+取出第<span class="number">9</span>个之后的字符
+    <span class="keyword">sort</span> <span class="keyword">file</span> | uniq -c | <span class="keyword">sort</span> -rn | cut -c <span class="number">9</span>- 
+
+    # 先对第<span class="number">2</span>列<span class="keyword">sort</span>，然后对第<span class="number">3</span>列<span class="keyword">sort</span>
+    <span class="keyword">sort</span> t.txt -k2,<span class="number">2</span>n -k3,<span class="number">3</span>n
+
+    # <span class="keyword">grep</span>或操作
+    <span class="keyword">grep</span> <span class="string">'word1\|word2'</span>
+    <span class="keyword">grep</span> -E <span class="string">'word1|word2'</span>
+    # 非操作
+    <span class="keyword">grep</span> -v <span class="string">'word1\|word2'</span>
+    # <span class="keyword">grep</span>正则匹配
+    <span class="keyword">grep</span> -o regex FILENAME  正则匹配
+    # 例如匹配vip=ip地址形式文本
+    <span class="keyword">grep</span> -o <span class="string">'vip=[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'</span>
+
+    <span class="keyword">grep</span> -n pattern <span class="keyword">file</span> 显示行号
+    <span class="keyword">grep</span> -c pattern <span class="keyword">file</span> 显示匹配到的行数
+
+    # 压缩文件相关的搜索
+    zgrep <span class="string">"/api"</span> access_log.gz access_log_1.gz
+
+    zcat access.tar.gz | <span class="keyword">grep</span> -a <span class="string">'/api'</span>
+    zgrep -a <span class="string">"/api"</span> access.tar.gz
+
+    zcat  解压文件并将内容输出到标准输出
+    zcmp  解压文件并且 <span class="keyword">byte</span> by <span class="keyword">byte</span> 比较两个文件
+    zdiff 解压文件并且 line by line 比较两个文件
+    zgrep 解压文件并且根据正则搜索文件内容
+</code></pre></li>
+</ol>
+<pre><code><span class="comment"># 根据进程路径查找pid并kill</span>
+<span class="built_in">kill</span> `ps -ef | grep bos/nginx | grep master | awk <span class="string">'{print $2}'</span>` 
+
+<span class="comment"># 去除每一行中的重复空格，输出 'a b c'</span>
+<span class="built_in">echo</span> <span class="string">'a     b c'</span> | tr <span class="operator">-s</span> <span class="string">' '</span>
+
+<span class="comment"># 数学表达式,例如计算10*10的结果, 只支持整数运算</span>
+<span class="built_in">echo</span> $[<span class="number">10</span>*<span class="number">10</span>]
+
+expr <span class="number">5</span> / <span class="number">2</span>  不支持浮点数计算
+<span class="built_in">echo</span> <span class="string">'scale=3;5/2'</span> | bc
+
+<span class="comment"># bc进入计算器模式，可以进行浮点数运算，scale=4代表保留4位小数，quit退出</span>
+</code></pre><ol>
+<li><p><strong>cut</strong>：按行剪切数据，cut命令主要是接受三个定位方法: ①字节（bytes），用选项-b，例如; ②字符（characters），用选项-c; ③域（fields），用选项-f; -n选项，-n用于告诉cut不要将多字节字符拆开</p>
+<pre><code># 提取每一行的第3个字节,-3表示从第一个字节到第三个字节，而3-表示从第三个字节到行尾
+<span class="keyword">cat</span> <span class="keyword">file</span> | cut -b 3
+# 提取每一行的第3,4,5,8个字节,执行此命令时，cut会先把-b后面所有的定位进行从小到大排序
+<span class="keyword">cat</span> <span class="keyword">file</span> | cut -b 3-5,8
+
+# -<span class="keyword">d</span>来设置间隔符为空格，然后用-f来设置我要取的是第一个域(用awk也可以取出指定列)
+<span class="keyword">cat</span> <span class="keyword">file</span> | cut -<span class="keyword">d</span> ' ' -f 1
+
+# cut的-<span class="keyword">d</span>选项的默认间隔符就是制表符，当要使用制表符的时候，可以省略-<span class="keyword">d</span>选项，直接用－f来取域;cut -<span class="keyword">d</span>只允许间隔符是一个字符。
+</code></pre></li>
+<li><p><strong>sed</strong>：一种流编辑器，会在编辑器处理数据之前基于预先提供的一组规则来编辑数据流。sed按行处理文本，默认从STDIN读取文本并将处理结果输出到STDOUT，不改变输入文本内容。</p>
+<pre><code><span class="preprocessor"># 显示空格和制表符的区别，-n选项是禁止编辑器输出,l是将特殊符以直观形式输出</span>
+sed -n l file
+
+<span class="preprocessor"># sed 替换字符串，把文本中第一个dog替换成big cat</span>
+echo <span class="string">"This is a dog"</span> | sed <span class="string">'s/dog/big cat/'</span>
+
+<span class="preprocessor"># 删除前N个字符  </span>
+sed -i <span class="string">'s/^..//'</span> file   (N个.表示N个字符)
+
+<span class="preprocessor"># substitute替换，通用格式：s/pattern/replace/flags, 选项可以是g,p,w,数字</span>
+sed <span class="string">'s/dog/big cat/g'</span> data.txt
+<span class="preprocessor"># -n + p 等价于w选项，只输出被替换命令修改过的行</span>
+
+<span class="preprocessor"># 包含特殊字符/的字符串替换，可使用\转义或者指定分隔符！</span>
+sed <span class="string">'s!/bin/bash!/bin/csh!'</span> /etc/passwd
+sed <span class="string">'s/\/bin\/bash/\/bin\/csh/'</span> /etc/passwd
+
+<span class="preprocessor"># -e执行多条命令到每行数据上</span>
+sed -e <span class="string">'s/brown/green/; s/dog/cat/'</span> data1.txt
+
+<span class="preprocessor"># -f选项读取script1.sed文件中所有sed命令并执行，每行都是一条单独的命令</span>
+sed -f script1.sed data1.txt
+
+<span class="preprocessor"># sed行寻址，也就是讲命令只作用于特定行or某些行</span>
+sed <span class="string">'2s/dog/cat/'</span> data1.txt
+sed <span class="string">'2,3s/dog/cat/'</span> data1.txt 
+<span class="preprocessor"># 只作用于第2行到最后一行</span>
+sed <span class="string">'2,$s/dog/cat/'</span> data1.txt 
+
+<span class="preprocessor"># 只作用于包含Samantha的行</span>
+sed <span class="string">'/Samantha/s/bash/csh/'</span> /etc/passwd
+
+<span class="preprocessor"># sed删除行</span>
+sed <span class="string">'2,3d'</span> data1.txt 
+<span class="preprocessor"># 只作用于第2行到最后一行</span>
+sed <span class="string">'2,$d'</span> data1.txt 
+
+<span class="preprocessor"># 只作用于包含Samantha的行</span>
+sed <span class="string">'/Samantha/d'</span> /etc/passwd
+
+<span class="preprocessor"># 插入行, 最后一行之后插入</span>
+sed <span class="string">'$a\This is a new line of text.'</span> data1.txt
+<span class="preprocessor"># 第三行之前插入</span>
+sed <span class="string">'3i\This is a new line of text.'</span> data1.txt
+
+<span class="preprocessor"># 修改包含'number 3'内容的行</span>
+sed <span class="string">'/number 3/c\
+&gt; This is a changed line of text.'</span> data6.txt
+
+<span class="preprocessor"># 修改第3行</span>
+sed <span class="string">'3c\
+&gt; This is a changed line of text.'</span> data6.txt
+
+<span class="preprocessor"># sed transform转换命令会对inchars和outchars值进行一对一的映射</span>
+$ echo <span class="string">"This 1 is a test of 1 try."</span> | sed <span class="string">'y/123/456/'</span> 
+This <span class="number">4</span> is a test of <span class="number">4</span> <span class="keyword">try</span>.
+
+<span class="preprocessor"># 禁止输出其他行，只打印包含匹配文本模式的行</span>
+sed -n <span class="string">'/number 3/p'</span> data6.txt
+<span class="preprocessor"># 非操作!</span>
+sed -n <span class="string">'/number 3/!p'</span> data6.txt
+
+提取内容并写入文件
+<span class="preprocessor"># 将data6.txt数据流中的前两行打印到一个文本文件test.txt中</span>
+sed <span class="string">'1,2w test.txt'</span> data6.txt
+
+<span class="preprocessor"># 只将包含文本模式的数据行写入目标文件Browncoats.txt</span>
+sed -n <span class="string">'/Browncoat/w Browncoats.txt'</span> data11.txt
+
+从文件读数据
+<span class="preprocessor"># 读取data12.txt所有内容，并写入data6.txt文件第三行之后</span>
+sed <span class="string">'3r data12.txt'</span> data6.txt
+<span class="preprocessor"># 写入包含number 2的一行之后并删除number 2行</span>
+sed <span class="string">'/number 2/r data12.txt'</span> data6.txt
+sed <span class="string">'$r data12.txt d'</span> data6.txt
+
+<span class="preprocessor"># sed多行命令</span>
+<span class="preprocessor"># next，n命令会让sed编辑器移动到文本的下一行</span>
+<span class="preprocessor"># N命令将下一行合并到当前行</span>
+sed <span class="string">'/first/{ N ; s/\n/ / }'</span> data2.txt
+<span class="preprocessor"># 合并行号和行内容</span>
+sed <span class="string">'='</span> data2.txt | sed <span class="string">'N; s/\n/ /'</span>
+
+<span class="preprocessor"># 向文本文件的行间插入空白行</span>
+sed <span class="string">'G'</span> data2.txt
+<span class="preprocessor"># 删除连续的空白行，保留单个空白行</span>
+sed <span class="string">'/./,/^$/!d'</span> data8.txt
+<span class="preprocessor"># 用排除符号(!)和尾行符号($)来确保脚本不会将空白行加到数据流的最后一行后面</span>
+sed <span class="string">'$!G'</span> data2.txt
+</code></pre></li>
+<li><p><strong>awk</strong>: gawk程序是Unix中的原始awk程序的GNU版本。gawk程序让流编辑迈上了一个新的台阶，它提供了一种编程语言而不只是编辑器命令。awk是一种文本处理和模式匹配语言，数据驱动的语言。gawk程序脚本用一对花括号来定义，你必须将脚本命令放到两个花括号{}中</p>
+<pre><code># 强制awk在读取数据前执行BEGIN关键字后指定的程序脚本；END关键字允许你指定一个程序脚本，awk会在读完数据后执行它
+awk 'BEGIN {<span class="keyword">print</span> <span class="string">"Hello World!"</span>}'
+# awk默认以任意的空白字符(例如空格或制表符)分割每一行，也可以用-F指定分隔符(也可以定义FS的特殊变量来指定字段分隔符)，<span class="label">$0</span>代表整行，<span class="label">$n</span>代表第<span class="keyword">n</span>列内容
+# 打印<span class="keyword">file</span>的第五列
+<span class="keyword">cat</span> <span class="keyword">file</span> | awk '{<span class="keyword">print</span> <span class="label">$5}</span>'
+awk -F: '{<span class="keyword">print</span> <span class="label">$1}</span>' <span class="keyword">file</span>
+
+# 通过设置OFS变量，可以在输出中使用任意字符串来分隔字段
+# 以,为分隔符，读取1-3列，然后以-连接，输出；相当于替换分隔符
+awk 'BEGIN{FS=<span class="string">","</span>; OFS=<span class="string">"-"</span>} {<span class="keyword">print</span> <span class="label">$1</span>,<span class="label">$2</span>,<span class="label">$3}</span>' data1
+
+# 记录分隔符设置，例如把文件中的每行都当成一个字段，把空白行当作记录分隔符，可以起到合并多行成1行的效果
+awk 'BEGIN{FS=<span class="string">"\n"</span>; RS=<span class="string">""</span>} {<span class="keyword">print</span> <span class="label">$1</span>,<span class="label">$4}</span>' data2
+
+# awk自带的ARGC，ARGV，NF，FNR等数据变量
+
+# awk自定义变量，进行计算
+awk 'BEGIN{x=4; x= x * 2 + 13 % 2 + 3^2; <span class="keyword">print</span> x}'
+
+# awk 遍历数组变量
+gawk 'BEGIN{
+&gt; <span class="keyword">var</span>[<span class="string">"a"</span>] = 1
+&gt; <span class="keyword">var</span>[<span class="string">"g"</span>] = 2
+&gt; <span class="keyword">for</span> (<span class="keyword">test</span> <span class="keyword">in</span> <span class="keyword">var</span>) &gt;{
+&gt; <span class="keyword">print</span> <span class="string">"Index:"</span>,<span class="keyword">test</span>,<span class="string">" - Value:"</span>,<span class="keyword">var</span>[<span class="keyword">test</span>] &gt;}'
+
+# awk 匹配操作符/……/，例如筛选出包含11的行做对应处理，用逗号做分隔符
+gawk 'BEGIN{FS=<span class="string">","</span>} /11/{<span class="keyword">print</span> <span class="label">$1}</span>' data1
+
+# 在每行第一个数据字段中查找以文本rich开头的行，打印第一个和最后一个字段
+awk -F: '<span class="label">$1</span> ~ /^rich/{<span class="keyword">print</span> <span class="label">$1</span>,<span class="label">$NF}</span>' /etc/passwd
+# 非操作!
+gawk –F: '<span class="label">$1</span> !~ /^rich/{<span class="keyword">print</span> <span class="label">$1</span>,<span class="label">$NF}</span>' /etc/passwd
+# 数学表达式，==，&lt;=……
+gawk -F, '<span class="label">$1</span> == <span class="string">"data"</span>{<span class="keyword">print</span> <span class="label">$1}</span>' data1
+
+# awk使用<span class="keyword">if</span> <span class="keyword">else</span>，<span class="keyword">while</span>，<span class="keyword">for</span>等结构化语句
+awk '{<span class="keyword">if</span> (<span class="label">$1</span> &gt; 20) <span class="keyword">print</span> <span class="label">$1</span> * 2; <span class="keyword">else</span> <span class="keyword">print</span> <span class="label">$1</span> / 2}' data4
+
+# printf格式化输出，例如用几个单独的printf命令在同一行上打印多个输出
+gawk 'BEGIN{FS=<span class="string">","</span>} {printf <span class="string">"%s "</span>, <span class="label">$1}</span> END{printf <span class="string">"\n"</span>}' data1
+
+# rand()产生随机数只在0和1之间(不包括0或1)，int会生成该值和0之间最接近该值的整数
+x = int(10 * rand())
+
+# 字符串函数，时间函数，自定义函数
+# 在定义函数时，它必须出现在所有代码块之前(包括BEGIN代码块)，例如
+awk '
+&gt; function myprint() 
+&gt; {
+&gt; printf <span class="string">"%-16s - %s\n"</span>, <span class="label">$1</span>, <span class="label">$4</span>
+&gt; }
+&gt; BEGIN{FS=<span class="string">"\n"</span>; RS=<span class="string">""</span>}
+&gt; {
+&gt; myprint()
+&gt; }' data2
+
+# 也可以把函数定义到文件中，然后用-f引用函数
+
+# 求<span class="keyword">sum</span>和average，使用awk变量时不需要带$
+<span class="keyword">cat</span> <span class="keyword">file</span> | awk '{<span class="keyword">sum</span>+=<span class="label">$1}</span> END {<span class="keyword">print</span> <span class="string">"Sum = "</span>, <span class="keyword">sum</span>}'
+<span class="keyword">cat</span> <span class="keyword">file</span> | awk '{<span class="keyword">sum</span>+=<span class="label">$1}</span> END {<span class="keyword">print</span> <span class="string">"Average = "</span>, <span class="keyword">sum</span>/NR}'
+
+# a.txt中每一行为一个单词，按行读取a.txt, <span class="label">$1</span>代表第一列，统计出出现次数前3名的单词
+# <span class="keyword">sort</span> -<span class="keyword">n</span> -r -k 2 -t ':' xx.txt -<span class="keyword">n</span>数字排序方式， -r倒序, -t ':'以冒号分隔, -k 2表示以冒号分隔后的第2列
+awk '{<span class="keyword">sum</span>[<span class="label">$1</span>]+=1} END {<span class="keyword">for</span>(k <span class="keyword">in</span> <span class="keyword">sum</span>) <span class="keyword">print</span> k <span class="string">":"</span> <span class="keyword">sum</span>[k]}' a.txt | <span class="keyword">sort</span> -<span class="keyword">n</span> -r -k 2 -t ':' | head -<span class="keyword">n</span> 3
+</code></pre></li>
+<li><p>权限相关(Linux文件权限以八进制表示)</p>
+<pre><code><span class="literal">umask</span> 设置文件(<span class="number">666</span>-x)<span class="keyword">or</span>目录(<span class="number">777</span>-x)默认权限的掩码
+
+权限的八进制表示：wr- --&gt; <span class="number">110</span> --&gt; <span class="number">6</span>
+
+<span class="comment"># 八进制修改权限</span>
+chmod -<span class="constant">R</span> <span class="number">777</span> dir
+chmod <span class="number">777</span> <span class="keyword">file</span>
+
+<span class="comment">#符号模式修改权限</span>
+chmod u+w <span class="keyword">file</span>   给文件<span class="keyword">user</span>增加write权限
+
+<span class="comment"># 改变文件的属主和属组；只有root可以改变文件属主，任何属主可以改变属组</span>
+chown <span class="keyword">user</span>.<span class="literal">group</span> <span class="keyword">file</span>
+</code></pre></li>
+<li><p>处理脚本控制信号和特殊参数  </p>
+<blockquote>
+<p>默认情况下，脚本以最后一个命令的退出状态码退出；当然也可以通过<figure class="highlight"><figcaption><span>0```来指定退出状态码，范围为0-255，如果大于255，则以num % 256返回给用户</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#9;&#10;&#9;&#9;# &#36755;&#20986;&#19978;&#19968;&#21629;&#20196;&#30340;&#36864;&#20986;&#30721;&#10;&#9;&#9;echo $? &#10;&#9;&#9;&#10;&#9;&#9;# shell&#30340;&#20301;&#32622;&#21442;&#25968;&#21464;&#37327;&#26159;&#26631;&#20934;&#30340;&#25968;&#23383;:$0&#26159;&#31243;&#24207;&#21517;&#65292;$1&#26159;&#31532;&#19968;&#20010;&#21442;&#25968;&#65292;$2&#26159;&#31532;&#20108;&#20010;&#21442;&#25968;&#65292;&#20381;&#27425;&#31867;&#25512;&#65292;&#30452;&#21040;&#31532;&#20061;&#20010;&#21442;&#25968;$9&#10;&#9;&#9;# $0&#21442;&#25968;&#33719;&#21462;shell&#22312;&#21629;&#20196;&#34892;&#21551;&#21160;&#30340;&#33050;&#26412;&#21517;&#10;&#9;&#9;echo $0&#10;&#9;&#9;&#10;&#9;&#9;# basename&#33719;&#21462;&#32477;&#23545;&#36335;&#24452;&#19979;&#30340;&#25991;&#20214;&#21517;or&#25991;&#20214;&#22841;&#21517;&#10;&#9;&#9;echo $(basename $0)&#10;&#9;&#9;&#10;&#9;&#9;# &#23450;&#26102;&#20219;&#21153;&#10;&#9;&#9;cron,crontab,anacron&#21644;at&#10;&#9;&#9;# &#36827;&#31243;&#20248;&#20808;&#32423;&#35843;&#24230;&#10;&#9;&#9;nice&#21644;renice&#10;&#9;&#9;# &#21518;&#21488;&#21069;&#21488;&#20219;&#21153;&#65306;jobs -l&#65292;bg,fg,&#38;,nohup&#10;&#10;#### Linux/Mac&#24120;&#35265;&#30446;&#24405;&#10;1. /bin &#23384;&#25918;&#31995;&#32479;&#31649;&#29702;&#21592;&#21644;&#26222;&#36890;&#29992;&#25143;&#37117;&#35201;&#20351;&#29992;&#30340;&#31243;&#24207;&#10;2. /sbin &#23384;&#25918;&#29992;&#20110;&#31995;&#32479;&#24674;&#22797;&#65292;&#31995;&#32479;&#21551;&#21160;&#65292;&#31995;&#32479;&#32500;&#25252;&#31561;&#31243;&#24207;&#10;3. /usr/bin &#30331;&#24405;&#29992;&#25143;&#21487;&#20197;&#20351;&#29992;&#30340;&#39044;&#35013;&#31243;&#24207;&#19968;&#33324;&#37117;&#25918;&#22312;&#36825;&#37324;,&#20250;&#38543;&#30528;&#31995;&#32479;&#21319;&#32423;&#32780;&#25913;&#21464;&#10;4. /usr/share/bin &#21487;&#20197;&#36890;&#36807;web&#35775;&#38382;&#30340;&#31243;&#24207;&#19968;&#33324;&#25918;&#22312;&#36825;&#37324;&#10;5. /usr/local/bin &#30446;&#24405;&#26159;&#32473;&#29992;&#25143;&#25918;&#32622;&#33258;&#24049;&#30340;&#21487;&#25191;&#34892;&#31243;&#24207;&#30340;&#22320;&#26041;&#65292;&#26159;&#25163;&#21160;&#32534;&#35793;&#25110;&#32773;&#23433;&#35013;&#30340;&#31243;&#24207;, &#19981;&#20250;&#34987;&#31995;&#32479;&#21319;&#32423;&#32780;&#35206;&#30422;&#21516;&#21517;&#25991;&#20214;&#10;6. usr &#25351; Unix System Resource&#65292;&#32780;&#19981;&#26159;User&#10;7. /lib&#30446;&#24405;&#37117;&#26159;&#20026;/bin, /sbin&#20934;&#22791;&#30340;;&#19968;&#20010;&#24212;&#29992;&#31243;&#24207;&#21551;&#21160;&#30340;&#26102;&#20505;&#65292;&#20250;&#22312;/lib &#21644; /usr/lib&#24211;&#20013;&#26597;&#25214;&#21160;&#24577;&#24211;&#10;&#10;#### Linux&#26816;&#27979;&#31243;&#24207;&#10;&#10;#### Linux&#30913;&#30424;&#25346;&#36733;/&#21368;&#36733;/&#26684;&#24335;&#21270;&#25805;&#20316;&#10;linux&#31995;&#32479;&#20013;&#21482;&#33021;&#22312;root&#26435;&#38480;&#29992;&#25143;&#19979;&#25346;&#36733;&#35774;&#22791;&#12290;&#10;##### BIOS vs UEFI&#10;BIOS&#65288;Basic Input/Output System&#65289;&#21644; UEFI&#65288;Unified Extensible Firmware Interface &#65289;&#26159;&#19981;&#21516;&#30340;&#35745;&#31639;&#26426;&#21551;&#21160;&#22266;&#20214;&#65288;Fireware&#65289;&#65292;&#38656;&#35201;&#30828;&#20214;&#65288;&#36890;&#24120;&#20026;&#20027;&#26495;&#65289;&#25903;&#25345;&#65292;&#30456;&#20114;&#20195;&#26367;&#65292;&#20854;&#20013; UEFI &#26159;&#27604;&#36739;&#26032;&#30340;&#26041;&#24335;&#12290;&#10;&#10;* BIOS&#65306;&#32463;&#20856;&#30340;&#21551;&#21160;&#22266;&#20214;&#65292;&#20250;&#35843;&#29992;&#30913;&#30424;&#30340; MBR&#65292;&#28982;&#21518;&#30001; MBR &#20013;&#30340; loader &#32487;&#32493;&#21152;&#36733;&#25805;&#20316;&#31995;&#32479;&#12290;&#10;* UEFI&#65306;UEFI &#29992;&#26469;&#20195;&#26367; BIOS&#65292;&#24182;&#20811;&#26381; BIOS &#30340;&#32570;&#28857;&#65292;&#22823;&#22810;&#25968;&#30340; UEFI &#22266;&#20214;&#20250;&#25552;&#20379;&#20860;&#23481; BIOS &#30340;&#21551;&#21160;&#26041;&#24335;&#12290;&#10;&#10;##### MBR vs GPT&#10;* MBR &#19982; GPT &#29992;&#20110;&#23384;&#20648;&#30828;&#30424;&#30340;&#20998;&#21306;&#20449;&#24687;&#65292;&#26159;&#19981;&#21516;&#30340;&#30828;&#30424;&#20998;&#21306;&#34920;&#31867;&#22411;&#12290;MBR&#25903;&#25345;&#26368;&#22823;&#32422;2T&#30340;&#30828;&#30424;&#65292;&#26368;&#22810;&#33021;&#21010;&#20998;4&#20010;&#20027;&#20998;&#21306;&#65292;&#26356;&#22810;&#20998;&#21306;&#38656;&#35201;&#20351;&#29992;&#25299;&#23637;&#20998;&#21306;&#23454;&#29616;&#12290;&#10;* GPT &#34920;&#31034; GUID&#65288;Globally Unique Identifier&#65289; &#20998;&#21306;&#34920;&#65292;&#26159; UEFI &#35268;&#33539;&#30340;&#19968;&#37096;&#20998;&#65292;&#29992;&#20110;&#26367;&#25442; MBR &#30340;&#20998;&#21306;&#26041;&#24335;&#12290;GPT &#27809;&#26377;&#20998;&#21306;&#25968;&#21644;&#20998;&#21306;&#22823;&#23567;&#38480;&#21046;&#12290;&#10;* BIOS/UEFI &#36319; MBR/GPT &#26159;&#19981;&#21516;&#23618;&#32423;&#30340;&#65292;BIOS/UEFI &#26159; Fireware&#65292;MBR/GPT &#26159;&#20998;&#21306;&#34920;&#12290;&#10;&#10;##### File System&#65288;&#25991;&#20214;&#31995;&#32479;&#65289;&#26159;&#23384;&#20648;&#23186;&#20171;&#20013;&#25991;&#20214;&#23384;&#20648;&#30340;&#32452;&#32455;&#26041;&#24335;&#12290;&#10;&#19981;&#21516;&#30340;&#25991;&#20214;&#31995;&#32479;&#31867;&#22411;&#26377;&#19981;&#21516;&#30340;&#36895;&#24230;&#65292;&#28789;&#27963;&#24615;&#65292;&#23433;&#20840;&#24615;&#21644;&#21344;&#29992;&#31354;&#38388;&#12290;&#19981;&#21516;&#25805;&#20316;&#31995;&#32479;&#21482;&#25903;&#25345;&#29305;&#23450;&#30340;&#25991;&#20214;&#31995;&#32479;&#31867;&#22411;&#12290;&#24120;&#35265;&#30340;&#25991;&#20214;&#31995;&#32479;&#31867;&#22411;&#26377; FAT16&#65292;FAT32&#65292;NTFS&#65292;EXT3&#65292;EXT4&#65292;HFS &#31561;&#12290;&#10;&#10;* **&#30913;&#30424;&#25991;&#20214;&#31995;&#32479;**&#21253;&#25324;&#30828;&#30424;&#12289;U&#30424;&#12289;&#30913;&#30424;&#38453;&#21015;&#12289;CDROM&#12289;DVD&#31561;&#12290;&#24120;&#35265;&#25991;&#20214;&#31995;&#32479;&#26377;autofs&#12289;coda&#12289;Ext2&#12289;Ext3&#12289;Ext4&#12289;VFAT&#12289;ISO9660&#65288;&#20809;&#30424;&#25110;&#32773;&#20809;&#30424;&#38236;&#20687;&#65289;&#12289;UFS&#65288;Unix File System&#65292;Unix&#25991;&#20214;&#31995;&#32479;&#65289;&#12289;FAT&#65288;File Allocation Table&#65292;&#25991;&#20214;&#20998;&#37197;&#34920;&#65289;&#12289;FAT16&#12289;FAT32&#12289;NTFS&#65288;New TechnologyFile System&#65289;&#31561;&#12290;&#10;* **&#32593;&#32476;&#25991;&#20214;&#31995;&#32479;**&#21487;&#20197;&#36828;&#31243;&#35775;&#38382;&#30340;&#25991;&#20214;&#31995;&#32479;&#65292;&#36825;&#31181;&#25991;&#20214;&#31995;&#32479;&#22312;&#26381;&#21153;&#22120;&#31471;&#20173;&#26159;&#26412;&#22320;&#30340;&#30913;&#30424;&#25991;&#20214;&#31995;&#32479;&#65292;&#23458;&#25143;&#26426;&#36890;&#36807;&#32593;&#32476;&#36828;&#31243;&#35775;&#38382;&#25968;&#25454;&#12290;&#24120;&#35265;&#25991;&#20214;&#31995;&#32479;&#26684;&#24335;&#26377;&#65306;NFS&#65288;Network File System&#65292;&#32593;&#32476;&#25991;&#20214;&#31995;&#32479;&#65289;&#12289;Samba&#65288;SMB/CIFS&#65289;&#12289;AFP&#65288;Apple FillingProtocol&#65292;Apple&#25991;&#20214;&#24402;&#26723;&#21327;&#35758;&#65289;&#21644;WebDAV&#31561;&#12290;&#10;* **&#19987;&#26377;/&#34394;&#25311;&#25991;&#20214;&#31995;&#32479;**&#19981;&#39547;&#30041;&#22312;&#30913;&#30424;&#19978;&#30340;&#25991;&#20214;&#31995;&#32479;&#12290;&#24120;&#35265;&#26684;&#24335;&#26377;&#65306;TMPFS&#65288;&#20020;&#26102;&#25991;&#20214;&#31995;&#32479;&#65289;&#12289;PROCFS&#65288;Process FileSystem&#65292;&#36827;&#31243;&#25991;&#20214;&#31995;&#32479;&#65289;&#21644;LOOPBACKFS&#65288;Loopback File System&#65292;&#22238;&#36865;&#25991;&#20214;&#31995;&#32479;&#65289;&#12290;&#10;&#10;##### GRUB&#65288;Grand Unified Boot loader&#65289;&#10;GRUB&#26159;&#30828;&#30424;&#20013;&#30340;&#36719;&#20214;&#65292;&#24341;&#23548;&#22120;&#65288;loader&#65289;&#30340;&#19968;&#31181;&#12290;&#30446;&#21069;&#20027;&#27969;&#29256;&#26412;&#26159; GRUB2&#65292;GRUB &#29992;&#20110;&#20174;&#22810;&#25805;&#20316;&#31995;&#32479;&#30340;&#35745;&#31639;&#26426;&#20013;&#36873;&#25321;&#19968;&#20010;&#31995;&#32479;&#26469;&#21551;&#21160;&#65292;&#25110;&#20174;&#31995;&#32479;&#20998;&#21306;&#20013;&#36873;&#25321;&#29305;&#27530;&#30340;&#20869;&#26680;&#37197;&#32622;&#12290;&#10;&#10;#### [Linux&#24120;&#29992;&#30340;&#26597;&#25214;&#21629;&#20196;](http://www.ruanyifeng.com/blog/2009/10/5_ways_to_search_for_files_using_the_terminal.html)&#10;find/locate, whereis/which/ps -ef, grep&#10;&#10;* find&#25991;&#20214;&#26597;&#25214;&#65306;`find path_name -name file_name -exec rm -f &#123;&#125; \;`&#10;&#10;  `find /&#160;&#65293;name &#39;*abvd*&#39;`  &#26597;&#25214;&#21253;&#21547;abvd&#23383;&#31526;&#20018;&#30340;&#25991;&#20214;&#21517;&#25991;&#20214;&#10;&#10;* grep&#25628;&#32034;&#30446;&#24405;&#21644;&#23376;&#30446;&#24405;&#65306; `grep -R &#39;&#25991;&#26412;&#39; ./*`&#10;&#10;* whereis&#23450;&#20301;&#21487;&#25191;&#34892;&#25991;&#20214;&#20301;&#32622;&#10;&#10;#### Linux&#23567;&#25216;&#24039;&#10;1. &#29983;&#25104;&#38543;&#26426;&#23494;&#30721;&#30340;&#20004;&#31181;&#26041;&#24335;&#65306;&#9312; `date | md5 | cut -b -8` &#9313; `openssl rand -base64 8`&#10;2. **&#38543;&#26426;&#29983;&#25104;10&#20010;8&#20301;&#23494;&#30721;shell&#33050;&#26412;**: &#39318;&#20301;&#22823;&#20889;&#23383;&#27597;, &#20013;&#38388;&#20845;&#20301;&#22823;&#23567;&#20889;&#23383;&#27597;&#25968;&#23383;&#38543;&#26426;&#28151;&#21512;, &#31532;&#20843;&#20301;[0-9]</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+</li>
+</ol>
+<h1 id="!/bin-bash">!/bin.bash</h1><p>for i in {1..10}<br>do<br>A=<code>head -c 500 /dev/urandom | tr -dc A-Z |head -c 1</code></p>
+<h1 id="随机生成500字符|只取大写字母|取第一个字符">随机生成500字符|只取大写字母|取第一个字符</h1><p>B=<code>head -c 500 /dev/urandom | tr -dc [:alnum:]| head -c 6</code></p>
+<h1 id="随机生成500字符|取英文大小写字节及数字，亦即_0-9,_A-Z,_a-z|取6位">随机生成500字符|取英文大小写字节及数字，亦即 0-9, A-Z, a-z|取6位</h1><p>C=<code>echo $RANDOM$RANDOM|cut -c 2</code></p>
+<h1 id="取第二位随机数字,第一位随机性不高大多数是1或2,所以取第二位-">取第二位随机数字,第一位随机性不高大多数是1或2,所以取第二位.</h1><p>echo $A$B$C<br>done<br>```</p>
+<ol>
+<li><code>source /path/to/filename</code> 在当前 shell 里执行一个文件里的命令</li>
+<li><code>wget -r --no-parent --reject &quot;index.html*&quot; http://hostname/ -P /home/user/dirs</code> 用 wget 抓取完整的网站目录结构，存放到本地目录中</li>
+<li>diff和cmp命令，分别比对两个file的逐行和逐字节</li>
+<li><a href="https://cnbin.github.io/blog/2015/06/15/shell-qian-hou-tai-jin-cheng-qie-huan/" target="_blank" rel="external">Shell 前后台进程切换</a></li>
+<li><code>dd if=/dev/zero of=obj_900k bs=1024 count=0 seek=$[9*1024/10]</code> 生成900k的文件</li>
+<li><code>mv /usr/cbu/ * .</code>  将/usr/cbu中的所有文件移到当前目录（用“.”表示）中</li>
+<li><code>at －f data 15:30 +2 days</code>  让系统在两天后的17：30执行文件data中指明的作业</li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Linux/"> #Linux </a>
+          
+            <a href="../../tags/shell/"> #shell </a>
           
         </div>
       
@@ -1070,7 +1740,7 @@ tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /ho
 
   
   <div class="pagination">
-    <a class="extend prev" rel="prev" href="../..//">&laquo;</a><a class="page-number" href="../..//">1</a><span class="page-number current">2</span><a class="page-number" href="../3/">3</a><span class="space">&hellip;</span><a class="page-number" href="../7/">7</a><a class="extend next" rel="next" href="../3/">&raquo;</a>
+    <a class="extend prev" rel="prev" href="../..//">&laquo;</a><a class="page-number" href="../..//">1</a><span class="page-number current">2</span><a class="page-number" href="../3/">3</a><span class="space">&hellip;</span><a class="page-number" href="../9/">9</a><a class="extend next" rel="next" href="../3/">&raquo;</a>
   </div>
 
 
@@ -1104,7 +1774,7 @@ tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /ho
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">54</span>
+              <span class="site-state-item-count">67</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1118,7 +1788,7 @@ tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /ho
 
           <div class="site-state-item site-state-tags">
             <a href="../..//tags">
-              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-count">69</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -1163,7 +1833,7 @@ tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /ho
         <div class="copyright">
   
   &copy; &nbsp;  2015.05.16 - 
-  2017
+  2018
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>
