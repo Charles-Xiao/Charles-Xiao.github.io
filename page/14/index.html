@@ -148,6 +148,335 @@
           
           
             
+              <a class="post-title-link" href="../../2015/05/27/java重难点知识集锦/">
+                java重难点知识集锦
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-27
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/java学习笔记/">java学习笔记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/05/27/java重难点知识集锦/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/27/java重难点知识集锦/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="复用类(继承组合)与多态">复用类(继承组合)与多态</h3><ol>
+<li><p>Java面向对象编程思想的三种基本特征：<strong>继承、封装、复合和多态</strong></p>
+<ul>
+<li><strong>封装</strong>：只公开代码的访问接口，隐藏其内部的数据和具体实现；通常采用public，protected，private来进行访问权限控制；封装可以隐藏实现细节，还可以使得代码模块化以对象形式呈现</li>
+<li><strong>继承、组合与代理之间的区别与联系</strong>：<strong>组合</strong>只是将对象引用置于新类中即可，表述的是一种has-a的关系，而<strong>继承</strong>通过extends关键字实现，自动得到基类中所有域和方法，表述的是一种is-a的关系；而<strong>代理</strong>是介于两者之间的一种关系，首先将对象引用置于新类中，然后在新类中构建同名方法来暴露该对象的所有方法(类似于继承)；<strong>继承</strong>可以扩展已存在的代码模块，并且表达出层次逻辑和归属关系</li>
+<li><strong>多态</strong>与向上转型相反，通常通过接口和抽象类来实现(覆盖重写方法)，我们把<strong>重载（overloading）称为编译时多态，把覆盖（overriding）称为运行时多态</strong>；多态可以达到接口重用的目的，深刻地体现了一种设计原则里-依赖倒置原则；程序要依赖超类（抽象类、接口）不要依赖具体类，基于接口的开发，而不是基于实现的开发。</li>
+<li><strong>运行时多态(也被称作动态绑定)</strong>是指允许将子类类型的引用赋值给父类类型的引用，赋值之后，父对象在执行期间(而非编译期间)就可以根据当前赋值给它的子对象的特性以不同的方式运作,根据实际类型判断并调用相应的属性和方法;<strong>编译时的多态</strong>是指参数列表的不同, 来区分不同的函数, 在编译后, 就自动变成两个不同的函数名.</li>
+<li><strong>动态绑定的底层实现</strong>是指针,我们知道程序中的方法是一段代码,存放在专门的内存区域(代码区),当我们在程序执行期间new 出一个对象后调用其方法的时候,JVM动态的把指针指向实际的对象重写的方法,从而实现了动态绑定.</li>
+<li><strong>动态绑定的最大好处</strong>就是给我们的程序的可扩展性带来了相当大的提高；如果没有动态绑定,我们一般情况下的做法是在子类中用instanceof判断一个对象是不是我们需要的当前具体对象,但当我们定义好多个子类的时候,每次都要判断,现在有了动态绑定,我们不需要再去判断,而是JVM动态给我们指向具体的对象并调用相应的属性和方法.</li>
+</ul>
+</li>
+<li><p><strong>继承与初始化</strong>：导出类继承自基类，构造器调用顺序是从上至下基类到导出类层层调用，若是默认构造器则不需要在导出类中显式调用基类构造器，否则需要首先在导出类构造器中使用super关键字调用基类构造器。见《Java编程思想P146和P158》</p>
+</li>
+</ol>
+<h3 id="接口与内部类">接口与内部类</h3><ol>
+<li><strong>接口与抽象类的区别联系</strong>：<ul>
+<li>一个类可以实现多个接口但是只能实现一个抽象类 </li>
+<li>接口中都是抽象方法，抽象类中可以有实现的方法</li>
+<li>接口中方法都是public的，属性都是public static final的;但是抽象类中方法和属性都可以自由定义修饰符</li>
+<li>接口不能有构造器，抽象类可以有构造器，但是两者都不能实例化</li>
+</ul>
+</li>
+<li><p><strong>静态内部类(嵌套类)与非静态内部类，方法内部类，匿名内部类区别</strong>：</p>
+<ul>
+<li>嵌套类不需要内部类对象与外围类对象之间有联系，而内部类自动拥有其外围类所有成员的访问权(因为内部类对象拥有一个指向其外围类对象的引用);创建内部类对象之前需要先创建外围类对象，而创建嵌套类对象则不需要</li>
+<li>嵌套类不能访问外围类的非静态属性，但是内部类可以访问外围类的所有属性和方法(包括private)，内部类不能有static变量</li>
+<li>局部内部类: 该类被创建在外围类的方法或者作用域中，局部内部类的访问仅限于方法内或者该作用域内</li>
+<li><p>匿名内部类: 在java Listener中出现的非常多，必须继承某个接口或者父类，在其中只能重写一个方法；没有修饰符;匿名内部类是唯一一种没有构造器的类。正因为其没有构造器，所以匿名内部类的使用范围非常有限，大部分匿名内部类用于接口回调。匿名内部类在编译的时候由系统自动起名为Outter$1.class；多线程的实现也是匿名内部类的一种</p>
+<pre><code>scan_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {
+    @<span class="type">Override</span>
+    public <span class="type">void</span> onClick(<span class="type">View</span> v) {
+        // <span class="type">TODO</span> <span class="type">Auto</span>-generated <span class="keyword">method</span> stub
+
+    }
+});
+
+history_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {       
+    @<span class="type">Override</span>
+    public <span class="type">void</span> onClick(<span class="type">View</span> v) {
+        // <span class="type">TODO</span> <span class="type">Auto</span>-generated <span class="keyword">method</span> stub
+
+    }
+});
+</code></pre></li>
+<li>成员内部类，就是作为外部类的成员，可以直接使用外部类的所有成员和方法，即使是private的。虽然成员内部类可以无条件地访问外部类的成员，而外部类想访问成员内部类的成员却不是这么随心所欲了。在外部类中如果要访问成员内部类的成员，必须先创建一个成员内部类的对象，再通过指向这个对象的引用来访问</li>
+</ul>
+</li>
+<li><strong>为什么需要内部类？</strong><ul>
+<li>内部类提供了进入和操作外围类的窗口，可以直接调用外部类的private方法和属性，但是外部类却不可以调用内部类的方法和属性</li>
+<li>内部类完善了“多重继承”机制，他能提供继承多个具体类或抽象类的能力</li>
+<li>内部类可以更好地封装，它被封装在外部类里，不允许同包其他类访问</li>
+</ul>
+</li>
+<li><strong>内部类的继承与覆盖</strong> —- 见《Java编程思想P212》</li>
+</ol>
+<h3 id="异常处理与类型信息">异常处理与类型信息</h3><ol>
+<li>异常处理是java中唯一正式的错误报告机制，用于解决运行期间遇到的问题；可以用try……catch进行捕获也可以在定义方法或者类时使用throws声明。</li>
+<li><strong>Error类和Exception类区别</strong>它们的父类都是throwable类，他们的区别是：<ul>
+<li><strong>Error类</strong>一般是指与虚拟机相关的问题，如系统崩溃，虚拟机错误，内存空间不足，方法调用栈溢等。对于这类错误的导致的应用程序中断，仅靠程序本身无法恢复和和预防，遇到这样的错误，建议让程序终止。</li>
+<li><strong>Exception类</strong>表示程序可以处理的异常，可以捕获且可能恢复。遇到这类异常，应该尽可能处理异常，使程序恢复运行，而不应该随意终止异常。</li>
+<li>Exception类又分为<strong>运行时异常（Runtime Exception）</strong>和<strong>受检查的异常(Checked Exception )</strong>，运行时异常;ArithmaticException算术异常,IllegalArgumentException非法参数异常，NullPointerException 空指针异常，编译能通过，但是一运行就终止了，程序不会处理运行时异常，出现这类异常，程序会终止。而受检查的异常，要么用try……catch捕获，要么用throws字句声明抛出，交给它的父类处理，否则编译不会通过，SQLException</li>
+</ul>
+</li>
+<li><strong>return与finally</strong>：<ul>
+<li>在try里边return会先return再执行finally；在catch里边return则先执行finally再return</li>
+<li>在finally里边return会导致异常丢失，不再抛出异常(另一种异常丢失是因为前一个异常还没处理就抛出下一个异常，前一个异常就丢失了)</li>
+</ul>
+</li>
+</ol>
+<h3 id="Java反射机制">Java反射机制</h3><ol>
+<li><p><strong>反射</strong>：反射机制不但可以让我们在程序运行时获取类的函数、属性、父类、接口等 Class 内部信息，还可以让我们在运行期实例化对象，调用方法，通过调用get/set方法获取变量的值，即使方法或属性是私有的的也可以通过反射的形式调用，可以用于使用在编译器为程序生成代码之后很久才会出现的类，比如基于构建编程和远程方法调用，主要是通过Class类和java.lang.reflect类库来实现</p>
+<pre><code>//记载指定路径中的<span class="class"><span class="keyword">class</span>对象的两个方法</span>
+<span class="class"><span class="keyword">Class</span>.<span class="title">forName</span>(<span class="title">String</span> <span class="title">className</span>);</span>
+<span class="keyword">public</span> static <span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">forName</span> (<span class="title">String</span> <span class="title">className</span>, <span class="title">boolean</span> <span class="title">shouldInitialize</span>, <span class="title">ClassLoader</span> <span class="title">classLoader</span>)</span>
+
+//编译器获取类的<span class="class"><span class="keyword">class</span>对象</span>
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">myObjectClass</span> = <span class="title">MyObject</span>.<span class="title">class</span>;</span>
+//编译器获取对象的<span class="class"><span class="keyword">class</span>对象</span>
+Student me = <span class="keyword">new</span> Student(<span class="string">"mr.simple"</span>);    
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">clazz</span> = <span class="title">me</span>.<span class="title">getClass</span>();</span>
+
+// 运行期获取指定路径的 <span class="class"><span class="keyword">Class</span> 对象</span>
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">clz</span> = <span class="title">Class</span>.<span class="title">forName</span>("<span class="title">org</span>.<span class="title">java</span>.<span class="title">advance</span>.<span class="title">reflect</span>.<span class="title">Student</span>");</span>
+// 通过 <span class="class"><span class="keyword">Class</span> 对象获取 <span class="title">Constructor</span>，<span class="title">Student</span> 的构造函数有一个字符串参数</span>
+// 因此这里需要传递参数的类型 ( Student 类见后面的代码 )
+Constructor&lt;?&gt; constructor = clz.getConstructor(String.class);
+// 通过 Constructor 来创建 Student 对象
+Object obj = constructor.newInstance(<span class="string">"mr.simple"</span>);
+//获取父类和接口
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">superClass</span> = <span class="title">obj</span>.<span class="title">getClass</span>().<span class="title">getSuperclass</span>();</span>
+<span class="class"><span class="keyword">Class</span>&lt;?&gt;[] <span class="title">interfaceses</span> = <span class="title">obj</span>.<span class="title">getClass</span>().<span class="title">getInterfaces</span>();</span>
+
+System.out.println(<span class="string">" obj :  "</span> + obj.toString());
+</code></pre><ul>
+<li>Class 中的 <strong>getDeclaredMethods</strong> 函数，它会获取到当前类中的public、default、protected、private 的所有方法; <strong>getDeclaredMethod(String name, Class…&lt;?&gt; parameterTypes)</strong>则是获取当前类中某个指定的方法</li>
+<li>Class 中的 <strong>getMethods</strong> 函数用于获取当前类以及父类中的所有 public 方法，而 <strong>getMethod(String name, Class…&lt;?&gt; parameterTypes)</strong> 则是获取某个指定的public方法</li>
+<li>Class 中的 <strong>getDeclaredFields</strong> 函数，它会获取到当前类中的public、default、protected、private 的所有属性; <strong>getDeclaredField(String name)</strong>则是获取当前类中某个指定的属性</li>
+<li>Class 中的 <strong>getFields</strong> 函数用于获取当前类以及父类中的所有 public 属性，而 <strong>getField(String name)</strong> 则是获取某个指定的public属性    </li>
+</ul>
+</li>
+<li><strong>RTTI(Run-Time Type Identification)</strong>：在运行时识别对象的类型；其主要限制是在编译时就必须已知对象类型，也就是知道类名，它的三种应用场景：①类型转换 如：Shape s = (Shape)circle　②Shape.class这种类字面常量　③instanceof判断某对象是否是某类或其之类的实例</li>
+<li><strong>RTTI和反射之间真正的区别</strong>在于：对RTTI来说，编译器在编译时打开和检查.class文件；对于反射机制来说，.class文件在编译时不可获取，只有等到运行时才能打开和检查。</li>
+</ol>
+<h3 id="枚举、注解与泛型">枚举、注解与泛型</h3><ol>
+<li><a href="http://www.cnblogs.com/happyPawpaw/archive/2013/04/09/3009553.html" target="_blank" rel="external">Java Enum用法</a></li>
+<li>注解又叫做元数据，一种在代码中添加信息的形式化方法，该信息可以在后期利用反射机制进行使用，我们可以通过编写注解处理器来解析代码中的注解，也可以使用apt来解析。</li>
+<li><strong>泛型</strong>主要是用于容器定义，泛型是通过类型擦除来实现的，编译器在编译时擦除了所有类型相关的信息，所以在运行时不存在任何类型相关的信息。例如 List<string>在运行时仅用一个List来表示。它提供了编译期的类型安全，确保你只能把正确类型的对象放入集合中，避免了在运行时出现ClassCastException。</string></li>
+</ol>
+<h3 id="字符串与数组">字符串与数组</h3><h3 id="持有对象的容器">持有对象的容器</h3><h3 id="java_I/O系统与并发">java I/O系统与并发</h3><h3 id="final、finally和finalize对比">final、finally和finalize对比</h3><ul>
+<li>final用于声明属性方法和类，分别表示：属性不可变，方法不可覆盖，类不可继承。可以用于关闭方法动态绑定</li>
+<li>finally是异常处理语句的一部分，表示总是执行。一般用于释放除内存之外的资源(例如已打开的文件或者网络连接)</li>
+<li>finalize是Object的一个方法，在垃圾收集器执行的时候会调用被回收对象的此方法。</li>
+</ul>
+<h3 id="String、StringBuffer和StringBuilder区别">String、StringBuffer和StringBuilder区别</h3><ul>
+<li>如果一个对象，在它创建完成之后，不能再改变它的状态，那么这个<strong>对象就是不可变的</strong>。不能改变状态的意思是，不能改变对象内的成员变量，包括基本数据类型的值不能改变，引用类型的变量不能指向其他的对象，引用类型指向的对象的状态也不能改变。</li>
+<li><strong>String类对象</strong>是不可变对象，其在创建之后不能再改变其所拥有的所有private final成员变量；因为String类本身就是final类而且其源码中的char[]数组引用，offset(记录字符串首字母在value数组中对应的下标),count(记录字符串的长度)，hash等变量也是final的(JDK1.7中只存在hash和char[]数组),除非使用反射机制去改变char[]引用指向的堆中的数组数据；而String的substring， replace， replaceAll， toLowerCase等函数都是新建一个堆中的String对象然后返回给String的引用，从而使得引用指向了新的String对象，并没有改变原来的String对象</li>
+<li><strong>字符串常量池</strong>：首先需要确认<strong>字符串常量池存放的是对象引用，不是对象，字符串常量池存在于方法区中(JDK8移到了堆中)，而对象都创建在堆内存中</strong>；<ul>
+<li>当代码中出现字面量形式(String str1 = “droid”;)创建字符串对象时，JVM首先会对这个字面量进行检查，如果字符串常量池中存在相同内容的字符串对象的引用，则将这个引用返回，否则新的字符串对象被创建，然后将这个引用放入字符串常量池，并返回该引用；</li>
+<li>当我们使用了new来构造字符串对象的时候，不管字符串常量池中有没有相同内容的对象的引用，新的字符串对象都会创建</li>
+<li>字符串常量池的<strong>好处</strong>就是减少相同内容字符串的创建，节省内存空间。<strong>坏处</strong>牺牲了CPU计算时间来换空间。CPU计算时间主要用于在字符串常量池中查找是否有内容相同对象的引用。不过其内部实现为HashTable，所以计算成本较低。 <a href="http://droidyue.com/blog/2014/12/21/string-literal-pool-in-java/" target="_blank" rel="external">Link</a></li>
+</ul>
+</li>
+<li><p>用反射可以反射出String对象中的私有 value属性， 进而改变通过获得的char[]引用去改变数组的结构，例如：</p>
+<pre><code><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testReflection</span><span class="params">()</span> throws Exception </span>{  
+
+<span class="comment">//创建字符串"Hello World"， 并赋给引用s  </span>
+String s = <span class="string">"Hello World"</span>;   
+
+System.<span class="keyword">out</span>.println(<span class="string">"s = "</span> + s); <span class="comment">//Hello World  </span>
+
+<span class="comment">//获取String类中的value字段  </span>
+Field valueFieldOfString = String.class.getDeclaredField(<span class="string">"value"</span>);  
+
+<span class="comment">//改变value属性的访问权限  </span>
+valueFieldOfString.setAccessible(<span class="keyword">true</span>);  
+
+<span class="comment">//获取s对象上的value属性的值  </span>
+<span class="keyword">char</span>[] <span class="keyword">value</span> = (<span class="keyword">char</span>[]) valueFieldOfString.<span class="keyword">get</span>(s);  
+
+<span class="comment">//改变value所引用的数组中的第5个字符  </span>
+<span class="keyword">value</span>[<span class="number">5</span>] = <span class="string">'_'</span>;  
+
+System.<span class="keyword">out</span>.println(<span class="string">"s = "</span> + s);  <span class="comment">//Hello_World  </span>
+}
+</code></pre></li>
+<li><p><strong>StringBuilder</strong>：非线程安全的可变字符串，单线程时字符串拼接最快</p>
+</li>
+<li><p><strong>StringBuffer</strong>：通过调用其append和insert方法来添加字符；线程安全的可变字符串，因为内部的方法都加了synchronized关键字; String 对象的字符串拼接其实是被 JVM 解释成了 StringBuffer 对象的拼接</p>
+<pre><code><span class="comment">// String +操作快</span>
+<span class="built_in">String</span> S1 = “This <span class="keyword">is</span> only a” + “ simple” + “test”; <span class="comment">//其实就是：String S1 = “This is only a simple test”</span>
+
+<span class="comment">// StringBuffer.append()更快</span>
+<span class="built_in">String</span> S2 = “This <span class="keyword">is</span> only a”;
+<span class="built_in">String</span> S3 = “ simple”;
+<span class="built_in">String</span> S4 = “ test”;
+<span class="built_in">String</span> S1 = S2 +S3 + S4;
+</code></pre></li>
+<li>JDK1.7中subString函数改变:String类中不再有offset和count变量;这意味着成员变量char[] value将不会被共享;String.substring方法会为每个子串创建一个新的char[] value（而不是共享母串的char[] value）。这意味着String.substring方法的时间复杂度由常数阶变为线性阶。这种变化的好处是String对象占用的内存稍微少了一些（比以前少8个字节），同时确保String.substring方法不会导致内存泄漏</li>
+</ul>
+<h3 id="[java中equals，hashcode，==分析]">[java中equals，hashcode，==分析]</h3><ul>
+<li>== : 对于基本类型的变量(int, char等), 只有==方法用于判断两者是否相等;==也可用于判断两个引用变量是否相等,但是引用变量相等只是说明两个引用变量引用了同一个对象</li>
+<li>equals(): 该方法继承自Object类,它在Object类中是用==实现的，跟==一样默认是比较两个引用是否相等;但是实际应用中它主要用于判断两个String,Integer等对象或者自定义对象在内存中的值是否相等; String等对象重载了equals方法，所以可以用来比较值是否相等;</li>
+<li>hashcode(): 哈希函数的作用是把不定长度的输入通过哈希算法将其压缩成固定长度的输出(int整数), 不同的输入可能转换成相同的输出;其在Object类中的默认实现是返回对象的内存地址的哈希码，不同的对象即使内容相同但引用不同也会返回不同的哈希码.主要用于HashMap等容器中的快速定位, 通过哈希值就可以直接定位到Map中Entry数组的某个位置，然后再循环该位置对应的链表用equals判断<key,value>是否都相等。</key,value></li>
+<li>set在使用add，remove等函数时会调用equals函数去判断两个自定义对象的地址是否相同，而不是比较两个对象的内容是否相同，需要重载hashcode和equals函数，类似于String类一样重载，才能够实现去重的目的！！ HashSet中的元素实际上是作为HashMap中的Key存放在HashMap中的，为了保证HashSet中的对象不会出现重复值，在被存放元素的类中必须要重写hashCode()和equals()这两个方法。</li>
+</ul>
+<h3 id="null判断将常量写在前面的好处">null判断将常量写在前面的好处</h3><ol>
+<li>if(val == null) 和 if(null == val)的区别：后一种方式的主要优点是防止将==写成=和将!=写成=，因为后一种方式如果出现漏写，编译器会提示报错便于检查出代码错误；而前一种不会报错，造成逻辑bug不能被编译器检查出来</li>
+<li>”abc”.equals(val)和val.equals(“abc”)的区别：前一种可以防止当val=null时编译器报空指针错误</li>
+</ol>
+<h3 id="java生成随机数的方法(返回1-6的六个随机数)">java生成随机数的方法(返回1-6的六个随机数)</h3><pre><code>Random <span class="keyword">rand</span> = new Random();  
+<span class="keyword">system</span>.out.println(<span class="keyword">rand</span>.nextInt(<span class="number">6</span>) + <span class="number">1</span>);
+</code></pre><h3 id="java反转字符串方法">java反转字符串方法</h3><pre><code><span class="keyword">String</span> <span class="built_in">reverse</span>(<span class="keyword">String</span> s)   
+{<span class="keyword">return</span> <span class="keyword">new</span> StringBuilder(s).<span class="built_in">reverse</span>().toString();}
+</code></pre><h3 id="函数参数的预防性检测">函数参数的预防性检测</h3><p>针对传入参数显式检测，throw相应的Exception；包括参数为null，数值溢出以及为负，数组下标越界</p>
+<h3 id="Java常见位操作">Java常见位操作</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/BitOperation.png" class="full-image"></p>
+<pre><code><span class="comment">// 1. 获得int型最大值</span>
+System.<span class="keyword">out</span>.println((1 &lt;&lt; 31) - 1);<span class="comment">// 2147483647， 由于优先级关系，括号不可省略</span>
+System.<span class="keyword">out</span>.println(~(1 &lt;&lt; 31));<span class="comment">// 2147483647</span>
+
+<span class="comment">// 2. 获得int型最小值</span>
+System.<span class="keyword">out</span>.println(1 &lt;&lt; 31);
+System.<span class="keyword">out</span>.println(1 &lt;&lt; -1);
+
+<span class="comment">// 3. 获得long类型的最大值</span>
+System.<span class="keyword">out</span>.println(((long)1 &lt;&lt; 127) - 1);
+
+<span class="comment">// 4. 乘以2运算</span>
+System.<span class="keyword">out</span>.println(x&lt;&lt;1);
+
+<span class="comment">// 5. 除以2运算(负奇数的运算不可用)</span>
+System.<span class="keyword">out</span>.println(x&gt;&gt;1);
+
+<span class="comment">// 6. 乘以2的m次方</span>
+System.<span class="keyword">out</span>.println(x&lt;&lt;<span class="keyword">m</span>);
+
+<span class="comment">// 7. 除以2的m次方</span>
+System.<span class="keyword">out</span>.println(x&gt;&gt;<span class="keyword">m</span>);
+
+<span class="comment">// 8. 判断一个数的奇偶性</span>
+System.<span class="keyword">out</span>.println((10 &amp; 1) == 1);
+System.<span class="keyword">out</span>.println((9 &amp; 1) == 1);
+
+<span class="comment">// 9. 不用临时变量交换两个数（面试常考）</span>
+a ^= b;
+b ^= a;
+a ^= b;
+
+<span class="comment">// 10. 取绝对值（某些机器上，效率比n&gt;0 ? n:-n 高）</span>
+int <span class="keyword">n</span> = -1;
+System.<span class="keyword">out</span>.println((<span class="keyword">n</span> ^ (<span class="keyword">n</span> &gt;&gt; 31)) - (<span class="keyword">n</span> &gt;&gt; 31));
+<span class="comment">/* n&gt;&gt;31 取得n的符号，若n为正数，n&gt;&gt;31等于0，若n为负数，n&gt;&gt;31等于-1
+若n为正数 n^0-0数不变，若n为负数n^-1 需要计算n和-1的补码，异或后再取补码，
+结果n变号并且绝对值减1，再减去-1就是绝对值 */</span>
+
+<span class="comment">// 11. 取两个数的最大值（某些机器上，效率比a&gt;b ? a:b高）</span>
+System.<span class="keyword">out</span>.println(b&amp;((a-b)&gt;&gt;31) | a&amp;(~(a-b)&gt;&gt;31));
+
+<span class="comment">// 12. 取两个数的最小值（某些机器上，效率比a&gt;b ? b:a高）</span>
+System.<span class="keyword">out</span>.println(a&amp;((a-b)&gt;&gt;31) | b&amp;(~(a-b)&gt;&gt;31));
+
+<span class="comment">// 13. 判断符号是否相同(true 表示 x和y有相同的符号， false表示x，y有相反的符号。)</span>
+System.<span class="keyword">out</span>.println((a ^ b) &gt; 0);
+
+<span class="comment">// 14. 计算2的n次方 n &gt; 0</span>
+System.<span class="keyword">out</span>.println(2&lt;&lt;(<span class="keyword">n</span>-1));
+
+<span class="comment">// 15. 判断一个数n是不是2的幂</span>
+System.<span class="keyword">out</span>.println((<span class="keyword">n</span> &amp; (<span class="keyword">n</span> - 1)) == 0);
+<span class="comment">/*如果是2的幂，n一定是100... n-1就是1111....
+所以做与运算结果为0*/</span>
+
+<span class="comment">// 16. 求两个整数的平均值</span>
+System.<span class="keyword">out</span>.println((a+b) &gt;&gt; 1);
+
+<span class="comment">// 17. 从低位到高位,取n的第m位</span>
+int <span class="keyword">m</span> = 2;
+System.<span class="keyword">out</span>.println((<span class="keyword">n</span> &gt;&gt; (<span class="keyword">m</span>-1)) &amp; 1);
+
+<span class="comment">// 18. 从低位到高位.将n的第m位置为1</span>
+System.<span class="keyword">out</span>.println(<span class="keyword">n</span> | (1&lt;&lt;(<span class="keyword">m</span>-1)));
+<span class="comment">/*将1左移m-1位找到第m位，得到000...1...000
+n在和这个数做或运算*/</span>
+
+<span class="comment">// 19. 从低位到高位,将n的第m位置为0</span>
+System.<span class="keyword">out</span>.println(<span class="keyword">n</span> &amp; ~(0&lt;&lt;(<span class="keyword">m</span>-1)));
+<span class="comment">/* 将1左移m-1位找到第m位，取反后变成111...0...1111
+n再和这个数做与运算*/</span>
+</code></pre>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/java/"> #java </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="../../2015/05/27/Android开发常见bug解决方法及注意事项/">
                 Android开发常见bug解决方法及注意事项
               </a>
@@ -694,237 +1023,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/19/数据库重难点集锦/">
-                数据库重难点集锦
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-19
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/数据库/">数据库</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/19/数据库重难点集锦/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/19/数据库重难点集锦/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="常见的Hash算法和一致性哈希">常见的Hash算法和一致性哈希</h3><ul>
-<li><p>线性哈希，平方取中法，随机数法，按位分割求和法  </p>
-</li>
-<li><p><strong>MD5和SHA</strong>这两种单向加密算法都是基于hash算法，前者产生128位的散列值，后者产生160位的散列值；两者都存在不同输入的散列值相同的情况，但是概率很低，为了防止被彩虹表破解，可以考虑加入Salt  </p>
-</li>
-<li><p>Hash算法主要用于文件校验、数字签名、鉴权协议等  </p>
-</li>
-<li><p><strong>一致性哈希算法</strong>主要应用在cache系统中，常用的hash(object)%N算法会计算object 的hash值，然后对N取模得到余数i，该Object就会被映射到编号为i的cache上;那么当增加或者减少n的值时会导致所有的n个对象的映射全部发生改变，但是一致性哈希算法却只需要重新hash K/n个元素，为什么呢？？？; 因为一致性哈希的内部原理是将Object和cache都使用同一种hash算法hash到同一个数值空间上，该空间为一个首尾相接的圆环；然后如何将Object映射到cache呢？顺着顺时针方向,将每一个Object映射到下一个最邻近的cache,这样当新增一个cache时，只需要将原本映射到下一个cache上的Object部分映射修改到新增的cache上；当减少cache时就将之前映射到该cache的Object都映射到下一个cache上.  </p>
-</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_pre.png" class="full-image"></p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_next.png" class="full-image"></p>
-<h3 id="数据库结构概览">数据库结构概览</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/db.png" width="100%"></p>
-<h3 id="数据库的事务、索引、范式和存储过程概念以及优缺点">数据库的事务、索引、范式和存储过程概念以及优缺点</h3><ol>
-<li><p>主键：数据库表中对储存数据对象予以唯一和完整标识的数据列或属性的组合。一个数据列只能有一个主键，且主键的取值不能缺失，即不能为空值（Null）。  </p>
-<p>超键：在关系中能唯一标识元组的属性集称为关系模式的超键。一个属性可以为作为一个超键，多个属性组合在一起也可以作为一个超键。超键包含候选键和主键。  </p>
-<p>候选键：能够确定全部属性的某个属性或某组属性，称为候选键。若候选键多于一个，则选定其中一个作为主键</p>
-<p>外键：在一个表中存在的另一个表的主键称此表的外键  </p>
-</li>
-<li><p><strong>事务</strong>：事务是数据库操作中的不可分割的逻辑单元,事务也是并发控制的基本单位，一个事务中的所有操作语句要么作为一个整体被执行，要么整体不被执行; 事务最重要的<strong>两个特性是事务的传播级别和数据隔离级别</strong>。传播级别定义的是事务的控制范围，事务隔离级别定义的是事务在数据库读写方面的控制范围。</p>
-<ul>
-<li>原子性Atomicity：要么操作序列中全部语句都执行，要么全部不被执行,不可分割; 也就是说当事务的执行序列中某个语句执行错误，会回滚到该事务未执行时的状态</li>
-<li>一致性Consistency：事务执行之后数据库从一个一致性状态转化到另一个一致性状态；数据库 ACID 中的一致性对事务的要求不止包含对数据完整性以及合法性的检查，还包含应用层面逻辑的正确。</li>
-<li>隔离性Isolation：多个事务并行执行时互相之间不会影响</li>
-<li>持久性Durability：事务成功执行之后会对数据库内容产生永久性影响，当事务已经被提交之后，就无法再次回滚了，唯一能够撤回已经提交的事务的方式就是创建一个相反的事务对原操作进行『补偿』</li>
-</ul>
-</li>
-<li><p><strong>范式</strong></p>
-<ul>
-<li>第一范式：数据库表里边的每一列都是不可分割的原子性基本数据项</li>
-<li>第二范式：数据库表里边每一个非关键字段都和任意一组候选关键字(主键)完全依赖，只有表的任意一组候选键有多个属性时才会出现部分依赖</li>
-<li>第三范式：数据库里边每一个非关键字段都和主键直接相关，而不能是间接相关(传递依赖)</li>
-<li>BC范式：数据里边每一列既不部分依赖于任何候选键也不传递依赖于任何候选键；一个关系满足BCNF则一定满足第三范式</li>
-</ul>
-</li>
-<li><p><strong>索引</strong> ：建立在数据库表的某些列上，例如需要搜索或者排序的列，主键列，外键列(用于连接的列),用在where语句中的列；<strong>有些列不应该建索引</strong>，比如：查询中很少使用或者参考的列， 只有很少数据值的列，定义为text, image和bit数据类型的列,当修改性能远远大于检索性能时，不应该创建索引；索引的实现通常使用B树及其变种B+树</p>
-<ul>
-<li>参考: 一般来说，<strong>应该在这些列上创建索引</strong>：在经常需要搜索的列上，可以加快搜索的速度；在作为主键的列上，强制该列的唯一性和组织表中数据的排列结构；在经常用在连接的列上，这些列主要是一些外键，可以加快连接的速度；在经常需要根据范围进行搜索的列上创建索引，因为索引已经排序，其指定的范围是连续的；在经常需要排序的列上创建索引，因为索引已经排序，这样查询可以利用索引的排序，加快排序查询时间；在经常使用在WHERE子句中的列上面创建索引，加快条件的判断速度。</li>
-<li><p><strong>复合索引</strong>就是索引建立在多个列上，<strong>唯一索引</strong>就是保证索引列中的所有数据都是唯一的，不会存在冗余数据;<strong>聚集索引</strong>是指表中行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能包含一个聚集索引</p>
-<p>优点：</p>
-</li>
-</ul>
-<ol>
-<li>通过创建唯一性索引，可以保证数据库表中每一行数据的唯一性 </li>
-<li>可以大大加快数据的检索速度    </li>
-<li>可以加速表和表之间的连接</li>
-<li>在使用分组和排序子句进行数据检索时，同样可以显著减少查询中分组和排序的时间</li>
-<li><p>通过使用索引，可以在查询的过程中，使用优化隐藏器，提高系统的性能</p>
-<p>缺点：</p>
-</li>
-<li>创建索引和维护索引要耗费时间和大量的物理空间</li>
-<li>对表中的数据进行增加、删除和修改的时候，索引也要动态的维护，这样就降低了数据的维护速度</li>
-</ol>
-</li>
-<li><p><strong>存储过程</strong></p>
-<ul>
-<li>它是一组存储在数据库中的编译后的SQL语句集，可以接受参数以及返回值，也可以包括程序流，查询语句等</li>
-<li>正常情况下,我们在code中写好SQL语句,连接数据库，SQL语句会被发送到服务器然后编译优化，数据库引擎执行编译后的查询语句，最后将查询结果返回给客户端；那么如果我们使用存储过程就可以省掉编译优化的过程，而且存储过程存储在database中，可以减少网络流量和传输时间；而且可以对存储过程授予制定权限，从而保证数据库操作安全</li>
-</ul>
-</li>
-<li><p><strong>View</strong></p>
-<ul>
-<li>视图是一种通过自定义查询语句去查询筛选数据库表中的数据然后呈现给用户的一种动态生成的虚拟表,他和表一样包含行列数据，但是来自于其引用的表；其优点主要是可以保证数据库安全性以及筛选隐藏部分重要数据;View与Table之间的关系类似于MVC，在View中对数据进行修改会影响到Table中的数据，在Table中进行数据修改同样会显示到View，因为他们用的是同一份数据。</li>
-</ul>
-</li>
-</ol>
-<h3 id="MySQL的隔离级别与锁">MySQL的隔离级别与锁</h3><ol>
-<li><strong><a href="https://www.kancloud.cn/hx78/sql/379624" target="_blank" rel="external">四种隔离级别</a></strong>: 隔离级别决定了一个会话中的事务可能对另一个会话的影响、并发会话对数据库的操作、一个会话中所见数据的一致性; MySQL的InnoDB支持四种隔离级别,默认是可重读隔离级别<ul>
-<li><strong>未提交读READ UNCOMMITTED</strong>：最低级别的隔离，也被称之为脏读，它允许一个事务读取还没commit的事务的执行结果，这样可能会提高性能，但是导致脏读   </li>
-<li><strong>提交读READ COMMITTED</strong>：在一个事务中只允许看见已经commit的事务所做的改变。如果一个session中select还在查询中，另一会话session此时insert一条记录，则新添加的数据不可见；只有该操作commit之后才可见，也就是说—-<strong>不可重复读</strong>   </li>
-<li><strong>可重读REPEATABLE READ</strong>：同一个事务的多个实例在并发读取数据时会看到同样的数据行。也就是说在一个事务中重复select的结果一样，除非本事务中添加新数据到数据库，可能导致<strong>幻读</strong>;也就说事务之间只是在新数据方面突破了隔离，对已存在的数据仍旧隔离。</li>
-<li><strong>可串行化SERIALIZABLE</strong>：最高级别的隔离，强制事务排序并且只允许事务串行执行。为了达到此目的，数据库会锁住每个读的数据行，减少了并发，增加了稳定性，但是可能导致超时和锁竞争现象</li>
-<li><strong>事务并发导致的几个问题</strong><a href="https://draveness.me/mysql-transaction" target="_blank" rel="external">事务实现</a><ul>
-<li><strong>脏读(Drity Read)</strong>：某个事务已更新一份数据，另一个事务在此时读取了同一份数据，由于某些原因，前一个回滚了操作，则后一个事务所读取的数据就会是不正确的</li>
-<li><strong>不可重复读</strong>:在一个事务的两次查询之中数据不一致，这可能是两次查询过程中间插入了一个事务更新了原有的数据。</li>
-<li><strong>幻读</strong>：例如一个事务的两次查询过程中有另外一个事务插入数据造成第二次查询出现了在第一次查询中没有出现的数据；<strong>例如</strong>如果事务A运行”SELECT count(1) from TABLE_X” ，然后事务B在 TABLE_X 加入一条新数据并提交，当事务A再运行一次 count(1)结果不会是一样的，这就叫做<strong>幻读</strong></li>
-</ul>
-</li>
-<li>隔离级别越高，越能保证数据的完整性和一致性，但是对并发性能的影响也越大。对于多数应用程序，可以优先考虑把数据库系统的隔离级别设为Read Committed。它能够避免脏读取，而且具有较好的并发性能。尽管它会导致不可重复读和并发问题，可以由应用程序采用悲观锁或乐观锁来控制。</li>
-<li>性质<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/SQL隔离.png" class="full-image"></li>
-</ul>
-</li>
-<li><strong>共享锁</strong>：由读表操作加上的锁，加锁后其他用户只能获取该表或行的共享锁，不能获取排它锁，也就是说只能读不能写；一个事务获取了共享锁之后，可以对锁定范围内的数据执行读操作。</li>
-<li><strong>排它锁</strong>：由写表操作加上的锁，加锁后其他用户不能获取该表或行的任何锁;一个事务获取了排它锁之后，可以对锁定范围内的数据执行写操作。</li>
-<li><strong>乐观锁</strong>:读取数据时不锁，更新时检查是否数据已经被更新过，如果是则取消当前更新<br>一般在悲观锁的等待时间过长而不能接受时我们才会选择乐观锁；<strong>乐观锁适用于多读的应用类型</strong>，这样可以提高吞吐量<ul>
-<li><strong>乐观锁怎么实现和检查数据是否已经被更新？？？</strong>：</li>
-<li><strong>①使用数据版本记录机制实现</strong>也就是为数据增加一个版本标识，一般是通过为数据库表增加一个数字类型的 “version” 字段来实现。当读取数据时，将version字段的值一同读出，数据每更新一次，对此version值加一。当我们提交更新的时候，判断数据库表对应记录的当前版本信息与第一次取出来的version值进行比对，如果数据库表当前版本号与第一次取出来的version值相等，则予以更新，否则认为是过期数据</li>
-<li><strong>②在需要乐观锁控制的table中增加一个字段</strong>，字段名称无所谓，字段类型使用时间戳（timestamp）, 和版本记录类似，也是在更新提交的时候检查当前数据库中数据的时间戳和自己更新前取到的时间戳进行对比，如果一致则OK，否则就是版本冲突</li>
-</ul>
-</li>
-<li><strong>悲观锁</strong>:在读取数据时锁住那几行，其他对这几行的更新需要等到悲观锁结束时才能继续；比如行锁，表锁等，读锁 </li>
-<li><strong>表级锁</strong>：对整个表加锁，影响标准的所有记录；开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。</li>
-<li><strong>行级锁</strong>：对一行记录加锁，只影响一条记录；开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。</li>
-<li><strong>页面锁</strong>：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</li>
-<li><strong>锁管理器</strong>是添加和释放锁的进程，在内部使用一个哈希表来保存锁的相关信息(关键字是被锁的数据），并且了解每一块数据是被哪个事务加的锁,哪个事务在等待数据解锁;锁管理器还需要检查是否存在死锁，以及决定选择取消哪一个事务来消除死锁，<strong>检查死锁有两种方式</strong>一种是<strong>检查循环等待</strong>还有一种是<strong>使用超时设定</strong>。如果一个锁在超时时间内没有加上，那事务就进入了死锁状态。</li>
-<li><strong>数据库一般采用锁或者数据版本控制来进行并发控制</strong> 版本控制是每个事务可以在相同时刻修改相同的数据，每个事务有自己的数据拷贝（或者叫版本）；如果2个事务修改相同的数据，只接受一个修改，另一个将被拒绝，相关的事务回滚（或重新运行）；这将提高性能，因为：读事务不会阻塞写事务，写事务不会阻塞读，可以减少锁管理器带来的额外开销，但是磁盘空间消耗巨大，以空间换时间</li>
-<li>乐观锁不会存在死锁的问题，但是由于更新后验证，所以当冲突频率和重试成本较高时更推荐使用悲观锁，而需要非常高的响应速度并且并发量非常大的时候使用乐观锁就能较好的解决问题，在这时使用悲观锁就可能出现严重的性能问题；在选择并发控制机制时，需要综合考虑上面的四个方面（冲突频率、重试成本、响应速度和并发量）进行选择。</li>
-<li><strong>共享锁（读锁）</strong>：允许事务对一条行数据进行读取；<strong>互斥锁（写锁）</strong>：允许事务对一条行数据进行删除或更新；</li>
-</ol>
-<h3 id="MySQL_InnoDB实现">MySQL InnoDB实现</h3><ol>
-<li><a href="https://draveness.me/mysql-innodb" target="_blank" rel="external">『浅入浅出』MySQL 和 InnoDB</a></li>
-<li><a href="https://draveness.me/database-concurrency-control" target="_blank" rel="external">浅谈数据库并发控制 - 锁和 MVCC</a></li>
-</ol>
-<h3 id="MyISAM和InnoDB存储引擎之间的区别">MyISAM和InnoDB存储引擎之间的区别</h3><ol>
-<li>InnoDB支持事务、外键和行锁，而MyISAM不支持这些高级功能，但是<strong>MyISAM是默认引擎</strong>，InnoDB则需要指定(事务是一种高级的处理方式，如在一些列增删改中只要哪个出错还可以回滚还原)</li>
-<li>MyISAM适合SELECT为主的应用，InnoDB适合频繁修改(INSERT或UPDATE)以及涉及到安全性较高的应用,因为InnoDB数据库在进行update时表进行行锁，并发量相对较大;而MyISAM在进行updata时进行表锁，并发量相对较小</li>
-<li>InnoDB不支持FULLTEXT类型的索引; 虽然InnoDB支持行锁,但是某些情况下还是锁整表，如 update table set a=1 where user like ‘%lee%’，因为该SQL语句不能确定要扫描的范围</li>
-<li>DELETE清空整个表时，InnoDB是一行一行的删除，效率非常慢。MyISAM则会重建表</li>
-<li>MyISAM的索引和数据是分开的，并且索引是有压缩的，内存使用率就对应提高了不少。能加载更多索引，而Innodb是索引和数据是紧密捆绑的，没有使用压缩从而会造成Innodb比MyISAM体积庞大不小</li>
-<li>InnoDB中不保存表的具体行数，也就是说，执行select count ( <em> ) from table时，InnoDB要扫描一遍整个表来计算有多少行，但是MyISAM只要简单的读出保存好的行数即可。注意的是，当count(</em>) 语句包含where条件时，两种表的操作是一样的</li>
-<li>MyISAM<strong>缓存</strong>在内存的是索引，不是数据。而InnoDB缓存在内存的是数据  </li>
-<li><strong>MyISAM和InnoDB索引B+树结构的区别</strong>：<strong>MyISAM引擎</strong>使用B+Tree作为索引结构，叶节点的data域存放的是数据记录的地址，索引检索的算法为首先按照B+Tree搜索算法搜索索引，如果指定的Key存在，则取出其data域的值，然后以data域的值为地址，读取相应数据记录。这种索引方式就属于“非聚集索引”；<strong>InnoDB中</strong>，表数据文件本身就是按B+Tree组织的一个索引结构，这棵树的叶节点data域保存了完整的数据记录  </li>
-</ol>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/myisam.png" width="100%"><br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/innodb.png" width="100%">   </p>
-<h3 id="SQL语句">SQL语句</h3><ol>
-<li><p><strong>in和exists区别</strong></p>
-<ul>
-<li>mysql中的<strong>in语句</strong>是把外表和内表作hash 连接，而<strong>exists语句</strong>是对外表作loop循环，每次loop循环再对内表进行查询。一直大家都认为exists比in语句的效率要高，这种说法其实是不准确的，这个是要区分环境的。</li>
-<li><strong>效率对比</strong>：①如果查询的两个表大小相当，那么用in和exists差别不大；②如果两个表中一个较小，一个是大表，则子查询表大的用exists，子查询表小的用in</li>
-<li><strong>实例（A&lt;B）</strong>：①select <em> from A where cc in (select cc from B) 效率低，用到了A表上cc列的索引；②select </em> from A where exists(select cc from B where cc=A.cc) 效率高，用到了B表上cc列的索引。③select <em> from B where cc in (select cc from A) 效率高，用到了B表上cc列的索引；④select </em> from B where exists(select cc from A where cc=B.cc) 效率低，用到了A表上cc列的索引。</li>
-</ul>
-</li>
-<li><p><strong>not in和not exists区别</strong></p>
-<ul>
-<li>not in 和not exists如果查询语句使用了not in 那么内外表都进行全表扫描，没有用到索引；而not extsts 的子查询依然能用到表上的索引。所以无论那个表大，用not exists都比not in要快。 </li>
-<li>在含有NULL值的列的时候，not in 逻辑上不完全等同于not exists；应该尽量不要使用not in(它会调用子查询)，而尽量使用not exists(它会调用关联子查询)。如果not in子查询中返回的任意一条记录含有空值，则查询将不返回任何记录；因此除非子查询字段有非空限制，这时可以使用not in</li>
-</ul>
-</li>
-<li><p><strong>inner join、outer join和cross join的区别</strong><br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Join区别.png" width="100%"></p>
-</li>
-</ol>
-<h3 id="日志管理器">日志管理器</h3><ol>
-<li>为了提升性能，数据库把数据保存在内存缓冲区内。但如果当事务提交时服务器崩溃，崩溃时还在内存里的数据会丢失，这破坏了事务的持久性。你可以把所有数据都写在磁盘上，但是如果服务器崩溃，最终数据可能只有部分写入磁盘，这破坏了事务的原子性。因此我们采用<strong>事务日志</strong>是一个存储空间，在每次写盘之前，数据库在事务日志中写入一些信息，这样当事务崩溃或回滚，数据库知道如何移除或完成尚未完成的事务。<strong>事务的每一个操作（增/删/改）产生一条日志</strong>，</li>
-<li>MySQL中的两种日志，数据库恢复机制是通过回滚日志（undo log）或者重做日志(redo log)实现的；在数据库系统中，事务的原子性和持久性是由事务日志（transaction log）保证的，在实现时也就是上面提到的两种日志，前者用于对事务的影响进行撤销，后者在错误处理时对已经提交的事务进行重做，它们能保证两点：①发生错误或者需要回滚的事务能够成功回滚（原子性）；②在事务提交后，数据没来得及写会磁盘就宕机时，在下次重新启动后能够成功恢复数据（持久性）</li>
-</ol>
-<h3 id="其它概念">其它概念</h3><ol>
-<li>Transaction2 依赖于 Transaction1，而 Transaction3 又依赖于 Transaction1，当 Transaction1 由于执行出现问题发生回滚时，为了保证事务的原子性，就会将 Transaction2 和 Transaction3 中的工作全部回滚，这种情况也叫做<strong>级联回滚（Cascading Rollback）</strong>，级联回滚的发生会导致大量的工作需要撤回，是我们难以接受的。</li>
-<li><strong>读写分离：</strong><ul>
-<li>Mysql有一个master-slave功能，可以实现主库与从库数据的自动同步，是基于二进制日志复制来实现的。</li>
-<li>读写路由规则：编码使用不同数据源或者使用proxy层，MySQL-Proxy 是Mysql提供的一个中间件，用于实现读写分离请求，还有MyCat、ProxySQL 等</li>
-</ul>
-</li>
-<li><strong>CQRS：Command Query Responsibility Segregation</strong>：Command 主要做业务逻辑的执行，Query来负责数据查询和展示，两者可以来自不同的数据源</li>
-<li><strong>数据库sharding分片</strong>：</li>
-</ol>
-<h3 id="参考链接">参考链接</h3><ol>
-<li><a href="http://blog.jobbole.com/100349/" target="_blank" rel="external">数据库整体架构原理</a></li>
-<li><a href="http://www.codeceo.com/article/mysql-index-struct.html#0-tsina-1-46551-397232819ff9a47a7b7e80a40613cfe1" target="_blank" rel="external">MySQL数据库索引原理</a>  </li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/databse/"> #databse </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -963,7 +1061,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">79</span>
+              <span class="site-state-item-count">80</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

@@ -1,0 +1,1002 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2"/>
+
+
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
+
+
+
+  <meta name="keywords" content="java,android,life,CharlesXiao" />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../..//favicon.ico?v=0.4.2" />
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6749450";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <title>  // CharlesXiao‘s Blog </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">CharlesXiao‘s Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    <!--增加swiftype搜索功能-->
+    <form class="menu-item menu-item-search">
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+    </form>
+    
+    <script type="text/javascript">
+      (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+      (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+      e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+      })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+      _st('install','yxUhPQ2aHyszT_1btxX9','2.0.0');
+    </script>
+    <!--增加swiftype搜索功能end-->
+    
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="../../../..//">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="../../../..//categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          分类
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-about">
+        <a href="../../../..//about">
+          <i class="menu-item-icon icon-about"></i> <br />
+          关于
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="../../../..//archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="../../../..//tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2018-09-22
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/09/22/C++手稿集锦/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>title: “C++手稿集锦”<br>date: 2017-11-21 11:36:53</p>
+<h2 id="tags:_[C++]">tags: [C++]</h2><h3 id="哪些变量会自动初始化？">哪些变量会自动初始化？</h3><p>在C语言中的<strong>全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值（C++默认初始化策略也是如此）。 C++保证了所有对象与对象成员都会初始化</strong>，无论是否写了圆括号或者是否写了参数列表，但其中基本数据类型的初始化还得依赖于构造函数。</p>
+<p>成员变量分为成员对象和内置类型成员，其中成员对象总是会被初始化的。我们通常会在构造函数中初始化所有内置类型的成员。例如：</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> v;</span><br><span class="line">    A(): v(0);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="https://harttle.land/2015/10/05/cpp-variable-init.html" target="_blank" rel="external">参考链接</a></p>
+</blockquote>
+<h3 id="对象的生命周期，构造与析构">对象的生命周期，构造与析构</h3><h4 id="对象实例化">对象实例化</h4><p>可以直接定义对象变量，在栈中分配并初始化对象；也可以定义对象指针，从堆中分配空间并初始化对象。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CPerson p1;</span><br><span class="line"><span class="function">CPerson <span class="title">p2</span><span class="params">(<span class="number">2</span>)</span></span>;</span><br><span class="line">CPerson* p3 = <span class="keyword">new</span> CPerson(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="析构函数">析构函数</h4><p>类的声明中，签名为<code>~CPerson()</code>的方法称为析构函数。析构函数没有参数和返回值。当对象生命周期结束时被调用，通常用来释放资源。一个类只能由一个析构函数。析构函数与构造函数类似，用户不指定时编译器会生成一个缺省的析构（构造）函数， 缺省的析构（构造）函数是空函数。</p>
+<h4 id="对象指针数组">对象指针数组</h4><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CPerson *p[<span class="number">3</span>] = &#123;<span class="keyword">new</span> CPerson(<span class="number">1</span>), <span class="keyword">new</span> CPerson(<span class="number">2</span>)&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="复制构造函数">复制构造函数</h4><p>类的声明中，签名为<code>CPerson(CPerson&amp;)</code>的方法称为复制构造函数，用来从一个已存在的对象复制生成一个新的对象。 在如下三种情况下会被调用：</p>
+<ol>
+<li><p>用一个对象初始化另一个对象时。例如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CPerson p2<span class="list">(<span class="keyword">p1</span>)</span><span class="comment">;</span></span><br><span class="line">CPerson p2 = p1<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对象作为参数传递时。例如：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void <span class="func"><span class="keyword">func</span><span class="params">(A a)</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对象作为返回值时。例如：</p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">A</span> func()&#123; <span class="literal">A</span> <span class="literal">a</span><span class="comment">; return a;&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>只有一个参数的复制构造函数可以被称为<strong>转换构造函数</strong>。当需要类型转换时，会被调用：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">CPerson</span> = <span class="number">2</span>;    <span class="comment">// CPerson(int) called</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意区分赋值和初始化：<strong>对象变量间赋值不会调用复制构造函数</strong>。赋值只会按位拷贝对象所在的内存。当然你也可以重载<code>operator=</code>来改变它的行为。</p>
+</blockquote>
+<h4 id="对象生命周期">对象生命周期</h4><p>如下程序解释了对象的声明周期何时开始，以及何时结束。涉及到了：全局对象、静态对象、栈中的对象、堆中的对象。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">CPerson</span> p1;             <span class="comment">// main执行前，构造函数被调用</span></span><br><span class="line">void <span class="func"><span class="keyword">func</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="type">CPerson</span> p2;  <span class="comment">// func第一次执行前，构造函数被调用</span></span><br><span class="line">    <span class="type">CPerson</span> p3;         <span class="comment">// p3的构造函数被调用</span></span><br><span class="line">                        <span class="comment">// func结束时，p3的析构函数被调用</span></span><br><span class="line">&#125;  </span><br><span class="line">int main()&#123;</span><br><span class="line">    <span class="type">CPerson</span> p4, *p5;    <span class="comment">// 调用p4的构造函数</span></span><br><span class="line">    <span class="func"><span class="keyword">func</span><span class="params">()</span></span>;</span><br><span class="line">    p5 = <span class="keyword">new</span> <span class="type">CPerson</span>;   <span class="comment">// 调用p5的构造函数</span></span><br><span class="line">    delete p5;          <span class="comment">// 调用p5的析构函数</span></span><br><span class="line">                        <span class="comment">// main结束时，p4的析构函数被调用</span></span><br><span class="line">&#125;</span><br><span class="line">                        <span class="comment">// 程序结束前，p1, p2的析构函数被调用</span></span><br></pre></td></tr></table></figure>
+<h3 id="栈对象和堆对象的创建方式">栈对象和堆对象的创建方式</h3><p>C++中，内存划分为三个逻辑区域：堆、栈和静态存储区，对象分为堆对象，栈对象以及静态对象。而类的对象建立分为两种，一种是静态建立，如A a；另一种是动态建立，如A* ptr=new A；两者都要执行构造函数。</p>
+<ol>
+<li><p><strong>静态建立类对象</strong>：是由编译器为对象在栈空间中分配内存，是通过直接移动栈顶指针，挪出适当的空间，然后在这片内存空间上调用构造函数形成一个栈对象。使用这种方法，<strong>直接调用类的构造函数</strong>，内存空间自动释放</p>
+<p>。</p>
+</li>
+<li><p><strong>动态建立类对象</strong>：是使用new运算符将对象建立在堆空间中。这个过程分为两步，第一步是执行operator new()函数，在堆空间中搜索合适的内存并进行分配；第二步是调用构造函数构造对象，初始化这片内存空间。这种方法，<strong>间接调用类的构造函数</strong>，内存空间需要手动释放。</p>
+</li>
+<li><p><strong>注意点</strong>：</p>
+</li>
+</ol>
+<blockquote>
+<ol>
+<li><p><a href="https://blog.csdn.net/hbtj_1216/article/details/65934865" target="_blank" rel="external">栈对象和堆对象区别和优劣</a> : 栈对象的创建速度一般较堆对象快，它仅仅需要移动栈顶指针就可以被创建，递归函数中最好不要使用栈对象以避免栈溢出；程序员对堆对象的生命具有完全的控制权。比如，我们需要创建一个对象，能够被多个函数所访问，但是又不想使其成为全局的，那么这个时候创建一个堆对象无疑是良好的选择，然后在各个函数之间传递这个堆对象的指针，便可以实现对该对象的共享。</p>
+</li>
+<li><p><strong>如何限制类对象只能在堆上建立? </strong>编译器在为类对象分配栈空间时，会先检查类的析构函数的访问性，其实不光是析构函数，只要是非静态的函数，编译器都会进行检查。如果类的析构函数是私有的，则编译器不会在栈空间上为类对象分配内存（如果我们将构造函数设置为私有，那么我们也就不能用new来直接产生堆对象了，因为new在为对象分配空间后也会调用它的构造函数）。为了统一，可以将构造函数设为protected，然后提供一个public的static函数来完成构造，这样不使用new，而是使用一个函数来构造，使用一个函数来析构。</p>
+</li>
+<li><p>构造函数设置为私有会限制继承。如果一个类不打算作为基类，可以将其析构函数声明为private。为了限制栈对象，却不限制继承，我们可以将析构函数声明为protected，这样就两全其美。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&gt;    <span class="class"><span class="keyword">class</span> <span class="title">NoStackObject</span> </span>&#123; </span><br><span class="line">&gt;    <span class="keyword">protected</span>: </span><br><span class="line">&gt;        NoStackObject() &#123; &#125; </span><br><span class="line">&gt;        ~NoStackObject() &#123; &#125; </span><br><span class="line">&gt;    <span class="keyword">public</span>: </span><br><span class="line">&gt;        <span class="keyword">static</span> NoStackObject* creatInstance() &#123;</span><br><span class="line">&gt;        <span class="keyword">return</span> <span class="keyword">new</span> NoStackObject() ;<span class="comment">//调用保护的构造函数 </span></span><br><span class="line">&gt;    &#125; </span><br><span class="line">&gt;        <span class="function"><span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">&gt;            delete <span class="keyword">this</span> ;<span class="comment">//调用保护的析构函数 </span></span><br><span class="line">&gt;        &#125; </span><br><span class="line">&gt;    &#125;;</span><br><span class="line">&gt;    NoStackObject* hash_ptr = NoStackObject::creatInstance() ;  </span><br><span class="line">&gt;    hash_ptr-&gt;destroy() ; </span><br><span class="line">&gt;    hash_ptr = NULL ; <span class="comment">//防止使用悬挂指针</span></span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<ol>
+<li><p><strong>只要禁用new运算符就可以实现类对象只能建立在栈上</strong>: 你不能影响new operator的能力（因为那是C++语言内建的），但是new operator 总是先调用 operator new,而后者我们是可以自行声明重写的。因此，将operator new()设为私有即可禁止对象被new在堆上；如果也想禁止堆对象数组，可以把operator new[]和operator delete[]也声明为private。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt;    <span class="class"><span class="keyword">class</span> <span class="title">A</span>    </span><br><span class="line">&gt;    </span>&#123;    </span><br><span class="line">&gt;    <span class="keyword">private</span>:    </span><br><span class="line">&gt;        <span class="keyword">void</span>* operator <span class="keyword">new</span>(size_t t)&#123;&#125;     <span class="comment">// 注意函数的第一个参数和返回值都是固定的    </span></span><br><span class="line">&gt;        <span class="keyword">void</span> <span class="function">operator <span class="title">delete</span><span class="params">(<span class="keyword">void</span>* ptr)</span></span>&#123;&#125; <span class="comment">// 重载了new就需要重载delete    </span></span><br><span class="line">&gt;    <span class="keyword">public</span>:    </span><br><span class="line">&gt;        A()&#123;&#125;    </span><br><span class="line">&gt;        ~A()&#123;&#125;    </span><br><span class="line">&gt;    &#125;; </span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</blockquote>
+<p>&gt;</p>
+<h3 id="C++_智能指针与裸指针">C++ 智能指针与裸指针</h3><p>我们知道c++的内存管理是让很多人头疼的事，当我们写一个new语句时，一般就会立即把delete语句直接也写了，但是我们不能避免程序还未执行到delete时就跳转了或者在函数中没有执行到最后的delete语句就返回了，如果我们不在每一个可能跳转或者返回的语句前释放资源，就会造成内存泄露。<strong>智能指针就是一个类，当超出了类的作用域，类会自动调用析构函数，析构函数会自动释放资源。</strong></p>
+<h4 id="为什么要用智能指针？">为什么要用智能指针？</h4><ol>
+<li>难以区分裸指针指向的是单个对象还是一个数组，也无法确定到底是用delete(销毁单个对象)还是delete[]销毁一个数组；</li>
+<li>使用完指针之后无法判断是否应该销毁指针，因为无法判断指针是否“拥有”指向的对象，也无法确定销毁指针的方式；</li>
+<li>遗漏销毁指正可能导致内存泄露，而销毁多次则会导致未定义行为。</li>
+</ol>
+<h4 id="四种智能指针">四种智能指针</h4><ol>
+<li><strong>std::auto_ptr和std::unique_ptr</strong>：auto_ptr是c++ 98遗留的关键字，已经不建议使用，auto_ptr的功能都可以由unique_ptr更加高效的做到。<ul>
+<li>auto_ptr智能指针可以像类的原始指针一样访问类的public成员，成员函数get()返回一个原始的指针，成员函数reset()重新绑定指向的对象，而原来的对象则会被释放。注意我们访问auto_ptr的成员函数时用的是“.”，访问指向对象的成员时用的是“-&gt;”。</li>
+<li>auto_ptr指针当我们对智能指针进行赋值时，如ptest2 = ptest，ptest2会接管ptest原来的内存管理权，ptest会变为空指针，如果ptest2原来不为空，则它会释放原来的资源，基于这个原因，应该避免把auto_ptr放到容器中，因为算法对容器操作时，很难避免STL内部对容器实现了赋值传递操作，这样会使容器中很多元素被置为NULL。判断一个智能指针是否为空不能使用if(ptest == NULL)，应该使用if(ptest.get() == NULL)。</li>
+<li>unique_ptr指针永远“拥有”其指向的对象，unique_ptr是一个move-only类型，一个unique_ptr指针无法被复制，只能将“所有权”在两个unique_ptr指针之间转移，转移完成后源unique_ptr将被设为null。unique_ptr默认的销毁方式是通过对unique_ptr中的裸指针进行delete操作，它可以无缝地转换成shared_ptr。不能使用两个unique_ptr智能指针赋值操作，应该使用std::move，例如foo(std::move(ptest))</li>
+</ul>
+</li>
+<li><strong><a href="https://segmentfault.com/a/1190000006860811" target="_blank" rel="external">std::shared_ptr</a>和std::weak_ptr</strong>：<ul>
+<li>shared_ptr使用计数机制来表明资源被几个指针共享，可以自动管理对象的生命周期和GC，shared_ptr的引用计数增减是原子操作</li>
+<li>一个对象可以被多个shared_ptr指向和访问，这些shared_ptr类型的指针共同享有该对象的所有权，当最后一个指向该对象的shared_ptr生命周期结束的时候，对象被销毁</li>
+<li>shared_ptr的构造将引用计数加1，销毁的时候引用计数减1，而赋值则将源指针引用计数加1，目标指针引用计数减1，例如P1=P2，P1指向对象的引用计数减1，P2指向对象的引用计数加1。当引用计数减1之后为0的时候，shared_ptr将会销毁指向的对象。</li>
+<li>由于control_block的存在，shared_ptr的size通常是2倍裸指针或unique_ptr的大小</li>
+<li>weak_ptr是用来解决shared_ptr相互引用时的死锁问题,如果说两个shared_ptr相互引用,那么这两个指针的引用计数永远不可能下降为0,资源永远不会释放。它是对对象的一种弱引用，不会增加对象的引用计数，和shared_ptr之间可以相互转化，shared_ptr可以直接赋值给它，它可以通过调用lock函数来获得shared_ptr。不能通过weak_ptr直接访问对象的方法，应该先把它转化为shared_ptr</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="../../../08/25/HDFS入门/">HDFS入门</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2018/09/22/C++手稿集锦/"
+               data-title="" data-url="https://charles-xiao.github.io/2018/09/22/C++手稿集锦/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <p class="site-author-name">CharlesXiao</p>
+        </div>
+        <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="../../../..//archives">
+              <span class="site-state-item-count">80</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="../../../..//categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="../../../..//tags">
+              <span class="site-state-item-count">75</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+              <a href="https://github.com/Charles-Xiao" target="_blank">github</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://weibo.com/2262300105/profile?topnav=1&wvr=6" target="_blank">weibo</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://daijiale.github.io/" target="_blank">Daijiale的个人站点</a>
+            </span>
+            
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags:_[C++]"><span class="nav-number">1.</span> <span class="nav-text">tags: [C++]</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#哪些变量会自动初始化？"><span class="nav-number">1.1.</span> <span class="nav-text">哪些变量会自动初始化？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象的生命周期，构造与析构"><span class="nav-number">1.2.</span> <span class="nav-text">对象的生命周期，构造与析构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对象实例化"><span class="nav-number">1.2.1.</span> <span class="nav-text">对象实例化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#析构函数"><span class="nav-number">1.2.2.</span> <span class="nav-text">析构函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象指针数组"><span class="nav-number">1.2.3.</span> <span class="nav-text">对象指针数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复制构造函数"><span class="nav-number">1.2.4.</span> <span class="nav-text">复制构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象生命周期"><span class="nav-number">1.2.5.</span> <span class="nav-text">对象生命周期</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#栈对象和堆对象的创建方式"><span class="nav-number">1.3.</span> <span class="nav-text">栈对象和堆对象的创建方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C++_智能指针与裸指针"><span class="nav-number">1.4.</span> <span class="nav-text">C++ 智能指针与裸指针</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么要用智能指针？"><span class="nav-number">1.4.1.</span> <span class="nav-text">为什么要用智能指针？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#四种智能指针"><span class="nav-number">1.4.2.</span> <span class="nav-text">四种智能指针</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp;  2015.05.16 - 
+  2018
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">CharlesXiao</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="../../../../vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.content img').each(function () {
+        var $image = $(this);
+        var $imageWrapLink = $image.parent('a');
+
+        if ($imageWrapLink.size() < 1) {
+          $imageWrapLink = $image.wrap('<a href="' + this.getAttribute('src') + '"></a>').parent('a');
+        }
+        $imageWrapLink.addClass('fancybox');
+      });
+    });
+    $('.fancybox').fancybox({
+      helpers: {
+        overlay: {
+          locked: false
+        }
+      }
+    });
+  </script>
+
+
+  <script type="text/javascript">
+  function hasMobileUA () {
+    var nav = window.navigator;
+    var ua = nav.userAgent;
+    var pa = /iPad|iPhone|Android|Opera Mini|BlackBerry|webOS|UCWEB|Blazer|PSP|IEMobile|Symbian/g;
+
+    return pa.test(ua);
+  }
+
+  function isDesktop () {
+    return screen.width > 991 && !hasMobileUA();
+  }
+
+  function isTablet () {
+    return screen.width < 992 && screen.width > 767 && hasMobileUA();
+  }
+
+  function isMobile () {
+    return screen.width < 767 && hasMobileUA();
+  }
+
+  function escapeSelector (selector) {
+    return selector.replace(/[!"$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")
+  }
+</script>
+
+  
+
+  <script type="text/javascript" src="../../../../vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="../../../../vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" id="motion.global">
+  $(document).ready(function () {
+    var body = $('body');
+    var isSidebarVisible = false;
+    var sidebarToggle = $('.sidebar-toggle');
+    var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
+    var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
+    var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
+    var sidebar = $('.sidebar');
+
+    var SIDEBAR_WIDTH = '320px';
+    var SIDEBAR_DISPLAY_DURATION = 300;
+
+    var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
+
+    var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
+    var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
+
+    var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine2ndStatusArrow = {width: '90%'};
+    var sidebarToogleLine2ndStatusClose = {opacity: 0};
+
+    var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
+    var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
+
+    LogoAndMenuMotion();
+    sidebatToggleMotion();
+    postsListMotion();
+    backToTopMotion();
+
+
+    $(document)
+      .on('sidebar.isShowing', function () {
+        isDesktop() && body.velocity(
+          {paddingRight: SIDEBAR_WIDTH},
+          SIDEBAR_DISPLAY_DURATION
+        );
+        sidebarContentMotion();
+      })
+      .on('sidebar.isHiding', function () {});
+
+    function LogoAndMenuMotion() {
+      $.Velocity.RunSequence([
+        { e: $('.brand'), p: { opacity: 1 }, o: { duration: 100 } },
+        { e: $('.logo'), p: { opacity: 1, top: 0 }, o: { duration: 50} },
+        
+        { e: $('.logo-line-before i'), p: { translateX: "100%" }, o: { duration: 500, sequenceQueue: false } },
+        { e: $('.logo-line-after i'), p: { translateX: "-100%" }, o: { duration: 500, sequenceQueue: false } },
+        
+        { e: $('.site-title'), p: { opacity: 1, top: 0 }, o: { duration: 200 } }
+      ]);
+      $('.menu-item').velocity('transition.slideDownIn', {display: null});
+    }
+
+
+    function backToTopMotion () {
+      var b2top = $('.back-to-top');
+      b2top.on('click', function () {
+        body.velocity('scroll');
+      });
+    }
+
+    function sidebarShowMotion () {
+
+      sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
+      sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
+      sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
+
+      sidebar.velocity({width: SIDEBAR_WIDTH}, {
+        display: 'block',
+        duration: SIDEBAR_DISPLAY_DURATION,
+        complete: function () {
+          sidebar.addClass('sidebar-active');
+          sidebar.trigger('sidebar.didShow');
+        }
+      });
+      sidebar.trigger('sidebar.isShowing');
+    }
+
+    function sidebarHideMotion () {
+      isDesktop() && body.velocity({paddingRight: 0});
+      sidebar.velocity('reverse');
+
+      sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
+      sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
+      sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
+
+      sidebar.removeClass('sidebar-active');
+      sidebar.trigger('sidebar.isHiding');
+    };
+
+    function sidebarContentMotion () {
+      $('.sidebar .motion-element').velocity(
+        'transition.slideRightIn',
+        {stagger: 50, drag: true}
+      );
+    }
+
+    function postsListMotion () {
+      var postMotionOptions = window.postMotionOptions || {stagger: 300, drag: true};
+      $('.post').velocity('transition.slideDownIn', postMotionOptions);
+    }
+
+    function sidebatToggleMotion () {
+      sidebarToggle.on('click', function () {
+        isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
+        isSidebarVisible = !isSidebarVisible;
+      });
+
+      sidebarToggle.hover(function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
+      }, function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
+      });
+    }
+  });
+
+</script>
+
+
+
+
+
+  
+  
+<script type="text/javascript" id="bootstrap.scrollspy.custom">
+  /* ========================================================================
+  * Bootstrap: scrollspy.js v3.3.2
+  * http://getbootstrap.com/javascript/#scrollspy
+  * ========================================================================
+  * Copyright 2011-2015 Twitter, Inc.
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  * ======================================================================== */
+
+  /**
+   * Custom by iissnan
+   *
+   * - Add a `clear.bs.scrollspy` event.
+   * - Esacpe targets selector.
+   */
+
+
+  +function ($) {
+    'use strict';
+
+    // SCROLLSPY CLASS DEFINITION
+    // ==========================
+
+    function ScrollSpy(element, options) {
+      this.$body          = $(document.body)
+      this.$scrollElement = $(element).is(document.body) ? $(window) : $(element)
+      this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
+      this.selector       = (this.options.target || '') + ' .nav li > a'
+      this.offsets        = []
+      this.targets        = []
+      this.activeTarget   = null
+      this.scrollHeight   = 0
+
+      this.$scrollElement.on('scroll.bs.scrollspy', $.proxy(this.process, this))
+      this.refresh()
+      this.process()
+    }
+
+    ScrollSpy.VERSION  = '3.3.2'
+
+    ScrollSpy.DEFAULTS = {
+      offset: 10
+    }
+
+    ScrollSpy.prototype.getScrollHeight = function () {
+      return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
+    }
+
+    ScrollSpy.prototype.refresh = function () {
+      var that          = this
+      var offsetMethod  = 'offset'
+      var offsetBase    = 0
+
+      this.offsets      = []
+      this.targets      = []
+      this.scrollHeight = this.getScrollHeight()
+
+      if (!$.isWindow(this.$scrollElement[0])) {
+        offsetMethod = 'position'
+        offsetBase   = this.$scrollElement.scrollTop()
+      }
+
+      this.$body
+        .find(this.selector)
+        .map(function () {
+          var $el   = $(this)
+          var href  = $el.data('target') || $el.attr('href')
+          var $href = /^#./.test(href) && $(escapeSelector(href)) // Need to escape selector.
+
+          return ($href
+            && $href.length
+            && $href.is(':visible')
+            && [[$href[offsetMethod]().top + offsetBase, href]]) || null
+        })
+        .sort(function (a, b) { return a[0] - b[0] })
+        .each(function () {
+          that.offsets.push(this[0])
+          that.targets.push(this[1])
+        })
+
+
+    }
+
+    ScrollSpy.prototype.process = function () {
+      var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
+      var scrollHeight = this.getScrollHeight()
+      var maxScroll    = this.options.offset + scrollHeight - this.$scrollElement.height()
+      var offsets      = this.offsets
+      var targets      = this.targets
+      var activeTarget = this.activeTarget
+      var i
+
+      if (this.scrollHeight != scrollHeight) {
+        this.refresh()
+      }
+
+      if (scrollTop >= maxScroll) {
+        return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
+      }
+
+      if (activeTarget && scrollTop < offsets[0]) {
+        $(this.selector).trigger('clear.bs.scrollspy')  // Add a custom event.
+        this.activeTarget = null
+        return this.clear()
+      }
+
+      for (i = offsets.length; i--;) {
+        activeTarget != targets[i]
+          && scrollTop >= offsets[i]
+          && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
+          && this.activate(targets[i])
+      }
+    }
+
+    ScrollSpy.prototype.activate = function (target) {
+      this.activeTarget = target
+
+      this.clear()
+
+      var selector = this.selector +
+        '[data-target="' + target + '"],' +
+        this.selector + '[href="' + target + '"]'
+
+      var active = $(selector)
+        .parents('li')
+        .addClass('active')
+
+      if (active.parent('.dropdown-menu').length) {
+        active = active
+          .closest('li.dropdown')
+          .addClass('active')
+      }
+
+      active.trigger('activate.bs.scrollspy')
+    }
+
+    ScrollSpy.prototype.clear = function () {
+      $(this.selector)
+        .parentsUntil(this.options.target, '.active')
+        .removeClass('active')
+    }
+
+
+    // SCROLLSPY PLUGIN DEFINITION
+    // ===========================
+
+    function Plugin(option) {
+      return this.each(function () {
+        var $this   = $(this)
+        var data    = $this.data('bs.scrollspy')
+        var options = typeof option == 'object' && option
+
+        if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
+        if (typeof option == 'string') data[option]()
+      })
+    }
+
+    var old = $.fn.scrollspy
+
+    $.fn.scrollspy             = Plugin
+    $.fn.scrollspy.Constructor = ScrollSpy
+
+
+    // SCROLLSPY NO CONFLICT
+    // =====================
+
+    $.fn.scrollspy.noConflict = function () {
+      $.fn.scrollspy = old
+      return this
+    }
+
+
+    // SCROLLSPY DATA-API
+    // ==================
+
+    $(window).on('load.bs.scrollspy.data-api', function () {
+      $('[data-spy="scroll"]').each(function () {
+        var $spy = $(this)
+        Plugin.call($spy, $spy.data())
+      })
+    })
+
+  }(jQuery);
+</script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0 && isDesktop()) {
+        setTimeout(function () {
+          $('.sidebar-toggle').trigger('click');
+        }, 800);
+      }
+    });
+  </script>
+
+
+
+
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"charles-xiao"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+
+  
+</body>
+</html>
