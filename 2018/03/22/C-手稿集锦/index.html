@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="java,android,life,CharlesXiao" />
+  <meta name="keywords" content="C++," />
 
 
 
@@ -43,7 +43,7 @@
   </script>
 
 
-  <title>  // CharlesXiao‘s Blog </title>
+  <title> C++手稿集锦 // CharlesXiao‘s Blog </title>
 </head>
 
 <body>
@@ -146,7 +146,7 @@
           
           
             
-              
+              C++手稿集锦
             
           
         </h1>
@@ -154,7 +154,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2018-09-22
+          发表于 2018-03-22
         </span>
 
         
@@ -164,7 +164,7 @@
             <span class="post-comments-count">
             &nbsp; | &nbsp;
             <a href="#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/09/22/C++手稿重难点集锦/"></span>
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/03/22/C-手稿集锦/"></span>
             </a>
           </span>
           
@@ -178,8 +178,7 @@
       
 
       
-        <p>title: “C++手稿重难点集锦”<br>date: 2017-11-21 11:36:53</p>
-<h2 id="tags:_[C++]">tags: [C++]</h2><h3 id="哪些变量会自动初始化？">哪些变量会自动初始化？</h3><p>在C语言中的<strong>全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值（C++默认初始化策略也是如此）。 C++保证了所有对象与对象成员都会初始化</strong>，无论是否写了圆括号或者是否写了参数列表，但其中基本数据类型的初始化还得依赖于构造函数。</p>
+        <h3 id="哪些变量会自动初始化？">哪些变量会自动初始化？</h3><p>在C语言中的<strong>全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值（C++默认初始化策略也是如此）。 C++保证了所有对象与对象成员都会初始化</strong>，无论是否写了圆括号或者是否写了参数列表，但其中基本数据类型的初始化还得依赖于构造函数。</p>
 <p>成员变量分为成员对象和内置类型成员，其中成员对象总是会被初始化的。我们通常会在构造函数中初始化所有内置类型的成员。例如：</p>
 <figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> v;</span><br><span class="line">    A(): v(0);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -266,16 +265,24 @@
 
     <div class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="../../../../tags/C/"> #C++ </a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
+              <a href="../../26/初探Goroutine调度机制/">初探Goroutine调度机制</a>
+            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="../../../08/25/HDFS入门/">HDFS入门</a>
+              <a href="../../../02/07/高并发系统的限流策略/">高并发系统的限流策略</a>
             
           </div>
         </div>
@@ -291,8 +298,8 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2018/09/22/C++手稿重难点集锦/"
-               data-title="" data-url="https://charles-xiao.github.io/2018/09/22/C++手稿重难点集锦/">
+          <div class="ds-thread" data-thread-key="2018/03/22/C-手稿集锦/"
+               data-title="C++手稿集锦" data-url="https://charles-xiao.github.io/2018/03/22/C-手稿集锦/">
           </div>
         
       </div>
@@ -302,6 +309,10 @@
 
         </div>
 
+        
+        <!-- 多说热评文章-->
+        <p>热评文章</p>
+        <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
         
       </div>
 
@@ -391,7 +402,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags:_[C++]"><span class="nav-number">1.</span> <span class="nav-text">tags: [C++]</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#哪些变量会自动初始化？"><span class="nav-number">1.1.</span> <span class="nav-text">哪些变量会自动初始化？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象的生命周期，构造与析构"><span class="nav-number">1.2.</span> <span class="nav-text">对象的生命周期，构造与析构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对象实例化"><span class="nav-number">1.2.1.</span> <span class="nav-text">对象实例化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#析构函数"><span class="nav-number">1.2.2.</span> <span class="nav-text">析构函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象指针数组"><span class="nav-number">1.2.3.</span> <span class="nav-text">对象指针数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复制构造函数"><span class="nav-number">1.2.4.</span> <span class="nav-text">复制构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象生命周期"><span class="nav-number">1.2.5.</span> <span class="nav-text">对象生命周期</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#栈对象和堆对象的创建方式"><span class="nav-number">1.3.</span> <span class="nav-text">栈对象和堆对象的创建方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C++_智能指针与裸指针"><span class="nav-number">1.4.</span> <span class="nav-text">C++ 智能指针与裸指针</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么要用智能指针？"><span class="nav-number">1.4.1.</span> <span class="nav-text">为什么要用智能指针？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#四种智能指针"><span class="nav-number">1.4.2.</span> <span class="nav-text">四种智能指针</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#哪些变量会自动初始化？"><span class="nav-number">1.</span> <span class="nav-text">哪些变量会自动初始化？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象的生命周期，构造与析构"><span class="nav-number">2.</span> <span class="nav-text">对象的生命周期，构造与析构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对象实例化"><span class="nav-number">2.1.</span> <span class="nav-text">对象实例化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#析构函数"><span class="nav-number">2.2.</span> <span class="nav-text">析构函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象指针数组"><span class="nav-number">2.3.</span> <span class="nav-text">对象指针数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复制构造函数"><span class="nav-number">2.4.</span> <span class="nav-text">复制构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象生命周期"><span class="nav-number">2.5.</span> <span class="nav-text">对象生命周期</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#栈对象和堆对象的创建方式"><span class="nav-number">3.</span> <span class="nav-text">栈对象和堆对象的创建方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C++_智能指针与裸指针"><span class="nav-number">4.</span> <span class="nav-text">C++ 智能指针与裸指针</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么要用智能指针？"><span class="nav-number">4.1.</span> <span class="nav-text">为什么要用智能指针？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#四种智能指针"><span class="nav-number">4.2.</span> <span class="nav-text">四种智能指针</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -996,6 +1007,10 @@
 
 
   
+
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"3","bdPos":"left","bdTop":"250"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+
 
   
 </body>
