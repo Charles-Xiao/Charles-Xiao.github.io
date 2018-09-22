@@ -590,7 +590,7 @@ def transport_request(req)
 <p>在Golang中，goroutine可以认为是一种”轻量级线程” —- 协程，占用资源少。一个Go程序中可以创建成千上万个并发的goroutine，包括golang runtime在内的所有代码都跑在goroutine中，不涉及OS内核态。OS完全不知道goroutine的存在，go代码运行在一个或多个操作系统线程上。因此golang需要有<strong>调度器</strong>来负责调度这些goroutine，go scheduler负责将程序内的goroutines按照一定算法调度到不同的线程中去执行。</p>
 <h3 id="Go调度模型">Go调度模型</h3><h4 id="G-M模型">G-M模型</h4><p>Go 1.0版本的简单调度模型，G指代goroutine，对应于runtime中的一个抽象结构；M指machine，代表一个操作系统线程。该模型存在一些问题。例如单一全局互斥锁(Sched.Lock)，意味着每个协程创建和调度都要加锁；M会做内存缓存，而且goroutine在M之间传递，造成调度延迟、、内存消耗、性能损耗。</p>
 <h4 id="G-P-M模型">G-P-M模型</h4><ul>
-<li><p>1.1版本之后沿用至今的调度模型，内部采用work stealing算法。模型图如下：<br><img src="https://tonybai.com/wp-content/uploads/goroutine-scheduler-model.png" width="100%"></p>
+<li><p>1.1版本之后沿用至今的调度模型，内部采用work stealing算法。模型图如下：<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/goroutine-scheduler-model.png" class="full-image"></p>
 </li>
 <li><blockquote>
 <p>M represents an OS thread. It’s the thread of execution managed by the OS and works pretty much like your standard POSIX thread. In the runtime code, it’s called M for machine.</p>
