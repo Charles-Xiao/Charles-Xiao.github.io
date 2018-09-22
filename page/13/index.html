@@ -148,383 +148,6 @@
           
           
             
-              <a class="post-title-link" href="../../2015/08/01/Python基础知识实例讲解/">
-                Python基础知识实例讲解
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-08-01
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Python开发/">Python开发</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/08/01/Python基础知识实例讲解/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/01/Python基础知识实例讲解/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>Python作为一种面向对象、解释型计算机程序设计语言，语法简洁而清晰，具有丰富和强大的类库，在网站开发，数据处理，网络编程，图形处理，网络爬虫、机器学习、科学计算、自动化测试、系统运维等方面应用广泛。也正是由于Python开发简洁、优雅、开发效率高，它能够在很多地方替代java、C++等语言从而提高程序猿编程效率。作为程序猿，掌握这样一门便捷的编程语言来作为工具显得十分必要。本文主要参考了“极客学院”相关Python入门视频教程，对Python基础入门知识进行了整合，采用代码实例展现的方式，语法知识全部体现在代码中，简洁明了易于理解；本文主要包括三个Python module，分别是hellopython.py、mylib.py、stackqueue.py，涵盖了Python数据类型，常量变量，判断循环，函数，类和对象，模块，数据结构等知识(Python开发编辑器为PyCharm)</p>
-<h3 id="hellopython-py">hellopython.py</h3><p>该模块为主模块，负责实现大部分Python基础语法及其测试，从该模块我们看到几乎所有的Python基础句法的使用方法  </p>
-<p>代码：  </p>
-<pre><code><span class="comment"># coding=UTF-8</span>
-__author__ = <span class="string">'xiaoyong'</span>
-
-<span class="keyword">from</span> math <span class="keyword">import</span> *
-<span class="keyword">from</span> stackqueue <span class="keyword">import</span> *
-<span class="keyword">from</span> mylib <span class="keyword">import</span> Hi
-<span class="keyword">from</span> collections <span class="keyword">import</span> Counter
-<span class="keyword">from</span> itertools <span class="keyword">import</span> combinations
-
-<span class="keyword">import</span> mylib
-<span class="keyword">import</span> sys
-
-<span class="class"><span class="keyword">class</span> <span class="title">HelloPy</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">helloPy</span><span class="params">(self, param)</span>:</span>
-        <span class="string">'''文档字符串：该函数用于测试变量定义，判断语句
-
-        循环语句'''</span>
-        <span class="comment"># 定义变量</span>
-        <span class="keyword">global</span> globalVar
-        globalVar = <span class="number">10</span>
-        var1 = <span class="number">10</span>
-        var2 = <span class="number">20</span>
-        var3 = var1 + var2
-        print(var3)
-
-        <span class="comment"># 判断语句</span>
-        <span class="keyword">if</span> param &gt;= <span class="number">60</span>:
-            print(<span class="string">"{0} &gt; 60"</span>.format(param))
-        <span class="keyword">elif</span> param &gt; <span class="number">0</span>:
-            print(<span class="string">"{0} &gt; 0"</span>.format(param))
-        <span class="keyword">else</span>:
-            print(<span class="string">"{0} &lt; 60 &amp;&amp; 0 &gt; {1}"</span>).format(param, <span class="string">"param"</span>)
-
-        <span class="comment"># 循环语句</span>
-        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>):
-            print(i)
-
-        var4 = <span class="number">0</span>
-        <span class="keyword">while</span> var4 &lt; <span class="number">3</span>:
-            print(var4)
-            var4 += <span class="number">1</span>
-        <span class="keyword">else</span>:
-            print(<span class="string">"else var4={0}"</span>.format(var4))
-
-
-<span class="comment"># 形参设置默认初始值</span>
-<span class="function"><span class="keyword">def</span> <span class="title">fuc1</span><span class="params">(a, b=<span class="number">1</span>, c=<span class="number">2</span>)</span>:</span>
-    print(a);print(b);print(c)
-
-
-<span class="function"><span class="keyword">def</span> <span class="title">fuc2</span><span class="params">(a, b=<span class="number">1</span>)</span>:</span>
-    print(a)
-    <span class="keyword">return</span> b
-
-
-<span class="function"><span class="keyword">def</span> <span class="title">fuc3</span><span class="params">()</span>:</span>
-    <span class="keyword">return</span> (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)
-
-<span class="comment"># Python常用tips </span>
-<span class="function"><span class="keyword">def</span> <span class="title">fuc_python_tips</span><span class="params">()</span>:</span>
-    print(<span class="string">'\nPython常用tips: '</span>)
-    <span class="comment"># 交换变量</span>
-    var1 = <span class="number">0</span>
-    var2 = <span class="number">1</span>
-    var1, var2 = var2, var1
-    <span class="keyword">print</span> var1, var2
-    <span class="comment"># if语句在行内</span>
-    print(<span class="string">'hello'</span>) <span class="keyword">if</span> <span class="number">1</span> != <span class="number">1</span> <span class="keyword">else</span> <span class="string">'world'</span>
-    print(<span class="string">'hello'</span> + str(var1))
-    <span class="comment"># 数字技巧</span>
-    <span class="keyword">print</span> <span class="number">5.0</span> // <span class="number">2</span>, <span class="number">5.0</span> / <span class="number">2</span>, <span class="number">2</span> ** <span class="number">5</span>, .<span class="number">3</span> / .<span class="number">1</span>, .<span class="number">3</span> // .<span class="number">1</span>
-    var3 = <span class="number">2</span>
-    <span class="keyword">if</span> <span class="number">1</span> &lt; var3 &lt; <span class="number">3</span>:
-        print(var3)
-    <span class="comment"># 列表迭代</span>
-    list1 = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]
-    list2 = [<span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>]
-    <span class="keyword">for</span> a, b <span class="keyword">in</span> zip(list1, list2):
-        <span class="keyword">print</span> a + <span class="string">" vs "</span> + b
-    <span class="keyword">for</span> index, a <span class="keyword">in</span> enumerate(list1):
-        <span class="keyword">print</span> index, a
-    list3 = [<span class="number">0</span>] * <span class="number">3</span>
-    list3.append(<span class="number">2</span>)
-    print(list3)
-    <span class="comment"># 列表--&gt;字符串</span>
-    print(<span class="string">','</span>.join(list1))
-    <span class="comment"># 获取列表子集</span>
-    x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]
-    <span class="comment"># 前3个</span>
-    <span class="keyword">print</span> x[:<span class="number">3</span>]
-    <span class="comment"># 中间4个</span>
-    <span class="keyword">print</span> x[<span class="number">1</span>:<span class="number">5</span>]
-    <span class="comment"># 最后3个</span>
-    <span class="keyword">print</span> x[-<span class="number">3</span>:]
-    <span class="comment"># 奇数项</span>
-    <span class="keyword">print</span> x[::<span class="number">2</span>]
-    <span class="comment"># 偶数项</span>
-    <span class="keyword">print</span> x[<span class="number">1</span>::<span class="number">2</span>]
-    <span class="comment"># 统计单个字母数目</span>
-    <span class="keyword">print</span> Counter(<span class="string">'hello'</span>)
-    <span class="comment"># 列出所有组合方式</span>
-    <span class="keyword">for</span> t <span class="keyword">in</span> combinations(x, <span class="number">2</span>):
-        print(t)
-
-<span class="comment"># python标识符首字符只能是下划线或者字母，其他部分可以是下划线、字母、数字；标识符对大小写敏感</span>
-
-print(sys.version);
-<span class="keyword">print</span> (<span class="string">"模块名：{0}"</span>).format(__name__)
-print(pi)
-help(HelloPy.helloPy)
-<span class="comment"># 列出模块定义的标识符,标识符有函数、类和变量</span>
-<span class="keyword">print</span> dir(sys)
-print(HelloPy.helloPy.__doc__)
-
-<span class="comment"># 引用mylib.py模块调用函数</span>
-h = mylib.Hello(<span class="string">"mylib"</span>)
-h.sayHello()
-
-h1 = Hi(<span class="string">"mylib"</span>)
-h1.sayHi()
-
-h2 = HelloPy()
-h2.helloPy(<span class="number">15</span>)
-<span class="comment"># 全局变量</span>
-print(globalVar)
-
-fuc1(b=<span class="number">2</span>, a=<span class="number">3</span>)
-var1 = fuc2(<span class="number">2</span>, <span class="number">3</span>)
-print(var1)
-var2 = fuc3()
-print(var2)
-m1, m2, m3 = fuc3()
-print(<span class="string">"{0} {1} {2}"</span>.format(m1, m2, m3))
-
-fuc_python_tips()
-
-<span class="comment"># 引号</span>
-str1 = <span class="string">'It is a "dog"'</span>
-str2 = <span class="string">"It's a dog"</span>
-str3 = <span class="string">'''she
-I
-you'''</span>
-print(<span class="string">"{0}  {1}"</span>.format(str1, str2))
-
-<span class="comment"># 字符串重复输出</span>
-print(str3) * <span class="number">3</span>
-
-<span class="comment"># 转义符</span>
-print(<span class="string">'It\'s a dog\nyou are not'</span>)
-<span class="keyword">print</span><span class="string">"women\
-doushihaohaizi"</span>
-
-<span class="comment"># 自然字符串</span>
-print(<span class="string">r"It's a dog \n you are not"</span>)
-
-<span class="comment"># 子字符串,索引和切片两种方式</span>
-print(str1[<span class="number">1</span>]);print(str1[<span class="number">0</span>:<span class="number">3</span>]);print(str1[:<span class="number">3</span>]);print(str1[<span class="number">3</span>:]);
-
-<span class="comment"># set,求两个set的&amp; | - 重复元素</span>
-print(<span class="string">"\n集合 列表 元组 字典测试:"</span>)
-var3 = set(<span class="string">'aaabbc'</span>)
-<span class="comment"># 集合中不能有重复元素</span>
-newVar = set(var3)
-print(newVar)
-<span class="comment"># 列表，数据可以修改</span>
-students = [<span class="string">"a"</span>, <span class="string">'b'</span>, <span class="string">"c"</span>]
-print(students[<span class="number">1</span>])
-
-<span class="comment"># 元组,数据不可修改</span>
-students = (<span class="string">"a"</span>, <span class="string">'b'</span>, <span class="string">"c"</span>)
-print(students[<span class="number">1</span>])
-
-<span class="comment"># 字典</span>
-dic = {<span class="string">'姓名'</span>: <span class="string">'xiaoyong'</span>, <span class="string">"性别"</span>: <span class="string">"男"</span>}
-dic[<span class="string">'兴趣'</span>] = <span class="string">'音乐'</span>
-print(dic[<span class="string">'兴趣'</span>])
-print(dic.get(<span class="string">'姓名'</span>))
-
-<span class="comment"># 栈测试</span>
-print(<span class="string">"\n栈测试:"</span>)
-stack = Stack()
-stack.push(<span class="number">1</span>)
-stack.push(<span class="number">2</span>)
-stack.push(<span class="number">3</span>)
-print(stack.length())
-print(stack.isEmpty())
-print(stack.top())
-stack.pop()
-print(stack.top())
-
-<span class="comment"># 队列测试</span>
-print(<span class="string">"\n队列测试:"</span>)
-queue = Queue()
-queue.enQueue(<span class="number">1</span>)
-queue.enQueue(<span class="number">2</span>)
-queue.enQueue(<span class="number">3</span>)
-print(queue.length())
-print(queue.isEmpty())
-print(queue.head())
-print(queue.tail())
-queue.deQueue()
-print(queue.head())
-print(queue.tail())
-</code></pre><h3 id="mylib-py">mylib.py</h3><p>该模块为引用模块，实现两个类，Hello为父类，Hi为子类  </p>
-<p>代码：</p>
-<pre><code><span class="comment"># coding=UTF-8</span>
-__author__ = <span class="string">'xiaoyong'</span>
-
-<span class="class"><span class="keyword">class</span> <span class="title">Hello</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span>
-        self._name = name
-
-    <span class="function"><span class="keyword">def</span> <span class="title">sayHello</span><span class="params">(self)</span>:</span>
-        print(<span class="string">"class Hello: sayHello"</span>)
-        <span class="keyword">print</span> (<span class="string">"模块名：{0}"</span>).format(__name__)
-
-<span class="comment"># 类的继承</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Hi</span><span class="params">(Hello)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span>
-        Hello.__init__(self, name)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">sayHi</span><span class="params">(self)</span>:</span>
-        print(<span class="string">"class Hi: sayHi"</span>)
-</code></pre><h3 id="stackqueue-py">stackqueue.py</h3><p>该模块为引用模块，Stack和Queue类分别实现栈和队列两种数据结构  </p>
-<p>代码：</p>
-<pre><code><span class="comment"># coding= utf-8</span>
-__author__ = <span class="string">'xiaoyong'</span>
-
-
-<span class="comment"># 栈实现</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Stack</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
-        self.stack = []
-
-    <span class="function"><span class="keyword">def</span> <span class="title">push</span><span class="params">(self, item)</span>:</span>
-        self.stack.append(item)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">pop</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.stack != []:
-            <span class="keyword">return</span> self.stack.pop(-<span class="number">1</span>)
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">top</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.stack != []:
-            <span class="keyword">return</span> self.stack[-<span class="number">1</span>]
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">length</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> len(self.stack)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">isEmpty</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.stack == []
-
-
-<span class="comment"># 队列实现</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Queue</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
-        self.queue = []
-
-    <span class="function"><span class="keyword">def</span> <span class="title">enQueue</span><span class="params">(self, item)</span>:</span>
-        self.queue.append(item)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">deQueue</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.queue != []:
-            <span class="keyword">return</span> self.queue.pop(<span class="number">0</span>)
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">head</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.queue != []:
-            <span class="keyword">return</span> self.queue[<span class="number">0</span>]
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">tail</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.queue != []:
-            <span class="keyword">return</span> self.queue[-<span class="number">1</span>]
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">length</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> len(self.queue)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">isEmpty</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.queue == []
-</code></pre><h3 id="结语">结语</h3><p>以上三个模块基本涵盖了Python所有基本语法的使用，仅作参考查询之用；如需深入学习Python相关知识，比如RESTful API开发，web2Py，Flask等框架使用，请Google之或参考相关官网。</p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Python/"> #Python </a>
-          
-            <a href="../../tags/栈/"> #栈 </a>
-          
-            <a href="../../tags/队列/"> #队列 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
               <a class="post-title-link" href="../../2015/07/29/浅析java内存管理机制/">
                 浅析java内存管理机制
               </a>
@@ -1171,6 +794,335 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
 
 
     
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/05/27/java重难点知识集锦/">
+                java重难点知识集锦
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-27
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/java学习笔记/">java学习笔记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/05/27/java重难点知识集锦/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/27/java重难点知识集锦/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="复用类(继承组合)与多态">复用类(继承组合)与多态</h3><ol>
+<li><p>Java面向对象编程思想的三种基本特征：<strong>继承、封装、复合和多态</strong></p>
+<ul>
+<li><strong>封装</strong>：只公开代码的访问接口，隐藏其内部的数据和具体实现；通常采用public，protected，private来进行访问权限控制；封装可以隐藏实现细节，还可以使得代码模块化以对象形式呈现</li>
+<li><strong>继承、组合与代理之间的区别与联系</strong>：<strong>组合</strong>只是将对象引用置于新类中即可，表述的是一种has-a的关系，而<strong>继承</strong>通过extends关键字实现，自动得到基类中所有域和方法，表述的是一种is-a的关系；而<strong>代理</strong>是介于两者之间的一种关系，首先将对象引用置于新类中，然后在新类中构建同名方法来暴露该对象的所有方法(类似于继承)；<strong>继承</strong>可以扩展已存在的代码模块，并且表达出层次逻辑和归属关系</li>
+<li><strong>多态</strong>与向上转型相反，通常通过接口和抽象类来实现(覆盖重写方法)，我们把<strong>重载（overloading）称为编译时多态，把覆盖（overriding）称为运行时多态</strong>；多态可以达到接口重用的目的，深刻地体现了一种设计原则里-依赖倒置原则；程序要依赖超类（抽象类、接口）不要依赖具体类，基于接口的开发，而不是基于实现的开发。</li>
+<li><strong>运行时多态(也被称作动态绑定)</strong>是指允许将子类类型的引用赋值给父类类型的引用，赋值之后，父对象在执行期间(而非编译期间)就可以根据当前赋值给它的子对象的特性以不同的方式运作,根据实际类型判断并调用相应的属性和方法;<strong>编译时的多态</strong>是指参数列表的不同, 来区分不同的函数, 在编译后, 就自动变成两个不同的函数名.</li>
+<li><strong>动态绑定的底层实现</strong>是指针,我们知道程序中的方法是一段代码,存放在专门的内存区域(代码区),当我们在程序执行期间new 出一个对象后调用其方法的时候,JVM动态的把指针指向实际的对象重写的方法,从而实现了动态绑定.</li>
+<li><strong>动态绑定的最大好处</strong>就是给我们的程序的可扩展性带来了相当大的提高；如果没有动态绑定,我们一般情况下的做法是在子类中用instanceof判断一个对象是不是我们需要的当前具体对象,但当我们定义好多个子类的时候,每次都要判断,现在有了动态绑定,我们不需要再去判断,而是JVM动态给我们指向具体的对象并调用相应的属性和方法.</li>
+</ul>
+</li>
+<li><p><strong>继承与初始化</strong>：导出类继承自基类，构造器调用顺序是从上至下基类到导出类层层调用，若是默认构造器则不需要在导出类中显式调用基类构造器，否则需要首先在导出类构造器中使用super关键字调用基类构造器。见《Java编程思想P146和P158》</p>
+</li>
+</ol>
+<h3 id="接口与内部类">接口与内部类</h3><ol>
+<li><strong>接口与抽象类的区别联系</strong>：<ul>
+<li>一个类可以实现多个接口但是只能实现一个抽象类 </li>
+<li>接口中都是抽象方法，抽象类中可以有实现的方法</li>
+<li>接口中方法都是public的，属性都是public static final的;但是抽象类中方法和属性都可以自由定义修饰符</li>
+<li>接口不能有构造器，抽象类可以有构造器，但是两者都不能实例化</li>
+</ul>
+</li>
+<li><p><strong>静态内部类(嵌套类)与非静态内部类，方法内部类，匿名内部类区别</strong>：</p>
+<ul>
+<li>嵌套类不需要内部类对象与外围类对象之间有联系，而内部类自动拥有其外围类所有成员的访问权(因为内部类对象拥有一个指向其外围类对象的引用);创建内部类对象之前需要先创建外围类对象，而创建嵌套类对象则不需要</li>
+<li>嵌套类不能访问外围类的非静态属性，但是内部类可以访问外围类的所有属性和方法(包括private)，内部类不能有static变量</li>
+<li>局部内部类: 该类被创建在外围类的方法或者作用域中，局部内部类的访问仅限于方法内或者该作用域内</li>
+<li><p>匿名内部类: 在java Listener中出现的非常多，必须继承某个接口或者父类，在其中只能重写一个方法；没有修饰符;匿名内部类是唯一一种没有构造器的类。正因为其没有构造器，所以匿名内部类的使用范围非常有限，大部分匿名内部类用于接口回调。匿名内部类在编译的时候由系统自动起名为Outter$1.class；多线程的实现也是匿名内部类的一种</p>
+<pre><code>scan_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {
+    @<span class="type">Override</span>
+    public <span class="type">void</span> onClick(<span class="type">View</span> v) {
+        // <span class="type">TODO</span> <span class="type">Auto</span>-generated <span class="keyword">method</span> stub
+
+    }
+});
+
+history_bt.setOnClickListener(new <span class="type">OnClickListener</span>() {       
+    @<span class="type">Override</span>
+    public <span class="type">void</span> onClick(<span class="type">View</span> v) {
+        // <span class="type">TODO</span> <span class="type">Auto</span>-generated <span class="keyword">method</span> stub
+
+    }
+});
+</code></pre></li>
+<li>成员内部类，就是作为外部类的成员，可以直接使用外部类的所有成员和方法，即使是private的。虽然成员内部类可以无条件地访问外部类的成员，而外部类想访问成员内部类的成员却不是这么随心所欲了。在外部类中如果要访问成员内部类的成员，必须先创建一个成员内部类的对象，再通过指向这个对象的引用来访问</li>
+</ul>
+</li>
+<li><strong>为什么需要内部类？</strong><ul>
+<li>内部类提供了进入和操作外围类的窗口，可以直接调用外部类的private方法和属性，但是外部类却不可以调用内部类的方法和属性</li>
+<li>内部类完善了“多重继承”机制，他能提供继承多个具体类或抽象类的能力</li>
+<li>内部类可以更好地封装，它被封装在外部类里，不允许同包其他类访问</li>
+</ul>
+</li>
+<li><strong>内部类的继承与覆盖</strong> —- 见《Java编程思想P212》</li>
+</ol>
+<h3 id="异常处理与类型信息">异常处理与类型信息</h3><ol>
+<li>异常处理是java中唯一正式的错误报告机制，用于解决运行期间遇到的问题；可以用try……catch进行捕获也可以在定义方法或者类时使用throws声明。</li>
+<li><strong>Error类和Exception类区别</strong>它们的父类都是throwable类，他们的区别是：<ul>
+<li><strong>Error类</strong>一般是指与虚拟机相关的问题，如系统崩溃，虚拟机错误，内存空间不足，方法调用栈溢等。对于这类错误的导致的应用程序中断，仅靠程序本身无法恢复和和预防，遇到这样的错误，建议让程序终止。</li>
+<li><strong>Exception类</strong>表示程序可以处理的异常，可以捕获且可能恢复。遇到这类异常，应该尽可能处理异常，使程序恢复运行，而不应该随意终止异常。</li>
+<li>Exception类又分为<strong>运行时异常（Runtime Exception）</strong>和<strong>受检查的异常(Checked Exception )</strong>，运行时异常;ArithmaticException算术异常,IllegalArgumentException非法参数异常，NullPointerException 空指针异常，编译能通过，但是一运行就终止了，程序不会处理运行时异常，出现这类异常，程序会终止。而受检查的异常，要么用try……catch捕获，要么用throws字句声明抛出，交给它的父类处理，否则编译不会通过，SQLException</li>
+</ul>
+</li>
+<li><strong>return与finally</strong>：<ul>
+<li>在try里边return会先return再执行finally；在catch里边return则先执行finally再return</li>
+<li>在finally里边return会导致异常丢失，不再抛出异常(另一种异常丢失是因为前一个异常还没处理就抛出下一个异常，前一个异常就丢失了)</li>
+</ul>
+</li>
+</ol>
+<h3 id="Java反射机制">Java反射机制</h3><ol>
+<li><p><strong>反射</strong>：反射机制不但可以让我们在程序运行时获取类的函数、属性、父类、接口等 Class 内部信息，还可以让我们在运行期实例化对象，调用方法，通过调用get/set方法获取变量的值，即使方法或属性是私有的的也可以通过反射的形式调用，可以用于使用在编译器为程序生成代码之后很久才会出现的类，比如基于构建编程和远程方法调用，主要是通过Class类和java.lang.reflect类库来实现</p>
+<pre><code>//记载指定路径中的<span class="class"><span class="keyword">class</span>对象的两个方法</span>
+<span class="class"><span class="keyword">Class</span>.<span class="title">forName</span>(<span class="title">String</span> <span class="title">className</span>);</span>
+<span class="keyword">public</span> static <span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">forName</span> (<span class="title">String</span> <span class="title">className</span>, <span class="title">boolean</span> <span class="title">shouldInitialize</span>, <span class="title">ClassLoader</span> <span class="title">classLoader</span>)</span>
+
+//编译器获取类的<span class="class"><span class="keyword">class</span>对象</span>
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">myObjectClass</span> = <span class="title">MyObject</span>.<span class="title">class</span>;</span>
+//编译器获取对象的<span class="class"><span class="keyword">class</span>对象</span>
+Student me = <span class="keyword">new</span> Student(<span class="string">"mr.simple"</span>);    
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">clazz</span> = <span class="title">me</span>.<span class="title">getClass</span>();</span>
+
+// 运行期获取指定路径的 <span class="class"><span class="keyword">Class</span> 对象</span>
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">clz</span> = <span class="title">Class</span>.<span class="title">forName</span>("<span class="title">org</span>.<span class="title">java</span>.<span class="title">advance</span>.<span class="title">reflect</span>.<span class="title">Student</span>");</span>
+// 通过 <span class="class"><span class="keyword">Class</span> 对象获取 <span class="title">Constructor</span>，<span class="title">Student</span> 的构造函数有一个字符串参数</span>
+// 因此这里需要传递参数的类型 ( Student 类见后面的代码 )
+Constructor&lt;?&gt; constructor = clz.getConstructor(String.class);
+// 通过 Constructor 来创建 Student 对象
+Object obj = constructor.newInstance(<span class="string">"mr.simple"</span>);
+//获取父类和接口
+<span class="class"><span class="keyword">Class</span>&lt;?&gt; <span class="title">superClass</span> = <span class="title">obj</span>.<span class="title">getClass</span>().<span class="title">getSuperclass</span>();</span>
+<span class="class"><span class="keyword">Class</span>&lt;?&gt;[] <span class="title">interfaceses</span> = <span class="title">obj</span>.<span class="title">getClass</span>().<span class="title">getInterfaces</span>();</span>
+
+System.out.println(<span class="string">" obj :  "</span> + obj.toString());
+</code></pre><ul>
+<li>Class 中的 <strong>getDeclaredMethods</strong> 函数，它会获取到当前类中的public、default、protected、private 的所有方法; <strong>getDeclaredMethod(String name, Class…&lt;?&gt; parameterTypes)</strong>则是获取当前类中某个指定的方法</li>
+<li>Class 中的 <strong>getMethods</strong> 函数用于获取当前类以及父类中的所有 public 方法，而 <strong>getMethod(String name, Class…&lt;?&gt; parameterTypes)</strong> 则是获取某个指定的public方法</li>
+<li>Class 中的 <strong>getDeclaredFields</strong> 函数，它会获取到当前类中的public、default、protected、private 的所有属性; <strong>getDeclaredField(String name)</strong>则是获取当前类中某个指定的属性</li>
+<li>Class 中的 <strong>getFields</strong> 函数用于获取当前类以及父类中的所有 public 属性，而 <strong>getField(String name)</strong> 则是获取某个指定的public属性    </li>
+</ul>
+</li>
+<li><strong>RTTI(Run-Time Type Identification)</strong>：在运行时识别对象的类型；其主要限制是在编译时就必须已知对象类型，也就是知道类名，它的三种应用场景：①类型转换 如：Shape s = (Shape)circle　②Shape.class这种类字面常量　③instanceof判断某对象是否是某类或其之类的实例</li>
+<li><strong>RTTI和反射之间真正的区别</strong>在于：对RTTI来说，编译器在编译时打开和检查.class文件；对于反射机制来说，.class文件在编译时不可获取，只有等到运行时才能打开和检查。</li>
+</ol>
+<h3 id="枚举、注解与泛型">枚举、注解与泛型</h3><ol>
+<li><a href="http://www.cnblogs.com/happyPawpaw/archive/2013/04/09/3009553.html" target="_blank" rel="external">Java Enum用法</a></li>
+<li>注解又叫做元数据，一种在代码中添加信息的形式化方法，该信息可以在后期利用反射机制进行使用，我们可以通过编写注解处理器来解析代码中的注解，也可以使用apt来解析。</li>
+<li><strong>泛型</strong>主要是用于容器定义，泛型是通过类型擦除来实现的，编译器在编译时擦除了所有类型相关的信息，所以在运行时不存在任何类型相关的信息。例如 List<string>在运行时仅用一个List来表示。它提供了编译期的类型安全，确保你只能把正确类型的对象放入集合中，避免了在运行时出现ClassCastException。</string></li>
+</ol>
+<h3 id="字符串与数组">字符串与数组</h3><h3 id="持有对象的容器">持有对象的容器</h3><h3 id="java_I/O系统与并发">java I/O系统与并发</h3><h3 id="final、finally和finalize对比">final、finally和finalize对比</h3><ul>
+<li>final用于声明属性方法和类，分别表示：属性不可变，方法不可覆盖，类不可继承。可以用于关闭方法动态绑定</li>
+<li>finally是异常处理语句的一部分，表示总是执行。一般用于释放除内存之外的资源(例如已打开的文件或者网络连接)</li>
+<li>finalize是Object的一个方法，在垃圾收集器执行的时候会调用被回收对象的此方法。</li>
+</ul>
+<h3 id="String、StringBuffer和StringBuilder区别">String、StringBuffer和StringBuilder区别</h3><ul>
+<li>如果一个对象，在它创建完成之后，不能再改变它的状态，那么这个<strong>对象就是不可变的</strong>。不能改变状态的意思是，不能改变对象内的成员变量，包括基本数据类型的值不能改变，引用类型的变量不能指向其他的对象，引用类型指向的对象的状态也不能改变。</li>
+<li><strong>String类对象</strong>是不可变对象，其在创建之后不能再改变其所拥有的所有private final成员变量；因为String类本身就是final类而且其源码中的char[]数组引用，offset(记录字符串首字母在value数组中对应的下标),count(记录字符串的长度)，hash等变量也是final的(JDK1.7中只存在hash和char[]数组),除非使用反射机制去改变char[]引用指向的堆中的数组数据；而String的substring， replace， replaceAll， toLowerCase等函数都是新建一个堆中的String对象然后返回给String的引用，从而使得引用指向了新的String对象，并没有改变原来的String对象</li>
+<li><strong>字符串常量池</strong>：首先需要确认<strong>字符串常量池存放的是对象引用，不是对象，字符串常量池存在于方法区中(JDK8移到了堆中)，而对象都创建在堆内存中</strong>；<ul>
+<li>当代码中出现字面量形式(String str1 = “droid”;)创建字符串对象时，JVM首先会对这个字面量进行检查，如果字符串常量池中存在相同内容的字符串对象的引用，则将这个引用返回，否则新的字符串对象被创建，然后将这个引用放入字符串常量池，并返回该引用；</li>
+<li>当我们使用了new来构造字符串对象的时候，不管字符串常量池中有没有相同内容的对象的引用，新的字符串对象都会创建</li>
+<li>字符串常量池的<strong>好处</strong>就是减少相同内容字符串的创建，节省内存空间。<strong>坏处</strong>牺牲了CPU计算时间来换空间。CPU计算时间主要用于在字符串常量池中查找是否有内容相同对象的引用。不过其内部实现为HashTable，所以计算成本较低。 <a href="http://droidyue.com/blog/2014/12/21/string-literal-pool-in-java/" target="_blank" rel="external">Link</a></li>
+</ul>
+</li>
+<li><p>用反射可以反射出String对象中的私有 value属性， 进而改变通过获得的char[]引用去改变数组的结构，例如：</p>
+<pre><code><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testReflection</span><span class="params">()</span> throws Exception </span>{  
+
+<span class="comment">//创建字符串"Hello World"， 并赋给引用s  </span>
+String s = <span class="string">"Hello World"</span>;   
+
+System.<span class="keyword">out</span>.println(<span class="string">"s = "</span> + s); <span class="comment">//Hello World  </span>
+
+<span class="comment">//获取String类中的value字段  </span>
+Field valueFieldOfString = String.class.getDeclaredField(<span class="string">"value"</span>);  
+
+<span class="comment">//改变value属性的访问权限  </span>
+valueFieldOfString.setAccessible(<span class="keyword">true</span>);  
+
+<span class="comment">//获取s对象上的value属性的值  </span>
+<span class="keyword">char</span>[] <span class="keyword">value</span> = (<span class="keyword">char</span>[]) valueFieldOfString.<span class="keyword">get</span>(s);  
+
+<span class="comment">//改变value所引用的数组中的第5个字符  </span>
+<span class="keyword">value</span>[<span class="number">5</span>] = <span class="string">'_'</span>;  
+
+System.<span class="keyword">out</span>.println(<span class="string">"s = "</span> + s);  <span class="comment">//Hello_World  </span>
+}
+</code></pre></li>
+<li><p><strong>StringBuilder</strong>：非线程安全的可变字符串，单线程时字符串拼接最快</p>
+</li>
+<li><p><strong>StringBuffer</strong>：通过调用其append和insert方法来添加字符；线程安全的可变字符串，因为内部的方法都加了synchronized关键字; String 对象的字符串拼接其实是被 JVM 解释成了 StringBuffer 对象的拼接</p>
+<pre><code><span class="comment">// String +操作快</span>
+<span class="built_in">String</span> S1 = “This <span class="keyword">is</span> only a” + “ simple” + “test”; <span class="comment">//其实就是：String S1 = “This is only a simple test”</span>
+
+<span class="comment">// StringBuffer.append()更快</span>
+<span class="built_in">String</span> S2 = “This <span class="keyword">is</span> only a”;
+<span class="built_in">String</span> S3 = “ simple”;
+<span class="built_in">String</span> S4 = “ test”;
+<span class="built_in">String</span> S1 = S2 +S3 + S4;
+</code></pre></li>
+<li>JDK1.7中subString函数改变:String类中不再有offset和count变量;这意味着成员变量char[] value将不会被共享;String.substring方法会为每个子串创建一个新的char[] value（而不是共享母串的char[] value）。这意味着String.substring方法的时间复杂度由常数阶变为线性阶。这种变化的好处是String对象占用的内存稍微少了一些（比以前少8个字节），同时确保String.substring方法不会导致内存泄漏</li>
+</ul>
+<h3 id="[java中equals，hashcode，==分析]">[java中equals，hashcode，==分析]</h3><ul>
+<li>== : 对于基本类型的变量(int, char等), 只有==方法用于判断两者是否相等;==也可用于判断两个引用变量是否相等,但是引用变量相等只是说明两个引用变量引用了同一个对象</li>
+<li>equals(): 该方法继承自Object类,它在Object类中是用==实现的，跟==一样默认是比较两个引用是否相等;但是实际应用中它主要用于判断两个String,Integer等对象或者自定义对象在内存中的值是否相等; String等对象重载了equals方法，所以可以用来比较值是否相等;</li>
+<li>hashcode(): 哈希函数的作用是把不定长度的输入通过哈希算法将其压缩成固定长度的输出(int整数), 不同的输入可能转换成相同的输出;其在Object类中的默认实现是返回对象的内存地址的哈希码，不同的对象即使内容相同但引用不同也会返回不同的哈希码.主要用于HashMap等容器中的快速定位, 通过哈希值就可以直接定位到Map中Entry数组的某个位置，然后再循环该位置对应的链表用equals判断<key,value>是否都相等。</key,value></li>
+<li>set在使用add，remove等函数时会调用equals函数去判断两个自定义对象的地址是否相同，而不是比较两个对象的内容是否相同，需要重载hashcode和equals函数，类似于String类一样重载，才能够实现去重的目的！！ HashSet中的元素实际上是作为HashMap中的Key存放在HashMap中的，为了保证HashSet中的对象不会出现重复值，在被存放元素的类中必须要重写hashCode()和equals()这两个方法。</li>
+</ul>
+<h3 id="null判断将常量写在前面的好处">null判断将常量写在前面的好处</h3><ol>
+<li>if(val == null) 和 if(null == val)的区别：后一种方式的主要优点是防止将==写成=和将!=写成=，因为后一种方式如果出现漏写，编译器会提示报错便于检查出代码错误；而前一种不会报错，造成逻辑bug不能被编译器检查出来</li>
+<li>”abc”.equals(val)和val.equals(“abc”)的区别：前一种可以防止当val=null时编译器报空指针错误</li>
+</ol>
+<h3 id="java生成随机数的方法(返回1-6的六个随机数)">java生成随机数的方法(返回1-6的六个随机数)</h3><pre><code>Random <span class="keyword">rand</span> = new Random();  
+<span class="keyword">system</span>.out.println(<span class="keyword">rand</span>.nextInt(<span class="number">6</span>) + <span class="number">1</span>);
+</code></pre><h3 id="java反转字符串方法">java反转字符串方法</h3><pre><code><span class="keyword">String</span> <span class="built_in">reverse</span>(<span class="keyword">String</span> s)   
+{<span class="keyword">return</span> <span class="keyword">new</span> StringBuilder(s).<span class="built_in">reverse</span>().toString();}
+</code></pre><h3 id="函数参数的预防性检测">函数参数的预防性检测</h3><p>针对传入参数显式检测，throw相应的Exception；包括参数为null，数值溢出以及为负，数组下标越界</p>
+<h3 id="Java常见位操作">Java常见位操作</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/BitOperation.png" class="full-image"></p>
+<pre><code><span class="comment">// 1. 获得int型最大值</span>
+System.<span class="keyword">out</span>.println((1 &lt;&lt; 31) - 1);<span class="comment">// 2147483647， 由于优先级关系，括号不可省略</span>
+System.<span class="keyword">out</span>.println(~(1 &lt;&lt; 31));<span class="comment">// 2147483647</span>
+
+<span class="comment">// 2. 获得int型最小值</span>
+System.<span class="keyword">out</span>.println(1 &lt;&lt; 31);
+System.<span class="keyword">out</span>.println(1 &lt;&lt; -1);
+
+<span class="comment">// 3. 获得long类型的最大值</span>
+System.<span class="keyword">out</span>.println(((long)1 &lt;&lt; 127) - 1);
+
+<span class="comment">// 4. 乘以2运算</span>
+System.<span class="keyword">out</span>.println(x&lt;&lt;1);
+
+<span class="comment">// 5. 除以2运算(负奇数的运算不可用)</span>
+System.<span class="keyword">out</span>.println(x&gt;&gt;1);
+
+<span class="comment">// 6. 乘以2的m次方</span>
+System.<span class="keyword">out</span>.println(x&lt;&lt;<span class="keyword">m</span>);
+
+<span class="comment">// 7. 除以2的m次方</span>
+System.<span class="keyword">out</span>.println(x&gt;&gt;<span class="keyword">m</span>);
+
+<span class="comment">// 8. 判断一个数的奇偶性</span>
+System.<span class="keyword">out</span>.println((10 &amp; 1) == 1);
+System.<span class="keyword">out</span>.println((9 &amp; 1) == 1);
+
+<span class="comment">// 9. 不用临时变量交换两个数（面试常考）</span>
+a ^= b;
+b ^= a;
+a ^= b;
+
+<span class="comment">// 10. 取绝对值（某些机器上，效率比n&gt;0 ? n:-n 高）</span>
+int <span class="keyword">n</span> = -1;
+System.<span class="keyword">out</span>.println((<span class="keyword">n</span> ^ (<span class="keyword">n</span> &gt;&gt; 31)) - (<span class="keyword">n</span> &gt;&gt; 31));
+<span class="comment">/* n&gt;&gt;31 取得n的符号，若n为正数，n&gt;&gt;31等于0，若n为负数，n&gt;&gt;31等于-1
+若n为正数 n^0-0数不变，若n为负数n^-1 需要计算n和-1的补码，异或后再取补码，
+结果n变号并且绝对值减1，再减去-1就是绝对值 */</span>
+
+<span class="comment">// 11. 取两个数的最大值（某些机器上，效率比a&gt;b ? a:b高）</span>
+System.<span class="keyword">out</span>.println(b&amp;((a-b)&gt;&gt;31) | a&amp;(~(a-b)&gt;&gt;31));
+
+<span class="comment">// 12. 取两个数的最小值（某些机器上，效率比a&gt;b ? b:a高）</span>
+System.<span class="keyword">out</span>.println(a&amp;((a-b)&gt;&gt;31) | b&amp;(~(a-b)&gt;&gt;31));
+
+<span class="comment">// 13. 判断符号是否相同(true 表示 x和y有相同的符号， false表示x，y有相反的符号。)</span>
+System.<span class="keyword">out</span>.println((a ^ b) &gt; 0);
+
+<span class="comment">// 14. 计算2的n次方 n &gt; 0</span>
+System.<span class="keyword">out</span>.println(2&lt;&lt;(<span class="keyword">n</span>-1));
+
+<span class="comment">// 15. 判断一个数n是不是2的幂</span>
+System.<span class="keyword">out</span>.println((<span class="keyword">n</span> &amp; (<span class="keyword">n</span> - 1)) == 0);
+<span class="comment">/*如果是2的幂，n一定是100... n-1就是1111....
+所以做与运算结果为0*/</span>
+
+<span class="comment">// 16. 求两个整数的平均值</span>
+System.<span class="keyword">out</span>.println((a+b) &gt;&gt; 1);
+
+<span class="comment">// 17. 从低位到高位,取n的第m位</span>
+int <span class="keyword">m</span> = 2;
+System.<span class="keyword">out</span>.println((<span class="keyword">n</span> &gt;&gt; (<span class="keyword">m</span>-1)) &amp; 1);
+
+<span class="comment">// 18. 从低位到高位.将n的第m位置为1</span>
+System.<span class="keyword">out</span>.println(<span class="keyword">n</span> | (1&lt;&lt;(<span class="keyword">m</span>-1)));
+<span class="comment">/*将1左移m-1位找到第m位，得到000...1...000
+n在和这个数做或运算*/</span>
+
+<span class="comment">// 19. 从低位到高位,将n的第m位置为0</span>
+System.<span class="keyword">out</span>.println(<span class="keyword">n</span> &amp; ~(0&lt;&lt;(<span class="keyword">m</span>-1)));
+<span class="comment">/* 将1左移m-1位找到第m位，取反后变成111...0...1111
+n再和这个数做与运算*/</span>
+</code></pre>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/java/"> #java </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
   </div>
 
   
@@ -1209,7 +1161,7 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">80</span>
+              <span class="site-state-item-count">79</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

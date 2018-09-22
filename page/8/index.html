@@ -148,87 +148,6 @@
           
           
             
-              <a class="post-title-link" href="../../2016/12/23/Redis基础知识/">
-                Redis基础知识
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-12-23
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/12/23/Redis基础知识/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/23/Redis基础知识/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h4 id="Redis事务">Redis事务</h4><ol>
-<li>Redis中的事务(transaction)是一组命令的集合。事务同命令一样都是Redis最小的执行单位，一个事务中的命令要么都执行，要么都不执行。但是<strong>Redis只能保证一个client发起的事务中的命令可以连续的执行，而中间不会插入其他client的命令</strong></li>
-<li>Redis是单线程来处理所有client的请求的。一般情况下redis在接受到一个client发来的命令后会立即处理并返回处理结果</li>
-<li><strong>如果使用事务</strong>：client发出multi命令，进入事务上下文，client后续发出的所有命令都被放到一个队列中，直到redis接收到exec命令，redis开始顺序执行队列中的命令，并将执行结果一起返回给client，该事务结束</li>
-</ol>
-<h4 id="Redis管道pipeline">Redis管道pipeline</h4><ol>
-<li>Redis是一个cs模式的tcp server，使用和http类似的请求响应协议。一个client可以通过一个socket连接发起多个请求命令。每个请求命令发出后client通常会阻塞并等待redis服务处理，redis处理完后请求命令后会将结果通过响应报文返回给client。</li>
-<li>除了可以利用mget,mset 之类的单条命令处理多个key的命令外我们还可以利用pipeline的方式从client打包多条命令一起发出，不需要等待单条命令的响应返回，而redis服务端会处理完多条命令后会将多条命令的处理结果打包到一起返回给客户端。当一组命令中每条命令都不依赖于之前命令的执行结果时就可以将这组命令一起通过管道发出。管道通过减少客户端与Redis的通信次数来实现降低往返时延累计值的目的(因为通信延迟往往比较久, 将多个命令打包到一条TCP报文，然后让redis并行处理，然后一次性返回结果)</li>
-<li>用pipeline方式打包命令发送，redis必须在处理完所有命令前先缓存起所有命令的处理结果。打包的命令越多，缓存消耗内存也越多。所以并是不是打包的命令越多越好。</li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Redis/"> #Redis </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
               <a class="post-title-link" href="../../2016/11/29/毕业求职漫漫路/">
                 毕业求职漫漫路
               </a>
@@ -545,6 +464,139 @@
 
 
     
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2016/06/12/二叉树的前序、中序、后序和层次遍历方法/">
+                二叉树的前序、中序、后序和层次遍历方法
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-06-12
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/算法/">算法</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/06/12/二叉树的前序、中序、后序和层次遍历方法/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/12/二叉树的前序、中序、后序和层次遍历方法/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="前序遍历">前序遍历</h3><pre><code><span class="comment">/**
+ * 递归实现
+ * @param root
+ * @return
+ */</span>
+<span class="keyword">public</span> static <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> preorderTraversal(TreeNode root) {
+    <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> resultList <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span>();
+    preorderTraveralHelper(root, resultList);
+    <span class="keyword">return</span> resultList;
+}
+
+<span class="keyword">private</span> static <span class="literal">void</span> preorderTraveralHelper(TreeNode root, <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> <span class="built_in">list</span>) {
+    <span class="keyword">if</span>(root <span class="subst">==</span> <span class="built_in">null</span>)
+        <span class="keyword">return</span>;
+    <span class="built_in">list</span><span class="built_in">.</span>add(root<span class="built_in">.</span>val);
+    preorderTraveralHelper(root<span class="built_in">.</span>left, <span class="built_in">list</span>);
+    preorderTraveralHelper(root<span class="built_in">.</span>right, <span class="built_in">list</span>);
+}
+
+<span class="comment">/**
+ * 利用栈的非递归实现
+ * @param root
+ * @return
+ */</span>
+<span class="keyword">private</span> static <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> preorderTraveralIter(TreeNode root) {
+    <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> <span class="built_in">list</span> <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span>();
+    LinkedList<span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span> <span class="built_in">stack</span> <span class="subst">=</span> <span class="literal">new</span> LinkedList<span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span>();
+    <span class="keyword">if</span>(root <span class="subst">==</span> <span class="built_in">null</span>)
+        <span class="keyword">return</span> <span class="built_in">list</span>;
+    <span class="keyword">while</span>(root <span class="subst">!=</span> <span class="built_in">null</span> <span class="subst">||</span> <span class="subst">!</span><span class="built_in">stack</span><span class="built_in">.</span>isEmpty()) {
+        <span class="keyword">if</span> (root <span class="subst">!=</span> <span class="built_in">null</span>) {
+            <span class="built_in">list</span><span class="built_in">.</span>add(root<span class="built_in">.</span>val);
+            <span class="built_in">stack</span><span class="built_in">.</span>push(root);
+            root <span class="subst">=</span> root<span class="built_in">.</span>left;
+        } <span class="keyword">else</span> {
+            root <span class="subst">=</span> <span class="built_in">stack</span><span class="built_in">.</span>pop();
+            <span class="comment">//中序遍历：list.add(root.val);</span>
+            root <span class="subst">=</span> root<span class="built_in">.</span>right;
+        }
+    }
+    <span class="keyword">return</span> <span class="built_in">list</span>;
+}
+</code></pre>
+          <div class="post-more-link text-center">
+            <a class="btn" href="../../2016/06/12/二叉树的前序、中序、后序和层次遍历方法/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/二叉树/"> #二叉树 </a>
+          
+            <a href="../../tags/数据结构/"> #数据结构 </a>
+          
+            <a href="../../tags/递归/"> #递归 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
   </div>
 
   
@@ -583,7 +635,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">80</span>
+              <span class="site-state-item-count">79</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

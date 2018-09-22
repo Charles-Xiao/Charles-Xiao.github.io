@@ -148,78 +148,6 @@
           
           
             
-              <a class="post-title-link" href="../../2017/02/05/Git使用指南/">
-                Git使用指南
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2017-02-05
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2017/02/05/Git使用指南/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/05/Git使用指南/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>Git是一个分布式版本控制系统，区别于SVN等集中式版本控制系统。集中式版本控制系统的版本库是集中存放在中央服务器的，每次工作时都需要先去中央服务器拉取最新代码，在本地修改之后，再推送至中央服务器；而分布式版本控制系统是不存在中央服务器的，每台电脑都是一个版本库，本地不联网也是可以工作的，而且代码更加安全，不用担心中央服务器出问题；当然多台电脑之间文件修改的交换与同步同样需要一台服务器来作为桥梁，比如github网站或者gitLab。此外，Git在开发流程、团队协作和分支管理方面的优点同样让其备受技术团队的欢迎。</p>
-<h3 id="Git原理图">Git原理图</h3><h3 id="Git常用操作命令">Git常用操作命令</h3><h3 id="Git_Flow开发流程">Git Flow开发流程</h3>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Git/"> #Git </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
               <a class="post-title-link" href="../../2017/01/15/从菊与刀初探日本文化/">
                 从菊与刀初探日本文化
               </a>
@@ -400,8 +328,8 @@
           
           
             
-              <a class="post-title-link" href="../../2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/">
-                Mac安装配置mySQL/mongodb/Redis开发环境及开机自启动
+              <a class="post-title-link" href="../../2016/12/23/Redis基础知识/">
+                Redis基础知识
               </a>
             
           
@@ -414,24 +342,13 @@
         </span>
 
         
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Mac系统/">Mac系统</a>
-
-              
-              
-
-            
-          </span>
-        
 
         
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/"></span>
+            <a href="../../2016/12/23/Redis基础知识/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/23/Redis基础知识/"></span>
             </a>
           </span>
           
@@ -446,12 +363,17 @@
 
       
         
-          <p>后端开发中免不了和数据库、缓存打交道，最近所参与的项目用到的就包括MySQL、mongodb、Redis，配置相关环境是参与开发的第一步; 本文主要讲述安装配置MySQL、mongodb、Redis的相关命令以及如何在mac中设置开机自启，也会记录一些相关控制台命令。
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          <h4 id="Redis事务">Redis事务</h4><ol>
+<li>Redis中的事务(transaction)是一组命令的集合。事务同命令一样都是Redis最小的执行单位，一个事务中的命令要么都执行，要么都不执行。但是<strong>Redis只能保证一个client发起的事务中的命令可以连续的执行，而中间不会插入其他client的命令</strong></li>
+<li>Redis是单线程来处理所有client的请求的。一般情况下redis在接受到一个client发来的命令后会立即处理并返回处理结果</li>
+<li><strong>如果使用事务</strong>：client发出multi命令，进入事务上下文，client后续发出的所有命令都被放到一个队列中，直到redis接收到exec命令，redis开始顺序执行队列中的命令，并将执行结果一起返回给client，该事务结束</li>
+</ol>
+<h4 id="Redis管道pipeline">Redis管道pipeline</h4><ol>
+<li>Redis是一个cs模式的tcp server，使用和http类似的请求响应协议。一个client可以通过一个socket连接发起多个请求命令。每个请求命令发出后client通常会阻塞并等待redis服务处理，redis处理完后请求命令后会将结果通过响应报文返回给client。</li>
+<li>除了可以利用mget,mset 之类的单条命令处理多个key的命令外我们还可以利用pipeline的方式从client打包多条命令一起发出，不需要等待单条命令的响应返回，而redis服务端会处理完多条命令后会将多条命令的处理结果打包到一起返回给客户端。当一组命令中每条命令都不依赖于之前命令的执行结果时就可以将这组命令一起通过管道发出。管道通过减少客户端与Redis的通信次数来实现降低往返时延累计值的目的(因为通信延迟往往比较久, 将多个命令打包到一条TCP报文，然后让redis并行处理，然后一次性返回结果)</li>
+<li>用pipeline方式打包命令发送，redis必须在处理完所有命令前先缓存起所有命令的处理结果。打包的命令越多，缓存消耗内存也越多。所以并是不是打包的命令越多越好。</li>
+</ol>
+
         
       
     </div>
@@ -460,7 +382,7 @@
       
         <div class="post-tags">
           
-            <a href="../../tags/Mac/"> #Mac </a>
+            <a href="../../tags/Redis/"> #Redis </a>
           
         </div>
       
@@ -697,6 +619,93 @@ select <span class="property">id</span> <span class="keyword">from</span> t <spa
 
 
     
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/">
+                Mac安装配置mySQL/mongodb/Redis开发环境及开机自启动
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-12-23
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Mac系统/">Mac系统</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>后端开发中免不了和数据库、缓存打交道，最近所参与的项目用到的就包括MySQL、mongodb、Redis，配置相关环境是参与开发的第一步; 本文主要讲述安装配置MySQL、mongodb、Redis的相关命令以及如何在mac中设置开机自启，也会记录一些相关控制台命令。
+          <div class="post-more-link text-center">
+            <a class="btn" href="../../2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Mac/"> #Mac </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
   </div>
 
   
@@ -735,7 +744,7 @@ select <span class="property">id</span> <span class="keyword">from</span> t <spa
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">80</span>
+              <span class="site-state-item-count">79</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

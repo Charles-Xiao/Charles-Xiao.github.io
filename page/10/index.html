@@ -148,119 +148,6 @@
           
           
             
-              <a class="post-title-link" href="../../2016/04/21/shadowsocks-android源码Mac环境编译打包apk教程/">
-                shadowsocks-android源码Mac环境编译打包apk教程
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-04-21
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Android/">Android</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/04/21/shadowsocks-android源码Mac环境编译打包apk教程/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/21/shadowsocks-android源码Mac环境编译打包apk教程/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <ol>
-<li><p>安装homebrew包管理器</p>
-<pre><code><span class="comment">//卸载brew命令</span>
-ruby -e <span class="string">"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"</span>
-
-<span class="comment">//安装 brew命令</span>
-<span class="regexp">/usr/</span>bin<span class="regexp">/ruby -e "$(curl -fsSL https:/</span><span class="regexp">/raw.githubusercontent.com/</span>Homebrew<span class="regexp">/install/m</span>aster<span class="regexp">/install)"</span>
-</code></pre></li>
-<li>Install Android SDK and NDK by run brew install android-ndk android-sdk</li>
-<li><p>设置sdk全局变量和NDK全局变量,在~目录下新建或打开.bash_profile文件，添加两行export命令引入ndk和sdk文件夹,再在terminal执行source .bash_profile</p>
-<pre><code><span class="built_in">export</span> ANDROID_HOME=~/sdk            
-<span class="built_in">export</span> ANDROID_NDK_HOME=~/ndk/android-ndk-r10e 
-</code></pre></li>
-<li><p>cd 进入sdk目录下tools子目录,运行两个命令更新sdk</p>
-<pre><code><span class="keyword">echo</span> <span class="string">"y"</span> | ./android <span class="keyword">update</span> sdk --<span class="built_in">filter</span> tools,platform-tools,build-tools-<span class="number">23.0</span>.<span class="number">2</span>,android-<span class="number">23</span>,extra-google-m2repository --<span class="keyword">no</span>-ui -<span class="keyword">a</span>
-
-<span class="keyword">echo</span> <span class="string">"y"</span> | ./android <span class="keyword">update</span> sdk --<span class="built_in">filter</span> extra-android-m2repository --<span class="keyword">no</span>-ui --<span class="keyword">no</span>-https -<span class="keyword">a</span>
-</code></pre></li>
-<li><p>cd进入shadowsocks-android目录执行 <figure class="highlight"><figcaption><span>submodule update --init ```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6. &#23433;&#35013;sbt&#65306;``` brew install sbt</span><br></pre></td></tr></table></figure></p>
-</li>
-<li><p>生成keystore文件和Create local.properties from local.properties.example</p>
-<pre><code>keytool -genkey -v -keystore <span class="keyword">release</span>.keystore -<span class="keyword">alias</span> <span class="keyword">release</span> -keyalg RSA -keysize <span class="number">2048</span> -validity <span class="number">10000</span>
-</code></pre></li>
-<li><p>sbt编译</p>
-<pre><code><span class="comment">// Build native binaries</span>
-./build.sh
-
-<span class="comment">// Build the apk</span>
-sbt clean <span class="string">android:</span><span class="keyword">package</span>-release
-</code></pre></li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/shadowsocks/"> #shadowsocks </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
               <a class="post-title-link" href="../../2016/04/19/海量数据处理常用方法/">
                 海量数据处理常用方法
               </a>
@@ -889,6 +776,104 @@ private <span class="keyword">static</span> boolean isBalanceBT(<span class="typ
 
 
     
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2016/01/17/Html5、React-Native和Native应用开发方式的对比分析/">
+                Html5、React Native和Native应用开发方式的对比分析
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-01-16
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/转载/">转载</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/01/17/Html5、React-Native和Native应用开发方式的对比分析/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/17/Html5、React-Native和Native应用开发方式的对比分析/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="React_Native的出现">React Native的出现</h3><p>React Native的出现，似乎是扛起的反H5的旗子。就像当年Facebook放弃H5，全部转向Native一样。这一点，我们需要认同和保持高度的清醒。那么，React Native是否又是在吞食Native的领地呢？技术的发展，是用户风向标的导向起的作用。任何一门技术的出现，都是当时用户需求的体现。</p>
+<p>我们应该从以下几点看待React Native的出现。</p>
+<p>“鉴往知来”——从过去的教训中总结经验，从用户的角度开拓未来，用户更希望产品迭代和稳定寻求一种平衡<br>“HTML5差强人意，但是与原生应用相比还是有些差距”——为了更高的追求！ 用户体验！<br>“人才宝贵，快速迭代”——Web开发者相对较多，寻找平衡点<br>“跨平台！跨平台！跨平台！”——单一技术栈，开发者的福音<br>“xx是世界上最好的语言” ——工程学的范畴，没有最好，只有最适合，我还是补充一句，JS还是很好很好的。</p>
+<p>HTML5 vs React Native ? HTML5 : React Native<br>结论（React Native）:</p>
+<ol>
+<li><p>原生应用的用户体验</p>
+</li>
+<li><p>跨平台特性</p>
+</li>
+<li><p>开发人员单一技术栈</p>
+</li>
+<li><p>上手快，入门容易</p>
+</li>
+<li><p>社区繁荣</p>
+</li>
+</ol>
+<h3 id="3种方式开发应用效果对比(IOS平台)">3种方式开发应用效果对比(IOS平台)</h3><h3 id="工程方案对比">工程方案对比</h3><h3 id="详细参考链接"><a href="http://my.oschina.net/vczero/blog/597980?fromerr=efaLD7Dm" target="_blank" rel="external">详细参考链接</a></h3>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/React/"> #React </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
   </div>
 
   
@@ -927,7 +912,7 @@ private <span class="keyword">static</span> boolean isBalanceBT(<span class="typ
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">80</span>
+              <span class="site-state-item-count">79</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

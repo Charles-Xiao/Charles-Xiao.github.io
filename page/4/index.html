@@ -148,260 +148,6 @@
           
           
             
-              <a class="post-title-link" href="../../2017/12/07/Linux终端利器tmux指南/">
-                Linux终端利器tmux指南
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2017-12-07
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2017/12/07/Linux终端利器tmux指南/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/07/Linux终端利器tmux指南/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h4 id="tmux简介">tmux简介</h4><p>tmux是BSD实现的Screen替代品，相对于Screen，它更加先进：支持屏幕切分，而且具备丰富的命令行参数，使其可以灵活、动态的进行各种布局和操作。它可以做到一条命令就启动起来(强大的配置)</p>
-<h5 id="安装方法">安装方法</h5><table>
-<thead>
-<tr>
-<th>系统</th>
-<th>安装命令</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>mac</td>
-<td><code>brew install tmux</code>（前提需要安装homebrew)</td>
-</tr>
-<tr>
-<td>ubuntu</td>
-<td><code>sudo apt-get install tmux</code></td>
-</tr>
-<tr>
-<td>centos</td>
-<td><code>yum install -y tmux</code></td>
-</tr>
-<tr>
-<td>其它</td>
-<td>下载源码配置-编译-链接-安装</td>
-</tr>
-</tbody>
-</table>
-<h5 id="概念名词">概念名词</h5><p>在你输入tmux开启了tmux服务器后，会首先创建一个会话，而这个会话则会首先创建一个窗口，其中仅包含一个面板; 也就是说，这里看到的所谓终端控制台应该称作tmux的一个面板，虽然其使用方法与终端控制台完全相同。</p>
-<table>
-<thead>
-<tr>
-<th>概念</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>server服务器</td>
-<td>输入tmux命令时就开启了一个服务器</td>
-</tr>
-<tr>
-<td>session会话</td>
-<td>一个服务器可以包含多个会话</td>
-</tr>
-<tr>
-<td>window窗口</td>
-<td>通过c-b-c创建，所有窗口的名称显示在底部状态栏上，一个会话可以包含多个窗口</td>
-</tr>
-<tr>
-<td>pane面板</td>
-<td>窗口里面的分屏，可通过c-b-%创建，一个窗口可以包含多个面板</td>
-</tr>
-</tbody>
-</table>
-<h5 id="使用场景和优点">使用场景和优点</h5><ol>
-<li>tmux命令开启一个终端之后，可以在这个终端里开启多个windows，同时还可以把windows split成多个pane，并行工作</li>
-<li>ssh登录远程主机的情景下，一旦ssh断开，那么当前账户登录的任务就被取消了，但是使用 tmux 可以在断开之后继续工作，下次登录可以查看</li>
-</ol>
-<h4 id="常用默认快捷键">常用默认快捷键</h4><p>tmux里边所有快捷键都默认以c-b作为前缀，也就是以ctrl+b开头，当然你也可以自行配置；</p>
-<ol>
-<li>基本命令<ul>
-<li><code>tmux</code>创建一个tmux session</li>
-<li><code>tmux new -s session_name</code>创建一个叫做session_name的 session</li>
-<li><code>tmux ls\tmux list-sessions</code>列出现有的所有session</li>
-<li><code>tmux info</code>列出所有的 session, window, pane, 运行的进程号等</li>
-<li><code>tmux list-keys</code>列出所有可以的快捷键和其运行的 tmux 命令</li>
-<li><code>tmux list-commands</code>列出所有的 tmux 命令及其参数</li>
-<li><code>tmux at(attach) -t session_name</code>进入叫做session_name的session</li>
-<li><code>tmux detach\c-b-d</code>离开当前开启的session</li>
-<li><code>tmux kill-session -t session</code>关闭开启的session</li>
-</ul>
-</li>
-<li><p>基本操作</p>
-<ul>
-<li><code>d</code>脱离并保存当前会话,可暂时返回Shell界面,tmux仍在后台运行</li>
-<li><code>ctrl + z</code>挂起当前会话</li>
-<li><code>s</code>选择并切换会话；在同时开启了多个会话时使用</li>
-<li><code>D</code>选择要脱离的会话；在同时开启了多个会话时使用</li>
-<li><code>:</code>进入命令行模式；此时可输入支持的命令，例如 kill-server 关闭所有tmux会话</li>
-<li><code>t</code>显示当前的时间</li>
-</ul>
-</li>
-<li><p>窗口操作</p>
-<ul>
-<li><code>c</code>创建新窗口</li>
-<li><code>&amp;</code>关闭当前窗口</li>
-<li><code>[0-9]</code>数字键切换到指定窗口</li>
-<li><code>p</code>切换至上一窗口</li>
-<li><code>n</code>切换至下一窗口</li>
-<li><code>l</code>切换到最后使用的窗口</li>
-<li><code>l</code>前后窗口间互相切换</li>
-<li><code>w</code>通过窗口列表切换窗口</li>
-<li><code>,</code>重命名当前窗口，便于识别</li>
-<li><code>.</code>修改当前窗口编号，相当于重新排序</li>
-<li><code>f</code>在所有窗口中查找关键词，便于窗口多了切换</li>
-</ul>
-</li>
-<li>(面板)分屏操作<ul>
-<li><code>?</code>显示快捷键帮助</li>
-<li><code>&quot;</code>将当前面板上下分屏（建议设置成 |）</li>
-<li><code>%</code>将当前面板左右分屏（建议设置成 -）</li>
-<li><code>x</code>关闭当前分屏</li>
-<li><code>q</code>显示面板编号</li>
-<li><code>o</code>选择当前窗口中下一个面板</li>
-<li><code>;</code>切换到最后一个使用的面板</li>
-<li><code>方向键</code>移动光标选择对应面板</li>
-<li><code>z</code>最大化当前所在面板</li>
-<li><code>!</code>面板转变成窗口</li>
-</ul>
-</li>
-</ol>
-<h4 id="推荐配置">推荐配置</h4><p>如果你有个性化配置的需要，包括快捷键，状态栏等，那么修改~/.tmux.conf文件可以达到你的目的，让你用起来更符合自己的习惯; 也可以通过配置~/.bashrc每次ssh登录时都默认attach或者新建tmux会话</p>
-<ol>
-<li>tmux.conf配置快捷键，配色等</li>
-</ol>
-<pre><code># 开启鼠标生效
-<span class="operator"><span class="keyword">set</span>-<span class="keyword">option</span> -g mouse <span class="keyword">on</span>
-
-#设置前缀为Ctrl + x
-<span class="keyword">set</span> -g prefix C-x
-unbind C-b
-
-# <span class="keyword">key</span> bindings <span class="keyword">for</span> horizontal <span class="keyword">and</span> vertical panes
-unbind %
-bind | split-window -h      # 使用|竖屏，方便分屏
-unbind <span class="string">'"'</span>
-bind - split-window -v      # 使用-横屏，方便分屏
-
-# <span class="keyword">status</span> bar <span class="keyword">with</span> <span class="keyword">load</span> <span class="keyword">and</span> <span class="keyword">time</span>
-<span class="keyword">set</span> -g <span class="keyword">status</span>-bg blue
-<span class="keyword">set</span> -g <span class="keyword">status</span>-fg <span class="string">'#bbbbbb'</span>
-<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">left</span>-fg green
-<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">left</span>-bg blue
-<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">right</span>-fg green
-<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">right</span>-bg blue
-<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">left</span>-length <span class="number">90</span>
-<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">right</span>-length <span class="number">90</span>
-<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">left</span> <span class="string">'[#(whoami)]'</span>
-<span class="keyword">set</span> -g <span class="keyword">status</span>-<span class="keyword">right</span> <span class="string">'[#(date +" %m-%d %H:%M ")]'</span>
-<span class="keyword">set</span> -g <span class="keyword">status</span>-justify <span class="string">"centre"</span>
-<span class="keyword">set</span> -g window-<span class="keyword">status</span>-<span class="keyword">format</span> <span class="string">'#I #W'</span>
-<span class="keyword">set</span> -g window-<span class="keyword">status</span>-<span class="keyword">current</span>-<span class="keyword">format</span> <span class="string">' #I #W '</span>
-setw -g window-<span class="keyword">status</span>-<span class="keyword">current</span>-bg blue
-setw -g window-<span class="keyword">status</span>-<span class="keyword">current</span>-fg green
-# pane <span class="built_in">number</span> display
-<span class="keyword">set</span> -g display-panes-active-colour colour33 #blue
-<span class="keyword">set</span> -g display-panes-colour colour166 #orange
-<span class="keyword">set</span> -g base-<span class="keyword">index</span> <span class="number">1</span>
-<span class="keyword">set</span> -g pane-base-<span class="keyword">index</span> <span class="number">1</span>
-<span class="keyword">set</span> -g display-<span class="keyword">time</span> <span class="number">3000</span>
-<span class="keyword">set</span> -g history-<span class="keyword">limit</span> <span class="number">10000</span>
-
-# copy-<span class="keyword">mode</span> 将快捷键设置为 vi 模式
-setw -g <span class="keyword">mode</span>-keys vi
-
-# 选中窗口
-bind-<span class="keyword">key</span> k <span class="keyword">select</span>-pane -U
-bind-<span class="keyword">key</span> j <span class="keyword">select</span>-pane -D
-bind-<span class="keyword">key</span> h <span class="keyword">select</span>-pane -L
-bind-<span class="keyword">key</span> l <span class="keyword">select</span>-pane -R</span>
-</code></pre><ol>
-<li><p>~/.bash_rc配置登录时自动进入tmux</p>
-<pre><code>tmux_init(<span class="function">)</span>
-{
-    tmux<span class="instruction"> new-session </span>-s <span class="string">"xiaoyong"</span> -d -n <span class="string">"local"</span>    <span class="comment"># 开启一个会话</span>
-    tmux<span class="instruction"> new-window </span>-n <span class="string">"other"</span>          <span class="comment"># 开启一个窗口</span>
-    tmux split-window -h                <span class="comment"># 开启一个竖屏</span>
-    tmux split-window -v                <span class="comment"># 开启一个横屏</span>
-    tmux -2 attach-session -d           <span class="comment"># tmux -2强制启用256color，连接已开启的tmux</span>
-}
-
-<span class="comment"># 判断是否已有开启的tmux会话，没有则开启</span><span class="instruction">
-if </span>which tmux 2&gt;&amp;1 &gt;/dev/null; then
-    test -z <span class="string">"$TMUX"</span> &amp;&amp;<span class="function"> (</span>tmux attach || tmux_init<span class="function">)</span>
-fi
-</code></pre></li>
-</ol>
-<h4 id="参考链接">参考链接</h4><ol>
-<li><a href="http://wdxtub.com/2016/03/30/tmux-guide/" target="_blank" rel="external">tmux指南</a></li>
-<li><strong> tmux如何将内容复制到系统clipboard ? </strong> Mac下如果用 iterm2 可以在 preference 下选择 Applications in terminal may access  clipboard</li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Linux/"> #Linux </a>
-          
-            <a href="../../tags/tmux/"> #tmux </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
               <a class="post-title-link" href="../../2017/12/02/Mysql Init线程不安全问题/">
                 Mysql初次Init线程不安全问题
               </a>
@@ -633,90 +379,6 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
           
           
             
-              <a class="post-title-link" href="../../2017/11/11/C++常用数据结构/">
-                C++常用数据结构
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2017-11-11
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2017/11/11/C++常用数据结构/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/C++常用数据结构/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="C++常用std集合—map/set">C++常用std集合—map/set</h3><ol>
-<li>unordered_map在C++11的时候被引入标准库了，而hash_map没有，所以建议还是使用unordered_map比较好。查询平均时间是O(1)，无序，类似于Java中HashMap。</li>
-<li>map的内部结构是R-B-tree来实现的，所以保证了一个稳定的动态操作时间，查询、插入、删除都是O（logN），最坏和平均都是。而unordered_map如前所述，是哈希表。顺便提一下，哈希表的查询时间虽然是O（1），但是并不是unordered_map查询时间一定比map短，因为实际情况中还要考虑到数据量，而且unordered_map的hash函数的构造速度也没那么快，所以不能一概而论，应该具体情况具体分析。最坏会是O(n)，额外空间复杂度则要高出许多。map中的元素是按照二叉搜索树存储，进行中序遍历会得到有序遍历，默认遍历顺序为以key从小到大。</li>
-<li>无序集合（Unordered Set）容器是一个存储唯一（Unique，即无重复）元素的关联容器（Associative container），容器中的元素无特别的次序关系。该容器允许基于值地快速元素检索。类似于HashSet。</li>
-<li><a href="https://zcheng.ren/2016/09/09/STLSetAndMap/#set" target="_blank" rel="external">set/multiset/map/multimap的内部实现和常用函数</a></li>
-<li><a href="https://github.com/julycoding/The-Art-Of-Programming-By-July/blob/master/ebook/zh/03.01.md" target="_blank" rel="external">红黑树原理</a></li>
-</ol>
-<h3 id="BloomFilter布隆过滤器">BloomFilter布隆过滤器</h3><ol>
-<li><p>核心实现是一个很长的二进制向量 （位数组）再加上一系列随机函数 (哈希)，空间效率和查询效率高，不会漏判，但是有一定的误判率（哈希表是精确匹配）。</p>
-</li>
-<li><p><a href="https://blog.csdn.net/tianyaleixiaowu/article/details/74721877" target="_blank" rel="external">布隆过滤器解决缓存击穿、垃圾邮件识别、集合判重</a></p>
-</li>
-</ol>
-<h3 id="SkipList跳跃表">SkipList跳跃表</h3><h3 id="参考链接">参考链接</h3>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/C/"> #C++ </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
               <a class="post-title-link" href="../../2017/11/11/计算机体系结构学习札记/">
                 计算机体系结构学习札记
               </a>
@@ -907,6 +569,242 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
 
 
     
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2017/11/11/投资随笔/">
+                投资随笔
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-11-11
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/11/11/投资随笔/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/投资随笔/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="实战经验">实战经验</h3><ol>
+<li>在大盘整体上涨的情况下，一定要等行情回调形势明朗时再买入，因为回调往往会连续几天，这几天里始终是会有上车机会的，不要着急，急于下手往往导致被套住。例如迅速买入京东亏损150刀</li>
+<li>每天的曲线，最低点到最高点的振幅其实已经够大，果断抓住也是非常重要的。但是短线的前提是重仓，否则你往往会因为收益不够多而恋战，从而导致最终盈变成亏，重仓时不要跟大盘趋势作对。</li>
+<li>在面对盈亏变化时心态和自制力非常重要，一定要有耐性。</li>
+<li>从阿里和好未来的股价变化来看，在股价创新高时抛售是极不明智的，长期持有带来的收益会达到3倍左右，不要做“弱水三千只取一瓢”的愚蠢举动。例如对阿里，好未来，百度没有长期持有</li>
+<li>不要跟趋势作对！参考第一条，下跌时买入往往会导致你止损割肉，从而亏损，例如短线操作微博亏损150刀</li>
+<li>尽量不买入不熟悉的股票，如果需要买入尽量先观察一段时间。因为买入一只不熟悉的股票，往往会因为没有信心，而在回调时割肉退场，得不偿失。</li>
+<li>相信自己的观察和股票的周期性，果断地买入被低估的公司，周期之后必会达到期望的价值例如低点的网易(250-310)，微博(95-110)</li>
+<li>迅雷日内交易严重失误！不应该被情绪左右，短线操作最好在下单之前有相应的计划，包括止损和止盈点，否则的人性的贪婪和恐惧心理影响下，很难果断作出决定，从15%止损，一直到拖到30%止损</li>
+<li>日内交易成交数过多导致杠杆太大，比如阿里日内交易只想下单20，却成交了40，如何处理？趋势不对，5%以内建议迅速果断立马减仓至20，不要有侥幸心理。</li>
+<li>类似于迅雷，人人网这种没有基本面支撑的暴涨暴跌型股票，很难拿得住；如果暴涨，赌对了方向，尽量设好止损点退场，不要被贪婪驱使死守住，因为它既然会暴涨，也就能暴跌给你看。</li>
+<li>及时止盈和做好计划，收割利润；近期10%以上的标的都考虑卖出，等等下一轮回调买入，目标3500</li>
+<li>不论股价如何变化，行情只有两种，一是趋势行情，一是横盘整理行情。趋势行情和横盘整理行情通常是连在一起的，一波趋势行情后跟着一段横盘整理行情，一段横盘整理行情被突破后又跟着一波趋势行情。在上涨趋势行情中，每次回调都可以加仓，但一般这种行情回调很少且幅度有限，抓住就一定不能放过，技术指标上可以参考均线，股价回踩5日或10日均线时加仓。如果在牛市行情中，不建议在区间震荡时减仓，应尽量避免过多买入卖出的操作。如果是在熊市行情中，则每次反弹都是减仓的好时机，熊市中不用等，越早平仓越好。<a href="https://mp.weixin.qq.com/s/c2CxG4QYtqsaBQxSOO_6eA" target="_blank" rel="external">如何选择加仓和减仓时机</a></li>
+<li>大盘回调风险以及黑天鹅事件的规避，例如中美贸易战等。整体回调可能持续上周；本次采用了去杠杆形式避险，导致利润回吐50%，如果及时补仓，利润则翻倍</li>
+<li>回顾之前持有过的亏损标的，发现都是高买，然后顶不住回调风险才割肉；教训就是一定要提前了解，对买入标的要有信心，如果回调，应该以月为单位考虑割肉，设置一个止损比例，才能理性投资，避免割肉</li>
+</ol>
+<h4 id="近期关注和交易计划">近期关注和交易计划</h4><ol>
+<li>从目前来看可以买入的低点股有特斯拉(300)，百度(240)，AMD(10)</li>
+<li>网易300即可买入；微博125可买入；如果大盘有大幅回调，可以考虑等到回转再买入；华住考虑120左右；好未来等回调到35左右；阿里巴巴继续观望，包括百度在内，预估会分别到210和275的价格，如果分别回调到195和260，考虑割肉.</li>
+</ol>
+<h3 id="学习研究">学习研究</h3><ol>
+<li><strong>二级市场里只有两种赚钱方式</strong>：一种是赚企业成长带来的收益，股价涨幅基本与企业利润涨幅保持正比；二种是通过博弈从交易对手身上赚来的钱，作为一名散户，想通过博傻来赚其他人的钱往往不太现实，但是可以赚市场犯错带来的收益，包括市场情绪以及理解偏差。</li>
+<li><strong>猿猴心态</strong>让人看到K线图里的新高就理所当然地认为会下跌或者风险高，然而盛极而衰并不科学，股价创新高从来不是停止上涨的理由，创新低也不是停止下跌的理由。</li>
+<li><strong>铆钉偏见</strong>让你以过去的数字作为参照，会让你在错过一只股票50块的买入时间，当他涨到100块时，理所当然地认为太贵，然后你就错过了将来涨到150的机会，一定要向未来价格看。一个股票便宜与否，看估值比看近期涨跌更可靠。</li>
+<li>不要低估<strong>复利</strong>的威力，如果你在7年前买入腾讯，意味着每年回报率为38%，等于7年翻了10倍</li>
+</ol>
+<h3 id="基础知识">基础知识</h3><ol>
+<li>限价单：最大程度获取利润，下跌到N就买入，上涨到N就卖出，低买高卖</li>
+<li>止损单：最大程度避免损失，下跌到N就卖出，上涨到N就买入，低卖高买</li>
+<li>止损限价单：到达止损价格就触发，接着要以限价价格交易，可能出现交易不成功</li>
+<li>跟踪止损单：</li>
+</ol>
+<h4 id="期权交易的4种基本类型"><a href="http://finance.china.com.cn/stock/usstock/20170817/4355475.shtml" target="_blank" rel="external">期权交易的4种基本类型</a></h4>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/投资理财/"> #投资理财 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2017/11/11/C++源码之LevelDB/">
+                C++源码之LevelDB
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-11-11
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/11/11/C++源码之LevelDB/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/C++源码之LevelDB/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h4 id="什么是LevelDB">什么是LevelDB</h4><p>一种单机持久化 K/V 数据库。其基于 <a href="http://nosqlsummer.org/paper/lsm-tree" target="_blank" rel="external">LSM(LOG Structured Merge Tree)</a> 实现，将所有的 Key/Value 按照 Key 的词法序有序地储存在文件中，具有很高的随机/顺序写性能，非常适用于写多读少的环境。</p>
+<p>LevelDB 不是一个 SQL 数据库，它不支持关系数据模型，不支持 SQL 语言，也不支持索引。在同一时刻只允许单个进程（可以是多线程）访问数据库。</p>
+<p>LevelDB具备以下特性：</p>
+<ol>
+<li><p>Keys 和 Values 可以是任意的字节序列</p>
+</li>
+<li><p>数据是按照 Key 排序的</p>
+</li>
+<li><p>调用者可以提供一个定制的比较函数来决定 Keys 的排序方式。</p>
+</li>
+<li><p>针对数据库的操作非常简单，<em>i.e.</em> <code>Put</code>, <code>Get</code>, <code>Delete</code></p>
+</li>
+<li><p>可以在一次原子的批处理中同时多次修改数据库</p>
+</li>
+<li><p>用户可以创建 snapshot 保持对于数据视图的一致性</p>
+</li>
+<li><p>这个数据结构提供前向和后向的迭代器 (iterator)</p>
+</li>
+<li><p>数据可以自动经过 <a href="http://google.github.io/snappy/" target="_blank" rel="external"><em>Snappy</em></a> 算法压缩</p>
+</li>
+<li><p>针对于操作系统文件的交互操作，LevelDB 提供给外部用户一个可以定制的虚拟的接口(Env)</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/leveldb_store_engine.jpg" class="full-image"></p>
+<h4 id="写入流程">写入流程</h4><ol>
+<li>每次写入一个 Key/Value 对时，首先将该数据追加到 log 中，然后再将其写入到内存的 memtable。memtable 是一个基于 SkipList 的有序的结构，每一个 Key 都会按序组织到 memtable 中。</li>
+<li>当 memtable 中的数据量达到一定的限制后，其将会转变成为一个 Immutable memtable，同时 levelDB 会新建新的 Log 文件和 memtable 结构用来接收后续的插入操作。内存的 Immutable memtable 将会被后台的线程持久化的存储到磁盘中，生成有序 sstable 文件。</li>
+<li>磁盘上的 sstable 文件按照 level 的形式组织，从 memtable 序列化得到的 sst 文件位于 level0 层。由于经过 compaction 线程的压缩，文件将不断地从 level n 层向 level n+1层移动。</li>
+</ol>
+<h4 id="读取流程">读取流程</h4><h4 id="LSM_Tree存储引擎">LSM Tree存储引擎</h4><h4 id="Skiplist跳跃表">Skiplist跳跃表</h4><h4 id="Key/Value数据存储">Key/Value数据存储</h4><h5 id="Node数据结构">Node数据结构</h5><p>skiplist中的单个node不仅存储了key，也存储了value。dbformat.h文件中定义了跳跃表中的node数据结构，如下表。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">klength</th>
+<th style="text-align:center">user_key</th>
+<th style="text-align:center">sequence+type(8byte)</th>
+<th style="text-align:center">value_size</th>
+<th style="text-align:center">value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">user_key 长度</td>
+<td style="text-align:center">用户输入的key</td>
+<td style="text-align:center">Seq:全局递增的序列号，每一次Put操作都会递增; type:用于判断操作是插入还是删除</td>
+<td style="text-align:center">value长度</td>
+<td style="text-align:center">用户输入的value</td>
+</tr>
+</tbody>
+</table>
+<p>skiplist中定义的几种key类型及其组成部分：</p>
+<ul>
+<li>LookupKey/memtable_key：klength + user_key + sequence+type</li>
+<li>InternalKey：user_key + sequence+type</li>
+<li>不管是memtable还是sstable文件，其内部都是按InternalKey有序的。 比较时先使用InternalKey内部的user_key进行比较，再比较sequence_num</li>
+</ul>
+<h4 id="Util基础工具包">Util基础工具包</h4><h5 id="coding-cc">coding.cc</h5><p>leveldb所有数据都是字符形式，即使是整型，也将被转换为字符型存储。这样的好处就是可以减少内存空间的使用。例如，假如有一个int型数据，小于128，存储为整型时，需要占用四个字节，存储为字符型时，只需要一个字节即可。</p>
+<p>LevelDB 使用了一种很简单的方案 <em>varint</em> 来节省小整数的存储。对于每一个字节，levelDB 使用其最高的 bit 位来表示当前的编码是否结束，而用低 7 bit 来存储实际的数据。<strong>如果最高位为1，表示当前的编码尚为结束，需要继续读下一字节的数据，否则当前的编码结束</strong>。示例：</p>
+<ol>
+<li>对于比较大的数，如果存储的数据如下<br>1001 0001  1000 1001 0111 1100<br>^          ^         ^      A: 最高位是1，未结束，实际值是后七位 001 0001<br>|          |         |      B: 最高位是1，未结束，实际值是后七位 000 1001<br>A          B         C      C: 最高位是0，结束，  实际值是后七位 111 1100<br>因此，三个字节拼接应该是 C + B + A :<br>[1111100][000 1001][0010001] = 2032785</li>
+<li>对于 [0-127] 的整数，例如：<br>0001 0001<br>^                           A: 第一字节，最高位为0，表示结束，实际值是 0010001<br>|                              也就是 33<br>A</li>
+</ol>
+<h5 id="arena-cc">arena.cc</h5><h4 id="实例分析">实例分析</h4><h4 id="参考链接">参考链接</h4>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/C/"> #C++ </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
   </div>
 
   
@@ -945,7 +843,7 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">80</span>
+              <span class="site-state-item-count">79</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

@@ -148,237 +148,6 @@
           
           
             
-              <a class="post-title-link" href="../../2015/05/19/数据库重难点集锦/">
-                数据库重难点集锦
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-19
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/数据库/">数据库</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/19/数据库重难点集锦/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/19/数据库重难点集锦/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="常见的Hash算法和一致性哈希">常见的Hash算法和一致性哈希</h3><ul>
-<li><p>线性哈希，平方取中法，随机数法，按位分割求和法  </p>
-</li>
-<li><p><strong>MD5和SHA</strong>这两种单向加密算法都是基于hash算法，前者产生128位的散列值，后者产生160位的散列值；两者都存在不同输入的散列值相同的情况，但是概率很低，为了防止被彩虹表破解，可以考虑加入Salt  </p>
-</li>
-<li><p>Hash算法主要用于文件校验、数字签名、鉴权协议等  </p>
-</li>
-<li><p><strong>一致性哈希算法</strong>主要应用在cache系统中，常用的hash(object)%N算法会计算object 的hash值，然后对N取模得到余数i，该Object就会被映射到编号为i的cache上;那么当增加或者减少n的值时会导致所有的n个对象的映射全部发生改变，但是一致性哈希算法却只需要重新hash K/n个元素，为什么呢？？？; 因为一致性哈希的内部原理是将Object和cache都使用同一种hash算法hash到同一个数值空间上，该空间为一个首尾相接的圆环；然后如何将Object映射到cache呢？顺着顺时针方向,将每一个Object映射到下一个最邻近的cache,这样当新增一个cache时，只需要将原本映射到下一个cache上的Object部分映射修改到新增的cache上；当减少cache时就将之前映射到该cache的Object都映射到下一个cache上.  </p>
-</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_pre.png" class="full-image"></p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConsistHash_next.png" class="full-image"></p>
-<h3 id="数据库结构概览">数据库结构概览</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/db.png" width="100%"></p>
-<h3 id="数据库的事务、索引、范式和存储过程概念以及优缺点">数据库的事务、索引、范式和存储过程概念以及优缺点</h3><ol>
-<li><p>主键：数据库表中对储存数据对象予以唯一和完整标识的数据列或属性的组合。一个数据列只能有一个主键，且主键的取值不能缺失，即不能为空值（Null）。  </p>
-<p>超键：在关系中能唯一标识元组的属性集称为关系模式的超键。一个属性可以为作为一个超键，多个属性组合在一起也可以作为一个超键。超键包含候选键和主键。  </p>
-<p>候选键：能够确定全部属性的某个属性或某组属性，称为候选键。若候选键多于一个，则选定其中一个作为主键</p>
-<p>外键：在一个表中存在的另一个表的主键称此表的外键  </p>
-</li>
-<li><p><strong>事务</strong>：事务是数据库操作中的不可分割的逻辑单元,事务也是并发控制的基本单位，一个事务中的所有操作语句要么作为一个整体被执行，要么整体不被执行; 事务最重要的<strong>两个特性是事务的传播级别和数据隔离级别</strong>。传播级别定义的是事务的控制范围，事务隔离级别定义的是事务在数据库读写方面的控制范围。</p>
-<ul>
-<li>原子性Atomicity：要么操作序列中全部语句都执行，要么全部不被执行,不可分割; 也就是说当事务的执行序列中某个语句执行错误，会回滚到该事务未执行时的状态</li>
-<li>一致性Consistency：事务执行之后数据库从一个一致性状态转化到另一个一致性状态；数据库 ACID 中的一致性对事务的要求不止包含对数据完整性以及合法性的检查，还包含应用层面逻辑的正确。</li>
-<li>隔离性Isolation：多个事务并行执行时互相之间不会影响</li>
-<li>持久性Durability：事务成功执行之后会对数据库内容产生永久性影响，当事务已经被提交之后，就无法再次回滚了，唯一能够撤回已经提交的事务的方式就是创建一个相反的事务对原操作进行『补偿』</li>
-</ul>
-</li>
-<li><p><strong>范式</strong></p>
-<ul>
-<li>第一范式：数据库表里边的每一列都是不可分割的原子性基本数据项</li>
-<li>第二范式：数据库表里边每一个非关键字段都和任意一组候选关键字(主键)完全依赖，只有表的任意一组候选键有多个属性时才会出现部分依赖</li>
-<li>第三范式：数据库里边每一个非关键字段都和主键直接相关，而不能是间接相关(传递依赖)</li>
-<li>BC范式：数据里边每一列既不部分依赖于任何候选键也不传递依赖于任何候选键；一个关系满足BCNF则一定满足第三范式</li>
-</ul>
-</li>
-<li><p><strong>索引</strong> ：建立在数据库表的某些列上，例如需要搜索或者排序的列，主键列，外键列(用于连接的列),用在where语句中的列；<strong>有些列不应该建索引</strong>，比如：查询中很少使用或者参考的列， 只有很少数据值的列，定义为text, image和bit数据类型的列,当修改性能远远大于检索性能时，不应该创建索引；索引的实现通常使用B树及其变种B+树</p>
-<ul>
-<li>参考: 一般来说，<strong>应该在这些列上创建索引</strong>：在经常需要搜索的列上，可以加快搜索的速度；在作为主键的列上，强制该列的唯一性和组织表中数据的排列结构；在经常用在连接的列上，这些列主要是一些外键，可以加快连接的速度；在经常需要根据范围进行搜索的列上创建索引，因为索引已经排序，其指定的范围是连续的；在经常需要排序的列上创建索引，因为索引已经排序，这样查询可以利用索引的排序，加快排序查询时间；在经常使用在WHERE子句中的列上面创建索引，加快条件的判断速度。</li>
-<li><p><strong>复合索引</strong>就是索引建立在多个列上，<strong>唯一索引</strong>就是保证索引列中的所有数据都是唯一的，不会存在冗余数据;<strong>聚集索引</strong>是指表中行的物理顺序与键值的逻辑（索引）顺序相同。一个表只能包含一个聚集索引</p>
-<p>优点：</p>
-</li>
-</ul>
-<ol>
-<li>通过创建唯一性索引，可以保证数据库表中每一行数据的唯一性 </li>
-<li>可以大大加快数据的检索速度    </li>
-<li>可以加速表和表之间的连接</li>
-<li>在使用分组和排序子句进行数据检索时，同样可以显著减少查询中分组和排序的时间</li>
-<li><p>通过使用索引，可以在查询的过程中，使用优化隐藏器，提高系统的性能</p>
-<p>缺点：</p>
-</li>
-<li>创建索引和维护索引要耗费时间和大量的物理空间</li>
-<li>对表中的数据进行增加、删除和修改的时候，索引也要动态的维护，这样就降低了数据的维护速度</li>
-</ol>
-</li>
-<li><p><strong>存储过程</strong></p>
-<ul>
-<li>它是一组存储在数据库中的编译后的SQL语句集，可以接受参数以及返回值，也可以包括程序流，查询语句等</li>
-<li>正常情况下,我们在code中写好SQL语句,连接数据库，SQL语句会被发送到服务器然后编译优化，数据库引擎执行编译后的查询语句，最后将查询结果返回给客户端；那么如果我们使用存储过程就可以省掉编译优化的过程，而且存储过程存储在database中，可以减少网络流量和传输时间；而且可以对存储过程授予制定权限，从而保证数据库操作安全</li>
-</ul>
-</li>
-<li><p><strong>View</strong></p>
-<ul>
-<li>视图是一种通过自定义查询语句去查询筛选数据库表中的数据然后呈现给用户的一种动态生成的虚拟表,他和表一样包含行列数据，但是来自于其引用的表；其优点主要是可以保证数据库安全性以及筛选隐藏部分重要数据;View与Table之间的关系类似于MVC，在View中对数据进行修改会影响到Table中的数据，在Table中进行数据修改同样会显示到View，因为他们用的是同一份数据。</li>
-</ul>
-</li>
-</ol>
-<h3 id="MySQL的隔离级别与锁">MySQL的隔离级别与锁</h3><ol>
-<li><strong><a href="https://www.kancloud.cn/hx78/sql/379624" target="_blank" rel="external">四种隔离级别</a></strong>: 隔离级别决定了一个会话中的事务可能对另一个会话的影响、并发会话对数据库的操作、一个会话中所见数据的一致性; MySQL的InnoDB支持四种隔离级别,默认是可重读隔离级别<ul>
-<li><strong>未提交读READ UNCOMMITTED</strong>：最低级别的隔离，也被称之为脏读，它允许一个事务读取还没commit的事务的执行结果，这样可能会提高性能，但是导致脏读   </li>
-<li><strong>提交读READ COMMITTED</strong>：在一个事务中只允许看见已经commit的事务所做的改变。如果一个session中select还在查询中，另一会话session此时insert一条记录，则新添加的数据不可见；只有该操作commit之后才可见，也就是说—-<strong>不可重复读</strong>   </li>
-<li><strong>可重读REPEATABLE READ</strong>：同一个事务的多个实例在并发读取数据时会看到同样的数据行。也就是说在一个事务中重复select的结果一样，除非本事务中添加新数据到数据库，可能导致<strong>幻读</strong>;也就说事务之间只是在新数据方面突破了隔离，对已存在的数据仍旧隔离。</li>
-<li><strong>可串行化SERIALIZABLE</strong>：最高级别的隔离，强制事务排序并且只允许事务串行执行。为了达到此目的，数据库会锁住每个读的数据行，减少了并发，增加了稳定性，但是可能导致超时和锁竞争现象</li>
-<li><strong>事务并发导致的几个问题</strong><a href="https://draveness.me/mysql-transaction" target="_blank" rel="external">事务实现</a><ul>
-<li><strong>脏读(Drity Read)</strong>：某个事务已更新一份数据，另一个事务在此时读取了同一份数据，由于某些原因，前一个回滚了操作，则后一个事务所读取的数据就会是不正确的</li>
-<li><strong>不可重复读</strong>:在一个事务的两次查询之中数据不一致，这可能是两次查询过程中间插入了一个事务更新了原有的数据。</li>
-<li><strong>幻读</strong>：例如一个事务的两次查询过程中有另外一个事务插入数据造成第二次查询出现了在第一次查询中没有出现的数据；<strong>例如</strong>如果事务A运行”SELECT count(1) from TABLE_X” ，然后事务B在 TABLE_X 加入一条新数据并提交，当事务A再运行一次 count(1)结果不会是一样的，这就叫做<strong>幻读</strong></li>
-</ul>
-</li>
-<li>隔离级别越高，越能保证数据的完整性和一致性，但是对并发性能的影响也越大。对于多数应用程序，可以优先考虑把数据库系统的隔离级别设为Read Committed。它能够避免脏读取，而且具有较好的并发性能。尽管它会导致不可重复读和并发问题，可以由应用程序采用悲观锁或乐观锁来控制。</li>
-<li>性质<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/SQL隔离.png" class="full-image"></li>
-</ul>
-</li>
-<li><strong>共享锁</strong>：由读表操作加上的锁，加锁后其他用户只能获取该表或行的共享锁，不能获取排它锁，也就是说只能读不能写；一个事务获取了共享锁之后，可以对锁定范围内的数据执行读操作。</li>
-<li><strong>排它锁</strong>：由写表操作加上的锁，加锁后其他用户不能获取该表或行的任何锁;一个事务获取了排它锁之后，可以对锁定范围内的数据执行写操作。</li>
-<li><strong>乐观锁</strong>:读取数据时不锁，更新时检查是否数据已经被更新过，如果是则取消当前更新<br>一般在悲观锁的等待时间过长而不能接受时我们才会选择乐观锁；<strong>乐观锁适用于多读的应用类型</strong>，这样可以提高吞吐量<ul>
-<li><strong>乐观锁怎么实现和检查数据是否已经被更新？？？</strong>：</li>
-<li><strong>①使用数据版本记录机制实现</strong>也就是为数据增加一个版本标识，一般是通过为数据库表增加一个数字类型的 “version” 字段来实现。当读取数据时，将version字段的值一同读出，数据每更新一次，对此version值加一。当我们提交更新的时候，判断数据库表对应记录的当前版本信息与第一次取出来的version值进行比对，如果数据库表当前版本号与第一次取出来的version值相等，则予以更新，否则认为是过期数据</li>
-<li><strong>②在需要乐观锁控制的table中增加一个字段</strong>，字段名称无所谓，字段类型使用时间戳（timestamp）, 和版本记录类似，也是在更新提交的时候检查当前数据库中数据的时间戳和自己更新前取到的时间戳进行对比，如果一致则OK，否则就是版本冲突</li>
-</ul>
-</li>
-<li><strong>悲观锁</strong>:在读取数据时锁住那几行，其他对这几行的更新需要等到悲观锁结束时才能继续；比如行锁，表锁等，读锁 </li>
-<li><strong>表级锁</strong>：对整个表加锁，影响标准的所有记录；开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。</li>
-<li><strong>行级锁</strong>：对一行记录加锁，只影响一条记录；开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。</li>
-<li><strong>页面锁</strong>：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</li>
-<li><strong>锁管理器</strong>是添加和释放锁的进程，在内部使用一个哈希表来保存锁的相关信息(关键字是被锁的数据），并且了解每一块数据是被哪个事务加的锁,哪个事务在等待数据解锁;锁管理器还需要检查是否存在死锁，以及决定选择取消哪一个事务来消除死锁，<strong>检查死锁有两种方式</strong>一种是<strong>检查循环等待</strong>还有一种是<strong>使用超时设定</strong>。如果一个锁在超时时间内没有加上，那事务就进入了死锁状态。</li>
-<li><strong>数据库一般采用锁或者数据版本控制来进行并发控制</strong> 版本控制是每个事务可以在相同时刻修改相同的数据，每个事务有自己的数据拷贝（或者叫版本）；如果2个事务修改相同的数据，只接受一个修改，另一个将被拒绝，相关的事务回滚（或重新运行）；这将提高性能，因为：读事务不会阻塞写事务，写事务不会阻塞读，可以减少锁管理器带来的额外开销，但是磁盘空间消耗巨大，以空间换时间</li>
-<li>乐观锁不会存在死锁的问题，但是由于更新后验证，所以当冲突频率和重试成本较高时更推荐使用悲观锁，而需要非常高的响应速度并且并发量非常大的时候使用乐观锁就能较好的解决问题，在这时使用悲观锁就可能出现严重的性能问题；在选择并发控制机制时，需要综合考虑上面的四个方面（冲突频率、重试成本、响应速度和并发量）进行选择。</li>
-<li><strong>共享锁（读锁）</strong>：允许事务对一条行数据进行读取；<strong>互斥锁（写锁）</strong>：允许事务对一条行数据进行删除或更新；</li>
-</ol>
-<h3 id="MySQL_InnoDB实现">MySQL InnoDB实现</h3><ol>
-<li><a href="https://draveness.me/mysql-innodb" target="_blank" rel="external">『浅入浅出』MySQL 和 InnoDB</a></li>
-<li><a href="https://draveness.me/database-concurrency-control" target="_blank" rel="external">浅谈数据库并发控制 - 锁和 MVCC</a></li>
-</ol>
-<h3 id="MyISAM和InnoDB存储引擎之间的区别">MyISAM和InnoDB存储引擎之间的区别</h3><ol>
-<li>InnoDB支持事务、外键和行锁，而MyISAM不支持这些高级功能，但是<strong>MyISAM是默认引擎</strong>，InnoDB则需要指定(事务是一种高级的处理方式，如在一些列增删改中只要哪个出错还可以回滚还原)</li>
-<li>MyISAM适合SELECT为主的应用，InnoDB适合频繁修改(INSERT或UPDATE)以及涉及到安全性较高的应用,因为InnoDB数据库在进行update时表进行行锁，并发量相对较大;而MyISAM在进行updata时进行表锁，并发量相对较小</li>
-<li>InnoDB不支持FULLTEXT类型的索引; 虽然InnoDB支持行锁,但是某些情况下还是锁整表，如 update table set a=1 where user like ‘%lee%’，因为该SQL语句不能确定要扫描的范围</li>
-<li>DELETE清空整个表时，InnoDB是一行一行的删除，效率非常慢。MyISAM则会重建表</li>
-<li>MyISAM的索引和数据是分开的，并且索引是有压缩的，内存使用率就对应提高了不少。能加载更多索引，而Innodb是索引和数据是紧密捆绑的，没有使用压缩从而会造成Innodb比MyISAM体积庞大不小</li>
-<li>InnoDB中不保存表的具体行数，也就是说，执行select count ( <em> ) from table时，InnoDB要扫描一遍整个表来计算有多少行，但是MyISAM只要简单的读出保存好的行数即可。注意的是，当count(</em>) 语句包含where条件时，两种表的操作是一样的</li>
-<li>MyISAM<strong>缓存</strong>在内存的是索引，不是数据。而InnoDB缓存在内存的是数据  </li>
-<li><strong>MyISAM和InnoDB索引B+树结构的区别</strong>：<strong>MyISAM引擎</strong>使用B+Tree作为索引结构，叶节点的data域存放的是数据记录的地址，索引检索的算法为首先按照B+Tree搜索算法搜索索引，如果指定的Key存在，则取出其data域的值，然后以data域的值为地址，读取相应数据记录。这种索引方式就属于“非聚集索引”；<strong>InnoDB中</strong>，表数据文件本身就是按B+Tree组织的一个索引结构，这棵树的叶节点data域保存了完整的数据记录  </li>
-</ol>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/myisam.png" width="100%"><br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/innodb.png" width="100%">   </p>
-<h3 id="SQL语句">SQL语句</h3><ol>
-<li><p><strong>in和exists区别</strong></p>
-<ul>
-<li>mysql中的<strong>in语句</strong>是把外表和内表作hash 连接，而<strong>exists语句</strong>是对外表作loop循环，每次loop循环再对内表进行查询。一直大家都认为exists比in语句的效率要高，这种说法其实是不准确的，这个是要区分环境的。</li>
-<li><strong>效率对比</strong>：①如果查询的两个表大小相当，那么用in和exists差别不大；②如果两个表中一个较小，一个是大表，则子查询表大的用exists，子查询表小的用in</li>
-<li><strong>实例（A&lt;B）</strong>：①select <em> from A where cc in (select cc from B) 效率低，用到了A表上cc列的索引；②select </em> from A where exists(select cc from B where cc=A.cc) 效率高，用到了B表上cc列的索引。③select <em> from B where cc in (select cc from A) 效率高，用到了B表上cc列的索引；④select </em> from B where exists(select cc from A where cc=B.cc) 效率低，用到了A表上cc列的索引。</li>
-</ul>
-</li>
-<li><p><strong>not in和not exists区别</strong></p>
-<ul>
-<li>not in 和not exists如果查询语句使用了not in 那么内外表都进行全表扫描，没有用到索引；而not extsts 的子查询依然能用到表上的索引。所以无论那个表大，用not exists都比not in要快。 </li>
-<li>在含有NULL值的列的时候，not in 逻辑上不完全等同于not exists；应该尽量不要使用not in(它会调用子查询)，而尽量使用not exists(它会调用关联子查询)。如果not in子查询中返回的任意一条记录含有空值，则查询将不返回任何记录；因此除非子查询字段有非空限制，这时可以使用not in</li>
-</ul>
-</li>
-<li><p><strong>inner join、outer join和cross join的区别</strong><br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Join区别.png" width="100%"></p>
-</li>
-</ol>
-<h3 id="日志管理器">日志管理器</h3><ol>
-<li>为了提升性能，数据库把数据保存在内存缓冲区内。但如果当事务提交时服务器崩溃，崩溃时还在内存里的数据会丢失，这破坏了事务的持久性。你可以把所有数据都写在磁盘上，但是如果服务器崩溃，最终数据可能只有部分写入磁盘，这破坏了事务的原子性。因此我们采用<strong>事务日志</strong>是一个存储空间，在每次写盘之前，数据库在事务日志中写入一些信息，这样当事务崩溃或回滚，数据库知道如何移除或完成尚未完成的事务。<strong>事务的每一个操作（增/删/改）产生一条日志</strong>，</li>
-<li>MySQL中的两种日志，数据库恢复机制是通过回滚日志（undo log）或者重做日志(redo log)实现的；在数据库系统中，事务的原子性和持久性是由事务日志（transaction log）保证的，在实现时也就是上面提到的两种日志，前者用于对事务的影响进行撤销，后者在错误处理时对已经提交的事务进行重做，它们能保证两点：①发生错误或者需要回滚的事务能够成功回滚（原子性）；②在事务提交后，数据没来得及写会磁盘就宕机时，在下次重新启动后能够成功恢复数据（持久性）</li>
-</ol>
-<h3 id="其它概念">其它概念</h3><ol>
-<li>Transaction2 依赖于 Transaction1，而 Transaction3 又依赖于 Transaction1，当 Transaction1 由于执行出现问题发生回滚时，为了保证事务的原子性，就会将 Transaction2 和 Transaction3 中的工作全部回滚，这种情况也叫做<strong>级联回滚（Cascading Rollback）</strong>，级联回滚的发生会导致大量的工作需要撤回，是我们难以接受的。</li>
-<li><strong>读写分离：</strong><ul>
-<li>Mysql有一个master-slave功能，可以实现主库与从库数据的自动同步，是基于二进制日志复制来实现的。</li>
-<li>读写路由规则：编码使用不同数据源或者使用proxy层，MySQL-Proxy 是Mysql提供的一个中间件，用于实现读写分离请求，还有MyCat、ProxySQL 等</li>
-</ul>
-</li>
-<li><strong>CQRS：Command Query Responsibility Segregation</strong>：Command 主要做业务逻辑的执行，Query来负责数据查询和展示，两者可以来自不同的数据源</li>
-<li><strong>数据库sharding分片</strong>：</li>
-</ol>
-<h3 id="参考链接">参考链接</h3><ol>
-<li><a href="http://blog.jobbole.com/100349/" target="_blank" rel="external">数据库整体架构原理</a></li>
-<li><a href="http://www.codeceo.com/article/mysql-index-struct.html#0-tsina-1-46551-397232819ff9a47a7b7e80a40613cfe1" target="_blank" rel="external">MySQL数据库索引原理</a>  </li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/databse/"> #databse </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
               <a class="post-title-link" href="../../2015/05/15/Mac常用快捷键和Tips/">
                 Mac常用快捷键和Tips
               </a>
@@ -784,6 +553,381 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 
 
     
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="../../2015/04/13/Java多线程同步方法/">
+                Java多线程同步方法
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-04-13
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/java学习笔记/">java学习笔记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/04/13/Java多线程同步方法/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/13/Java多线程同步方法/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="同步VS异步_and_阻塞VS非阻塞_Link">同步VS异步 and 阻塞VS非阻塞 <a href="http://elf8848.iteye.com/blog/1739611" target="_blank" rel="external">Link</a></h3><ol>
+<li><strong>同步/异步与阻塞/非阻塞是两组不同的概念,它们可以共存组合,同步和异步与消息的通知机制有关,阻塞和非阻塞与程序等待消息(无所谓同步或者异步)时的状态有关</strong> <strong>同步</strong>：就是在发出一个功能调用时，在没有得到结果之前，该调用就不返回(<strong>与阻塞的区别</strong>很多时候当前线程还是激活的，只是从逻辑上当前函数没有返回而已)。<strong>异步</strong>：当一个异步过程调用发出后，调用者不能立刻得到结果；这个调用的部件在处理完成后，通过状态、通知和回调来通知调用者。<strong>阻塞</strong>：是指调用结果返回之前，当前线程会被挂起，函数只有在得到结果之后才会返回。<strong>非阻塞</strong>指在不能立刻得到结果之前，该函数不会阻塞当前线程，而会立刻返回。</li>
+<li>举例: 我去买一本书，立即买到了，这就是<strong>非阻塞</strong>；如果恰好书店没有，我就等一直等到书店有了这本书买到了才走，这就是<strong>阻塞</strong>；这两种情况，非阻塞和阻塞都可以称为<strong>同步</strong>。如果书店恰好没有，我就告诉书店老板，书来了告诉我一声让我来取或者直接送到我家，然后我就走了，这就是<strong>异步</strong>。</li>
+</ol>
+<h3 id="Java对象锁和类锁">Java对象锁和类锁</h3><ol>
+<li>在Java程序运行时环境中，JVM需要对两类线程共享的数据进行协调：①保存在堆中的实例变量 ②保存在方法区中的类变量。</li>
+<li>一个线程可以多次对同一个对象上锁。对于每一个对象，java虚拟机维护一个加锁计数器，线程每获得一次该对象，计数器就加1，每释放一次，计数器就减 1，当计数器值为0时，对象就被完全释放了。</li>
+<li>对于同一个类A，线程1争夺A对象实例的对象锁，线程2争夺类A的类锁，这两者不存在竞争关系。也就说对象锁和类锁互补干预内政</li>
+</ol>
+<h3 id="互斥锁与读写锁">互斥锁与读写锁</h3><ol>
+<li><strong>互斥锁</strong>：任意时刻，只能有一个线程持有锁。即假设A线程已经获取了锁，在A线程释放这个锁之前，B线程是无法获取到这个锁的，B要获取这个锁就会进入阻塞状态。例如synchronized和ReentrantLock都属于互斥锁</li>
+<li><strong>读写锁ReadWriteLock</strong>：Java并发包中实现<strong>ReadWriteLock接口的ReentrantReadWriteLock</strong>，它并没有实现Lock接口，是其内部类ReadLock和WriteLock实现了Lock的接口<ul>
+<li>在真实的业务场景中，通常会出现<strong>对一份数据的读取操作次数远高于写入操作</strong>这种读多写少的场景，而线程与线程间的读读操作是不涉及到线程安全的问题，没有必要加入互斥锁</li>
+<li>所以读写锁只要满足<strong>“读-读”不互斥 ，”读-写”互斥 ，”写-写”互斥</strong>；也就是说只要在任何时候必须保证：①只有一个线程在写入；②线程正在读取的时候，写入操作等待；③线程正在写入的时候，其他线程的写入操作和读取操作都要等待；这样，使用读写锁就可以大大提高效率</li>
+<li><a href="http://www.cnblogs.com/Gordon-YangYiBao/archive/2012/09/12/2681874.html" target="_blank" rel="external">读写锁实例讲解</a></li>
+</ul>
+</li>
+</ol>
+<h3 id="Synchronized代码块和方法">Synchronized代码块和方法</h3><ol>
+<li>synchronized关键字强制实施一个<strong>互斥锁</strong>，使得被保护的代码块在同一时间只能有一个线程进入并执行，用于防止多线程访问临界共享资源出现数据不一致性；但是<strong>同步是一种高开销的操作</strong>(因为在锁竞争激烈的情况下，各个线程不断在阻塞和运行状态之间切换会导致操作系统的上下文切换开销非常大)，因此应该尽量减少同步的内容;通常没有必要同步整个方法，使用synchronized代码块同步关键代码；</li>
+<li><p>Synchronized锁住的是对象或者类,对象被锁住时，该对象所有的其他同步方法和代码块不能被执行；类被锁住时，该类所有的其他同步静态方法和代码块不能被执行</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">Bank</span> </span>{
+    <span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
+        <span class="keyword">return</span> account;
+    }
+
+    <span class="javadoc">/**
+     * 用同步方法实现
+     * 
+     *<span class="javadoctag"> @param</span> money
+     */</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+        account += money;
+    }
+
+    <span class="javadoc">/**
+     * 用同步代码块实现
+     * 
+     *<span class="javadoctag"> @param</span> money
+     */</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save1</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) {
+            account += money;
+        }
+    }
+}
+</code></pre></li>
+</ol>
+<h3 id="ReentrantLock可重入锁">ReentrantLock可重入锁</h3><ol>
+<li>可重入锁，也叫做递归锁，指的是同一线程外层函数获得锁之后，内层递归函数仍然有获取该锁的代码，但不受影响;即被同一个线程多次获取，而不会产生死锁。在JAVA环境下 ReentrantLock 和synchronized 都是可重入锁</li>
+<li>ReentrantLock是可重入、互斥、实现了Lock接口的锁，需要自己手动加锁与释放；要注意及时释放锁，否则会出现死锁，通常在finally代码释放锁；它能完成Synchronized所实现的所有功能,而且性能上有一定提升</li>
+<li><strong>ReentrantLock的常用方法</strong>:<ul>
+<li>lock(), 如果获取了锁立即返回，如果别的线程持有锁，当前线程则一直处于休眠状态，直到获取锁</li>
+<li>lockInterruptibly -&gt; 调用后一直阻塞到获得锁(和lock()一样)，但是接受中断信号</li>
+<li>tryLock(), 如果获取了锁立即返回true，如果别的线程正持有锁，立即返回false</li>
+<li>tryLock(long timeout,TimeUnit unit)，如果获取了锁定立即返回true，如果别的线程正持有锁，会等待参数给定的时间，在等待的过程中，如果获取了锁定，就返回true，如果等待超时，返回false</li>
+</ul>
+</li>
+<li><strong>synchronized和ReentrantLock的主要区别</strong><ul>
+<li><strong>ReentrantLock新特性</strong><ol>
+<li>等待可中断—-在持有锁的线程长时间不释放锁的时候,等待的线程可以选择放弃等待. 使用tryLock(long timeout, TimeUnit unit)方法</li>
+<li>公平锁(按照申请锁的顺序来依次获得锁称为公平锁)—-synchronized的是非公平锁,ReentrantLock可以通过构造函数实现公平锁. new RenentrantLock(boolean fair)</li>
+<li>可绑定多个Condition—-通过多次newCondition可以获得多个Condition对象,可以简单的通过await(),signal()方法实现比较复杂的线程同步的功能</li>
+</ol>
+</li>
+<li><strong>使用场景</strong>并发量比较小的情况下，Synchronized的性能要优于ReetrantLock，但是在并发量比较高，资源竞争很激烈的情况下，其性能下降很严重，此时ReentrantLock是个不错的方案;如果synchronized关键字能满足用户的需求，就用synchronized，因为它能简化代码，可读性高，而且编译器会尽可能优化synchronize</li>
+</ul>
+</li>
+</ol>
+<pre><code><span class="keyword">class</span> <span class="title">Bank</span> {
+<span class="keyword">private</span> <span class="keyword">int</span> account = <span class="number">100</span>;
+<span class="comment">// 创建一个ReentrantLock锁</span>
+<span class="keyword">private</span> Lock <span class="keyword">lock</span> = <span class="keyword">new</span> ReentrantLock();
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
+    <span class="keyword">return</span> account;
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+    <span class="keyword">lock</span>.<span class="keyword">lock</span>();    <span class="comment">// 获得锁 </span>
+    <span class="keyword">try</span> {
+        account += money;
+    } <span class="keyword">finally</span> {
+        <span class="keyword">lock</span>.unlock();    <span class="comment">// 释放锁</span>
+    }
+}
+}
+</code></pre><h3 id="自旋锁">自旋锁</h3><ol>
+<li><strong>自旋锁</strong>是对线程阻塞的一种优化，他的原理是当线程争用锁失败的时候不立即进入阻塞状态，而是再等一会，因为对于执行时间短的代码这一会可能就会释放锁，而线程就不需要进行一次阻塞与唤醒。这个等待操作就是让线程多执行几个空指令，至于等待多久这跟具体的处理器实现有关，也有可能处理器根本不支持自旋锁，具体实现的时候我们可以设置一个临界值，当超过了这个临界值之后我们就不自旋了，就乖乖进入阻塞状态吧。这种优化对于执行时间短的代码是很有效的。synchronized使用自旋锁的时机是线程进入等待队列即阻塞的前一步。</li>
+<li><strong>无锁</strong>例如Disruptor并发框架，Disruptor底层依赖一个RingBuffer来进行线程之间的数据交换，在并发条件下，多线程对RingBuffer的读和写不会涉及到锁，然而因为RingBuffer满或者RingBuffer中没有可消费内容引发的线程等待，那就要另当别论了。<strong>Disruptor无锁原理</strong>RingBuffer维护者可读和可写的指针，也叫游标，它指向生产者或消费者需要写或读的位置，而对于指针的更新是由CAS来完成的，这个过程中我们不需要加锁/解锁的过程。<h3 id="ThreadLocal线程局部变量">ThreadLocal线程局部变量</h3></li>
+<li><strong>ThreadLocal与同步机制区别</strong>：a.ThreadLocal与同步机制都是为了解决多线程中相同变量的访问冲突问题。b.前者采用以”空间换时间”的方法，后者采用以”时间换空间”的方式</li>
+<li><strong>性质</strong>每一个使用ThreadLocal变量的线程都获得该变量的副本，副本之间相互独立，这样每一个线程都可以随意修改自己的变量副本，而不会对其他线程产生影响</li>
+<li><strong>四个函数</strong>：initialValue函数用于获取此线程局部变量的初始值；get用于获取此线程局部变量在当前线程中的副本值，set用于设置，remove用于移除此线程局部变量在当前线程中的副本值；<strong>顺序</strong>在进行get之前，必须先set，否则会报空指针异常；如果想在get之前不需要调用set就能正常访问的话，必须重写initialValue()方法</li>
+<li><p><strong>实现原理</strong>：内部持有一个叫做ThreadLocalMap的内部类，从源码可以看出这个ThreadLocalMap的Entry继承了WeakReference，并且使用ThreadLocal作为键值，以键值对形式存储着[ThreadLocal对象, 存放的值]，每个线程中可有多个threadLocal变量</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Bank</span> {
+    <span class="comment">// 使用ThreadLocal类管理共享变量account</span>
+    <span class="keyword">private</span> ThreadLocal&lt;Integer&gt; account = <span class="keyword">new</span> ThreadLocal&lt;Integer&gt;() {
+        @<span class="function">Override
+        <span class="keyword">protected</span> Integer <span class="title">initialValue</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> <span class="number">100</span>;
+        }
+    };
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>{
+        account.<span class="keyword">set</span>(account.<span class="keyword">get</span>() + money);
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAccount</span><span class="params">()</span> </span>{
+        <span class="keyword">return</span> account.<span class="keyword">get</span>();
+    }
+}
+</code></pre></li>
+</ol>
+<h3 id="volatile变量可见性">volatile变量可见性</h3><p><strong>volatile</strong>: 在需要同步的变量上加上修饰符volatile，例如：private volatile int account = 100;volatile可以保证变量的可见性但是不保证原子性，不能用于修饰final常量，线程每一次对volatile变量的修改都会即时刷新到主存和通知到其他线程，也就是说每一次每个线程读取volatile变量时都会从主存中去取而不会从缓存寄存器中获取，以确保变量的值都是最新获取的;该关键字在JDK1.6开始可以保证指令不被重排序；但是他<strong>不能保证原子性，比如n++这种复合型操作</strong>;java虚拟机规范（jvm spec）中，规定了声明为volatile的long和double变量的get和set操作是原子的,所以将long和double类型的变量用volatile修饰，就可以保证对他们的赋值操作的原子性。<strong>适用场景</strong>：作为状态标识量适用，也在双重检查的单例中使用；适用于一个线程写，多个线程读的情况；两个条件:①对线程的写操作不依赖于当前值 ② 该变量没有包含在具有其他变量的不等式中 </p>
+<p><strong>CAS比较并交换操作</strong>：CAS 操作包含三个操作数 —— 内存位置（V）、预期原值（A）和新值(B). CAS有效地说明了“我认为位置 V 应该包含值 A；如果包含该值，则更新值为B；否则，不要更改该位置，只告诉我这个位置现在的值即可。” <strong>处理ABA情况</strong>，引入[引用, 版本号]机制来确保ABA也说明该数据已经被其他线程修改过</p>
+<p>例如，有一个变量i=0，Thread-1和Thread-2都对这个变量执行自增操作。 可能会出现Thread-1与Thread-2同时读取i=0到各自的工作内存中，然后各自执行+1，最后将结果赋予i。这样，虽然两个线程都对i执行了自增操作，但是最后i的值为1，而不是2。<br>解决这个问题使用互斥锁自然可以。但是也可以使用CAS来实现，思路如下：<br><strong>自增操作可以分为三步</strong>：（1）从内存中读取这个变量的当前值（2）执行（变量=上一步取到的当前值+1）的赋值操作 (3)将自增后的值写入变量</p>
+<p>多线程情况下，自增操作出现问题的原因就是执行（2）的时候，变量在主内存中的值已经不等于上一步取到的当前值了，所以赋值时，用CompareAndSet操作代替Set操作：首先比较一下内存中这个变量的值是否等于上一步取到的当前值，如果等于，则说明可以执行+1运算，并赋值；如果不等于，则说明有其他线程在此期间更改了主内存中此变量的值，上一步取出的当前值已经失效，此时，不再执行+1运算及后续的赋值操作，而是返回主内存中此变量的最新值。<strong>“比较并交换（compare_and_swap）”操作是原子操作，它使用平台提供的CPU级别上的用于并发操作的硬件原语</strong>。</p>
+<p><strong>原子（atom）</strong>本意是“不能被进一步分割的最小粒子”，而原子操作（atomic operation）意为”不可被中断的一个或一系列操作”  </p>
+<p><strong>基于CAS的并发算法称为“无锁定算法”，因为线程不必再等待锁定。“无锁定算法”要求某个线程总是执行操作</strong></p>
+<h3 id="Wait_&amp;&amp;_Notify同步(生产者消费者模式实现)">Wait &amp;&amp; Notify同步(生产者消费者模式实现)</h3><ol>
+<li><strong>Wait</strong>调用任意对象的wait()方法导致该线程阻塞，并释放该对象上的锁，进入等待对象同步锁的状态;<strong>Notify</strong>随机唤醒一个等待对象同步锁的线程</li>
+<li><strong>wait()方法</strong>：当缓冲区已满/空时，生产者/消费者线程停止自己的执行，放弃锁，使自己处于等待状态，让其他线程执行。<strong>notify()方法</strong>：当生产者/消费者向缓冲区放入/取出一个产品时，向其他等待的线程发出可执行的通知，同时放弃锁，使自己处于等待状态。</li>
+<li><strong>生产者-消费者（producer-consumer）问题</strong>，也称作有界缓冲区（bounded-buffer）问题，两个进程共享一个公共的固定大小的缓冲区。其中一个是生产者，用于将消息放入缓冲区；另外一个是消费者，用于从缓冲区中取出消息。问题出现在当缓冲区已经满了，而此时生产者还想向其中放入一个新的数据项的情形，其解决方法是让生产者此时进行休眠，等待消费者从缓冲区中取走了一个或者多个数据后再去唤醒它。同样地，当缓冲区已经空了，而消费者还想去取消息，此时也可以让消费者进行休眠，等待生产者放入一个或者多个数据时再唤醒它</li>
+<li><strong>如何停止消费者</strong>: 第一种方法: <strong>设置一个Volatile的boolean类型变量</strong>作为flag, 生产者结束后标示该变量为true, 消费者轮询这个变量来决定自己是否退出; 第二种方法: <strong>经典的“毒丸”策略</strong>，生产者结束后，把一个特别的对象：“毒丸”对象放入队列。消费者从队列中拿到对象后，判断是否是毒丸对象。如果是普通非毒丸对象，则正常消费。如果是毒丸对象，则放回队列（并杀死其他消费者），然后结束自己。  </li>
+<li>代码实现: </li>
+</ol>
+<pre><code><span class="keyword">public</span> class ProducerCustomer {
+
+<span class="comment">/**
+ * @param args
+ */</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) {
+    Product product = <span class="keyword">new</span> Product(); <span class="comment">// 实例化产品对象</span>
+    Producer p = <span class="keyword">new</span> Producer(product); <span class="comment">// 实例化一个生产者</span>
+    Consumer c = <span class="keyword">new</span> Consumer(product); <span class="comment">// 实例化一个消费者</span>
+    <span class="keyword">new</span> Thread(p).start(); <span class="comment">// 开启生产者线程</span>
+    <span class="keyword">new</span> Thread(c).start(); <span class="comment">// 开启消费者线程</span>
+}
+
+<span class="comment">/**
+ * 生产者线程
+ */</span>
+<span class="keyword">static</span> class Producer implements Runnable {
+    <span class="keyword">private</span> Product product;
+
+    <span class="keyword">public</span> Producer(Product product) {
+        <span class="keyword">this</span>.product = product;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> run() {
+        <span class="keyword">while</span> (<span class="keyword">true</span>) {
+            <span class="comment">// 同步代码锁</span>
+            <span class="keyword">synchronized</span> (product) {
+                <span class="keyword">try</span> {
+                    <span class="keyword">while</span> (product.getMax() == product.<span class="built_in">size</span>()) {
+                        <span class="comment">// 产品栈已经满,不需要再生产,执行线程等待操作</span>
+                        System.out.<span class="built_in">println</span>(<span class="string">"产品栈已满，生产者休息中......"</span>);
+                        product.wait();
+                    }
+                    <span class="comment">// 产品栈不足,开始生产</span>
+                    <span class="keyword">Object</span> newObj = <span class="keyword">new</span> <span class="keyword">Object</span>();
+                    product.<span class="built_in">add</span>(newObj);
+                    System.out.<span class="built_in">println</span>(<span class="string">"Producer 生产了一个产品，目前产品栈大小为："</span>
+                            + product.<span class="built_in">size</span>());
+                    <span class="comment">// 生产一个产品之后,线程开始睡眠</span>
+                    Thread.sleep((<span class="keyword">long</span>) Math.<span class="built_in">random</span>() * <span class="number">3000</span>);
+                    <span class="comment">// 通知消费者,有新产品</span>
+                    product.notify();
+                } <span class="keyword">catch</span> (Exception e) {
+                }
+            }
+        }
+    }
+}
+
+<span class="comment">/**
+ * 消费者线程
+ */</span>
+<span class="keyword">static</span> class Consumer implements Runnable {
+    <span class="keyword">private</span> Product product;
+
+    <span class="keyword">public</span> Consumer(Product product) {
+        <span class="keyword">this</span>.product = product;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> run() {
+        <span class="keyword">while</span> (<span class="keyword">true</span>) {
+            <span class="comment">// 同步代码锁</span>
+            <span class="keyword">synchronized</span> (product) {
+                <span class="keyword">try</span> {
+                    <span class="keyword">while</span> (product.<span class="built_in">size</span>() == <span class="number">0</span>) {
+                        <span class="comment">// 产品栈已空,不可以再消费,执行线程等待操作</span>
+                        System.out.<span class="built_in">println</span>(<span class="string">"产品栈为空，消费者等待中......"</span>);
+                        product.wait();
+                    }
+                    <span class="comment">// 产品栈有商品,开始消费</span>
+                    product.remove();
+                    System.out.<span class="built_in">println</span>(<span class="string">"Consumer 消费了一个产品，目前产品栈大小为："</span>
+                            + product.<span class="built_in">size</span>());
+                    <span class="comment">// 消费一个产品之后,线程开始睡眠</span>
+                    Thread.sleep((<span class="keyword">long</span>) Math.<span class="built_in">random</span>() * <span class="number">3000</span>);
+                    <span class="comment">// 通知生产者,消费了一个产品</span>
+                    product.notify();
+                } <span class="keyword">catch</span> (Exception e) {
+                }
+            }
+        }
+    }
+}
+
+<span class="keyword">static</span> class Product {
+    <span class="comment">// 使用list集合模拟一个产品栈</span>
+    <span class="keyword">private</span> List&lt;<span class="keyword">Object</span>&gt; goods = <span class="keyword">new</span> LinkedList&lt;<span class="keyword">Object</span>&gt;();
+    <span class="keyword">private</span> <span class="built_in">int</span> <span class="built_in">max</span> = <span class="number">10</span>; <span class="comment">// 最大产品数量</span>
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="built_in">add</span>(<span class="keyword">Object</span> obj) {
+        goods.<span class="built_in">add</span>(obj);
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> remove() {
+        <span class="keyword">if</span> (goods.<span class="built_in">size</span>() &gt; <span class="number">0</span>) {
+            goods.remove(goods.<span class="built_in">size</span>() - <span class="number">1</span>);
+        }
+    }
+
+    <span class="keyword">public</span> <span class="built_in">int</span> <span class="built_in">size</span>() {
+        <span class="keyword">return</span> goods.<span class="built_in">size</span>();
+    }
+
+    <span class="keyword">public</span> <span class="built_in">int</span> getMax() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="built_in">max</span>;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> setMax(<span class="built_in">int</span> <span class="built_in">max</span>) {
+        <span class="keyword">this</span>.<span class="built_in">max</span> = <span class="built_in">max</span>;
+    }
+}
+}
+</code></pre><h3 id="java-util-concurrent并发包">java.util.concurrent并发包</h3><p>几乎java.util.concurrent 中的所有类都是在 ReentrantLock 之上构建的，ReentrantLock 则是在原子变量类的基础上构建的</p>
+<h4 id="Semaphore（信号量）">Semaphore（信号量）</h4><ol>
+<li>Semaphore（信号量）是用来控制同时访问特定资源的线程数量，它通过协调各个线程，以保证合理的使用公共资源。</li>
+<li><strong>应用场景</strong><ul>
+<li><strong>Semaphore可以用于做流量控制，特别公用资源有限的应用场景，比如数据库连接</strong>。假如有一个需求，要读取几万个文件的数据，因为都是IO密集型任务，我们可以启动几十个线程并发的读取，但是如果读到内存后，还需要存储到数据库中，而数据库的连接数只有10个，这时我们必须控制只有十个线程同时获取数据库连接保存数据，否则会报错无法获取数据库连接。这个时候，我们就可以使用Semaphore来做流控</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>Semaphore的构造方法Semaphore(int permits) 接受一个整型的数字，表示可用的许可证数量。Semaphore(10)表示允许10个线程获取许可证，也就是最大并发数是10。Semaphore的用法也很简单，首先线程使用Semaphore的acquire()获取一个许可证，使用完之后调用release()归还许可证。还可以用tryAcquire()方法尝试获取许可证。</li>
+</ol>
+<h4 id="原子变量">原子变量</h4><p>java.util.concurrent.atomic包中提供了原子变量的9种风格（AtomicInteger、AtomicLong、 AtomicReference、AtomicBoolean等，其原子地更新一对值）</p>
+<h4 id="CountDownLatch">CountDownLatch</h4><ul>
+<li>利用它可以实现类似计数器的功能; 比如有一个任务A，它要等待其他4个任务执行完毕之后才能执行，就可以利用CountDownLatch来实现</li>
+<li><p>例：假如有Thread1、Thread2、Thread3、Thread4四条线程分别统计C、D、E、F四个盘的大小，所有线程都统计完毕交给Thread5线程去做汇总，实现代码如下：</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CountDownLatchTest</span> </span>{
+    <span class="keyword">private</span> <span class="keyword">static</span> CountDownLatch <span class="keyword">count</span> = <span class="keyword">new</span> CountDownLatch(<span class="number">4</span>);
+    <span class="keyword">private</span> <span class="keyword">static</span> ExecutorService service = Executors.newFixedThreadPool(<span class="number">6</span>);
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String args[]) throws InterruptedException {
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) {
+            service.execute(() -&gt; {
+                <span class="comment">// 模拟任务耗时</span>
+                <span class="keyword">try</span> {
+                    <span class="keyword">int</span> timer = <span class="keyword">new</span> Random().nextInt(<span class="number">5</span>);
+                    TimeUnit.SECONDS.sleep(timer);
+                    System.out.printf(<span class="string">"%s时完成磁盘的统计任务,耗费%d秒.\n"</span>, <span class="keyword">new</span> Date().toString(), timer);
+                    <span class="comment">// 任务完成之后,计数器减一</span>
+                    <span class="keyword">count</span>.countDown();
+                } <span class="keyword">catch</span> (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        <span class="comment">// 主线程一直被阻塞,知道count的计数器被设置为0</span>
+        <span class="keyword">count</span>.await();
+        System.out.printf(<span class="string">"%s时全部任务都完成,执行合并计算.\n"</span>, <span class="keyword">new</span> Date().toString());
+        service.shutdown();
+    }
+}
+</code></pre></li>
+</ul>
+<h4 id="CyclicBarrier回环栅栏">CyclicBarrier回环栅栏</h4><ul>
+<li>通过它可以实现让一组线程等待至某个状态之后再全部同时执行。叫做回环是因为当所有等待线程都被释放以后，CyclicBarrier可以被重用。我们暂且把这个状态就叫做barrier，当调用await()方法之后，线程就处于barrier了</li>
+<li><strong>例子</strong>：假若有若干个线程都要进行写数据操作，并且只有所有线程都完成写数据操作之后，这些线程才能继续做后面的事情</li>
+</ul>
+<h4 id="CountDownLatch_VS_CyclicBarrier">CountDownLatch VS CyclicBarrier</h4><ol>
+<li>CountDownLatch和CyclicBarrier都能够实现线程之间的等待，只不过它们侧重点不同：CountDownLatch一般用于某个线程A等待若干个其他线程执行完任务之后，它才执行；而CyclicBarrier一般用于一组线程互相等待至某个状态，然后这一组线程再同时执行</li>
+<li>CountDownLatch是不能够重用的，而CyclicBarrier是可以重用的。</li>
+</ol>
+<h4 id="Fork-Join_框架：">Fork-Join 框架：</h4><p>并行分解方法，执行一个任务将首先分解（fork）为多个子任务，完成之后再合并（join）</p>
+<h4 id="Callable和FutureTask">Callable和FutureTask</h4><h3 id="参考链接">参考链接</h3><ol>
+<li><a href="http://www.itdadao.com/articles/c15a210800p0.html" target="_blank" rel="external">Concurrent并发包</a></li>
+</ol>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Java/"> #Java </a>
+          
+            <a href="../../tags/多线程/"> #多线程 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
   </div>
 
   
@@ -822,7 +966,7 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../..//archives">
-              <span class="site-state-item-count">80</span>
+              <span class="site-state-item-count">79</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
