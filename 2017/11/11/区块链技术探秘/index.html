@@ -181,7 +181,7 @@
         <h3 id="区块链">区块链</h3><p>技术角度来讲，<strong>区块链</strong>是分布式数据存储、P2P网络传输、共识机制、加密算法等技术的集成应用。区块链技术是利用块链式数据结构来验证与存储数据、利用分布式节点共识算法来生成和更新数据、利用密码学的方式保证数据传输和访问安全、利用智能化合约来编程和操作数据的一种全新的分布式基础架构与计算范式。  </p>
 <p>通俗来讲，<strong>区块链</strong>是一个收录所有历史交易的分布式账本，每个区块中包含若干笔交易记录。如果说区块链是账本，那么区块就是账本的每一页。交易的细节都被记录在一个网络里任何人都可以看得到的公开账簿上，而且这个账本会保存在每个节点中。</p>
 <p><strong>区块链的核心能力</strong>在于“大大降低了达成存在性证明的成本”：对于当前区块记录，采用一台矿机记录，成千上万矿机鉴证的模式，保证着没有非法区块被正确记录，当然理论上51%的矿机如果共同决定要做假，事实是可以记录假数据，只是在当前的算力下，准备如此大的算力来记录假数据，成本极高。</p>
-<h4 id="主体架构">主体架构</h4><p>从架构设计上来说，区块链可以简单的分为三个层次，协议层、扩展层和应用层。</p>
+<h4 id="主体架构">主体架构</h4><p>从架构设计上来说，区块链可以简单的分为三个层次，协议层、扩展层和应用层。<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/blockchain_overview.png" class="full-image" width="100%"></p>
 <h4 id="核心概念">核心概念</h4><ol>
 <li><strong>共识机制</strong>：我们知道，比特币系统中每十分钟产生一个区块，同时有n个节点在收到了这个区块，那么由谁去负责打包这个区块，将其纳入区块链呢？为了达到这种共识，决定最终打包权，需要一种共识机制，例如比特币就采用了POW，看谁的计算力强大，哈希计算速度更快，谁就更有可能获得打包权，也就相应的获得打包的奖励以及交易的手续费用。</li>
 <li><strong>挖矿过程</strong>：每一个比特币的节点都会收集所有尚未确认的交易，并将其归集到一个资料块中，比特币系统会在系统节点上将他生成一个随机代码，任何人都有权通过计算机去寻找此代码，争夺具有记账权的节点，挖矿节点不断重复进行尝试；矿工找到此代码，就会产生一个可记账区块，随即得到一个比特币的奖励报酬；当一个节点找到了符合要求的解，那么它就可以向全网广播自己的结果。其他节点就可以接收这个新解出来的资料块，并检验其是否符合规则。如果其他节点通过计算杂凑值发现确实满足要求（比特币要求的运算目标），那么该资料块有效，其他的节点就会接受该资料块。每隔一个时间点（10分钟），比特币系统会在系统节点上重新生成一个随机代码。具体计算随机数的流程：</li>
@@ -272,13 +272,13 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="../../../12/02/Mysql Init线程不安全问题/">Mysql初次Init线程不安全问题</a>
+              <a href="../C++源码之LevelDB/">C++源码之LevelDB</a>
             
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="../C++编译之CMake工具/">C++常用数据结构</a>
+              <a href="../C++编译之CMake工具/">C++编译之CMake工具</a>
             
           </div>
         </div>
@@ -346,7 +346,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="../../../..//archives">
-              <span class="site-state-item-count">67</span>
+              <span class="site-state-item-count">80</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -360,7 +360,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="../../../..//tags">
-              <span class="site-state-item-count">69</span>
+              <span class="site-state-item-count">75</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
