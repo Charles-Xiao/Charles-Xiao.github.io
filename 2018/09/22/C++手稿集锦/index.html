@@ -178,7 +178,7 @@
       
 
       
-        <p>title: “C++手稿集锦”<br>date: 2018-06-11 11:36:53</p>
+        <p>title: “C++手稿集锦”<br>date: 2017-11-21 11:36:53</p>
 <h2 id="tags:_[C++]">tags: [C++]</h2><h3 id="哪些变量会自动初始化？"><a href="https://harttle.land/2015/10/05/cpp-variable-init.html" target="_blank" rel="external">哪些变量会自动初始化？</a></h3><p>在C语言中的<strong>全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值（C++默认初始化策略也是如此）。 C++保证了所有对象与对象成员都会初始化</strong>，无论是否写了圆括号或者是否写了参数列表，但其中基本数据类型的初始化还得依赖于构造函数。</p>
 <p>成员变量分为成员对象和内置类型成员，其中成员对象总是会被初始化的。我们通常会在构造函数中初始化所有内置类型的成员。例如：</p>
 <figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> v;</span><br><span class="line">    A(): v(0);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
