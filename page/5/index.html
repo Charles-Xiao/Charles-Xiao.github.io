@@ -386,6 +386,75 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
           
           
             
+              计算机体系结构学习札记
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-11-11
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/11/11/计算机体系结构学习札记/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/计算机体系结构学习札记/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>计算机系统是由硬件和系统软件组成的，它们共同工作来运行应用程序。</p>
+<h3 id="操作系统">操作系统</h3><p>操作系统处于中间位置，它的一边是应用程序、实用程序和用户，另一边是计算机系统的硬件。</p>
+<h3 id="计算机硬件">计算机硬件</h3>
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/计算机体系结构/"> #计算机体系结构 </a>
+          
+            <a href="../../tags/操作系统/"> #操作系统 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               C++编译之CMake工具
             
           
@@ -452,75 +521,6 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
         <div class="post-tags">
           
             <a href="../../tags/C/"> #C++ </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              计算机体系结构学习札记
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2017-11-11
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2017/11/11/计算机体系结构学习札记/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/计算机体系结构学习札记/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        <p>计算机系统是由硬件和系统软件组成的，它们共同工作来运行应用程序。</p>
-<h3 id="操作系统">操作系统</h3><p>操作系统处于中间位置，它的一边是应用程序、实用程序和用户，另一边是计算机系统的硬件。</p>
-<h3 id="计算机硬件">计算机硬件</h3>
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/计算机体系结构/"> #计算机体系结构 </a>
-          
-            <a href="../../tags/操作系统/"> #操作系统 </a>
           
         </div>
       
@@ -642,7 +642,7 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
           
           
             
-              2018
+              C++源码之LevelDB
             
           
         </h1>
@@ -659,8 +659,8 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2017/11/11/2018/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/2018/"></span>
+            <a href="../../2017/11/11/C++源码之LevelDB:RocksDB/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/C++源码之LevelDB:RocksDB/"></span>
             </a>
           </span>
           
@@ -674,42 +674,123 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
       
 
       
-        <h3 id="投资理财">投资理财</h3><ul>
-<li>美股和港股</li>
-<li>基金和P2P理财类(懒投资，网贷之家，行业收紧需慎重) — 不再碰</li>
-<li>百度钱包等固定收益类 — 稳定收益</li>
-<li>少量虚拟货币 — 自媒体扩大业务，50%进入投资</li>
-<li>股票技术面分析理论与实践</li>
-<li>阅读5本相关书籍：格林皮特的两本，技术面分析2本，宏微观经济 — doing</li>
+        <h4 id="什么是LevelDB—-LevelDB日知录">什么是LevelDB—-<a href="http://cighao.com/2016/08/14/leveldb-source-analysis-02-structure/" target="_blank" rel="noopener"><strong>LevelDB日知录</strong></a></h4><p>一种单机持久化 K/V 数据库。其基于 <a href="http://nosqlsummer.org/paper/lsm-tree" target="_blank" rel="noopener">LSM(LOG Structured Merge Tree)</a> 实现，将所有的 Key/Value 按照 Key 的词法序有序地储存在文件中，具有很高的随机/顺序写性能，非常适用于写多读少的环境。</p>
+<p>LevelDB 不是一个 SQL 数据库，它不支持关系数据模型，不支持 SQL 语言，也不支持索引。在同一时刻只允许单个进程（可以是多线程）访问数据库。</p>
+<p>LevelDB具备以下特性：</p>
+<ol>
+<li><p>Keys 和 Values 可以是任意的字节序列</p>
+</li>
+<li><p>数据是按照 Key 排序的</p>
+</li>
+<li><p>调用者可以提供一个定制的比较函数来决定 Keys 的排序方式。</p>
+</li>
+<li><p>针对数据库的操作非常简单，<em>i.e.</em> <code>Put</code>, <code>Get</code>, <code>Delete</code></p>
+</li>
+<li><p>可以在一次原子的批处理中同时多次修改数据库</p>
+</li>
+<li><p>用户可以创建 snapshot 保持对于数据视图的一致性</p>
+</li>
+<li><p>这个数据结构提供前向和后向的迭代器 (iterator)</p>
+</li>
+<li><p>数据可以自动经过 <a href="http://google.github.io/snappy/" target="_blank" rel="noopener"><em>Snappy</em></a> 算法压缩</p>
+</li>
+<li><p>针对于操作系统文件的交互操作，LevelDB 提供给外部用户一个可以定制的虚拟的接口(Env)</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/leveldb_store_engine.jpg" class="full-image"></p>
+<h4 id="写入流程">写入流程</h4><ol>
+<li>每次写入一个 Key/Value 对时，首先将该数据追加到 log 中，然后再将其写入到内存的 memtable。memtable 是一个基于 SkipList 的有序的结构，每一个 Key 都会按序组织到 memtable 中。</li>
+<li>当 memtable 中的数据量达到一定的限制后，其将会转变成为一个 Immutable memtable，同时 levelDB 会新建新的 Log 文件和 memtable 结构用来接收后续的插入操作。内存的 Immutable memtable 将会被后台的线程持久化的存储到磁盘中，生成有序 sstable 文件。</li>
+<li>磁盘上的 sstable 文件按照 level 的形式组织，从 memtable 序列化得到的 sst 文件位于 level0 层。由于经过 compaction 线程的压缩，文件将不断地从 level n 层向 level n+1层移动。</li>
+</ol>
+<blockquote>
+<p>delete操作</p>
+</blockquote>
+<h4 id="读取流程">读取流程</h4><p>leveldb读取数据总是先读取最新的数据,因为有可能插入键值一样的键值对,但是我们查询时是想获取最近插入的数据,所以读取数据时的顺序为：memtable-&gt;immemtable-&gt;sstable</p>
+<h4 id="compaction">compaction</h4><h5 id="minor_compaction">minor compaction</h5><p>就是将immemtable数据写回到磁盘的过程</p>
+<h5 id="major_compaction">major compaction</h5><p>即将某一层某个文件和上一层的几个sst文件合并的过程</p>
+<h5 id="源码分析">源码分析</h5><p>Put函数调用Write函数，触发后台合并操作，DoCompactionWork之前会先调用MakeRoomForWrite函数判断空间是否足够</p>
+<h4 id="LSM_Tree存储引擎">LSM Tree存储引擎</h4><h5 id="MemTable">MemTable</h5><p>核心是Get和Add函数实现对SkipList的操作</p>
+<h5 id="Skiplist跳跃表">Skiplist跳跃表</h5><ul>
+<li><p>构建</p>
+<p><img src="/Users/xiaoyong/Desktop/个人资料/hexo-CharlesXiao/themes/next/source/images/skiplist-construct.png" alt="skiplist-insert"></p>
+</li>
 </ul>
-<h3 id="被动收入">被动收入</h3><ul>
-<li>内容号，包括博客，百家号等 — done，微博+头条+微信</li>
-<li>小程序，招聘信息类爬虫等开发类产品 — 红利期还没爆发？百度小程序？</li>
+<ul>
+<li><p>查找</p>
+<p><img src="https://i.imgur.com/cQsPnGa.png" alt="Search"></p>
+</li>
+<li><p>插入/删除</p>
+<p><img src="/Users/xiaoyong/Desktop/个人资料/hexo-CharlesXiao/themes/next/source/images/skiplist-insert.png" alt="skiplist-insert"></p>
+</li>
 </ul>
-<h3 id="技术成长">技术成长</h3><ul>
-<li>有一个系统全面的roadmap和framework</li>
-<li>基础技术方面：语言，操作系统，网络</li>
-<li>专业技能：分布式系统，存储，云计算相关新技术栈</li>
-<li>算法和数据结构：leetcode到达300道，以C++，Go，Java三种语言</li>
-<li>阅读5本相关书籍：深入理解计算机系统、effective C++、Golang一本、系统架构</li>
-<li>阅读2-3份源码：Nginx、Leveldb、raft or brpc、redis、mysql、golang</li>
-<li>熟悉3个周边系统：BlobStorage、proxy、tafDB、Mola</li>
+<ul>
+<li><p>复杂度</p>
+<p>  <img src="/Users/xiaoyong/Library/Application Support/typora-user-images/image-20181018145345754.png" alt="image-20181018145345754"></p>
+</li>
 </ul>
-<h3 id="外部机遇">外部机遇</h3><ul>
-<li>涨薪机会</li>
-<li>晋升机会</li>
-<li>技术转管理或金融机会</li>
-<li>跳槽机会</li>
-<li>面试技巧训练</li>
-<li>找准3次定位</li>
+<h5 id="sstable">sstable</h5><h5 id="manifest">manifest</h5><h5 id="versionSet">versionSet</h5><h4 id="Key/Value数据存储">Key/Value数据存储</h4><h5 id="Node数据结构">Node数据结构</h5><p>skiplist中的单个node不仅存储了key，也存储了value。dbformat.h文件中定义了跳跃表中的node数据结构，如下表。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">klength</th>
+<th style="text-align:center">user_key</th>
+<th style="text-align:center">sequence+type(8byte)</th>
+<th style="text-align:center">value_size</th>
+<th style="text-align:center">value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">user_key 长度</td>
+<td style="text-align:center">用户输入的key</td>
+<td style="text-align:center">Seq:全局递增的序列号，每一次Put操作都会递增; type:用于判断操作是插入还是删除</td>
+<td style="text-align:center">value长度</td>
+<td style="text-align:center">用户输入的value</td>
+</tr>
+</tbody>
+</table>
+<p>skiplist中定义的几种key类型及其组成部分：</p>
+<ul>
+<li>LookupKey/memtable_key：klength + user_key + sequence+type</li>
+<li>InternalKey：user_key + sequence+type</li>
+<li>不管是memtable还是sstable文件，其内部都是按InternalKey有序的。 比较时先使用InternalKey内部的user_key进行比较，再比较sequence_num</li>
 </ul>
-<h3 id="行业新风口">行业新风口</h3><ul>
-<li>机器学习与AI算法</li>
-<li>区块链和虚拟货币</li>
+<h5 id="sstable存储结构">sstable存储结构</h5><h4 id="Cache">Cache</h4><h5 id="table_cache">table cache</h5><p>table cache的key值是SSTable的文件名称，Value部分包含两部分，一个是指向磁盘打开的SSTable文件的文件指针，这是为了方便读取内容；另外一个是指向内存中这个SSTable文件对应的Table结构指针。这样就将不同的sstable文件像cache一样进行管理。</p>
+<h5 id="block_cache">block cache</h5><p>block cache 的结构其中的key是文件的cache_id加上这个block在文件中的起始位置block_offset。而value则是这个Block的内容</p>
+<h4 id="Util基础工具包">Util基础工具包</h4><h5 id="coding-cc_—-_编解码">coding.cc —- 编解码</h5><p>leveldb所有数据都是字符形式，即使是整型，也将被转换为字符型存储。这样的好处就是可以减少内存空间的使用。例如，假如有一个int型数据，小于128，存储为整型时，需要占用四个字节，存储为字符型时，只需要一个字节即可。</p>
+<p>LevelDB 使用了一种很简单的方案 <em>varint</em> 来节省小整数的存储。对于每一个字节，levelDB 使用其最高的 bit 位来表示当前的编码是否结束，而用低 7 bit 来存储实际的数据。<strong>如果最高位为1，表示当前的编码尚为结束，需要继续读下一字节的数据，否则当前的编码结束</strong>。示例：</p>
+<ol>
+<li>对于比较大的数，如果存储的数据如下<br>1001 0001  1000 1001 0111 1100<br>^          ^         ^      A: 最高位是1，未结束，实际值是后七位 001 0001<br>|          |         |      B: 最高位是1，未结束，实际值是后七位 000 1001<br>A          B         C      C: 最高位是0，结束，  实际值是后七位 111 1100<br>因此，三个字节拼接应该是 C + B + A :<br>[1111100][000 1001][0010001] = 2032785</li>
+<li>对于 [0-127] 的整数，例如：<br>0001 0001<br>^                           A: 第一字节，最高位为0，表示结束，实际值是 0010001<br>|                              也就是 33<br>A</li>
+</ol>
+<h5 id="arena-cc_—-_内存池">arena.cc —- 内存池</h5><p>Arena内存池实现原理是每次向系统申请4KB大小的一整块内存block, 程序需要内存时,直接从block中获取一部分即可, 这样可以减少系统分配内存次数(new char[]操作), 降低系统分配内存带来的消耗。但是当程序需要一大块内存时(&gt;1024B)时就单独分配一块需要大小的内存，这样也是为了减少系统分配内存的次数。当需要的内存大于block剩余大小而且小于等于1024B时，重新分配一块block，这样会导致有1/4的block被浪费掉。</p>
+<h5 id="cache-cc_—-_LRU缓存">cache.cc —- LRU缓存</h5><p>HashTable 和 环形双向链表的结合, hashtable实现O(1)存取时间复杂度; 双向链表实现每次读取或者插入元素都在链表head，每次淘汰链表tail。<code>lru.prev is newest entry, lru.next is oldest entry.</code></p>
+<h5 id="schedule_—-_后台任务调度队列">schedule —- 后台任务调度队列</h5><h4 id="实例分析">实例分析</h4><h4 id="RocksDb_vs_LevelDb">RocksDb vs LevelDb</h4><h5 id="概述">概述</h5><h5 id="RocksDb新增特性和优化列表"><a href="http://xiaqunfeng.cc/2017/02/23/RocksDB%E7%9B%B8%E6%AF%94LevelDB%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7/" target="_blank" rel="noopener">RocksDb新增特性和优化列表</a></h5><p>性能优化：</p>
+<ol>
+<li>compaction和memtable inserts操作都多线程化，不止是后台单线程操作</li>
+<li>减少互斥锁，优化写锁</li>
+<li>Fewer comparator calls during SkipList searches</li>
+<li>Allocate memtable memory using huge page</li>
+<li>Prefix bloom filter</li>
+<li>Optimized level-based compaction style and universal compaction style</li>
+<li>对SSD存储做了优化，可以以in-memory方式运行</li>
+</ol>
+<p>新增特性：</p>
+<ul>
+<li>列簇（column families）</li>
+<li>手动压缩与自动压缩并行运行</li>
+<li>Persistent Cache 持久化缓存</li>
+<li>Merge Operators，也就是原地更新，优化了modify的效率</li>
+<li>Transactions and WriteBatchWithIndex</li>
+<li>单个删除，以及范围删除文件</li>
+<li>Vector-based and hash-based memtable format</li>
+<li>Group commit和AwaitState</li>
+<li>内存中有多个Immutable memtable</li>
 </ul>
-<h3 id="随笔札记">随笔札记</h3><p>区块链技术的发展很有可能带来技术革新，类似于PC互联网、移动互联网、自媒体内容创业这样同等重要的机遇，如何抓住并且变现，值得思考！  </p>
-<p>房产市场的变化，从买房到租房，可能会引发下一个投资机遇，这个跟政策有很大关系，应该多加关注房地产政策的走向和解读  </p>
-
+<h5 id="memtable">memtable</h5><p>rocksdb中,memtable在内存中的形式有三种：skiplist、hash-skiplist、hash-linklist。</p>
+<h5 id="内联跳跃表（Inline_Skip_List）">内联跳跃表（Inline Skip List）</h5><h5 id="Group_commit和AwaitState">Group commit和AwaitState</h5><p>RocksDB多个写线程组成一个group， leader 负责 group 的 WAL (write ahead log)及 memtable 的提交，提交完后唤醒所有的 follwer，向上层返回；leader批量提交group所有线程的WAL日志，然后唤醒follower，一起开始并发无锁写memtable（allow_concurrent_memtable_write开关），洗完之后更新线程链表，开始下一轮写入；还支持enable_pipelined_write流水线配置，允许在WAL写完之后开始并发写memtale时就开始下一轮的group。</p>
+<h4 id="参考链接">参考链接</h4>
       
     </div>
 
@@ -717,7 +798,7 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
       
         <div class="post-tags">
           
-            <a href="../../tags/2018/"> #2018 </a>
+            <a href="../../tags/C/"> #C++ </a>
           
         </div>
       

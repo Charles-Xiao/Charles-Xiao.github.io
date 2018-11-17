@@ -314,6 +314,134 @@
           
           
             
+              Linux expect自动交互脚本入门
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-02-19
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/02/19/Linux expect自动交互脚本入门/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/19/Linux expect自动交互脚本入门/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p><strong>Expect</strong> is a program that “talks” to other interactive programs according to a script. Following the script, Expect knows what can be expected from a program and what the correct response should be. An interpreted language provides branching and high-level control structures to direct the dialogue. In addition, the user can take control and interact directly when desired, afterward returning control to the script.</p>
+<h4 id="expect基础语法">expect基础语法</h4><p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># 命令行参数 </span><br><span class="line"># $argv，参数数组，使用[lindex $argv n]获取，$argv 0初始化为脚本名字</span><br><span class="line"># $argc，参数个数</span><br><span class="line">set username [lindex $argv 0]  # 获取第0个参数</span><br><span class="line">set passwd [lindex $argv 1]    # 获取第1个参数</span><br><span class="line">set TOKEN $expect_out(buffer): 获取上一个键盘输入保存到TOKEN变量中</span><br><span class="line"></span><br><span class="line">set timeout 30 # 设置超时30s</span><br><span class="line"> </span><br><span class="line"># spawn是expect内部命令，开启ssh连接</span><br><span class="line">spawn ssh -l username 192.168.1.1</span><br><span class="line"> </span><br><span class="line"># 判断上次输出结果里是否包含以“password:”开头的字符串，如果有则立即返回，否则就等待一段时间(timeout)后返回</span><br><span class="line">expect &quot;password:*&quot;</span><br><span class="line"> </span><br><span class="line"># 发送内容ispass(密码)，与手工输入密码ispass的动作等效</span><br><span class="line">send &quot;ispass\r&quot;</span><br><span class="line"> </span><br><span class="line"># 发送内容给用户</span><br><span class="line">send_user &quot;$argv0 [lrange $argv 0 2]\n&quot;</span><br><span class="line">send_user &quot;It&apos;s OK\r&quot;</span><br><span class="line"># 执行完成后保持交互状态，控制权交给控制台(可以继续手工输入等操作)。否则会完成后会退出。</span><br><span class="line">interact</span><br></pre></td></tr></table></figure>
+<h5 id="spwan命令">spwan命令</h5><p>spawn命令用于启动一个进程, 后边接上你要执行的命令，例如<code>spawn ssh relay01.baidu.com</code></p>
+<h5 id="interact命令">interact命令</h5><p>interact命令用于脚本执行完简单的命令后人手动介入,只在所属的spawn进程空间有效</p>
+<h5 id="expect的三种使用格式">expect的三种使用格式</h5><ul>
+<li><p>并行：只要其中的任何一个pattern能够匹配，那么这个expect就算是完成了一次匹配</p>
+<pre><code>expect {
+    pattern1 {
+        command2 }
+    pattern2 {
+        command2 }
+}
+
+<span class="comment"># 示例</span>
+expect {
+   <span class="string">"hi"</span>    { <span class="built_in">send</span> <span class="string">"You said hi\r"</span> }
+   <span class="string">"hello"</span> { <span class="built_in">send</span> <span class="string">"Hello yourself\r"</span> }
+   <span class="string">"bye"</span>   { <span class="built_in">send</span> <span class="string">"That was unexpected\r"</span> }
+}
+</code></pre></li>
+</ul>
+<ul>
+<li><p>串行：所有的匹配被依次满足了之后才算整个语句完成</p>
+<pre><code>expect pattern command
+expect pattern2 command2
+
+<span class="comment"># 串行示例</span>
+expect <span class="string">"username:"</span>
+<span class="keyword">send</span> <span class="string">"<span class="variable">$userid</span>\r"</span>
+expect <span class="string">"password:"</span> { <span class="keyword">send</span> <span class="string">"<span class="variable">$mypassword</span>\r"</span> }
+
+<span class="comment"># 利用exp_continue并行实现串行，continue执行下一个pattern</span>
+expect {   
+    <span class="string">"*yes/no"</span> { <span class="keyword">send</span> <span class="string">"yes\r"</span>; exp_continue }
+     <span class="string">"*password:"</span> { <span class="keyword">send</span> <span class="string">"<span class="variable">$mypassword</span>\r"</span> }   
+}
+</code></pre></li>
+</ul>
+<h5 id="shell脚本接收多个参数">shell脚本接收多个参数</h5><ol>
+<li>expect脚本可以接受从bash传递过来的参数.可以使用[lindex $argv n]获得，n从0开始，分别表示第一个,第二个,第三个….参数</li>
+<li>$argc为命令行参数的个数，$argv0为脚本名字本身，$argv为命令行参数。[lrange $argv 0 0]表示第1个参数，[lrange $argv 0 4]为第一个到第五个参数。</li>
+<li>执行<code>./test.sh 1 2 3</code>,脚本内容如下：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/expect -d</span><br><span class="line">set username [lindex $argv 0]</span><br><span class="line">set password [lindex $argv 1]</span><br><span class="line">set server [lindex $argv 2]</span><br><span class="line">send_user  &quot;UserName is $username\n&quot;</span><br><span class="line">send_user  &quot;PassWord is $password\n&quot;</span><br><span class="line">send_user  &quot;Server is $server\n&quot;</span><br><span class="line">send_user &quot;Total arg num is $argc\n&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="bash脚本直接调用expect进行交互">bash脚本直接调用expect进行交互</h4><ul>
+<li>Here document实现, expect脚本可以使用bash中定义的变量</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">host=&quot;USER@HOST&quot;</span><br><span class="line">password=&quot;PASSWORD&quot;</span><br><span class="line">cmd=&quot;command_list&quot;</span><br><span class="line"></span><br><span class="line">expect &lt;&lt;EOF </span><br><span class="line">spawn ssh $host &quot;$cmd&quot;</span><br><span class="line">expect &#123;</span><br><span class="line">&quot;*(yes/no)?&quot; &#123; send &quot;yes\r&quot;;exp_continue &#125;</span><br><span class="line">&quot;*assword:&quot; &#123; send &quot;$password\r&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line">expect eof</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<ul>
+<li>直接使用set来定义变量并在expect脚本中使用</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">expect -c &apos;</span><br><span class="line">set $PASSWORD=&quot;123qwe&quot;</span><br><span class="line">spawn ssh USER@HOST &quot;commands&quot;</span><br><span class="line">expect &#123;</span><br><span class="line">&quot;*(yes/no)?&quot; &#123; send &quot;yes\r&quot;;exp_continue &#125;</span><br><span class="line">&quot;*assword:&quot; &#123; send &quot;$PASSWORD\r&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line">expect eof</span><br><span class="line">&apos;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果希望保持登录，去掉上面代码的ssh后的命令列表并且将expect eof改成interact即可</p>
+</blockquote>
+<h4 id="更多示例">更多示例</h4><ol>
+<li><a href="http://xstarcd.github.io/wiki/shell/expect.html" target="_blank" rel="noopener">expect交互脚本示例</a></li>
+<li><a href="https://www.jianshu.com/p/70556b1ce932" target="_blank" rel="noopener">Linux Expect 简介和使用实例</a></li>
+</ol>
+<h4 id="开发机登陆脚本示例">开发机登陆脚本示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/expect</span><br><span class="line"></span><br><span class="line"># 登录relay</span><br><span class="line">spawn ssh relay01.baidu.com</span><br><span class="line"></span><br><span class="line"># 定义变量</span><br><span class="line">set PIN &quot;123321&quot;</span><br><span class="line">set HOST &quot;hz01-bos-dev-r15-01-005.hz01&quot;</span><br><span class="line">set PASSWORD &quot;&quot;</span><br><span class="line"></span><br><span class="line"># 执行脚本时带上参数,以空格分开</span><br><span class="line"># set TOKEN [lindex $argv 0]</span><br><span class="line"></span><br><span class="line"># 打开调试模式</span><br><span class="line">#exp_internal 1</span><br><span class="line"># relay PIN码 + Token(Token需手动输入)</span><br><span class="line">expect &#123;</span><br><span class="line">    -re &quot;password:*&quot; &#123;</span><br><span class="line">        send_user &quot;PIN:****** + Token:&quot;</span><br><span class="line">        expect_user &#123;</span><br><span class="line">            -timeout -1</span><br><span class="line">            -re &quot;(.*)\n&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        set TOKEN $expect_out(buffer)</span><br><span class="line">        send &quot;$PIN$TOKEN\r&quot;</span><br><span class="line">        exp_continue</span><br><span class="line">    &#125;</span><br><span class="line">   # 自动登录开发机</span><br><span class="line">    -re &quot;-bash-baidu-ssl*&quot; &#123;</span><br><span class="line">        if &#123; &quot;$HOST&quot; != &quot;&quot; &#125; &#123;</span><br><span class="line">            send &quot;ssh --silent $HOST\r&quot;</span><br><span class="line">            # [可选]自动开发机输入密码</span><br><span class="line">            if &#123; &quot;$PASSWORD&quot; != &quot;&quot; &#125; &#123;</span><br><span class="line">                expect -re &quot;password:&quot; &#123; send &quot;$PASSWORD\r&quot; &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"># 关闭调试模式</span><br><span class="line">#exp_internal 0</span><br><span class="line">interact</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Linux/"> #Linux </a>
+          
+            <a href="../../tags/shell/"> #shell </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               Linux shell/目录基础知识
             
           
@@ -755,134 +883,6 @@ rsync -v rsync://<span class="number">172.16</span>.<span class="number">78.192<
 <li><code>mv /usr/cbu/ * .</code>  将/usr/cbu中的所有文件移到当前目录（用“.”表示）中</li>
 <li><code>at －f data 15:30 +2 days</code>  让系统在两天后的17：30执行文件data中指明的作业</li>
 </ol>
-
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Linux/"> #Linux </a>
-          
-            <a href="../../tags/shell/"> #shell </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              Linux expect自动交互脚本入门
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2017-02-19
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2017/02/19/Linux expect自动交互脚本入门/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/19/Linux expect自动交互脚本入门/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        <p><strong>Expect</strong> is a program that “talks” to other interactive programs according to a script. Following the script, Expect knows what can be expected from a program and what the correct response should be. An interpreted language provides branching and high-level control structures to direct the dialogue. In addition, the user can take control and interact directly when desired, afterward returning control to the script.</p>
-<h4 id="expect基础语法">expect基础语法</h4><p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># 命令行参数 </span><br><span class="line"># $argv，参数数组，使用[lindex $argv n]获取，$argv 0初始化为脚本名字</span><br><span class="line"># $argc，参数个数</span><br><span class="line">set username [lindex $argv 0]  # 获取第0个参数</span><br><span class="line">set passwd [lindex $argv 1]    # 获取第1个参数</span><br><span class="line">set TOKEN $expect_out(buffer): 获取上一个键盘输入保存到TOKEN变量中</span><br><span class="line"></span><br><span class="line">set timeout 30 # 设置超时30s</span><br><span class="line"> </span><br><span class="line"># spawn是expect内部命令，开启ssh连接</span><br><span class="line">spawn ssh -l username 192.168.1.1</span><br><span class="line"> </span><br><span class="line"># 判断上次输出结果里是否包含以“password:”开头的字符串，如果有则立即返回，否则就等待一段时间(timeout)后返回</span><br><span class="line">expect &quot;password:*&quot;</span><br><span class="line"> </span><br><span class="line"># 发送内容ispass(密码)，与手工输入密码ispass的动作等效</span><br><span class="line">send &quot;ispass\r&quot;</span><br><span class="line"> </span><br><span class="line"># 发送内容给用户</span><br><span class="line">send_user &quot;$argv0 [lrange $argv 0 2]\n&quot;</span><br><span class="line">send_user &quot;It&apos;s OK\r&quot;</span><br><span class="line"># 执行完成后保持交互状态，控制权交给控制台(可以继续手工输入等操作)。否则会完成后会退出。</span><br><span class="line">interact</span><br></pre></td></tr></table></figure>
-<h5 id="spwan命令">spwan命令</h5><p>spawn命令用于启动一个进程, 后边接上你要执行的命令，例如<code>spawn ssh relay01.baidu.com</code></p>
-<h5 id="interact命令">interact命令</h5><p>interact命令用于脚本执行完简单的命令后人手动介入,只在所属的spawn进程空间有效</p>
-<h5 id="expect的三种使用格式">expect的三种使用格式</h5><ul>
-<li><p>并行：只要其中的任何一个pattern能够匹配，那么这个expect就算是完成了一次匹配</p>
-<pre><code>expect {
-    pattern1 {
-        command2 }
-    pattern2 {
-        command2 }
-}
-
-<span class="comment"># 示例</span>
-expect {
-   <span class="string">"hi"</span>    { <span class="built_in">send</span> <span class="string">"You said hi\r"</span> }
-   <span class="string">"hello"</span> { <span class="built_in">send</span> <span class="string">"Hello yourself\r"</span> }
-   <span class="string">"bye"</span>   { <span class="built_in">send</span> <span class="string">"That was unexpected\r"</span> }
-}
-</code></pre></li>
-</ul>
-<ul>
-<li><p>串行：所有的匹配被依次满足了之后才算整个语句完成</p>
-<pre><code>expect pattern command
-expect pattern2 command2
-
-<span class="comment"># 串行示例</span>
-expect <span class="string">"username:"</span>
-<span class="keyword">send</span> <span class="string">"<span class="variable">$userid</span>\r"</span>
-expect <span class="string">"password:"</span> { <span class="keyword">send</span> <span class="string">"<span class="variable">$mypassword</span>\r"</span> }
-
-<span class="comment"># 利用exp_continue并行实现串行，continue执行下一个pattern</span>
-expect {   
-    <span class="string">"*yes/no"</span> { <span class="keyword">send</span> <span class="string">"yes\r"</span>; exp_continue }
-     <span class="string">"*password:"</span> { <span class="keyword">send</span> <span class="string">"<span class="variable">$mypassword</span>\r"</span> }   
-}
-</code></pre></li>
-</ul>
-<h5 id="shell脚本接收多个参数">shell脚本接收多个参数</h5><ol>
-<li>expect脚本可以接受从bash传递过来的参数.可以使用[lindex $argv n]获得，n从0开始，分别表示第一个,第二个,第三个….参数</li>
-<li>$argc为命令行参数的个数，$argv0为脚本名字本身，$argv为命令行参数。[lrange $argv 0 0]表示第1个参数，[lrange $argv 0 4]为第一个到第五个参数。</li>
-<li>执行<code>./test.sh 1 2 3</code>,脚本内容如下：</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/expect -d</span><br><span class="line">set username [lindex $argv 0]</span><br><span class="line">set password [lindex $argv 1]</span><br><span class="line">set server [lindex $argv 2]</span><br><span class="line">send_user  &quot;UserName is $username\n&quot;</span><br><span class="line">send_user  &quot;PassWord is $password\n&quot;</span><br><span class="line">send_user  &quot;Server is $server\n&quot;</span><br><span class="line">send_user &quot;Total arg num is $argc\n&quot;</span><br></pre></td></tr></table></figure>
-<h4 id="bash脚本直接调用expect进行交互">bash脚本直接调用expect进行交互</h4><ul>
-<li>Here document实现, expect脚本可以使用bash中定义的变量</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">host=&quot;USER@HOST&quot;</span><br><span class="line">password=&quot;PASSWORD&quot;</span><br><span class="line">cmd=&quot;command_list&quot;</span><br><span class="line"></span><br><span class="line">expect &lt;&lt;EOF </span><br><span class="line">spawn ssh $host &quot;$cmd&quot;</span><br><span class="line">expect &#123;</span><br><span class="line">&quot;*(yes/no)?&quot; &#123; send &quot;yes\r&quot;;exp_continue &#125;</span><br><span class="line">&quot;*assword:&quot; &#123; send &quot;$password\r&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line">expect eof</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<ul>
-<li>直接使用set来定义变量并在expect脚本中使用</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">expect -c &apos;</span><br><span class="line">set $PASSWORD=&quot;123qwe&quot;</span><br><span class="line">spawn ssh USER@HOST &quot;commands&quot;</span><br><span class="line">expect &#123;</span><br><span class="line">&quot;*(yes/no)?&quot; &#123; send &quot;yes\r&quot;;exp_continue &#125;</span><br><span class="line">&quot;*assword:&quot; &#123; send &quot;$PASSWORD\r&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line">expect eof</span><br><span class="line">&apos;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>如果希望保持登录，去掉上面代码的ssh后的命令列表并且将expect eof改成interact即可</p>
-</blockquote>
-<h4 id="更多示例">更多示例</h4><ol>
-<li><a href="http://xstarcd.github.io/wiki/shell/expect.html" target="_blank" rel="noopener">expect交互脚本示例</a></li>
-<li><a href="https://www.jianshu.com/p/70556b1ce932" target="_blank" rel="noopener">Linux Expect 简介和使用实例</a></li>
-</ol>
-<h4 id="开发机登陆脚本示例">开发机登陆脚本示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/expect</span><br><span class="line"></span><br><span class="line"># 登录relay</span><br><span class="line">spawn ssh relay01.baidu.com</span><br><span class="line"></span><br><span class="line"># 定义变量</span><br><span class="line">set PIN &quot;123321&quot;</span><br><span class="line">set HOST &quot;hz01-bos-dev-r15-01-005.hz01&quot;</span><br><span class="line">set PASSWORD &quot;&quot;</span><br><span class="line"></span><br><span class="line"># 执行脚本时带上参数,以空格分开</span><br><span class="line"># set TOKEN [lindex $argv 0]</span><br><span class="line"></span><br><span class="line"># 打开调试模式</span><br><span class="line">#exp_internal 1</span><br><span class="line"># relay PIN码 + Token(Token需手动输入)</span><br><span class="line">expect &#123;</span><br><span class="line">    -re &quot;password:*&quot; &#123;</span><br><span class="line">        send_user &quot;PIN:****** + Token:&quot;</span><br><span class="line">        expect_user &#123;</span><br><span class="line">            -timeout -1</span><br><span class="line">            -re &quot;(.*)\n&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        set TOKEN $expect_out(buffer)</span><br><span class="line">        send &quot;$PIN$TOKEN\r&quot;</span><br><span class="line">        exp_continue</span><br><span class="line">    &#125;</span><br><span class="line">   # 自动登录开发机</span><br><span class="line">    -re &quot;-bash-baidu-ssl*&quot; &#123;</span><br><span class="line">        if &#123; &quot;$HOST&quot; != &quot;&quot; &#125; &#123;</span><br><span class="line">            send &quot;ssh --silent $HOST\r&quot;</span><br><span class="line">            # [可选]自动开发机输入密码</span><br><span class="line">            if &#123; &quot;$PASSWORD&quot; != &quot;&quot; &#125; &#123;</span><br><span class="line">                expect -re &quot;password:&quot; &#123; send &quot;$PASSWORD\r&quot; &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"># 关闭调试模式</span><br><span class="line">#exp_internal 0</span><br><span class="line">interact</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
 
       
     </div>
