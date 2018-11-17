@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="nginx," />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="nginx,">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../../../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../../favicon.ico?v=0.4.2">
 
 
 
@@ -69,7 +69,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -85,40 +85,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../../../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../../../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../../../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../../../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../../../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -163,7 +163,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="#comments" >
+            <a href="#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/19/Nginx配置教程/"></span>
             </a>
           </span>
@@ -194,12 +194,12 @@
 <li><p>Nginx配置文件主要分成6部分：<strong>main（全局设置）、server（主机设置/指定虚拟主机域名、IP和端口）、upstream（上游服务器设置，主要为反向代理、负载均衡相关配置）和 location（URL匹配特定位置后的设置/用于匹配网页位置）、events(nginx工作模式)、http(http设置)</strong>  </p>
 </li>
 <li>他们之间的关系式：server继承main，location继承server,upstream既不会继承指令也不会被继承,它有自己的特殊指令，不需要在其他地方的应用</li>
-<li><a href="https://www.zybuluo.com/phper/note/89391" target="_blank" rel="external">参考链接</a></li>
+<li><a href="https://www.zybuluo.com/phper/note/89391" target="_blank" rel="noopener">参考链接</a></li>
 </ol>
 <h5 id="Nginx限速和超时配置">Nginx限速和超时配置</h5><ol>
-<li>nginx可以通过<figure class="highlight"><figcaption><span>两个模块都能够对客户端访问进行限制。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2. [nginx&#35775;&#38382;&#38480;&#21046;&#27169;&#22359;limit_conn_zone &#21644;limit_req_zone&#37197;&#32622;&#20351;&#29992;&#35814;&#35299;](http://blog.51cto.com/michaelkang/1257476)&#10;3. [nginx&#36229;&#26102;&#35774;&#32622;](http://blog.csdn.net/liujiyong7/article/details/18228915)&#10;4. **&#38480;&#36895;&#37197;&#32622;&#23454;&#20363;**&#10;&#9;&#10;&#9;&#62; * ```limit_req_log_level```: &#35774;&#32622;&#26085;&#24535;&#32423;&#21035;&#65292;&#40664;&#35748;&#20540;&#20026;error&#32423;&#21035;&#65292;&#24403;&#26381;&#21153;&#22120;&#22240;&#20026;&#39057;&#29575;&#36807;&#39640;&#25298;&#32477;&#25110;&#32773;&#24310;&#36831;&#22788;&#29702;&#35831;&#27714;&#26102;&#21487;&#20197;&#35760;&#19979;&#30456;&#24212;&#32423;&#21035;&#30340;&#26085;&#24535;&#12290;&#24310;&#36831;&#35760;&#24405;&#30340;&#26085;&#24535;&#32423;&#21035;&#27604;&#25298;&#32477;&#30340;&#20302;&#19968;&#20010;&#32423;&#21035;&#65292;&#22914;&#26524;&#35774;&#32622;&#8220;limit_req_log_level notice&#8221;&#65292; &#21017;&#24310;&#36831;&#30340;&#26085;&#24535;&#23601;&#26159;info&#32423;&#21035;&#10;&#9;&#10;&#9;&#62; * ```limit_req_status```: &#35774;&#32622;&#25298;&#32477;&#35831;&#27714;&#30340;&#21709;&#24212;&#29366;&#24577;&#30721;,&#20363;&#22914;```limit_req_status 503</span><br></pre></td></tr></table></figure></li>
+<li>nginx可以通过<figure class="highlight plain"><figcaption><span>两个模块都能够对客户端访问进行限制。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">2. [nginx访问限制模块limit_conn_zone 和limit_req_zone配置使用详解](http://blog.51cto.com/michaelkang/1257476)</span><br><span class="line">3. [nginx超时设置](http://blog.csdn.net/liujiyong7/article/details/18228915)</span><br><span class="line">4. **限速配置实例**</span><br><span class="line">	</span><br><span class="line">	&gt; * ```limit_req_log_level```: 设置日志级别，默认值为error级别，当服务器因为频率过高拒绝或者延迟处理请求时可以记下相应级别的日志。延迟记录的日志级别比拒绝的低一个级别，如果设置“limit_req_log_level notice”， 则延迟的日志就是info级别</span><br><span class="line">	</span><br><span class="line">	&gt; * ```limit_req_status```: 设置拒绝请求的响应状态码,例如```limit_req_status 503</span><br></pre></td></tr></table></figure></li>
 </ol>
-<pre><code><span class="xml">&gt; * <span class="comment"><figure class="highlight"><figcaption><span>zone=name [burst=number] [nodelay]```: 设置对应的共享内存限制域和允许被处理的最大请求数阈值。 如果请求的频率超过了限制域配置的值，请求处理会被延迟，所以所有的请求都是以定义的频率被处理的, 直到被延迟的请求数超过了定义的阈值，这时，这个请求会被终止，并返回503 (Service Temporarily Unavailable) 错误。这个阈值的默认值为0;如果不希望超过的请求被延迟，可以用nodelay参数</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62;&#62; &#35774;&#32622;&#20869;&#23384;&#38480;&#21046;&#22495;&#20026;10M(1M&#23384;&#20648;&#21306;&#21487;&#20197;&#20445;&#23384;32000&#20010;32&#23383;&#33410;&#25110;16000&#20010;64&#23383;&#33410;&#30340;&#29366;&#24577;&#12290;&#22914;&#26524;&#23384;&#20648;&#21306;&#28385;&#65292;&#26381;&#21153;&#22120;&#23558;&#23545;&#20854;&#20182;&#35831;&#27714;&#30456;&#24212;503&#29366;&#24577;&#30721;)&#65292;&#38480;&#21046;&#24179;&#22343;&#27599;&#31186;&#19981;&#36229;&#36807;1&#20010;&#35831;&#27714;&#65292;&#21516;&#26102;&#20801;&#35768;&#36229;&#36807;&#39057;&#29575;&#38480;&#21046;&#30340;&#35831;&#27714;&#25968;&#19981;&#22810;&#20110;5&#20010;</span><br></pre></td></tr></table></figure></span>
+<pre><code><span class="xml">&gt; * <span class="comment"><figure class="highlight plain"><figcaption><span>zone</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; 设置内存限制域为10M(1M存储区可以保存32000个32字节或16000个64字节的状态。如果存储区满，服务器将对其他请求相应503状态码)，限制平均每秒不超过1个请求，同时允许超过频率限制的请求数不多于5个</span><br></pre></td></tr></table></figure></span>
 
             limit_req_zone $binary_remote_addr zone=ttlsa_com:10m rate=1r/s;
         server </span><span class="expression">{
@@ -267,8 +267,7 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2016/02/19/Nginx配置教程/"
-               data-title="Nginx配置教程" data-url="https://charles-xiao.github.io/2016/02/19/Nginx配置教程/">
+          <div class="ds-thread" data-thread-key="2016/02/19/Nginx配置教程/" data-title="Nginx配置教程" data-url="https://charles-xiao.github.io/2016/02/19/Nginx配置教程/">
           </div>
         
       </div>
@@ -312,28 +311,28 @@
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../../../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../../../..//categories">
+            <a href="../../../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../../../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

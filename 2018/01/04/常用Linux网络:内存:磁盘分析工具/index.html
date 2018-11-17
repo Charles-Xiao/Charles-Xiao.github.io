@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="Linux,阅读," />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="Linux,阅读,">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../../../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../../favicon.ico?v=0.4.2">
 
 
 
@@ -69,7 +69,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -85,40 +85,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../../../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../../../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../../../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../../../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../../../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -163,7 +163,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="#comments" >
+            <a href="#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2018/01/04/常用Linux网络:内存:磁盘分析工具/"></span>
             </a>
           </span>
@@ -178,110 +178,64 @@
       
 
       
-        <h3 id="网络">网络</h3><h4 id="tcpdump">tcpdump</h4><pre><code># 抓取<span class="number">9100</span>端口，网卡xgbe0的TCP网络包信息，保存到<span class="keyword">aaa</span>.pcap
-tcpdump tcp port <span class="number">9100</span> -i xgbe0 -nn -s <span class="number">0</span> -XX -w <span class="keyword">aaa</span>.pcap
-
-# 指定目的或者源<span class="literal">ip</span>，可以使用<span class="keyword">and</span>，<span class="keyword">or</span>
-tcpdump -i eth0 src <span class="keyword">and</span> dst <span class="number">172.16</span><span class="string">.11</span><span class="string">.1</span> <span class="keyword">and</span> port <span class="number">80</span> -nn -s <span class="number">0</span> -XX -w <span class="keyword">aaa</span>.pcap
-
-# 指定主机
-tcpdump -i eth0 host <span class="number">172.16</span><span class="string">.11</span><span class="string">.1</span> <span class="keyword">and</span> port <span class="number">80</span> -nn -s <span class="number">0</span> -XX -w <span class="keyword">aaa</span>.pcap
-</code></pre><h4 id="wireshark分析网络包">wireshark分析网络包</h4><p>tcpdump保存的文件是二进制的文件，需要下载到本地用wireshark查看<br>过滤器<br>tcp.stream</p>
+        <h3 id="网络IO">网络IO</h3><ol>
+<li>sar -n DEV 1 3 监控网卡IO</li>
+<li><code>ethtool 网卡名</code> 查看网卡的最大速率等参数信息</li>
+<li><code>netstat -nat | awk &#39;FNR&gt;2{print $NF}&#39; | sort | uniq -c</code> 查看系统TIME_WAIT状态连接数</li>
+<li>查看DND信息dig命令<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dig baidu.com # 输出host的cname记录与A记录，可以看到ip地址和使用的DNS服务器信息，添加` +short`可以简化输出</span><br><span class="line">dig -x 204.152.184.167 +short # 用 -x的选项查找IP地址的主机名</span><br><span class="line">dig @ns1.google.com www.google.com 指定查询的DNS server</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="tcpdump">tcpdump</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">   tcpdump -D # 显示可以抓取的所有网络接口</span><br><span class="line"># 抓取9100端口，网卡xgbe0的TCP网络包信息，保存到aaa.pcap</span><br><span class="line">tcpdump tcp port 9100 -i xgbe0 -nn -s 0 -XX -w aaa.pcap</span><br><span class="line"></span><br><span class="line"># 指定目的或者源ip，可以使用and，or</span><br><span class="line">tcpdump -i eth0 src and dst 172.16.11.1 and port 80 -nn -s 0 -XX -w aaa.pcap</span><br><span class="line"></span><br><span class="line"># 指定主机</span><br><span class="line">tcpdump -i eth0 host 172.16.11.1 and port 80 -nn -s 0 -XX -w aaa.pcap</span><br><span class="line"></span><br><span class="line"># 抓取http包，一般是eth0，xgbe0，可以加上port 80作为条件，这里是指本机接收http请求的80端口，发出端口为随机</span><br><span class="line">tcpdump -i xgbe0 -nn -s 0 -XX -w yq41.pcap</span><br></pre></td></tr></table></figure>
+<h4 id="wireshark分析网络包">wireshark分析网络包</h4><ol>
+<li>tcpdump保存的文件是二进制的文件，需要下载到本地用wireshark查看</li>
+<li>过滤器:tcp.stream</li>
+<li><a href="https://linux.cn/article-10191-1.html" target="_blank" rel="noopener">抓包参数和结果解析</a></li>
+</ol>
 <h3 id="CPU">CPU</h3><ol>
-<li><code>mpstat -P ALL 1 1</code> 查看cpu占用率；也可以<code>top</code>，然后1</li>
+<li><code>mpstat -P ALL 1 1</code> 查看cpu占用率波动情况；也可以<code>top</code>，然后1</li>
+<li><p>taskset绑定进程或者线程到指定CPU的核</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">taskset -cp pid   查看进程所属核</span><br><span class="line">taskset -acp pid   查看进程及所有线程的所属核</span><br><span class="line">taskset -pc 3 pid   表示将进程pid绑定到第3个核上</span><br><span class="line">taskset -a -pc 3 pid  表示将进程pid(包括所有线程)绑定到第3个核上</span><br><span class="line">taskset -cp 1,2,3 pid</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>pidstat 用于监控全部或指定进程的cpu、内存、线程、设备IO等系统资源的占用情况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 查看CPU</span><br><span class="line">pidstat -p pid 3 3</span><br><span class="line"># 查看进程内存状态，用ps效果一样，RSS单位为KB</span><br><span class="line">pidstat -r -p 26716 3 3</span><br><span class="line"># 查看进程磁盘IO</span><br><span class="line">pidstat -d -p 26716 3 3</span><br><span class="line"># 查看进程上下文切换</span><br><span class="line">pidstat -wt -p 26716 3 3</span><br><span class="line"># 查看进程中的线程信息</span><br><span class="line">pidstat -t -p 26716 3 3</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>vmstat 2 1 查看系统上下文切换</p>
+</li>
 </ol>
 <h3 id="内存">内存</h3><h4 id="top">top</h4><ol>
-<li><p><a href="http://blog.csdn.net/heizistudio/article/details/25125061" target="_blank" rel="external">top命令常用参数</a></p>
-</li>
-<li><p>P，M分别是按cpu和内存排序；mac系统使用o + 列名</p>
-</li>
+<li><a href="http://blog.csdn.net/heizistudio/article/details/25125061" target="_blank" rel="noopener">top命令常用参数</a></li>
+<li>P，M分别是按cpu和内存排序；mac系统使用o + 列名</li>
+<li><code>sar -u 1 3</code> 监控CPU状态</li>
+<li><code>top -p 345</code> 查看指定pid=345的进程,在mac中用-pid代替-p</li>
+<li>%cpu参数不可靠，需要1查看每个CPU的使用率才可靠</li>
 </ol>
-<h4 id="free">free</h4><p><code>free -g</code>：以GB为显示单位，也可以-m以MB为显示单位</p>
-<table>
-<thead>
-<tr>
-<th>name</th>
-<th>total</th>
-<th>used</th>
-<th>free</th>
-<th>shared</th>
-<th>buffers</th>
-<th>cached </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Mem:</td>
-<td>125</td>
-<td>125</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>109</td>
-<td></td>
-</tr>
-<tr>
-<td>-/+ buffers/cache:</td>
-<td></td>
-<td>15(上一行的used - buffers - cached)</td>
-<td>110(上一行的 free + buffers + cached)</td>
-</tr>
-<tr>
-<td>Swap:</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<p>对操作系统来讲，为了内存利用率最大化，会把剩余内存申请为cached，所以系统运行时间长了，cached就会比较大，对于频繁读写的系统就更加明显。used 和 free都是Mem的参数，所以 buffers/cached这两项对于操作系统来讲都是已经被使用的内存，所以呢 free的就比较少；</p>
-<p>而对于应用程序来说呢，buffers/cached等同于可用的内存，因为buffers/cached可提高程序执行的性能，当程序使用内存时，buffers/cached很快就会被使用。</p>
-<p>所以从应用程序的角度来看，应以（-/+ buffers/cached）的free 和 used为主，即我们主要与他相关的free和used就可以了  </p>
-<p>我们在观察Linux的内存使用情况时，只要没发现用swap的交换空间，就不必担心自己的内存太少。如果常常看到swap用了很多，那么你就要考虑加物理内存了，可以用<code>vmstat</code>查看swap IO状况。这也是在Linux服务器上看内存是否够用的标准。因为swap用的多，说明OS把本应该存在物理内存中的部分内存页调度到了磁盘，腾出空间给当前进程使用，等到其他进程运行时才会把这部分内存页再次调度到物理内存。</p>
-<h4 id="buffer/cache/shared_memory区别与联系">buffer/cache/shared memory区别与联系</h4><h4 id="pmap">pmap</h4><ol>
-<li>查看进程内存分布:<code>pmap -d 12345 # 12345 是进程号</code></li>
+<h4 id="free">free</h4><figure class="highlight plain"><figcaption><span>-g```：以GB为显示单位，也可以-m以MB为显示单位</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">name |    total   |    used    |   free  |   shared  |  buffers |cached </span><br><span class="line">--- | --- | --- | --- | --- | --- | ---   </span><br><span class="line">Mem: | 125 | 125 | 0 | 0 | 0 | 109 |</span><br><span class="line">-/+ buffers/cache: | | 15(上一行的used - buffers - cached) | 110(上一行的 free + buffers + cached)</span><br><span class="line">Swap: | 0 | 0 | 0</span><br><span class="line"></span><br><span class="line">对操作系统来讲，为了内存利用率最大化，会把剩余内存申请为cached，所以系统运行时间长了，cached就会比较大，对于频繁读写的系统就更加明显。used 和 free都是Mem的参数，所以 buffers/cached这两项对于操作系统来讲都是已经被使用的内存，所以呢 free的就比较少；</span><br><span class="line"></span><br><span class="line">而对于应用程序来说呢，buffers/cached等同于可用的内存，因为buffers/cached可提高程序执行的性能，当程序使用内存时，buffers/cached很快就会被使用。</span><br><span class="line"></span><br><span class="line">所以从应用程序的角度来看，应以（-/+ buffers/cached）的free 和 used为主，即我们主要与他相关的free和used就可以了  </span><br><span class="line"></span><br><span class="line">我们在观察Linux的内存使用情况时，只要没发现用swap的交换空间，就不必担心自己的内存太少。如果常常看到swap用了很多，那么你就要考虑加物理内存了，可以用`vmstat`查看swap IO状况。这也是在Linux服务器上看内存是否够用的标准。因为swap用的多，说明OS把本应该存在物理内存中的部分内存页调度到了磁盘，腾出空间给当前进程使用，等到其他进程运行时才会把这部分内存页再次调度到物理内存。</span><br><span class="line"></span><br><span class="line">#### buffer/cache/shared memory区别与联系</span><br><span class="line"></span><br><span class="line">#### pmap</span><br><span class="line">1. 查看进程内存分布状况，可以用来分析线程堆栈:`pmap -d 12345 # 12345 是进程号`</span><br><span class="line"></span><br><span class="line">#### 清理linux cache</span><br><span class="line">Kernels 2.6.16 and newer provide a mechanism to have the kernel drop the page cache and/or inode and dentry caches on command, which can help free up a lot of memory.  </span><br><span class="line"></span><br><span class="line">This is a non-destructive operation and will only free things that are completely unused. Dirty objects will continue to be in use until written out to disk and are not freeable. If you run &quot;sync&quot; first to flush them out to disk, these drop operations will tend to free more memory.</span><br><span class="line"></span><br><span class="line">	To free pagecache:</span><br><span class="line">	# echo 1 &gt; /proc/sys/vm/drop_caches</span><br><span class="line">	</span><br><span class="line">	To free dentries and inodes:</span><br><span class="line">	# echo 2 &gt; /proc/sys/vm/drop_caches</span><br><span class="line">	</span><br><span class="line">	To free pagecache, dentries and inodes:</span><br><span class="line">	echo 3 &gt; /proc/sys/vm/drop_caches</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt; 遇到报错： ```tcpdump: can&apos;t create rx ring on packet socket: cannot allocate memory```, 可以使用该命令清除cache</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 磁盘IO</span><br><span class="line"></span><br><span class="line">#### 磁盘IOPS和Throughput</span><br><span class="line"></span><br><span class="line">1. 磁盘的 IOPS，也就是在一秒内磁盘进行多少次 I/O 读写。磁盘的吞吐量，也就是每秒磁盘 I/O 的流量，即磁盘写入加上读出的数据的大小。每秒 I/O 吞吐量＝ IOPS* 平均 I/O SIZE</span><br><span class="line">2. 随机读写频繁的应用，如OLTP(Online Transaction Processing)，IOPS是关键衡量指标；对于大量顺序读写的应用，如VOD(Video On Demand)，则更关注吞吐量指标。</span><br><span class="line"></span><br><span class="line">#### 影响IOPS的因素</span><br><span class="line"></span><br><span class="line">1. 第一个**寻址时间**，考虑到被读写的数据可能在磁盘的任意一个磁道，既有可能在磁盘的最内圈(寻址时间最短)，也可能在磁盘的最外圈(寻址时间最长)，所以在计算中我们只考虑平均寻址时间，也就是磁盘参数中标明的那个平均寻址时间，这里就采用当前最多的10krmp硬盘的5ms。</span><br><span class="line">2. 第二个**旋转延时**，和寻址一样，当磁头定位到磁道之后有可能正好在要读写扇区之上，这时候是不需要额外额延时就可以立刻读写到数据，但是最坏的情况确实要磁盘旋转整整一圈之后磁头才能读取到数据，所以这里我们也考虑的是平均旋转延时，对于10krpm的磁盘就是(60s/10k)*(1/2) = 2ms。</span><br><span class="line">3. 第三个**传送时间**，磁盘参数提供我们的最大的传输速度，当然要达到这种速度是很有难度的，但是这个速度却是磁盘纯读写磁盘的速度，因此只要给定了单次 IO的大小，我们就知道磁盘需要花费多少时间在数据传送上，这个时间就是IO Chunk Size / Max Transfer Rate。</span><br><span class="line"></span><br><span class="line">#### I/O 读写的类型</span><br><span class="line"></span><br><span class="line">大体上讲，I/O 的类型可以分为：读 / 写 I/O、大 / 小块 I/O、连续 / 随机 I/O, 顺序 / 并发 I/O。在这几种类型中，我们主要讨论一下：大 / 小块 I/O、连续 / 随机 I/O, 顺序 / 并发 I/O。</span><br><span class="line"></span><br><span class="line">##### 大 / 小块 I/O</span><br><span class="line"></span><br><span class="line">这个数值指的是控制器指令中给出的连续读出扇区数目的多少。如果数目较多，如 64，128 等，我们可以认为是大块 I/O；反之，如果很小，比如 4，8，我们就会认为是小块 I/O，实际上，在大块和小块 I/O 之间，没有明确的界限。</span><br><span class="line"></span><br><span class="line">##### 连续 / 随机 I/O</span><br><span class="line"></span><br><span class="line">连续 I/O 指的是本次 I/O 给出的初始扇区地址和上一次 I/O 的结束扇区地址是完全连续或者相隔不多的。反之，如果相差很大，则算作一次随机 I/O</span><br><span class="line"></span><br><span class="line">连续 I/O 比随机 I/O 效率高的原因是：在做连续 I/O 的时候，磁头几乎不用换道，或者换道的时间很短；而对于随机 I/O，如果这个 I/O 很多的话，会导致磁头不停地换道，造成效率的极大降低。</span><br><span class="line"></span><br><span class="line">##### 顺序 / 并发 I/O</span><br><span class="line"></span><br><span class="line">从概念上讲，并发 I/O 就是指向一块磁盘发出一条 I/O 指令后，不必等待它回应，接着向另外一块磁盘发 I/O 指令。对于具有条带性的 RAID（LUN），对其进行的 I/O 操作是并发的，例如：raid 0+1(1+0),raid5 等。反之则为顺序 I/O。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### [磁盘I/O那些事](https://tech.meituan.com/about_desk_io.html)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### [Linux下的IO监控与分析](https://www.cnblogs.com/quixotic/p/3258730.html)</span><br><span class="line"></span><br><span class="line">1. `iostat -xdm 3`：磁盘IO状态</span><br><span class="line">2. `iostat -x 1 1`: 监控CPU和磁盘</span><br><span class="line">3. [iostat命令输出详解](http://www.cnblogs.com/peida/archive/2012/12/28/2837345.html)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 系统端口占用信息和进程信息</span><br><span class="line"></span><br><span class="line">- ```ps aux```只能看到pid等信息，不能看到端口号</span><br><span class="line">- ```lsof | grep pid/pname``` 查看进程信息</span><br><span class="line">- ```lsof -i:port```查看端口号port使用的进程号和连接情况</span><br><span class="line">- ```lsof -i@ip:port```使用@host:port来显示指定到指定主机的连接</span><br><span class="line">- ```lsof -iTCP```显示TCP连接</span><br><span class="line">- ```lsof -c abc``` 显示 abc 进程现在打开的文件</span><br><span class="line">- ```lsof -p 12``` 看进程号为 12 的进程打开了哪些文件</span><br><span class="line">- ```netstat -np/c/atux | grep pid/port/pname```查看进程号所占用的端口号和端口占用情况</span><br><span class="line">- `netstat -n | grep tcp | grep 侦听端口 | wc -l` : 监听端口连接数</span><br><span class="line">- `ps -eLf | grep java | wc -l`: 监控java进程的线程数</span><br><span class="line">- 远程登录 `telnet hostname`</span><br><span class="line"></span><br><span class="line">### sar命令查看网络、磁盘、CPU、内存信息</span><br><span class="line">sar - Collect, report, or save system activity information.</span><br></pre></td></tr></table></figure>
+<h1 id="参数说明">参数说明</h1><p>-A 汇总所有的报告<br>-a 报告文件读写使用情况<br>-B 报告附加的缓存的使用情况<br>-b 报告缓存的使用情况<br>-c 报告系统调用的使用情况<br>-d 报告磁盘的使用情况<br>-g 报告串口的使用情况<br>-h 报告关于buffer使用的统计数据<br>-m 报告IPC消息队列和信号量的使用情况<br>-n 报告命名cache的使用情况<br>-p 报告调页活动的使用情况<br>-q 报告运行队列和交换队列的平均长度<br>-R 报告进程的活动情况<br>-r 报告没有使用的内存页面和硬盘块<br>-u 报告CPU的利用率<br>-v 报告进程、i节点、文件和锁表状态<br>-w 报告系统交换活动状况<br>-y 报告TTY设备活动状况</p>
+<h1 id="系统平均load负载">系统平均load负载</h1><p>sar -q 2 2</p>
+<p>参数：<br>runq-sz：运行队列的长度（等待CPU时间片来运行的进程数）<br>plist-sz：进程列表中进程（processes）和线程（threads）的数量<br>ldavg-1：最后1分钟的系统平均负载 ldavg-5：过去5分钟的系统平均负载<br>ldavg-15：过去15分钟的系统平均负载</p>
+<h1 id="查看内存信息">查看内存信息</h1><p>sar -r 1 3</p>
+<p>参数解释：<br>kbmemfree：剩余可用内存、单位K<br>kbmemused：已用内存、以K 为单位、该值不考虑内核自身所使用的内存<br>%memused：已用内存百分比<br>kbbuffers：已用buffer(内核所用)、单位K<br>kbcached：已用cache（内核所用）、单位K<br>kbswpfree：剩余Swap、单位K<br>kbswpused：已用Swap、单位K<br>%swpused：已用Swap百分比<br>kbswpcad：被缓存的Swap、单位K</p>
+<h1 id="内存分页统计">内存分页统计</h1><p>sar -B 5 3</p>
+<p>参数解释：  </p>
+<p>pgpgin/s：表示每秒从磁盘或SWAP置换到内存的字节数(KB)<br>pgpgout/s：表示每秒从内存置换到磁盘或SWAP的字节数(KB)<br>fault/s：每秒钟系统产生的缺页数,即主缺页与次缺页之和(major + minor)<br>majflt/s：每秒钟产生的主缺页数. </p>
+<h1 id="系统交换活动状况">系统交换活动状况</h1><p>sar -w  1 3</p>
+<p>参数：<br>pswpin/s：每秒系统换入的交换页面（swap page）数量<br>pswpout/s：每秒系统换出的交换页面（swap page）数量</p>
+<h1 id="CPU信息">CPU信息</h1><p>sar -u 3 5</p>
+<p>参数解释：  </p>
+<p>%user：显示在用户级别(application)运行使用 CPU 总时间的百分比<br>%nice：显示在用户级别，通过nice改变了进程调度优先级的进程，在用户模式下消耗的CPU时间的比例<br>%system：在内核级别(kernel)运行所使用 CPU 总时间的百分比<br>%iowait：显示用于等待I/O操作占用 CPU 总时间的百分比<br>%idle：显示 CPU 空闲时间占用 CPU 总时间的百分比 </p>
+<p> 1）若 %iowait 的值过高(大于0的长时间值)，表示硬盘或者网络存在I/O瓶颈<br> 2）若 %idle 的值高但系统响应慢时，有可能是 CPU 等待分配内存，此时应加大内存容量<br> 3）若 %idle 的值持续低于1，则系统的 CPU 处理能力相对较低，表明系统中最需要解决的资源是 CPU</p>
+<h1 id="磁盘信息">磁盘信息</h1><p>sar -b 3 5 </p>
+<p>tps：每秒磁盘的 I/O 传输总量<br>rtps：每秒从磁盘读出的数据总量<br>wtps：每秒向磁盘写入的数据总量<br>bread/s：每秒从磁盘读出的数据量，单位为 块/s<br>bwrtn/s：每秒向磁盘写入的数据量，单位为 块/s </p>
+<h1 id="网络IO-1">网络IO</h1><p>sar -n DEV 2 3<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### Linux /proc目录</span><br><span class="line">在Linux系统“一切都是文件”的思想贯彻指导下，所有进程的运行状态都可以用文件来获取。系统根目录/proc中，每一个数字子目录的名字都是运行中的进程的PID，进入任一个进程目录，可通过其中文件或目录来观察进程的各项运行指标，例如task目录就是用来描述进程中线程的</span><br></pre></td></tr></table></figure></p>
+<h1 id="可以通过下面的方法获取某进程中运行中的线程数量（PID指的是进程ID)">可以通过下面的方法获取某进程中运行中的线程数量（PID指的是进程ID)</h1><p>ls /proc/PID/task | wc -l</p>
+<h1 id="获取进程相关信息">获取进程相关信息</h1><p>cat /proc/PID/status</p>
+<h1 id="获取内存信息">获取内存信息</h1><p>vmstat -s -S M<br>cat /proc/meminfo</p>
+<h1 id="CPU信息-1">CPU信息</h1><p>cat /proc/cpuinfo<br>```</p>
+<h3 id="Linux单机性能评估和优化">Linux单机性能评估和优化</h3><ol>
+<li><a href="https://blog.csdn.net/hguisu/article/details/39373311" target="_blank" rel="noopener">Linux服务器性能评估与优化(一)</a></li>
+<li><a href="https://blog.csdn.net/hguisu/article/details/39249775" target="_blank" rel="noopener">Linux服务器性能评估与优化(二)</a></li>
 </ol>
-<h4 id="清理linux_cache">清理linux cache</h4><p>Kernels 2.6.16 and newer provide a mechanism to have the kernel drop the page cache and/or inode and dentry caches on command, which can help free up a lot of memory.  </p>
-<p>This is a non-destructive operation and will only free things that are completely unused. Dirty objects will continue to be in use until written out to disk and are not freeable. If you run “sync” first to flush them out to disk, these drop operations will tend to free more memory.</p>
-<pre><code><span class="type">To</span> free pagecache:
-<span class="comment"># echo 1 &gt; /proc/sys/vm/drop_caches</span>
-
-<span class="type">To</span> free dentries <span class="keyword">and</span> inodes:
-<span class="comment"># echo 2 &gt; /proc/sys/vm/drop_caches</span>
-
-<span class="type">To</span> free pagecache, dentries <span class="keyword">and</span> inodes:
-echo <span class="number">3</span> &gt; /<span class="keyword">proc</span>/sys/vm/drop_caches
-</code></pre><blockquote>
-<p>遇到报错： <code>tcpdump: can&#39;t create rx ring on packet socket: cannot allocate memory</code>, 可以使用该命令清除cache</p>
-</blockquote>
-<h3 id="磁盘IO">磁盘IO</h3><h4 id="磁盘IOPS和Throughput">磁盘IOPS和Throughput</h4><ol>
-<li>磁盘的 IOPS，也就是在一秒内磁盘进行多少次 I/O 读写。磁盘的吞吐量，也就是每秒磁盘 I/O 的流量，即磁盘写入加上读出的数据的大小。每秒 I/O 吞吐量＝ IOPS* 平均 I/O SIZE</li>
-<li>随机读写频繁的应用，如OLTP(Online Transaction Processing)，IOPS是关键衡量指标；对于大量顺序读写的应用，如VOD(Video On Demand)，则更关注吞吐量指标。</li>
-</ol>
-<h4 id="影响IOPS的因素">影响IOPS的因素</h4><ol>
-<li>第一个<strong>寻址时间</strong>，考虑到被读写的数据可能在磁盘的任意一个磁道，既有可能在磁盘的最内圈(寻址时间最短)，也可能在磁盘的最外圈(寻址时间最长)，所以在计算中我们只考虑平均寻址时间，也就是磁盘参数中标明的那个平均寻址时间，这里就采用当前最多的10krmp硬盘的5ms。</li>
-<li>第二个<strong>旋转延时</strong>，和寻址一样，当磁头定位到磁道之后有可能正好在要读写扇区之上，这时候是不需要额外额延时就可以立刻读写到数据，但是最坏的情况确实要磁盘旋转整整一圈之后磁头才能读取到数据，所以这里我们也考虑的是平均旋转延时，对于10krpm的磁盘就是(60s/10k)*(1/2) = 2ms。</li>
-<li>第三个<strong>传送时间</strong>，磁盘参数提供我们的最大的传输速度，当然要达到这种速度是很有难度的，但是这个速度却是磁盘纯读写磁盘的速度，因此只要给定了单次 IO的大小，我们就知道磁盘需要花费多少时间在数据传送上，这个时间就是IO Chunk Size / Max Transfer Rate。</li>
-</ol>
-<h4 id="I/O_读写的类型">I/O 读写的类型</h4><p>大体上讲，I/O 的类型可以分为：读 / 写 I/O、大 / 小块 I/O、连续 / 随机 I/O, 顺序 / 并发 I/O。在这几种类型中，我们主要讨论一下：大 / 小块 I/O、连续 / 随机 I/O, 顺序 / 并发 I/O。</p>
-<h5 id="大_/_小块_I/O">大 / 小块 I/O</h5><p>这个数值指的是控制器指令中给出的连续读出扇区数目的多少。如果数目较多，如 64，128 等，我们可以认为是大块 I/O；反之，如果很小，比如 4，8，我们就会认为是小块 I/O，实际上，在大块和小块 I/O 之间，没有明确的界限。</p>
-<h5 id="连续_/_随机_I/O">连续 / 随机 I/O</h5><p>连续 I/O 指的是本次 I/O 给出的初始扇区地址和上一次 I/O 的结束扇区地址是完全连续或者相隔不多的。反之，如果相差很大，则算作一次随机 I/O</p>
-<p>连续 I/O 比随机 I/O 效率高的原因是：在做连续 I/O 的时候，磁头几乎不用换道，或者换道的时间很短；而对于随机 I/O，如果这个 I/O 很多的话，会导致磁头不停地换道，造成效率的极大降低。</p>
-<h5 id="顺序_/_并发_I/O">顺序 / 并发 I/O</h5><p>从概念上讲，并发 I/O 就是指向一块磁盘发出一条 I/O 指令后，不必等待它回应，接着向另外一块磁盘发 I/O 指令。对于具有条带性的 RAID（LUN），对其进行的 I/O 操作是并发的，例如：raid 0+1(1+0),raid5 等。反之则为顺序 I/O。</p>
-<h4 id="磁盘I/O那些事"><a href="https://tech.meituan.com/about_desk_io.html" target="_blank" rel="external">磁盘I/O那些事</a></h4><h4 id="Linux下的IO监控与分析"><a href="https://www.cnblogs.com/quixotic/p/3258730.html" target="_blank" rel="external">Linux下的IO监控与分析</a></h4><ol>
-<li><code>iostat -xdm 3</code>：磁盘IO状态</li>
-<li><a href="http://www.cnblogs.com/peida/archive/2012/12/28/2837345.html" target="_blank" rel="external">iostat命令输出详解</a></li>
-</ol>
-<h3 id="系统端口占用信息和进程信息">系统端口占用信息和进程信息</h3><ul>
-<li><code>ps aux</code>只能看到pid等信息，不能看到端口号</li>
-<li><code>lsof | grep pid/pname</code> 查看进程信息</li>
-<li><code>lsof -i:port</code>查看端口号port使用的进程号和连接情况</li>
-<li><code>lsof -i@ip:port</code>使用@host:port来显示指定到指定主机的连接</li>
-<li><code>lsof -iTCP</code>显示TCP连接</li>
-<li><code>lsof -c abc</code> 显示 abc 进程现在打开的文件</li>
-<li><code>lsof -p 12</code> 看进程号为 12 的进程打开了哪些文件</li>
-<li><code>netstat -np/c/atux | grep pid/port/pname</code>查看进程号所占用的端口号和端口占用情况</li>
-</ul>
+<p>单机性能主要包括CPU、内存、网络IO、磁盘IO几个方面，互相依赖，互相影响。例如，网卡巨量吞吐或者磁盘频繁读写都可能导致CPU系统调用过高而占用率很高。CPU一般认为user%+sys%&lt;70%为良好状态，内存一般认为si和swap out都为0为良好状态，磁盘认为iowait%&lt;20%为良好状态</p>
 
       
     </div>
@@ -301,13 +255,13 @@ echo <span class="number">3</span> &gt; /<span class="keyword">proc</span>/sys/v
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="../大型分布式网站架构设计与实践/">大型分布式网站架构设计与实践</a>
+              <a href="../从Paxos到Raft/">从Raft到Paxos</a>
             
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="../../../../2017/12/09/如何实现多个数据库分片的list_objects操作/">如何实现多个数据库分片的list_objects操作</a>
+              <a href="../../../../2017/12/09/Mysql 长连接与短连接/">Mysql 长连接与短连接</a>
             
           </div>
         </div>
@@ -323,8 +277,7 @@ echo <span class="number">3</span> &gt; /<span class="keyword">proc</span>/sys/v
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2018/01/04/常用Linux网络:内存:磁盘分析工具/"
-               data-title="常用Linux网络/内存/磁盘分析工具" data-url="https://charles-xiao.github.io/2018/01/04/常用Linux网络:内存:磁盘分析工具/">
+          <div class="ds-thread" data-thread-key="2018/01/04/常用Linux网络:内存:磁盘分析工具/" data-title="常用Linux网络/内存/磁盘分析工具" data-url="https://charles-xiao.github.io/2018/01/04/常用Linux网络:内存:磁盘分析工具/">
           </div>
         
       </div>
@@ -368,28 +321,28 @@ echo <span class="number">3</span> &gt; /<span class="keyword">proc</span>/sys/v
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../../../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../../../..//categories">
+            <a href="../../../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../../../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -427,7 +380,7 @@ echo <span class="number">3</span> &gt; /<span class="keyword">proc</span>/sys/v
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#网络"><span class="nav-number">1.</span> <span class="nav-text">网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tcpdump"><span class="nav-number">1.1.</span> <span class="nav-text">tcpdump</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wireshark分析网络包"><span class="nav-number">1.2.</span> <span class="nav-text">wireshark分析网络包</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU"><span class="nav-number">2.</span> <span class="nav-text">CPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存"><span class="nav-number">3.</span> <span class="nav-text">内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#top"><span class="nav-number">3.1.</span> <span class="nav-text">top</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#free"><span class="nav-number">3.2.</span> <span class="nav-text">free</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#buffer/cache/shared_memory区别与联系"><span class="nav-number">3.3.</span> <span class="nav-text">buffer/cache/shared memory区别与联系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pmap"><span class="nav-number">3.4.</span> <span class="nav-text">pmap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#清理linux_cache"><span class="nav-number">3.5.</span> <span class="nav-text">清理linux cache</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘IO"><span class="nav-number">4.</span> <span class="nav-text">磁盘IO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#磁盘IOPS和Throughput"><span class="nav-number">4.1.</span> <span class="nav-text">磁盘IOPS和Throughput</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#影响IOPS的因素"><span class="nav-number">4.2.</span> <span class="nav-text">影响IOPS的因素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#I/O_读写的类型"><span class="nav-number">4.3.</span> <span class="nav-text">I/O 读写的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#大_/_小块_I/O"><span class="nav-number">4.3.1.</span> <span class="nav-text">大 / 小块 I/O</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#连续_/_随机_I/O"><span class="nav-number">4.3.2.</span> <span class="nav-text">连续 / 随机 I/O</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#顺序_/_并发_I/O"><span class="nav-number">4.3.3.</span> <span class="nav-text">顺序 / 并发 I/O</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#磁盘I/O那些事"><span class="nav-number">4.4.</span> <span class="nav-text">磁盘I/O那些事</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux下的IO监控与分析"><span class="nav-number">4.5.</span> <span class="nav-text">Linux下的IO监控与分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统端口占用信息和进程信息"><span class="nav-number">5.</span> <span class="nav-text">系统端口占用信息和进程信息</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#网络IO"><span class="nav-number">1.</span> <span class="nav-text">网络IO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tcpdump"><span class="nav-number">1.1.</span> <span class="nav-text">tcpdump</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wireshark分析网络包"><span class="nav-number">1.2.</span> <span class="nav-text">wireshark分析网络包</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU"><span class="nav-number">2.</span> <span class="nav-text">CPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存"><span class="nav-number">3.</span> <span class="nav-text">内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#top"><span class="nav-number">3.1.</span> <span class="nav-text">top</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#free"><span class="nav-number">3.2.</span> <span class="nav-text">free</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#参数说明"><span class="nav-number"></span> <span class="nav-text">参数说明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系统平均load负载"><span class="nav-number"></span> <span class="nav-text">系统平均load负载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看内存信息"><span class="nav-number"></span> <span class="nav-text">查看内存信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存分页统计"><span class="nav-number"></span> <span class="nav-text">内存分页统计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系统交换活动状况"><span class="nav-number"></span> <span class="nav-text">系统交换活动状况</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CPU信息"><span class="nav-number"></span> <span class="nav-text">CPU信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#磁盘信息"><span class="nav-number"></span> <span class="nav-text">磁盘信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络IO-1"><span class="nav-number"></span> <span class="nav-text">网络IO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#可以通过下面的方法获取某进程中运行中的线程数量（PID指的是进程ID)"><span class="nav-number"></span> <span class="nav-text">可以通过下面的方法获取某进程中运行中的线程数量（PID指的是进程ID)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#获取进程相关信息"><span class="nav-number"></span> <span class="nav-text">获取进程相关信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#获取内存信息"><span class="nav-number"></span> <span class="nav-text">获取内存信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CPU信息-1"><span class="nav-number"></span> <span class="nav-text">CPU信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux单机性能评估和优化"><span class="nav-number">1.</span> <span class="nav-text">Linux单机性能评估和优化</span></a></li></ol></li></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="Golang," />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="Golang,">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../../../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../../favicon.ico?v=0.4.2">
 
 
 
@@ -69,7 +69,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -85,40 +85,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../../../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../../../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../../../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../../../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../../../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -163,7 +163,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="#comments" >
+            <a href="#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2018/02/07/Golang学习总结/"></span>
             </a>
           </span>
@@ -186,12 +186,12 @@
 <li><p><strong>go 没有显式的关键字用来实现 interface，如果一个类型实现了一个 interface 中所有方法，我们说类型实现了该 interface</strong></p>
 </li>
 <li><p>go 允许不带任何方法的 interface ，这种类型的 interface 叫 <strong>empty interface</strong>。<strong>go 不会对类型是interface{} 的 slice 进行转换</strong> 。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 报错：cannot use names (type []string) as type []interface &#123;&#125; in argument to printAll</span></span><br><span class="line"><span class="comment">// 原因：interface&#123;&#125; 会占用两个字长的存储空间，一个是自身的 methods 数据，一个是指向其存储值的指针，也就是 interface 变量存储的值；slice []interface&#123;&#125; 其长度是固定的N*2，但是 []T 的长度是N*sizeof(T)，两种 slice 实际存储值的大小是有区别的</span></span><br><span class="line"><span class="keyword">func</span> printAll(vals []<span class="keyword">interface</span>&#123;&#125;) &#123;</span><br><span class="line">	<span class="keyword">for</span> _, val := <span class="keyword">range</span> vals &#123;</span><br><span class="line">		fmt.Println(val)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">func</span> main()&#123;</span><br><span class="line">	names := []<span class="typename">string</span>&#123;<span class="string">"stanley"</span>, <span class="string">"david"</span>, <span class="string">"oscar"</span>&#125;</span><br><span class="line">	printAll(names)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 手动转换成[]interface&#123;&#125;</span></span><br><span class="line"><span class="keyword">var</span> dataSlice []<span class="typename">int</span> = foo()</span><br><span class="line"><span class="keyword">var</span> interfaceSlice []<span class="keyword">interface</span>&#123;&#125; = <span class="built_in">make</span>([]<span class="keyword">interface</span>&#123;&#125;, <span class="built_in">len</span>(dataSlice))</span><br><span class="line"><span class="keyword">for</span> i, d := <span class="keyword">range</span> dataSlice &#123;</span><br><span class="line">	interfaceSlice[i] = d</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 报错：cannot use names (type []string) as type []interface &#123;&#125; in argument to printAll</span><br><span class="line">// 原因：interface&#123;&#125; 会占用两个字长的存储空间，一个是自身的 methods 数据，一个是指向其存储值的指针，也就是 interface 变量存储的值；slice []interface&#123;&#125; 其长度是固定的N*2，但是 []T 的长度是N*sizeof(T)，两种 slice 实际存储值的大小是有区别的</span><br><span class="line">func printAll(vals []interface&#123;&#125;) &#123;</span><br><span class="line">	for _, val := range vals &#123;</span><br><span class="line">		fmt.Println(val)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">func main()&#123;</span><br><span class="line">	names := []string&#123;&quot;stanley&quot;, &quot;david&quot;, &quot;oscar&quot;&#125;</span><br><span class="line">	printAll(names)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 手动转换成[]interface&#123;&#125;</span><br><span class="line">var dataSlice []int = foo()</span><br><span class="line">var interfaceSlice []interface&#123;&#125; = make([]interface&#123;&#125;, len(dataSlice))</span><br><span class="line">for i, d := range dataSlice &#123;</span><br><span class="line">	interfaceSlice[i] = d</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>interface 变量存储的是实现者的值，也就是可以申明一个interface，然后把具体的struct赋值给其进行初始化。</p>
 </li>
-<li><p><a href="https://tour.golang.org/methods/15" target="_blank" rel="external">Type assertions</a> (类型断言)，用于区分 interface 的变量究竟存储哪种类型的值</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">s :</span>= S&#123;&#125;</span><br><span class="line">var i I <span class="comment">//声明 i </span></span><br><span class="line">i = &amp;s <span class="comment">//赋值 s 到 i</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 方案一</span></span><br><span class="line"><span class="keyword">if</span> t, <span class="string">ok :</span>= i.(*S); ok &#123;</span><br><span class="line">    fmt.Println(<span class="string">"s implements I"</span>, t)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方案二</span></span><br><span class="line"><span class="keyword">switch</span> <span class="string">t :</span>= i.(type) &#123;</span><br><span class="line"><span class="keyword">case</span> *<span class="string">S:</span></span><br><span class="line">    fmt.Println(<span class="string">"i store *S"</span>, t)</span><br><span class="line"><span class="keyword">case</span> *<span class="string">R:</span></span><br><span class="line">    fmt.Println(<span class="string">"i store *R"</span>, t)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li><p><a href="https://tour.golang.org/methods/15" target="_blank" rel="noopener">Type assertions</a> (类型断言)，用于区分 interface 的变量究竟存储哪种类型的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">s := S&#123;&#125;</span><br><span class="line">var i I //声明 i </span><br><span class="line">i = &amp;s //赋值 s 到 i</span><br><span class="line"></span><br><span class="line">// 方案一</span><br><span class="line">if t, ok := i.(*S); ok &#123;</span><br><span class="line">    fmt.Println(&quot;s implements I&quot;, t)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 方案二</span><br><span class="line">switch t := i.(type) &#123;</span><br><span class="line">case *S:</span><br><span class="line">    fmt.Println(&quot;i store *S&quot;, t)</span><br><span class="line">case *R:</span><br><span class="line">    fmt.Println(&quot;i store *R&quot;, t)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>interface 定义时并没有严格规定实现者的方法 receiver 是个 value receiver 还是 pointer receiver。interface 的实现者 ss的方法 receiver 都是 value receiver，执行函数<code>func(i)</code>可以无论是 pointer 还是 value 都可以正确执行，也就是<code>func(&amp;ss)或者func(ss)</code>；如果ss的方法receiver存在pointer receiver，则不能调用<code>func(ss)</code>，因为根据value找不到地址</p>
 </li>
@@ -238,8 +238,7 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2018/02/07/Golang学习总结/"
-               data-title="Golang学习总结" data-url="https://charles-xiao.github.io/2018/02/07/Golang学习总结/">
+          <div class="ds-thread" data-thread-key="2018/02/07/Golang学习总结/" data-title="Golang学习总结" data-url="https://charles-xiao.github.io/2018/02/07/Golang学习总结/">
           </div>
         
       </div>
@@ -283,28 +282,28 @@
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../../../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../../../..//categories">
+            <a href="../../../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../../../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="java," />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="java,">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../../../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../../favicon.ico?v=0.4.2">
 
 
 
@@ -69,7 +69,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -85,40 +85,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../../../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../../../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../../../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../../../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../../../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -174,7 +174,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="#comments" >
+            <a href="#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/20/Java容器类库的学习研究/"></span>
             </a>
           </span>
@@ -189,7 +189,7 @@
       
 
       
-        <h3 id="Comparable和Comparator接口区别"><a href="http://fuxueliang.com/tech/2013/05/26/java-sorting-comparator-vs-comparable-tutorial/" target="_blank" rel="external">Comparable和Comparator接口区别</a></h3><ol>
+        <h3 id="Comparable和Comparator接口区别"><a href="http://fuxueliang.com/tech/2013/05/26/java-sorting-comparator-vs-comparable-tutorial/" target="_blank" rel="noopener">Comparable和Comparator接口区别</a></h3><ol>
 <li>Comparable &amp; Comparator 都是用来实现集合中元素的比较、排序的，只是 Comparable 是在集合内部定义的方法实现的排序，Comparator 是在集合外部实现的排序，所以，如想实现排序，就需要在集合外定义 Comparator 接口的方法或在集合内实现 Comparable 接口的方法</li>
 <li><p><strong>Comparable</strong>:一个实现了comparable接口的对象的实例可以被用于和相同类的不同实例做对比。它本身必须实现java.lang.Comparable的接口，这样它就拥有了对比的能力;java.util.Collections.sort(List) 和 java.util.Arrays.sort(Object[]) 方法被用来排列使用内在排序（natural ordering）方式的对象.</p>
 </li>
@@ -259,7 +259,7 @@
 <li><strong>put存储元素</strong>HashMap在存储Entry对象的时候，首先根据Key的hashCode()方法得到其hashCode值，然后根据高位运算和取模运算来判定将存储到Entry[]数组的哪一个位置对应的链表上O(1),然后调用key的Equals方法去遍历链表比较key值，如果找到则更新value并返回旧址，否则将新的Entry加入到该链表头部</li>
 <li><strong>内部结构图</strong>：<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HashMap.jpg" class="full-image" width="100%"></li>
 <li><strong>遍历顺序</strong>也就是说Entry<key,value>对象随机地分配到某个Entry[] table数组的元素表示的链表上, HashMap内部Entry<k,v>的遍历顺序是对Entry[] table 数组，从index=0开始，依次遍历table[i]上的链表上的Entry对象;所以对HashMap遍历Entry对象的顺序和Entry对象的存储顺序之间没有任何关系.</k,v></key,value></li>
-<li><strong>重新hash调节大小</strong>HashMap允许null键插入，其内部会将null存到table[0]中进行处理. 内部有负载因子和数组长度、size等参数，当map中元素达到16*0.75=12时，因为链表长度可能很长导致查找效率降低，hashmap会对原来的所有元素重新进行hash,数组容量变为原来的2倍，当然Java里的数组是无法自动扩容的，方法是使用一个新的数组代替已有的容量小的数组；重新hash时链表顺序会被反转，可以避免尾部遍历(1.8中不会倒置，也不会重新计算哈希).<a href="http://www.xuebuyuan.com/2231227.html" target="_blank" rel="external">HashMap</a>; 在HashMap调整大小时会出现条件竞争，也就是多个线程同时来调整大小，出现死循环.如果内存空间很多而又对时间效率要求很高，可以降低负载因子Load factor的值；相反，如果内存空间紧张而对时间效率要求不高，可以增加负载因子loadFactor的值，这个值可以大于1。</li>
+<li><strong>重新hash调节大小</strong>HashMap允许null键插入，其内部会将null存到table[0]中进行处理. 内部有负载因子和数组长度、size等参数，当map中元素达到16*0.75=12时，因为链表长度可能很长导致查找效率降低，hashmap会对原来的所有元素重新进行hash,数组容量变为原来的2倍，当然Java里的数组是无法自动扩容的，方法是使用一个新的数组代替已有的容量小的数组；重新hash时链表顺序会被反转，可以避免尾部遍历(1.8中不会倒置，也不会重新计算哈希).<a href="http://www.xuebuyuan.com/2231227.html" target="_blank" rel="noopener">HashMap</a>; 在HashMap调整大小时会出现条件竞争，也就是多个线程同时来调整大小，出现死循环.如果内存空间很多而又对时间效率要求很高，可以降低负载因子Load factor的值；相反，如果内存空间紧张而对时间效率要求不高，可以增加负载因子loadFactor的值，这个值可以大于1。</li>
 <li><strong>key不可变</strong>Map的key值应该使用不可变对象，以防put和get的时候对象发生变化从而导致hashcode变化，取不到正确的对象；HashMap也可以声明为同步的，使用Map m = Collections.synchronizeMap(hashMap);</li>
 <li><strong>Fail-Fast机制</strong>:在使用迭代器的过程中有其他线程修改了map结构，那么将抛出ConcurrentModificationException，这就是所谓fail-fast机制。这一机制在源码中的实现是通过modCount域，modCount顾名思义就是修改次数，对HashMap元素个数的修改都将增加这个值;在迭代器初始化过程中会将这个值赋给迭代器的expectedModCount。在迭代过程中，判断modCount跟expectedModCount是否相等，如果不相等就表示已经有其他线程修改了Map中元素个数.例如：HashMap在foreach迭代器循环遍历时如果其他线程对该map进行结构上的更改(比如进行add和map.remove元素操作,而不是简单的修改集合元素的内容)会导致ConcurrrentModificationEaception</li>
 <li><strong>遍历区别</strong>①for循环遍历时删除或者增加某个元素只会导致数组越界(rangeCheck函数)，或者一直add生成无穷序列以及遍历不完整 ②使用Iterator遍历或者foreach遍历时如果采用iterator.remove()不会报错，因为他会重新设置expectedModCount=modCount，如果采用list.remove()则会出现ConcurrrentModificationException</li>
@@ -314,7 +314,7 @@
 <li><strong>ConcurrentLinkedQueue</strong>: ConcurrentLinkedQueue是一个无锁的并发线程安全的非阻塞队列；Queue中元素按FIFO原则进行排序．采用CAS操作，来保证元素的一致性</li>
 </ol>
 <h3 id="参考链接">参考链接</h3><ol>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477291&amp;idx=1&amp;sn=68fd7ee467eb60bb984b3c6136cea039&amp;scene=0#wechat_redirect" target="_blank" rel="external">Java8系列之重新认识HashMap</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477291&amp;idx=1&amp;sn=68fd7ee467eb60bb984b3c6136cea039&amp;scene=0#wechat_redirect" target="_blank" rel="noopener">Java8系列之重新认识HashMap</a></li>
 </ol>
 
       
@@ -355,8 +355,7 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/10/20/Java容器类库的学习研究/"
-               data-title="Java容器类库的学习研究" data-url="https://charles-xiao.github.io/2015/10/20/Java容器类库的学习研究/">
+          <div class="ds-thread" data-thread-key="2015/10/20/Java容器类库的学习研究/" data-title="Java容器类库的学习研究" data-url="https://charles-xiao.github.io/2015/10/20/Java容器类库的学习研究/">
           </div>
         
       </div>
@@ -400,28 +399,28 @@
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../../../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../../../..//categories">
+            <a href="../../../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../../../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="java,android,life,CharlesXiao" />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="java,android,life,CharlesXiao">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../favicon.ico?v=0.4.2">
 
 
 
@@ -49,7 +49,7 @@
 <body>
 <!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
   <div class="container one-column 
-   page-home 
+  
 ">
     <div class="headband"></div>
 
@@ -71,7 +71,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -87,40 +87,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -148,9 +148,870 @@
           
           
             
-              <a class="post-title-link" href="../../2017/02/05/Git使用指南/">
-                Git使用指南
-              </a>
+              C++基础
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-11-11
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/11/11/C++基础/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/C++基础/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h3 id="基础语法">基础语法</h3><ol>
+<li><p>在C和C++语言中的全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值。 C++保证了所有对象与对象成员都会初始化，但其中基本数据类型的初始化还得依赖于构造函数。</p>
+</li>
+<li><p>在C语言中int a;表示声明了整型a但未初始化，而C++中的对象总是会被初始化的，无论是否写了圆括号或者是否写了参数列表；定义基本数据类型变量（单个值、数组）的同时可以指定初始值，如果未指定C++会去执行默认初始化(default-initialization)。<a href="http://harttle.land/2015/10/05/cpp-variable-init.html" target="_blank" rel="noopener">变量初始化</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/bzhxuexi/article/details/19899803" target="_blank" rel="noopener">size_t,ssize_t,int和long的区别</a></p>
+</li>
+<li><p><code>gcc test.c -o test</code>编译指令分为四个阶段进行，即预处理(也称预编译，Preprocessing, 把头文件内容真正引入cpp文件中)、编译(Compilation生成汇编代码.s文件)、汇编 (Assembly编译为目标文件.o)和连接(Linking包括静态连接库中需要的库文件)。</p>
+</li>
+<li>函数库分为<strong>静态库和动态库</strong>两种。静态库在程序编译时会被连接到目标代码中，程序运行时将不再需要该静态库。动态库在程序编译时并不会被连接到目标代码中，而是在程序运行是才被载入，因此在程序运行时还需要动态库存在。无论静态库，还是动态库，都是由.o文件创建的。<ul>
+<li>.o 一个.c或.cpp文件对应一个.o文件, 也就是编译器编译cpp源代码文件生成的目标文件</li>
+<li>.a是静态库，是好多个.o合在一起，多个.a可以链接生成一个可执行文件；静态库文件名的命名规范是以lib为前缀，紧接着跟静态库名，扩展名为.a</li>
+<li>.so是动态库，文件名命名规范和静态库文件名命名规范类似，也是在动态库名增加前缀lib，但其文件扩展名为.so</li>
+<li>默认情况下， GCC在链接时优先使用动态链接库，只有当动态链接库不存在时才考虑使用静态链接库，如果需要的话可以在编译时加上-static选项，强制使用静态链接库。</li>
+</ul>
+</li>
+</ol>
+<h3 id="智能指针boost::scoped_ptr/std::auto_ptr">智能指针boost::scoped_ptr/std::auto_ptr</h3><p>boost::scoped_ptr和std::auto_ptr（已被C++11废弃）非常类似，是一个简单的智能指针，它能够保证在离开作用域后对象被自动释放，避免由于忘记手动调用delete而造成内存泄漏。实现原理都是利用了一个栈上的对象去管理一个堆上的对象，从而使得堆上的对象随着栈上的对象销毁时自动删除。  </p>
+<h4 id="两者区别">两者区别</h4><ol>
+<li><strong>不能转换所有权</strong>：boost::scoped_ptr所管理的对象生命周期仅仅局限于一个区间（该指针所在的”{}”之间），无法传到区间之外，无法拷贝。这就意味着boost::scoped_ptr对象是不能作为函数的返回值的（std::auto_ptr可以）。</li>
+<li><strong>不能共享所有权</strong>：这点和std::auto_ptr类似。这个特点一方面使得该指针简单易用。另一方面也造成了功能的薄弱——不能用于stl的容器中。</li>
+<li><strong>不能用于管理数组对象</strong>：由于boost::scoped_ptr是通过delete来删除所管理对象的，而数组对象必须通过deletep[]来删除，因此boost::scoped_ptr是不能管理数组对象的，如果要管理数组对象需要使用boost::scoped_array类。</li>
+<li>如何在他们之间取舍取决于是否需要转移所管理的对象的所有权（如是否需要作为函数的返回值）。如果没有这个需要的话，大可以使用boost::scoped_ptr，让编译器来进行更严格的检查，来发现一些不正确的赋值操作。</li>
+</ol>
+<h3 id="C++_显式类型转换">C++ 显式类型转换</h3><blockquote>
+<figure class="highlight plain"><figcaption><span>分别为转换方式，目标类型，被转换的值。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">1. ```static_cast&lt;type&gt;(expression)```: 不提供运行时的检查的类型转换方式</span><br><span class="line">	* 主要用于父类和子类之间指针和引用的转换；进行上行转换，把子类对象的指针/引用转换为父类指针/引用，这种转换是安全的；进行下行转换，把父类对象的指针/引用转换成子类指针/引用，这种转换是不安全的</span><br><span class="line">	* 用于基本数据类型之间的转换，例如把int转char，int转enum等，需要编写程序时来确认安全性</span><br><span class="line">	* 把void指针转换成目标类型的指针（这是极其不安全的）</span><br><span class="line"></span><br><span class="line">2. ```dynamic_cast&lt;type&gt;(expression)```: 在运行时检查类型转换是否合法，具有一定的安全性，额外消耗一些性能；仅适用于指针或引用转换，若指针转换失败，则返回空指针，若引用转换失败，则抛出异常。经常用于将指针转换为void*: ```A *pA = new A; void *pV = dynamic_cast&lt;void *&gt;(pA);</span><br></pre></td></tr></table></figure>
+</blockquote>
+<ol>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">4. ```reinterpret_cast```非常激进的指针类型转换，在编译期完成，可以转换任何类型的指针，所以极不安全。非极端情况不要使用。</span><br><span class="line"></span><br><span class="line">### 守护进程</span><br><span class="line">#### Supervisor</span><br><span class="line">1. Supervisor是一个C/S系统， 允许用户监控和管理一系列运行于类Unix系统上的进程。通常，我们使用Supervisor将一个普通的命令行进程变为后台daemon，并监控这一些进程，以便这些进程在意外退出后能够重新启动。</span><br><span class="line">2. Supervisor有以下优点：</span><br><span class="line">	* 简单， ini风格的配置文件，容易阅读，对每个进程都提供了许多选项以便失败重启和日志轮替。</span><br><span class="line">	* 集中，一站式的进程启动，停止，监控平台。进程可以单独管理或分组管理，更提供了Web管理界面。</span><br><span class="line">	* 高效，通过fork/exec启动子进程且子进程不会进入守护模式，当子进程意外终止时，操作系统会立即发送信号给Supervisor，而不像其他方案那样，需要通过PID轮询。</span><br><span class="line">	* 可扩展，拥有非常简单的事件通知协议，任何编程语言程序都能监控它，也提供了XML-RPC管理接口，也为Python开发者预留了扩展空间。</span><br><span class="line">兼容性，除了Windows，几乎可以运行于任何操作系统，已经测试过的包括Linux, Mac OS X, Solaris, 和 FreeBSD。</span><br><span class="line">	* 久经考验，虽然开发非常活跃，但Supervisor并不是新软件，它已经存在多年，广泛运行于许多服务器上。</span><br><span class="line"></span><br><span class="line">#### systemd</span><br><span class="line">1. Systemd是一个Linux操作系统下的系统和服务管理器。它被设计成向后兼容SysV启动脚本，并提供了大量的特性，如开机时平行启动系统服务，按需启动守护进程，支持系统状态快照，或者基于依赖的服务控制逻辑,已成为大多数发行版的标准配置。可以通过 systemctl --version 命令来查看使用的版本</span><br><span class="line">3. systemd 和 supervisord 各有长短，不存在哪一方绝对的碾压。systemd 跟 Linux 紧密结合，所需的依赖少，其提供的保障自然比 supervisord 更可靠。然而在强大的能力背后，也有配置复杂、不易上手等问题。</span><br><span class="line"></span><br><span class="line">### 常用测试工具</span><br><span class="line">1. Apache自带ApacheBench程序对Apache或其它类型的服务器进行网站访问压力测试。</span><br><span class="line"></span><br><span class="line">&gt; ApacheBench命令原理：ab命令会创建很多的并发访问线程，模拟多个访问者同时对某一URL地址进行访问。它的测试目标是基于URL的，因此，既可以用来测试Apache的负载压力，也可以测试nginx、lighthttp、tomcat、IIS等其它Web服务器的压力。</span><br><span class="line"></span><br><span class="line">&gt; ab命令对发出负载的计算机要求很低，既不会占用很高CPU，也不会占用很多内存，但却会给目标服务器造成巨大的负载，其原理类似CC攻击。自己测试使用也须注意，否则一次上太多的负载，可能造成目标服务器因资源耗完，严重时甚至导致死机。</span><br><span class="line"></span><br><span class="line">2. [服务器性能评估相关指标QPS](https://ruby-china.org/topics/26221)</span><br><span class="line"></span><br><span class="line">### C++常用错误调试工具</span><br><span class="line"></span><br><span class="line">#### core dump</span><br><span class="line">core dump是大多数UNIX系统实现的一种特性，当进程运行的过程中异常终止或崩溃时，操作系统会将进程当前的内存映像和一部分相关的调试信息写入core文件，例如寄存器信息（包括程序指针、栈指针等）、内存管理信息、其他处理器和操作系统状态和信息。我们可以使用```ulimit -c unlimited```命令来开启core dump。  </span><br><span class="line"></span><br><span class="line">Linux中信号是一种异步事件处理的机制，每种信号对应有其默认的操作，默认操作主要包括忽略该信号（Ingore）、暂停进程（Stop）、终止进程（Terminate）、终止并发生core dump（core）等；```kill -l```可以看到linux里边的信号种类，默认动作中可能产生core文件的信号包括以下种类：</span><br><span class="line"></span><br><span class="line">信号名字 | 说明 | 默认动作</span><br><span class="line">--- | --- | ---</span><br><span class="line">SIGABRT(6) | 异常终止（调用abort函数产生此信号）| 终止+core</span><br><span class="line">SIGBUS(7) | 硬件故障，比如出现某些内存故障 | 终止+core</span><br><span class="line">SIGEMT | 硬件故障 | 终止+core</span><br><span class="line">SIGFPE(8) | 算术异常，比如除以0，浮点溢出等 | 终止+core</span><br><span class="line">SIGILL(4) | 非法硬件指令	| 终止+core</span><br><span class="line">SIGIOT(29) | 硬件故障	| 终止+core</span><br><span class="line">SIGQUIT(3) | 终端退出符，比如Ctrl+C	| 终止+core</span><br><span class="line">SIGSEGV(11) | 无效内存引用 | 终止+core</span><br><span class="line">SIGSYS(31) | 无效系统调用	| 终止+core</span><br><span class="line">SIGXCPU(24) | 超过CPU限制（setrlimit）| 终止+core/忽略</span><br><span class="line">SIGXFSZ(25) | 超过文件长度限制（setrlimit）| 终止+core/忽略</span><br><span class="line"></span><br><span class="line">这就是为什么我们使用```ctrl+z```来挂起一个进程或者```Ctrl+C```结束一个进程均不会产生 core dump，因为前者会向进程发出SIGTSTP信号，该信号的默认操作为暂停进程（Stop Process）；后者会向进程发出SIGINT信号，该信号默认操作为终止进程（Terminate Process）。同样上面提到的 kill -9 命令会发出 SIGKILL 命令，该命令默认为终止进程。而如果我们使用 Ctrl+\ 来终止一个进程，会向进程发出 SIGQUIT 信号，默认是会产生 core dump 的。还有其它情景会产生core dump， 如：程序调用 abort() 函数、访存错误、非法指令等等。</span><br><span class="line"></span><br><span class="line">#### dmesg</span><br><span class="line">**段错误**是指访问的内存超出了系统给这个程序所设定的内存空间， 例如访问了不存在的内存地址，访问了系统保护的内存地址，访问了只读的内存地址等等情况。```dmesg```命令显示linux内核的环形缓冲区信息，我们可以从中获得诸如系统架构、cpu、挂载的硬件，RAM等多个运行级别的大量的系统信息。通过dmesg命令可以查看发生段错误的程序名称、引起段错误发生的内存地址、指令指针地址、堆栈指针地址、错误代码、错误原因等。</span><br><span class="line"></span><br><span class="line">1. dmesg信息解读: 如下是bucket bin文件段错误信息，ip信息会用到后续objdump反编译分析</span><br><span class="line"></span><br><span class="line">```bucket[14306]: segfault at b8c6000 ip 0000000000c3dece sp 00007ffd2c96ae80 error 6 in bucket[400000+eea000]</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p>error number是6, 转成二进制就是110, 即bit2=1, bit1=1, bit0=0, 按照上面的解释，我们可以得出这条信息是由于用户态程序写操作访问越界，访问的是无效地址造成的。</p>
+<p>error number是由三个字位组成的，从高到底分别为bit2 bit1和bit0,所以它的取值范围是0~7.</p>
+<blockquote>
+<ul>
+<li>bit2: 值为1表示是用户态程序内存访问越界，值为0表示是内核态程序内存访问越界</li>
+<li>bit1: 值为1表示是写操作导致内存访问越界，值为0表示是读操作导致内存访问越界</li>
+<li>bit0: 值为1表示没有足够的权限访问非法地址的内容，值为0表示访问的非法地址根本没有对应的页面，也就是无效地址</li>
+</ul>
+</blockquote>
+</blockquote>
+<h4 id="objdump">objdump</h4><p>objdump命令是Linux下的反汇编目标文件或者可执行文件的命令，使用objdump生成二进制的相关信息，并重定向到文件中</p>
+<figure class="highlight plain"><figcaption><span>-d(-S尽可能完全反编译) bin/bucket > segfaultDump```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```grep -n -A 10 -B 10 &quot;c3dece&quot; ./segfaultDump</span><br></pre></td></tr></table></figure>
+<h4 id="pstack和strace">pstack和strace</h4><p>strace跟踪程序使用的底层系统调用，可输出系统调用被执行的时间点以及各个调用耗时；pstack工具对指定PID的进程输出函数调用栈。一般两者配合调用，先用strace查看耗时的系统调用，然后用pstack看函数调用栈信息，找到出问题的函数。</p>
+<ol>
+<li><p>在Linux世界，进程不能直接访问硬件设备，当进程需要访问硬件设备(比如读取磁盘文件，接收网络数据等等)时，必须由用户态模式切换至内核态模式，通过系统调用访问硬件设备。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">	</span><br><span class="line">		# -f -F选项设置同时跟踪fork和vfork出来的进程，输出到~/straceout.txt，myserver是要启动和调试的程序</span><br><span class="line">		strace -f -F -o ~/straceout.txt myserver</span><br><span class="line">		</span><br><span class="line">		# 跟踪28979进程的所有系统调用（-e trace=all），并统计系统调用的花费时间，以及开始时间（并以可视化的时分秒格式显示）</span><br><span class="line">		strace -o output.txt -T -tt -e trace=all -p 28979</span><br><span class="line">2. ```pstack pid```: print a stack trace of a running process</span><br><span class="line">3. [实例讲解如何使用strace+pstack利器分析程序性能](https://blog.csdn.net/jiang1013nan/article/details/17558165)</span><br><span class="line"></span><br><span class="line">#### 其它</span><br><span class="line">1. ldd：使用ldd命令查看二进制程序的共享链接库依赖，包括库的名称、起始地址，这样可以确定段错误到底是发生在了自己的程序中还是依赖的共享库中。例如```ldd bin/bucket</span><br></pre></td></tr></table></figure></p>
+</li>
+<li><p>nm：使用nm命令列出二进制文件中的符号表，包括符号地址、符号类型、符号名等，这样可以帮助定位在哪里发生了段错误。<figure class="highlight plain"><figcaption><span>bin/bucket```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">#### 参考链接</span><br><span class="line">1. [Linux工具](http://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/objdump.html)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### condition_variable/mutex/thread_pool</span><br><span class="line"></span><br><span class="line">1. **条件变量(Condtion Variable)是在多线程程序中用来实现“等待-&gt;唤醒”逻辑常用的方法，条件变量能使一个或多个线程进入阻塞状态,直到接到另一个线程的通知(notify),或者发生超时或虚假唤醒时,才退出阻塞**。例如，应用程序A中包含两个线程t1和t2。t1需要在bool变量test_cond为true时才能继续执行，而test_cond的值是由t2来改变的，这种情况下可供选择的方案有两种：</span><br><span class="line"></span><br><span class="line">   * t1定时的去轮询变量test_cond，如果test_cond为false，则继续休眠；如果test_cond为true，则开始执行。</span><br><span class="line">   * 利用条件变量，t1在test_cond为false时调用cond_wait进行等待，t2在改变test_cond的值后，调用cond_signal，唤醒在等待中的t1，告诉t1 test_cond的值变了，这样t1便可继续往下执行。</span><br><span class="line">   * Wait_for: 在条件变量收到信号或者指定的超时发生前，线程一直处于阻塞状态；</span><br><span class="line">   * Wait_until:在条件变量收到信号或者指定的时刻到达之前，线程一直处于阻塞状态。</span><br><span class="line"></span><br><span class="line">2. **Thread相关的函数**：</span><br><span class="line"></span><br><span class="line">   * t.join()：使调用线程（本例是指主线程）一直处于阻塞状态，直到正在执行的线程t执行结束。如果线程函数返回某个值，该值也将被忽略。不过，该函数可以接收任意数量的参数，尽管可以向线程函数传递任意数量的参数，但是所有的参数应当按值传递。如果需要将参数按引用传递，那要向下例所示那样，必须将参数用std::ref 或者std::cref进行封装。</span><br><span class="line"></span><br><span class="line">     ```cpp</span><br><span class="line">     void func(int i, double d, const std::string&amp; s)</span><br><span class="line">     &#123;</span><br><span class="line">         std::cout &lt;&lt; i &lt;&lt; &quot;, &quot; &lt;&lt; d &lt;&lt; &quot;, &quot; &lt;&lt; s &lt;&lt; std::endl;</span><br><span class="line">     &#125;</span><br><span class="line">      </span><br><span class="line">     void func1(int&amp; a)</span><br><span class="line">     &#123;</span><br><span class="line">        a++;</span><br><span class="line">     &#125;</span><br><span class="line">     </span><br><span class="line">     int main()</span><br><span class="line">     &#123;</span><br><span class="line">        std::thread t(func, 1, 12.50, &quot;sample&quot;);</span><br><span class="line">        t.join();</span><br><span class="line">      </span><br><span class="line">        int a = 42;</span><br><span class="line">        std::thread t1(func, std::ref(a));</span><br><span class="line">        t1.join();</span><br><span class="line">        </span><br><span class="line">        return 0;</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>Detach: 允许执行该方法的线程脱离其线程对象而继续独立执行。脱离后的线程不再是可结合线程（你不能等待它们执行结束）。</p>
+</li>
+<li><p>get_id: 返回当前线程的id</p>
+</li>
+<li><p>yield:在处于等待状态时，可以让调度器先运行其他可用的线程。</p>
+</li>
+<li><p>sleep_for:阻塞当前线程，时间不少于其参数指定的时间。</p>
+</li>
+<li><p>sleep_util:在参数指定的时间到达之前，使当前线程一直处于阻塞状态。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>std::recursive_mutex：</strong>允许同一个线程多次获取同一个互斥量，可获取的互斥量的最大次数并没有具体说明。但是一旦超过最大次数，再对lock进行调用就会抛出std::system_error错误异常。</p>
+</li>
+<li><p><strong>Timed_mutex和Recursive_timed_mutex</strong>：try_lock_for() 和 try_lock_until()，分别用于在某个时间段里或者某个时刻到达之间获取该互斥量</p>
+</li>
+<li><p><strong>Lock_guard</strong>: 在构造对象时，它试图去获取互斥量的所有权（通过调用lock()），在析构对象时，自动释放互斥量（通过调用unlock()）.这是一个不可复制的类。</p>
+</li>
+<li><p><strong>Unique_lock</strong>: 这个一通用的互斥量封装类，不同于lock_guard，它还支持延迟加锁，时间加锁和递归加锁以及锁所有权的转移和条件变量的使用。这也是一个不可复制的类，但它是可移动类。</p>
+</li>
+<li><p><a href="http://blog.jobbole.com/44409/" target="_blank" rel="noopener">C++11 中的线程、锁和条件变量</a></p>
+</li>
+</ol>
+<h3 id="Linux中的线程同步机制-Futex/Mutexes/Condition_Variables/POSIX_Semaphores">Linux中的线程同步机制-Futex/Mutexes/Condition Variables/POSIX Semaphores</h3><p>Futex是一种用户态和内核态混合的同步机制。首先，同步的进程间通过mmap共享一段内存，futex变量就位于这段共享 的内存中且操作是原子的，当进程尝试进入互斥区或者退出互斥区的时候，先去查看共享内存中的futex变量，如果没有竞争发生，则只修改futex,而不 用再执行系统调用了。当通过访问futex变量告诉进程有竞争发生，则还是得执行系统调用去完成相应的处理(wait 或者 wake up)。简单的说，futex就是通过在用户态的检查，（motivation）如果了解到没有竞争就不用陷入内核了，大大提高了low-contention时候的效率。<br><a href="http://ju.outofmemory.cn/entry/38941" target="_blank" rel="noopener">Linux多线程同步机制参考链接</a></p>
+<h3 id="C++的RAII_—-_资源获取即初始化">C++的RAII —- 资源获取即初始化</h3><p>C++的一种利用C++构造的对象最终会被销毁的原则来管理资源避免泄露的用法。具体做法是使用一个对象，在其构造时获取对应的资源，在对象生命期内控制对资源的访问，使之始终保持有效，最后在对象析构的时候，释放构造时获取的资源。</p>
+<p><strong>如何使用RAII ？</strong><br>把资源用类进行封装起来，对资源操作都封装在类的内部，在析构函数中进行释放资源。当定义的局部变量的生命结束时，它的析构函数就会自动的被调用，如此，就不用程序员显示的去调用释放资源的操作了。例如对socket、互斥锁、文件句柄和内存的申请和释放。</p>
+<h3 id="其它">其它</h3><ol>
+<li>C++ 11 auto关键字编译时类型推断。</li>
+<li>std::map::emplace_hint 暗示指定位置前插入元素；make_shared构造类型对象和make_pair构造pair</li>
+<li>常用第三方库：boost，gflag，glog，folly，chromium，bazel代码构建</li>
+<li>性能分析和内存泄漏：gperftools</li>
+<li>C++单例：std::atomic + DCLP, std::once_flag</li>
+<li>线程池：rocksdb/util/thread_pool_imp.h</li>
+<li>C++智能指针：boost::smart_ptr, std::shared_ptr, std::unique_ptr</li>
+<li>boost::shared_ptr 主要的功能是，管理动态创建的对象的销毁。它的基本原理就是记录对象被引用的次数，当引用次数为 0 的时候，也就是最后一个指向某对象的共享指针析构的时候，共享指针的析构函数就把指向的内存区域释放掉。共享指针对象重载了 operator* 和 operator-&gt; , 所以你可以像通常的指针一样使用它. <a href="https://blog.csdn.net/codestinity/article/details/6898613" target="_blank" rel="noopener">shared_ptr</a></li>
+<li><strong><a href="https://www.ibm.com/developerworks/cn/aix/library/1307_lisl_c11/index.html" target="_blank" rel="noopener">C++左值与右值引用</a></strong>: C++( 包括 C) 中所有的表达式和变量要么是左值，要么是右值。通俗的左值的定义就是非临时对象，那些可以在多条语句中使用的对象。所有的变量都满足这个定义，在多条代码中都可以使用，都是左值。右值是指临时的对象，它们只在当前的语句中有效。左值的声明符号为”&amp;”， 为了和左值区分，右值的声明符号为”&amp;&amp;”。右值引用是用来支持转移语义的。转移语义可以将资源 ( 堆，系统对象等 ) 从一个对象转移到另一个对象，这样能够减少不必要的临时对象的创建、拷贝以及销毁，能够大幅度提高 C++ 应用程序的性能。要实现转移语义，需要定义转移构造函数，还可以定义转移赋值操作符。标准库提供了函数 std::move，这个函数以非常简单的方式将左值引用转换为右值引用。</li>
+<li>C++11之后支持lamda语法：std::function可调用实体，std::bind返回可调用实体，用于后续作为回调函数</li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/C/"> #C++ </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Linux shell/目录基础知识
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-02-19
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/02/19/Linux shell:目录基础知识/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/19/Linux shell:目录基础知识/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h4 id="Unix/Linux/GNU_Linux">Unix/Linux/GNU Linux</h4><p>Linux本质是指 Linux 内核，而GNU/Linux则代表这是一个发行版系统(内核+GNU工具), GNU的全称又是：Gnu’s Not Unix, 本质上这些都属于类unix系统。</p>
+<h4 id="bash配置文件(Linux_or_Mac)">bash配置文件(Linux or Mac)</h4><h5 id="全局配置文件">全局配置文件</h5><ol>
+<li>/etc/profile 和 /rtc/profile.d/*.sh : 此文件为系统的每个用户设置环境信息,当用户第一次登录时该文件被执行，并从/etc/profile.d目录的配置文件中搜集shell的设置</li>
+<li>/etc/bashrc : 为每一个运行bash shell的用户执行此文件，当bash shell被打开时,该文件被读取</li>
+</ol>
+<h5 id="个人配置文件">个人配置文件</h5><ol>
+<li>~/.bash_profile : 每个用户都可使用该文件输入专用于自己使用的shell信息；当用户登录时,该文件仅仅执行一次；默认情况下,他设置一些环境变量,执行用户的.bashrc文件</li>
+<li>~/.bashrc : 该文件包含专用于你的bash shell的bash信息,当登录时以及每次打开新的shell时,该文件被读取</li>
+<li>~/.bash_history : </li>
+<li>~/.bash_logout : 当每次退出系统(退出bash shell)时,执行该文件</li>
+</ol>
+<h5 id="shell如何读取配置文件">shell如何读取配置文件</h5><ol>
+<li><p><strong>登录式shell如何读取配置文件</strong>  </p>
+<pre><code><span class="comment">/etc/profile</span> <span class="literal">-</span><span class="literal">-</span>&gt; <span class="comment">/etc/profile</span><span class="string">.</span><span class="comment">d/*</span><span class="string">.</span><span class="comment">sh</span> <span class="literal">-</span><span class="literal">-</span>&gt; <span class="comment">~/</span><span class="string">.</span><span class="comment">bash_profile</span> <span class="literal">-</span><span class="literal">-</span>&gt; <span class="comment">~/</span><span class="string">.</span><span class="comment">bashrc</span> <span class="literal">-</span><span class="literal">-</span>&gt; <span class="comment">/etc/bashrc</span>
+</code></pre></li>
+<li><p>非登录式shell如何配置文件</p>
+<pre><code>~<span class="regexp">/.bashrc --&gt; /etc</span><span class="regexp">/bashrc --&gt; /etc</span><span class="regexp">/profile.d/</span>*.sh  
+</code></pre></li>
+</ol>
+<h5 id="配置变量和命令">配置变量和命令</h5><ol>
+<li><p>$PATH : 决定了shell将到哪些目录中寻找命令或程序，PATH的值是一系列目录，当您运行一个程序时，Linux在这些目录下进行搜寻编译链接  </p>
+<pre><code><span class="comment"># 设置PATH, PATH N 为自己加上指定路径，中间用冒号隔开</span>
+<span class="variable">$ </span><span class="constant">PATH=</span><span class="variable">$PATH</span><span class="symbol">:PATH1</span><span class="symbol">:PATH</span> <span class="number">2</span><span class="symbol">:PATH</span> <span class="number">3</span><span class="symbol">:</span> ... <span class="symbol">:PATH</span> <span class="constant">N</span>
+<span class="comment"># 打印当前搜索路径的两种方法</span>
+<span class="variable">$ </span>echo <span class="variable">$PATH</span> 或者 <span class="variable">$ </span>export
+<span class="comment"># 打印全局变量的两种方法，printenv HOME打印变量值</span>
+<span class="variable">$ </span>env 或者printenv
+<span class="comment"># 显示所有的全局变量，局部变量以及用户自定义变量</span>
+<span class="variable">$set</span>
+</code></pre></li>
+<li><p>export : 该命令将新变量添加到环境中 ; 在命令行直接执行可以设置一个新的临时环境变量, 变量在关闭shell时失效</p>
+</li>
+<li>source .bash_profile : 使设置的PATH生效</li>
+<li>每次重新打开终端的时候，.bashrc会自动执行一次，而.bash_profile不会</li>
+</ol>
+<h4 id="shell和shell脚本的概念">shell和shell脚本的概念</h4><p><strong>shell</strong>是指一种应用程序，这个应用程序提供了一个界面，用户通过这个界面访问操作系统内核的服务。Ken Thompson的sh是第一种Unix Shell，Windows Explorer是一个典型的图形界面Shell。</p>
+<p><strong>shell脚本（shell script）</strong>，是一种为shell编写的脚本程序。业界所说的shell通常都是指shell脚本，但读者朋友要知道，shell和shell script是两个不同的概念。本文出现的“shell编程”都是指shell脚本编程，不是指开发shell自身（如Windows Explorer扩展开发）</p>
+<h4 id="脚本解释器">脚本解释器</h4><p><strong>sh</strong> —- 即Bourne shell，POSIX（Portable Operating System Interface）标准的shell解释器，它的二进制文件路径通常是/bin/sh，由Bell Labs开发。</p>
+<p><strong>Bash</strong> —- 是Bourne shell的替代品，属GNU Project，二进制文件路径通常是/bin/bash。</p>
+<p><strong>ksh、csh、zsh等不常用的解释器</strong></p>
+<h4 id="shell脚本实例">shell脚本实例</h4><pre><code><span class="shebang">#!/bin/sh</span>
+<span class="built_in">cd</span> ~
+ret=`mkdir shell_tut`
+<span class="built_in">cd</span> shell_tut
+
+<span class="keyword">for</span> ((i=<span class="number">0</span>; i&lt;<span class="number">10</span>; i++)); <span class="keyword">do</span>
+    touch <span class="built_in">test</span>_<span class="variable">$i</span>.txt
+<span class="keyword">done</span>
+</code></pre><ol>
+<li>定义变量时，变量名不加美元符号（$）</li>
+<li>变量名和等号之间不能有空格</li>
+<li>单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的；单引号字串中不能出现单引号（对单引号使用转义符后也不行）</li>
+<li>双引号里可以有变量，双引号里可以出现转义字符</li>
+<li>以“#”开头的行就是注释，会被解释器忽略</li>
+<li>bash shell提供了一个组合键来生成 EOF(End-of-File)字符。Ctrl+D组合键会在bash中产生一个EOF字符</li>
+</ol>
+<h1 id="shell并发多进程执行">shell并发多进程执行</h1><p>命令之后加入 &amp;可以让for循环中的命令并行执行，添加wait可以保证for循环所有命令执行完后再向后执行接下来的命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"># Step1 创建有名管道</span><br><span class="line">[ -e ./fd1 ] || mkfifo ./fd1</span><br><span class="line"></span><br><span class="line"># 创建文件描述符，以可读（&lt;）可写（&gt;）的方式关联管道文件，这时候文件描述符3就有了有名管道文件的所有特性</span><br><span class="line">exec 3&lt;&gt; ./fd1   </span><br><span class="line"></span><br><span class="line"># 关联后的文件描述符拥有管道文件的所有特性,所以这时候管道文件可以删除，我们留下文件描述符来用就可以了</span><br><span class="line">rm -rf ./fd1                    </span><br><span class="line"></span><br><span class="line"># Step2 创建令牌 </span><br><span class="line">for i in `seq 1 2`;</span><br><span class="line">do</span><br><span class="line">    # echo 每次输出一个换行符,也就是一个令牌</span><br><span class="line">    echo &gt;&amp;3                   </span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"># Step3 拿出令牌，进行并发操作</span><br><span class="line">for line in `seq 1 10`;</span><br><span class="line">do</span><br><span class="line">    read -u3                    # read 命令每次读取一行，也就是拿到一个令牌   </span><br><span class="line">    &#123;</span><br><span class="line">        echo $line</span><br><span class="line">        echo &gt;&amp;3                # 执行完一条命令会将令牌放回管道</span><br><span class="line">    &#125;&amp;</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">wait</span><br><span class="line"></span><br><span class="line">exec 3&lt;&amp;-                       # 关闭文件描述符的读</span><br><span class="line">exec 3&gt;&amp;-                       # 关闭文件描述符的写</span><br></pre></td></tr></table></figure>
+<h4 id="运行Shell脚本的两种方法">运行Shell脚本的两种方法</h4><pre><code>chmod +x <span class="keyword">test</span>.<span class="keyword">sh</span>
+./<span class="keyword">test</span>.<span class="keyword">sh</span>
+或者
+bin/<span class="keyword">sh</span> <span class="keyword">test</span>.<span class="keyword">sh</span>
+/bin/php <span class="keyword">test</span>.php
+第一种必须要带上.才能在当前目录寻找脚本，否则会去PATH寻找；第二种不需要指定#!/bin/<span class="keyword">sh</span>
+</code></pre><h4 id="Shell日志分析常用命令">Shell日志分析常用命令</h4><ol>
+<li><p>查看内容</p>
+<pre><code>who - show who is logged <span class="command"><span class="keyword">on</span></span>
+
+    <span class="comment"># 多个命令可以用分号隔开，同时执行</span>
+    who; <span class="built_in">date</span>
+
+    <span class="comment"># 通配符？代表一个字符，*代表多个字符</span>
+    ls -alh
+    ll <span class="operator">a</span>*.txt  
+    ll <span class="operator">a</span>?.txt
+
+    <span class="comment"># 符号链接(软链接):指向源文件的新的独立文件(类似于一个新指针)，与原文件完全不同，inode也不同，但是读写起来就像原始文件一样</span>
+    <span class="built_in">ln</span> -s <span class="operator">a</span> a_link
+    <span class="comment"># 硬链接:与原文件本质上是同一个文件，大小一样，修改时间一样，只是在目录下的文件名不一样</span>
+ <span class="comment"># 不管硬链接还是软链接，修改都会影响到原文件</span>
+    <span class="built_in">ln</span> <span class="operator">a</span> a_link
+    <span class="comment"># 查看inode编号</span>
+    ls -li <span class="operator">a</span>*
+
+    <span class="comment"># 查看目录的树形结构</span>
+    tree dir
+
+    <span class="comment"># 查看文件内容，显示行数和进度; 输入v可以直接进入vim编辑模式</span>
+    less -NM <span class="built_in">file</span> 
+
+    <span class="comment"># cat新建、合并文件</span>
+    cat &gt; <span class="built_in">file</span>
+    cat f1 f2 &gt; f 
+
+    <span class="comment"># 显示行数</span>
+    cat -n/-b <span class="built_in">file</span>
+
+    <span class="comment"># 使用两个 &gt; 符时, 会将第一个文件中的内容追加到第二个文件的末尾</span>
+    cat /root/linux &gt;&gt; /root/desktop
+
+    <span class="comment"># ps,top,du,df查看系统信息</span>
+    lsblk -f: 可以查看未挂载的文件系统类型
+    parted -l 命令会输出文件系统类型（File <span class="keyword">system</span>）， 其中参数l表示列出所有设备的分区信息
+    parted /dev/sdg
+    fdisk -l
+
+    df -T 查看已经挂载的分区和文件系统类型
+
+    killall <span class="operator">a</span>* 杀死所有以<span class="operator">a</span>开头的进程
+    mount 查看系统挂载的设备列表
+    umount 卸载设备
+
+    <span class="comment"># 测试url联通性</span>
+    wget -nv <span class="comment">--spider $url</span>
+</code></pre></li>
+<li><p>数据提取处理</p>
+<pre><code><span class="comment"># sort -n可以识别每行开头的数字，并按其大小对文本行进行排序；-t设置分隔符</span>
+   <span class="comment"># sort默认是按升序排列，如果想要按降序要加-r选项(sort -rn), sort命令按照第1个、第2个、第N个字段依次排序，如果第一个字段相同，就按第2个字段的顺序排列，直到最后。</span>
+   <span class="comment"># 用命令cut -c 9- 取出每行第9个及其以后的字符</span>
+   <span class="comment"># uniq命令只能对相邻行进行去重操作,所以要先sort；uniq -c显示每一行出现次数，-u只显示单独出现的行，-d只显示重复出现的行</span>
+
+   <span class="comment"># 排序+去重并显示次数+按开头数字降序+取出第9个之后的字符</span>
+   <span class="built_in">sort</span> <span class="built_in">file</span> | uniq -c | <span class="built_in">sort</span> -rn | cut -c <span class="number">9</span>- 
+
+   <span class="comment"># 先对第2列sort，然后对第3列sort</span>
+   <span class="built_in">sort</span> t.txt -k2,<span class="number">2</span>n -k3,<span class="number">3</span>n
+
+<span class="comment"># 对sort_*多个已经排好序的文件做merge并去重，得到排序不重复的文件</span>
+<span class="built_in">sort</span> -smu sort_*
+
+   <span class="comment"># grep或操作</span>
+   grep <span class="string">'word1\|word2'</span>
+   grep -E <span class="string">'word1|word2'</span>
+   <span class="comment"># 非操作</span>
+   grep -v <span class="string">'word1\|word2'</span>
+   <span class="comment"># grep正则匹配</span>
+   grep -o regex FILENAME  正则匹配
+   <span class="comment"># 例如匹配vip=ip地址形式文本</span>
+   grep -o <span class="string">'vip=[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'</span>
+
+   grep -n pattern <span class="built_in">file</span> 显示行号
+   grep -c pattern <span class="built_in">file</span> 显示匹配到的行数
+
+   <span class="comment"># 压缩文件相关的搜索</span>
+   zgrep <span class="string">"/api"</span> access_log.gz access_log_1.gz
+
+   zcat access.tar.gz | grep -<span class="operator">a</span> <span class="string">'/api'</span>
+   zgrep -<span class="operator">a</span> <span class="string">"/api"</span> access.tar.gz
+
+   zcat  解压文件并将内容输出到标准输出
+   zcmp  解压文件并且 <span class="keyword">byte</span> <span class="keyword">by</span> <span class="keyword">byte</span> 比较两个文件
+   zdiff 解压文件并且 <span class="built_in">line</span> <span class="keyword">by</span> <span class="built_in">line</span> 比较两个文件
+   zgrep 解压文件并且根据正则搜索文件内容
+</code></pre></li>
+</ol>
+<pre><code><span class="comment"># 根据进程路径查找pid并kill</span>
+<span class="built_in">kill</span> `ps -ef | grep bos/nginx | grep master | awk <span class="string">'{print $2}'</span>` 
+
+<span class="comment"># 去除每一行中的重复空格，输出 'a b c'</span>
+<span class="built_in">echo</span> <span class="string">'a     b c'</span> | tr <span class="operator">-s</span> <span class="string">' '</span>
+
+<span class="comment"># 数学表达式,例如计算10*10的结果, 只支持整数运算</span>
+<span class="built_in">echo</span> $[<span class="number">10</span>*<span class="number">10</span>]
+
+expr <span class="number">5</span> / <span class="number">2</span>  不支持浮点数计算
+<span class="built_in">echo</span> <span class="string">'scale=3;5/2'</span> | bc
+
+<span class="comment"># bc进入计算器模式，可以进行浮点数运算，scale=4代表保留4位小数，quit退出</span>
+</code></pre><ol>
+<li><p><strong>cut</strong>：按行剪切数据，cut命令主要是接受三个定位方法: ①字节（bytes），用选项-b，例如; ②字符（characters），用选项-c; ③域（fields），用选项-f; -n选项，-n用于告诉cut不要将多字节字符拆开</p>
+<pre><code># 提取每一行的第3个字节,-3表示从第一个字节到第三个字节，而3-表示从第三个字节到行尾
+<span class="keyword">cat</span> <span class="keyword">file</span> | cut -b 3
+# 提取每一行的第3,4,5,8个字节,执行此命令时，cut会先把-b后面所有的定位进行从小到大排序
+<span class="keyword">cat</span> <span class="keyword">file</span> | cut -b 3-5,8
+
+# -<span class="keyword">d</span>来设置间隔符为空格，然后用-f来设置我要取的是第一个域(用awk也可以取出指定列)
+<span class="keyword">cat</span> <span class="keyword">file</span> | cut -<span class="keyword">d</span> ' ' -f 1
+
+# cut的-<span class="keyword">d</span>选项的默认间隔符就是制表符，当要使用制表符的时候，可以省略-<span class="keyword">d</span>选项，直接用－f来取域;cut -<span class="keyword">d</span>只允许间隔符是一个字符。
+</code></pre></li>
+<li><p><strong>sed</strong>：一种流编辑器，会在编辑器处理数据之前基于预先提供的一组规则来编辑数据流。sed按行处理文本，默认从STDIN读取文本并将处理结果输出到STDOUT，不改变输入文本内容。</p>
+<pre><code><span class="preprocessor"># 显示空格和制表符的区别，-n选项是禁止编辑器输出,l是将特殊符以直观形式输出</span>
+sed -n l file
+
+<span class="preprocessor"># sed 替换字符串，把文本中第一个dog替换成big cat</span>
+echo <span class="string">"This is a dog"</span> | sed <span class="string">'s/dog/big cat/'</span>
+
+<span class="preprocessor"># 删除前N个字符  </span>
+sed -i <span class="string">'s/^..//'</span> file   (N个.表示N个字符)
+
+<span class="preprocessor"># substitute替换，通用格式：s/pattern/replace/flags, 选项可以是g,p,w,数字</span>
+sed <span class="string">'s/dog/big cat/g'</span> data.txt
+<span class="preprocessor"># -n + p 等价于w选项，只输出被替换命令修改过的行</span>
+
+<span class="preprocessor"># 包含特殊字符/的字符串替换，可使用\转义或者指定分隔符！</span>
+sed <span class="string">'s!/bin/bash!/bin/csh!'</span> /etc/passwd
+sed <span class="string">'s/\/bin\/bash/\/bin\/csh/'</span> /etc/passwd
+
+<span class="preprocessor"># -e执行多条命令到每行数据上</span>
+sed -e <span class="string">'s/brown/green/; s/dog/cat/'</span> data1.txt
+
+<span class="preprocessor"># -f选项读取script1.sed文件中所有sed命令并执行，每行都是一条单独的命令</span>
+sed -f script1.sed data1.txt
+
+<span class="preprocessor"># sed行寻址，也就是讲命令只作用于特定行or某些行</span>
+sed <span class="string">'2s/dog/cat/'</span> data1.txt
+sed <span class="string">'2,3s/dog/cat/'</span> data1.txt 
+<span class="preprocessor"># 只作用于第2行到最后一行</span>
+sed <span class="string">'2,$s/dog/cat/'</span> data1.txt 
+
+<span class="preprocessor"># 只作用于包含Samantha的行</span>
+sed <span class="string">'/Samantha/s/bash/csh/'</span> /etc/passwd
+
+<span class="preprocessor"># sed删除行</span>
+sed <span class="string">'2,3d'</span> data1.txt 
+<span class="preprocessor"># 只作用于第2行到最后一行</span>
+sed <span class="string">'2,$d'</span> data1.txt 
+
+<span class="preprocessor"># 只作用于包含Samantha的行</span>
+sed <span class="string">'/Samantha/d'</span> /etc/passwd
+
+<span class="preprocessor"># 插入行, 最后一行之后插入</span>
+sed <span class="string">'$a\This is a new line of text.'</span> data1.txt
+<span class="preprocessor"># 第三行之前插入</span>
+sed <span class="string">'3i\This is a new line of text.'</span> data1.txt
+
+<span class="preprocessor"># 修改包含'number 3'内容的行</span>
+sed <span class="string">'/number 3/c\
+&gt; This is a changed line of text.'</span> data6.txt
+
+<span class="preprocessor"># 修改第3行</span>
+sed <span class="string">'3c\
+&gt; This is a changed line of text.'</span> data6.txt
+
+<span class="preprocessor"># sed transform转换命令会对inchars和outchars值进行一对一的映射</span>
+$ echo <span class="string">"This 1 is a test of 1 try."</span> | sed <span class="string">'y/123/456/'</span> 
+This <span class="number">4</span> is a test of <span class="number">4</span> <span class="keyword">try</span>.
+
+<span class="preprocessor"># 禁止输出其他行，只打印包含匹配文本模式的行</span>
+sed -n <span class="string">'/number 3/p'</span> data6.txt
+<span class="preprocessor"># 非操作!</span>
+sed -n <span class="string">'/number 3/!p'</span> data6.txt
+
+提取内容并写入文件
+<span class="preprocessor"># 将data6.txt数据流中的前两行打印到一个文本文件test.txt中</span>
+sed <span class="string">'1,2w test.txt'</span> data6.txt
+
+<span class="preprocessor"># 只将包含文本模式的数据行写入目标文件Browncoats.txt</span>
+sed -n <span class="string">'/Browncoat/w Browncoats.txt'</span> data11.txt
+
+从文件读数据
+<span class="preprocessor"># 读取data12.txt所有内容，并写入data6.txt文件第三行之后</span>
+sed <span class="string">'3r data12.txt'</span> data6.txt
+<span class="preprocessor"># 写入包含number 2的一行之后并删除number 2行</span>
+sed <span class="string">'/number 2/r data12.txt'</span> data6.txt
+sed <span class="string">'$r data12.txt d'</span> data6.txt
+
+<span class="preprocessor"># sed多行命令</span>
+<span class="preprocessor"># next，n命令会让sed编辑器移动到文本的下一行</span>
+<span class="preprocessor"># N命令将下一行合并到当前行</span>
+sed <span class="string">'/first/{ N ; s/\n/ / }'</span> data2.txt
+<span class="preprocessor"># 合并行号和行内容</span>
+sed <span class="string">'='</span> data2.txt | sed <span class="string">'N; s/\n/ /'</span>
+
+<span class="preprocessor"># 向文本文件的行间插入空白行</span>
+sed <span class="string">'G'</span> data2.txt
+<span class="preprocessor"># 删除连续的空白行，保留单个空白行</span>
+sed <span class="string">'/./,/^$/!d'</span> data8.txt
+<span class="preprocessor"># 用排除符号(!)和尾行符号($)来确保脚本不会将空白行加到数据流的最后一行后面</span>
+sed <span class="string">'$!G'</span> data2.txt
+</code></pre></li>
+<li><p><strong>awk</strong>: gawk程序是Unix中的原始awk程序的GNU版本。gawk程序让流编辑迈上了一个新的台阶，它提供了一种编程语言而不只是编辑器命令。awk是一种文本处理和模式匹配语言，数据驱动的语言。gawk程序脚本用一对花括号来定义，你必须将脚本命令放到两个花括号{}中</p>
+<pre><code># 强制awk在读取数据前执行BEGIN关键字后指定的程序脚本；END关键字允许你指定一个程序脚本，awk会在读完数据后执行它
+awk 'BEGIN {<span class="keyword">print</span> <span class="string">"Hello World!"</span>}'
+# awk默认以任意的空白字符(例如空格或制表符)分割每一行，也可以用-F指定分隔符(也可以定义FS的特殊变量来指定字段分隔符)，<span class="label">$0</span>代表整行，<span class="label">$n</span>代表第<span class="keyword">n</span>列内容
+# 打印<span class="keyword">file</span>的第五列
+<span class="keyword">cat</span> <span class="keyword">file</span> | awk '{<span class="keyword">print</span> <span class="label">$5}</span>'
+awk -F: '{<span class="keyword">print</span> <span class="label">$1}</span>' <span class="keyword">file</span>
+
+# 通过设置OFS变量，可以在输出中使用任意字符串来分隔字段
+# 以,为分隔符，读取1-3列，然后以-连接，输出；相当于替换分隔符
+awk 'BEGIN{FS=<span class="string">","</span>; OFS=<span class="string">"-"</span>} {<span class="keyword">print</span> <span class="label">$1</span>,<span class="label">$2</span>,<span class="label">$3}</span>' data1
+
+# 记录分隔符设置，例如把文件中的每行都当成一个字段，把空白行当作记录分隔符，可以起到合并多行成1行的效果
+awk 'BEGIN{FS=<span class="string">"\n"</span>; RS=<span class="string">""</span>} {<span class="keyword">print</span> <span class="label">$1</span>,<span class="label">$4}</span>' data2
+
+# awk自带的ARGC，ARGV，NF，FNR等数据变量
+
+# awk自定义变量，进行计算
+awk 'BEGIN{x=4; x= x * 2 + 13 % 2 + 3^2; <span class="keyword">print</span> x}'
+
+# awk 遍历数组变量
+gawk 'BEGIN{
+&gt; <span class="keyword">var</span>[<span class="string">"a"</span>] = 1
+&gt; <span class="keyword">var</span>[<span class="string">"g"</span>] = 2
+&gt; <span class="keyword">for</span> (<span class="keyword">test</span> <span class="keyword">in</span> <span class="keyword">var</span>) &gt;{
+&gt; <span class="keyword">print</span> <span class="string">"Index:"</span>,<span class="keyword">test</span>,<span class="string">" - Value:"</span>,<span class="keyword">var</span>[<span class="keyword">test</span>] &gt;}'
+
+# awk 匹配操作符/……/，例如筛选出包含11的行做对应处理，用逗号做分隔符
+gawk 'BEGIN{FS=<span class="string">","</span>} /11/{<span class="keyword">print</span> <span class="label">$1}</span>' data1
+
+# 在每行第一个数据字段中查找以文本rich开头的行，打印第一个和最后一个字段
+awk -F: '<span class="label">$1</span> ~ /^rich/{<span class="keyword">print</span> <span class="label">$1</span>,<span class="label">$NF}</span>' /etc/passwd
+# 非操作!
+gawk –F: '<span class="label">$1</span> !~ /^rich/{<span class="keyword">print</span> <span class="label">$1</span>,<span class="label">$NF}</span>' /etc/passwd
+# 数学表达式，==，&lt;=……
+gawk -F, '<span class="label">$1</span> == <span class="string">"data"</span>{<span class="keyword">print</span> <span class="label">$1}</span>' data1
+
+# awk使用<span class="keyword">if</span> <span class="keyword">else</span>，<span class="keyword">while</span>，<span class="keyword">for</span>等结构化语句
+awk '{<span class="keyword">if</span> (<span class="label">$1</span> &gt; 20) <span class="keyword">print</span> <span class="label">$1</span> * 2; <span class="keyword">else</span> <span class="keyword">print</span> <span class="label">$1</span> / 2}' data4
+
+# printf格式化输出，例如用几个单独的printf命令在同一行上打印多个输出
+gawk 'BEGIN{FS=<span class="string">","</span>} {printf <span class="string">"%s "</span>, <span class="label">$1}</span> END{printf <span class="string">"\n"</span>}' data1
+
+# rand()产生随机数只在0和1之间(不包括0或1)，int会生成该值和0之间最接近该值的整数
+x = int(10 * rand())
+
+# 字符串函数，时间函数，自定义函数
+# 在定义函数时，它必须出现在所有代码块之前(包括BEGIN代码块)，例如
+awk '
+&gt; function myprint() 
+&gt; {
+&gt; printf <span class="string">"%-16s - %s\n"</span>, <span class="label">$1</span>, <span class="label">$4</span>
+&gt; }
+&gt; BEGIN{FS=<span class="string">"\n"</span>; RS=<span class="string">""</span>}
+&gt; {
+&gt; myprint()
+&gt; }' data2
+
+# 也可以把函数定义到文件中，然后用-f引用函数
+
+# 求<span class="keyword">sum</span>和average，使用awk变量时不需要带$
+<span class="keyword">cat</span> <span class="keyword">file</span> | awk '{<span class="keyword">sum</span>+=<span class="label">$1}</span> END {<span class="keyword">print</span> <span class="string">"Sum = "</span>, <span class="keyword">sum</span>}'
+<span class="keyword">cat</span> <span class="keyword">file</span> | awk '{<span class="keyword">sum</span>+=<span class="label">$1}</span> END {<span class="keyword">print</span> <span class="string">"Average = "</span>, <span class="keyword">sum</span>/NR}'
+
+# a.txt中每一行为一个单词，按行读取a.txt, <span class="label">$1</span>代表第一列，统计出出现次数前3名的单词
+# <span class="keyword">sort</span> -<span class="keyword">n</span> -r -k 2 -t ':' xx.txt -<span class="keyword">n</span>数字排序方式， -r倒序, -t ':'以冒号分隔, -k 2表示以冒号分隔后的第2列
+awk '{<span class="keyword">sum</span>[<span class="label">$1</span>]+=1} END {<span class="keyword">for</span>(k <span class="keyword">in</span> <span class="keyword">sum</span>) <span class="keyword">print</span> k <span class="string">":"</span> <span class="keyword">sum</span>[k]}' a.txt | <span class="keyword">sort</span> -<span class="keyword">n</span> -r -k 2 -t ':' | head -<span class="keyword">n</span> 3
+
+# awk对文件行内容去重，O(<span class="keyword">n</span>)时间复杂度，利用了hashtable数据结构
+awk '!seen[<span class="label">$0</span>]++' <span class="keyword">file</span> # 对这个文件的每一行进行检查，如果你之前没有见过它，就打印出来,<span class="label">$0</span> 是一个变量，表示整个当前行
+awk '{ <span class="keyword">if</span> (!seen[<span class="label">$0</span>]++) { <span class="keyword">print</span> <span class="label">$0</span>; } }'
+</code></pre></li>
+<li><p>权限相关(Linux文件权限以八进制表示)</p>
+<pre><code><span class="literal">umask</span> 设置文件(<span class="number">666</span>-x)<span class="keyword">or</span>目录(<span class="number">777</span>-x)默认权限的掩码
+
+权限的八进制表示：wr- --&gt; <span class="number">110</span> --&gt; <span class="number">6</span>
+
+<span class="comment"># 八进制修改权限</span>
+chmod -<span class="constant">R</span> <span class="number">777</span> dir
+chmod <span class="number">777</span> <span class="keyword">file</span>
+
+<span class="comment">#符号模式修改权限</span>
+chmod u+w <span class="keyword">file</span>   给文件<span class="keyword">user</span>增加write权限
+
+<span class="comment"># 改变文件的属主和属组；只有root可以改变文件属主，任何属主可以改变属组</span>
+chown <span class="keyword">user</span>.<span class="literal">group</span> <span class="keyword">file</span>
+</code></pre></li>
+<li><p>处理脚本控制信号和特殊参数  </p>
+<blockquote>
+<p>默认情况下，脚本以最后一个命令的退出状态码退出；当然也可以通过<figure class="highlight plain"><figcaption><span>0```来指定退出状态码，范围为0-255，如果大于255，则以num % 256返回给用户</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">	</span><br><span class="line">		# 输出上一命令的退出码</span><br><span class="line">		echo $? </span><br><span class="line">		</span><br><span class="line">		# shell的位置参数变量是标准的数字:$0是程序名，$1是第一个参数，$2是第二个参数，依次类推，直到第九个参数$9</span><br><span class="line">		# $0参数获取shell在命令行启动的脚本名</span><br><span class="line">		echo $0</span><br><span class="line">		</span><br><span class="line">		# basename获取绝对路径下的文件名or文件夹名</span><br><span class="line">		echo $(basename $0)</span><br><span class="line">		</span><br><span class="line">		# 定时任务</span><br><span class="line">		cron,crontab,anacron和at</span><br><span class="line">		# 进程优先级调度</span><br><span class="line">		nice和renice</span><br><span class="line">		# 后台前台任务：jobs -l，bg,fg,&amp;,nohup</span><br><span class="line"></span><br><span class="line">#### Linux/Mac常见目录</span><br><span class="line">1. /bin 存放系统管理员和普通用户都要使用的程序</span><br><span class="line">2. /sbin 存放用于系统恢复，系统启动，系统维护等程序</span><br><span class="line">3. /usr/bin 登录用户可以使用的预装程序一般都放在这里,会随着系统升级而改变</span><br><span class="line">4. /usr/share/bin 可以通过web访问的程序一般放在这里</span><br><span class="line">5. /usr/local/bin 目录是给用户放置自己的可执行程序的地方，是手动编译或者安装的程序, 不会被系统升级而覆盖同名文件</span><br><span class="line">6. usr 指 Unix System Resource，而不是User</span><br><span class="line">7. /lib目录都是为/bin, /sbin准备的;一个应用程序启动的时候，会在/lib 和 /usr/lib库中查找动态库</span><br><span class="line"></span><br><span class="line">#### [Linux常用的查找命令](http://www.ruanyifeng.com/blog/2009/10/5_ways_to_search_for_files_using_the_terminal.html)</span><br><span class="line">find/locate, whereis/which/ps -ef, grep</span><br><span class="line"></span><br><span class="line">* find文件查找：`find path_name -name file_name -exec rm -f &#123;&#125; \;`</span><br><span class="line"></span><br><span class="line">  `find / －name &apos;*abvd*&apos;`  查找包含abvd字符串的文件名文件</span><br><span class="line"></span><br><span class="line">* grep搜索目录和子目录： `grep -R &apos;文本&apos; ./*`</span><br><span class="line"></span><br><span class="line">* whereis定位可执行文件位置</span><br><span class="line"></span><br><span class="line">#### 其它命令</span><br><span class="line">1. **rsync**是远程和本地在Linux / Unix系统中复制和同步文件和目录的最常用命令</span><br><span class="line">	* 用法```rsync options source destination</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<ul>
+<li>优势：rsync能有效地将文件复制到远程系统或从远程系统同步到本地，支持复制链接，设备，所有者，组和权限；相对于scp命令，rsync使用远程更新协议，允许转让只是两套文件之间的差异。 第一次，它从源到目标复制文件或目录的整个内容，但从下一次，它只将已更改的块和字节复制到目标。rsync消耗更少的带宽 ，因为它使用压缩和解压缩方法在发送和接收数据两端。更加安全，可以使用scp、ssh等方式来传输文件，当然也可以通过直接的socket连接，还支持匿名传输。</li>
+<li><p>案例：</p>
+<pre><code>/<span class="keyword">*</span> -v：详细
+</code></pre><p>  ​        -r：将数据递归（但不保存时间戳和权限，同时传输数据<br>  ​        -a：—archive归档模式下，归档模式允许递归地拷贝文件，同时也保留了符号链接，文件权限，用户组所有权和时间戳等所有文件属性，等于-rlptgoD<br>  ​        -z：压缩文件中的数据<br>  ​        -h：在人类可读的格式人类可读，输出数字<br>  ​        -progress 选项。 它显示完成传输的文件和剩余时间。<br>  ​        -e ssh 指定ssh协议传输<br>  ​        —remove-source-files 成功传输后自动删除源文件<br>  ​        </p>
+<pre><code>*/
+
+// 拷贝本地文件。当<span class="constant">S</span>RC和<span class="constant">D</span>ES路径信息都不包含有单个冒号<span class="string">":"</span>分隔符时就启动这种工作模式
+rsync -a  ./test.c  /<span class="literal">backup</span>
+
+//用一个远程<span class="literal">shell</span>程序(如rsh、ssh)来实现将本地机器的内容拷贝到远程机器,当<span class="constant">D</span>ES路径地址包含单个冒号<span class="string">":"</span>分隔符时启动该模式
+rsync -avz  test.c  <span class="keyword">user</span>@<span class="number">172.16</span>.<span class="number">0</span>.<span class="number">11</span>:/<span class="literal">home</span>/<span class="keyword">user</span>/src
+
+// 用一个远程<span class="literal">shell</span>程序(如rsh、ssh)来实现将远程机器的内容拷贝到本地机器
+rsync -avz <span class="keyword">user</span>@<span class="number">172.16</span>.<span class="number">0</span>.<span class="number">11</span>:/<span class="literal">home</span>/<span class="keyword">user</span>/src  ./src
+
+// 从远程rsync服务器中拷贝文件到本地机。当<span class="constant">S</span>RC路径信息包含<span class="string">"::"</span>分隔符时启动该模式
+rsync -av <span class="keyword">user</span>@<span class="number">172.16</span>.<span class="number">0</span>.<span class="number">11</span>::www  /databack
+
+// 从本地机器拷贝文件到远程rsync服务器中。当<span class="constant">D</span>ES路径信息包含<span class="string">"::"</span>分隔符时启动该模式
+rsync -av /databack <span class="keyword">user</span>@<span class="number">172.16</span>.<span class="number">0</span>.<span class="number">11</span>::www
+
+//列远程机的文件列表
+rsync -v rsync://<span class="number">172.16</span>.<span class="number">78.192</span>  /www
+</code></pre></li>
+</ul>
+</li>
+<li><p>对当前目录下所有文件夹添加读写权限：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod -R 777 * 或者chmod -R 777 . </span><br><span class="line">chown -R a:b:c * 修改ower, group， others</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><a href="http://www.cnblogs.com/highfly2012/archive/2013/05/04/3059727.html" target="_blank" rel="noopener">进程前后台运行切换命令</a></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">	jobs –l 查看后台运行的进程</span><br><span class="line">	fg %n 让后台运行的进程n到前台来</span><br><span class="line">	bg %n 让进程n到后台去</span><br><span class="line">	暂停程序运行CTRL+Z</span><br><span class="line">	kill %n 杀死进程n</span><br><span class="line">	ls -la | grep php  查看php真实路径</span><br><span class="line">	```	</span><br><span class="line">4. `tar zcvf /home/httpd/html/CAP-IDA/tmp.tar.gz -C /home/httpd/html/CAP-IDA/Data IDASUBSTAT`  绝对路径压缩文件夹IDASUBSTAT，使用-C指定相对路径去除多余层次</span><br><span class="line">5. Linux taskset命令和sched_setaffinity函数将某个进程绑定到一个特定的CPU</span><br><span class="line"></span><br><span class="line">#### Linux小技巧</span><br><span class="line">1. 生成随机密码的两种方式：① `date | md5 | cut -b -8` ② `openssl rand -base64 8`</span><br><span class="line">2. **随机生成10个8位密码shell脚本**: 首位大写字母, 中间六位大小写字母数字随机混合, 第八位[0-9]</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="!/bin-bash">!/bin.bash</h1><p>for i in {1..10}<br>do<br>A=<code>head -c 500 /dev/urandom | tr -dc A-Z |head -c 1</code></p>
+<h1 id="随机生成500字符|只取大写字母|取第一个字符">随机生成500字符|只取大写字母|取第一个字符</h1><p>B=<code>head -c 500 /dev/urandom | tr -dc [:alnum:]| head -c 6</code></p>
+<h1 id="随机生成500字符|取英文大小写字节及数字，亦即_0-9,_A-Z,_a-z|取6位">随机生成500字符|取英文大小写字节及数字，亦即 0-9, A-Z, a-z|取6位</h1><p>C=<code>echo $RANDOM$RANDOM|cut -c 2</code></p>
+<h1 id="取第二位随机数字,第一位随机性不高大多数是1或2,所以取第二位-">取第二位随机数字,第一位随机性不高大多数是1或2,所以取第二位.</h1><p>echo $A$B$C<br>done<br>```</p>
+<ol>
+<li><code>source /path/to/filename</code> 在当前 shell 里执行一个文件里的命令</li>
+<li><code>wget -r --no-parent --reject &quot;index.html*&quot; http://hostname/ -P /home/user/dirs</code> 用 wget 抓取完整的网站目录结构，存放到本地目录中</li>
+<li>diff和cmp命令，分别比对两个file的逐行和逐字节</li>
+<li><a href="https://cnbin.github.io/blog/2015/06/15/shell-qian-hou-tai-jin-cheng-qie-huan/" target="_blank" rel="noopener">Shell 前后台进程切换</a></li>
+<li><code>dd if=/dev/zero of=obj_900k bs=1024 count=0 seek=$[9*1024/10]</code> 生成900k的文件</li>
+<li><code>mv /usr/cbu/ * .</code>  将/usr/cbu中的所有文件移到当前目录（用“.”表示）中</li>
+<li><code>at －f data 15:30 +2 days</code>  让系统在两天后的17：30执行文件data中指明的作业</li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Linux/"> #Linux </a>
+          
+            <a href="../../tags/shell/"> #shell </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Linux expect自动交互脚本入门
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-02-19
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/02/19/Linux expect自动交互脚本入门/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/19/Linux expect自动交互脚本入门/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p><strong>Expect</strong> is a program that “talks” to other interactive programs according to a script. Following the script, Expect knows what can be expected from a program and what the correct response should be. An interpreted language provides branching and high-level control structures to direct the dialogue. In addition, the user can take control and interact directly when desired, afterward returning control to the script.</p>
+<h4 id="expect基础语法">expect基础语法</h4><p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># 命令行参数 </span><br><span class="line"># $argv，参数数组，使用[lindex $argv n]获取，$argv 0初始化为脚本名字</span><br><span class="line"># $argc，参数个数</span><br><span class="line">set username [lindex $argv 0]  # 获取第0个参数</span><br><span class="line">set passwd [lindex $argv 1]    # 获取第1个参数</span><br><span class="line">set TOKEN $expect_out(buffer): 获取上一个键盘输入保存到TOKEN变量中</span><br><span class="line"></span><br><span class="line">set timeout 30 # 设置超时30s</span><br><span class="line"> </span><br><span class="line"># spawn是expect内部命令，开启ssh连接</span><br><span class="line">spawn ssh -l username 192.168.1.1</span><br><span class="line"> </span><br><span class="line"># 判断上次输出结果里是否包含以“password:”开头的字符串，如果有则立即返回，否则就等待一段时间(timeout)后返回</span><br><span class="line">expect &quot;password:*&quot;</span><br><span class="line"> </span><br><span class="line"># 发送内容ispass(密码)，与手工输入密码ispass的动作等效</span><br><span class="line">send &quot;ispass\r&quot;</span><br><span class="line"> </span><br><span class="line"># 发送内容给用户</span><br><span class="line">send_user &quot;$argv0 [lrange $argv 0 2]\n&quot;</span><br><span class="line">send_user &quot;It&apos;s OK\r&quot;</span><br><span class="line"># 执行完成后保持交互状态，控制权交给控制台(可以继续手工输入等操作)。否则会完成后会退出。</span><br><span class="line">interact</span><br></pre></td></tr></table></figure>
+<h5 id="spwan命令">spwan命令</h5><p>spawn命令用于启动一个进程, 后边接上你要执行的命令，例如<code>spawn ssh relay01.baidu.com</code></p>
+<h5 id="interact命令">interact命令</h5><p>interact命令用于脚本执行完简单的命令后人手动介入,只在所属的spawn进程空间有效</p>
+<h5 id="expect的三种使用格式">expect的三种使用格式</h5><ul>
+<li><p>并行：只要其中的任何一个pattern能够匹配，那么这个expect就算是完成了一次匹配</p>
+<pre><code>expect {
+    pattern1 {
+        command2 }
+    pattern2 {
+        command2 }
+}
+
+<span class="comment"># 示例</span>
+expect {
+   <span class="string">"hi"</span>    { <span class="built_in">send</span> <span class="string">"You said hi\r"</span> }
+   <span class="string">"hello"</span> { <span class="built_in">send</span> <span class="string">"Hello yourself\r"</span> }
+   <span class="string">"bye"</span>   { <span class="built_in">send</span> <span class="string">"That was unexpected\r"</span> }
+}
+</code></pre></li>
+</ul>
+<ul>
+<li><p>串行：所有的匹配被依次满足了之后才算整个语句完成</p>
+<pre><code>expect pattern command
+expect pattern2 command2
+
+<span class="comment"># 串行示例</span>
+expect <span class="string">"username:"</span>
+<span class="keyword">send</span> <span class="string">"<span class="variable">$userid</span>\r"</span>
+expect <span class="string">"password:"</span> { <span class="keyword">send</span> <span class="string">"<span class="variable">$mypassword</span>\r"</span> }
+
+<span class="comment"># 利用exp_continue并行实现串行，continue执行下一个pattern</span>
+expect {   
+    <span class="string">"*yes/no"</span> { <span class="keyword">send</span> <span class="string">"yes\r"</span>; exp_continue }
+     <span class="string">"*password:"</span> { <span class="keyword">send</span> <span class="string">"<span class="variable">$mypassword</span>\r"</span> }   
+}
+</code></pre></li>
+</ul>
+<h5 id="shell脚本接收多个参数">shell脚本接收多个参数</h5><ol>
+<li>expect脚本可以接受从bash传递过来的参数.可以使用[lindex $argv n]获得，n从0开始，分别表示第一个,第二个,第三个….参数</li>
+<li>$argc为命令行参数的个数，$argv0为脚本名字本身，$argv为命令行参数。[lrange $argv 0 0]表示第1个参数，[lrange $argv 0 4]为第一个到第五个参数。</li>
+<li>执行<code>./test.sh 1 2 3</code>,脚本内容如下：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/expect -d</span><br><span class="line">set username [lindex $argv 0]</span><br><span class="line">set password [lindex $argv 1]</span><br><span class="line">set server [lindex $argv 2]</span><br><span class="line">send_user  &quot;UserName is $username\n&quot;</span><br><span class="line">send_user  &quot;PassWord is $password\n&quot;</span><br><span class="line">send_user  &quot;Server is $server\n&quot;</span><br><span class="line">send_user &quot;Total arg num is $argc\n&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="bash脚本直接调用expect进行交互">bash脚本直接调用expect进行交互</h4><ul>
+<li>Here document实现, expect脚本可以使用bash中定义的变量</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">host=&quot;USER@HOST&quot;</span><br><span class="line">password=&quot;PASSWORD&quot;</span><br><span class="line">cmd=&quot;command_list&quot;</span><br><span class="line"></span><br><span class="line">expect &lt;&lt;EOF </span><br><span class="line">spawn ssh $host &quot;$cmd&quot;</span><br><span class="line">expect &#123;</span><br><span class="line">&quot;*(yes/no)?&quot; &#123; send &quot;yes\r&quot;;exp_continue &#125;</span><br><span class="line">&quot;*assword:&quot; &#123; send &quot;$password\r&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line">expect eof</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<ul>
+<li>直接使用set来定义变量并在expect脚本中使用</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">expect -c &apos;</span><br><span class="line">set $PASSWORD=&quot;123qwe&quot;</span><br><span class="line">spawn ssh USER@HOST &quot;commands&quot;</span><br><span class="line">expect &#123;</span><br><span class="line">&quot;*(yes/no)?&quot; &#123; send &quot;yes\r&quot;;exp_continue &#125;</span><br><span class="line">&quot;*assword:&quot; &#123; send &quot;$PASSWORD\r&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line">expect eof</span><br><span class="line">&apos;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果希望保持登录，去掉上面代码的ssh后的命令列表并且将expect eof改成interact即可</p>
+</blockquote>
+<h4 id="更多示例">更多示例</h4><ol>
+<li><a href="http://xstarcd.github.io/wiki/shell/expect.html" target="_blank" rel="noopener">expect交互脚本示例</a></li>
+<li><a href="https://www.jianshu.com/p/70556b1ce932" target="_blank" rel="noopener">Linux Expect 简介和使用实例</a></li>
+</ol>
+<h4 id="开发机登陆脚本示例">开发机登陆脚本示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/expect</span><br><span class="line"></span><br><span class="line"># 登录relay</span><br><span class="line">spawn ssh relay01.baidu.com</span><br><span class="line"></span><br><span class="line"># 定义变量</span><br><span class="line">set PIN &quot;123321&quot;</span><br><span class="line">set HOST &quot;hz01-bos-dev-r15-01-005.hz01&quot;</span><br><span class="line">set PASSWORD &quot;&quot;</span><br><span class="line"></span><br><span class="line"># 执行脚本时带上参数,以空格分开</span><br><span class="line"># set TOKEN [lindex $argv 0]</span><br><span class="line"></span><br><span class="line"># 打开调试模式</span><br><span class="line">#exp_internal 1</span><br><span class="line"># relay PIN码 + Token(Token需手动输入)</span><br><span class="line">expect &#123;</span><br><span class="line">    -re &quot;password:*&quot; &#123;</span><br><span class="line">        send_user &quot;PIN:****** + Token:&quot;</span><br><span class="line">        expect_user &#123;</span><br><span class="line">            -timeout -1</span><br><span class="line">            -re &quot;(.*)\n&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        set TOKEN $expect_out(buffer)</span><br><span class="line">        send &quot;$PIN$TOKEN\r&quot;</span><br><span class="line">        exp_continue</span><br><span class="line">    &#125;</span><br><span class="line">   # 自动登录开发机</span><br><span class="line">    -re &quot;-bash-baidu-ssl*&quot; &#123;</span><br><span class="line">        if &#123; &quot;$HOST&quot; != &quot;&quot; &#125; &#123;</span><br><span class="line">            send &quot;ssh --silent $HOST\r&quot;</span><br><span class="line">            # [可选]自动开发机输入密码</span><br><span class="line">            if &#123; &quot;$PASSWORD&quot; != &quot;&quot; &#125; &#123;</span><br><span class="line">                expect -re &quot;password:&quot; &#123; send &quot;$PASSWORD\r&quot; &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"># 关闭调试模式</span><br><span class="line">#exp_internal 0</span><br><span class="line">interact</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Linux/"> #Linux </a>
+          
+            <a href="../../tags/shell/"> #shell </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Linux正则表达式/通配符揭秘
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-02-19
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/02/19/Linux正则表达式:通配符揭秘/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/19/Linux正则表达式:通配符揭秘/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h4 id="正则表达式概念">正则表达式概念</h4><p><strong>正则表达式</strong>是你所定义的模式模板(pattern template)，Linux工具可以用它来过滤文本；如果数据匹配模式，它就会被接受并进一步处理;如果数据不匹配模式，它就会被滤掉。正则表达式模式利用通配符来描述数据流中的一个或多个字符，例如<figure class="highlight plain"><figcaption><span>da*```da*参数会让ls命令只列出名字以da开头的文件。文件名中da之后可以有任意多个字符(包括什么也没有)。  </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">正则表达式是通过正则表达式引擎(regular expression engine)实现的。正则表达式引擎是一套底层软件，负责解释正则表达式模式并使用这些模式进行文本匹配。</span><br><span class="line">#### 正则表达式类型</span><br><span class="line">Linux中的不同应用程序可能会用不同类型的正则表达式；而在Linux中，有两种流行的正则表达式引擎：</span><br><span class="line">	</span><br><span class="line">&gt; POSIX基础正则表达式(basic regular expression，BRE)引擎，sed编辑器只符合了BRE引擎规范的子集</span><br><span class="line"></span><br><span class="line">&gt; POSIX扩展正则表达式(extended regular expression，ERE)引擎，gawk程序用ERE引擎来处理它的正则表达式模式。</span><br><span class="line"></span><br><span class="line">#### 处理特殊字符</span><br><span class="line">正则表达式识别的特殊字符包括:```.*[]^$&#123;&#125;\+?|()```,如果要用某个特殊字符作为文本字符，就必须用```\```转义</span><br></pre></td></tr></table></figure></p>
+<h1 id="查找$或者正斜线">查找$或者正斜线</h1><p>sed -n ‘/\$/p’ data2<br>echo “3 / 2” | sed -n ‘/\//p’</p>
+<h1 id="^字符会在每个由换行符决定的新数据行的行首检查模式">^字符会在每个由换行符决定的新数据行的行首检查模式</h1><p>echo “Books are great” | sed -n ‘/^Book/p’</p>
+<h1 id="美元符($)定义了行尾锚点">美元符($)定义了行尾锚点</h1><p>echo “This book is good” | sed -n ‘/book$/p’</p>
+<h1 id="^$组合删除所有空白行">^$组合删除所有空白行</h1><p>sed ‘/^$/d’ data5</p>
+<h1 id="点号字符-用来匹配除换行符之外的任意单个字符，如果在点号字符的位置没有字符，那么模式就不成立。在正则表达式中，空格也是字符，也会被-匹配">点号字符.用来匹配除换行符之外的任意单个字符，如果在点号字符的位置没有字符，那么模式就不成立。在正则表达式中，空格也是字符，也会被.匹配</h1><p>sed -n ‘/.at/p’ data6</p>
+<h1 id="[]定义字符组，字符组中必须有个字符来匹配相应的位置，例如匹配cat和hat">[]定义字符组，字符组中必须有个字符来匹配相应的位置，例如匹配cat和hat</h1><p>sed -n ‘/[ch]at/p’ data6</p>
+<h1 id="使用3个字符组来涵盖3个字符位置含有大小写的情况">使用3个字符组来涵盖3个字符位置含有大小写的情况</h1><p>echo “yeS” | sed -n ‘/[Yy][Ee][Ss]/p’</p>
+<h1 id="匹配了任意含有数字0、1、2或3的行">匹配了任意含有数字0、1、2或3的行</h1><p>sed -n ‘/[0123]/p’ data7</p>
+<p>排除匹配</p>
+<h1 id="匹配c或h之外的任何字符以及文本模式">匹配c或h之外的任何字符以及文本模式</h1><p>sed -n ‘/[^ch]at/p’ data6</p>
+<p>区间匹配</p>
+<h1 id="每个字符组都会匹配0~9的任意数字">每个字符组都会匹配0~9的任意数字</h1><p>sed -n ‘/^[0-9][0-9][0-9][0-9][0-9]$/p’ data8</p>
+<h1 id="新的模式[c-h]at匹配了首字母在字母c和字母h之间的单词">新的模式[c-h]at匹配了首字母在字母c和字母h之间的单词</h1><p>sed -n ‘/[c-h]at/p’ data6</p>
+<h1 id="该字符组允许区间a~c、h~m中的字母出现在at文本前">该字符组允许区间a~c、h~m中的字母出现在at文本前</h1><p>sed -n ‘/[a-ch-m]at/p’ data6</p>
+<h1 id="特殊字符组，可以用[[:digit:]]来代替区间[0-9]">特殊字符组，可以用[[:digit:]]来代替区间[0-9]</h1><h1 id="在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中">在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中</h1><p>echo “I’m getting a color TV” | sed -n ‘/colou*r/p’</p>
+<h1 id="将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。">将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。</h1><p>echo “bat” | sed -n ‘/b.*t/p’</p>
+<h1 id="星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)">星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)</h1><p>echo “bat” | sed -n ‘/b[ae]*t/p’</p>
+<h1 id="显示文件夹中文件绝对目录">显示文件夹中文件绝对目录</h1><p>ls | sed “s:^:<code>pwd</code>/:”</p>
+<p>扩展正则表达式：gawk程序能够识别ERE模式，但sed编辑器不能</p>
+<h1 id="问号表明前面的字符可以出现0次或1次">问号表明前面的字符可以出现0次或1次</h1><p>echo “bt” | gawk ‘/be?t/{print $0}’</p>
+<h1 id="加号表明前面的字符可以出现1次或多次，但必须至少出现1次">加号表明前面的字符可以出现1次或多次，但必须至少出现1次</h1><p>echo “bt” | gawk ‘/b[ae]+t/{print $0}’</p>
+<h1 id="花括号{}允许你为可重复的正则表达式指定一个上限">花括号{}允许你为可重复的正则表达式指定一个上限</h1><h1 id="字符e只能出现1次，模式才能匹配">字符e只能出现1次，模式才能匹配</h1><p>echo “bet” | gawk —re-interval ‘/be{1}t/{print $0}’</p>
+<h1 id="字符e可以出现1次或2次，这样模式就能匹配">字符e可以出现1次或2次，这样模式就能匹配</h1><p>echo “beet” | gawk —re-interval ‘/be{1,2}t/{print $0}’</p>
+<h1 id="圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符">圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符</h1><h1 id="结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat">结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat</h1><p>echo “Sat” | gawk ‘/Sat(urday)?/{print $0}’</p>
+<h1 id="模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合">模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合</h1><p>echo “bab” | gawk ‘/(c|b)a(b|t)/{print $0}’</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### 正则表达式应用</span><br><span class="line">1. 验证电话号码</span><br><span class="line">2. 解析邮件地址</span><br><span class="line">	```^([a-zA-Z0-9_\-\.\+]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]&#123;2,5&#125;)$</span><br></pre></td></tr></table></figure>
+<h4 id="Linux通配符">Linux通配符</h4><p>bash shell可以使用正则表达式中的一些元字符实现通配（Globbing）功能。通配是把一个包含通配符的非具体文件名扩展存储在计算机，服务器或者网络上的一批具体文件名的过程。（可以看出<strong>①通配主要应用匹配文件名上，而正则主要应用于字符串上；②通配符通常只能被shell自解释，正则表达式需要被正则引擎解析；③元字符不同</strong>）。最常用的通配符包括正则表达式元字符：</p>
+<ul>
+<li>？(匹配任意单个字符,不能匹配“/”字符)</li>
+<li>*（匹配任意位的任意字符，包括空字符串，不包含对“/”字符的匹配）</li>
+<li>[]（匹配一个单字符范围,如[a-z]；[0-9]；[a-zBE5-7]表示所有a到z之间的字符和 B、E、5、6、7相匹配；[!abc]匹配除了“a，b，c”这3个字符之外的任意一个字符)</li>
+<li>{}</li>
+<li>^(取反)，例如<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* !取反</span><br><span class="line"></span><br><span class="line">&gt; 示例</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><em>.txt               # 匹配全部后缀为.txt的文件<br>file?.log           # 匹配file1.log, file2.log, …<br>[a-z]</em>.log          # 匹配a-z开头的.log文件<br>[^a-z]*.log         # 上面的反向匹配<br>```</p>
+<blockquote>
+<p>备注：反斜杠()或引号(‘, “)都会使通配符失效，例如如: <code>\*</code>, <code>&quot;*&quot;</code>, <code>&#39;*&#39;</code>都表示<code>*</code>本身，不通配任何文件</p>
+</blockquote>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Linux/"> #Linux </a>
+          
+            <a href="../../tags/shell/"> #shell </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Git使用指南
             
           
         </h1>
@@ -167,7 +1028,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2017/02/05/Git使用指南/#comments" >
+            <a href="../../2017/02/05/Git使用指南/#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/05/Git使用指南/"></span>
             </a>
           </span>
@@ -182,10 +1043,8 @@
       
 
       
-        
-          <p>Git是一个分布式版本控制系统，区别于SVN等集中式版本控制系统。集中式版本控制系统的版本库是集中存放在中央服务器的，每次工作时都需要先去中央服务器拉取最新代码，在本地修改之后，再推送至中央服务器；而分布式版本控制系统是不存在中央服务器的，每台电脑都是一个版本库，本地不联网也是可以工作的，而且代码更加安全，不用担心中央服务器出问题；当然多台电脑之间文件修改的交换与同步同样需要一台服务器来作为桥梁，比如github网站或者gitLab。此外，Git在开发流程、团队协作和分支管理方面的优点同样让其备受技术团队的欢迎。</p>
+        <p>Git是一个分布式版本控制系统，区别于SVN等集中式版本控制系统。集中式版本控制系统的版本库是集中存放在中央服务器的，每次工作时都需要先去中央服务器拉取最新代码，在本地修改之后，再推送至中央服务器；而分布式版本控制系统是不存在中央服务器的，每台电脑都是一个版本库，本地不联网也是可以工作的，而且代码更加安全，不用担心中央服务器出问题；当然多台电脑之间文件修改的交换与同步同样需要一台服务器来作为桥梁，比如github网站或者gitLab。此外，Git在开发流程、团队协作和分支管理方面的优点同样让其备受技术团队的欢迎。</p>
 <h3 id="Git原理图">Git原理图</h3><h3 id="Git常用操作命令">Git常用操作命令</h3><h3 id="Git_Flow开发流程">Git Flow开发流程</h3>
-        
       
     </div>
 
@@ -202,496 +1061,6 @@
 
       
       
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2017/01/15/从菊与刀初探日本文化/">
-                从菊与刀初探日本文化
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2017-01-14
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/读书札记/">读书札记</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2017/01/15/从菊与刀初探日本文化/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/15/从菊与刀初探日本文化/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>说到日本文化，我其实是不太感兴趣的，应该说是因为从小到大接触的少，如果接触得多说不定也会很感兴趣；然而身边有些朋友对日本文化表现出了很深的兴趣，不管是漫画还是电影还是其他。可以说，在我这一代人里边应该是有不少人收到日本文化影响的，包括大部分二次元的东西应该都是起源于日本。我想，日本文化是必有其过人之处的，否则不太可能有这么的输出力。抱着了解的心态，我从亚马逊下单了《菊与刀》，趁着每日睡前读完了它，一探日本文化。
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2017/01/15/从菊与刀初探日本文化/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/日本/"> #日本 </a>
-          
-            <a href="../../tags/菊与刀/"> #菊与刀 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/12/28/Ruby入门基础知识集锦/">
-                Ruby入门基础知识集锦
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-12-28
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Ruby/">Ruby</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/12/28/Ruby入门基础知识集锦/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/28/Ruby入门基础知识集锦/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>Ruby是一种纯粹的面向对象编程语言, 类似于 Python 和 Perl 等服务器端脚本语言; 既可以用来编写通用网关接口（CGI）脚本，也可以被嵌入到超文本标记语言（HTML), 语法简单，快速上手，是个人开发者的利器;再加上Ruby on Rails 开发框架，也是一枚轻量级web开发的利器。本文主要包括部分ruby基础语法和部分易淆点。</p>
-<h3 id="变量/常量">变量/常量</h3><ul>
-<li>一般小写字母、下划线开头：变量（Variable）</li>
-<li>$开头：全局变量（Global variable）;未初始化的全局变量的值为 nil，在使用 -w 选项后，会产生警告</li>
-<li>@开头：实例变量（Instance variable）</li>
-<li>@@开头：类变量（Class variable）类变量被共享在整个继承链中</li>
-<li>大写字母开头：常数（Constant）,类名称,模块名称</li>
-<li></li>
-</ul>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Ruby/"> #Ruby </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/">
-                Mac安装配置mySQL/mongodb/Redis开发环境及开机自启动
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-12-23
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Mac系统/">Mac系统</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>后端开发中免不了和数据库、缓存打交道，最近所参与的项目用到的就包括MySQL、mongodb、Redis，配置相关环境是参与开发的第一步; 本文主要讲述安装配置MySQL、mongodb、Redis的相关命令以及如何在mac中设置开机自启，也会记录一些相关控制台命令。
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2016/12/23/Mac安装配置mySQL:mongodb:Redis开发环境及开机自启动/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Mac/"> #Mac </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/12/23/MySQL基础知识/">
-                MySQL基础知识
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-12-23
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/12/23/MySQL基础知识/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/23/MySQL基础知识/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h4 id="MySQL函数">MySQL函数</h4><ol>
-<li>SQL中操作日期和年月的函数：SELECT DAYOFWEEK(‘2013-12-1’), DAYOFMONTH(‘2013-12-1’), WEEKDAY(‘2013-12-1’),DAYOFYEAR(‘2013-12-1’), DAYNAME(‘2013-12-1’), MONTHNAME(‘2013-12-1’), WEEK(‘2013-12-1’)\G;</li>
-<li>字符串操作函数：length(), concat(), concat_ws(), RTRIM(), LTRIM(), RPAD(), LPAD(), LOCATE(), SUBSTRING(), LCASE(), UCASE(), REPEAT();</li>
-<li>时间处理函数：HOUR(), MINUTE(), SECOND(); 时间格式处理函数：SELECT DATE_FORMAT(‘2013-12-01 02:02:00’, ‘%h:%i:%S’) AS sample_time</li>
-<li>日期算数函数：SELECT DATE_ADD(NOW(), INTERVAL 21 DAY); DATE_SUB(), CURDATE(), CURTIME(), NOW(), UNIX_TIMESTAMP(), FROM_UNIXTIME()</li>
-<li>SQL事务处理：BEGIN—-ROLLBACK—-COMMIT</li>
-<li><p>PHP与SQL交互：</p>
-<pre><code><span class="variable">$mysqli</span> = mysqli_connect(<span class="string">"hostname(localhost)"</span>, <span class="string">"uername"</span>, <span class="string">"password"</span>, <span class="string">"database"</span>);
-<span class="variable">$sql</span> = <span class="string">"SQL语句"</span>;
-<span class="variable">$res</span> = mysqli_query(<span class="variable">$mysqli</span>, <span class="variable">$sql</span>);<span class="regexp">//</span>执行mysqli_query函数，如果正确执行则返回<span class="keyword">true</span>，否则返回<span class="keyword">false</span>；
-可以使用mysqli_error(<span class="variable">$mysqli</span>)输出
-mysqli_free_result();<span class="regexp">//</span>在关闭之前释放空间
-mysqli_close(<span class="variable">$mysqli</span>)；
-mysqli_fetch_array()函数获取每一行记录作为一个数组，使用<span class="keyword">while</span>循环可以遍历一次所有记录
-</code></pre></li>
-</ol>
-<h4 id="MySQL概念">MySQL概念</h4><ol>
-<li><strong>主键</strong>—唯一标识一条记录，不能有重复的，不允许为空。一个表的主键只能有一个。用来保证数据完整性</li>
-<li><strong>外键</strong>—表的外键是另一表的主键, 外键可以有重复的, 可以是空值。一个表可以有多个外键。用来和其他表建立联系用的</li>
-<li><strong>索引</strong>—该字段没有重复值，但可以有一个空值。一个表可以有多个唯一索引。提高查询排序的速度</li>
-<li><p>外键取值规则：空值或参照的主键值。</p>
-<p> (1)插入非空值时，如果主键表中没有这个值，则不能插入。</p>
-<p> (2)更新时，不能改为主键表中没有的值。</p>
-<p> (3)删除主键表记录时，你可以在建外键时选定外键记录一起级联删除还是拒绝删除。</p>
-<p> (4)更新主键记录时，同样有级联更新和拒绝执行的选择</p>
-</li>
-</ol>
-<h4 id="MySQL常用操作">MySQL常用操作</h4><ol>
-<li><p>建立主键:</p>
-<pre><code><span class="operator"><span class="keyword">alter</span> <span class="keyword">table</span> 表名
-<span class="keyword">add</span> <span class="keyword">constraint</span> PK_字段名<span class="comment">--"PK"为主键的缩写，字段名为要在其上创建主键的字段名,'PK_字段名'就为约束名</span>
-<span class="keyword">primary</span> <span class="keyword">key</span> (字段名) <span class="comment">--字段名同上</span></span>
-</code></pre></li>
-<li><p>增加唯一约束:</p>
-<pre><code><span class="operator"><span class="keyword">alter</span> <span class="keyword">table</span> 表名
-<span class="keyword">add</span> <span class="keyword">constraint</span> UQ_字段名
-<span class="keyword">unique</span> (字段名)</span>
-</code></pre></li>
-<li><p>增加外键约束：</p>
-<pre><code><span class="operator"><span class="keyword">alter</span> <span class="keyword">table</span> 表名
-<span class="keyword">add</span> <span class="keyword">constraint</span> FK_字段名<span class="comment">--"FK"为外键的缩写</span>
-<span class="keyword">foreign</span> <span class="keyword">key</span> (字段名) <span class="keyword">references</span> 关联的表名(关联的字段名) <span class="comment">--注意'关联的表名'和'关联的字段名'</span></span>
-</code></pre></li>
-<li><p>常见join方式</p>
-<ul>
-<li>LEFT(OUTER) JOIN</li>
-<li>RIGHT(OUTER) JOIN</li>
-<li>INNER JOIN</li>
-</ul>
-</li>
-<li>建立索引：ALTER TABLE table_name ADD INDEX index_name(‘name’, ‘age’);</li>
-<li>删除索引的2种方法<ul>
-<li>DROP INDEX index_name on table_name;</li>
-<li>ALTER table table_name drop key index_name; 可以删除被外键约束的索引</li>
-</ul>
-</li>
-<li>select * from mysql.user \G; 查看数据库用户权限</li>
-<li>show warnings\G; —- 查看mysql优化过程 </li>
-</ol>
-<h4 id="MySQL索引的建立规则">MySQL索引的建立规则</h4><ol>
-<li>在 where 及 order by 涉及的列上建立索引,避免全表扫描</li>
-<li>应尽量避免在 where 子句中对字段进行 null 值判断，否则将导致引擎放弃使用索引而进行全表扫描，尤其是is not null会导致全表扫描，如： select id from t where num is null 可以在num上设置默认值0，确保表中num列没有null值，然后这样查询： select id from t where num=0</li>
-<li>当索引列有大量数据重复时,也就是选择性极低时，查询可能不会去利用索引，还不如直接全表扫描；如一表中有字段sex，male、female几乎各一半，那么即使在sex上建了索引也对查询效率起不了作用。</li>
-<li>索引固然可以提高相应的 select 的效率，但同时也降低了 insert 及 update 的效率，因为 insert 或 update 时有可能会重建索引；一个表的索引数最好不要超过6个，若太多则应考虑一些不常使用到的列上建的索引是否有必要。</li>
-<li>尽量使用数字型字段，若只含数值信息的字段尽量不要设计为字符型，这会降低查询和连接的性能，并会增加存储开销。这是因为引擎在处理查询和连接时会逐个比较字符串中每一个字符，而对于数字型而言只需要比较一次就够了</li>
-<li>尽可能的使用 varchar/nvarchar 代替 char/nchar ，因为首先变长字段存储空间小，可以节省存储空间，其次对于查询来说，在一个相对较小的字段内搜索效率显然要高些</li>
-<li>避免频繁创建和删除临时表，以减少系统表资源的消耗</li>
-<li>在新建临时表时，如果一次性插入数据量很大，那么可以使用 select into 代替 create table，避免造成大量 log ，以提高速度；如果数据量不大，为了缓和系统表的资源，应先create table，然后insert。</li>
-<li>如果使用到了临时表，在存储过程的最后务必将所有的临时表显式删除，先 truncate table ，然后 drop table ，这样可以避免系统表的较长时间锁定</li>
-<li>应尽量避免在 where 子句中使用!=或&lt;&gt;操作符，否则将引擎放弃使用索引而进行全表扫描</li>
-<li>(新版本已经会使用到索引)应尽量避免在 where 子句中使用 or 来连接条件，否则将导致引擎放弃使用索引而进行全表扫描，如： select id from t where num=10 or num=20 可以这样查询： select id from t where num=10 union all select id from t where num=20</li>
-<li>in 和 not in 也要慎用，否则会导致全表扫描，如： select id from t where num in(1,2,3) 对于连续的数值，能用 between 就不要用 in 了： select id from t where num between 1 and 3</li>
-<li>下面的查询也将导致全表扫描： select id from t where name like ‘%abc%’</li>
-<li>如果在 where 子句中使用参数，也会导致全表扫描。因为SQL只有在运行时才会解析局部变量，但优化程序不能将访问计划的选择推迟到运行时；它必须在编译时进行选择。然而，如果在编译时建立访问计划，变量的值还是未知的，因而无法作为索引选择的输入项。如下面语句将进行全表扫描： select id from t where num=@num 可以改为强制查询使用索引： select id from t with(index(索引名)) where num=@num</li>
-<li>应尽量避免在 where 子句中对字段进行表达式操作，这将导致引擎放弃使用索引而进行全表扫描。如： select id from t where num/2=100 应改为: select id from t where num=100*2</li>
-<li><p>应尽量避免在where子句中对字段进行函数操作，这将导致引擎放弃使用索引而进行全表扫描。如： </p>
-<pre><code>select <span class="property">id</span> <span class="keyword">from</span> t <span class="keyword">where</span> substring(<span class="property">name</span>,<span class="number">1</span>,<span class="number">3</span>)=’abc’   –<span class="property">name</span>以abc开头的<span class="property">id</span> 
-select <span class="property">id</span> <span class="keyword">from</span> t <span class="keyword">where</span> datediff(<span class="property">day</span>,createdate,’<span class="number">2005</span>-<span class="number">11</span>-<span class="number">30</span>′)=<span class="number">0</span>       –‘<span class="number">2005</span>-<span class="number">11</span>-<span class="number">30</span>’生成的<span class="property">id</span> 
-应改为: select <span class="property">id</span> <span class="keyword">from</span> t <span class="keyword">where</span> <span class="property">name</span> like ‘abc%’ select <span class="property">id</span> <span class="keyword">from</span> t <span class="keyword">where</span> createdate&gt;=’<span class="number">2005</span>-<span class="number">11</span>-<span class="number">30</span>′ <span class="keyword">and</span> createdate&lt;’<span class="number">2005</span>-<span class="number">12</span>-<span class="number">1</span>′
-</code></pre></li>
-<li><p>不要在 where 子句中的“=”左边进行函数、算术运算或其他表达式运算，否则系统将可能无法正确使用索引</p>
-</li>
-<li>很多时候用 exists 代替 in 是一个好的选择： select num from a where num in(select num from b) 用下面的语句替换： select num from a where<br>exists(select 1 from b where num=a.num)</li>
-<li>任何地方都不要使用 select <em> from t ，用具体的字段列表代替“</em>”，不要返回用不到的任何字段。</li>
-<li>尽量避免使用游标，因为游标的效率较差，如果游标操作的数据超过1万行，那么就应该考虑改写</li>
-<li>尽量避免向客户端返回大数据量，若数据量过大，应该考虑相应需求是否合理</li>
-<li>尽量避免大事务操作，提高系统并发能力。</li>
-<li>最有可能影响SQL性能的是磁盘和网络吞吐量</li>
-<li>能够采用存储过程实现的对数据库的操作尽量通过存储过程来实现</li>
-<li>不良的SQL往往来自于不恰当的索引设计、不充份的连接条件和不可优化的where子句。在对它们进行适当的优化后，其运行速度有了明显地提高</li>
-<li>在不加WHERE限制条件的情况下，COUNT(<em>)与COUNT(COL)基本可以认为是等价的；但是在有WHERE限制条件的情况下，COUNT(</em>)会比COUNT(COL)快非常多；</li>
-<li>COUNT(*)通常是对主键进行索引扫描，而COUNT(COL)就不一定了，另外前者是统计表中的所有符合的纪录总数，而后者是计算表中所有符合的COL的纪录数。</li>
-<li>两表join时，inner join 和 left join 差不多,都需要优化右表(join字段加索引)，而 right join 需要优化左表</li>
-</ol>
-<h4 id="MySQL_explain/explain_extended含义">MySQL explain/explain extended含义</h4><ol>
-<li><strong>id列</strong>：MySQL Query Optimizer 选定的执行计划中查询的序列号。表示查询中执行 select 子句或操作表的顺序,id值越大优先级越高,越先被执行。id 相同,执行顺序由上至下。</li>
-<li><p><strong>select_type 列</strong><br>MySQL 把 SELECT 查询分成简单和复杂两种类型，复杂类型又可以分成三个大类：简单子查询、所谓的衍生表（子查询在 FROM 子句里）和 UNION 。SIMPLE：查询中不包含子查询或者UNION；<br>PRIMARY:子查询上层；<br>SUBQUERY：子查询；<br>DERIVED：在FROM列表中包含子查询， MySQL会递归执行这些子查询，把结果放在临时表里</p>
-</li>
-<li><p><strong>type 列</strong><br>MySQL 在表里找到所需行的方式。包括（由左至右，由最差到最好）：| All | index | range | ref | eq_ref | const,system | null</p>
-<ul>
-<li>ALL：全表扫描，MySQL 从头到尾扫描整张表查找行  </li>
-<li>index：按索引次序扫描表，就是先读索引，再读实际的行，其实还是全表扫描。主要优点是避免了排序，因为索引是排好序的。  </li>
-<li>range：以范围的形式扫描索引</li>
-<li>ref：非唯一性索引访问</li>
-<li>eq_ref：使用有唯一性索引查找（主键或唯一性索引）；唯一性索引才会出现 eq_ref （非唯一性索引会出现 ref ），因为唯一，所以最多只返回一条记录，找到后无需继续查找，因此比 ref 更快。</li>
-<li>const：被称为“常量”，这个词不好理解，不过出现 const 的话就表示发生下面两种情况：在整个查询过程中这个表最多只会有一条匹配的行，比如主键 id=1 就肯定只有一行，只需读取一次表数据便能取得所需的结果，且表数据在分解执行计划时读取。例如：select * from a where id=1\G  ；只有唯一性索引才能保证表中最多只有一条记录，只有这样 type 才有可能为 const 。为 id 加普通索引后， type 变为 ref ，改为加唯一或主键索引后， type 便变为 const 了。  </li>
-<li>system：system 是 const 类型的特例，当表只有一行时就会出现 system 。  </li>
-<li>NULL：在优化过程中就已得到结果，不用再访问表或索引。例如：select min(a_id) from a\G  </li>
-</ul>
-</li>
-<li><p><strong>key_len 列</strong>：索引字段最大可能使用的长度。</p>
-</li>
-<li><strong>key 列</strong>：查询过程中实际使用的索引；可以在 SELECT 语句中使用 USE INDEX (indexname)来强制使用一个索引或者用 IGNORE INDEX(indexname)来强制 MYSQL 忽略索引</li>
-<li><strong>ref 列</strong>：指出对 key 列所选择的索引的查找方式，常见的值有 const, func, NULL, 具体字段名。当 key 列为 NULL ，即不使用索引时，此值也相应的为 NULL 。</li>
-<li><strong>rows 列</strong>：MySQL 估计的需要扫描的行数</li>
-<li><p><strong>Extra 列</strong>：</p>
-<ul>
-<li>Using index: 此查询使用了覆盖索引(Covering Index)，即通过索引就能返回结果，无需访问表  </li>
-<li>Using where：表示 MySQL 服务器从存储引擎收到行后再进行“后过滤”（Post-filter）。所谓“后过滤”，就是先读取整行数据，再检查此行是否符合 where 句的条件，符合就留下，不符合便丢弃。因为检查是在读取行后才进行的，所以称为“后过滤”。  </li>
-<li>Using temporary：使用到临时表；MySQL 使用临时表来实现 distinct 操作；常见于排序 order by 和分组查询 group by </li>
-<li>Using filesort：若查询所需的排序与使用的索引的排序一致，因为索引是已排序的，因此按索引的顺序读取结果返回，否则，在取得结果后，还需要按查询所需的顺序对结果进行排序，这时就会出现 Using filesort  </li>
-<li>当 type 为 rang、 ref 或者 index 的时候才有可能利用索引排序，其它，如 ALL ，都无法通过索引排序，此时若有 order by ，如上例，便会出现 Using filesort 。 但是当扫描的行过多时，MySQL 直接改用全表扫描，再 Using filesort ，不再使用索引。也就是说， MySQL 会根据表中的信息及查询来决定使用任种方式。</li>
-<li>Select tables optimized away：这个值意味着仅通过使用索引，优化器可能仅从聚合函数结果中返回一行。</li>
-<li><p>优化器会在索引存在的情况下，通过符合 RANGE 范围的条数和总数的比例来选择是使用索引还是进行全表遍历,这是为了避免过多的 random disk.  </p>
-<p>  — 不使用索引(customer_id)<br>  EXPLAIN SELECT <em> FROM rental WHERE customer_id&lt;103;<br>  — 使用索引<br>  EXPLAIN SELECT </em> FROM rental WHERE customer_id&lt;102;<br>  — 其中 id &lt; 103 的行数为 2767, id &lt; 102 的行数为 2734</p>
-</li>
-<li><p>“Using Index; Using where” it means that first the index is used to retrieve the records (an actual access to the table is not needed) and then on top of this result set the filtering of the where clause is done. For example: SELECT id FROM test WHERE id &gt; 5;</p>
-</li>
-<li>“Using index condition” 的理解是, 首先 mysql server 和 storage engine 是两个组件, server 负责 sql的parse, 执行; storage engine 去真正的 做 数据/index的 读取/写入. 以前是这样: server 命令 storage engine 按 index 把相应的 数据 从 数据表读出, 传给server, server来按 where条件 做选择; 现在 ICP则是在 可能的情况下, 让storage engine 根据index 做判断, 如果不符合 条件 则无须 读 数据表. 这样 节省了disk IO. <a href="https://dev.mysql.com/doc/refman/5.6/en/index-condition-pushdown-optimization.html" target="_blank" rel="external">Link</a></li>
-</ul>
-</li>
-</ol>
-<h4 id="MySQL数据类型选择">MySQL数据类型选择</h4><h5 id="varchar和text">varchar和text</h5><ol>
-<li><p>当超过255的长度之后，使用varchar和text没有本质区别，text没有默认值；推荐使用varchar（10000），毕竟这个还有截断，可以保证字段的最大值可控，如果使用text那么如果code有漏洞很有可能就写入数据库一个很大的内容，会造成风险；</p>
-</li>
-<li><p>当varchar大于某些数值的时候，其会自动转换为text，大概规则如下：</p>
-<ul>
-<li>大于varchar（255）变为 tinytext</li>
-<li>大于varchar（500）变为 text</li>
-<li>大于varchar（20000）变为 mediumtext  </li>
-</ul>
-</li>
-<li><p>char的上限为255字节，varchar的上限65535字节，text的上限为65535。char在存储的时候会截断尾部的空格，varchar和text不会。<a href="http://www.cnblogs.com/billyxp/p/3548540.html" target="_blank" rel="external">MySQL之char、varchar和text的设计</a></p>
-</li>
-</ol>
-<h4 id="参考链接">参考链接</h4><ol>
-<li><a href="http://blog.csdn.net/gevolution90/article/details/6856922" target="_blank" rel="external">Mysql explain结果解读</a></li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/MySQL/"> #MySQL </a>
-          
-            <a href="../../tags/数据库/"> #数据库 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
     </div>
   </div>
 
@@ -701,7 +1070,7 @@ select <span class="property">id</span> <span class="keyword">from</span> t <spa
 
   
   <div class="pagination">
-    <a class="extend prev" rel="prev" href="../6/">&laquo;</a><a class="page-number" href="../..//">1</a><span class="space">&hellip;</span><a class="page-number" href="../6/">6</a><span class="page-number current">7</span><a class="page-number" href="../8/">8</a><span class="space">&hellip;</span><a class="page-number" href="../16/">16</a><a class="extend next" rel="next" href="../8/">&raquo;</a>
+    <a class="extend prev" rel="prev" href="../6/">&laquo;</a><a class="page-number" href="../../">1</a><span class="space">&hellip;</span><a class="page-number" href="../6/">6</a><span class="page-number current">7</span><a class="page-number" href="../8/">8</a><span class="space">&hellip;</span><a class="page-number" href="../17/">17</a><a class="extend next" rel="next" href="../8/">&raquo;</a>
   </div>
 
 
@@ -728,28 +1097,28 @@ select <span class="property">id</span> <span class="keyword">from</span> t <spa
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../..//categories">
+            <a href="../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

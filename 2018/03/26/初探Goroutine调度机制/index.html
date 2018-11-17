@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="Golang," />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="Golang,">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../../../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../../favicon.ico?v=0.4.2">
 
 
 
@@ -69,7 +69,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -85,40 +85,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../../../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../../../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../../../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../../../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../../../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -163,7 +163,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="#comments" >
+            <a href="#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2018/03/26/初探Goroutine调度机制/"></span>
             </a>
           </span>
@@ -229,8 +229,8 @@
 <p>当goroutine读或写阻塞时会被放到等待队列，goroutine失去运行权，而M继续执行其它的G。后台的poller不停地poll，所有的文件描述符都被添加到了这个poller中，当某个时刻一个文件描述符准备好了，poller就会唤醒之前因它而阻塞的goroutine，于是goroutine重新被分配给某个P执行。</p>
 <p>和使用Unix系统中的select或是poll方法不同地是，Golang的netpoller查询的是能被调度的goroutine而不是那些函数指针、包含了各种状态变量的struct等，这样你就不用管理这些状态，也不用重新检查函数指针等，这些都是你在传统Unix网络I/O需要操心的问题。</p>
 <h3 id="参考链接">参考链接</h3><ol>
-<li><a href="https://morsmachine.dk/go-scheduler" target="_blank" rel="external">The Go scheduler</a></li>
-<li><a href="https://morsmachine.dk/netpoller" target="_blank" rel="external">The Go netpoller</a></li>
+<li><a href="https://morsmachine.dk/go-scheduler" target="_blank" rel="noopener">The Go scheduler</a></li>
+<li><a href="https://morsmachine.dk/netpoller" target="_blank" rel="noopener">The Go netpoller</a></li>
 </ol>
 
       
@@ -271,8 +271,7 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2018/03/26/初探Goroutine调度机制/"
-               data-title="初探Goroutine调度机制" data-url="https://charles-xiao.github.io/2018/03/26/初探Goroutine调度机制/">
+          <div class="ds-thread" data-thread-key="2018/03/26/初探Goroutine调度机制/" data-title="初探Goroutine调度机制" data-url="https://charles-xiao.github.io/2018/03/26/初探Goroutine调度机制/">
           </div>
         
       </div>
@@ -316,28 +315,28 @@
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../../../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../../../..//categories">
+            <a href="../../../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../../../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

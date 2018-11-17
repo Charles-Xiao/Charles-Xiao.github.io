@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="java,android,life,CharlesXiao" />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="java,android,life,CharlesXiao">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../favicon.ico?v=0.4.2">
 
 
 
@@ -49,7 +49,7 @@
 <body>
 <!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
   <div class="container one-column 
-   page-home 
+  
 ">
     <div class="headband"></div>
 
@@ -71,7 +71,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -87,40 +87,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -148,9 +148,7 @@
           
           
             
-              <a class="post-title-link" href="../../2018/01/04/从Paxos到Raft/">
-                从Raft到Paxos
-              </a>
+              高并发系统的限流策略
             
           
         </h1>
@@ -158,7 +156,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2018-01-04
+          发表于 2018-02-07
         </span>
 
         
@@ -167,8 +165,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2018/01/04/从Paxos到Raft/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/01/04/从Paxos到Raft/"></span>
+            <a href="../../2018/02/07/高并发系统的限流策略/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/02/07/高并发系统的限流策略/"></span>
             </a>
           </span>
           
@@ -182,9 +180,31 @@
       
 
       
-        
-          
-        
+        <p>一个高并发的系统，保护系统的方法一般有三种：<strong>缓存、降级和限流</strong>，本文主要讲一讲常见的限流策略。限流的目的是通过对并发访问进行限速或者一个时间窗口内的的请求进行限速来保护系统，一旦达到限制速率则可以拒绝服务（定向到错误页或告知资源没有了）、排队或等待（比如秒杀、评论、下单）、降级（返回兜底数据或默认数据，如商品详情页库存默认有货）</p>
+<h4 id="单机限流">单机限流</h4><h5 id="常见限流措施">常见限流措施</h5><ul>
+<li>限制总并发数（比如数据库连接池、线程池）</li>
+<li>限制瞬时并发数（如nginx的limit_conn模块，用来限制瞬时并发连接数）</li>
+<li>限制时间窗口内的平均速率（如Guava的RateLimiter、nginx的limit_req模块，限制每秒的平均速率）</li>
+<li>限制远程接口调用速率</li>
+<li>限制消息队列的消费速率</li>
+<li>根据网络连接数、网络流量、CPU或内存负载等来限流</li>
+</ul>
+<h5 id="限流算法">限流算法</h5><ol>
+<li><p><strong>令牌桶算法</strong>：令牌桶是按照固定速率往桶中添加令牌，请求是否被处理需要看桶中令牌是否足够，当令牌数减为零时则拒绝新的请求（Nginx限速模块的实现/Guava RateLimiter SmoothBursty）</p>
+</li>
+<li><p><strong>漏桶算法</strong>：漏桶则是按照常量固定速率流出请求，流入请求速率任意，当流入的请求数累积到漏桶容量时，则新流入的请求被拒绝(Guava RateLimiter SmoothWarmingUp)</p>
+</li>
+<li><p><strong>计数器限流：</strong>主要用来限制总并发数，比如数据库连接池、线程池、秒杀的并发数；只要全局总请求数或者一定时间段的总请求数设定的阀值则进行限流，是简单粗暴的总数量限流，而不是平均速率限流（atomic.incrementAndGet() + atomic.decrementAndGet()）</p>
+</li>
+</ol>
+<h4 id="分布式系统限流">分布式系统限流</h4><h5 id="分布式限流_—_redis技术/一致性hash流量分片">分布式限流 — redis技术/一致性hash流量分片</h5><ol>
+<li><strong>分布式系统</strong>：基于 REDIS 实现，存储两个 KEY，一个用于计时，一个用于计数。请求每调用一次，计数器增加 1，若在计时器时间内计数器未超过阈值，则可以处理任务。</li>
+<li><strong>单机</strong>：使用Guava的Cache来存储计数器，过期时间设置为2秒（保证1秒内的计数器是有的），然后我们获取当前时间戳然后取秒数来作为KEY进行计数统计和限流</li>
+</ol>
+<h5 id="接入层限流_—_nginx限速模块">接入层限流 — nginx限速模块</h5><h4 id="参考链接">参考链接</h4><ol>
+<li><a href="https://www.jianshu.com/p/2596e559db5c" target="_blank" rel="noopener">聊聊高并发系统之限流特技</a></li>
+</ol>
+
       
     </div>
 
@@ -192,9 +212,7 @@
       
         <div class="post-tags">
           
-            <a href="../../tags/分布式系统/"> #分布式系统 </a>
-          
-            <a href="../../tags/阅读/"> #阅读 </a>
+            <a href="../../tags/并发/"> #并发 </a>
           
         </div>
       
@@ -202,8 +220,6 @@
       
 
       
-      
-        <div class="post-eof"></div>
       
     </div>
   </div>
@@ -221,9 +237,304 @@
           
           
             
-              <a class="post-title-link" href="../../2018/01/04/大型分布式网站架构设计与实践/">
-                大型分布式网站架构设计与实践
-              </a>
+              Golang学习总结
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2018-02-07
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2018/02/07/Golang学习总结/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/02/07/Golang学习总结/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h3 id="基础语法">基础语法</h3><h4 id="Channel+WaitGroup">Channel+WaitGroup</h4><ol>
+<li>实现发布/订阅Server：for+select循环监听发布事件、订阅事件、取消事件</li>
+<li>工作调度器：</li>
+</ol>
+<h4 id="interface">interface</h4><ol>
+<li><p><strong>go 没有显式的关键字用来实现 interface，如果一个类型实现了一个 interface 中所有方法，我们说类型实现了该 interface</strong></p>
+</li>
+<li><p>go 允许不带任何方法的 interface ，这种类型的 interface 叫 <strong>empty interface</strong>。<strong>go 不会对类型是interface{} 的 slice 进行转换</strong> 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 报错：cannot use names (type []string) as type []interface &#123;&#125; in argument to printAll</span><br><span class="line">// 原因：interface&#123;&#125; 会占用两个字长的存储空间，一个是自身的 methods 数据，一个是指向其存储值的指针，也就是 interface 变量存储的值；slice []interface&#123;&#125; 其长度是固定的N*2，但是 []T 的长度是N*sizeof(T)，两种 slice 实际存储值的大小是有区别的</span><br><span class="line">func printAll(vals []interface&#123;&#125;) &#123;</span><br><span class="line">	for _, val := range vals &#123;</span><br><span class="line">		fmt.Println(val)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">func main()&#123;</span><br><span class="line">	names := []string&#123;&quot;stanley&quot;, &quot;david&quot;, &quot;oscar&quot;&#125;</span><br><span class="line">	printAll(names)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 手动转换成[]interface&#123;&#125;</span><br><span class="line">var dataSlice []int = foo()</span><br><span class="line">var interfaceSlice []interface&#123;&#125; = make([]interface&#123;&#125;, len(dataSlice))</span><br><span class="line">for i, d := range dataSlice &#123;</span><br><span class="line">	interfaceSlice[i] = d</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>interface 变量存储的是实现者的值，也就是可以申明一个interface，然后把具体的struct赋值给其进行初始化。</p>
+</li>
+<li><p><a href="https://tour.golang.org/methods/15" target="_blank" rel="noopener">Type assertions</a> (类型断言)，用于区分 interface 的变量究竟存储哪种类型的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">s := S&#123;&#125;</span><br><span class="line">var i I //声明 i </span><br><span class="line">i = &amp;s //赋值 s 到 i</span><br><span class="line"></span><br><span class="line">// 方案一</span><br><span class="line">if t, ok := i.(*S); ok &#123;</span><br><span class="line">    fmt.Println(&quot;s implements I&quot;, t)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 方案二</span><br><span class="line">switch t := i.(type) &#123;</span><br><span class="line">case *S:</span><br><span class="line">    fmt.Println(&quot;i store *S&quot;, t)</span><br><span class="line">case *R:</span><br><span class="line">    fmt.Println(&quot;i store *R&quot;, t)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>interface 定义时并没有严格规定实现者的方法 receiver 是个 value receiver 还是 pointer receiver。interface 的实现者 ss的方法 receiver 都是 value receiver，执行函数<code>func(i)</code>可以无论是 pointer 还是 value 都可以正确执行，也就是<code>func(&amp;ss)或者func(ss)</code>；如果ss的方法receiver存在pointer receiver，则不能调用<code>func(ss)</code>，因为根据value找不到地址</p>
+</li>
+<li><strong>go 中函数都是按值传递即 passed by value</strong>。对于 receiver 是 value 的 method，任何在 method 内部对 value 做出的改变都不影响调用者看到的 value，这就是按值传递。</li>
+</ol>
+<h4 id="参考链接">参考链接</h4><h3 id="其它">其它</h3><h4 id="gofmt与goimports">gofmt与goimports</h4><p>gofmt follows a simple rule that works for all use cases: imports may be separated by<br>blank lines, and each set of blank lines is sorted independently.  </p>
+<p>goimports, which does more than just formatting, applies a different rule: it groups<br>imports according to whether they are standard imports, appengine imports, or other<br>imports.  It emits each group separately.  Then the gofmt algorithm kicks in and sorts<br>each group independently.<br>The goimports and gofmt programs do different jobs and it is not a goal that they<br>produce identical results.</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Golang/"> #Golang </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              大数据分析相关工具
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2018-02-07
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2018/02/07/大数据分析相关工具/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/02/07/大数据分析相关工具/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h3 id="基础组件">基础组件</h3><ol>
+<li>Hadoop = HDFS + YARN + MapReduce；HDFS负责存储，YARN负责资源调度，依然发挥重要作用，MapReduce计算框架</li>
+<li>Hbase主要解决实时数据查询问题;Hive和Pig主要解决数据处理和计算问题，分别以SQL形式和脚本形式</li>
+<li><a href="https://www.zhihu.com/question/27974418/answer/156227565" target="_blank" rel="noopener">如何用形象的比喻描述大数据的技术生态？Hadoop、Hive、Spark 之间是什么关系？</a></li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/bigdata.jpg" class="full-image" width="100%"></p>
+<h4 id=""> </h4>
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/大数据/"> #大数据 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              投资中最简单的事---读后随记
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2018-01-11
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2018/01/11/投资中最简单的事---读后随记/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/01/11/投资中最简单的事---读后随记/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h3 id="序言">序言</h3><blockquote>
+<p>很多人都醉心于即时满足，却不懂得用延时满足去做交易  </p>
+</blockquote>
+<ul>
+<li><strong>Note</strong>: 面对眼前利益和诱惑隐忍的重要性，不然很难获得多倍收益,所谓的挥泪割肉和过早止盈往往由此产生</li>
+</ul>
+<blockquote>
+<p>理性只会迟到，不会缺席</p>
+<p>别人恐惧时我贪婪，别人贪婪时我恐惧</p>
+<p>贪婪有两种，一种是6000点明知贵了的时候还想等再涨点再卖，还有一种是在2000点的时候明知已经很便宜了还想等多跌一会儿再买入；从而造成不及时止盈和不及时建仓的情况，永远没有最好的买入和卖出点</p>
+<p>人多的地方不去</p>
+<p>最一致的时候就是最危险的时候</p>
+<p>一般只有在趋势的初期和末期，才是真理掌握在少数人手里的时候</p>
+<p>业余炒股者到职业投资者的几个必经阶段：<br>    跟庄炒作 —&gt; 定量投资+程序化交易 —&gt; 技术分析+财报分析基本面 —&gt; 个股到行业配置 —&gt; 成长性投资+价值低估投资</p>
+<p>成长投资关注公司未来价值远大于公司现在价值，着眼于未来收入和利润的高增长，需要的是远见；价值投资关注企业现在的资产、现金流，看公司现在价格是否远小于公司现在的价值，寻找便宜的好公司为重中之重。</p>
+<ol>
+<li><p>好公司的2个标准：</p>
+<ul>
+<li>定价权</li>
+<li>要么在做自己可以不断复制和规模化的事情，决定销售增速</li>
+<li>要么在做别人不可能复制的事情，决定利润率的高低和趋势</li>
+<li>也就是可规模化+门槛高(可持续性)</li>
+</ul>
+</li>
+<li><p>客观看待股价波动，只反映看客们的情绪波动，与企业价值无关。</p>
+</li>
+<li>买股票之前问问自己下跌之后敢不敢加仓，因为价格波动在所难免。</li>
+<li>股价的波动本质上只跟估值和流动性有关系。</li>
+<li>投资的两种风险，一种是丧失本金的风险，另一种是波动风险。</li>
+</ol>
+</blockquote>
+<h3 id="价值投资">价值投资</h3><blockquote>
+<ol>
+<li><p>食品安全事件是行业投资较好的买入点，特别是那些没有涉事的行业龙头，被波及的企业。</p>
+</li>
+<li><p>当市场上大幅出逃，大家都忙着斩仓的时候，一定会有被低估的好公司出现。只不过此时往往有钱的没胆了，有胆的没钱了。</p>
+</li>
+<li><p>进入有积累的行业</p>
+</li>
+<li><p>股票价格等于市盈率乘以利润</p>
+</li>
+<li><p>牛市里听到的都是好消息，熊市里听到的都是坏消息，你只听到你想听到的消息，所以一定要保持独立性</p>
+</li>
+<li><p>遛狗理论：价格围绕着价值波动，最终回归价值</p>
+</li>
+<li><p>高估值股票的平均回报率远不如低估值股票</p>
+</li>
+<li><p>一个东西只有足够的便宜，赚钱的概率就会高很多</p>
+</li>
+<li><p>买入一个好公司永远不会太迟，即使局势明朗之后还是会有空间</p>
+</li>
+<li><p>股市市场长期来看是均值回归的，低估值时高仓位，高估值时低仓位，一般当公募基金平均仓位达到88%以上，市场就是阶段性见顶；不要追涨杀跌，抄底和逃顶的概率极低，最好是以区间来做决断。</p>
+</li>
+<li><p>德州扑克与炒股的相似点：理解概率只是；注意风险控制；牌好下重注，牌差不下注；避免贪婪和恐惧；读懂对手心理。</p>
+</li>
+<li><p>股票大跌时意味着未来预期收益率上升，反之下降。</p>
+</li>
+<li><p>高估值股票往往还在财报出现前后出现巨大风险。因为期望越大，失望越大。</p>
+</li>
+<li><p>股市风险有两种，一种是感受到的风险，一种是真实的风险。股票暴涨时真实风险增大，但是大家感受到的风险反而小；股市下跌时感受到的风险大，但是实际风险小。</p>
+</li>
+<li><p>什么时候卖出股票？基本面恶化，价格达到目标价，有更好的其他投资；与目前是否亏损没有必然关系，忘掉你的买入成本，不要有心理账户，因为它根本不会影响股价未来走势。</p>
+</li>
+<li><p>一个好的荐股逻辑包括三点：估值、品质、时机</p>
+</li>
+<li><p>熬得住和跑得快是市场生存的两种方式</p>
+</li>
+<li><p>锚固偏见</p>
+</li>
+<li><p>互联网赢家通吃，买龙头股；差异化产品买品牌；同质化产品买成本低的。</p>
+</li>
+<li><p>经济和市场都一定是有周期的。股票能跌多深是由最恐慌的人决定的。</p>
+</li>
+</ol>
+</blockquote>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/投资理财/"> #投资理财 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              大型分布式网站架构设计与实践
             
           
         </h1>
@@ -240,7 +551,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2018/01/04/大型分布式网站架构设计与实践/#comments" >
+            <a href="../../2018/01/04/大型分布式网站架构设计与实践/#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2018/01/04/大型分布式网站架构设计与实践/"></span>
             </a>
           </span>
@@ -255,8 +566,7 @@
       
 
       
-        
-          <h3 id="SOA和RPC">SOA和RPC</h3><p>随着互联网规模发展，面向服务的体系架构(SOA)成为主流的架构方式，各个系统之间通过服务的方式进行交互，这样保证了交互的标准性，这对于一个复杂的大规模系统来说显得尤为重要，子系统之间能够标准清晰地互相配合与沟通。同时，随着数据规模的飞速发展，从单一应用架构，再到拆分成多个子系统，演变成垂直应用架构，最后演变成分布式应用架构。此时，在一个分布式系统中，如何实现节点之间的RPC调用方式？如何实现服务的动态发现与路由？如何实现软件层面的负载均衡(4层还是7层更优)？这些都将成为我们要解决的问题。</p>
+        <h3 id="SOA和RPC">SOA和RPC</h3><p>随着互联网规模发展，面向服务的体系架构(SOA)成为主流的架构方式，各个系统之间通过服务的方式进行交互，这样保证了交互的标准性，这对于一个复杂的大规模系统来说显得尤为重要，子系统之间能够标准清晰地互相配合与沟通。同时，随着数据规模的飞速发展，从单一应用架构，再到拆分成多个子系统，演变成垂直应用架构，最后演变成分布式应用架构。此时，在一个分布式系统中，如何实现节点之间的RPC调用方式？如何实现服务的动态发现与路由？如何实现软件层面的负载均衡(4层还是7层更优)？这些都将成为我们要解决的问题。</p>
 <h4 id="体系化认识RPC">体系化认识RPC</h4><p>远程过程调用(Remote Process Call): 简单地来说，就是client通过网络来调用server的地址空间上的函数/方法，就跟调本地方法一样简单便捷，这样就相当于扩展了client的能力。一个RPC框架的实现必须考虑的几个核心组件如下：  </p>
 <h4 id="RPC组成部分">RPC组成部分</h4><ul>
 <li><strong>传输协议</strong>：我们知道，七层网络协议栈中，从http到tcp，不过只是层层嵌套header而已，RPC传输的message可以只是TCP的body内容(也叫payload)，也可以是header+body，那么基于TCP还是基于HTTP来实现RPC呢？它们各有优劣：<ul>
@@ -385,7 +695,7 @@
 </li>
 <li><strong>中间劫持</strong>：用户数据在浏览器和百度服务器中间传输必须要经过的节点。比如WIFI热点，路由器，防火墙，反向代理，缓存服务器等，都可能出现劫持。例如，运营商的内容劫持是如何进行的，运营商会分析你的网络请求，它可以先于网站回包，也能修改数据包的内容。所以它可以让你跳转一次，在网址上加上小尾巴，也能在你访问的页面弹出小广告</li>
 </ol>
-<h5 id="图解https"><a href="http://www.cnblogs.com/zhuqil/archive/2012/07/23/2604572.html" target="_blank" rel="external">图解https</a></h5><h5 id="https对性能的影响">https对性能的影响</h5><ol>
+<h5 id="图解https"><a href="http://www.cnblogs.com/zhuqil/archive/2012/07/23/2604572.html" target="_blank" rel="noopener">图解https</a></h5><h5 id="https对性能的影响">https对性能的影响</h5><ol>
 <li>HTTPS会降低用户访问速度(协议交互所增加的网络RTT(round trip time+加解密相关的计算耗时30ms)，增加网站服务器的计算资源消耗；非对称密钥交换很安全，但同时也是HTTPS性能和速度严重降低的“罪魁祸首”。</li>
 </ol>
 <h5 id="优化策略">优化策略</h5><h6 id="HTTPS_访问速度优化">HTTPS 访问速度优化</h6><ol>
@@ -395,7 +705,7 @@
 <li><strong>Session ticket</strong>的原理参考RFC4507。简述如下：server将session信息加密成ticket发送给浏览器，浏览器后续握手请求时会发送 ticket，server 端如果能成功解密和处理 ticket，就能完成简化握手。显然，session ticket 的优点是不需要服务端消耗大量资源来存储 session 内容。</li>
 </ul>
 </li>
-<li><strong>HSTS(HTTP Strict Transport Security)</strong>。服务端返回一个HSTS的http header，浏览器获取到HSTS头部之后，在一段时间内，不管用户输入www.baidu.com还是<a href="http://www.baidu.com，都会默认将请求内部跳转成https://www.baidu.com。" target="_blank" rel="external">http://www.baidu.com，都会默认将请求内部跳转成https://www.baidu.com。</a></li>
+<li><strong>HSTS(HTTP Strict Transport Security)</strong>。服务端返回一个HSTS的http header，浏览器获取到HSTS头部之后，在一段时间内，不管用户输入www.baidu.com还是<a href="http://www.baidu.com，都会默认将请求内部跳转成https://www.baidu.com。" target="_blank" rel="noopener">http://www.baidu.com，都会默认将请求内部跳转成https://www.baidu.com。</a></li>
 <li>Ocsp stapling</li>
 <li>False start:原理就是在 client_key_exchange 发出时将应用层数据一起发出来，能够节省一个 RTT</li>
 <li>使用 SPDY 或者 HTTP2: SPDY 最大的特性就是多路复用，能将多个 HTTP 请求在同一个连接上一起发出去，不像目前的 HTTP 协议一样，只能串行地逐个发送请求。Pipeline 虽然支持多个请求一起发送，但是接收时依然得按照顺序接收，本质上无法解决并发的问题。</li>
@@ -511,17 +821,16 @@
 <li>MapReduce并行编程模型和计算框架</li>
 <li>Hbase主要解决实时海量数据查询问题</li>
 <li>Hive和Pig主要解决数据处理和计算问题，分别以SQL形式和脚本形式，例如通过HiveSQL写SQL查询语句，会转化成MR操作，不实时，主要用于离线分析。</li>
-<li><a href="https://www.zhihu.com/question/27974418/answer/156227565" target="_blank" rel="external">如何用形象的比喻描述大数据的技术生态？Hadoop、Hive、Spark 之间是什么关系？</a></li>
+<li><a href="https://www.zhihu.com/question/27974418/answer/156227565" target="_blank" rel="noopener">如何用形象的比喻描述大数据的技术生态？Hadoop、Hive、Spark 之间是什么关系？</a></li>
 </ul>
 </li>
 </ol>
 <h3 id="参考链接">参考链接</h3><ol>
-<li><a href="http://blog.csdn.net/historyasamirror/article/details/5778378" target="_blank" rel="external">IO - 同步，异步，阻塞，非阻塞</a></li>
-<li><a href="https://segmentfault.com/a/1190000003063859#articleHeader13" target="_blank" rel="external">四种IO与epoll</a></li>
+<li><a href="http://blog.csdn.net/historyasamirror/article/details/5778378" target="_blank" rel="noopener">IO - 同步，异步，阻塞，非阻塞</a></li>
+<li><a href="https://segmentfault.com/a/1190000003063859#articleHeader13" target="_blank" rel="noopener">四种IO与epoll</a></li>
 <li><a href="">大数据分析相关工具</a></li>
 </ol>
 
-        
       
     </div>
 
@@ -540,484 +849,6 @@
 
       
       
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2018/01/04/常用Linux网络:内存:磁盘分析工具/">
-                常用Linux网络/内存/磁盘分析工具
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2018-01-04
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2018/01/04/常用Linux网络:内存:磁盘分析工具/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/01/04/常用Linux网络:内存:磁盘分析工具/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="网络">网络</h3><h4 id="tcpdump">tcpdump</h4><pre><code># 抓取<span class="number">9100</span>端口，网卡xgbe0的TCP网络包信息，保存到<span class="keyword">aaa</span>.pcap
-tcpdump tcp port <span class="number">9100</span> -i xgbe0 -nn -s <span class="number">0</span> -XX -w <span class="keyword">aaa</span>.pcap
-
-# 指定目的或者源<span class="literal">ip</span>，可以使用<span class="keyword">and</span>，<span class="keyword">or</span>
-tcpdump -i eth0 src <span class="keyword">and</span> dst <span class="number">172.16</span><span class="string">.11</span><span class="string">.1</span> <span class="keyword">and</span> port <span class="number">80</span> -nn -s <span class="number">0</span> -XX -w <span class="keyword">aaa</span>.pcap
-
-# 指定主机
-tcpdump -i eth0 host <span class="number">172.16</span><span class="string">.11</span><span class="string">.1</span> <span class="keyword">and</span> port <span class="number">80</span> -nn -s <span class="number">0</span> -XX -w <span class="keyword">aaa</span>.pcap
-</code></pre><h4 id="wireshark分析网络包">wireshark分析网络包</h4><p>tcpdump保存的文件是二进制的文件，需要下载到本地用wireshark查看<br>过滤器<br>tcp.stream</p>
-<h3 id="CPU">CPU</h3><ol>
-<li><code>mpstat -P ALL 1 1</code> 查看cpu占用率；也可以<code>top</code>，然后1</li>
-</ol>
-<h3 id="内存">内存</h3><h4 id="top">top</h4><ol>
-<li><p><a href="http://blog.csdn.net/heizistudio/article/details/25125061" target="_blank" rel="external">top命令常用参数</a></p>
-</li>
-<li><p>P，M分别是按cpu和内存排序；mac系统使用o + 列名</p>
-</li>
-</ol>
-<h4 id="free">free</h4><p><code>free -g</code>：以GB为显示单位，也可以-m以MB为显示单位</p>
-<table>
-<thead>
-<tr>
-<th>name</th>
-<th>total</th>
-<th>used</th>
-<th>free</th>
-<th>shared</th>
-<th>buffers</th>
-<th>cached </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Mem:</td>
-<td>125</td>
-<td>125</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>109</td>
-<td></td>
-</tr>
-<tr>
-<td>-/+ buffers/cache:</td>
-<td></td>
-<td>15(上一行的used - buffers - cached)</td>
-<td>110(上一行的 free + buffers + cached)</td>
-</tr>
-<tr>
-<td>Swap:</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<p>对操作系统来讲，为了内存利用率最大化，会把剩余内存申请为cached，所以系统运行时间长了，cached就会比较大，对于频繁读写的系统就更加明显。used 和 free都是Mem的参数，所以 buffers/cached这两项对于操作系统来讲都是已经被使用的内存，所以呢 free的就比较少；</p>
-<p>而对于应用程序来说呢，buffers/cached等同于可用的内存，因为buffers/cached可提高程序执行的性能，当程序使用内存时，buffers/cached很快就会被使用。</p>
-<p>所以从应用程序的角度来看，应以（-/+ buffers/cached）的free 和 used为主，即我们主要与他相关的free和used就可以了  </p>
-<p>我们在观察Linux的内存使用情况时，只要没发现用swap的交换空间，就不必担心自己的内存太少。如果常常看到swap用了很多，那么你就要考虑加物理内存了，可以用<code>vmstat</code>查看swap IO状况。这也是在Linux服务器上看内存是否够用的标准。因为swap用的多，说明OS把本应该存在物理内存中的部分内存页调度到了磁盘，腾出空间给当前进程使用，等到其他进程运行时才会把这部分内存页再次调度到物理内存。</p>
-<h4 id="buffer/cache/shared_memory区别与联系">buffer/cache/shared memory区别与联系</h4><h4 id="pmap">pmap</h4><ol>
-<li>查看进程内存分布:<code>pmap -d 12345 # 12345 是进程号</code></li>
-</ol>
-<h4 id="清理linux_cache">清理linux cache</h4><p>Kernels 2.6.16 and newer provide a mechanism to have the kernel drop the page cache and/or inode and dentry caches on command, which can help free up a lot of memory.  </p>
-<p>This is a non-destructive operation and will only free things that are completely unused. Dirty objects will continue to be in use until written out to disk and are not freeable. If you run “sync” first to flush them out to disk, these drop operations will tend to free more memory.</p>
-<pre><code><span class="type">To</span> free pagecache:
-<span class="comment"># echo 1 &gt; /proc/sys/vm/drop_caches</span>
-
-<span class="type">To</span> free dentries <span class="keyword">and</span> inodes:
-<span class="comment"># echo 2 &gt; /proc/sys/vm/drop_caches</span>
-
-<span class="type">To</span> free pagecache, dentries <span class="keyword">and</span> inodes:
-echo <span class="number">3</span> &gt; /<span class="keyword">proc</span>/sys/vm/drop_caches
-</code></pre><blockquote>
-<p>遇到报错： <code>tcpdump: can&#39;t create rx ring on packet socket: cannot allocate memory</code>, 可以使用该命令清除cache</p>
-</blockquote>
-<h3 id="磁盘IO">磁盘IO</h3><h4 id="磁盘IOPS和Throughput">磁盘IOPS和Throughput</h4><ol>
-<li>磁盘的 IOPS，也就是在一秒内磁盘进行多少次 I/O 读写。磁盘的吞吐量，也就是每秒磁盘 I/O 的流量，即磁盘写入加上读出的数据的大小。每秒 I/O 吞吐量＝ IOPS* 平均 I/O SIZE</li>
-<li>随机读写频繁的应用，如OLTP(Online Transaction Processing)，IOPS是关键衡量指标；对于大量顺序读写的应用，如VOD(Video On Demand)，则更关注吞吐量指标。</li>
-</ol>
-<h4 id="影响IOPS的因素">影响IOPS的因素</h4><ol>
-<li>第一个<strong>寻址时间</strong>，考虑到被读写的数据可能在磁盘的任意一个磁道，既有可能在磁盘的最内圈(寻址时间最短)，也可能在磁盘的最外圈(寻址时间最长)，所以在计算中我们只考虑平均寻址时间，也就是磁盘参数中标明的那个平均寻址时间，这里就采用当前最多的10krmp硬盘的5ms。</li>
-<li>第二个<strong>旋转延时</strong>，和寻址一样，当磁头定位到磁道之后有可能正好在要读写扇区之上，这时候是不需要额外额延时就可以立刻读写到数据，但是最坏的情况确实要磁盘旋转整整一圈之后磁头才能读取到数据，所以这里我们也考虑的是平均旋转延时，对于10krpm的磁盘就是(60s/10k)*(1/2) = 2ms。</li>
-<li>第三个<strong>传送时间</strong>，磁盘参数提供我们的最大的传输速度，当然要达到这种速度是很有难度的，但是这个速度却是磁盘纯读写磁盘的速度，因此只要给定了单次 IO的大小，我们就知道磁盘需要花费多少时间在数据传送上，这个时间就是IO Chunk Size / Max Transfer Rate。</li>
-</ol>
-<h4 id="I/O_读写的类型">I/O 读写的类型</h4><p>大体上讲，I/O 的类型可以分为：读 / 写 I/O、大 / 小块 I/O、连续 / 随机 I/O, 顺序 / 并发 I/O。在这几种类型中，我们主要讨论一下：大 / 小块 I/O、连续 / 随机 I/O, 顺序 / 并发 I/O。</p>
-<h5 id="大_/_小块_I/O">大 / 小块 I/O</h5><p>这个数值指的是控制器指令中给出的连续读出扇区数目的多少。如果数目较多，如 64，128 等，我们可以认为是大块 I/O；反之，如果很小，比如 4，8，我们就会认为是小块 I/O，实际上，在大块和小块 I/O 之间，没有明确的界限。</p>
-<h5 id="连续_/_随机_I/O">连续 / 随机 I/O</h5><p>连续 I/O 指的是本次 I/O 给出的初始扇区地址和上一次 I/O 的结束扇区地址是完全连续或者相隔不多的。反之，如果相差很大，则算作一次随机 I/O</p>
-<p>连续 I/O 比随机 I/O 效率高的原因是：在做连续 I/O 的时候，磁头几乎不用换道，或者换道的时间很短；而对于随机 I/O，如果这个 I/O 很多的话，会导致磁头不停地换道，造成效率的极大降低。</p>
-<h5 id="顺序_/_并发_I/O">顺序 / 并发 I/O</h5><p>从概念上讲，并发 I/O 就是指向一块磁盘发出一条 I/O 指令后，不必等待它回应，接着向另外一块磁盘发 I/O 指令。对于具有条带性的 RAID（LUN），对其进行的 I/O 操作是并发的，例如：raid 0+1(1+0),raid5 等。反之则为顺序 I/O。</p>
-<h4 id="磁盘I/O那些事"><a href="https://tech.meituan.com/about_desk_io.html" target="_blank" rel="external">磁盘I/O那些事</a></h4><h4 id="Linux下的IO监控与分析"><a href="https://www.cnblogs.com/quixotic/p/3258730.html" target="_blank" rel="external">Linux下的IO监控与分析</a></h4><ol>
-<li><code>iostat -xdm 3</code>：磁盘IO状态</li>
-<li><a href="http://www.cnblogs.com/peida/archive/2012/12/28/2837345.html" target="_blank" rel="external">iostat命令输出详解</a></li>
-</ol>
-<h3 id="系统端口占用信息和进程信息">系统端口占用信息和进程信息</h3><ul>
-<li><code>ps aux</code>只能看到pid等信息，不能看到端口号</li>
-<li><code>lsof | grep pid/pname</code> 查看进程信息</li>
-<li><code>lsof -i:port</code>查看端口号port使用的进程号和连接情况</li>
-<li><code>lsof -i@ip:port</code>使用@host:port来显示指定到指定主机的连接</li>
-<li><code>lsof -iTCP</code>显示TCP连接</li>
-<li><code>lsof -c abc</code> 显示 abc 进程现在打开的文件</li>
-<li><code>lsof -p 12</code> 看进程号为 12 的进程打开了哪些文件</li>
-<li><code>netstat -np/c/atux | grep pid/port/pname</code>查看进程号所占用的端口号和端口占用情况</li>
-</ul>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Linux/"> #Linux </a>
-          
-            <a href="../../tags/阅读/"> #阅读 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2017/12/09/如何实现多个数据库分片的list_objects操作/">
-                如何实现多个数据库分片的list_objects操作
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2017-12-09
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2017/12/09/如何实现多个数据库分片的list_objects操作/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/09/如何实现多个数据库分片的list_objects操作/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h4 id="业务场景">业务场景</h4><p>我们需要实现一个类似于Linux中ls命令的功能，用户可以用该功能来查看的bucket里边object列表，这些object信息存储在mysql meta表和shard meta表中；正常情况下一个bucket中的所有object存储在一张meta表中；然而当一个bucket中的object数量十分庞大时，我们采用了水平分表的方式，将这些object通过哈希方式分散到了1024个shard meta表中，以避免单表行数过大带来的性能问题。  </p>
-<p>因此，ls功能的实现需要考虑以上两种情景，分别是单表和多表的list；list功能需要支持delimiter来折叠文件夹(类似于linux中ls命令，根据该参数来决定是否展开当前目录下的子目录)，marker来指定每次查询的起始位置，maxKeys来指定每次返回数目，prefix来筛选出以前缀开头的object。单表list我们可以直接采用mysql order来保证结果有序；如果object分散在了1024个shard meta表中，要每次拿出前n个就比较困难了，因为数据只是单表有序的，要想全局有序，就还得做一些处理。</p>
-<h4 id="分表hash方式">分表hash方式</h4><p>如何把很多object通过哈希方式分散到了1024个shard meta表中？如下代码所示，我们根据bucket和object构建一个url字符串，然后求MD5值，然后按4位做异或操作，最后对shard数目取模，就可以把object都随机分散到1024个表里了；MD5算法对原信息进行数学变换后得到的一个128位(bit)的特征码作为数据摘要，具有高度的离散性，原信息的一点点变化就会导致MD5的巨大变化。</p>
-<pre><code><span class="function"><span class="keyword">void</span> <span class="title">GenUrl</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; bucket, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; object, <span class="built_in">std</span>::<span class="built_in">string</span>&amp; url)</span> </span>{
-    url.append(<span class="string">"bs://"</span>);
-    url.append(bucket);
-    url.append(<span class="string">"/"</span>);
-    url.append(object);
-}
-
-<span class="function"><span class="keyword">int32_t</span> <span class="title">GetShardKey</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;bucket, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;object)</span> </span>{
-    <span class="built_in">std</span>::<span class="built_in">string</span> url = <span class="string">""</span>;
-    GenUrl(bucket, object, url);
-    <span class="built_in">std</span>::<span class="built_in">string</span> md5sum = MD5(url);
-    <span class="keyword">const</span> <span class="keyword">uint32_t</span> *p = <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">uint32_t</span>*&gt;(md5sum.data());
-    <span class="keyword">return</span> <span class="keyword">static_cast</span>&lt;<span class="keyword">int32_t</span>&gt;((p[<span class="number">0</span>]^p[<span class="number">1</span>]^p[<span class="number">2</span>]^p[<span class="number">3</span>]) % BUCKET_SHARD_NUM);
-}
-</code></pre><h4 id="单表list">单表list</h4><ul>
-<li><p><strong>解决方案</strong></p>
-<ul>
-<li>每次查询都是根据请求参数组装成一条SQL，查出需要的object  <code>select object, etag, size,…… from meta where bucket_id = * and shard_key = * order by object limit 0,1001</code></li>
-<li>针对子文件夹的折叠处理：<ul>
-<li>ls操作需要支持折叠文件夹操作，以免一个文件夹下边有很多子文件夹，而且子文件夹里有很多文件的时候，会导致多次ls也一直在一个子文件夹里边，支持折叠子文件夹，用户才可以ls出文件夹下边的所有子文件夹</li>
-<li>解决方案：当遇到子文件夹中文件多的时候，每次都能list出指定数目的objects，这些objects可能都是一个子文件中的文件；因为用户需要折叠子文件夹，因此我们进行跳过子文件夹的处理，极端情况下这批objects都在一个子文件夹中，此时我们需要根据最后一个object name来判断是否在子文件中，如果该批objects在子文件中，此时我们会对下次查询的起始位置做一个++操作，确保下次查询跳过这个已经获取了的子文件夹；如此进行三次重试，至少保证一次请求可以拿出3个子文件夹给用户</li>
-</ul>
-</li>
-<li>marker的处理：如果需要跳过文件夹，对marker++；例如正常情况下，object &gt; marker；如果要跳过文件夹，变成object &gt;= marker++</li>
-</ul>
-</li>
-<li><p><strong>核心代码</strong></p>
-<pre><code><span class="comment">// 需要跳过文件夹时对marker的处理</span>
-<span class="built_in">string</span> BucketModel::ProcessMarkerWithDelimiter(<span class="keyword">const</span> <span class="built_in">string</span>&amp; marker,
-                    <span class="keyword">const</span> <span class="built_in">string</span>&amp; prefix, <span class="keyword">char</span> delimiter) {
-    <span class="comment">//prefix empty, or prefix not empty and marker start with prefix</span>
-    <span class="keyword">if</span> (prefix.empty() || marker.compare(<span class="number">0</span>, prefix.length(), prefix) == <span class="number">0</span>) {
-        size_t pos = marker.find_first_of(delimiter, prefix.length());
-        <span class="built_in">string</span> new_marker;
-        <span class="keyword">if</span> (<span class="built_in">std</span>::<span class="built_in">string</span>::npos != pos) {
-            ++pos;
-            new_marker = marker.substr(<span class="number">0</span>, pos);
-            new_marker[new_marker.length()-<span class="number">1</span>]++;
-            <span class="keyword">return</span> new_marker;
-        } <span class="keyword">else</span> {
-            <span class="keyword">return</span> marker;
-        }
-    }
-    <span class="keyword">return</span> marker;
-}
-</code></pre></li>
-</ul>
-<h4 id="多表list">多表list</h4><ul>
-<li><p><strong>解决方案</strong></p>
-<ul>
-<li>利用Golang携程并发发送1024个shardMeta的list请求，也就是1024次SQL查询，拿到1024个请求结果之后，对结果做归并和提取处理，最终得出与单表listObject接口逻辑一致的结果。</li>
-</ul>
-</li>
-<li><p><strong>核心代码</strong></p>
-<pre><code>// merge two <span class="type">ObjectInfo</span> struct <span class="keyword">type</span> slice, max length <span class="keyword">is</span> maxKeys
-func merge(maxKeys <span class="type">int</span>, left, right []<span class="type">ObjectInfo</span>) []<span class="type">ObjectInfo</span> {
-    <span class="keyword">var</span> <span class="literal">result</span> []<span class="type">ObjectInfo</span>
-
-    <span class="keyword">for</span> len(left) &gt; <span class="number">0</span> || len(right) &gt; <span class="number">0</span> {
-        <span class="keyword">if</span> len(left) == <span class="number">0</span> {
-            <span class="literal">result</span> = append(<span class="literal">result</span>, right...)
-            <span class="keyword">break</span>
-        }
-        <span class="keyword">if</span> len(right) == <span class="number">0</span> {
-            <span class="literal">result</span> = append(<span class="literal">result</span>, left...)
-            <span class="keyword">break</span>
-        }
-        <span class="keyword">if</span> left[<span class="number">0</span>].<span class="type">Key</span> &lt;= right[<span class="number">0</span>].<span class="type">Key</span> {
-            <span class="literal">result</span> = append(<span class="literal">result</span>, left[<span class="number">0</span>])
-            left = left[<span class="number">1</span>:]
-        } <span class="keyword">else</span> {
-            <span class="literal">result</span> = append(<span class="literal">result</span>, right[<span class="number">0</span>])
-            right = right[<span class="number">1</span>:]
-        }
-        <span class="keyword">if</span> len(<span class="literal">result</span>) &gt;= maxKeys {
-            <span class="keyword">return</span> <span class="literal">result</span>[<span class="number">0</span>:maxKeys]
-        }
-    }
-    <span class="keyword">if</span> len(<span class="literal">result</span>) &gt;= maxKeys {
-        <span class="keyword">return</span> <span class="literal">result</span>[<span class="number">0</span>:maxKeys]
-    }
-    <span class="keyword">return</span> <span class="literal">result</span>
-}
-</code></pre></li>
-<li><p><strong>方案重难点</strong></p>
-<ul>
-<li><p><strong>Cache嗅探机制</strong>：<br>List ShardMeta每次会通过VIP从Bucket取回1024个表数据，为了提高请求响应速度，当请求频率达到阈值时，这1024个表的数据会分别以ApiType+Bucket+ShardKey为key保存到Cache中，如何在充分利用Cache降低请求响应速度和对数据库压力的同时，也尽量减少与Cache之间的通信显得尤为重要。  </p>
-<p>  在充分考虑了系统Cache的实现机制之后，设计了预读取方案来降低与Cache之间的通信次数，将1024个ShardMeta的请求任务队列切割出一小部分(10个)作为嗅探Cache的任务，多个goroutine并发去读Cache，如果嗅探Cache的ShardMeta都能读取到，说明Cache中能读到1024个表数据，可以继续读Cache，否则后续请求都直接请求数据库，不再读Cache，这样可以把每次List Shard请求<span style="color:red">读Cache的次数从1024次降低到10次</span>。  </p>
-</li>
-<li><p><strong>性能优化</strong>：<br>List ShardMeta是一个重请求，相当于所有操作开销都放大1024倍，然而又必须满足客户对耗时的要求，我主要从以下几个方面做了性能优化 </p>
-<p>  <strong>减少互斥锁粒度，充分利用Golang atomic函数</strong>：在归并1024个表数据时，只给归并过程和写最终结果的少量代码加锁，利用atomic变量做全局信号量，保证变量操作的原子性  </p>
-<p>  <strong>并发Goroutine发送请求和进行Json-Struct转换</strong>：利用Golang Goroutine给Bucket并发发请求，加快网络请求速度；归并结果时需要多次进行byte数组和Struct之间的转换，而Golang自带json库函数效率低，也将该过程利用Goroutine来并发完成，加快转换速度</p>
-<p>  <strong>通过VIP分发请求</strong>：1024个请求如果并发到本机Bucket服务，会对本机服务造成巨大压力，而且由于单进程资源有限，会导致响应速度很慢。因此采用了将1024个请求发送给VIP的方式，均衡地分散到服务集群数千台机器上，保证了处理速度，降低了单机压力 </p>
-</li>
-<li><p><strong>异常处理机制</strong>：<br>List ShardMeta每次1024个数据库请求，如果有一个请求遇到网络超时等错误，返回结果不正常，就会导致整个请求返回结果有误；因此我采用了标志量和超时机制来实现异常处理，一旦单个请求出现异常，标志量置位TRUE，其他请求不再继续；同时采用Goroutine等待超时信号量的方式来处理超时情况，如果工作任务出现错误，一旦从任务通道取不到任务超过50ms，Goroutine自动结束操作，给用户返回错误提示</p>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="json转换函数性能低的解决方案">json转换函数性能低的解决方案</h4><p>Golang自带json Unmarshal函数转化包含1000个obj的list object接口返回结果时，耗时10ms，效率很低；主要有<strong>两种解决方案</strong>：</p>
-<ul>
-<li>一种是减少转化次数以及缩小锁的范围，并发地去做转化</li>
-<li>另一种是使用开源库，性能能够提升2-4倍，例如easyjson，ffjson</li>
-</ul>
-<h4 id="并发等待是等goroutine还是Channel">并发等待是等goroutine还是Channel</h4><p>Goroutine一般会结合WaitGroup来使用，wg相当于一个同步信号量，等到wg减到0，才开始下一步的逻辑</p>
-<ul>
-<li>如果wg等待goroutine，也就是说先给wg.add(Goroutine数目)，然后使用<code>defer this.wg.Done()</code>和<code>return</code>来指定当函数结束(也意味着Goroutine结束)时就给wg减一，这样能确保最终协程都结束时，wg也不再等待，开始下一步的逻辑</li>
-<li>如果wg等待channel里边的任务，会存在一些异常问题，例如channel任务没被消费完，Goroutine都异常中止了，那么wg永远等不到减到0的那一刻，程序就会hang住了</li>
-</ul>
-<h4 id="耗时正比例增加因为多打了log">耗时正比例增加因为多打了log</h4><p>上线之后从某一天开始发现list请求耗时突增到上线时的6倍，非常奇怪，而且耗时随着每次请求数据量的增加而增加，经过git diff版本分析代码，发现是后续debug增加了几行日志打印，打印数据为每个shardMeta返回的数据，而且打印日志的代码被mutex互斥锁锁住，也就意味着每次要串行打印n个object数据，打印1024次，每次耗时10ms，从而导致耗时剧增；后来删除log之后耗时恢复到正常水平 </p>
-<h4 id="Golang相关技术和踩坑">Golang相关技术和踩坑</h4><h5 id="defer和WaitGroup">defer和WaitGroup</h5><ol>
-<li>在Golang中，defer表达式通常用来处理一些清理和释放资源的操作。defer后面的表达式会被放入一个列表中，在当前方法返回的时候，列表中的表达式就会被执行。一个方法中可以在一个或者多个地方使用defer表达式</li>
-<li>defer表达式中变量的值在defer表达式被定义时就已经明确</li>
-<li>defer表达式的调用顺序是按照先进后出的方式</li>
-<li>defer还可以用于在 return 之后修改函数的返回值</li>
-<li>Go语言中, panic用于抛出异常, recover用于捕获异常. </li>
-</ol>
-<h4 id="参考链接">参考链接</h4><p>1.<a href="https://xiaozhou.net/something-about-defer-2014-05-25.html" target="_blank" rel="external">Golang中defer的那些事</a></p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Golang/"> #Golang </a>
-          
-            <a href="../../tags/Mysql/"> #Mysql </a>
-          
-            <a href="../../tags/databse/"> #databse </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2017/12/09/Mysql 长连接与短连接/">
-                Mysql 长连接与短连接
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2017-12-09
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2017/12/09/Mysql 长连接与短连接/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/09/Mysql 长连接与短连接/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h4 id="概念说明">概念说明</h4><ol>
-<li><strong>短连接</strong>：是指程序和数据库通信时需要建立连接，执行操作后，连接关闭。短连接简单来说就是每一次操作数据库，都要打开和关闭数据库连接，基本步骤是：连接→数据传输→关闭连接。</li>
-<li><strong>长连接</strong>：是指程序之间的连接在建立之后，就一直打开，被后续程序重用，基本步骤是：连接→数据传输→保持连接→数据传输……。使用长连接的初衷是减少连接的开销，尽管MySQL的连接比其他数据库要快得多。长连接在没有数据通信时，定时发送数据包，以维持连接状态。</li>
-<li><strong>数据库连接池</strong>：是一些网络代理服务或应用服务器实现的特性，如J2EE服务器，它实现了一个持久连接的“池”，允许其他程序、客户端来连接，这个连接池将被所有连接的客户端共享使用，连接池可以节省打开数据库的时间，加速连接，也可以减少数据库连接，降低数据库服务器的负载；它是预先打开N个数据库连接，把它们缓存起来，当需要使用数据库的时候就直接使用这些已经打开的连接，节省时间</li>
-<li><strong>J2EE数据库连接池的原理</strong>：<ul>
-<li>J2EE服务器启动时会建立一定数量的池连接，并一直维持不少于此数目的池连接。</li>
-<li>客户端程序需要连接时，池驱动程序会返回一个未使用的池连接并将其表记为忙。</li>
-<li>如果当前没有空闲连接，池驱动程序就新建一定数量的连接，新建连接的数量由配置参数决定。</li>
-<li>当使用的池连接调用完成后，池驱动程序将此连接表记为空闲，其他调用就可以使用这个连接。</li>
-</ul>
-</li>
-</ol>
-<h4 id="适用场景">适用场景</h4><ol>
-<li><strong>长连接优劣势</strong><ul>
-<li>从客户端的角度来说，使用长连接可以不用每次创建新连接，若客户端对MySQL服务器的连接请求很频繁，永久连接将更加高效。</li>
-<li>从服务器的角度来看，情况则略有不同，它可以节省创建连接的开销，但维持连接也是需要内存的。如果滥用长连接的话，可能会使用过多的MySQL服务器连接。现代的操作系统可以拥有几千个MySQL连接，但很有可能绝大部分都是睡眠（sleep）状态的，这样的工作方式不够高效，而且连接占据内存，也会导致内存的浪费。</li>
-</ul>
-</li>
-<li><strong>长连接主要用于在少数客户端与服务端的频繁通信</strong>，因为这时候如果用短连接频繁通信常会发生Socket出错，并且频繁创建Socket连接也是对资源的浪费；但是对于服务端来说，长连接也会耗费一定的资源，需要专门的线程（unix下可以用进程管理）来负责维护连接状态。</li>
-<li><strong>长连接</strong>是一些驱动、驱动框架、ORM工具的特性，由驱动来保持连接句柄的打开，以便后续的数据库操作可以重用连接，从而减少数据库的连接开销。而<strong>连接池</strong>是应用服务器的组件，它可以通过参数来配置连接数、连接检测、连接的生命周期等。</li>
-</ol>
-<h4 id="注意事项">注意事项</h4><ol>
-<li>我们一般使用mysql -uroot -p只不过是使用了管理员的身份来创建一个connection，从而登录mysql，mysql的连接过程，内部实际上是经过tcp/ip协议的，当然mysql封装了tcp/ip有自己的一套协议。mysql是会创建一个线程来处理到来的连接的，我们可以在mysql中show status;然后在连接mysql，再次show status就可以看到Thread_connected的数量会增加1</li>
-<li>在生产繁忙的系统中，连接也可能会受到系统端口数的限制，如果要每秒建立几千个连接，那么连接断开后，端口不会被马上回收利用，必须经历一个“FIN”阶段的等待，直到可被回收利用为止，这样就可能会导致端口资源不够用。</li>
-<li>如果客户端和MySQL数据库之间有连接池或Proxy代理，一般在客户端推荐使用短连接。对于长连接的使用一定要慎重，不可滥用</li>
-<li>如果使用了长连接而长期没有对数据库进行任何操作，那么在timeout值(默认8小时)后，mysql server就会关闭此连接，而客户端在执行查询的时候就会得到一个类似于“MySQL server has gone away“这样的错误。在使用mysql_real_connect连接数据库之后，再使用mysql_options( &amp;mysql, MYSQL_OPT_RECONNECT, … ) 来设置为自动重连。</li>
-</ol>
-<h4 id="常用工具">常用工具</h4><ol>
-<li>查看mysql连接数：<code>mysqladmin -uroot -p  processlist</code></li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Mysql/"> #Mysql </a>
-          
-            <a href="../../tags/databse/"> #databse </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
     </div>
   </div>
 
@@ -1027,7 +858,7 @@ func merge(maxKeys <span class="type">int</span>, left, right []<span class="typ
 
   
   <div class="pagination">
-    <a class="extend prev" rel="prev" href="../2/">&laquo;</a><a class="page-number" href="../..//">1</a><a class="page-number" href="../2/">2</a><span class="page-number current">3</span><a class="page-number" href="../4/">4</a><span class="space">&hellip;</span><a class="page-number" href="../16/">16</a><a class="extend next" rel="next" href="../4/">&raquo;</a>
+    <a class="extend prev" rel="prev" href="../2/">&laquo;</a><a class="page-number" href="../../">1</a><a class="page-number" href="../2/">2</a><span class="page-number current">3</span><a class="page-number" href="../4/">4</a><span class="space">&hellip;</span><a class="page-number" href="../17/">17</a><a class="extend next" rel="next" href="../4/">&raquo;</a>
   </div>
 
 
@@ -1054,28 +885,28 @@ func merge(maxKeys <span class="type">int</span>, left, right []<span class="typ
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../..//categories">
+            <a href="../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

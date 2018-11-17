@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="Linux," />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="Linux,">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../../../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../../favicon.ico?v=0.4.2">
 
 
 
@@ -69,7 +69,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -85,40 +85,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../../../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../../../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../../../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../../../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../../../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -174,7 +174,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="#comments" >
+            <a href="#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/26/Linux操作系统基础知识/"></span>
             </a>
           </span>
@@ -189,7 +189,13 @@
       
 
       
-        <h3 id="Linux进程调度机制">Linux进程调度机制</h3><ol>
+        <h3 id="Linux程序/进程/文件">Linux程序/进程/文件</h3><ol>
+<li>程序是存在文件中的机器指令及其数据的序列，编译器将高级语言编写的源代码编译成CPU可执行的二进制可执行文件。</li>
+<li>进程存在于用户空间，用户空间是存放运行中程序和他们的数据的一部分内存空间。</li>
+<li>进程运行在内存中，内存实际是一个很大的字节数组，对应着内存条上的所有二进制内存位置，进程并不占用连续的内存位置，内核帮进程找到可用的空闲内存页来保存它的机器指令和数据，并建立数据结构来保存内存分配情况和进程属性。</li>
+<li>shell是新建一个进程来执行命令行程序，通过fork创建一个和原进程一模一样的新进程，通过execvp来调用指定程序代码覆盖fork出来的进程的代码并执行</li>
+</ol>
+<h3 id="Linux进程调度机制">Linux进程调度机制</h3><ol>
 <li>Linux的进程调度算法基本上是<strong>基于优先级的时间片轮转法</strong>，将CPU时间分片，给每个可运行进程分配一片，目的就是既能够实现进程之间的抢占，又不至于让低优先级的进程被饿死。。每个进程在创建之初有一个基本的优先级，执行期间调度系统会动态调整它的优先级，交互性高的任务会获得一个高的动态优先级，而交互性低的任务获得一个低的动态优先级；在较长的时间间隔内没有使用CPU的进程，通过动态地增加它们的优先级来提升它们。相应地，对于已经在CPU上运行了较长时间的进程，通过减少它们的优先级来处罚它们。</li>
 <li>Linux系统中进程调度操作由一个只在内核态运行的函数schedule()函数执行，该函数代码为所有进程共享；进程控制块PCB(Process ControlBlock)是系统中最为重要的数据结构之一。用来存放进程所必需的各种信息，PCB用结构task—struct来表示，包括进程的类型、进程状态、优先级、时钟信息等。</li>
 <li>Linux中设置了进程调度标志need—resched ，当标志为1时，可执行调度程序．通常，Linux 调度时机分以下两种情况：(1)<strong>主动调度</strong>：指显式调用schedule() 函数明确释放CPU ，引起新一轮调度．一般发生在当前进程状态改变，如：进程终止、进程睡眠、进程对某些信号处理过程中等(2)<strong>被动调度</strong>：指不显示调用schedule() 函数，只是PCB 中的need_resched 进程调度标志，该域置位为1 将引起新的进程调度  (3)三种情况：<strong>中断处理过程（包括时钟中断、I/O中断、系统调用和异常）</strong>中，直接调用schedule()，或者返回用户态时根据need_resched标记调用schedule()；<strong>内核线程</strong>可以直接调用schedule()进行进程切换，也可以在中断处理过程中进行调度，也就是说内核线程作为一类的特殊的进程可以主动调度，也可以被动调度；<strong>用户态进程</strong>无法实现主动调度，仅能通过陷入内核态后的某个时机点进行调度，即在中断处理过程中进行调度 </li>
@@ -203,82 +209,44 @@
 </ul>
 </li>
 </ol>
-<h3 id="Linux内存管理机制">Linux内存管理机制</h3><p>Linux中无论物理内存有多大，都将其充份利用，将一些程序调用过的硬盘数据读入内存，利用内存读写的高速特性来提高Linux系统的数据访问性能；<strong>页高速缓存(cache)</strong>是Linux内核实现的一种主要磁盘缓存。它主要用来减少对磁盘的I/O操作。是通过把磁盘中的数据缓存到物理内存中，把对磁盘的访问变为对物理内存的访问。查看内存状态命令<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;1. **&#29289;&#29702;&#20869;&#23384;**&#23601;&#26159;&#31995;&#32479;&#30828;&#20214;&#25552;&#20379;&#30340;&#20869;&#23384;&#22823;&#23567;&#65292;&#26159;&#30495;&#27491;&#30340;&#20869;&#23384;&#65292;&#30456;&#23545;&#20110;&#29289;&#29702;&#20869;&#23384;&#65292;**&#34394;&#25311;&#20869;&#23384;**&#23601;&#26159;&#20026;&#20102;&#28385;&#36275;&#29289;&#29702;&#20869;&#23384;&#30340;&#19981;&#36275;&#32780;&#25552;&#20986;&#30340;&#31574;&#30053;&#65292;&#23427;&#26159;&#21033;&#29992;&#30913;&#30424;&#31354;&#38388;&#34394;&#25311;&#20986;&#30340;&#19968;&#22359;&#36923;&#36753;&#20869;&#23384;&#65292;&#29992;&#20316;&#34394;&#25311;&#20869;&#23384;&#30340;&#30913;&#30424;&#31354;&#38388;&#34987;&#31216;&#20026;**&#20132;&#25442;&#31354;&#38388;&#65288;Swap Space)**;**&#34394;&#25311;&#20869;&#23384;**&#20316;&#20026;&#29289;&#29702;&#20869;&#23384;&#30340;&#25193;&#23637;&#65292;linux&#20250;&#22312;&#29289;&#29702;&#20869;&#23384;&#19981;&#36275;&#26102;&#65292;&#20351;&#29992;&#34394;&#25311;&#20869;&#23384;&#65292;&#26356;&#35814;&#32454;&#30340;&#35828;&#65292;&#23601;&#26159;Linux&#20869;&#26680;&#20250;&#23558;&#26242;&#26102;&#19981;&#29992;&#30340;&#29289;&#29702;&#20869;&#23384;&#22359;&#20449;&#24687;&#20889;&#21040;&#20132;&#25442;&#31354;&#38388;&#65292;&#36825;&#26679;&#20197;&#26469;&#65292;&#29289;&#29702;&#20869;&#23384;&#24471;&#21040;&#20102;&#37322;&#25918;&#65292;&#36825;&#22359;&#20869;&#23384;&#23601;&#21487;&#20197;&#29992;&#20110;&#20854;&#23427;&#30446;&#30340;&#65292;&#24403;&#38656;&#35201;&#29992;&#21040;&#21407;&#22987;&#30340;&#20869;&#23481;&#26102;&#65292;&#36825;&#20123;&#20449;&#24687;&#20250;&#34987;&#37325;&#26032;&#20174;&#20132;&#25442;&#31354;&#38388;&#35835;&#20837;&#29289;&#29702;&#20869;&#23384;&#12290;&#10;2. Linux&#30340;&#20869;&#23384;&#31649;&#29702;&#37319;&#21462;&#30340;&#26159;**&#20998;&#39029;&#23384;&#21462;&#26426;&#21046;**&#65292;&#20026;&#20102;&#20445;&#35777;&#29289;&#29702;&#20869;&#23384;&#33021;&#24471;&#21040;&#20805;&#20998;&#30340;&#21033;&#29992;&#65292;&#20869;&#26680;&#20250;&#22312;&#36866;&#24403;&#30340;&#26102;&#20505;&#23558;&#29289;&#29702;&#20869;&#23384;&#20013;&#19981;&#32463;&#24120;&#20351;&#29992;&#30340;&#25968;&#25454;&#22359;&#33258;&#21160;&#20132;&#25442;&#21040;&#34394;&#25311;&#20869;&#23384;&#20013;&#65292;&#32780;&#23558;&#32463;&#24120;&#20351;&#29992;&#30340;&#20449;&#24687;&#20445;&#30041;&#21040;&#29289;&#29702;&#20869;&#23384;&#12290;Linux&#31995;&#32479;&#20250;&#19981;&#26102;&#30340;&#36827;&#34892;&#39029;&#38754;&#20132;&#25442;&#25805;&#20316;&#65292;&#20197;&#20445;&#25345;&#23613;&#21487;&#33021;&#22810;&#30340;&#31354;&#38386;&#29289;&#29702;&#20869;&#23384;&#65292;&#21363;&#20351;&#24182;&#27809;&#26377;&#20160;&#20040;&#20107;&#24773;&#38656;&#35201;&#20869;&#23384;&#65292;Linux&#20063;&#20250;&#20132;&#25442;&#20986;&#26242;&#26102;&#19981;&#29992;&#30340;&#20869;&#23384;&#39029;&#38754;&#12290;&#36825;&#21487;&#20197;&#36991;&#20813;&#31561;&#24453;&#20132;&#25442;&#25152;&#38656;&#30340;&#26102;&#38388;&#65307;Linux&#36827;&#34892;**&#39029;&#38754;&#20132;&#25442;**&#26159;&#26377;&#26465;&#20214;&#30340;&#65292;&#19981;&#26159;&#25152;&#26377;&#39029;&#38754;&#22312;&#19981;&#29992;&#26102;&#37117;&#20132;&#25442;&#21040;&#34394;&#25311;&#20869;&#23384;&#65292;linux&#20869;&#26680;&#26681;&#25454;&#8221;&#26368;&#36817;&#26368;&#32463;&#24120;&#20351;&#29992;&#8220;&#31639;&#27861;&#65292;&#20165;&#20165;&#23558;&#19968;&#20123;&#19981;&#32463;&#24120;&#20351;&#29992;&#30340;&#39029;&#38754;&#25991;&#20214;&#20132;&#25442;&#21040;&#34394;&#25311;&#20869;&#23384;&#10;3. **&#36923;&#36753;&#22320;&#22336;**&#26159;&#23545;&#24212;&#29992;&#31243;&#24207;&#32780;&#35328;&#30340;&#65292;&#19968;&#33324;&#20197;Seg:Offset&#27573;&#20869;&#20559;&#31227;&#26469;&#34920;&#31034;&#65307;**&#32447;&#24615;&#22320;&#22336;**&#26159;CPU&#25152;&#33021;&#23547;&#22336;&#30340;&#31354;&#38388;&#25110;&#32773;&#33539;&#22260;&#65292;&#26159;&#36923;&#36753;&#22320;&#22336;&#21040;&#29289;&#29702;&#22320;&#22336;&#21464;&#25442;&#20043;&#38388;&#30340;&#20013;&#38388;&#23618;&#65307;**&#29289;&#29702;&#22320;&#22336;**&#26159;&#26426;&#22120;&#20013;&#23454;&#38469;&#30340;&#20869;&#23384;&#22320;&#22336;,&#25442;&#35328;&#20043;&#65292;&#26159;&#26426;&#22120;&#20013;&#30340;&#20869;&#23384;&#23481;&#37327;&#33539;&#22260;&#10;4. **&#36923;&#36753;&#22320;&#22336; -&#65288;&#27573;&#34920;&#65289;-&#62; &#32447;&#24615;&#22320;&#22336; &#8212; &#65288;&#39029;&#34920;&#65289;&#8212;&#62; &#29289;&#29702;&#22320;&#22336;&#30340;&#36716;&#25442;&#36807;&#31243;(&#30001;&#22823;&#21040;&#23567;)**&#65306;CPU&#23558;&#19968;&#20010;&#34394;&#25311;&#20869;&#23384;&#31354;&#38388;&#20013;&#30340;&#22320;&#22336;&#36716;&#25442;&#20026;&#29289;&#29702;&#22320;&#22336;&#65292;&#38656;&#35201;&#36827;&#34892;&#20004;&#27493;&#65306;&#39318;&#20808;&#23558;&#19968;&#20010;&#36923;&#36753;&#22320;&#22336;&#65288;&#20854;&#23454;&#26159;&#27573;&#20869;&#20559;&#31227;&#37327;&#65289;&#65292;CPU&#35201;&#21033;&#29992;&#20854;&#27573;&#24335;&#20869;&#23384;&#31649;&#29702;&#21333;&#20803;&#65292;&#20808;&#23558;&#36923;&#36753;&#22320;&#22336;&#21152;&#19978;&#30456;&#24212;&#27573;&#30340;&#22522;&#22320;&#22336;&#36716;&#25442;&#25104;&#19968;&#20010;&#32447;&#24615;&#22320;&#22336;&#65307;&#22914;&#26524;&#21551;&#29992;&#20102;&#20998;&#39029;&#26426;&#21046;&#65292;&#20877;&#21033;&#29992;&#20854;&#39029;&#24335;&#20869;&#23384;&#31649;&#29702;&#21333;&#20803;&#65292;&#36890;&#36807;&#26597;&#35810;&#39029;&#34920;&#26469;&#23558;&#32447;&#24615;&#22320;&#22336;&#36716;&#25442;&#20026;&#26368;&#32456;&#29289;&#29702;&#22320;&#22336;&#65307;&#33509;&#27809;&#26377;&#21551;&#29992;&#20998;&#39029;&#26426;&#21046;&#65292;&#37027;&#20040;&#32447;&#24615;&#22320;&#22336;&#30452;&#25509;&#23601;&#26159;&#29289;&#29702;&#22320;&#22336; [Link](http://laoxu.blog.51cto.com/4120547/1166661)&#10;5. &#19981;&#21516;&#30340;&#36923;&#36753;&#22320;&#22336;&#21487;&#20197;&#26144;&#23556;&#21040;&#21516;&#19968;&#20010;&#32447;&#24615;&#22320;&#22336;&#19978;&#65307;&#19981;&#21516;&#30340;&#32447;&#24615;&#22320;&#22336;&#20063;&#21487;&#20197;&#26144;&#23556;&#21040;&#21516;&#19968;&#20010;&#29289;&#29702;&#22320;&#22336;&#19978;&#65307;&#25152;&#20197;&#26159;&#22810;&#23545;&#19968;&#30340;&#20851;&#31995;&#12290;&#21478;&#22806;&#65292;&#21516;&#19968;&#20010;&#32447;&#24615;&#22320;&#22336;&#65292;&#22312;&#21457;&#29983;&#25442;&#39029;&#20197;&#21518;&#65292;&#20063;&#21487;&#33021;&#34987;&#37325;&#26032;&#35013;&#36733;&#21040;&#21478;&#22806;&#19968;&#20010;&#29289;&#29702;&#22320;&#22336;&#19978;&#12290;&#25152;&#20197;&#36825;&#31181;&#22810;&#23545;&#19968;&#30340;&#26144;&#23556;&#20851;&#31995;&#20063;&#20250;&#38543;&#26102;&#38388;&#21457;&#29983;&#21464;&#21270;&#12290;&#10;&#10;### Linux&#24120;&#29992;&#21629;&#20196;&#10;1. **ps -ef|grep java** &#65306;&#26597;&#25214;&#36816;&#34892;&#20013;&#30340;Java&#36827;&#31243;&#10;2. **top -p 345**: &#26597;&#30475;&#25351;&#23450;pid=345&#30340;&#36827;&#31243;,&#22312;mac&#20013;&#29992;-pid&#20195;&#26367;-p&#10;3. **ps -A**: &#26174;&#31034;&#25152;&#26377;&#31243;&#24207;&#10;4. **ps -a**: &#26174;&#31034;&#25152;&#26377;&#32456;&#31471;&#26426;&#19979;&#25191;&#34892;&#30340;&#31243;&#24207;&#65292;&#38500;&#20102;&#38454;&#27573;&#20316;&#19994;&#39046;&#23548;&#32773;&#20043;&#22806;&#10;4.  **kill -9 345**: &#26432;&#27515;pid=345&#30340;&#36827;&#31243;&#10;5.  **ifconfig**: &#26597;&#30475;&#33258;&#24049;&#30340;IP&#22320;&#22336; &#10;6.  **telnet**: &#36828;&#31243;&#30331;&#24405;; telnet hostname&#10;7. **rsync**&#26159;&#36828;&#31243;&#21644;&#26412;&#22320;&#22312;Linux / Unix&#31995;&#32479;&#20013;&#22797;&#21046;&#21644;&#21516;&#27493;&#25991;&#20214;&#21644;&#30446;&#24405;&#30340;&#26368;&#24120;&#29992;&#21629;&#20196;&#10;&#9;* &#29992;&#27861;```rsync options source destination</span><br></pre></td></tr></table></figure></p>
-<pre><code>* 优势：rsync能有效地将文件复制到远程系统或从远程系统同步到本地，支持复制链接，设备，所有者，组和权限；相对于scp命令，rsync使用远程更新协议，允许转让只是两套文件之间的差异。 第一次，它从源到目标复制文件或目录的整个内容，但从下一次，它只将已更改的块和字节复制到目标。rsync消耗更少的带宽 ，因为它使用压缩和解压缩方法在发送和接收数据两端。更加安全，可以使用scp、ssh等方式来传输文件，当然也可以通过直接的socket连接，还支持匿名传输。
-* 案例：
-
-        /* -v：详细
-    ​        -r：将数据递归（但不保存时间戳和权限，同时传输数据
-    ​        -a：--archive归档模式下，归档模式允许递归地拷贝文件，同时也保留了符号链接，文件权限，用户组所有权和时间戳等所有文件属性，等于-rlptgoD
-    ​        -z：压缩文件中的数据
-    ​        -h：在人类可读的格式人类可读，输出数字
-    ​        -progress 选项。 它显示完成传输的文件和剩余时间。
-    ​        -e ssh 指定ssh协议传输
-    ​        --remove-<span class="literal">source</span>-files 成功传输后自动删除源文件
-    ​        
-        */
-
-        // 拷贝本地文件。当<span class="constant">S</span>RC和<span class="constant">D</span>ES路径信息都不包含有单个冒号<span class="string">":"</span>分隔符时就启动这种工作模式
-        rsync -a  ./test.c  /<span class="literal">backup</span>
-
-        //用一个远程<span class="literal">shell</span>程序(如rsh、ssh)来实现将本地机器的内容拷贝到远程机器,当<span class="constant">D</span>ES路径地址包含单个冒号<span class="string">":"</span>分隔符时启动该模式
-        rsync -avz  test.c  <span class="keyword">user</span>@<span class="number">172.16</span>.<span class="number">0</span>.<span class="number">11</span>:/<span class="literal">home</span>/<span class="keyword">user</span>/src
-
-        // 用一个远程<span class="literal">shell</span>程序(如rsh、ssh)来实现将远程机器的内容拷贝到本地机器
-        rsync -avz <span class="keyword">user</span>@<span class="number">172.16</span>.<span class="number">0</span>.<span class="number">11</span>:/<span class="literal">home</span>/<span class="keyword">user</span>/src  ./src
-
-        // 从远程rsync服务器中拷贝文件到本地机。当<span class="constant">S</span>RC路径信息包含<span class="string">"::"</span>分隔符时启动该模式
-        rsync -av <span class="keyword">user</span>@<span class="number">172.16</span>.<span class="number">0</span>.<span class="number">11</span>::www  /databack
-
-        // 从本地机器拷贝文件到远程rsync服务器中。当<span class="constant">D</span>ES路径信息包含<span class="string">"::"</span>分隔符时启动该模式
-        rsync -av /databack <span class="keyword">user</span>@<span class="number">172.16</span>.<span class="number">0</span>.<span class="number">11</span>::www
-
-        //列远程机的文件列表
-        rsync -v rsync://<span class="number">172.16</span>.<span class="number">78.192</span>  /www
-</code></pre><ol>
-<li><p><strong>其他</strong>    </p>
-<pre><code>nano编辑文件   —编辑完成后 用 Ctrl ＋<span class="keyword">O</span> 存盘，Ctrl＋X 退出  
-</code></pre><p>​    df -h 查看服务器空间占用情况<br>​    du -sh * 查看当前目录下文件夹大小</p>
-<pre><code>push本地文件夹到远程主机： scp -r ./emailAccount/ release@210.209.103.130:/home/httpd/html/caspar.kactus.com.hk/emailAccount/
-
-push本地文件到远程主机：
-scp KFS_xy.jar evarist.f@test2-1.kactus.com.hk:/home/evarist.f/<span class="keyword">CAP</span>-IDA/gateway/KFS_xy.jar
-
-对当前目录下所有文件夹添加读写权限：
-chmod -R 777 * 或者chmod -R 777 . 
-chown -R a:b:c * 修改ower, group， others
-
-<span class="keyword">ls</span> -<span class="keyword">l</span> 显示文件和详细信息;  <span class="keyword">ls</span> -<span class="keyword">la</span>; <span class="keyword">ls</span> -Z
-cp -rf dir1 dir2
-grep -Hlr AlertEmail *  当前目录下查找所有包含AlertEmail字符串的文件
-
-进程前后台运行切换命令： http:<span class="comment">//www.cnblogs.com/highfly2012/archive/2013/05/04/3059727.html</span>
-    1. command  &amp; 让进程在后台运行
-
-    2. jobs –<span class="keyword">l</span> 查看后台运行的进程
-
-    3. fg %<span class="keyword">n</span> 让后台运行的进程<span class="keyword">n</span>到前台来
-
-    4. bg %<span class="keyword">n</span> 让进程<span class="keyword">n</span>到后台去
-
-    5. 暂停程序运行CTRL+Z
-
-    6. kill %<span class="keyword">n</span> 杀死进程<span class="keyword">n</span>
-
-<span class="keyword">ls</span> -<span class="keyword">la</span> | grep php  查看php真实路径
-
-find . -name “start*”  查找以某某开头或者结尾的文件,区分大小写
-
-tar zcvf /home/httpd/html/<span class="keyword">CAP</span>-IDA/tmp.tar.gz -C /home/httpd/html/<span class="keyword">CAP</span>-IDA/Data IDASUBSTAT   绝对路径压缩文件夹IDASUBSTAT，使用-C指定相对路径去除多余层次
-
-Linux taskset命令和sched_setaffinity函数将某个进程绑定到一个特定的CPU
-</code></pre></li>
+<h3 id="Linux内存管理机制">Linux内存管理机制</h3><p>Linux中无论物理内存有多大，都将其充份利用，将一些程序调用过的硬盘数据读入内存，利用内存读写的高速特性来提高Linux系统的数据访问性能；<strong>页高速缓存(cache)</strong>是Linux内核实现的一种主要磁盘缓存。它主要用来减少对磁盘的I/O操作。是通过把磁盘中的数据缓存到物理内存中，把对磁盘的访问变为对物理内存的访问。查看内存状态命令<code>top，free，vmstat</code><a href="https://blog.linuxeye.com/362.html" target="_blank" rel="noopener">Link</a></p>
+<ol>
+<li><strong>物理内存</strong>就是系统硬件提供的内存大小，是真正的内存，相对于物理内存，<strong>虚拟内存</strong>就是为了满足物理内存的不足而提出的策略，它是利用磁盘空间虚拟出的一块逻辑内存，用作虚拟内存的磁盘空间被称为<strong>交换空间（Swap Space)</strong>;<strong>虚拟内存</strong>作为物理内存的扩展，linux会在物理内存不足时，使用虚拟内存，更详细的说，就是Linux内核会将暂时不用的物理内存块信息写到交换空间，这样以来，物理内存得到了释放，这块内存就可以用于其它目的，当需要用到原始的内容时，这些信息会被重新从交换空间读入物理内存。</li>
+<li>Linux的内存管理采取的是<strong>分页存取机制</strong>，为了保证物理内存能得到充分的利用，内核会在适当的时候将物理内存中不经常使用的数据块自动交换到虚拟内存中，而将经常使用的信息保留到物理内存。Linux系统会不时的进行页面交换操作，以保持尽可能多的空闲物理内存，即使并没有什么事情需要内存，Linux也会交换出暂时不用的内存页面。这可以避免等待交换所需的时间；Linux进行<strong>页面交换</strong>是有条件的，不是所有页面在不用时都交换到虚拟内存，linux内核根据”最近最经常使用“算法，仅仅将一些不经常使用的页面文件交换到虚拟内存</li>
+<li><strong>逻辑地址</strong>是对应用程序而言的，一般以Seg:Offset段内偏移来表示；<strong>线性地址</strong>是CPU所能寻址的空间或者范围，是逻辑地址到物理地址变换之间的中间层；<strong>物理地址</strong>是机器中实际的内存地址,换言之，是机器中的内存容量范围</li>
+<li><strong>逻辑地址 -（段表）-&gt; 线性地址 — （页表）—&gt; 物理地址的转换过程(由大到小)</strong>：CPU将一个虚拟内存空间中的地址转换为物理地址，需要进行两步：首先将一个逻辑地址（其实是段内偏移量），CPU要利用其段式内存管理单元，先将逻辑地址加上相应段的基地址转换成一个线性地址；如果启用了分页机制，再利用其页式内存管理单元，通过查询页表来将线性地址转换为最终物理地址；若没有启用分页机制，那么线性地址直接就是物理地址 <a href="http://laoxu.blog.51cto.com/4120547/1166661" target="_blank" rel="noopener">Link</a></li>
+<li>不同的逻辑地址可以映射到同一个线性地址上；不同的线性地址也可以映射到同一个物理地址上；所以是多对一的关系。另外，同一个线性地址，在发生换页以后，也可能被重新装载到另外一个物理地址上。所以这种多对一的映射关系也会随时间发生变化。</li>
+</ol>
+<h3 id="Unix文件系统的内部结构">Unix文件系统的内部结构</h3><ol>
+<li>硬盘是由磁性盘片组成的计算机硬件设备，一个磁盘可以被划分成多个分区，每个分区都可以看做独立的磁盘。盘面上的一个有一个同心圆叫做磁道，磁道再分成扇区，就是磁盘的基本存储单元，可以存储固定字节数的数据。</li>
+<li>文件系统由三部分组成，superblock是文件系统的第一个块，存放文件系统本身的结构信息；接着是inode table，里边是一个个inode，负责存放文件属性，例如数据块列表；然后是数据区，磁盘上所有块的大小一样，大文件会分布在多个独立的磁盘块中。如果文件相当大，固定大小的inode不够存放这么多块编号，就会引入数据块作为间接块，保存着数据块编号，然后把指针存到inode里。inode号是文件的唯一标识。</li>
+<li>目录是一种包括了文件名字列表的特殊文件，本质是一个包括<inode号，文件名>的表，可以通过ls -1ia查看详细信息，当前目录的信息保存在.对应的inode节点中，Unix中根目录/的父目录指向自己。cat，cp等命令读取文件的过程：目录查找到inode — inode查找到数据块编号列表 — 不断调用read函数读取数据到内核缓冲区，再到用户空间。有时候会因为没有权限而打不开文件，这就是格局inode数据中的文件属性(权限位和owner ID)来判断的。</inode号，文件名></li>
+<li>一个文件可以有多个链接，链接数也被记录在inode中。rm命令当inode的链接数减到0时才会真正删除数据块和inode。磁盘上每个分区都包含一棵独立的目录树，linux会有个根文件系统来把多个分区的目录树关联到一起，某一个文件系统的目录树会被附加在子目录上。linux拒绝跨设备的链接，也就是说磁盘1和2上都有个叫做402的inode，但是指向不同的文件。</li>
+<li>FD文件描述符：Linux中一个进程会打开一组文件，它们保存在一个数组中，FD是指某个文件在数组中的索引，0、1、2分别表示标准输入，标准输出，标准错误输出。</li>
 </ol>
 <h3 id="Linux通用文件系统">Linux通用文件系统</h3><p>大部分 Linux 文件系统都默认采用 ext4 文件系统。在有 ext 之前，使用的是 MINIX 文件系统。如果你不熟悉 Linux 历史，那么可以理解为 MINIX 是用于 IBM PC/AT 微型计算机的一个非常小的类 Unix 系统。年轻的 Linus Torvalds 使用 MINIX 来开发原始 Linux 内核，并于 1991 年首次公布。</p>
 <p><strong>ext2的问题</strong>：在大部分情况下，ext2 在 Linux 发行版中工作得很好，但像 FAT、FAT32、HFS 和当时的其它文件系统一样 —— 在断电时容易发生灾难性的破坏。如果在将数据写入文件系统时候发生断电，则可能会将其留在所谓 不一致 的状态 —— 事情只完成一半而另一半未完成。这可能导致大量文件丢失或损坏，这些文件与正在保存的文件无关甚至导致整个文件系统无法卸载。</p>
 <p>ext3 文件系统的 Linux 内核中实现了三个级别的日志记录方式来解决数据不一致问题：日记journal、顺序ordered和回写writeback。</p>
 <p>ext4 特地设计为尽可能地向后兼容 ext3。这不仅允许 ext3 文件系统原地升级到 ext4；也允许 ext4 驱动程序以 ext3 模式自动挂载 ext3 文件系统，因此使它无需单独维护两个代码库</p>
 <h3 id="Linux_/proc_文件系统">Linux /proc 文件系统</h3><p>Linux 内核提供了一种通过 /proc 文件系统，在运行时访问内核内部数据结构、改变内核设置的机制。proc文件系统是一个伪文件系统，它只存在内存当中，而不占用外存空间。它以文件系统的方式为访问系统内核数据的操作提供接口。<br>用户和应用程序可以通过proc得到系统的信息，并可以改变内核的某些参数。由于系统的信息，如进程，是动态改变的，所以用户或应用程序读取proc文件时，proc文件系统是动态从系统内核读出所需信息并提交的。另外，在/proc下还有三个很重要的目录：net，scsi和sys。 Sys目录是可写的，可以通过它来访问或修改内核的参数，而net和scsi则依赖于内核配置。例如，如果系统不支持scsi，则scsi 目录不存在</p>
+<h3 id="Linux磁盘挂载/卸载/格式化操作">Linux磁盘挂载/卸载/格式化操作</h3><p>linux系统中只能在root权限用户下挂载设备。</p>
+<h5 id="BIOS_vs_UEFI">BIOS vs UEFI</h5><p>BIOS（Basic Input/Output System）和 UEFI（Unified Extensible Firmware Interface ）是不同的计算机启动固件（Fireware），需要硬件（通常为主板）支持，相互代替，其中 UEFI 是比较新的方式。</p>
+<ul>
+<li>BIOS：经典的启动固件，会调用磁盘的 MBR，然后由 MBR 中的 loader 继续加载操作系统。</li>
+<li>UEFI：UEFI 用来代替 BIOS，并克服 BIOS 的缺点，大多数的 UEFI 固件会提供兼容 BIOS 的启动方式。</li>
+</ul>
+<h5 id="MBR_vs_GPT">MBR vs GPT</h5><ul>
+<li>MBR 与 GPT 用于存储硬盘的分区信息，是不同的硬盘分区表类型。MBR支持最大约2T的硬盘，最多能划分4个主分区，更多分区需要使用拓展分区实现。</li>
+<li>GPT 表示 GUID（Globally Unique Identifier） 分区表，是 UEFI 规范的一部分，用于替换 MBR 的分区方式。GPT 没有分区数和分区大小限制。</li>
+<li>BIOS/UEFI 跟 MBR/GPT 是不同层级的，BIOS/UEFI 是 Fireware，MBR/GPT 是分区表。</li>
+</ul>
+<h5 id="File_System（文件系统）是存储媒介中文件存储的组织方式。">File System（文件系统）是存储媒介中文件存储的组织方式。</h5><p>不同的文件系统类型有不同的速度，灵活性，安全性和占用空间。不同操作系统只支持特定的文件系统类型。常见的文件系统类型有 FAT16，FAT32，NTFS，EXT3，EXT4，HFS 等。</p>
+<ul>
+<li><strong>磁盘文件系统</strong>包括硬盘、U盘、磁盘阵列、CDROM、DVD等。常见文件系统有autofs、coda、Ext2、Ext3、Ext4、VFAT、ISO9660（光盘或者光盘镜像）、UFS（Unix File System，Unix文件系统）、FAT（File Allocation Table，文件分配表）、FAT16、FAT32、NTFS（New TechnologyFile System）等。</li>
+<li><strong>网络文件系统</strong>可以远程访问的文件系统，这种文件系统在服务器端仍是本地的磁盘文件系统，客户机通过网络远程访问数据。常见文件系统格式有：NFS（Network File System，网络文件系统）、Samba（SMB/CIFS）、AFP（Apple FillingProtocol，Apple文件归档协议）和WebDAV等。</li>
+<li><strong>专有/虚拟文件系统</strong>不驻留在磁盘上的文件系统。常见格式有：TMPFS（临时文件系统）、PROCFS（Process FileSystem，进程文件系统）和LOOPBACKFS（Loopback File System，回送文件系统）。</li>
+</ul>
+<h5 id="GRUB（Grand_Unified_Boot_loader）">GRUB（Grand Unified Boot loader）</h5><p>GRUB是硬盘中的软件，引导器（loader）的一种。目前主流版本是 GRUB2，GRUB 用于从多操作系统的计算机中选择一个系统来启动，或从系统分区中选择特殊的内核配置。</p>
 
       
     </div>
@@ -318,8 +286,7 @@ Linux taskset命令和sched_setaffinity函数将某个进程绑定到一个特�
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2016/05/26/Linux操作系统基础知识/"
-               data-title="Linux操作系统基础知识" data-url="https://charles-xiao.github.io/2016/05/26/Linux操作系统基础知识/">
+          <div class="ds-thread" data-thread-key="2016/05/26/Linux操作系统基础知识/" data-title="Linux操作系统基础知识" data-url="https://charles-xiao.github.io/2016/05/26/Linux操作系统基础知识/">
           </div>
         
       </div>
@@ -363,28 +330,28 @@ Linux taskset命令和sched_setaffinity函数将某个进程绑定到一个特�
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../../../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../../../..//categories">
+            <a href="../../../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../../../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -422,7 +389,7 @@ Linux taskset命令和sched_setaffinity函数将某个进程绑定到一个特�
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux进程调度机制"><span class="nav-number">1.</span> <span class="nav-text">Linux进程调度机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux内存管理机制"><span class="nav-number">2.</span> <span class="nav-text">Linux内存管理机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux通用文件系统"><span class="nav-number">3.</span> <span class="nav-text">Linux通用文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux_/proc_文件系统"><span class="nav-number">4.</span> <span class="nav-text">Linux /proc 文件系统</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux程序/进程/文件"><span class="nav-number">1.</span> <span class="nav-text">Linux程序/进程/文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux进程调度机制"><span class="nav-number">2.</span> <span class="nav-text">Linux进程调度机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux内存管理机制"><span class="nav-number">3.</span> <span class="nav-text">Linux内存管理机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Unix文件系统的内部结构"><span class="nav-number">4.</span> <span class="nav-text">Unix文件系统的内部结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux通用文件系统"><span class="nav-number">5.</span> <span class="nav-text">Linux通用文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux_/proc_文件系统"><span class="nav-number">6.</span> <span class="nav-text">Linux /proc 文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux磁盘挂载/卸载/格式化操作"><span class="nav-number">7.</span> <span class="nav-text">Linux磁盘挂载/卸载/格式化操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#BIOS_vs_UEFI"><span class="nav-number">7.0.1.</span> <span class="nav-text">BIOS vs UEFI</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MBR_vs_GPT"><span class="nav-number">7.0.2.</span> <span class="nav-text">MBR vs GPT</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#File_System（文件系统）是存储媒介中文件存储的组织方式。"><span class="nav-number">7.0.3.</span> <span class="nav-text">File System（文件系统）是存储媒介中文件存储的组织方式。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GRUB（Grand_Unified_Boot_loader）"><span class="nav-number">7.0.4.</span> <span class="nav-text">GRUB（Grand Unified Boot loader）</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

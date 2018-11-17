@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="java,android,life,CharlesXiao" />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="java,android,life,CharlesXiao">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../favicon.ico?v=0.4.2">
 
 
 
@@ -49,7 +49,7 @@
 <body>
 <!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
   <div class="container one-column 
-   page-home 
+  
 ">
     <div class="headband"></div>
 
@@ -71,7 +71,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -87,40 +87,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -148,9 +148,565 @@
           
           
             
-              <a class="post-title-link" href="../../2015/05/19/数据库重难点集锦/">
-                数据库重难点集锦
-              </a>
+              Android开发常见bug解决方法及注意事项
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-27
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Android开发/">Android开发</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/05/27/Android开发常见bug解决方法及注意事项/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/27/Android开发常见bug解决方法及注意事项/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h3 id="xml文件出现找不到相应类">xml文件出现找不到相应类</h3><p>例如ViewPager类找不到，应该检查类名单词拼写是否错误，是否写错包名以及是否导入jar包并勾选</p>
+<h3 id="xml文件布局merge标签">xml文件布局merge标签</h3><p><merge>标签能百分百代替<framelayout>这个布局组件， 对于不复杂的其他布局组件如线性布局等组合组件中，可以在继承子类中对其属性进行设置后也可以使用<merge>标 签，<merge>标签不占资源，自然在生成界面时也不会生成对应的组件。另外需要注意一点是<merge>只能作为根元素，对 于需要用inflate生成布局文件时，必须指定一个ViewGroup作为其父元素，并且要设置inflate的attachToRoot参数为 true</merge></merge></merge></framelayout></merge></p>
+<h3 id="DEXpathlist错误">DEXpathlist错误</h3><p>往往是因为重复导入jar或者第三方依赖包 <a id="more"></a></p>
+<h3 id="Fragment使用注意事项">Fragment使用注意事项</h3><p>Fragment尽量使用support-v4包中以便于低版本兼容，可以兼容到1.6版本；同时需要使用getSupportFragmentManager(),Activity需要继承FragmentActivity;Fragment,FragmentManager,FragmentTransaction都要用v4包</p>
+<p>大部分的应用仅仅在onCreate()方法被调用的开始时间提交transactions，或者在相应用户输入的时候，因此将不可能碰到任何问题;避免在异步回调函数中提交transactions。包括常用的方法，比如AsyncTask的onPostExecute方法和LoaderManager.LoaderCallbacks的onLoadFinished方法;如果你的应用要求在除onCreate()函数之外的其他Activity生命周期函数中提交transaction，你可以在FragmentActivity的onResumeFragments()函数或者Activity的onPostResume()函数中提交。这两个函数确保在Activity恢复到原始状态之后才会被调用，从而避免了状态丢失的可能性。使用commitAllowingStateLoss()函数。commit()函数和commitAllowingStateLoss()函数的唯一区别就是当发生状态丢失的时候，后者不会抛出一个异常</p>
+<h3 id="eventBus和android-priority-jobqueue搭配使用的优势"><a href="https://github.com/greenrobot/EventBus" target="_blank" rel="noopener">eventBus</a>和<a href="https://github.com/path/android-priority-jobqueue" target="_blank" rel="noopener">android-priority-jobqueue</a>搭配使用的优势</h3><p>对于每一个新的backgroundJob都新建一个继承job类的类，然后在内部重载函数中实现业务逻辑，JobManager类会对所有的job进行管理(注意对job和manager的configuration)；同样地，对每一个的job的执行结果可以相对应一个event，post到eventBus中进行管理，需要相应event的activity自行进行event订阅。</p>
+<h3 id="Android_view的layout参数">Android view的layout参数</h3><p>android View的layout函数四个参数是指该view控件距离其父view的距离，以左上角为坐标原点计算；setMargins函数与具体xml设置有关，Grivaty等属性会导致margin设置无效  </p>
+<p><strong> 关于layout_margin </strong>  </p>
+<p>大量网络资料上都说，layout_margin指view距离父view的距离。这个说法不够严谨，正确的说法是， 距离 view的相对view的距离 才更准确。</p>
+<p>在Linearlayout下，可以认为是距离父view的距离。但在RelativeLayout下则不然，如果view A已经写定在view B的右侧，则view A的layout_marginLeft就是距离view B的距离，与父View无关。另外，这个距离究竟是两个view中心的距离还是相邻两边的距离？可以这样理解，每个view都是一个矩形区域，如果view A已经设定在view B的右侧，<strong><em> 则layout_marginLeft是view B的右边 和view A的左边之间的距离，而非两个view中心之间的距离！</em></strong></p>
+<h3 id="三个导致View重建的原因">三个导致View重建的原因</h3><ol>
+<li><p>视图本身内部状态变化引起重绘；</p>
+</li>
+<li><p>view树内部添加或者删除子view；</p>
+</li>
+<li><p>View本身的大小及可见性发生变化。</p>
+</li>
+</ol>
+<h3 id="MVC和MVP模式的区别和详解以及在Android开发中对MVP模式的应用实践">MVC和MVP模式的区别和详解以及在Android开发中对MVP模式的应用实践</h3><p><a href="http://www.ruanyifeng.com/blog/2015/02/mvcmvp_mvvm.html" target="_blank" rel="noopener">参考链接1</a><br><a href="http://baike.baidu.com/link?url=UtJm3jt4YBAb2FST5tLPrdmpE982FPFy8LBTJV4JN7nn0mkJIsxtf219-RrNRp_ownU8vIi6_iYjbt6bn9A4u_" target="_blank" rel="noopener">参考链接2</a><br><a href="http://blog.csdn.net/vector_yi/article/details/24719873" target="_blank" rel="noopener">参考链接3</a>  </p>
+<h3 id="Android项目反编译得到java源码步骤">Android项目反编译得到java源码步骤</h3><ol>
+<li>下载apk文件，修改文件格式为zip并解压得到classes.dex文件</li>
+<li>利用dex2jar软件将classes.dex文件转化为classes_dex2jar.jar文件</li>
+<li>下载 xjad或者jd-gui软件将该jar文件反编译为java文件并保存</li>
+<li><p>利用apktool反编译得到所有资源文件  </p>
+<p> <a href="http://download.csdn.net/detail/jaysh1029/7081673" target="_blank" rel="noopener">最新工具Androidfby</a></p>
+</li>
+</ol>
+<h3 id="Android_APK大小压缩方法">Android APK大小压缩方法</h3><p><a href="http://android.jobbole.com/80613/" target="_blank" rel="noopener">参考链接1</a><br><a href="http://zhuanlan.zhihu.com/zmywly8866/20006066" target="_blank" rel="noopener">参考链接2</a></p>
+<h3 id="常见bug注意事项">常见bug注意事项</h3><ol>
+<li><strong> 网络请求以及文件存取 </strong>时务必记得加入permission权限！！！</li>
+<li><strong> Mainapplication </strong>为了防止为空对象，务必记得在manifest里面进行全局初始化</li>
+<li><strong> 使用Gson解析json数据 </strong>一定要保持json数据的key和要转换的对应类的成员变量名一致</li>
+<li><a href="http://www.yrom.net/blog/2013/03/10/fragment-switch-not-restart/#" target="_blank" rel="noopener">fragment切换不用replace的switch方法</a></li>
+<li>xml文件设置background时图片分辨率过大会导致设置无效</li>
+<li>Activity无法开启需要查看manifest是否注册该Activity</li>
+<li>Android Development Toolkit版本低于SDK版本时会导致adb无法启动，建议<a href="http://developer.android.com/sdk/installing/installing-adt.html#Download" target="_blank" rel="noopener">更新ADT</a>到最新版本</li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/bug/"> #bug </a>
+          
+            <a href="../../tags/Android/"> #Android </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              耒阳支教之行有感
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-24
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/生活随笔/">生活随笔</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/05/24/耒阳支教之行有感/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/24/耒阳支教之行有感/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>　　当我坐在电脑前，开始敲击键盘来记录与回忆这短短7天的支教的日子时，鲜活的记忆一样样蹦出在我的脑海中，一幕幕的上课场景、一张张鲜活的稚嫩面孔、一段段烈日下的家访历程，无一不让我怀念不已，我想，即使是多年后，当我回想起这段日子，我还是会觉得这是一段舒适惬意、欢乐轻松的日子，这是一个值得一提、值得缅怀的人生经历与选择，即便有辛苦有艰难有沮丧，但是却充满欢乐，充满收获。这种收获与欢乐，是一种给予带来的自我满足与自我实现，这种快乐不在乎我得到什么，而只在乎我能够带给孩子们什么。看着孩子们天真的脸庞，无所求，只希望孩子们能够更好；和孩子们一起玩闹嬉戏，玩小时候玩过的游戏，仿佛看见自己儿时的影子，一下子就能把思绪拉回到多年前无忧无虑的童年时光。在短短几天里与孩子们建立起来的单纯的友谊与信任弥足珍贵，这是一种我在成人世界寻找不到的关系，可以让我感动不已。<br>　　这次支教也算是机缘巧合，因为在我的脑海里之前是并没有支教这样一个想法的，而且学院的假期太晚，时间也不怎么允许；而且像我这种经常把时间安排得太满，假期里总是忙于奔波四处的人，对于支教并不具备热情，也并不热衷；况且，在没去支教之前，对于支教，并无深入的了解，反而时常在网上看到有人数落支教的弊端，所以并不认为支教是件对孩子们很有益的事情；可是当我自己切身体验完之后，发现支教并不像我想得那么简单，它的利弊也不是一两句话可以说清，以前见过微博上的各种愤青针砭支教之弊，各种文青抒发支教感想，觉得貌似有道理，却没有切身感受，有句话说“纸上得来终觉浅，绝知此事要躬行”，的确，只有经历过，才有发言权，才会有你自己的看法。利弊从来都是任何事物必备的两面，就好像一个硬币的两面，不会分离。支教要给孩纸们带去什么？我们能帮到孩纸们什么？利是什么？弊是什么？这些问题应该是始终萦绕支教队每个成员心头的头等大问！在支教的过程中，我们慢慢找到这些问题的答案，也仅是我们的答案…… <a id="more"></a><br>　　我在7月13日赶回衡阳，14日和兄弟们聚了聚，15日便在衡阳与几个队友作为第一批先头部队集聚开赴耒阳市公坪镇横岭小学，横岭小学离公坪镇上不远，大概不到2里路，而且就在107国道旁，交通还算便利，公坪镇是每5天一赶集，我们若是需要添置食品，生活用品，都得提前列好清单，趁着赶集一次买好；记得我唯一的一次和大厨去赶集买菜，几个汉子都是用蛇皮袋子一袋袋地买了菜背回学校，像大采购似的。<br>　　我们第一批是在中午12点左右到的学校，大约下午3点左右，支教队初期成员一共12人都到齐，麻星星，我，刘静，梁蕊，邓涛，王泉，黄伟明，王若君，邓雨，何艳，罗瑞霞，胡蓉，，晚婷、陈璨和玉琦则在几天后也陆续到达学校，大家互相认识之后就开始收拾，做一些准备工作，校长给我们安置了住宿的地方，厨房等等，我们暂定为16号家访宣传，17号报名，18号正式上课。我们到了学校才一会儿，就有学校附近的孩子们来学校找我们玩了，有些大胆外向的孩纸们主动找我们攀谈，问我们从哪里来，怎么报名上课，一下子就和我们混熟了，说到这儿不得不提梁小蕊童鞋人气实在是高啊，一下子就有两个小女孩开始黏上她了，左边一个右边一个牵着她到处逛，可恶的是，居然让我做免费保镖负责赶狗，好桑心啊啊啊！后来还让我给他们做免费摄影师，各种拍照，面对如此的不公平待遇好桑心……折腾了一下午才和他们交上朋友，拍合照，玩游戏，最终成功俘虏2个小女生，哈哈哈，被叫老师的感觉还不错～小女生们爱拍照，爱溜达，小男生们则和小时候的我们差不多，成群结队，踩单车，打篮球，乒乓球，一个个闹腾得永远不会停！<br>　　开课前的准备工作繁琐而忙乱，吃穿住行都得自己解决，校长把厨房借给我们做饭，幸好我们有大厨小厨在，吃的问题就迎刃而解了～在教学楼的三楼腾出了2间教室，一间住男生，一间住女生，在凹凸不平的地上铺上凉席，就是我们的床铺了，虽然硬质水泥地硌得骨头疼，但每晚上11，2点躺上去很快就沉沉睡去，或许是因为累，或许是因为第二天一大早就得起来，这样的日子作息时间规律得很，晚上看月亮星星，早上看日出朝霞，乡村宁静祥和的环境让我这个从小在农村长大的人有种久违的舒适感,待在钢筋水泥铸就的城市的这两年除了把作息时间打乱得一团糟，也早把这种舒适感消磨殆尽，失而复得才知珍贵！<br>　　16号一大早吃完饭，我和胡蓉，麻星星就带上一群虾兵蟹将开赴光华宣传招生，光华是离横岭小学最远的一个村，和我的支教之旅可以说有不解之缘，加上每天送孩纸们放学回家我一共去了4次；第一次去宣传招生，虽然有一群小萝卜头带路，去光华却走了一条远路，烈日当头，大家却都不觉得累，一路上有说有笑，孩纸们还和我边走边对歇后语，各种欢乐；回来时我们走了近路，翻了一座山，最后回到学校我们几个都快虚脱了，估计孩纸们也累得够呛，回来后就都回家吃饭了；后面的几次去光华都是送孩纸们回家，抄近路，翻山越岭，路途虽远，但看着孩纸们一个个安全到家，想着学校里同志们还在等着我们回去吃饭，吃西瓜，马上又动力十足了。<br>　　17号报名，家长孩纸们都相当有热情。<br>　　18号开始正式上课，上午上课，下午家访。<br>　　我教的是四五年级数学，在到横岭学校之前就在网上找了不少的课件和资料，趣味数学，奥赛数学等等，还是派上了不少用场；记得第一堂课是在五年级上的，说不紧张那都是假话，对着下面黑压压40多号人，看着他们天真热切的眼光，我都不好意思不好好讲；第一堂课讲的是小数乘法，刚开始不知道孩纸们基础怎么样，只能从最简单的开始，一步步地慢慢讲，一堂课讲下来发现时间过的超级快，下课铃响了还有一大堆没讲呢，下课问孩纸们能不能听懂，有孩纸反映说太简单了；于是第二堂课就多加了一些思维拓展题，叫他们上台在黑板上写，然后就发现难一点的题目基本上只有跟我反映太简单的那个孩纸会做，其他人其实还是不怎么会的；我大致知道了这个班的数学水平是很参差不齐的，于是开始把课程安排成每节课3/4讲基础知识，1/4用来讲趣味题和难题，每节课都会尽量多提问让不同的孩纸来回答，确保大多数人都能听懂；上了几堂课之后就发现很多孩纸数学不太好，值得欣慰的是，一个个都很好学，下课了有孩子还特地找到我让我帮他补习数学，由于我下午一般要出去家访，下午只给他们补习了一次，略遗憾；之前跟我反映上课太简单的孩纸叫李小波，看得出来他对数学很有兴趣，反应也非常快，我就约了他到办公室，找了一些奥赛题给他做，同时在旁边给他讲，小孩纸嘛，如果对数学有兴趣，好好发展，说不定将来是数学家一枚，好好滴鼓励了一下李小波同学~<br>　　每天的下午是家访时间，几天里走访了不少孩纸家，有些让人印象深刻；<code>李瑭，11岁，四年级，一个爱看书的孩子，父母在北京，跟爷爷在家，他爷爷告诉我们：小李瑭阅读能力很强，很爱看书，最近还在电话里特地叫爸爸从北京寄了300元的书回来。李瑭告诉我们：他什么书都爱看，尤其喜欢科幻书(这么爱看书的孩纸着实让人喜欢不已，想我小时候可没这么高觉悟...好惭愧啊...)李元，五年级，家里三兄妹，一个姐姐读高二了，父母在外打工要承担3个孩纸读书的学费，还得供养爷爷，家里还住着老土坯房，但是李元的姐姐告诉我们，李元很争气，不但在学校里学习成绩优异，在家里也非常懂事；还有一个小女孩，父亲在她小时候就外出不归，了无音讯，母亲也在几年后出走，打懂事起就跟着年迈的奶奶一起生活，家里很困难，不过很庆幸的是，小女孩依旧过的很开心，或许是因为年纪小不懂事，父母之爱的缺失并没有在孩纸心灵上留下不可弥补的创伤；有时候总觉得，小孩纸们的童真与快乐是上天赋予他们的，任何伤害与剥夺都让我觉得于心不忍。</code><br>　　支教不得不提的小插曲就是崇武兄带上一大批老乡过来探望支教队了，一大群年轻人抱着西瓜，带着吃的浩浩荡荡地开进了横岭小学，让本来已经十分热闹的横岭小学又沸腾不少；晚上，一大群人轧马路，买啤酒，一路高歌，不得不赞一句，华科男果然奔放~<br>　　很庆幸在短短七天的支教之行中遇到这么多可爱的人，可爱的孩纸们，可爱的队友们，一切都沉淀在美好的记忆里，不管过了多久，再度回首，洋溢的总是幸福欢乐与感动；如果一定要问支教带去什么？收获什么？我想这么回答：就是这一群可爱的人，这一段美好的共同记忆，足矣~<br>　　<blockquote class="blockquote-center">some pictures</blockquote><br>　　<img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/zhijiao/logo.jpg" class="full-image"><br>　　<img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/zhijiao/1.jpg" class="full-image"><br>　　<img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/zhijiao/2.jpg" class="full-image">    
+　　　　   </p>
+<p>　　</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/耒阳/"> #耒阳 </a>
+          
+            <a href="../../tags/支教/"> #支教 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              读《1988-我想和这个世界谈谈》
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-24
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/读书札记/">读书札记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/05/24/读《1988-我想和这个世界谈谈》/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/24/读《1988-我想和这个世界谈谈》/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>　　最近花了2天左右的时间看完了韩寒的这本书，总体感觉，嗯，很抽象的小说，却也有着很鲜明的现实意义，把社会现实和人性揭露得都很透彻，在此写写我读到了什么。<br>　　主人公貌似叫做路子野，而1988则是他的那辆由朋友帮忙改装好的旅游车，因为那辆车是1988年出厂，1988就是这么来的；他开着这辆车上路去接他的刚出狱的朋友，途中接受了已怀孕妓女娜娜的“特殊服务”却被警察查到，由此结缘，娜娜成为了他旅途的唯一伴侣；两个本来有着不同的目标、不同的社会经历和身份的人，在这个漫长的旅途中，他们互相交谈，聊着自己的人生经历，再加上这一路的经历，就组成了这么一本小说。<br>　　写到这儿，我想我是应该按小说中不同的事件来叙说感想，还是按照小说叙述的先后顺序来写呢？还是按照前者来写吧，应该会清楚一些。<a id="more"></a><br>　　路子野坐在车里等娜娜的时候回忆起他的童年，他五年级时爬到学校旗杆的最高处无法下来，引来学校老师的集体营救和同学的围观，老师们在下面淡定的商量着解决方案，摄影组的同学在以他作为创作题材，而他自己关注的也只是看到的某个穿花格子衬衫的女孩，他觉得自己爱上了那个女生，正如大家本身关注的并不是他的生死一样，他也并没有关注人们到底是不是想营救他；这其实算是件很可笑的事情吧，正如总是有很多人喜欢自诩高尚，自诩清高，殊不知是骗人偏己；他想起自己小时候对丁丁哥哥带给自己的知识和外面的世界的崇拜，玩打弹珠游戏时对不公平制度的憎恨和反抗，那个时候对自己喜欢的女生的看法。<br>　　文中也有提到路子野自己作为一个新闻工作者的经历，有理想的新闻工作者往往在现实面前也是无能为力的，你说实话往往没法报道，因为你的批判对象力量之强不是你所能抵抗，这便是现实；特别搞笑的一段是路子野去为他的女朋友孟孟寻找公道，因为他女朋友的剧组编剧做事不公平，本是为了揭露剧组的不平等待遇，却被编剧拿着一个视频找到他请他去帮剧组曝光，视频中的亮点就是“编剧潜规则孟孟”，当然路子野不会这么做，可是这段感情只能到此为止。<br>　　再需要提一提的便是娜娜了，她只是一个妓女，没有太高文化，也没有太大的理想，只不过希望生下自己的孩子，远离自己这一行，希望存够一些钱来养孩子和供孩子读书，可是却因为警察扫黄等因素而使计划一次次破产；在这些发生的事情中，娜娜只是一个受害者，而那些扫黄者只是欺负弱者或者捞外快，而不是真的扫黄。或者在这个世界上，妓女可能是高尚的，而所谓的卫道士只是虚有其表，道貌岸然！<br>　　 文中有很多的精辟语段，在此摘录。　　<br>　　<code>“不要以为这只是一场肤浅的自驾游，不要以为我是无根的漂泊，我的根深深地扎在这片土地上，我一度以为自己是种子，被这季风吹来吹去，但是我终于意识到，我不是种子，我就是连着根的植物，至于我是一棵什么样的植物，我看不到我自己，那得问其他的植物，至于我为什么一直在换地方，因为我以为我扎在泥土里，但其实我扎在了流沙中。这么多年来，一直是我脚下的流沙裹着我四处漂泊，它也不淹我，它只是时不时提醒我，你没有别的选择，否则你就被风吹走了。我就这么浑浑噩噩地度过了我所有热血的岁月，被裹到东，被裹到西，连我曾经所鄙视的种子都不如。” --我们生活在现实世界里，现实就仿佛流沙，束缚着我们的各种选择，我们并不像种子般自由，因为我们离不开现实；别人告诉我们我们是植物，不能移动，当我们被束缚太久，后来我们自己误以为我们是植物，无法移动，可其实我们是动物，可以决定自己的去向；到底是浑浑噩噩地随波逐流还是追求自由与热血，由你自己决定！</code><br>　　<code>&quot;我总是崇拜那些热血的人们，当我在发呆的时候他们在思考，当我在思考的时候，他们已经开始行动了，而当我打算开始行动的时候，他们已经翘了，然后我又不敢行动了，翘了的他们成为我生命里最高的仰望&quot;   --热血的人和不热血的人有何区别，热血的人应该是充满激情与活力，具有很强执行力，说做就做；而不热血的人较为理性，做事深思熟虑；一个热血有度的人才能达到被人仰望的高度，否则就只能平凡得像路边的路灯一样，它亮着你也不会多看它一眼，他灭了你也不会少走一步。&quot;</code><br>　　<code>“在越无序的地方，越可能寻找到安全感”</code><br>　　<code>“我回忆过去，不代表我对过去的迷恋，也不代表我对现在的失望，它是代表我越来越自闭”</code><br>　　<code>“世界就像一堵墙，我就像一只猫，我必须要在这堵墙上留下自己的抓痕，在此之前，怎么能够把爪子对向自己”  --关于自杀</code><br>　　<code>“我总听到有人说，生活就像一场电影。我说，去你的，生活就像一场电视剧，粗制滥造，没有逻辑，但却猥琐前行，冗长，不过不能罢手”</code><br>　　<code>“很多时候我们的道路都不是自己规划出来，而是别人规划的时候把我们圈进去”走自己的路其实是很难的。</code><br>　　<code>“人总是在一边寻求安全感，一边寻求刺激感”</code><br>　　<code>“人们埋怨一成不变，但也埋怨居无定所，人们其实都无所谓，只是要给日子找点岔子而已，似乎只有违背现在的生活，才真正懂得了生活，生活就是一个婊子、一个戏子、一个你能想到的—切，你所有的比喻就往里面扔吧，你总是对的。因为生活太强大了，最强者总是懒得跟你反驳，甚至任你修饰，然后悄悄地把锅盖盖住”</code><br>　　<code>“和人聊天谈心最尴尬的事是：好像喝酒一样，每次发现自己都醉了，人家瓶还没打开呢”</code>
+　　</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/阅读/"> #阅读 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              常见设计模式实例讲解
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-05-21
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/设计模式/">设计模式</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/05/21/常见设计模式实例讲解/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/21/常见设计模式实例讲解/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h3 id="单例模式的三种实现方式及其优缺点">单例模式的三种实现方式及其优缺点</h3><pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>{
+
+    <span class="javadoc">/**
+     *<span class="javadoctag"> @param</span> args
+     */</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+        SingletonEnum.INSTANCE.setmName(<span class="string">"enum"</span>);
+        SingletonInner.getInstance().setmName(<span class="string">"inner"</span>);
+        SingletonDoubleCheck.getInstance().setmName(<span class="string">"doubleCheck"</span>);
+    }
+
+    <span class="comment">/*
+     * 单例模式考虑点： 
+     * 1. 线程安全：Synchronized关键字，Enum，静态内部类 
+     * 2. 延迟加载：减少负载和消耗 
+     * 3. 自动序列化(Serializable和transient) 
+     * 4. 防止反射强行调用构造器
+     * 3、4点只有枚举可以实现
+     */</span>
+
+    <span class="comment">/*
+     * 枚举实现单例
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">enum</span> SingletonEnum {
+        INSTANCE;
+        <span class="keyword">private</span> String mName;
+
+        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> mName;
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
+            <span class="keyword">this</span>.mName = mName;
+        }
+
+    }
+    <span class="comment">/*
+     * 双重检查锁：单例模式中需要new的情况非常少,第一层锁可以减少锁的次数
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDoubleCheck</span> </span>{
+        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingletonDoubleCheck singleton = <span class="keyword">null</span>;
+
+        <span class="function"><span class="keyword">private</span> <span class="title">SingletonDoubleCheck</span><span class="params">()</span> </span>{
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDoubleCheck <span class="title">getInstance</span><span class="params">()</span> </span>{
+            <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) {
+                <span class="keyword">synchronized</span> (SingletonDoubleCheck.class) {
+                    <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) {
+                        singleton = <span class="keyword">new</span> SingletonDoubleCheck();
+                    }
+                }
+            }
+            <span class="keyword">return</span> singleton;
+        }
+
+        <span class="keyword">private</span> String mName;
+
+        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> mName;
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
+            <span class="keyword">this</span>.mName = mName;
+        }
+    }
+
+    <span class="comment">/*
+     * 内部类方式实现
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonInner</span> </span>{
+
+        <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Holder</span> </span>{
+            <span class="keyword">private</span> <span class="keyword">static</span> SingletonInner singleton = <span class="keyword">new</span> SingletonInner();
+        }
+
+        <span class="function"><span class="keyword">private</span> <span class="title">SingletonInner</span><span class="params">()</span> </span>{
+
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonInner <span class="title">getInstance</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> Holder.singleton;
+        }
+
+        <span class="keyword">private</span> String mName;
+
+        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> mName;
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
+            <span class="keyword">this</span>.mName = mName;
+        }
+    }
+
+}
+</code></pre><h3 id="工厂模式实例">工厂模式实例</h3><h3 id="观察者模式">观察者模式</h3><ol>
+<li>在Java中通过Observable类和Observer接口实现了观察者模式，Observer对象监视着Observable对象的变化，当Observable对象发生变化时，Observer得到通知，就可以进行相应的工作。</li>
+<li><strong>Observable类</strong>—-程序中的被观察者类需要继承这个类</li>
+<li><strong>Observer接口</strong>—-观察者接口，观察者需要实现这个接口并重写其中的update()方法</li>
+<li>可以在main函数中通过调用被观察者的addObserver方法添加观察者，当被观察者发生变化时要调用<strong>setChanged()方法</strong>标记此Observable对象已改变，并调用<strong>notifyObservers()</strong>通知所有观察者</li>
+<li><p><strong>自定义代码实现观察者模式</strong>:</p>
+<pre><code><span class="comment">// 被观察者接口</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Subject</span> </span>{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerObserver</span><span class="params">(Observer o)</span></span>;
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer o)</span></span>;
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyAllObservers</span><span class="params">()</span></span>;
+}
+
+<span class="comment">// 观察者接口</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Observer</span> </span>{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Subject s)</span></span>;
+}
+
+    <span class="comment">// 猎头类</span>
+     <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HeadHunter</span> <span class="keyword">implements</span> <span class="title">Subject</span> </span>{
+        <span class="keyword">private</span> ArrayList&lt;Observer&gt; userList;
+        <span class="keyword">private</span> ArrayList&lt;String&gt; jobs;
+
+        <span class="function"><span class="keyword">public</span> <span class="title">HeadHunter</span><span class="params">()</span></span>{
+            userList = <span class="keyword">new</span> ArrayList&lt;Observer&gt;();
+            jobs = <span class="keyword">new</span> ArrayList&lt;String&gt;();
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerObserver</span><span class="params">(Observer o)</span> </span>{
+            userList.add(o);
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer o)</span> </span>{}
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyAllObservers</span><span class="params">()</span> </span>{
+            <span class="keyword">for</span>(Observer o: userList){
+                o.update(<span class="keyword">this</span>);
+            }
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addJob</span><span class="params">(String job)</span> </span>{
+            <span class="keyword">this</span>.jobs.add(job);
+            notifyAllObservers();
+        }
+
+        <span class="function"><span class="keyword">public</span> ArrayList&lt;String&gt; <span class="title">getJobs</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> jobs;
+        }
+
+        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>{
+            <span class="keyword">return</span> jobs.toString();
+        }
+    }
+
+<span class="comment">// 求职者类    </span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JobSeeker</span> <span class="keyword">implements</span> <span class="title">Observer</span> </span>{
+
+    <span class="keyword">private</span> String name;
+
+    <span class="function"><span class="keyword">public</span> <span class="title">JobSeeker</span><span class="params">(String name)</span></span>{
+        <span class="keyword">this</span>.name = name;
+    }
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Subject s)</span> </span>{
+        System.out.println(<span class="keyword">this</span>.name + <span class="string">" got notified!"</span>);
+        <span class="comment">//print job list</span>
+        System.out.println(s);
+    }
+}
+
+<span class="comment">// 主函数</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+        HeadHunter hh = <span class="keyword">new</span> HeadHunter();
+        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Mike"</span>));
+        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Chris"</span>));
+        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Jeff"</span>));
+
+        <span class="comment">//每次添加一个个job，所有找工作人都可以得到通知。</span>
+        hh.addJob(<span class="string">"Google Job"</span>);
+        hh.addJob(<span class="string">"Yahoo Job"</span>);
+    }
+}
+</code></pre></li>
+</ol>
+<h3 id="代理模式">代理模式</h3><ol>
+<li><strong>代理模式</strong>就是为某个对象提供一个代理，以控制对这个对象的访问。 代理类和委托类有共同的父类或父接口，这样在任何使用委托类对象的地方都可以用代理对象替代。代理类负责请求的预处理、过滤、将请求分派给委托类处理、以及委托类执行完请求后的后续处理。</li>
+<li><strong>静态代理</strong> 由程序员创建或工具生成代理类的源码，再编译代理类。所谓静态也就是在程序运行前就已经存在代理类的字节码文件，代理类和委托类的关系在运行前就确定了。</li>
+<li><strong>动态代理</strong> 动态代理类的源码是在程序运行期间由JVM根据反射等机制动态的生成，所以不存在代理类的字节码文件。代理类和委托类的关系是在程序运行时确定。<ul>
+<li><strong>java.lang.reflect.Proxy</strong> ：Java 动态代理机制生成的所有动态代理类的父类，它提供了一组静态方法来为一组接口动态地生成代理类及其对象, 其中newProxyInstance方法用于为指定类装载器、一组接口及调用处理器生成动态代理类实例</li>
+<li><strong>java.lang.reflect.InvocationHandler</strong>：这是调用处理器接口，它自定义了一个 invoke 方法，用于集中处理在动态代理类对象上的方法调用，通常在该方法中实现对委托类的代理访问。每次生成动态代理类对象时都要指定一个对应的调用处理器对象。 </li>
+</ul>
+</li>
+</ol>
+<h3 id="适配器模式">适配器模式</h3><ol>
+<li><strong>适配器模式</strong>：将一个类的接口，转换成客户期望的另外一个接口。适配器让原本接口不兼容的类可以很好的合作;<br>两种方式：①类的适配器模式（采用继承实现）②对象适配器（采用对象组合方式实现）；</li>
+<li><strong>使用场景</strong><ul>
+<li>系统需要使用现有的类，而这些类的接口不符合系统的接口。</li>
+<li>想要建立一个可以重用的类，用于与一些彼此之间没有太大关联的一些类，包括一些可能在将来引进的类一起工作</li>
+<li>使用第三方组件，组件接口定义和自己定义的不同，不希望修改自己的接口，但是要使用第三方组件接口的功能。</li>
+</ul>
+</li>
+</ol>
+<h3 id="装饰器模式VS代理模式">装饰器模式VS代理模式</h3><ol>
+<li><strong>装饰器模式</strong>关注于在一个对象上动态的添加方法，是继承关系的一个替代方案；然而<strong>代理模式</strong>关注于控制对对象的访问，并不提供对象本身的增强功能。</li>
+<li>对<strong>装饰器模式</strong>来说，装饰者和被装饰者都实现同一个接口; 对<strong>代理模式</strong>来说，代理类和真实处理的类都实现同一个接口</li>
+<li><h3 id="参考链接">参考链接</h3></li>
+<li><a href="http://layznet.iteye.com/blog/1182924" target="_blank" rel="noopener">Java动态代理</a></li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/设计模式/"> #设计模式 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              数据库重难点集锦
             
           
         </h1>
@@ -178,7 +734,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2015/05/19/数据库重难点集锦/#comments" >
+            <a href="../../2015/05/19/数据库重难点集锦/#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/19/数据库重难点集锦/"></span>
             </a>
           </span>
@@ -193,8 +749,7 @@
       
 
       
-        
-          <h3 id="常见的Hash算法和一致性哈希">常见的Hash算法和一致性哈希</h3><ul>
+        <h3 id="常见的Hash算法和一致性哈希">常见的Hash算法和一致性哈希</h3><ul>
 <li><p>线性哈希，平方取中法，随机数法，按位分割求和法  </p>
 </li>
 <li><p><strong>MD5和SHA</strong>这两种单向加密算法都是基于hash算法，前者产生128位的散列值，后者产生160位的散列值；两者都存在不同输入的散列值相同的情况，但是概率很低，为了防止被彩虹表破解，可以考虑加入Salt  </p>
@@ -261,12 +816,12 @@
 </li>
 </ol>
 <h3 id="MySQL的隔离级别与锁">MySQL的隔离级别与锁</h3><ol>
-<li><strong><a href="https://www.kancloud.cn/hx78/sql/379624" target="_blank" rel="external">四种隔离级别</a></strong>: 隔离级别决定了一个会话中的事务可能对另一个会话的影响、并发会话对数据库的操作、一个会话中所见数据的一致性; MySQL的InnoDB支持四种隔离级别,默认是可重读隔离级别<ul>
+<li><strong><a href="https://www.kancloud.cn/hx78/sql/379624" target="_blank" rel="noopener">四种隔离级别</a></strong>: 隔离级别决定了一个会话中的事务可能对另一个会话的影响、并发会话对数据库的操作、一个会话中所见数据的一致性; MySQL的InnoDB支持四种隔离级别,默认是可重读隔离级别<ul>
 <li><strong>未提交读READ UNCOMMITTED</strong>：最低级别的隔离，也被称之为脏读，它允许一个事务读取还没commit的事务的执行结果，这样可能会提高性能，但是导致脏读   </li>
 <li><strong>提交读READ COMMITTED</strong>：在一个事务中只允许看见已经commit的事务所做的改变。如果一个session中select还在查询中，另一会话session此时insert一条记录，则新添加的数据不可见；只有该操作commit之后才可见，也就是说—-<strong>不可重复读</strong>   </li>
 <li><strong>可重读REPEATABLE READ</strong>：同一个事务的多个实例在并发读取数据时会看到同样的数据行。也就是说在一个事务中重复select的结果一样，除非本事务中添加新数据到数据库，可能导致<strong>幻读</strong>;也就说事务之间只是在新数据方面突破了隔离，对已存在的数据仍旧隔离。</li>
 <li><strong>可串行化SERIALIZABLE</strong>：最高级别的隔离，强制事务排序并且只允许事务串行执行。为了达到此目的，数据库会锁住每个读的数据行，减少了并发，增加了稳定性，但是可能导致超时和锁竞争现象</li>
-<li><strong>事务并发导致的几个问题</strong><a href="https://draveness.me/mysql-transaction" target="_blank" rel="external">事务实现</a><ul>
+<li><strong>事务并发导致的几个问题</strong><a href="https://draveness.me/mysql-transaction" target="_blank" rel="noopener">事务实现</a><ul>
 <li><strong>脏读(Drity Read)</strong>：某个事务已更新一份数据，另一个事务在此时读取了同一份数据，由于某些原因，前一个回滚了操作，则后一个事务所读取的数据就会是不正确的</li>
 <li><strong>不可重复读</strong>:在一个事务的两次查询之中数据不一致，这可能是两次查询过程中间插入了一个事务更新了原有的数据。</li>
 <li><strong>幻读</strong>：例如一个事务的两次查询过程中有另外一个事务插入数据造成第二次查询出现了在第一次查询中没有出现的数据；<strong>例如</strong>如果事务A运行”SELECT count(1) from TABLE_X” ，然后事务B在 TABLE_X 加入一条新数据并提交，当事务A再运行一次 count(1)结果不会是一样的，这就叫做<strong>幻读</strong></li>
@@ -294,8 +849,8 @@
 <li><strong>共享锁（读锁）</strong>：允许事务对一条行数据进行读取；<strong>互斥锁（写锁）</strong>：允许事务对一条行数据进行删除或更新；</li>
 </ol>
 <h3 id="MySQL_InnoDB实现">MySQL InnoDB实现</h3><ol>
-<li><a href="https://draveness.me/mysql-innodb" target="_blank" rel="external">『浅入浅出』MySQL 和 InnoDB</a></li>
-<li><a href="https://draveness.me/database-concurrency-control" target="_blank" rel="external">浅谈数据库并发控制 - 锁和 MVCC</a></li>
+<li><a href="https://draveness.me/mysql-innodb" target="_blank" rel="noopener">『浅入浅出』MySQL 和 InnoDB</a></li>
+<li><a href="https://draveness.me/database-concurrency-control" target="_blank" rel="noopener">浅谈数据库并发控制 - 锁和 MVCC</a></li>
 </ol>
 <h3 id="MyISAM和InnoDB存储引擎之间的区别">MyISAM和InnoDB存储引擎之间的区别</h3><ol>
 <li>InnoDB支持事务、外键和行锁，而MyISAM不支持这些高级功能，但是<strong>MyISAM是默认引擎</strong>，InnoDB则需要指定(事务是一种高级的处理方式，如在一些列增删改中只要哪个出错还可以回滚还原)</li>
@@ -308,6 +863,8 @@
 <li><strong>MyISAM和InnoDB索引B+树结构的区别</strong>：<strong>MyISAM引擎</strong>使用B+Tree作为索引结构，叶节点的data域存放的是数据记录的地址，索引检索的算法为首先按照B+Tree搜索算法搜索索引，如果指定的Key存在，则取出其data域的值，然后以data域的值为地址，读取相应数据记录。这种索引方式就属于“非聚集索引”；<strong>InnoDB中</strong>，表数据文件本身就是按B+Tree组织的一个索引结构，这棵树的叶节点data域保存了完整的数据记录  </li>
 </ol>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/myisam.png" width="100%"><br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/innodb.png" width="100%">   </p>
+<h3 id="B+_Tree_vs_LSM_存储引擎的区别">B+ Tree vs LSM 存储引擎的区别</h3><p>关系数据库本质上是面向磁盘设计的，它把数据分成很多很多的页面，通过页面缓存机制来管理页面，底层的索引是B+树。这种引擎发展得非常成熟，但是写入性能差，原因是关系数据库的写入放大效应。用户数据是按行写入的，但是关系数据库却是按页面管理的，有时只写了一行数据，却不得不把整个页面刷入磁盘。另外一类流行的引擎是LSM树。例如LevelDB和RocksDB。这种引擎采用基线加增量的设计，数据首先以增量的形式写入到内存中，当增量达到一个阀值时统一写到磁盘。这种做法的好处是解决了关系数据库写入放大的问题，但是它的合并代价会比较大，可能出现合并速度赶不上内存写入的情况。</p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/B+vsLSM.jpeg" width="100%"></p>
 <h3 id="SQL语句">SQL语句</h3><ol>
 <li><p><strong>in和exists区别</strong></p>
 <ul>
@@ -340,11 +897,10 @@
 <li><strong>数据库sharding分片</strong>：</li>
 </ol>
 <h3 id="参考链接">参考链接</h3><ol>
-<li><a href="http://blog.jobbole.com/100349/" target="_blank" rel="external">数据库整体架构原理</a></li>
-<li><a href="http://www.codeceo.com/article/mysql-index-struct.html#0-tsina-1-46551-397232819ff9a47a7b7e80a40613cfe1" target="_blank" rel="external">MySQL数据库索引原理</a>  </li>
+<li><a href="http://blog.jobbole.com/100349/" target="_blank" rel="noopener">数据库整体架构原理</a></li>
+<li><a href="http://www.codeceo.com/article/mysql-index-struct.html#0-tsina-1-46551-397232819ff9a47a7b7e80a40613cfe1" target="_blank" rel="noopener">MySQL数据库索引原理</a>  </li>
 </ol>
 
-        
       
     </div>
 
@@ -361,424 +917,6 @@
 
       
       
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/15/Mac常用快捷键和Tips/">
-                Mac常用快捷键和Tips
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-15
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Mac系统/">Mac系统</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/15/Mac常用快捷键和Tips/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/15/Mac常用快捷键和Tips/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>在Mac系统中学会使用常用快捷键可以大大提高效率，以下为Mac系统中常用的快捷键和在Elipse开发中的常用快捷键(包含Mac和Win两个版本)。</p>
-<h3 id="Mac系统中常用快捷键">Mac系统中常用快捷键</h3><pre><code>cmd+alt+<span class="number">1</span>  <span class="comment">--- 自动整理当前文件夹中文件</span>
-ctrl+<span class="constant">space</span> <span class="comment">---  启动spotlight全局搜索</span>
-cmd+<span class="constant">space</span> <span class="comment">--- 切换输入法</span>
-cmd+向上/向下箭头 <span class="comment">--- 返回上级文件夹/打开当前文件夹或文件</span>
-cmd+T <span class="comment">--- 新建各种窗口(包括terminal窗口、finder窗口、chrome tab等)</span>
-cmd+shift+{/} <span class="comment">--- 切换tab(包括finder、terminal等窗口tab)</span>
-cmd+shift+<span class="number">3</span> <span class="comment">--- 屏幕截屏</span>
-cmd+shift+<span class="number">4</span> <span class="comment">---选取区域截图</span>
-cmd+<span class="built_in">delete</span> <span class="comment">--- 删除某个文件</span>
-enter <span class="comment">--- 修改文件名(类似于win中的F2)</span>
-cmd+I <span class="comment">--- 查看文件详细属性</span>
-cmd+option+esc <span class="comment">--- 打开进程管理窗口</span>
-</code></pre><h3 id="Mac常用设置方法">Mac常用设置方法</h3><h4 id="设置Eclipse中package_explorer窗口中项目列表字体大小">设置Eclipse中package explorer窗口中项目列表字体大小</h4><ul>
-<li><p>Step1: 下载安装TinkerTool的软件  </p>
-</li>
-<li><p>Step2: 点击fonts，修改Help tags的字体大小</p>
-</li>
-</ul>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Mac/"> #Mac </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/">
-                Mac设置环境变量(adb+NDK+sdk)
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-15
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Mac系统/">Mac系统</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>无论是在windows还是mac系统下，对于程序猿而言，在terminal中输入命令进行一些常用操作是比用鼠标更为快捷的方式。那么为了能够打开terminal就可以直接输入并执行命令，就需要进行环境变量的设置，这样就不必进入命令文件所在目录下执行该命令了。windows下配置环境变量较为简单，在此讲一下mac下配置环境变量的方法和注意事项。</p>
-<p><strong>1. 打开terminal，输入<code>cd ~</code>, 进入当前用户home目录</strong></p>
-<p><strong>2. 输入<code>touch .bash_profile</code>, 创建bash_profile文件(如果该文件已经存在则可以直接进入第3步)</strong></p>
-<p><strong>3. 打开记事本编辑bash_profile文件，示例如下</strong></p>
-<pre><code>方式一：用<span class="constant">SDK_HOME指</span>代一个通用路径，一处设置，多处使用，结构明晰，然后设置到<span class="constant">PATH</span>
-
-export <span class="constant">SDK_HOME=</span>“/usr/sdk”             
-export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:</span><span class="variable">${</span><span class="constant">SDK_HOME}</span><span class="symbol">:</span><span class="variable">${</span><span class="constant">SDK_HOME}</span>/<span class="symbol">tools:</span>/usr/ndk
-
-
-方式二：直接将各个命令的路径用<span class="symbol">:</span>连接起来设置到<span class="constant">PATH </span>形如--- export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:</span>路径<span class="number">1</span><span class="symbol">:</span>路径<span class="number">2</span><span class="symbol">:</span>路径<span class="number">3</span>
-
-export <span class="constant">PATH=</span><span class="variable">${</span><span class="constant">PATH}</span><span class="symbol">:/usr/sdk</span><span class="symbol">:/usr/sdk/tools</span><span class="symbol">:/usr/ndk</span>
-</code></pre><p><strong>4. 保存修改，输入更新命令<code>source .bash_profile</code>,PATH变量配置完成</strong></p>
-<p><a href="http://blog.csdn.net/zf135792468/article/details/11926995" target="_blank" rel="external">参考链接</a></p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Android/"> #Android </a>
-          
-            <a href="../../tags/Mac/"> #Mac </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/05/12/如何阅读一本书/">
-                如何阅读一本书
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-12
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/读书札记/">读书札记</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/12/如何阅读一本书/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/12/如何阅读一本书/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>书籍使人进步！阅读使人明智！如何阅读一本书也是一门学问，读懂不同类型的书也是一件不容易的事情。美国教育家查尔斯-范多伦还特地写了一本《如何阅读一本书》来讲述读书的“方法论”，此文为部分书摘，闲来无事翻书，翻到哪儿写到哪儿，未完待续……
-          <div class="post-more-link text-center">
-            <a class="btn" href="../../2015/05/12/如何阅读一本书/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/阅读/"> #阅读 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/04/23/Java语言基础知识点/">
-                Java语言基础知识点
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-04-23
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/java学习笔记/">java学习笔记</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/04/23/Java语言基础知识点/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/23/Java语言基础知识点/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <ol>
-<li><strong>Switch语句参数</strong>: JDK7之前，switch 只能支持 byte、short、char、int 这几个基本数据类型和其对应的封装类型;如果想用String，需要将String包装成枚举类型作为参数；JDK7之后支持String类型直接作为参数<a href="http://blog.csdn.net/amazing7/article/details/51219315" target="_blank" rel="external">参考</a></li>
-<li><strong>for循环和foreach的区别</strong>: for循环效率高于foreach; for循环可以间隔遍历，步伐可以自由设置，但是foreach只能用于遍历读取每一个元素，还不能进行修改</li>
-<li><strong>Java和C++区别</strong>：①Java有接口，有垃圾回收机制②C++有引用，有多重继承，有操作符重载</li>
-<li><strong>JNI</strong><br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JNI.png" class="full-image" width="100%"></li>
-<li><strong>Java泛型</strong>：泛型是指在定义接口或者类时可以使用类型参数，泛型提供了编译期的类型安全检查，确保你只能把正确类型的对象放入集合中，避免了在运行时出现ClassCastException。Java中的泛型基本上都是在编译器这个层次来实现的。在生成的Java字节代码中是不包含泛型中的类型信息的。使用泛型的时候加上的类型参数，会被编译器在编译的时候去掉，JVM看到的只是List，而由泛型附加的类型信息对JVM来说是不可见的。这个过程就称为<strong>类型擦除</strong>。比如一个方法如果接收List<object>作为形式参数，那么如果尝试将一个List<string>的对象作为实际参数传进去，却发现无法通过编译；因为这会产生隐含的类型转换问题，编译器直接就禁止这样的行为；Array不支持泛型，所以不能保证编译期的类型安全保证。</string></object></li>
-<li><p><strong>BIO、NIO、AIO</strong>：三者之间的区别，类似于resin、apache、nginx在IO处理上的区别，从多线程互不干扰的阻塞式执行(resin)，到轮询式的同步非阻塞式（apache），再到异步非阻塞式（nginx）,现在这三种IO都在JDK中予以了支持</p>
-<ul>
-<li><strong>BIO</strong>是面向流的同步阻塞式IO方式，<strong>对于每一个客户端Socket连接，服务端都会新开一个线程处理</strong>,在此期间线程一直被占用,直到socket关闭,其中tcp的连接、数据的读取read、数据的返回都是被阻塞的。也就是说这期间会大量的浪费cpu的时间片和线程占用的内存资源。<strong>优缺点和适应情景</strong>BIO方式具有很高的响应速度，并且控制起来简单，在连接数较少且固定的架构非常有效，但是如果对每一个连接都产生一个线程的无疑是对系统资源的一种浪费，如果连接数较多将会出现资源不足的情况。</li>
-<li><strong>NIO(new IO从JDK1.4开始)</strong>是面向缓冲区的同步非阻塞式IO方式, <strong>对于每一个客户端请求，服务端新开一个线程处理</strong>；即客户端发送的连接请求都会注册到多路复用器上，多路复用器轮询到连接有I/O请求时才启动一个线程进行处理,当连接没有数据时，是没有工作线程来处理的; 它的非阻塞模式使用一个专用的reactor来处理分发IO事件，数据处理采用双通道模式，client和server各自维护一个选择器用于检测通道上的事件，通过访问选择器来处理感兴趣事件。<strong>优缺点和适应情景</strong>NIO方式适用于连接数目多且连接比较短（轻操作）的架构，比如聊天服务器，并发局限于应用中，编程比较复杂</li>
-<li><strong>AIO(Asynchronous IO从JDK1.7开始)</strong>是一种异步非阻塞的IO方式;<strong>对于每一个客户端的有效请求，服务端新开一个线程处理</strong>;即客户端的I/O请求都是由OS先完成了再通知服务器应用去启动线程进行处理，每个线程不必亲自处理IO，而是委派OS来处理，并且也不需要等待IO完成了，如果完成后，OS会通知的;<strong>优缺点和适应情景</strong>AIO方式使用于连接数目多且连接比较长（重操作）的架构，比如相册服务器，充分调用OS参与并发操作，编程比较复杂</li>
-</ul>
-</li>
-<li><p><strong>为什么匿名内部类和局部内部类只能访问final变量？</strong>：因为虽然匿名内部类在方法的内部，但实际编译的时候，内部类编译成Outer.Inner,这说明内部类所处的位置和外部类中的方法处在同一个等级上，外部类中的方法中的变量或参数只是方法的局部变量，这些变量或参数的作用域只在这个方法内部有效。因为编译的时候内部类和方法在同一级别上，所以方法中的变量或参数只有为final，内部类才可以引用，因为Java采用了一种copy local variable的方式来实现，也就是说把定义为final的局部变量拷贝过来用，而引用的也可以拿过来用，只是不能重新赋值。</p>
-</li>
-<li><strong>JDK8的新特性</strong>:<ul>
-<li><strong>新增函数接口</strong>，引入注解@FunctionalInterface，函数式接口就是只有一个方法的普通接口</li>
-<li><strong>接口可以有默认方法和实现以及静态方法</strong></li>
-<li>取消方法区/永久代，采用元空间取代</li>
-<li>新的Date-Time API</li>
-<li>引入Optional类来防止空指针异常，它可以保存类型T的值，或者保存null。使用Optional类我们就不用显式进行空指针检查，主要是利用orElseGet(),flatMap()等函数</li>
-<li>Process类现在增加了两个新的方法用于<strong>终止进程</strong>；第一个是isAlive()方法，有了它你可以判断进程是否还活着。第二个方法则更加强大，它叫destroyForcibly()，你可以用它来强制的杀掉一个已经超时或者不再需要的进程</li>
-<li>Java8引入了一个<strong>新的读写锁StampedLock</strong>。它不仅更快，同时还提供了一系列强大的API来实现乐观锁，这样如果没有写操作在访问临界区域的话，你只需很低的开销就能获取到一个读锁。访问结束后你可以查询锁来判断这期间是否发生了写操作，如果有的话再选择进行重试，升级锁，或者放弃这个操作</li>
-<li><strong>新的增强的随机数生成方法SecureRandom.getinstanceStrong()</strong>，它能自动选择出当前JVM可用的最佳的随机数生成器。这样减少了获取失败的机率，同时也避免了默认的弱随机数生成器可能会导致密钥或者加密值容易被黑客攻破的问题</li>
-</ul>
-</li>
-<li><p><strong>Java 8 中的 Stream</strong> 是对集合（Collection）对象功能的增强，它专注于对集合对象进行各种非常便利、高效的聚合操作（aggregate operation），或者大批量数据操作 (bulk data operation)。Stream API 借助于同样新出现的 Lambda 表达式，极大的提高编程效率和程序可读性。同时它提供串行和并行两种模式进行汇聚操作，并发模式能够充分利用多核处理器的优势。通常编写并行代码很难而且容易出错, 但使用 Stream API 无需编写一行多线程的代码，就可以很方便地写出高性能的并发程序；Stream 可以并行化遍历操作，使用并行去遍历时，数据会被分成多个段，其中每一个都在不同的线程中处理，然后将结果一起输出; Stream 的并行操作依赖于 Java7 中引入的 Fork/Join 框架（JSR166y）来拆分任务和加速处理过程</p>
-<pre><code><span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> nums <span class="subst">=</span> Lists<span class="built_in">.</span>newArrayList(<span class="number">1</span>,<span class="built_in">null</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="built_in">null</span>,<span class="number">6</span>);
-<span class="comment">// 创建stream --&gt; map转换stream --&gt; reduce聚合函数</span>
-<span class="comment">// 含义：给定一个Integer类型的List，获取其对应的Stream对象，然后进行过滤掉null，再去重，再每个元素乘以2，再每个元素被消费的时候打印自身，在跳过前两个元素，最后取前四个元素进行加和运算</span>
-nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter(num <span class="subst">-&gt; </span>num <span class="subst">!=</span> <span class="built_in">null</span>)<span class="built_in">.
-               </span>distinct()<span class="built_in">.</span>mapToInt(num <span class="subst">-&gt; </span>num <span class="subst">*</span> <span class="number">2</span>)<span class="built_in">.
-               </span>peek(System<span class="built_in">.</span>out<span class="tag">::println</span>)<span class="built_in">.</span><span class="keyword">skip</span>(<span class="number">2</span>)<span class="built_in">.</span>limit(<span class="number">4</span>)<span class="built_in">.</span><span class="keyword">sum</span>();
-</code></pre></li>
-<li><p><strong>Java 8 中的 Lambda</strong> : 一段带有输入参数的可执行语句块,Lambda表达式取代了匿名类，取消了模板，允许用函数式风格编写代码。这样有时可读性更好，表达更清晰。书写形式：</p>
-<pre><code><span class="function"><span class="params">(params)</span> -&gt;</span> expression
-<span class="function"><span class="params">(params)</span> -&gt;</span> statement
-<span class="function"><span class="params">(params)</span> -&gt;</span> { statements }                      
-</code></pre></li>
-<li><strong>自动装箱</strong>就是Java自动将原始类型值转换成对应的对象，比如将int的变量转换成Integer对象，这个过程叫做装箱，反之将Integer对象转换成int类型值，这个过程叫做<strong>拆箱</strong>。自动装箱时编译器调用valueOf将原始类型值转换成对象，同时自动拆箱时，编译器通过调用类似intValue(),doubleValue()这类的方法将对象转换成原始类型值。原始类型byte,short,char,int,long,float,double和boolean对应的封装类为Byte,Short,Character,Integer,Long,Float,Double,Boolean。<strong><a href="http://www.importnew.com/15712.html" target="_blank" rel="external">存在问题</a></strong>: ①自动装箱会隐式地创建对象，如果在一个循环体中，会创建无用的中间对象，这样会增加GC压力，拉低程序的性能 ② 缓存对象，在Java中，会对-128到127的Integer对象进行缓存，当创建新的Integer对象时，如果符合这个这个范围，并且已有存在的相同值的对象，则返回这个对象，否则创建新的Integer对象。</li>
-<li>JDK             </li>
-</ol>
-<h3 id="参考链接">参考链接</h3><ol>
-<li><a href="http://ifeve.com/lambda/" target="_blank" rel="external">Java8初体验（一）lambda表达式语法</a></li>
-<li><a href="http://ifeve.com/stream/" target="_blank" rel="external">Java8初体验（二）Stream语法详解</a></li>
-<li><a href="http://www.importnew.com/16436.html" target="_blank" rel="external">Java8 lambda表达式10个示例</a></li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Java/"> #Java </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
     </div>
   </div>
 
@@ -788,7 +926,7 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 
   
   <div class="pagination">
-    <a class="extend prev" rel="prev" href="../14/">&laquo;</a><a class="page-number" href="../..//">1</a><span class="space">&hellip;</span><a class="page-number" href="../14/">14</a><span class="page-number current">15</span><a class="page-number" href="../16/">16</a><a class="extend next" rel="next" href="../16/">&raquo;</a>
+    <a class="extend prev" rel="prev" href="../14/">&laquo;</a><a class="page-number" href="../../">1</a><span class="space">&hellip;</span><a class="page-number" href="../14/">14</a><span class="page-number current">15</span><a class="page-number" href="../16/">16</a><a class="page-number" href="../17/">17</a><a class="extend next" rel="next" href="../16/">&raquo;</a>
   </div>
 
 
@@ -815,28 +953,28 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../..//categories">
+            <a href="../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="分布式系统,存储," />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="存储,分布式系统,">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../../../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../../favicon.ico?v=0.4.2">
 
 
 
@@ -69,7 +69,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -85,40 +85,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../../../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../../../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../../../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../../../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../../../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -163,7 +163,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="#comments" >
+            <a href="#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/分布式系统基础知识/"></span>
             </a>
           </span>
@@ -203,7 +203,7 @@
 <h3 id="CAP理论">CAP理论</h3><p>2000年7月，加州大学伯克利分校的Eric Brewer教授在ACM PODC会议上提出CAP猜想。2年后，麻省理工学院的Seth Gilbert和Nancy Lynch从理论上证明了CAP；也就是：<strong>一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项</strong>。  </p>
 <ol>
 <li><strong>一致性</strong>：<code>all nodes see the same data at the same time</code>；根据业务场景可以分为强一致性，弱一致性和最终一致性。对于关系型数据库，要求更新过的数据能被后续的访问都能看到，这是<strong>强一致性</strong>。如果能容忍后续的部分或者全部访问不到，则是<strong>弱一致性</strong>。如果经过一段时间后要求能访问到更新后的数据，则是<strong>最终一致性</strong>。</li>
-<li><strong>可用性</strong>：<code>Reads and writes always succeed</code>，即服务一直可用，而且是正常响应时间。</li>
+<li><strong>可用性</strong>：<code>Reads and writes always succeed</code>，即服务一直可用，而且是正常响应时间。如果系统每运行100个时间单位，会有1个时间单位无法提供服务，则说系统的可用性是99%。</li>
 <li><strong>分区容错性</strong>：<code>the system continues to operate despite arbitrary message loss or failure of part of the system</code>，即分布式系统在遇到某节点或网络分区故障的时候，仍然能够对外提供满足一致性和可用性的服务。</li>
 <li><strong>CAP权衡</strong>：</li>
 </ol>
@@ -213,10 +213,12 @@
 <p>AP wihtout C：要高可用并允许分区，则需放弃一致性。一旦分区发生，节点之间可能会失去联系，为了高可用，每个节点只能用本地数据提供服务，而这样会导致全局数据的不一致性。现在众多的NoSQL都属于此类。</p>
 <p>对于多数大型互联网应用，集群规模庞大、主机众多、部署分散，节点故障、网络故障是常态，而且要保证服务可用性达到N个9，往往采用AP without C，只保证最终一致性即可。</p>
 <p>对于银行业场景，C必须保证。网络发生故障宁可停止服务，这是保证CA，舍弃P；还有一种是保证CP，舍弃A，例如网络故障事只读不写。</p>
+<p>保证P的前提下，选择一致性C，举例：传统单库水平切分，就是这类选型的典型</p>
+<p>保证P的前提下，选择可用性A，举例：双主库同步高可用，就是这类选型的典型</p>
 </blockquote>
 <h3 id="分布式存储常见概念名词">分布式存储常见概念名词</h3><ol>
 <li><strong>RAID(Redundant Array of Independent Disk 独立冗余磁盘阵列)</strong>是加州大学伯克利分校1987年提出，最初是为了组合小的廉价磁盘来代替大的昂贵磁盘，同时希望磁盘失效时不会使对数据的访问受损失而开发出一定水平的数据保护技术。<strong>RAID就是一种由多块廉价磁盘构成的冗余阵列，在操作系统下是作为一个独立的大型存储设备出现。RAID可以充分发挥出多块硬盘的优势，可以提升硬盘速度，增大容量，提供容错功能够确保数据安全性，易于管理的优点</strong>，在任何一块硬盘出现问题的情况下都可以继续工作，不会受到损坏硬盘的影响。</li>
-<li><strong>RAID卡</strong>就是用来实现RAID功能的板卡，通常是由I/O<a href="http://baike.baidu.com/view/50152.htm" target="_blank" rel="external">处理器</a>、SCSI控制器、SCSI连接器和缓存等一系列零组件构成的。不同的RAID卡支持的RAID功能不同。支持RADI0、RAID1、RAID3、RAID4、RAID5、RAID10不等。RAID卡可以让很多磁盘驱动器同时传输数据，而这些磁盘驱动器在逻辑上又是一个磁盘驱动器，所以使用RAID可以达到单个的磁盘驱动器几倍、几十倍甚至上百倍的速率。这也是RAID卡最初想要解决的问题。可以提供容错功能，这是RAID卡的第二个重要功能。</li>
+<li><strong>RAID卡</strong>就是用来实现RAID功能的板卡，通常是由I/O<a href="http://baike.baidu.com/view/50152.htm" target="_blank" rel="noopener">处理器</a>、SCSI控制器、SCSI连接器和缓存等一系列零组件构成的。不同的RAID卡支持的RAID功能不同。支持RADI0、RAID1、RAID3、RAID4、RAID5、RAID10不等。RAID卡可以让很多磁盘驱动器同时传输数据，而这些磁盘驱动器在逻辑上又是一个磁盘驱动器，所以使用RAID可以达到单个的磁盘驱动器几倍、几十倍甚至上百倍的速率。这也是RAID卡最初想要解决的问题。可以提供容错功能，这是RAID卡的第二个重要功能。</li>
 <li><strong>MVCC</strong></li>
 <li><strong>EC编码与各级RAID</strong></li>
 </ol>
@@ -228,6 +230,15 @@
 <p>目前存在多种索引的选择来解决各种访问模式的需求。例如 B-Trees 是范围请求最好的选择（例如在特定时间线上索引所有的数据记录），哈希表（Hash-Maps）在性能上很难打败基于键值的搜索方法，而布隆过滤器 (Bloom Filter) 通常用于检测是否存在某条记录。由于索引对于数据库系统和其它一些应用的重要性，过去几十年来，它们已经广泛地发展为更高的内存、缓存和 CPU 效率的方法</p>
 <p>本论文的核心思想是一个模型可以学习排序顺序或查找键的结构，并使用这一信号有效地预测记录的位置或存在。我们从理论上分析了学习索引在什么条件下表现优于传统索引结构，并描述了设计学习索引结构的主要挑战。我们的初步结果表明，借助神经网络，我们能够超过缓存优化的 B-Trees 高达 70％的速度，同时为若干个真实数据集节省一个数量级的内存。</p>
 </blockquote>
+<h3 id="分布式事务">分布式事务</h3><h4 id="两阶段提交2PC">两阶段提交2PC</h4><ol>
+<li>二阶段提交2PC（Two phase Commit）是一种在分布式环境下所有节点进行事务提交保持一致性的算法。它通过引入一个协调者（Coordinator）来统一掌控所有参与者（Participant）的操作结果，并指示它们是否要把操作结果进行真正的提交（commit）或者回滚（rollback）。</li>
+<li>两个阶段：<ul>
+<li>投票阶段（voting phase）：参与者通知协调者，协调者反馈结果；</li>
+<li>提交阶段（commit phase）：收到参与者的反馈后，协调者再向参与者发出通知，根据反馈情况决定各参与者是否要提交还是回滚</li>
+</ul>
+</li>
+<li>2PC在执行过程中，所有节点都处于阻塞状态，所有节点所持有的资源（例如数据库数据，本地文件等）都处于封锁状态。例如，某一个参与者回复消息之前，所有参与者以及协调者都处于阻塞状态；在协调者发出消息之前，所有参与者都处于阻塞状态。要打破完全阻塞状态需要引入超时机制。</li>
+</ol>
 <h3 id="常见分布式一致性算法">常见分布式一致性算法</h3><h4 id="Paxos">Paxos</h4><h4 id="Raft">Raft</h4><h4 id="异同点">异同点</h4><h4 id="应用场景">应用场景</h4><ol>
 <li><strong>2PC和Paxos区别</strong>：2PC用于保证多个数据分片上分布式事务的原子性，Paxos协议用于保证同一个数据分片在多个副本的分布式一致性，所以两者可以是互补的关系，绝不是替代关系。对于2PC协调者单点问题，可以利用Paxos协议解决，当协调者出问题时，选一个新的协调者继续提供服务。</li>
 </ol>
@@ -239,9 +250,9 @@
       
         <div class="post-tags">
           
-            <a href="../../../../tags/分布式系统/"> #分布式系统 </a>
-          
             <a href="../../../../tags/存储/"> #存储 </a>
+          
+            <a href="../../../../tags/分布式系统/"> #分布式系统 </a>
           
         </div>
       
@@ -250,13 +261,13 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="../计算机体系结构学习札记/">计算机体系结构学习札记</a>
+              <a href="../区块链技术探秘/">区块链技术探秘</a>
             
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="../投资随笔/">投资随笔</a>
+              <a href="../C++常用数据结构/">C++常用数据结构</a>
             
           </div>
         </div>
@@ -272,8 +283,7 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2017/11/11/分布式系统基础知识/"
-               data-title="分布式存储系统基础" data-url="https://charles-xiao.github.io/2017/11/11/分布式系统基础知识/">
+          <div class="ds-thread" data-thread-key="2017/11/11/分布式系统基础知识/" data-title="分布式存储系统基础" data-url="https://charles-xiao.github.io/2017/11/11/分布式系统基础知识/">
           </div>
         
       </div>
@@ -317,28 +327,28 @@
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../../../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../../../..//categories">
+            <a href="../../../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../../../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -376,7 +386,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#块存储/对象存储/文件系统"><span class="nav-number">1.</span> <span class="nav-text">块存储/对象存储/文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OLAP与OLTP"><span class="nav-number">2.</span> <span class="nav-text">OLAP与OLTP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAP理论"><span class="nav-number">3.</span> <span class="nav-text">CAP理论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式存储常见概念名词"><span class="nav-number">4.</span> <span class="nav-text">分布式存储常见概念名词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#轮询调度算法"><span class="nav-number">5.</span> <span class="nav-text">轮询调度算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Learned_Indexes_VS_Traditional_Indexes"><span class="nav-number">6.</span> <span class="nav-text">Learned Indexes VS Traditional Indexes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见分布式一致性算法"><span class="nav-number">7.</span> <span class="nav-text">常见分布式一致性算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Paxos"><span class="nav-number">7.1.</span> <span class="nav-text">Paxos</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Raft"><span class="nav-number">7.2.</span> <span class="nav-text">Raft</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#异同点"><span class="nav-number">7.3.</span> <span class="nav-text">异同点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#应用场景"><span class="nav-number">7.4.</span> <span class="nav-text">应用场景</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#块存储/对象存储/文件系统"><span class="nav-number">1.</span> <span class="nav-text">块存储/对象存储/文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OLAP与OLTP"><span class="nav-number">2.</span> <span class="nav-text">OLAP与OLTP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAP理论"><span class="nav-number">3.</span> <span class="nav-text">CAP理论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式存储常见概念名词"><span class="nav-number">4.</span> <span class="nav-text">分布式存储常见概念名词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#轮询调度算法"><span class="nav-number">5.</span> <span class="nav-text">轮询调度算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Learned_Indexes_VS_Traditional_Indexes"><span class="nav-number">6.</span> <span class="nav-text">Learned Indexes VS Traditional Indexes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式事务"><span class="nav-number">7.</span> <span class="nav-text">分布式事务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#两阶段提交2PC"><span class="nav-number">7.1.</span> <span class="nav-text">两阶段提交2PC</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见分布式一致性算法"><span class="nav-number">8.</span> <span class="nav-text">常见分布式一致性算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Paxos"><span class="nav-number">8.1.</span> <span class="nav-text">Paxos</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Raft"><span class="nav-number">8.2.</span> <span class="nav-text">Raft</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#异同点"><span class="nav-number">8.3.</span> <span class="nav-text">异同点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#应用场景"><span class="nav-number">8.4.</span> <span class="nav-text">应用场景</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="java,android,life,CharlesXiao" />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="java,android,life,CharlesXiao">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../favicon.ico?v=0.4.2">
 
 
 
@@ -49,7 +49,7 @@
 <body>
 <!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
   <div class="container one-column 
-   page-home 
+  
 ">
     <div class="headband"></div>
 
@@ -71,7 +71,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -87,40 +87,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -148,9 +148,622 @@
           
           
             
-              <a class="post-title-link" href="../../2016/01/17/Html5、React-Native和Native应用开发方式的对比分析/">
-                Html5、React Native和Native应用开发方式的对比分析
-              </a>
+              海量数据处理常用方法
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-04-18
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/算法/">算法</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/04/19/海量数据处理常用方法/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/19/海量数据处理常用方法/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h3 id="BitSet位图">BitSet位图</h3><ol>
+<li><strong>BitSet原理</strong>BitSet位图类实现了一个按需增长的位向量，每一位值只有0或1，可以用1位来表示一个数据是否出现过，0为没有出现过，1表示出现过；内部维护了一个long数组，初始只有一个long，所以BitSet最小的size是64，当随着存储的元素越来越多，BitSet内部会动态扩充，最终内部是由N个long来存储。</li>
+<li><strong>常见的应用</strong>是那些需要对海量数据进行一些统计工作的时候，比如日志分析等；一个1G的空间有 8<em>1024</em>1024<em>1024=8.58</em>10^9bit，也就是可以表示85亿个不同的数</li>
+<li><strong>问题1</strong>：现在有1千万个随机数，随机数的范围在1到1亿之间。将1到1亿之间没有在随机数中的数求出来；<strong>问题2</strong>：两个10G文本, 里边是1-1亿的数字，怎么找出一个里边没有的3个数？<strong>答案</strong>：如果有足够的内存的话可以用位图法，即开一个1亿位的bitset，内存为100m/8== 12.5m, 然后如果一个数有出现，对应的bitset上标记为1，最后统计bitset上为0的即可。</li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/数据结构/"> #数据结构 </a>
+          
+            <a href="../../tags/算法/"> #算法 </a>
+          
+            <a href="../../tags/海量数据/"> #海量数据 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              二叉树常见问题
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-03-12
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/算法/">算法</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/03/12/二叉树常见问题/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/12/二叉树常见问题/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h4 id="链表相关问题"><a href="http://wuchong.me/blog/2014/03/25/interview-link-questions/" target="_blank" rel="noopener">链表相关问题</a></h4><ol>
+<li>在O(1)时间删除链表节点</li>
+<li>单链表的转置</li>
+<li>求链表倒数第k个节点</li>
+<li>求链表的中间节点</li>
+<li>判断单链表是否存在环</li>
+<li>找到环的入口点</li>
+<li>编程判断两个链表是否相交</li>
+<li>扩展：链表有环，如何判断相交</li>
+<li>扩展：两链表相交的第一个公共节点</li>
+</ol>
+<h4 id="求二叉树的深度(从根节点到叶子结点一次经过的结点形成树的一条路径，最长路径的长度为树的深度。根节点的深度为1。)">求二叉树的深度(从根节点到叶子结点一次经过的结点形成树的一条路径，最长路径的长度为树的深度。根节点的深度为1。)</h4><pre><code>private <span class="keyword">static</span> int getTreeHeight(<span class="type">TreeNode</span> root) {
+    <span class="keyword">if</span> (root == null)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="comment">// 左子树depth与右子树depth的较大值+1即为tree的depth</span>
+    int <span class="keyword">left</span> = getTreeHeight(root.<span class="keyword">left</span>);
+    int <span class="keyword">right</span> = getTreeHeight(root.<span class="keyword">right</span>);
+
+    <span class="keyword">return</span> <span class="keyword">left</span>&gt;<span class="keyword">right</span> ? <span class="keyword">left</span>+<span class="number">1</span>:<span class="keyword">right</span>+<span class="number">1</span>;
+}
+</code></pre><h4 id="求二叉树的节点个数">求二叉树的节点个数</h4><div align="center"><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/BTNodeNumber.jpg" width="50%"></div>
+
+<h4 id="求二叉树第K层的节点个数">求二叉树第K层的节点个数</h4><pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">int</span> <span class="title">kLevelNodeNumber</span><span class="params">(TreeNode root, <span class="keyword">int</span> k)</span> </span>{
+    <span class="comment">// 第k层节点数可以看做是左子树的k-1层节点数+右子树的k-1层节点数</span>
+    <span class="keyword">if</span> (root == <span class="keyword">null</span> || k &lt;= <span class="number">0</span>)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="keyword">if</span> (k == <span class="number">1</span>)
+        <span class="keyword">return</span> <span class="number">1</span>;
+    <span class="keyword">int</span> leftNodeNum = kLevelNodeNumber(root.left, k-<span class="number">1</span>);
+    <span class="keyword">int</span> rightNodeNum = kLevelNodeNumber(root.right, k-<span class="number">1</span>);
+
+    <span class="keyword">return</span> leftNodeNum+rightNodeNum;
+}
+</code></pre><h4 id="求二叉树中叶子节点的个数">求二叉树中叶子节点的个数</h4><pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">int</span> <span class="title">leafNodeNumber</span><span class="params">(TreeNode root)</span> </span>{
+    <span class="keyword">if</span> (root == <span class="keyword">null</span>)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="keyword">if</span> (root.left == <span class="keyword">null</span> &amp;&amp; root.right == <span class="keyword">null</span>)
+        <span class="keyword">return</span> <span class="number">1</span>;
+    <span class="keyword">return</span> leafNodeNumber(root.left) + leafNodeNumber(root.right);
+
+}
+</code></pre><h4 id="反转二叉树(求二叉树镜像)_—-_递归和循环解法">反转二叉树(求二叉树镜像) —- 递归和循环解法</h4><div align="center"><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/invertBT.jpg" width="60%"></div>
+
+<h4 id="判断两棵二叉树是否结构相同">判断两棵二叉树是否结构相同</h4><pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">boolean</span> <span class="title">EqualsOrNot</span><span class="params">(TreeNode node1, TreeNode node2)</span> </span>{
+    <span class="comment">// 如果两棵二叉树都为空，返回真;一真一假则返回false</span>
+    <span class="keyword">if</span> (node1 == <span class="keyword">null</span> &amp;&amp; node2 == <span class="keyword">null</span>) 
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    <span class="keyword">else</span> <span class="keyword">if</span>(node1==<span class="keyword">null</span> || node2==<span class="keyword">null</span>)
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    <span class="keyword">boolean</span> left = EqualsOrNot(node1.left, node2.left);
+    <span class="keyword">boolean</span> right = EqualsOrNot(node1.right, node2.right);
+    <span class="comment">// 如果对应的左子树和右子树都为true则返回真</span>
+    <span class="keyword">return</span> left &amp;&amp; right;
+}
+</code></pre><h4 id="判断一个二叉树是否是完全二叉树">判断一个二叉树是否是完全二叉树</h4><p><strong>完全二叉树：</strong>二叉树的深度为h，除第 h 层外，其它各层 (1～h-1) 的结点数都达到最大个数，第 h 层所有的结点都连续集中在最左边<br><strong>思路：</strong>任意的一个二叉树，都可以补成一个满二叉树。这样中间就会有很多空洞。在广度优先遍历的时候，如果是满二叉树，或者完全二叉树，这些空洞是在广度优先的遍历的末尾，当我们遍历到空洞的时候，整个二叉树就已经遍历完成了。而如果遍历到空洞还没有完成遍历则说明它是非完全二叉树</p>
+<pre><code><span class="keyword">private</span> static <span class="built_in">boolean</span> isCompleteBT(TreeNode root) {
+
+    LinkedList<span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span> <span class="built_in">queue</span> <span class="subst">=</span> <span class="literal">new</span> LinkedList<span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span>();
+    <span class="comment">// 进行广度优先遍历（层次遍历），并把NULL节点也放入队列</span>
+    TreeNode node;
+    <span class="built_in">queue</span><span class="built_in">.</span>offer(root);
+    <span class="keyword">while</span>((node<span class="subst">=</span><span class="built_in">queue</span><span class="built_in">.</span>poll()) <span class="subst">!=</span> <span class="built_in">null</span>) {
+        <span class="built_in">queue</span><span class="built_in">.</span>offer(node<span class="built_in">.</span>left);
+        <span class="built_in">queue</span><span class="built_in">.</span>offer(node<span class="built_in">.</span>right);
+    }
+    <span class="comment">// 有未访问到的的非NULL节点，则树存在空洞，为非完全二叉树</span>
+    <span class="keyword">while</span>(<span class="subst">!</span><span class="built_in">queue</span><span class="built_in">.</span>isEmpty()) {
+        <span class="keyword">if</span> (<span class="built_in">queue</span><span class="built_in">.</span>poll() <span class="subst">!=</span> <span class="built_in">null</span>)
+            <span class="keyword">return</span> <span class="literal">false</span>;
+    }
+    <span class="keyword">return</span> <span class="literal">true</span>;
+}
+</code></pre><h4 id="判断二叉树是不是平衡二叉树">判断二叉树是不是平衡二叉树</h4><p><strong>平衡二叉树</strong>它是一棵空树或它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树</p>
+<pre><code>private <span class="keyword">static</span> int getTreeHeight(<span class="type">TreeNode</span> root) {
+    <span class="keyword">if</span> (root == null)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="comment">// 左子树depth与右子树depth的较大值+1即为tree的depth</span>
+    int <span class="keyword">left</span> = getTreeHeight(root.<span class="keyword">left</span>);
+    int <span class="keyword">right</span> = getTreeHeight(root.<span class="keyword">right</span>);
+
+    <span class="keyword">return</span> <span class="keyword">left</span>&gt;<span class="keyword">right</span> ? <span class="keyword">left</span>+<span class="number">1</span>:<span class="keyword">right</span>+<span class="number">1</span>;
+}
+
+private <span class="keyword">static</span> boolean isBalanceBT(<span class="type">TreeNode</span> root) {
+    <span class="keyword">if</span> (root == null)
+        <span class="keyword">return</span> <span class="built_in">true</span>;
+    int leftHeight = getTreeHeight(root.<span class="keyword">left</span>);
+    int rightHeight = getTreeHeight(root.<span class="keyword">right</span>);
+    <span class="comment">// 左右子树的高度之差应该&lt;=1;而且左右子树都应该是平衡二叉树</span>
+    <span class="keyword">if</span> (<span class="type">Math</span>.<span class="built_in">abs</span>(leftHeight-rightHeight) &gt; <span class="number">1</span>)
+        <span class="keyword">return</span> <span class="built_in">false</span>;
+    <span class="keyword">else</span>
+        <span class="keyword">return</span> isBalanceBT(root.<span class="keyword">left</span>) &amp;&amp; isBalanceBT(root.<span class="keyword">right</span>);
+}
+</code></pre><p><strong>优化解法: 只后序遍历二叉树一次，一边遍历一边比较左右子树的深度差</strong></p>
+<div align="center"><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/balanceOnce.jpg" width="50%"></div>
+
+<h4 id="判断二叉树B是不是A的子结构">判断二叉树B是不是A的子结构</h4><p><strong>思路</strong>: 第一步在树A中找到和B的根节点的值一样的节点R，第二步再判断A中以R为根节点的子树是不是包含和树B一样的结构</p>
+<pre><code><span class="keyword">private</span> <span class="function"><span class="keyword">boolean</span> <span class="title">isBsubTreeOfA</span><span class="params">(TreeNode rootA, TreeNode rootB)</span> </span>{
+    <span class="keyword">boolean</span> res = <span class="keyword">false</span>;
+    <span class="keyword">if</span> (rootA != <span class="keyword">null</span> &amp;&amp; rootB != <span class="keyword">null</span>) {
+        <span class="keyword">if</span> (rootA.val == rootB.val)
+            res = EqualsTreeOrNot.EqualsOrNot(rootA, rootB);<span class="comment">// 判断两棵树是否结构相同</span>
+        <span class="keyword">if</span> (!res)
+            res = isBsubTreeOfA(rootA.left, rootB);
+        <span class="keyword">if</span> (!res)
+            res = isBsubTreeOfA(rootA.right, rootB);
+    }
+    <span class="keyword">return</span> res;
+}
+</code></pre><h4 id="求二叉树中两个节点的最低公共祖先节点">求二叉树中两个节点的最低公共祖先节点</h4><pre><code><span class="comment">// 二叉查找树</span>
+<span class="keyword">public</span> <span class="keyword">static</span> TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+
+    <span class="keyword">if</span> (root.<span class="keyword">val</span> &gt; p.<span class="keyword">val</span> &amp;&amp; root.<span class="keyword">val</span> &gt; q.<span class="keyword">val</span>)
+        <span class="keyword">return</span> lowestCommonAncestor(root.left, p, q);
+    <span class="keyword">else</span> <span class="keyword">if</span> (root.<span class="keyword">val</span> &lt; p.<span class="keyword">val</span> &amp;&amp; root.<span class="keyword">val</span> &lt; q.<span class="keyword">val</span>)
+        <span class="keyword">return</span> lowestCommonAncestor(root.right, p, q);
+    <span class="keyword">else</span>
+        <span class="keyword">return</span> root;
+}
+<span class="comment">// 普通树二叉树</span>
+<span class="keyword">public</span> <span class="keyword">static</span> TreeNode lowestCommonAncestorBT(TreeNode root, TreeNode p, TreeNode q) {
+    <span class="comment">// 对二叉树做一个前序遍历，如果找到目标节点或者到了叶节点就return,对于return的结果进行判断</span>
+    <span class="comment">// ，两者都!null说明root就是这两个节点的最近公共父节点;否则返回非空的那一个节点；回溯过程中到达最近公共父节点时会满足两者都!null</span>
+    <span class="keyword">if</span> (root == <span class="keyword">null</span> || root == p || root == q)
+        <span class="keyword">return</span> root;
+    TreeNode leftNode = lowestCommonAncestorBT(root.left, p, q);
+    TreeNode rightNode = lowestCommonAncestorBT(root.right, p, q);
+    <span class="keyword">if</span> (leftNode != <span class="keyword">null</span> &amp;&amp; rightNode != <span class="keyword">null</span>) {
+        <span class="keyword">return</span> root;
+    } <span class="keyword">else</span> <span class="keyword">if</span> (leftNode != <span class="keyword">null</span>) {
+        <span class="keyword">return</span> leftNode;
+    } <span class="keyword">else</span> {
+        <span class="keyword">return</span> rightNode;
+    }
+}
+</code></pre><h4 id="求二叉树中两个节点之间的最大距离">求二叉树中两个节点之间的最大距离</h4><pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="typename">int</span> getTreeHeight(TreeNode root) {
+    <span class="keyword">if</span> (root == <span class="literal">null</span>)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="comment">// 左子树depth与右子树depth的较大值+1即为tree的depth</span>
+    <span class="typename">int</span> left = getTreeHeight(root.left);
+    <span class="typename">int</span> right = getTreeHeight(root.right);
+
+    <span class="keyword">return</span> left&gt;right ? left+1:right+<span class="number">1</span>;
+}
+
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="typename">int</span> findMaxDistance(TreeNode root) {
+    <span class="keyword">if</span> (root == <span class="literal">null</span>)
+        <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="comment">// 左右子树中的最大距离</span>
+    <span class="typename">int</span> leftMaxDis = findMaxDistance(root.left);
+    <span class="typename">int</span> rightMaxDis = findMaxDistance(root.right);
+
+    <span class="comment">// 左右子树的最大Height</span>
+    <span class="typename">int</span> leftHeight = <span class="number">0</span>, rightHeight = <span class="number">0</span>;
+    <span class="keyword">if</span> (root.left != <span class="literal">null</span>)
+        leftHeight = getTreeHeight(root.left);
+    <span class="keyword">if</span> (root.right != <span class="literal">null</span>)
+        rightHeight = getTreeHeight(root.right);
+
+    <span class="typename">int</span> max = leftMaxDis &gt; rightMaxDis ? leftMaxDis : rightMaxDis;
+    <span class="keyword">return</span> max&gt;(leftHeight+rightHeight) ? max:(leftHeight+rightHeight);
+}
+</code></pre><h4 id="将二叉查找树变为有序的双向链表">将二叉查找树变为有序的双向链表</h4><p><strong>思路</strong>:将tree看做左子树，根节点，右子树三个部分，然后利用中序遍历先对左子树转变为双向链表然后连接根节点；然后将右子树转变为双向链表，根节点连接到该双向链表；最后返回一个有序双向链表的头结点</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">static</span> <span class="function">TreeNode <span class="title">BST2List</span><span class="params">(TreeNode root)</span> </span>{
+    TreeNode lastNodeOfList = <span class="keyword">null</span>;
+    lastNodeOfList = convert(root, lastNodeOfList);
+    <span class="comment">// 将lastNodeOfList从双向链表尾部移动到头部</span>
+    <span class="keyword">while</span> (lastNodeOfList != <span class="keyword">null</span> &amp;&amp; lastNodeOfList.left != <span class="keyword">null</span>) {
+        lastNodeOfList = lastNodeOfList.left;
+    }
+    <span class="keyword">return</span> lastNodeOfList;
+}
+
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="function">TreeNode <span class="title">convert</span><span class="params">(TreeNode root, TreeNode lastNodeOfList)</span> </span>{
+    <span class="keyword">if</span> (root == <span class="keyword">null</span>) {
+        <span class="keyword">return</span> root;
+    }
+    <span class="comment">// 转变左子树为双向链表</span>
+    <span class="keyword">if</span> (root.left != <span class="keyword">null</span>)
+        lastNodeOfList = convert(root.left, lastNodeOfList);
+    <span class="comment">// 修改双链表尾节点为当前节点</span>
+    <span class="keyword">if</span> (lastNodeOfList != <span class="keyword">null</span>) {
+        root.left = lastNodeOfList;
+        lastNodeOfList.right = root;
+    }
+    lastNodeOfList = root;
+    <span class="comment">// 转变右子树为双向链表</span>
+    <span class="keyword">if</span> (root.right != <span class="keyword">null</span>)
+        lastNodeOfList = convert(root.right, lastNodeOfList);
+    <span class="comment">// 返回值为双链表尾节点</span>
+    <span class="keyword">return</span> lastNodeOfList;
+}
+</code></pre><h4 id="由前序遍历序列和中序遍历序列重建二叉树">由前序遍历序列和中序遍历序列重建二叉树</h4><p>二叉树前序遍历序列中，第一个元素总是树的根节点的值。中序遍历序列中，左子树的节点的值位于根节点的值的左边，右子树的节点的值位于根节点的值的右边。<br><strong>递归解法</strong>：</p>
+<ol>
+<li>如果前序遍历为空或中序遍历为空或节点个数小于等于0，返回NULL。</li>
+<li>创建根节点。前序遍历的第一个数据就是根节点的数据，在中序遍历中找到根节点的位置，可分别得知左子树和右子树的前序和中序遍历序列，重建左右子树。</li>
+</ol>
+<h4 id="二叉树的下一个节点(给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点left和right，同时包含指向父结点的指针next)">二叉树的下一个节点(给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点left和right，同时包含指向父结点的指针next)</h4><p><strong>思路</strong>: 三种情况</p>
+<ol>
+<li>如果一个结点有右子树，那么它的下一个结点就是它的右子树中的左子结点。也就是说右子结点出发一直沿着指向左子结点的指针，我们就能找到它的下一个结点。 </li>
+<li><p>如果一个结点没有右子树，又可以分为两种情况：</p>
+<ul>
+<li>如果结点是它父节点的左子结点，那么它的下一个结点就是它的父结点。 </li>
+<li><p>如果一个结点既没有右子树，并且它还是它父结点的右子结点。我们可以沿着指向父节点的指针一直向上遍历，直到找到一个是它父结点的左结点的结点。如果这样的结点存在，那么这个结点的父结点就是我们要找的下一个结点。</p>
+<pre><code><span class="keyword">public</span> TreeLinkNode GetNext(TreeNode pNode) {
+    TreeNode curNode = <span class="keyword">null</span>;
+    <span class="comment">//第一步：判断是否有右孩子</span>
+    <span class="keyword">if</span>(pNode.right != <span class="keyword">null</span>){
+        curNode = pNode.right;
+        <span class="keyword">while</span>(curNode.left != <span class="keyword">null</span>) curNode = curNode.left;
+        <span class="keyword">return</span> curNode;
+    }
+    <span class="comment">//第二步：判断是否是其父节点的左孩子</span>
+    <span class="keyword">if</span>(pNode.<span class="keyword">next</span> == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;
+    <span class="keyword">if</span>(pNode == pNode.<span class="keyword">next</span>.left){
+        <span class="keyword">return</span> pNode.<span class="keyword">next</span>;
+    }
+    <span class="comment">//第三步：向上找其父节点，直到父节点是其父节点的父节点的左孩子</span>
+    curNode = pNode.<span class="keyword">next</span>;
+    <span class="keyword">while</span>(curNode.<span class="keyword">next</span> != <span class="keyword">null</span>){
+        <span class="keyword">if</span>(curNode == curNode.<span class="keyword">next</span>.left){
+            <span class="keyword">return</span> curNode.<span class="keyword">next</span>;
+        }
+        <span class="comment">//继续向上找父节点</span>
+        curNode = curNode.<span class="keyword">next</span>;
+    }
+    <span class="keyword">return</span> <span class="keyword">null</span>;
+}
+</code></pre></li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/数据结构/"> #数据结构 </a>
+          
+            <a href="../../tags/二叉树/"> #二叉树 </a>
+          
+            <a href="../../tags/递归/"> #递归 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Nginx配置教程
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-02-19
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/02/19/Nginx配置教程/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/19/Nginx配置教程/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h4 id="nginx反向代理/负载均衡">nginx反向代理/负载均衡</h4><p>nginx是一个网页服务器，它能反向代理HTTP, HTTPS, SMTP, POP3, IMAP的协议链接，以及负载均衡和HTTP缓存  </p>
+<ol>
+<li><strong>代理</strong>，就是在客户端和服务端之间强行添加了一层，用来实现流量转发的功能  </li>
+<li><strong>正向代理</strong>，是用于代理客户端的。举个很简单的例子：你直接在大陆地区访问google.com肯定是访问不了的，但是现在假如你有一台在美国的主机A，并且能够正常访问，那么你可以将浏览器对google.com的请求先转发给服务器A，服务器A收到请求后，扮演客户端的角色，发起对google.com的请求，服务器A收到响应后，又扮演服务端，将此响应原封不动的返回给你，自此，一次正向代理顺利完成。  </li>
+<li><strong>反向代理</strong>顾名思义是用来代理服务端的多台机器，访问同一个域名可以分流到不同的服务器。也就是<strong>负载均衡</strong>，用来分流流量压力到不同的服务器</li>
+</ol>
+<h4 id="nginx的多进程并发模型">nginx的多进程并发模型</h4><h4 id="nginx配置文件">nginx配置文件</h4><ol>
+<li><p>配置文件所在的常见目录: (可用nginx -t 测试配置文件是否正确)</p>
+<pre><code>/etc/nginx/nginx<span class="class">.conf</span>
+/opt/nginx/conf/nginx<span class="class">.conf</span>
+/usr/local/nginx/nginx<span class="class">.conf</span>
+/usr/local/etc/nginx/nginx.<span class="function"><span class="title">cnf</span><span class="params">(Mac系统)</span></span>
+</code></pre></li>
+<li><p>Nginx配置文件主要分成6部分：<strong>main（全局设置）、server（主机设置/指定虚拟主机域名、IP和端口）、upstream（上游服务器设置，主要为反向代理、负载均衡相关配置）和 location（URL匹配特定位置后的设置/用于匹配网页位置）、events(nginx工作模式)、http(http设置)</strong>  </p>
+</li>
+<li>他们之间的关系式：server继承main，location继承server,upstream既不会继承指令也不会被继承,它有自己的特殊指令，不需要在其他地方的应用</li>
+<li><a href="https://www.zybuluo.com/phper/note/89391" target="_blank" rel="noopener">参考链接</a></li>
+</ol>
+<h5 id="Nginx限速和超时配置">Nginx限速和超时配置</h5><ol>
+<li>nginx可以通过<figure class="highlight plain"><figcaption><span>两个模块都能够对客户端访问进行限制。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">2. [nginx访问限制模块limit_conn_zone 和limit_req_zone配置使用详解](http://blog.51cto.com/michaelkang/1257476)</span><br><span class="line">3. [nginx超时设置](http://blog.csdn.net/liujiyong7/article/details/18228915)</span><br><span class="line">4. **限速配置实例**</span><br><span class="line">	</span><br><span class="line">	&gt; * ```limit_req_log_level```: 设置日志级别，默认值为error级别，当服务器因为频率过高拒绝或者延迟处理请求时可以记下相应级别的日志。延迟记录的日志级别比拒绝的低一个级别，如果设置“limit_req_log_level notice”， 则延迟的日志就是info级别</span><br><span class="line">	</span><br><span class="line">	&gt; * ```limit_req_status```: 设置拒绝请求的响应状态码,例如```limit_req_status 503</span><br></pre></td></tr></table></figure></li>
+</ol>
+<pre><code><span class="xml">&gt; * <span class="comment"><figure class="highlight plain"><figcaption><span>zone</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; 设置内存限制域为10M(1M存储区可以保存32000个32字节或16000个64字节的状态。如果存储区满，服务器将对其他请求相应503状态码)，限制平均每秒不超过1个请求，同时允许超过频率限制的请求数不多于5个</span><br></pre></td></tr></table></figure></span>
+
+            limit_req_zone $binary_remote_addr zone=ttlsa_com:10m rate=1r/s;
+        server </span><span class="expression">{
+            <span class="variable">location</span> <span class="end-block">/www.ttlsa.com</span><span class="end-block">/ </span>{
+                <span class="variable">limit</span>_<span class="variable">req</span> <span class="variable">zone</span>=<span class="variable">ttlsa</span>_<span class="variable">com</span> <span class="variable">burst</span>=5;
+            }</span><span class="xml">
+        }
+        ```</span>
+</code></pre><h5 id="Nginx日志配置">Nginx日志配置</h5><ol>
+<li><p>error.log日志配置，主要用于排查错误。</p>
+<blockquote>
+<p>配置语法：error_log /path/file level;</p>
+<p>默认配置：error_log logs/error.log error;</p>
+<blockquote>
+<ul>
+<li><p>level是日志的输出等级，取值范围从小到大为(debug,info,notice,warn,error,crit,alert,emerg)。当设定为一个级别时，大于或者等于该级别的日志都会被输出到/path/file文件中，小于该级别的日志则不会输出。例如：当设定为error级别时，error，crit，alert，emerg级别的日志都会输出;如果设定的日志级别是debug，则会输出所有的日志。</p>
+</li>
+<li><p>/path/file也可以是/dev/null，这样就不会输出任何日志，这也是关闭error日志的唯一手段。</p>
+</li>
+<li><p>/path/file也可以是stderr，这样日志会输出到标准错误文件中。</p>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+</li>
+<li><p>access.log: nginx请求日志</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/nginx/"> #nginx </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              依道-wifi室内定位的实现原理
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-02-18
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/算法/">算法</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/02/18/依道-wifi室内定位的实现原理/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/18/依道-wifi室内定位的实现原理/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h3 id="技术背景和原理">技术背景和原理</h3><ol>
+<li>每一个无线AP都有一个全球唯一的MAC地址,并且一般来说无线AP在一段时间内是不会移动的; 然后每一个移动设备在开启Wi-Fi的情况下,即可扫描并收集周围的AP信号,无论是否加密,是否已连接，甚至信号强度不足以显示在无线信号列表中,都可以获取到AP广播出来的MAC地址</li>
+<li><strong>基于RSSI(信号接收强度)模型方法</strong>是一种基于MAC层的通过接收到的信号强弱测定信号点与接收点的距离，进而根据相应数据进行定位计算的方法。因为室内WIFI信号强度会随着传播距离的增加而降低(当然随着距离的增加同理定位的精度也会降低。)我们<strong>根据移动终端测量接收到的信号强度和已知的无线信号衰落模型，可以估算出收发方之间的距离，根据多个估算的距离值，可以计算出移动终端的位置</strong>  </li>
+<li>位置服务商不断更新、补充自己的数据库,以保证数据的准确性,毕竟无线AP不像基站塔那样基本100%不会移动 </li>
+</ol>
+<h3 id="两种算法">两种算法</h3><ol>
+<li><strong>三角定位</strong>:<br>如果我们已经知道了所有AP的位置，我们可以利用信号衰减模型RSSI估算出移动设备距离各个AP的距离,然后根据移动设备到周围AP距离作为直径画圆，其交点就是该设备的位置，如果三者两两相交而不是交于一点，可以采用近似估计法找出位置。很容易发现，三角定位算法需要我们提前知道AP的位置，因此对于环境变化较快的场合不适合使用。</li>
+<li><strong>指纹数据匹配算法</strong>：指纹算法类似于机器学习算法，分为两个阶段:<ul>
+<li><strong>离线训练阶段</strong>: 第一步，将需要室内定位区域划分网格，建立采样点（间距1~2m)；第二步，使用移动设备打开wifi逐个采样点采样，记录该点位置、所获取的RSSI及AP地址，保存到指纹数据库。<strong>采样过程</strong>对每个点每隔5s采样一次，共100次，然后对这些数据去除噪点，并对这些采样数据求均值</li>
+<li><strong>在线定位阶段</strong>: 用户持移动设备在定位区域移动，实时获取当前信号接收强度及AP地址，将该信息上传到服务器进行匹配（匹配算法有KNN、神经网络等),得到估算位置返还给手机app。<strong>匹配具体过程</strong>：例如该手机获取到10个ap信号及其对应的信号接收强度，那么就去指纹数据库寻找对应的数据进行匹配,怎么寻找呢？通过每个ap及其信号接受强度都可以在数据库找到多个位置信息(也就是在数据库找到K个信息最近的数据，最近的度量方法是通过RSSI和AP—-数据库中相同AP的RSSI和该RSSI差值小于某一阀值)，假设每个找到10个，那就是一共100个位置信息，那么最后100个里边出现频率最高的就是位置就是该移动设备的定位结果</li>
+</ul>
+</li>
+</ol>
+<h3 id="定位过程常见问题及解决方法">定位过程常见问题及解决方法</h3><ol>
+<li><strong>怎么解决定位过程中路由器信号遇到障碍物反射影响精度的问题</strong><ul>
+<li>对RSSI模型要进行环境参数拟合，添加高斯随机变量来对不同的环境进行模型优化</li>
+<li>路由器数目要足够多，这样可以减少部分路由器遇到墙壁反射带来的误差</li>
+<li>一个移动设备会同时接收到多个路由器信号来确定位置，如果该位置得到的某个路由器及其信号接受强度和原数据库信息差异过大，就应该修改数据库数据</li>
+</ul>
+</li>
+</ol>
+<h3 id="参考图">参考图</h3><p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/wifi定位.JPG" width="100%"></p>
+<h3 id="参考链接">参考链接</h3><ol>
+<li><a href="http://www.zhihu.com/question/20593603" target="_blank" rel="noopener">Wi-Fi 定位的原理</a></li>
+<li><a href="http://blog.liuning.tk/2015/09/consin-similarity-indoor-positioning" target="_blank" rel="noopener">基于余弦相似性的指纹匹配算法</a></li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/室内定位/"> #室内定位 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Html5、React Native和Native应用开发方式的对比分析
             
           
         </h1>
@@ -178,7 +791,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2016/01/17/Html5、React-Native和Native应用开发方式的对比分析/#comments" >
+            <a href="../../2016/01/17/Html5、React-Native和Native应用开发方式的对比分析/#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/17/Html5、React-Native和Native应用开发方式的对比分析/"></span>
             </a>
           </span>
@@ -193,8 +806,7 @@
       
 
       
-        
-          <h3 id="React_Native的出现">React Native的出现</h3><p>React Native的出现，似乎是扛起的反H5的旗子。就像当年Facebook放弃H5，全部转向Native一样。这一点，我们需要认同和保持高度的清醒。那么，React Native是否又是在吞食Native的领地呢？技术的发展，是用户风向标的导向起的作用。任何一门技术的出现，都是当时用户需求的体现。</p>
+        <h3 id="React_Native的出现">React Native的出现</h3><p>React Native的出现，似乎是扛起的反H5的旗子。就像当年Facebook放弃H5，全部转向Native一样。这一点，我们需要认同和保持高度的清醒。那么，React Native是否又是在吞食Native的领地呢？技术的发展，是用户风向标的导向起的作用。任何一门技术的出现，都是当时用户需求的体现。</p>
 <p>我们应该从以下几点看待React Native的出现。</p>
 <p>“鉴往知来”——从过去的教训中总结经验，从用户的角度开拓未来，用户更希望产品迭代和稳定寻求一种平衡<br>“HTML5差强人意，但是与原生应用相比还是有些差距”——为了更高的追求！ 用户体验！<br>“人才宝贵，快速迭代”——Web开发者相对较多，寻找平衡点<br>“跨平台！跨平台！跨平台！”——单一技术栈，开发者的福音<br>“xx是世界上最好的语言” ——工程学的范畴，没有最好，只有最适合，我还是补充一句，JS还是很好很好的。</p>
 <p>HTML5 vs React Native ? HTML5 : React Native<br>结论（React Native）:</p>
@@ -210,8 +822,7 @@
 <li><p>社区繁荣</p>
 </li>
 </ol>
-<h3 id="3种方式开发应用效果对比(IOS平台)">3种方式开发应用效果对比(IOS平台)</h3><h3 id="工程方案对比">工程方案对比</h3><h3 id="详细参考链接"><a href="http://my.oschina.net/vczero/blog/597980?fromerr=efaLD7Dm" target="_blank" rel="external">详细参考链接</a></h3>
-        
+<h3 id="3种方式开发应用效果对比(IOS平台)">3种方式开发应用效果对比(IOS平台)</h3><h3 id="工程方案对比">工程方案对比</h3><h3 id="详细参考链接"><a href="http://my.oschina.net/vczero/blog/597980?fromerr=efaLD7Dm" target="_blank" rel="noopener">详细参考链接</a></h3>
       
     </div>
 
@@ -228,473 +839,6 @@
 
       
       
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/01/14/Palindrome-Reverse-Integer问题/">
-                Palindrome && Reverse Integer问题
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-01-14
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Leetcode/">Leetcode</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/01/14/Palindrome-Reverse-Integer问题/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/14/Palindrome-Reverse-Integer问题/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="Palindrome_Number问题">Palindrome Number问题</h3><p><a href="https://leetcode.com/problems/palindrome-number/" target="_blank" rel="external">题目链接</a></p>
-<p>解题思路：首先需要注意两点,①负数和小数都不是回文数 ②Integer有32位的范围限制，所以反转之后可能溢出. 对该整数循环除以10,取余数和商,余数则为从尾到头依次的digit number,并利用该digit number计算反转之后的结果，直到商为0结束循环；最终判断反转结构是否与原数相等。</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
-    <span class="keyword">public</span> <span class="keyword">boolean</span> isPalindrome(<span class="keyword">int</span> x) {
-        <span class="keyword">if</span> (x &lt; <span class="number">0</span>)
-            <span class="keyword">return</span> <span class="keyword">false</span>;
-        <span class="keyword">int</span> <span class="keyword">reverse</span> = <span class="number">0</span>;
-        <span class="keyword">int</span> quotient = x;
-        <span class="keyword">while</span> (quotient != <span class="number">0</span>) {
-            <span class="keyword">reverse</span> = <span class="keyword">reverse</span>*<span class="number">10</span> + quotient%<span class="number">10</span>;
-            quotient = quotient/<span class="number">10</span>;
-        }
-        <span class="keyword">if</span> (<span class="keyword">reverse</span> == x)
-            <span class="keyword">return</span> <span class="keyword">true</span>;
-        <span class="keyword">else</span>
-            <span class="keyword">return</span> <span class="keyword">false</span>; 
-    }
-}
-</code></pre><p>优化解法: 分别从整数的首尾开始比对，第一位和最后一位比较，第二位和倒数第二位比较，一直比较到中间位置，如果发现全部都相等则说明是回文数,此方法可以避免溢出，例如对于:121,第一次比较1和1，剩下2；再比较2和2，发现它是回文数.</p>
-<h3 id="Reverse_Integer问题">Reverse Integer问题</h3><p><a href="https://leetcode.com/problems/reverse-integer/" target="_blank" rel="external">题目链接</a></p>
-<p>解题思路：这道题与上一题类似,也是个反转整数的题,在java中Integer占据4个bytes, 有32位的范围限制，对于正数,它的最高位是0,所以它最大能表示的数是01111….(后面共31个1),数化成十进制即是2147483647，Integer.MAX_VALUE = 2147483647[0x7fffffff]; 负数能表示的最小数的二进制数为1000..(后面共31个0),化为十进制数即为-int 类型的范围是 -2147483648,即为Integer.MIN_VALUE.当一个整数溢出时，变成一个与原数不相等的在int范围内的数，所以可以通过reverse/10 != tmp来判断是否溢出.</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
-    <span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">reverse</span>(<span class="keyword">int</span> x) {
-        <span class="comment">// Consider the case: reverse overflow int</span>
-        <span class="keyword">int</span> <span class="keyword">reverse</span> = <span class="number">0</span>;
-        <span class="keyword">int</span> quotient = x;
-        <span class="keyword">while</span> (quotient != <span class="number">0</span>) {
-            <span class="keyword">int</span> tmp = <span class="keyword">reverse</span>;
-            <span class="comment">// if (reverse &gt; Integer.MAX_VALUE || reverse &lt; Integer.MIN_VALUE)</span>
-            <span class="comment">//    return 0;</span>
-            <span class="keyword">reverse</span> = <span class="keyword">reverse</span> * <span class="number">10</span> + quotient % <span class="number">10</span>;
-            quotient = quotient / <span class="number">10</span>;
-            <span class="comment">// deal with overflow</span>
-            <span class="keyword">if</span> (<span class="keyword">reverse</span>/<span class="number">10</span> != tmp) {
-                <span class="keyword">return</span> <span class="number">0</span>;
-            }
-
-        }
-
-        <span class="keyword">return</span> <span class="keyword">reverse</span>;
-    }
-}
-</code></pre>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Leetcode/"> #Leetcode </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/01/13/Remove-element问题的简单优化/">
-                Remove element问题的简单优化
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-01-13
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Leetcode/">Leetcode</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/01/13/Remove-element问题的简单优化/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/13/Remove-element问题的简单优化/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>原题链接: <a href="https://leetcode.com/problems/remove-element/" target="_blank" rel="external">Remove Element</a>. 这是一道easy的水题，之所以拿出来讲，主要是其中有一个巧妙的小优化,可以因小见大体会到代码效率优化的无处不在，激励自己写出最优的代码.</p>
-<h3 id="最初解法">最初解法</h3><pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span> {
-    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> val)</span> </span>{
-        <span class="keyword">int</span> length = nums.length;
-        <span class="keyword">int</span> res = <span class="number">0</span>;
-        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length; ++i) {
-            <span class="keyword">if</span> (nums[i] != val) {
-                 nums[res] = nums[i];
-                 res++;
-            }
-        }
-        <span class="keyword">return</span> res;
-    }
-}
-</code></pre><p>思路讲解: 从头开始遍历数组元素length次，当元素nums[i]与val不相等，重新赋值, 相等则跳过，最终数组中前res个元素都是不等于val的元素</p>
-<p>效率:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/remove_element_0.png" class="full-image">  </p>
-<h3 id="改进解法">改进解法</h3><pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span> {
-    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> val)</span> </span>{
-        <span class="keyword">int</span> length = nums.length;
-        <span class="keyword">int</span> res = <span class="number">0</span>;
-        <span class="comment">// 减少i++操作引发70%的效率提升</span>
-        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length-res;) {
-            <span class="keyword">if</span> (nums[i] == val) {
-                 nums[i] = nums[length-res-<span class="number">1</span>];
-                 res++;
-            } <span class="keyword">else</span> {
-                i++;
-            }
-        }
-        <span class="keyword">return</span> length-res;
-    }
-}
-</code></pre><p>思路讲解: 从头开始遍历数组元素length-res次，当元素nums[i]与val相等，i不改变, 从末尾取出一个对应的将不再被循环遍历到的元素赋值到当前的nums[i], 再次与val比较；如果nums[i]与val不相等则i++，比较下一元素</p>
-<p>效率:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/remove_element_1.png" class="full-image">  </p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Array/"> #Array </a>
-          
-            <a href="../../tags/Leetcode/"> #Leetcode </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2016/01/13/Roman与Integer之间的相互转换/">
-                Roman与Integer之间的相互转换
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-01-13
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Leetcode/">Leetcode</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/01/13/Roman与Integer之间的相互转换/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/13/Roman与Integer之间的相互转换/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>罗马数字与阿拉伯数字之间的简单转换方法,首先需要了解罗马数字计数法，在这两道转换题里我们只用到了前三项规则</p>
-<ol>
-<li><p>罗马数字共有7个，即I（1）、V（5）、X（10）、L（50）、C（100）、D（500）和M（1000）</p>
-</li>
-<li><p>右加左减: 较大的罗马数字的右边记上较小的罗马数字，表示大数字加小数字; 较大的罗马数字的左边记上较小的罗马数字，表示大数字减小数字</p>
-</li>
-<li>左减有一定限制: 只有I, X, C可以放到左边当做减数使用,而且左减不能越位,I的右边只能是VX, X右边只能是LC, C的右边只能是DM; 左减数字必须为一位</li>
-<li>其他规则: 加线乘千、重复数次、右加数字不可连续超过三位、同一数码最多只能连续出现三次</li>
-</ol>
-<h3 id="Roman_to_Integer">Roman to Integer</h3><p>解题思路:  对于每一个roman字符,除了I，X，C三种情况会出现减去对应数值，其他情况都是加上该字符对应的数值; 针对I、X、C，我们可以总结发现只需要考察他们的下一位是否满足减的条件,是则减，否则加。</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
-    <span class="keyword">public</span> <span class="function"><span class="keyword">int</span> <span class="title">romanToInt</span><span class="params">(String s)</span> </span>{
-        <span class="keyword">int</span> res = <span class="number">0</span>;
-        <span class="keyword">int</span> len = s.length();
-        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) {
-            <span class="keyword">char</span> tmp = s.charAt(i);
-            <span class="keyword">switch</span> (tmp) {
-                <span class="keyword">case</span> <span class="string">'I'</span>:
-                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'V' || s.charAt(i+1) == 'X')) {
-                        res -= <span class="number">1</span>;
-                        <span class="keyword">break</span>;
-                    }
-                    res += <span class="number">1</span>;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'V'</span>:
-                    res += 5;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'X'</span>:
-                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'L' || s.charAt(i+1) == 'C')) {
-                        res -= <span class="number">10</span>;
-                        <span class="keyword">break</span>;
-                    }
-                    res += <span class="number">10</span>;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'L'</span>:
-                    res += 50;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'C'</span>:
-                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'D' || s.charAt(i+1) == 'M')) {
-                        res -= <span class="number">100</span>;
-                        <span class="keyword">break</span>;
-                    }
-                    res += <span class="number">100</span>;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'D'</span>:
-                    res += 500;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'M'</span>:
-                    res += 1000;
-                    <span class="keyword">break</span>;
-                <span class="keyword">default</span>:
-                    <span class="keyword">break</span>;
-            }
-        }
-        <span class="keyword">return</span> res;
-    }
-}
-</code></pre><h3 id="Integer_To_Roman">Integer To Roman</h3><p>解题思路: 对于输入的数值进行取商处理，从大的计数单位到小的计数单位依次取商, 商则是该计数单位对应的roman字符的个数。</p>
-<pre><code>public <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
-    public <span class="built_in">String</span> intToRoman(<span class="built_in">int</span> <span class="built_in">num</span>) {
-        <span class="comment">// igr存储的是从大到小每一个基本计数单位,与roman一一对应</span>
-        <span class="built_in">String</span>[] roman = {<span class="string">"M"</span>, <span class="string">"CM"</span>, <span class="string">"D"</span>, <span class="string">"CD"</span>, <span class="string">"C"</span>, <span class="string">"XC"</span>, <span class="string">"L"</span>, <span class="string">"XL"</span>, <span class="string">"X"</span>, <span class="string">"IX"</span>, <span class="string">"V"</span>, <span class="string">"IV"</span>, <span class="string">"I"</span>};
-        <span class="built_in">int</span>[] igr = {<span class="number">1000</span>, <span class="number">900</span>, <span class="number">500</span>, <span class="number">400</span>, <span class="number">100</span>, <span class="number">90</span>, <span class="number">50</span>, <span class="number">40</span>, <span class="number">10</span>, <span class="number">9</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">1</span>};
-        StringBuilder res = <span class="keyword">new</span> StringBuilder();
-        <span class="keyword">for</span> (<span class="built_in">int</span> i=<span class="number">0</span>; i&lt;roman.length; i++) {
-            <span class="built_in">int</span> quotient = <span class="built_in">num</span> / igr[i];
-            <span class="keyword">for</span> (<span class="built_in">int</span> j=<span class="number">0</span>; j&lt;quotient; j++) {
-                res.append(roman[i]);
-            }
-            <span class="built_in">num</span> -= quotient * igr[i];
-        }
-        <span class="keyword">return</span> res.toString();
-    }
-}
-</code></pre>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Leetcode/"> #Leetcode </a>
-          
-            <a href="../../tags/String/"> #String </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/12/24/Google-Compute-Engine配置LAMP环境以及部署Web项目/">
-                Google Compute Engine配置LAMP环境以及部署Web项目
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-12-24
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/12/24/Google-Compute-Engine配置LAMP环境以及部署Web项目/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/24/Google-Compute-Engine配置LAMP环境以及部署Web项目/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
     </div>
   </div>
 
@@ -704,7 +848,7 @@
 
   
   <div class="pagination">
-    <a class="extend prev" rel="prev" href="../10/">&laquo;</a><a class="page-number" href="../..//">1</a><span class="space">&hellip;</span><a class="page-number" href="../10/">10</a><span class="page-number current">11</span><a class="page-number" href="../12/">12</a><span class="space">&hellip;</span><a class="page-number" href="../16/">16</a><a class="extend next" rel="next" href="../12/">&raquo;</a>
+    <a class="extend prev" rel="prev" href="../10/">&laquo;</a><a class="page-number" href="../../">1</a><span class="space">&hellip;</span><a class="page-number" href="../10/">10</a><span class="page-number current">11</span><a class="page-number" href="../12/">12</a><span class="space">&hellip;</span><a class="page-number" href="../17/">17</a><a class="extend next" rel="next" href="../12/">&raquo;</a>
   </div>
 
 
@@ -731,28 +875,28 @@
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../..//categories">
+            <a href="../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

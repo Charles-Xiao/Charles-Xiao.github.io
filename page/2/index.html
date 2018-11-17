@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="java,android,life,CharlesXiao" />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="java,android,life,CharlesXiao">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../favicon.ico?v=0.4.2">
 
 
 
@@ -49,7 +49,7 @@
 <body>
 <!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
   <div class="container one-column 
-   page-home 
+  
 ">
     <div class="headband"></div>
 
@@ -71,7 +71,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -87,40 +87,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -148,9 +148,7 @@
           
           
             
-              <a class="post-title-link" href="../../2018/03/22/C-手稿集锦/">
-                C++手稿集锦
-              </a>
+              Ruby net::http库默认重试一次请求问题
             
           
         </h1>
@@ -158,7 +156,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2018-03-22
+          发表于 2018-05-10
         </span>
 
         
@@ -167,8 +165,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2018/03/22/C-手稿集锦/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/03/22/C-手稿集锦/"></span>
+            <a href="../../2018/05/10/Ruby net http库默认重试一次请求问题/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/10/Ruby net http库默认重试一次请求问题/"></span>
             </a>
           </span>
           
@@ -182,90 +180,89 @@
       
 
       
-        
-          <h3 id="哪些变量会自动初始化？">哪些变量会自动初始化？</h3><p>在C语言中的<strong>全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值（C++默认初始化策略也是如此）。 C++保证了所有对象与对象成员都会初始化</strong>，无论是否写了圆括号或者是否写了参数列表，但其中基本数据类型的初始化还得依赖于构造函数。</p>
-<p>成员变量分为成员对象和内置类型成员，其中成员对象总是会被初始化的。我们通常会在构造函数中初始化所有内置类型的成员。例如：</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> v;</span><br><span class="line">    A(): v(0);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><a href="https://harttle.land/2015/10/05/cpp-variable-init.html" target="_blank" rel="external">参考链接</a></p>
-</blockquote>
-<h3 id="对象的生命周期，构造与析构">对象的生命周期，构造与析构</h3><h4 id="对象实例化">对象实例化</h4><p>可以直接定义对象变量，在栈中分配并初始化对象；也可以定义对象指针，从堆中分配空间并初始化对象。</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CPerson p1;</span><br><span class="line"><span class="function">CPerson <span class="title">p2</span><span class="params">(<span class="number">2</span>)</span></span>;</span><br><span class="line">CPerson* p3 = <span class="keyword">new</span> CPerson(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
-<h4 id="析构函数">析构函数</h4><p>类的声明中，签名为<code>~CPerson()</code>的方法称为析构函数。析构函数没有参数和返回值。当对象生命周期结束时被调用，通常用来释放资源。一个类只能由一个析构函数。析构函数与构造函数类似，用户不指定时编译器会生成一个缺省的析构（构造）函数， 缺省的析构（构造）函数是空函数。</p>
-<h4 id="对象指针数组">对象指针数组</h4><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CPerson *p[<span class="number">3</span>] = &#123;<span class="keyword">new</span> CPerson(<span class="number">1</span>), <span class="keyword">new</span> CPerson(<span class="number">2</span>)&#125;;</span><br></pre></td></tr></table></figure>
-<h4 id="复制构造函数">复制构造函数</h4><p>类的声明中，签名为<code>CPerson(CPerson&amp;)</code>的方法称为复制构造函数，用来从一个已存在的对象复制生成一个新的对象。 在如下三种情况下会被调用：</p>
-<ol>
-<li><p>用一个对象初始化另一个对象时。例如：</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CPerson p2<span class="list">(<span class="keyword">p1</span>)</span><span class="comment">;</span></span><br><span class="line">CPerson p2 = p1<span class="comment">;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>对象作为参数传递时。例如：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void <span class="func"><span class="keyword">func</span><span class="params">(A a)</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>对象作为返回值时。例如：</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">A</span> func()&#123; <span class="literal">A</span> <span class="literal">a</span><span class="comment">; return a;&#125;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>只有一个参数的复制构造函数可以被称为<strong>转换构造函数</strong>。当需要类型转换时，会被调用：</p>
-<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">CPerson</span> = <span class="number">2</span>;    <span class="comment">// CPerson(int) called</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意区分赋值和初始化：<strong>对象变量间赋值不会调用复制构造函数</strong>。赋值只会按位拷贝对象所在的内存。当然你也可以重载<code>operator=</code>来改变它的行为。</p>
-</blockquote>
-<h4 id="对象生命周期">对象生命周期</h4><p>如下程序解释了对象的声明周期何时开始，以及何时结束。涉及到了：全局对象、静态对象、栈中的对象、堆中的对象。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">CPerson</span> p1;             <span class="comment">// main执行前，构造函数被调用</span></span><br><span class="line">void <span class="func"><span class="keyword">func</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="type">CPerson</span> p2;  <span class="comment">// func第一次执行前，构造函数被调用</span></span><br><span class="line">    <span class="type">CPerson</span> p3;         <span class="comment">// p3的构造函数被调用</span></span><br><span class="line">                        <span class="comment">// func结束时，p3的析构函数被调用</span></span><br><span class="line">&#125;  </span><br><span class="line">int main()&#123;</span><br><span class="line">    <span class="type">CPerson</span> p4, *p5;    <span class="comment">// 调用p4的构造函数</span></span><br><span class="line">    <span class="func"><span class="keyword">func</span><span class="params">()</span></span>;</span><br><span class="line">    p5 = <span class="keyword">new</span> <span class="type">CPerson</span>;   <span class="comment">// 调用p5的构造函数</span></span><br><span class="line">    delete p5;          <span class="comment">// 调用p5的析构函数</span></span><br><span class="line">                        <span class="comment">// main结束时，p4的析构函数被调用</span></span><br><span class="line">&#125;</span><br><span class="line">                        <span class="comment">// 程序结束前，p1, p2的析构函数被调用</span></span><br></pre></td></tr></table></figure>
-<h3 id="栈对象和堆对象的创建方式">栈对象和堆对象的创建方式</h3><p>C++中，内存划分为三个逻辑区域：堆、栈和静态存储区，对象分为堆对象，栈对象以及静态对象。而类的对象建立分为两种，一种是静态建立，如A a；另一种是动态建立，如A* ptr=new A；两者都要执行构造函数。</p>
-<ol>
-<li><p><strong>静态建立类对象</strong>：是由编译器为对象在栈空间中分配内存，是通过直接移动栈顶指针，挪出适当的空间，然后在这片内存空间上调用构造函数形成一个栈对象。使用这种方法，<strong>直接调用类的构造函数</strong>，内存空间自动释放</p>
-<p>。</p>
-</li>
-<li><p><strong>动态建立类对象</strong>：是使用new运算符将对象建立在堆空间中。这个过程分为两步，第一步是执行operator new()函数，在堆空间中搜索合适的内存并进行分配；第二步是调用构造函数构造对象，初始化这片内存空间。这种方法，<strong>间接调用类的构造函数</strong>，内存空间需要手动释放。</p>
-</li>
-<li><p><strong>注意点</strong>：</p>
-</li>
-</ol>
-<blockquote>
-<ol>
-<li><p><a href="https://blog.csdn.net/hbtj_1216/article/details/65934865" target="_blank" rel="external">栈对象和堆对象区别和优劣</a> : 栈对象的创建速度一般较堆对象快，它仅仅需要移动栈顶指针就可以被创建，递归函数中最好不要使用栈对象以避免栈溢出；程序员对堆对象的生命具有完全的控制权。比如，我们需要创建一个对象，能够被多个函数所访问，但是又不想使其成为全局的，那么这个时候创建一个堆对象无疑是良好的选择，然后在各个函数之间传递这个堆对象的指针，便可以实现对该对象的共享。</p>
-</li>
-<li><p><strong>如何限制类对象只能在堆上建立? </strong>编译器在为类对象分配栈空间时，会先检查类的析构函数的访问性，其实不光是析构函数，只要是非静态的函数，编译器都会进行检查。如果类的析构函数是私有的，则编译器不会在栈空间上为类对象分配内存（如果我们将构造函数设置为私有，那么我们也就不能用new来直接产生堆对象了，因为new在为对象分配空间后也会调用它的构造函数）。为了统一，可以将构造函数设为protected，然后提供一个public的static函数来完成构造，这样不使用new，而是使用一个函数来构造，使用一个函数来析构。</p>
-</li>
-<li><p>构造函数设置为私有会限制继承。如果一个类不打算作为基类，可以将其析构函数声明为private。为了限制栈对象，却不限制继承，我们可以将析构函数声明为protected，这样就两全其美。</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&gt;    <span class="class"><span class="keyword">class</span> <span class="title">NoStackObject</span> </span>&#123; </span><br><span class="line">&gt;    <span class="keyword">protected</span>: </span><br><span class="line">&gt;        NoStackObject() &#123; &#125; </span><br><span class="line">&gt;        ~NoStackObject() &#123; &#125; </span><br><span class="line">&gt;    <span class="keyword">public</span>: </span><br><span class="line">&gt;        <span class="keyword">static</span> NoStackObject* creatInstance() &#123;</span><br><span class="line">&gt;        <span class="keyword">return</span> <span class="keyword">new</span> NoStackObject() ;<span class="comment">//调用保护的构造函数 </span></span><br><span class="line">&gt;    &#125; </span><br><span class="line">&gt;        <span class="function"><span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">&gt;            delete <span class="keyword">this</span> ;<span class="comment">//调用保护的析构函数 </span></span><br><span class="line">&gt;        &#125; </span><br><span class="line">&gt;    &#125;;</span><br><span class="line">&gt;    NoStackObject* hash_ptr = NoStackObject::creatInstance() ;  </span><br><span class="line">&gt;    hash_ptr-&gt;destroy() ; </span><br><span class="line">&gt;    hash_ptr = NULL ; <span class="comment">//防止使用悬挂指针</span></span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-</blockquote>
-<p>&gt;</p>
-<blockquote>
-<ol>
-<li><p><strong>只要禁用new运算符就可以实现类对象只能建立在栈上</strong>: 你不能影响new operator的能力（因为那是C++语言内建的），但是new operator 总是先调用 operator new,而后者我们是可以自行声明重写的。因此，将operator new()设为私有即可禁止对象被new在堆上；如果也想禁止堆对象数组，可以把operator new[]和operator delete[]也声明为private。</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt;    <span class="class"><span class="keyword">class</span> <span class="title">A</span>    </span><br><span class="line">&gt;    </span>&#123;    </span><br><span class="line">&gt;    <span class="keyword">private</span>:    </span><br><span class="line">&gt;        <span class="keyword">void</span>* operator <span class="keyword">new</span>(size_t t)&#123;&#125;     <span class="comment">// 注意函数的第一个参数和返回值都是固定的    </span></span><br><span class="line">&gt;        <span class="keyword">void</span> <span class="function">operator <span class="title">delete</span><span class="params">(<span class="keyword">void</span>* ptr)</span></span>&#123;&#125; <span class="comment">// 重载了new就需要重载delete    </span></span><br><span class="line">&gt;    <span class="keyword">public</span>:    </span><br><span class="line">&gt;        A()&#123;&#125;    </span><br><span class="line">&gt;        ~A()&#123;&#125;    </span><br><span class="line">&gt;    &#125;; </span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-</blockquote>
-<p>&gt;</p>
-<h3 id="C++_智能指针与裸指针">C++ 智能指针与裸指针</h3><p>我们知道c++的内存管理是让很多人头疼的事，当我们写一个new语句时，一般就会立即把delete语句直接也写了，但是我们不能避免程序还未执行到delete时就跳转了或者在函数中没有执行到最后的delete语句就返回了，如果我们不在每一个可能跳转或者返回的语句前释放资源，就会造成内存泄露。<strong>智能指针就是一个类，当超出了类的作用域，类会自动调用析构函数，析构函数会自动释放资源。</strong></p>
-<h4 id="为什么要用智能指针？">为什么要用智能指针？</h4><ol>
-<li>难以区分裸指针指向的是单个对象还是一个数组，也无法确定到底是用delete(销毁单个对象)还是delete[]销毁一个数组；</li>
-<li>使用完指针之后无法判断是否应该销毁指针，因为无法判断指针是否“拥有”指向的对象，也无法确定销毁指针的方式；</li>
-<li>遗漏销毁指正可能导致内存泄露，而销毁多次则会导致未定义行为。</li>
-</ol>
-<h4 id="四种智能指针">四种智能指针</h4><ol>
-<li><strong>std::auto_ptr和std::unique_ptr</strong>：auto_ptr是c++ 98遗留的关键字，已经不建议使用，auto_ptr的功能都可以由unique_ptr更加高效的做到。<ul>
-<li>auto_ptr智能指针可以像类的原始指针一样访问类的public成员，成员函数get()返回一个原始的指针，成员函数reset()重新绑定指向的对象，而原来的对象则会被释放。注意我们访问auto_ptr的成员函数时用的是“.”，访问指向对象的成员时用的是“-&gt;”。</li>
-<li>auto_ptr指针当我们对智能指针进行赋值时，如ptest2 = ptest，ptest2会接管ptest原来的内存管理权，ptest会变为空指针，如果ptest2原来不为空，则它会释放原来的资源，基于这个原因，应该避免把auto_ptr放到容器中，因为算法对容器操作时，很难避免STL内部对容器实现了赋值传递操作，这样会使容器中很多元素被置为NULL。判断一个智能指针是否为空不能使用if(ptest == NULL)，应该使用if(ptest.get() == NULL)。</li>
-<li>unique_ptr指针永远“拥有”其指向的对象，unique_ptr是一个move-only类型，一个unique_ptr指针无法被复制，只能将“所有权”在两个unique_ptr指针之间转移，转移完成后源unique_ptr将被设为null。unique_ptr默认的销毁方式是通过对unique_ptr中的裸指针进行delete操作，它可以无缝地转换成shared_ptr。不能使用两个unique_ptr智能指针赋值操作，应该使用std::move，例如foo(std::move(ptest))</li>
+        <ol>
+<li><strong>问题描述</strong>：并发20个线程，每个线程使用一个单独的BosClient去执行5G文件的PUT/GET操作，并比较下载文件和原文件的MD5，发现偶尔出现文件MD5对不上，文件大小大于5G的情况的情况，出现几率大概1%；</li>
+<li><strong>问题定位</strong>：<ul>
+<li>查看sdk日志和BOS日志，发现该情况下client发送了2次GET请求，第一次返回200但是err msg是PartialContentError</li>
+<li>进一步查看nginx error log发现是客户端主动关闭了连接，可能是因为TCP连接超时等原因导致client主动关闭连接</li>
+<li>但是从client日只看并没有触发重试机制，那么多出来的GET请求可能就是sdk用到的http库主动发起的</li>
 </ul>
 </li>
-<li><strong><a href="https://segmentfault.com/a/1190000006860811" target="_blank" rel="external">std::shared_ptr</a>和std::weak_ptr</strong>：<ul>
-<li>shared_ptr使用计数机制来表明资源被几个指针共享，可以自动管理对象的生命周期和GC，shared_ptr的引用计数增减是原子操作</li>
-<li>一个对象可以被多个shared_ptr指向和访问，这些shared_ptr类型的指针共同享有该对象的所有权，当最后一个指向该对象的shared_ptr生命周期结束的时候，对象被销毁</li>
-<li>shared_ptr的构造将引用计数加1，销毁的时候引用计数减1，而赋值则将源指针引用计数加1，目标指针引用计数减1，例如P1=P2，P1指向对象的引用计数减1，P2指向对象的引用计数加1。当引用计数减1之后为0的时候，shared_ptr将会销毁指向的对象。</li>
-<li>由于control_block的存在，shared_ptr的size通常是2倍裸指针或unique_ptr的大小</li>
-<li>weak_ptr是用来解决shared_ptr相互引用时的死锁问题,如果说两个shared_ptr相互引用,那么这两个指针的引用计数永远不可能下降为0,资源永远不会释放。它是对对象的一种弱引用，不会增加对象的引用计数，和shared_ptr之间可以相互转化，shared_ptr可以直接赋值给它，它可以通过调用lock函数来获得shared_ptr。不能通过weak_ptr直接访问对象的方法，应该先把它转化为shared_ptr</li>
+<li><strong>问题原因</strong>：<ul>
+<li>定位发现sdk引用了第三方库rest-client，rest-client又引用了ruby语言自带的net::http库来发起http请求</li>
+<li>查看net::http库源码发现，默认自带了一次重试机制；重试时不会对重置读取到的body stream，而是会继续追加写，导致文件大小大于5G</li>
+<li><a href="https://github.com/ankane/the-ultimate-guide-to-ruby-timeouts/issues/8" target="_blank" rel="noopener">Net::HTTP read_timeout causes double requests</a></li>
+</ul>
+</li>
+<li><p><strong>解决方案</strong>：<br>net::http库默认重试一次的机制不合理，因此有用户提出了bug，建议retry次数可配置<a href="https://bugs.ruby-lang.org/issues/10674" target="_blank" rel="noopener">Net::HTTP retries idempotent requests once after a timeout, but its not configurable</a>；AWS ruby sdk也发现了这一问题，提交了<a href="">PR</a>，不过要到ruby 2.5版本才支持直接设置重试次数。考虑到版本向下兼容问题，我们采取monkey patching的方式来解决这一问题，两个思路：</p>
+<ul>
+<li><p><strong>方案一</strong>：第二次重试的时候将body stream重置到起始位置</p>
+<pre><code>module Net
+class HTTP
+def transport_request(req)
+      count = <span class="number">0</span>
+      begin
+        begin_transport req
+        res = <span class="keyword">catch</span>(:response) {
+          req.exec @<span class="built_in">socket</span>, @curr_http_version, edit_path(req.path)
+          begin
+            res = HTTPResponse.read_new(@<span class="built_in">socket</span>)
+            res.decode_content = req.decode_content
+          <span class="function"><span class="keyword">end</span> <span class="title">while</span> <span class="title">res</span>.<span class="title">kind_of</span>?(<span class="title">HTTPContinue</span>)</span>
+          res.uri = req.uri
+          res
+        }
+        res.reading_body(@<span class="built_in">socket</span>, req.response_body_permitted?) {
+          yield res <span class="keyword">if</span> block_given?
+        }
+      rescue Net::OpenTimeout
+        raise
+      rescue Net::ReadTimeout, IOError, EOFError,
+             Errno::ECONNRESET, Errno::ECONNABORTED, Errno::EPIPE,
+             <span class="comment"># avoid a dependency on OpenSSL</span>
+             defined?(OpenSSL::SSL) ? OpenSSL::SSL::SSLError : IOError,
+             Timeout::Error =&gt; exception
+        <span class="keyword">if</span> count == <span class="number">0</span> &amp;&amp; IDEMPOTENT_METHODS_.<span class="built_in">include</span>?(req.method)
+          count += <span class="number">1</span>
+          @<span class="built_in">socket</span>.<span class="built_in">close</span> <span class="keyword">if</span> @<span class="built_in">socket</span> <span class="operator">and</span> <span class="operator">not</span> @<span class="built_in">socket</span>.closed?
+          D <span class="string">"Conn close because of error #{exception}, and retry"</span>
+         <span class="comment"> // 添加重置body_stream操作</span>
+          <span class="keyword">if</span> req.body_stream
+            <span class="keyword">if</span> req.body_stream.respond_to?(:rewind)
+              req.body_stream.rewind
+            <span class="keyword">else</span>
+              raise
+            <span class="function"><span class="keyword">end</span></span>
+          <span class="function"><span class="keyword">end</span></span>
+          retry
+        <span class="function"><span class="keyword">end</span></span>
+        D <span class="string">"Conn close because of error #{exception}"</span>
+        @<span class="built_in">socket</span>.<span class="built_in">close</span> <span class="keyword">if</span> @<span class="built_in">socket</span> <span class="operator">and</span> <span class="operator">not</span> @<span class="built_in">socket</span>.closed?
+        raise
+      <span class="function"><span class="keyword">end</span></span>
+      end_transport req, res
+      res
+    rescue =&gt; exception
+      D <span class="string">"Conn close because of error #{exception}"</span>
+      @<span class="built_in">socket</span>.<span class="built_in">close</span> <span class="keyword">if</span> @<span class="built_in">socket</span> <span class="operator">and</span> <span class="operator">not</span> @<span class="built_in">socket</span>.closed?
+      raise exception
+    <span class="function"><span class="keyword">end</span></span>
+<span class="function"><span class="keyword">end</span></span>
+<span class="function"><span class="keyword">end</span></span>
+</code></pre></li>
+<li><strong>方案二</strong>：去除重试机制，删掉retry语句 </li>
+</ul>
+</li>
+<li><p><strong>参考链接</strong></p>
+<ul>
+<li><a href="https://github.com/aws/aws-sdk-ruby/issues/1167" target="_blank" rel="noopener">What is the purpose of monkey patching global HTTP stack?</a></li>
+<li><a href="https://github.com/aws/aws-sdk-ruby/pull/1756" target="_blank" rel="noopener">Update Net::HTTP patching for Ruby 2.5 #1756</a></li>
+<li><a href="https://github.com/aws/aws-sdk-ruby/blob/master/gems/aws-sdk-core/lib/seahorse/client/net_http/patches.rb" target="_blank" rel="noopener">AWS猴子补丁</a></li>
+<li><a href="https://github.com/ruby/ruby/blob/v2_5_0/lib/net/http.rb" target="_blank" rel="noopener">各版本Ruby http.rb源码</a></li>
 </ul>
 </li>
 </ol>
 
-        
       
     </div>
 
@@ -273,7 +270,9 @@
       
         <div class="post-tags">
           
-            <a href="../../tags/C/"> #C++ </a>
+            <a href="../../tags/Ruby/"> #Ruby </a>
+          
+            <a href="../../tags/http/"> #http </a>
           
         </div>
       
@@ -281,8 +280,6 @@
       
 
       
-      
-        <div class="post-eof"></div>
       
     </div>
   </div>
@@ -300,9 +297,7 @@
           
           
             
-              <a class="post-title-link" href="../../2018/02/07/高并发系统的限流策略/">
-                高并发系统的限流策略
-              </a>
+              初探Golang内存管理和垃圾回收机制
             
           
         </h1>
@@ -310,7 +305,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2018-02-07
+          发表于 2018-04-04
         </span>
 
         
@@ -319,8 +314,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2018/02/07/高并发系统的限流策略/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/02/07/高并发系统的限流策略/"></span>
+            <a href="../../2018/04/04/初探Golang内存管理和垃圾回收机制/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/04/04/初探Golang内存管理和垃圾回收机制/"></span>
             </a>
           </span>
           
@@ -334,125 +329,23 @@
       
 
       
-        
-          <p>一个高并发的系统，保护系统的方法一般有三种：<strong>缓存、降级和限流</strong>，本文主要讲一讲常见的限流策略。限流的目的是通过对并发访问进行限速或者一个时间窗口内的的请求进行限速来保护系统，一旦达到限制速率则可以拒绝服务（定向到错误页或告知资源没有了）、排队或等待（比如秒杀、评论、下单）、降级（返回兜底数据或默认数据，如商品详情页库存默认有货）</p>
-<h4 id="单机限流">单机限流</h4><h5 id="常见限流措施">常见限流措施</h5><ul>
-<li>限制总并发数（比如数据库连接池、线程池）</li>
-<li>限制瞬时并发数（如nginx的limit_conn模块，用来限制瞬时并发连接数）</li>
-<li>限制时间窗口内的平均速率（如Guava的RateLimiter、nginx的limit_req模块，限制每秒的平均速率）</li>
-<li>限制远程接口调用速率</li>
-<li>限制消息队列的消费速率</li>
-<li>根据网络连接数、网络流量、CPU或内存负载等来限流</li>
-</ul>
-<h5 id="限流算法">限流算法</h5><ol>
-<li><p><strong>令牌桶算法</strong>：令牌桶是按照固定速率往桶中添加令牌，请求是否被处理需要看桶中令牌是否足够，当令牌数减为零时则拒绝新的请求（Nginx限速模块的实现/Guava RateLimiter SmoothBursty）</p>
-</li>
-<li><p><strong>漏桶算法</strong>：漏桶则是按照常量固定速率流出请求，流入请求速率任意，当流入的请求数累积到漏桶容量时，则新流入的请求被拒绝(Guava RateLimiter SmoothWarmingUp)</p>
-</li>
-<li><p><strong>计数器限流：</strong>主要用来限制总并发数，比如数据库连接池、线程池、秒杀的并发数；只要全局总请求数或者一定时间段的总请求数设定的阀值则进行限流，是简单粗暴的总数量限流，而不是平均速率限流（atomic.incrementAndGet() + atomic.decrementAndGet()）</p>
-</li>
-</ol>
-<h4 id="分布式系统限流">分布式系统限流</h4><h5 id="分布式限流_—_redis技术/一致性hash流量分片">分布式限流 — redis技术/一致性hash流量分片</h5><ol>
-<li><strong>分布式系统</strong>：基于 REDIS 实现，存储两个 KEY，一个用于计时，一个用于计数。请求每调用一次，计数器增加 1，若在计时器时间内计数器未超过阈值，则可以处理任务。</li>
-<li><strong>单机</strong>：使用Guava的Cache来存储计数器，过期时间设置为2秒（保证1秒内的计数器是有的），然后我们获取当前时间戳然后取秒数来作为KEY进行计数统计和限流</li>
-</ol>
-<h5 id="接入层限流_—_nginx限速模块">接入层限流 — nginx限速模块</h5><h4 id="参考链接">参考链接</h4><ol>
-<li><a href="https://www.jianshu.com/p/2596e559db5c" target="_blank" rel="external">聊聊高并发系统之限流特技</a></li>
+        <h3 id="内存管理">内存管理</h3><h4 id="堆与栈">堆与栈</h4><p>Go语言与CPP类似，也有栈和堆的概念，栈就是函数使用的栈，函数局部变量都在栈里，而new出来的变量大部分在堆上，当然这还取决于变量是会在作用域外被使用(注：编译器通过静态分析技术Escape Analysis来确定变量的作用范围)。</p>
+<h4 id="堆内存管理机制">堆内存管理机制</h4><p>Go的内存管理是基于<a href="http://legendtkl.com/2015/12/11/go-memory/" target="_blank" rel="noopener">tcmalloc</a>实现的，tcmalloc核心思想是多级缓存、定长分配和管理.</p>
+<h4 id="参考文章">参考文章</h4><p><a href="http://legendtkl.com/2017/04/02/golang-alloc/" target="_blank" rel="noopener">Golang内存管理</a></p>
+<h3 id="垃圾回收GC">垃圾回收GC</h3><h4 id="常用GC算法">常用GC算法</h4><h4 id="Golang的三色标注-清除法">Golang的三色标注-清除法</h4><h4 id="Golang_垃圾回收剖析"><a href="http://legendtkl.com/2017/04/28/golang-gc/" target="_blank" rel="noopener">Golang 垃圾回收剖析</a></h4><blockquote>
+<p>Unlike GHC’s stop-the-world collector, Go’s collector runs concurrently with the program to achieve short GC pauses.it means that the pause times become a scheduling problem.</p>
+<p>In practice, the pause times of these phases to be &lt;1ms with very large heaps. With a concurrent GC, there is also potential for running the GC in parallel on multiple processors.</p>
+<p>Low latency has costs. The most important cost is reduced throughput. Concurrency requires extra work for synchronization and duplication, which eats into the time the program can be doing useful work. GHC’s garbage collector is optimized for throughput, but Go’s is optimized for latency. At Pusher, we care about latency, so this is an excellent tradeoff for us.</p>
+<p>A second cost of concurrent garbage collection is unpredictable heap growth. The program can allocate arbitrary amounts of memory while the GC is running. This means the GC must be run before the heap reaches the target maximum size.</p>
+<p>GC times tend to be proportional to the number of pointers rather than the number of bytes. we would expect pauses of around 1ms for our heap size of 200MB, according to the go team. The heap size is kept large, which is important because the heap must be traversed in order to detect which objects are still referenced. This is why GC running time is proportional to the number of live objects/pointers between them.</p>
+<p><code>go tool trace</code> observe gc phase state.</p>
+</blockquote>
+<h3 id="参考链接">参考链接</h3><ol>
+<li><a href="https://www.jianshu.com/p/91d2956f22c1" target="_blank" rel="noopener">ptmalloc/tcmalloc/jemalloc内存分配策略</a></li>
+<li><a href="https://making.pusher.com/golangs-real-time-gc-in-theory-and-practice/" target="_blank" rel="noopener">Golang’s Real-time GC in Theory and Practice</a></li>
+<li><a href="https://blog.cloudflare.com/recycling-memory-buffers-in-go/" target="_blank" rel="noopener">Recycling memory buffers in Go</a></li>
 </ol>
 
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/并发/"> #并发 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2018/02/07/Golang学习总结/">
-                Golang学习总结
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2018-02-07
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2018/02/07/Golang学习总结/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/02/07/Golang学习总结/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="基础语法">基础语法</h3><h4 id="Channel+WaitGroup">Channel+WaitGroup</h4><ol>
-<li>实现发布/订阅Server：for+select循环监听发布事件、订阅事件、取消事件</li>
-<li>工作调度器：</li>
-</ol>
-<h4 id="interface">interface</h4><ol>
-<li><p><strong>go 没有显式的关键字用来实现 interface，如果一个类型实现了一个 interface 中所有方法，我们说类型实现了该 interface</strong></p>
-</li>
-<li><p>go 允许不带任何方法的 interface ，这种类型的 interface 叫 <strong>empty interface</strong>。<strong>go 不会对类型是interface{} 的 slice 进行转换</strong> 。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 报错：cannot use names (type []string) as type []interface &#123;&#125; in argument to printAll</span></span><br><span class="line"><span class="comment">// 原因：interface&#123;&#125; 会占用两个字长的存储空间，一个是自身的 methods 数据，一个是指向其存储值的指针，也就是 interface 变量存储的值；slice []interface&#123;&#125; 其长度是固定的N*2，但是 []T 的长度是N*sizeof(T)，两种 slice 实际存储值的大小是有区别的</span></span><br><span class="line"><span class="keyword">func</span> printAll(vals []<span class="keyword">interface</span>&#123;&#125;) &#123;</span><br><span class="line">	<span class="keyword">for</span> _, val := <span class="keyword">range</span> vals &#123;</span><br><span class="line">		fmt.Println(val)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">func</span> main()&#123;</span><br><span class="line">	names := []<span class="typename">string</span>&#123;<span class="string">"stanley"</span>, <span class="string">"david"</span>, <span class="string">"oscar"</span>&#125;</span><br><span class="line">	printAll(names)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 手动转换成[]interface&#123;&#125;</span></span><br><span class="line"><span class="keyword">var</span> dataSlice []<span class="typename">int</span> = foo()</span><br><span class="line"><span class="keyword">var</span> interfaceSlice []<span class="keyword">interface</span>&#123;&#125; = <span class="built_in">make</span>([]<span class="keyword">interface</span>&#123;&#125;, <span class="built_in">len</span>(dataSlice))</span><br><span class="line"><span class="keyword">for</span> i, d := <span class="keyword">range</span> dataSlice &#123;</span><br><span class="line">	interfaceSlice[i] = d</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>interface 变量存储的是实现者的值，也就是可以申明一个interface，然后把具体的struct赋值给其进行初始化。</p>
-</li>
-<li><p><a href="https://tour.golang.org/methods/15" target="_blank" rel="external">Type assertions</a> (类型断言)，用于区分 interface 的变量究竟存储哪种类型的值</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">s :</span>= S&#123;&#125;</span><br><span class="line">var i I <span class="comment">//声明 i </span></span><br><span class="line">i = &amp;s <span class="comment">//赋值 s 到 i</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 方案一</span></span><br><span class="line"><span class="keyword">if</span> t, <span class="string">ok :</span>= i.(*S); ok &#123;</span><br><span class="line">    fmt.Println(<span class="string">"s implements I"</span>, t)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方案二</span></span><br><span class="line"><span class="keyword">switch</span> <span class="string">t :</span>= i.(type) &#123;</span><br><span class="line"><span class="keyword">case</span> *<span class="string">S:</span></span><br><span class="line">    fmt.Println(<span class="string">"i store *S"</span>, t)</span><br><span class="line"><span class="keyword">case</span> *<span class="string">R:</span></span><br><span class="line">    fmt.Println(<span class="string">"i store *R"</span>, t)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>interface 定义时并没有严格规定实现者的方法 receiver 是个 value receiver 还是 pointer receiver。interface 的实现者 ss的方法 receiver 都是 value receiver，执行函数<code>func(i)</code>可以无论是 pointer 还是 value 都可以正确执行，也就是<code>func(&amp;ss)或者func(ss)</code>；如果ss的方法receiver存在pointer receiver，则不能调用<code>func(ss)</code>，因为根据value找不到地址</p>
-</li>
-<li><strong>go 中函数都是按值传递即 passed by value</strong>。对于 receiver 是 value 的 method，任何在 method 内部对 value 做出的改变都不影响调用者看到的 value，这就是按值传递。</li>
-</ol>
-<h4 id="参考链接">参考链接</h4><h3 id="其它">其它</h3><h4 id="gofmt与goimports">gofmt与goimports</h4><p>gofmt follows a simple rule that works for all use cases: imports may be separated by<br>blank lines, and each set of blank lines is sorted independently.  </p>
-<p>goimports, which does more than just formatting, applies a different rule: it groups<br>imports according to whether they are standard imports, appengine imports, or other<br>imports.  It emits each group separately.  Then the gofmt algorithm kicks in and sorts<br>each group independently.<br>The goimports and gofmt programs do different jobs and it is not a goal that they<br>produce identical results.</p>
-
-        
       
     </div>
 
@@ -469,8 +362,6 @@
 
       
       
-        <div class="post-eof"></div>
-      
     </div>
   </div>
 
@@ -487,9 +378,7 @@
           
           
             
-              <a class="post-title-link" href="../../2018/02/07/大数据分析相关工具/">
-                大数据分析相关工具
-              </a>
+              初探Goroutine调度机制
             
           
         </h1>
@@ -497,7 +386,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2018-02-07
+          发表于 2018-03-26
         </span>
 
         
@@ -506,8 +395,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2018/02/07/大数据分析相关工具/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/02/07/大数据分析相关工具/"></span>
+            <a href="../../2018/03/26/初探Goroutine调度机制/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/03/26/初探Goroutine调度机制/"></span>
             </a>
           </span>
           
@@ -521,161 +410,61 @@
       
 
       
-        
-          <h3 id="基础组件">基础组件</h3><ol>
-<li>Hadoop = HDFS + YARN + MapReduce；HDFS负责存储，YARN负责资源调度，依然发挥重要作用，MapReduce计算框架</li>
-<li>Hbase主要解决实时数据查询问题;Hive和Pig主要解决数据处理和计算问题，分别以SQL形式和脚本形式</li>
-<li><a href="https://www.zhihu.com/question/27974418/answer/156227565" target="_blank" rel="external">如何用形象的比喻描述大数据的技术生态？Hadoop、Hive、Spark 之间是什么关系？</a></li>
-</ol>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/bigdata.jpg" class="full-image" width="100%"></p>
-<h4 id=""> </h4>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/大数据/"> #大数据 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2018/01/11/投资中最简单的事---读后随记/">
-                投资中最简单的事---读后随记
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2018-01-11
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2018/01/11/投资中最简单的事---读后随记/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/01/11/投资中最简单的事---读后随记/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="序言">序言</h3><blockquote>
-<p>很多人都醉心于即时满足，却不懂得用延时满足去做交易  </p>
-</blockquote>
+        <h3 id="何为Goroutine调度">何为Goroutine调度</h3><p>Goroutine是Go语言原生支持并发的具体实现，所有代码都跑在goroutine里，我们可以启动许多goroutine，多个goroutine对应一个os thread，不过最多只能允许创建10000个os线程, 如果超过10000个会抛异常。  </p>
+<p><strong>Goroutine调度</strong>就是决定何时哪个goroutine将获得资源开始执行、哪个goroutine应该停止执行让出资源、哪个goroutine应该被唤醒恢复执行等。</p>
+<h3 id="Goroutine调度器">Goroutine调度器</h3><p>传统语言中往往是代码负责创建线程，然后交给OS来进行线程调度。操作系统调度器会将系统中的多个线程or进程按照一定算法调度到物理CPU上去运行。这样会带来一些问题，例如</p>
 <ul>
-<li><strong>Note</strong>: 面对眼前利益和诱惑隐忍的重要性，不然很难获得多倍收益,所谓的挥泪割肉和过早止盈往往由此产生</li>
+<li>线程创建容易退出难，因为退出时要判断线程状态</li>
+<li>并发单元间通信困难，易错，一旦涉及到shared memory，就会用到各种lock，死锁便成为家常便饭</li>
+<li>相对于协程而言，线程开销依然很大，OS切换线程上下文的代价不小</li>
+</ul>
+<p>在Golang中，goroutine可以认为是一种”轻量级线程” —- 协程，占用资源少。一个Go程序中可以创建成千上万个并发的goroutine，包括golang runtime在内的所有代码都跑在goroutine中，不涉及OS内核态。OS完全不知道goroutine的存在，go代码运行在一个或多个操作系统线程上。因此golang需要有<strong>调度器</strong>来负责调度这些goroutine，go scheduler负责将程序内的goroutines按照一定算法调度到不同的线程中去执行。</p>
+<h3 id="Go调度模型">Go调度模型</h3><h4 id="G-M模型">G-M模型</h4><p>Go 1.0版本的简单调度模型，G指代goroutine，对应于runtime中的一个抽象结构；M指machine，代表一个操作系统线程。该模型存在一些问题。例如单一全局互斥锁(Sched.Lock)，意味着每个协程创建和调度都要加锁；M会做内存缓存，而且goroutine在M之间传递，造成调度延迟、、内存消耗、性能损耗。</p>
+<h4 id="G-P-M模型">G-P-M模型</h4><ul>
+<li><p>1.1版本之后沿用至今的调度模型，内部采用work stealing算法。模型图如下：<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/goroutine-scheduler-model.png" class="full-image"></p>
+</li>
+<li><blockquote>
+<p>M represents an OS thread. It’s the thread of execution managed by the OS and works pretty much like your standard POSIX thread. In the runtime code, it’s called M for machine.</p>
+<p>G represents a goroutine. It includes the stack, the instruction pointer and other information important for scheduling goroutines, like any channel it might be blocked on. In the runtime code, it’s called a G.</p>
+<p>P represents a context for scheduling. You can look at it as a localized version of the scheduler which runs Go code on a single thread. It’s the important part that lets us go from a N:1 scheduler to a M:N scheduler. In the runtime code, it’s called P for processor.     </p>
+</blockquote>
+</li>
+<li>可以看到G和M之间加了个中间层P—-逻辑Processor，对于G而言，它只与P打交道，多个G会被平均分配到多个P上执行，一旦一部分G被分派到某个P上边执行，它就会存在于P的本地队列中等待被执行；而P与M的关系，可以认为是每个P绑定唯一一个M的关系，启动时的P默认数目为系统物理处理器个数。</li>
+</ul>
+<h4 id="G-P-M调度机制">G-P-M调度机制</h4><ul>
+<li><strong>抢占式调度</strong>：<ul>
+<li>当一个G中出现死循环或永久循环的代码逻辑，那么G将永久占用分配给它的P和M，位于同一个P中的其他G将得不到调度，出现“饿死”的情况；因此Go 1.2实现了抢占式调度机制，在每个函数或方法的入口，加上一段额外的代码，让runtime有机会检查是否需要执行抢占调；然而对于没有函数调用，纯循环计算的G，无法抢占调度。Go的具体实现是启动一个sysmon的监控线程，不绑定P，每20us~10ms启动一次，向长时间运行的G任务发出抢占调度。  </li>
+<li>如果一个G任务运行10ms，sysmon就会认为其运行时间太久而发出抢占式调度的请求。一旦G的抢占标志位被设为true，那么待这个G下一次调用函数或方法时，runtime便可以将G抢占，并移出运行状态，放入P的local runq中，等待下一次被调度。</li>
+</ul>
+</li>
+<li><strong>网络IO/channel阻塞调度</strong>：<ul>
+<li>Go runtime通过实现netpoller机制来实现当goroutine发起网络I/O操作也不会导致M被阻塞（仅阻塞G），从而不会导致大量M被创建出来。</li>
+<li>对于G被网络IO/channel阻塞，调度器会将当前G放入等待队列，等到阻塞操作完成之后再次被分配给某个P执行，而此时的M会去执行下一个runnable的G；如果此时没有runnable的G供M运行，那么M将解绑P，并进入sleep状态。</li>
+</ul>
+</li>
+<li><p><strong>系统调用阻塞</strong>：</p>
+<ul>
+<li>当G去执行一个文件IO类似的系统调用时会导致系统G和线程M都被阻塞，P就会与M分离，去寻找其他的idle的M，没有就去创建，从而可能导致大量创建新的M的问题</li>
+<li>Go 1.9增加了Poller for os package来实现在G操作支持pollable的fd时，仅阻塞G，而不阻塞M，不过对regular file无效</li>
+</ul>
+</li>
+<li><p><strong>Tips</strong>：Go提供了调度器当前状态的查看方法, 使用Go运行时环境变量GODEBUG，例如<code>GODEBUG=schedtrace=1000 godoc -http=:6060</code></p>
+</li>
 </ul>
 <blockquote>
-<p>理性只会迟到，不会缺席</p>
-<p>别人恐惧时我贪婪，别人贪婪时我恐惧</p>
-<p>贪婪有两种，一种是6000点明知贵了的时候还想等再涨点再卖，还有一种是在2000点的时候明知已经很便宜了还想等多跌一会儿再买入；从而造成不及时止盈和不及时建仓的情况，永远没有最好的买入和卖出点</p>
-<p>人多的地方不去</p>
-<p>最一致的时候就是最危险的时候</p>
-<p>一般只有在趋势的初期和末期，才是真理掌握在少数人手里的时候</p>
-<p>业余炒股者到职业投资者的几个必经阶段：<br>    跟庄炒作 —&gt; 定量投资+程序化交易 —&gt; 技术分析+财报分析基本面 —&gt; 个股到行业配置 —&gt; 成长性投资+价值低估投资</p>
-<p>成长投资关注公司未来价值远大于公司现在价值，着眼于未来收入和利润的高增长，需要的是远见；价值投资关注企业现在的资产、现金流，看公司现在价格是否远小于公司现在的价值，寻找便宜的好公司为重中之重。</p>
-<ol>
-<li><p>好公司的2个标准：</p>
-<ul>
-<li>定价权</li>
-<li>要么在做自己可以不断复制和规模化的事情，决定销售增速</li>
-<li>要么在做别人不可能复制的事情，决定利润率的高低和趋势</li>
-<li>也就是可规模化+门槛高(可持续性)</li>
-</ul>
-</li>
-<li><p>客观看待股价波动，只反映看客们的情绪波动，与企业价值无关。</p>
-</li>
-<li>买股票之前问问自己下跌之后敢不敢加仓，因为价格波动在所难免。</li>
-<li>股价的波动本质上只跟估值和流动性有关系。</li>
-<li>投资的两种风险，一种是丧失本金的风险，另一种是波动风险。</li>
-</ol>
+<p>Go programs run with multiple threads, even when GOMAXPROCS is 1. The runtime uses goroutines that call syscalls, leaving threads behind.</p>
+<p>In order to run goroutines, a thread must hold a context.</p>
+<p>There are 3 usual models for threading. One is N:1 where several userspace threads are run on one OS thread. This has the advantage of being very quick to context switch but cannot take advantage of multi-core systems. Another is 1:1 where one thread of execution matches one OS thread. It takes advantage of all of the cores on the machine, but context switching is slow because it has to trap through the OS.</p>
+<p>Go tries to get the best of both worlds by using a M:N scheduler. It schedules an arbitrary number of goroutines onto an arbitrary number of OS threads. You get quick context switches and you take advantage of all the cores in your system. The main disadvantage of this approach is the complexity it adds to the scheduler. </p>
 </blockquote>
-<h3 id="价值投资">价值投资</h3><blockquote>
-<ol>
-<li><p>食品安全事件是行业投资较好的买入点，特别是那些没有涉事的行业龙头，被波及的企业。</p>
-</li>
-<li><p>当市场上大幅出逃，大家都忙着斩仓的时候，一定会有被低估的好公司出现。只不过此时往往有钱的没胆了，有胆的没钱了。</p>
-</li>
-<li><p>进入有积累的行业</p>
-</li>
-<li><p>股票价格等于市盈率乘以利润</p>
-</li>
-<li><p>牛市里听到的都是好消息，熊市里听到的都是坏消息，你只听到你想听到的消息，所以一定要保持独立性</p>
-</li>
-<li><p>遛狗理论：价格围绕着价值波动，最终回归价值</p>
-</li>
-<li><p>高估值股票的平均回报率远不如低估值股票</p>
-</li>
-<li><p>一个东西只有足够的便宜，赚钱的概率就会高很多</p>
-</li>
-<li><p>买入一个好公司永远不会太迟，即使局势明朗之后还是会有空间</p>
-</li>
-<li><p>股市市场长期来看是均值回归的，低估值时高仓位，高估值时低仓位，一般当公募基金平均仓位达到88%以上，市场就是阶段性见顶；不要追涨杀跌，抄底和逃顶的概率极低，最好是以区间来做决断。</p>
-</li>
-<li><p>德州扑克与炒股的相似点：理解概率只是；注意风险控制；牌好下重注，牌差不下注；避免贪婪和恐惧；读懂对手心理。</p>
-</li>
-<li><p>股票大跌时意味着未来预期收益率上升，反之下降。</p>
-</li>
-<li><p>高估值股票往往还在财报出现前后出现巨大风险。因为期望越大，失望越大。</p>
-</li>
-<li><p>股市风险有两种，一种是感受到的风险，一种是真实的风险。股票暴涨时真实风险增大，但是大家感受到的风险反而小；股市下跌时感受到的风险大，但是实际风险小。</p>
-</li>
-<li><p>什么时候卖出股票？基本面恶化，价格达到目标价，有更好的其他投资；与目前是否亏损没有必然关系，忘掉你的买入成本，不要有心理账户，因为它根本不会影响股价未来走势。</p>
-</li>
-<li><p>一个好的荐股逻辑包括三点：估值、品质、时机</p>
-</li>
-<li><p>熬得住和跑得快是市场生存的两种方式</p>
-</li>
-<li><p>锚固偏见</p>
-</li>
-<li><p>互联网赢家通吃，买龙头股；差异化产品买品牌；同质化产品买成本低的。</p>
-</li>
-<li><p>经济和市场都一定是有周期的。股票能跌多深是由最恐慌的人决定的。</p>
-</li>
+<h3 id="netpooler">netpooler</h3><p>当系统出现高并发的IO访问时，如一个网络服务器通常要并发处理成百上千的链接，每个链接可能都是由一个用户任务执行的，那么将会出现大量阻塞的IO操作，如果为每个阻塞操作都单独分配一个OS线程，那么将会增加系统的负载。因此在Golang中针对网络IO实现了netpooler来做特别的优化，只阻塞G，不阻塞M。</p>
+<p>当goroutine读或写阻塞时会被放到等待队列，goroutine失去运行权，而M继续执行其它的G。后台的poller不停地poll，所有的文件描述符都被添加到了这个poller中，当某个时刻一个文件描述符准备好了，poller就会唤醒之前因它而阻塞的goroutine，于是goroutine重新被分配给某个P执行。</p>
+<p>和使用Unix系统中的select或是poll方法不同地是，Golang的netpoller查询的是能被调度的goroutine而不是那些函数指针、包含了各种状态变量的struct等，这样你就不用管理这些状态，也不用重新检查函数指针等，这些都是你在传统Unix网络I/O需要操心的问题。</p>
+<h3 id="参考链接">参考链接</h3><ol>
+<li><a href="https://morsmachine.dk/go-scheduler" target="_blank" rel="noopener">The Go scheduler</a></li>
+<li><a href="https://morsmachine.dk/netpoller" target="_blank" rel="noopener">The Go netpoller</a></li>
 </ol>
-</blockquote>
 
-        
       
     </div>
 
@@ -683,7 +472,7 @@
       
         <div class="post-tags">
           
-            <a href="../../tags/投资理财/"> #投资理财 </a>
+            <a href="../../tags/Golang/"> #Golang </a>
           
         </div>
       
@@ -692,7 +481,264 @@
 
       
       
-        <div class="post-eof"></div>
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              C++手稿集锦
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2018-03-22
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2018/03/22/C-手稿集锦/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/03/22/C-手稿集锦/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h3 id="哪些变量会自动初始化？">哪些变量会自动初始化？</h3><p>在C语言中的<strong>全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值（C++默认初始化策略也是如此）。 C++保证了所有对象与对象成员都会初始化</strong>，无论是否写了圆括号或者是否写了参数列表，但其中基本数据类型的初始化还得依赖于构造函数中手动初始化。</p>
+<p>成员变量分为成员对象和内置类型成员，其中成员对象总是会被初始化的。我们通常会在构造函数中手动初始化所有内置类型的成员。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class A&#123;</span><br><span class="line">public:</span><br><span class="line">    int v;</span><br><span class="line">    A(): v(0);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="https://harttle.land/2015/10/05/cpp-variable-init.html" target="_blank" rel="noopener">参考链接</a></p>
+</blockquote>
+<h4 id="静态变量实现单例模式">静态变量实现单例模式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 将构造函数私有化，并提供获取单例的方法。 此后还需禁止复制构造函数、禁止赋值运算符。</span><br><span class="line">class CPerson&#123;</span><br><span class="line">private:</span><br><span class="line">    static CPerson* p;</span><br><span class="line">    CPerson()&#123;&#125;;</span><br><span class="line">    CPerson(CPerson&amp;);</span><br><span class="line">    const CPerson&amp; operator= (const CPerson&amp;);</span><br><span class="line">public:</span><br><span class="line">    static Person* instance()&#123;</span><br><span class="line">        return p ? p : (p = new P());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">CPerson* CPerson::p = NULL; // 静态成员必须在声明类的文件中进行声明（通常会初始化），否则链接错。</span><br></pre></td></tr></table></figure>
+<h3 id="对象的生命周期，构造与析构">对象的生命周期，构造与析构</h3><h4 id="对象实例化">对象实例化</h4><p>可以直接定义对象变量，在栈中分配并初始化对象；也可以定义对象指针，从堆中分配空间并初始化对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CPerson p1;</span><br><span class="line">CPerson p2(2);</span><br><span class="line">CPerson* p3 = new CPerson(3);</span><br></pre></td></tr></table></figure>
+<h4 id="析构函数">析构函数</h4><p>类的声明中，签名为<code>~CPerson()</code>的方法称为析构函数。析构函数没有参数和返回值。当对象生命周期结束时被调用，通常用来释放资源。一个类只能由一个析构函数。析构函数与构造函数类似，用户不指定时编译器会生成一个缺省的析构（构造）函数， 缺省的析构（构造）函数是空函数。</p>
+<h4 id="构造析构顺序">构造析构顺序</h4><p>对象的构造过程中，首先完成父类的构造函数，再完成成员对象的构造，最后调用当前类的构造函数：</p>
+<ol>
+<li>构造父类的对象。在此过程中对象的动态类型是仍然是父类。</li>
+<li>构造对象属性。它们实例化的顺序只取决于在类中声明的顺序，与初始化列表中的顺序无关。</li>
+<li>调用构造函数。在这里完成当前类指定的构造过程。</li>
+</ol>
+<p>对象的析构过程恰好相反，首先调用当前类的析构函数，然后析构对象属性，最后析构父类对象。</p>
+<h4 id="对象指针数组">对象指针数组</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CPerson *p[3] = &#123;new CPerson(1), new CPerson(2)&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="复制构造函数">复制构造函数</h4><p>类的声明中，签名为<code>CPerson(CPerson&amp;)</code>的方法称为复制构造函数，用来从一个已存在的对象复制生成一个新的对象。 在如下三种情况下会被调用：</p>
+<ol>
+<li><p>用一个对象初始化另一个对象时。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CPerson p2(p1);</span><br><span class="line">CPerson p2 = p1;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对象作为参数传递时。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void func(A a)&#123;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对象作为返回值时。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A func()&#123; A a; return a;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>只有一个参数的复制构造函数可以被称为<strong>转换构造函数</strong>。当需要类型转换时，会被调用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CPerson = 2;    // CPerson(int) called</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意区分赋值和初始化：<strong>对象变量间赋值不会调用复制构造函数</strong>。赋值只会按位拷贝对象所在的内存。当然你也可以重载<code>operator=</code>来改变它的行为。</p>
+</blockquote>
+<h4 id="对象生命周期">对象生命周期</h4><p>如下程序解释了对象的声明周期何时开始，以及何时结束。涉及到了：全局对象、静态对象、栈中的对象、堆中的对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">CPerson p1;             // main执行前，构造函数被调用</span><br><span class="line">void func()&#123;</span><br><span class="line">    static CPerson p2;  // func第一次执行前，构造函数被调用</span><br><span class="line">    CPerson p3;         // p3的构造函数被调用</span><br><span class="line">                        // func结束时，p3的析构函数被调用</span><br><span class="line">&#125;  </span><br><span class="line">int main()&#123;</span><br><span class="line">    CPerson p4, *p5;    // 调用p4的构造函数</span><br><span class="line">    func();</span><br><span class="line">    p5 = new CPerson;   // 调用p5的构造函数</span><br><span class="line">    delete p5;          // 调用p5的析构函数</span><br><span class="line">                        // main结束时，p4的析构函数被调用</span><br><span class="line">&#125;</span><br><span class="line">                        // 程序结束前，p1, p2的析构函数被调用</span><br></pre></td></tr></table></figure>
+<h3 id="栈对象和堆对象的创建方式">栈对象和堆对象的创建方式</h3><p>C++中，内存划分为三个逻辑区域：堆、栈和静态存储区，对象分为堆对象，栈对象以及<strong>静态对象</strong>(构造之后直到main程序结束才调用析构函数将其销毁，不管是local还是非local static对象)。而类的对象建立分为两种，一种是静态建立，如A a；另一种是动态建立，如A* ptr=new A；两者都要执行构造函数。</p>
+<ol>
+<li><p><strong>静态建立类对象</strong>：是由编译器为对象在栈空间中分配内存，是通过直接移动栈顶指针，挪出适当的空间，然后在这片内存空间上调用构造函数形成一个栈对象。使用这种方法，<strong>直接调用类的构造函数</strong>，内存空间自动释放</p>
+<p>。</p>
+</li>
+<li><p><strong>动态建立类对象</strong>：是使用new运算符将对象建立在堆空间中。这个过程分为两步，第一步是执行operator new()函数，在堆空间中搜索合适的内存并进行分配；第二步是调用构造函数构造对象，初始化这片内存空间。这种方法，<strong>间接调用类的构造函数</strong>，内存空间需要手动释放。</p>
+</li>
+<li><p><strong>注意点</strong>：</p>
+</li>
+</ol>
+<blockquote>
+<ol>
+<li><p><a href="https://blog.csdn.net/hbtj_1216/article/details/65934865" target="_blank" rel="noopener">栈对象和堆对象区别和优劣</a> : 栈对象的创建速度一般较堆对象快，它仅仅需要移动栈顶指针就可以被创建，递归函数中最好不要使用栈对象以避免栈溢出；程序员对堆对象的生命具有完全的控制权。比如，我们需要创建一个对象，能够被多个函数所访问，但是又不想使其成为全局的，那么这个时候创建一个堆对象无疑是良好的选择，然后在各个函数之间传递这个堆对象的指针，便可以实现对该对象的共享。</p>
+</li>
+<li><p><strong>如何限制类对象只能在堆上建立? </strong>编译器在为类对象分配栈空间时，会先检查类的析构函数的访问性，其实不光是析构函数，只要是非静态的函数，编译器都会进行检查。如果类的析构函数是私有的，则编译器不会在栈空间上为类对象分配内存（如果我们将构造函数设置为私有，那么我们也就不能用new来直接产生堆对象了，因为new在为对象分配空间后也会调用它的构造函数）。为了统一，可以将构造函数设为protected，然后提供一个public的static函数来完成构造，这样不使用new，而是使用一个函数来构造，使用一个函数来析构。</p>
+</li>
+<li><p>构造函数设置为私有会限制继承。如果一个类不打算作为基类，可以将其析构函数声明为private。为了限制栈对象，却不限制继承，我们可以将析构函数声明为protected，这样就两全其美。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&gt;    class NoStackObject &#123; </span><br><span class="line">&gt;    protected: </span><br><span class="line">&gt;        NoStackObject() &#123; &#125; </span><br><span class="line">&gt;        ~NoStackObject() &#123; &#125; </span><br><span class="line">&gt;    public: </span><br><span class="line">&gt;        static NoStackObject* creatInstance() &#123;</span><br><span class="line">&gt;        return new NoStackObject() ;//调用保护的构造函数 </span><br><span class="line">&gt;    &#125; </span><br><span class="line">&gt;        void destroy() &#123;</span><br><span class="line">&gt;            delete this ;//调用保护的析构函数 </span><br><span class="line">&gt;        &#125; </span><br><span class="line">&gt;    &#125;;</span><br><span class="line">&gt;    NoStackObject* hash_ptr = NoStackObject::creatInstance() ;  </span><br><span class="line">&gt;    hash_ptr-&gt;destroy() ; </span><br><span class="line">&gt;    hash_ptr = NULL ; //防止使用悬挂指针</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<ol>
+<li><p><strong>只要禁用new运算符就可以实现类对象只能建立在栈上</strong>: 你不能影响new operator的能力（因为那是C++语言内建的），但是new operator 总是先调用 operator new,而后者我们是可以自行声明重写的。因此，将operator new()设为私有即可禁止对象被new在堆上；如果也想禁止堆对象数组，可以把operator new[]和operator delete[]也声明为private。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt;    class A    </span><br><span class="line">&gt;    &#123;    </span><br><span class="line">&gt;    private:    </span><br><span class="line">&gt;        void* operator new(size_t t)&#123;&#125;     // 注意函数的第一个参数和返回值都是固定的    </span><br><span class="line">&gt;        void operator delete(void* ptr)&#123;&#125; // 重载了new就需要重载delete    </span><br><span class="line">&gt;    public:    </span><br><span class="line">&gt;        A()&#123;&#125;    </span><br><span class="line">&gt;        ~A()&#123;&#125;    </span><br><span class="line">&gt;    &#125;; </span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<ol>
+<li><a href="https://harttle.land/2015/07/22/memory-segment.html" target="_blank" rel="noopener">CPP进程的地址空间分配-堆栈空间</a></li>
+</ol>
+</blockquote>
+<h3 id="引用和指针">引用和指针</h3><ol>
+<li>引用定义一个变量的别名，是一种隐式的指针，对它的操作都会被解释为对它引用的对象的操作。 引用不占用栈空间，因为编译器知道它的地址。但作为参数传递引用时，会把指针放在参数栈中。为了在函数中修改传入的参数，可以把函数参数声明为引用。引用作为函数的返回值，一般是为了在函数外部修改内部变量。</li>
+</ol>
+<h4 id="常量指针与指针常量">常量指针与指针常量</h4><p>常量指针指向地方的内容不可改变，指针常量指向的地方不可改变</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 定义整数</span><br><span class="line">int n = 1, m=2;</span><br><span class="line"></span><br><span class="line">// 常量指针</span><br><span class="line">const int * p = &amp;n;</span><br><span class="line">*p = 5;   // 编译错，内容不可变</span><br><span class="line"></span><br><span class="line">// 指针常量</span><br><span class="line">int * const p = &amp;n;</span><br><span class="line">p = &amp;m;   // 编译错，地址不可变</span><br><span class="line"></span><br><span class="line">// 指针和指向的对象都是常量</span><br><span class="line">const int * const p = &amp;n;</span><br></pre></td></tr></table></figure>
+<h4 id="指针数组vs数组指针">指针数组vs数组指针</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 指针数组：数组的长度为8，数组的每一项都是类型为int*的指针</span><br><span class="line">int* arr[8];</span><br><span class="line"></span><br><span class="line">// 数组指针：一个指向长度为8的数组的指针</span><br><span class="line">int (*arr)[8];</span><br></pre></td></tr></table></figure>
+<h4 id="函数指针">函数指针</h4><p>函数指针通常用来进行传参，借此实现动态的策略。传参时可以用函数名，也可以用函数指针。而函数指针需要用函数名来初始化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">int sum(int a, int b)j&#123;</span><br><span class="line">    return a+b;</span><br><span class="line">&#125;</span><br><span class="line">void wrapper(int a, int b, int (*p)(int, int))&#123;</span><br><span class="line">    cout&lt;&lt;p(a, b)&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    wrapper(2, 3, sum);</span><br><span class="line">    int (*p)(int, int) = sum;</span><br><span class="line">    wrapper(2, 3, p);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="C++_智能指针与裸指针">C++ 智能指针与裸指针</h4><p>我们知道c++的内存管理是让很多人头疼的事，当我们写一个new语句时，一般就会立即把delete语句直接也写了，但是我们不能避免程序还未执行到delete时就跳转了或者在函数中没有执行到最后的delete语句就返回了，如果我们不在每一个可能跳转或者返回的语句前释放资源，就会造成内存泄露。<strong>智能指针就是一个类，当超出了类的作用域，类会自动调用析构函数，析构函数会自动释放资源。</strong></p>
+<h4 id="为什么要用智能指针？">为什么要用智能指针？</h4><ol>
+<li>难以区分裸指针指向的是单个对象还是一个数组，也无法确定到底是用delete(销毁单个对象)还是delete[]销毁一个数组；</li>
+<li>使用完指针之后无法判断是否应该销毁指针，因为无法判断指针是否“拥有”指向的对象，也无法确定销毁指针的方式；</li>
+<li>遗漏销毁指正可能导致内存泄露，而销毁多次则会导致未定义行为。</li>
+</ol>
+<h4 id="四种智能指针">四种智能指针</h4><ol>
+<li><strong>std::auto_ptr和std::unique_ptr</strong>：auto_ptr是c++ 98遗留的关键字，已经不建议使用，auto_ptr的功能都可以由unique_ptr更加高效的做到。<ul>
+<li>auto_ptr智能指针可以像类的原始指针一样访问类的public成员，成员函数get()返回一个原始的指针，成员函数reset()重新绑定指向的对象，而原来的对象则会被释放。注意我们访问auto_ptr的成员函数时用的是“.”，访问指向对象的成员时用的是“-&gt;”。</li>
+<li>auto_ptr指针当我们对智能指针进行赋值时，如ptest2 = ptest，ptest2会接管ptest原来的内存管理权，ptest会变为空指针，如果ptest2原来不为空，则它会释放原来的资源，基于这个原因，应该避免把auto_ptr放到容器中，因为算法对容器操作时，很难避免STL内部对容器实现了赋值传递操作，这样会使容器中很多元素被置为NULL。判断一个智能指针是否为空不能使用if(ptest == NULL)，应该使用if(ptest.get() == NULL)。</li>
+<li>unique_ptr指针永远“拥有”其指向的对象，unique_ptr是一个move-only类型，一个unique_ptr指针无法被复制，只能将“所有权”在两个unique_ptr指针之间转移，转移完成后源unique_ptr将被设为null。unique_ptr默认的销毁方式是通过对unique_ptr中的裸指针进行delete操作，它可以无缝地转换成shared_ptr。不能使用两个unique_ptr智能指针赋值操作，应该使用std::move，例如foo(std::move(ptest))</li>
+</ul>
+</li>
+<li><strong><a href="https://segmentfault.com/a/1190000006860811" target="_blank" rel="noopener">std::shared_ptr</a>和std::weak_ptr</strong>：<ul>
+<li>shared_ptr使用计数机制来表明资源被几个指针共享，可以自动管理对象的生命周期和GC，shared_ptr的引用计数增减是原子操作</li>
+<li>一个对象可以被多个shared_ptr指向和访问，这些shared_ptr类型的指针共同享有该对象的所有权，当最后一个指向该对象的shared_ptr生命周期结束的时候，对象被销毁</li>
+<li>shared_ptr的构造将引用计数加1，销毁的时候引用计数减1，而赋值则将源指针引用计数加1，目标指针引用计数减1，例如P1=P2，P1指向对象的引用计数减1，P2指向对象的引用计数加1。当引用计数减1之后为0的时候，shared_ptr将会销毁指向的对象。</li>
+<li>由于control_block的存在，shared_ptr的size通常是2倍裸指针或unique_ptr的大小</li>
+<li>weak_ptr是用来解决shared_ptr相互引用时的死锁问题,如果说两个shared_ptr相互引用,那么这两个指针的引用计数永远不可能下降为0,资源永远不会释放。它是对对象的一种弱引用，不会增加对象的引用计数，和shared_ptr之间可以相互转化，shared_ptr可以直接赋值给它，它可以通过调用lock函数来获得shared_ptr。不能通过weak_ptr直接访问对象的方法，应该先把它转化为shared_ptr</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/C/"> #C++ </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Effective C++ 札记
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2018-03-22
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2018/03/22/Effective C++ 札记/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/03/22/Effective C++ 札记/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h3 id="变量常量">变量常量</h3><ol>
+<li>避免使用#define，而使用常量、枚举和内联函数，enum比const好用</li>
+<li>出于效率原因，C++不保证内置类型(int等基本类型)数据成员的初始化。对于成员变量(class A)的内置类型， 会在构造函数进入之前进行初始化; 在构造函数前给出初始化列表来确保初始化，例如：<code>C():b(), i(){}</code></li>
+<li>静态变量的生命周期不同于栈或者堆中的对象，从它被构造开始一直存在，直到程序结束。 包括全局变量、命名空间下的变量、类中和函数中定义的static对象。 其中，定义在函数中的称为 local static，其他的称为 non-local static。</li>
+</ol>
+<h3 id="函数">函数</h3><ol>
+<li><p>编译器默认定义函数调用时机：</p>
+<ul>
+<li>构造函数：对象定义；使用其他兼容的类型初始化对象时（可使用 explicit 来避免这种情况）</li>
+<li>复制构造函数：用一个对象来初始化另一对象时；传入对象参数时；返回对象时；</li>
+<li>析构函数：作用域结束（包括函数返回）时；delete</li>
+<li>=运算符：一个对象赋值给另一对象</li>
+<li><p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Empty e1;               // 默认构造函数</span><br><span class="line">Empty e2(e1);           // 拷贝构造函数</span><br><span class="line">Empty e3 = e1;          // 拷贝构造函数</span><br><span class="line">e2 = e1;                // = 运算符</span><br><span class="line"></span><br><span class="line">void func(Empty e)&#123;     // 拷贝构造函数，拷贝一份参数对象</span><br><span class="line">   	return e;           // 拷贝构造函数，拷贝一份返回对象</span><br><span class="line">                       // 析构函数，拷贝得到的参数对象被析构</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">e2 = func(e1);          // = 运算符</span><br><span class="line">                       // 析构函数，返回值被析构</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>通过把默认定义函数声明成private而且不实现它，可以禁用这些函数被调用，可以用于实现单例；也可以用base class的方式来禁用</p>
+</li>
+<li><p>析构函数声明为虚函数的目的在于以基类指针调用析构函数时能够正确地析构子类部分的内存。 否则子类部分的内存将会泄漏。示例：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 基类</span><br><span class="line">class TimeKeeper&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual ~TimeKeeper();</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line">TimeKeeper *ptk = getTimeKeeper():  // 可能返回任何一种子类</span><br><span class="line">...</span><br><span class="line">delete ptk;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>由于析构函数常常被自动调用，在析构函数中抛出的异常往往会难以捕获，引发程序非正常退出或未定义行为，所以析构函数不要抛出异常</p>
+</li>
+<li>使用对象来管理资源，类似智能指针</li>
+<li></li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/C/"> #C++ </a>
+          
+        </div>
+      
+
+      
+
+      
       
     </div>
   </div>
@@ -703,7 +749,7 @@
 
   
   <div class="pagination">
-    <a class="extend prev" rel="prev" href="../..//">&laquo;</a><a class="page-number" href="../..//">1</a><span class="page-number current">2</span><a class="page-number" href="../3/">3</a><span class="space">&hellip;</span><a class="page-number" href="../16/">16</a><a class="extend next" rel="next" href="../3/">&raquo;</a>
+    <a class="extend prev" rel="prev" href="../../">&laquo;</a><a class="page-number" href="../../">1</a><span class="page-number current">2</span><a class="page-number" href="../3/">3</a><span class="space">&hellip;</span><a class="page-number" href="../17/">17</a><a class="extend next" rel="next" href="../3/">&raquo;</a>
   </div>
 
 
@@ -730,28 +776,28 @@
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../..//categories">
+            <a href="../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

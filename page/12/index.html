@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="java,android,life,CharlesXiao" />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="java,android,life,CharlesXiao">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../favicon.ico?v=0.4.2">
 
 
 
@@ -49,7 +49,7 @@
 <body>
 <!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
   <div class="container one-column 
-   page-home 
+  
 ">
     <div class="headband"></div>
 
@@ -71,7 +71,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -87,40 +87,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -148,9 +148,448 @@
           
           
             
-              <a class="post-title-link" href="../../2015/10/20/Java容器类库的学习研究/">
-                Java容器类库的学习研究
-              </a>
+              Palindrome && Reverse Integer问题
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-01-14
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Leetcode/">Leetcode</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/01/14/Palindrome-Reverse-Integer问题/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/14/Palindrome-Reverse-Integer问题/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h3 id="Palindrome_Number问题">Palindrome Number问题</h3><p><a href="https://leetcode.com/problems/palindrome-number/" target="_blank" rel="noopener">题目链接</a></p>
+<p>解题思路：首先需要注意两点,①负数和小数都不是回文数 ②Integer有32位的范围限制，所以反转之后可能溢出. 对该整数循环除以10,取余数和商,余数则为从尾到头依次的digit number,并利用该digit number计算反转之后的结果，直到商为0结束循环；最终判断反转结构是否与原数相等。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
+    <span class="keyword">public</span> <span class="keyword">boolean</span> isPalindrome(<span class="keyword">int</span> x) {
+        <span class="keyword">if</span> (x &lt; <span class="number">0</span>)
+            <span class="keyword">return</span> <span class="keyword">false</span>;
+        <span class="keyword">int</span> <span class="keyword">reverse</span> = <span class="number">0</span>;
+        <span class="keyword">int</span> quotient = x;
+        <span class="keyword">while</span> (quotient != <span class="number">0</span>) {
+            <span class="keyword">reverse</span> = <span class="keyword">reverse</span>*<span class="number">10</span> + quotient%<span class="number">10</span>;
+            quotient = quotient/<span class="number">10</span>;
+        }
+        <span class="keyword">if</span> (<span class="keyword">reverse</span> == x)
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        <span class="keyword">else</span>
+            <span class="keyword">return</span> <span class="keyword">false</span>; 
+    }
+}
+</code></pre><p>优化解法: 分别从整数的首尾开始比对，第一位和最后一位比较，第二位和倒数第二位比较，一直比较到中间位置，如果发现全部都相等则说明是回文数,此方法可以避免溢出，例如对于:121,第一次比较1和1，剩下2；再比较2和2，发现它是回文数.</p>
+<h3 id="Reverse_Integer问题">Reverse Integer问题</h3><p><a href="https://leetcode.com/problems/reverse-integer/" target="_blank" rel="noopener">题目链接</a></p>
+<p>解题思路：这道题与上一题类似,也是个反转整数的题,在java中Integer占据4个bytes, 有32位的范围限制，对于正数,它的最高位是0,所以它最大能表示的数是01111….(后面共31个1),数化成十进制即是2147483647，Integer.MAX_VALUE = 2147483647[0x7fffffff]; 负数能表示的最小数的二进制数为1000..(后面共31个0),化为十进制数即为-int 类型的范围是 -2147483648,即为Integer.MIN_VALUE.当一个整数溢出时，变成一个与原数不相等的在int范围内的数，所以可以通过reverse/10 != tmp来判断是否溢出.</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
+    <span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">reverse</span>(<span class="keyword">int</span> x) {
+        <span class="comment">// Consider the case: reverse overflow int</span>
+        <span class="keyword">int</span> <span class="keyword">reverse</span> = <span class="number">0</span>;
+        <span class="keyword">int</span> quotient = x;
+        <span class="keyword">while</span> (quotient != <span class="number">0</span>) {
+            <span class="keyword">int</span> tmp = <span class="keyword">reverse</span>;
+            <span class="comment">// if (reverse &gt; Integer.MAX_VALUE || reverse &lt; Integer.MIN_VALUE)</span>
+            <span class="comment">//    return 0;</span>
+            <span class="keyword">reverse</span> = <span class="keyword">reverse</span> * <span class="number">10</span> + quotient % <span class="number">10</span>;
+            quotient = quotient / <span class="number">10</span>;
+            <span class="comment">// deal with overflow</span>
+            <span class="keyword">if</span> (<span class="keyword">reverse</span>/<span class="number">10</span> != tmp) {
+                <span class="keyword">return</span> <span class="number">0</span>;
+            }
+
+        }
+
+        <span class="keyword">return</span> <span class="keyword">reverse</span>;
+    }
+}
+</code></pre>
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Leetcode/"> #Leetcode </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Remove element问题的简单优化
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-01-13
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Leetcode/">Leetcode</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/01/13/Remove-element问题的简单优化/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/13/Remove-element问题的简单优化/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>原题链接: <a href="https://leetcode.com/problems/remove-element/" target="_blank" rel="noopener">Remove Element</a>. 这是一道easy的水题，之所以拿出来讲，主要是其中有一个巧妙的小优化,可以因小见大体会到代码效率优化的无处不在，激励自己写出最优的代码.</p>
+<h3 id="最初解法">最初解法</h3><pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span> {
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> val)</span> </span>{
+        <span class="keyword">int</span> length = nums.length;
+        <span class="keyword">int</span> res = <span class="number">0</span>;
+        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length; ++i) {
+            <span class="keyword">if</span> (nums[i] != val) {
+                 nums[res] = nums[i];
+                 res++;
+            }
+        }
+        <span class="keyword">return</span> res;
+    }
+}
+</code></pre><p>思路讲解: 从头开始遍历数组元素length次，当元素nums[i]与val不相等，重新赋值, 相等则跳过，最终数组中前res个元素都是不等于val的元素</p>
+<p>效率:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/remove_element_0.png" class="full-image">  </p>
+<h3 id="改进解法">改进解法</h3><pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span> {
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">removeElement</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> val)</span> </span>{
+        <span class="keyword">int</span> length = nums.length;
+        <span class="keyword">int</span> res = <span class="number">0</span>;
+        <span class="comment">// 减少i++操作引发70%的效率提升</span>
+        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length-res;) {
+            <span class="keyword">if</span> (nums[i] == val) {
+                 nums[i] = nums[length-res-<span class="number">1</span>];
+                 res++;
+            } <span class="keyword">else</span> {
+                i++;
+            }
+        }
+        <span class="keyword">return</span> length-res;
+    }
+}
+</code></pre><p>思路讲解: 从头开始遍历数组元素length-res次，当元素nums[i]与val相等，i不改变, 从末尾取出一个对应的将不再被循环遍历到的元素赋值到当前的nums[i], 再次与val比较；如果nums[i]与val不相等则i++，比较下一元素</p>
+<p>效率:<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/remove_element_1.png" class="full-image">  </p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Leetcode/"> #Leetcode </a>
+          
+            <a href="../../tags/Array/"> #Array </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Roman与Integer之间的相互转换
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-01-13
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="../../categories/Leetcode/">Leetcode</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/01/13/Roman与Integer之间的相互转换/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/13/Roman与Integer之间的相互转换/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>罗马数字与阿拉伯数字之间的简单转换方法,首先需要了解罗马数字计数法，在这两道转换题里我们只用到了前三项规则</p>
+<ol>
+<li><p>罗马数字共有7个，即I（1）、V（5）、X（10）、L（50）、C（100）、D（500）和M（1000）</p>
+</li>
+<li><p>右加左减: 较大的罗马数字的右边记上较小的罗马数字，表示大数字加小数字; 较大的罗马数字的左边记上较小的罗马数字，表示大数字减小数字</p>
+</li>
+<li>左减有一定限制: 只有I, X, C可以放到左边当做减数使用,而且左减不能越位,I的右边只能是VX, X右边只能是LC, C的右边只能是DM; 左减数字必须为一位</li>
+<li>其他规则: 加线乘千、重复数次、右加数字不可连续超过三位、同一数码最多只能连续出现三次</li>
+</ol>
+<h3 id="Roman_to_Integer">Roman to Integer</h3><p>解题思路:  对于每一个roman字符,除了I，X，C三种情况会出现减去对应数值，其他情况都是加上该字符对应的数值; 针对I、X、C，我们可以总结发现只需要考察他们的下一位是否满足减的条件,是则减，否则加。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
+    <span class="keyword">public</span> <span class="function"><span class="keyword">int</span> <span class="title">romanToInt</span><span class="params">(String s)</span> </span>{
+        <span class="keyword">int</span> res = <span class="number">0</span>;
+        <span class="keyword">int</span> len = s.length();
+        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) {
+            <span class="keyword">char</span> tmp = s.charAt(i);
+            <span class="keyword">switch</span> (tmp) {
+                <span class="keyword">case</span> <span class="string">'I'</span>:
+                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'V' || s.charAt(i+1) == 'X')) {
+                        res -= <span class="number">1</span>;
+                        <span class="keyword">break</span>;
+                    }
+                    res += <span class="number">1</span>;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'V'</span>:
+                    res += 5;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'X'</span>:
+                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'L' || s.charAt(i+1) == 'C')) {
+                        res -= <span class="number">10</span>;
+                        <span class="keyword">break</span>;
+                    }
+                    res += <span class="number">10</span>;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'L'</span>:
+                    res += 50;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'C'</span>:
+                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'D' || s.charAt(i+1) == 'M')) {
+                        res -= <span class="number">100</span>;
+                        <span class="keyword">break</span>;
+                    }
+                    res += <span class="number">100</span>;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'D'</span>:
+                    res += 500;
+                    <span class="keyword">break</span>;
+                <span class="keyword">case</span> <span class="string">'M'</span>:
+                    res += 1000;
+                    <span class="keyword">break</span>;
+                <span class="keyword">default</span>:
+                    <span class="keyword">break</span>;
+            }
+        }
+        <span class="keyword">return</span> res;
+    }
+}
+</code></pre><h3 id="Integer_To_Roman">Integer To Roman</h3><p>解题思路: 对于输入的数值进行取商处理，从大的计数单位到小的计数单位依次取商, 商则是该计数单位对应的roman字符的个数。</p>
+<pre><code>public <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
+    public <span class="built_in">String</span> intToRoman(<span class="built_in">int</span> <span class="built_in">num</span>) {
+        <span class="comment">// igr存储的是从大到小每一个基本计数单位,与roman一一对应</span>
+        <span class="built_in">String</span>[] roman = {<span class="string">"M"</span>, <span class="string">"CM"</span>, <span class="string">"D"</span>, <span class="string">"CD"</span>, <span class="string">"C"</span>, <span class="string">"XC"</span>, <span class="string">"L"</span>, <span class="string">"XL"</span>, <span class="string">"X"</span>, <span class="string">"IX"</span>, <span class="string">"V"</span>, <span class="string">"IV"</span>, <span class="string">"I"</span>};
+        <span class="built_in">int</span>[] igr = {<span class="number">1000</span>, <span class="number">900</span>, <span class="number">500</span>, <span class="number">400</span>, <span class="number">100</span>, <span class="number">90</span>, <span class="number">50</span>, <span class="number">40</span>, <span class="number">10</span>, <span class="number">9</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">1</span>};
+        StringBuilder res = <span class="keyword">new</span> StringBuilder();
+        <span class="keyword">for</span> (<span class="built_in">int</span> i=<span class="number">0</span>; i&lt;roman.length; i++) {
+            <span class="built_in">int</span> quotient = <span class="built_in">num</span> / igr[i];
+            <span class="keyword">for</span> (<span class="built_in">int</span> j=<span class="number">0</span>; j&lt;quotient; j++) {
+                res.append(roman[i]);
+            }
+            <span class="built_in">num</span> -= quotient * igr[i];
+        }
+        <span class="keyword">return</span> res.toString();
+    }
+}
+</code></pre>
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Leetcode/"> #Leetcode </a>
+          
+            <a href="../../tags/String/"> #String </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Google Compute Engine配置LAMP环境以及部署Web项目
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-12-24
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2015/12/24/Google-Compute-Engine配置LAMP环境以及部署Web项目/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/24/Google-Compute-Engine配置LAMP环境以及部署Web项目/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Java容器类库的学习研究
             
           
         </h1>
@@ -178,7 +617,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2015/10/20/Java容器类库的学习研究/#comments" >
+            <a href="../../2015/10/20/Java容器类库的学习研究/#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/20/Java容器类库的学习研究/"></span>
             </a>
           </span>
@@ -193,8 +632,7 @@
       
 
       
-        
-          <h3 id="Comparable和Comparator接口区别"><a href="http://fuxueliang.com/tech/2013/05/26/java-sorting-comparator-vs-comparable-tutorial/" target="_blank" rel="external">Comparable和Comparator接口区别</a></h3><ol>
+        <h3 id="Comparable和Comparator接口区别"><a href="http://fuxueliang.com/tech/2013/05/26/java-sorting-comparator-vs-comparable-tutorial/" target="_blank" rel="noopener">Comparable和Comparator接口区别</a></h3><ol>
 <li>Comparable &amp; Comparator 都是用来实现集合中元素的比较、排序的，只是 Comparable 是在集合内部定义的方法实现的排序，Comparator 是在集合外部实现的排序，所以，如想实现排序，就需要在集合外定义 Comparator 接口的方法或在集合内实现 Comparable 接口的方法</li>
 <li><p><strong>Comparable</strong>:一个实现了comparable接口的对象的实例可以被用于和相同类的不同实例做对比。它本身必须实现java.lang.Comparable的接口，这样它就拥有了对比的能力;java.util.Collections.sort(List) 和 java.util.Arrays.sort(Object[]) 方法被用来排列使用内在排序（natural ordering）方式的对象.</p>
 </li>
@@ -264,7 +702,7 @@
 <li><strong>put存储元素</strong>HashMap在存储Entry对象的时候，首先根据Key的hashCode()方法得到其hashCode值，然后根据高位运算和取模运算来判定将存储到Entry[]数组的哪一个位置对应的链表上O(1),然后调用key的Equals方法去遍历链表比较key值，如果找到则更新value并返回旧址，否则将新的Entry加入到该链表头部</li>
 <li><strong>内部结构图</strong>：<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HashMap.jpg" class="full-image" width="100%"></li>
 <li><strong>遍历顺序</strong>也就是说Entry<key,value>对象随机地分配到某个Entry[] table数组的元素表示的链表上, HashMap内部Entry<k,v>的遍历顺序是对Entry[] table 数组，从index=0开始，依次遍历table[i]上的链表上的Entry对象;所以对HashMap遍历Entry对象的顺序和Entry对象的存储顺序之间没有任何关系.</k,v></key,value></li>
-<li><strong>重新hash调节大小</strong>HashMap允许null键插入，其内部会将null存到table[0]中进行处理. 内部有负载因子和数组长度、size等参数，当map中元素达到16*0.75=12时，因为链表长度可能很长导致查找效率降低，hashmap会对原来的所有元素重新进行hash,数组容量变为原来的2倍，当然Java里的数组是无法自动扩容的，方法是使用一个新的数组代替已有的容量小的数组；重新hash时链表顺序会被反转，可以避免尾部遍历(1.8中不会倒置，也不会重新计算哈希).<a href="http://www.xuebuyuan.com/2231227.html" target="_blank" rel="external">HashMap</a>; 在HashMap调整大小时会出现条件竞争，也就是多个线程同时来调整大小，出现死循环.如果内存空间很多而又对时间效率要求很高，可以降低负载因子Load factor的值；相反，如果内存空间紧张而对时间效率要求不高，可以增加负载因子loadFactor的值，这个值可以大于1。</li>
+<li><strong>重新hash调节大小</strong>HashMap允许null键插入，其内部会将null存到table[0]中进行处理. 内部有负载因子和数组长度、size等参数，当map中元素达到16*0.75=12时，因为链表长度可能很长导致查找效率降低，hashmap会对原来的所有元素重新进行hash,数组容量变为原来的2倍，当然Java里的数组是无法自动扩容的，方法是使用一个新的数组代替已有的容量小的数组；重新hash时链表顺序会被反转，可以避免尾部遍历(1.8中不会倒置，也不会重新计算哈希).<a href="http://www.xuebuyuan.com/2231227.html" target="_blank" rel="noopener">HashMap</a>; 在HashMap调整大小时会出现条件竞争，也就是多个线程同时来调整大小，出现死循环.如果内存空间很多而又对时间效率要求很高，可以降低负载因子Load factor的值；相反，如果内存空间紧张而对时间效率要求不高，可以增加负载因子loadFactor的值，这个值可以大于1。</li>
 <li><strong>key不可变</strong>Map的key值应该使用不可变对象，以防put和get的时候对象发生变化从而导致hashcode变化，取不到正确的对象；HashMap也可以声明为同步的，使用Map m = Collections.synchronizeMap(hashMap);</li>
 <li><strong>Fail-Fast机制</strong>:在使用迭代器的过程中有其他线程修改了map结构，那么将抛出ConcurrentModificationException，这就是所谓fail-fast机制。这一机制在源码中的实现是通过modCount域，modCount顾名思义就是修改次数，对HashMap元素个数的修改都将增加这个值;在迭代器初始化过程中会将这个值赋给迭代器的expectedModCount。在迭代过程中，判断modCount跟expectedModCount是否相等，如果不相等就表示已经有其他线程修改了Map中元素个数.例如：HashMap在foreach迭代器循环遍历时如果其他线程对该map进行结构上的更改(比如进行add和map.remove元素操作,而不是简单的修改集合元素的内容)会导致ConcurrrentModificationEaception</li>
 <li><strong>遍历区别</strong>①for循环遍历时删除或者增加某个元素只会导致数组越界(rangeCheck函数)，或者一直add生成无穷序列以及遍历不完整 ②使用Iterator遍历或者foreach遍历时如果采用iterator.remove()不会报错，因为他会重新设置expectedModCount=modCount，如果采用list.remove()则会出现ConcurrrentModificationException</li>
@@ -319,10 +757,9 @@
 <li><strong>ConcurrentLinkedQueue</strong>: ConcurrentLinkedQueue是一个无锁的并发线程安全的非阻塞队列；Queue中元素按FIFO原则进行排序．采用CAS操作，来保证元素的一致性</li>
 </ol>
 <h3 id="参考链接">参考链接</h3><ol>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477291&amp;idx=1&amp;sn=68fd7ee467eb60bb984b3c6136cea039&amp;scene=0#wechat_redirect" target="_blank" rel="external">Java8系列之重新认识HashMap</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477291&amp;idx=1&amp;sn=68fd7ee467eb60bb984b3c6136cea039&amp;scene=0#wechat_redirect" target="_blank" rel="noopener">Java8系列之重新认识HashMap</a></li>
 </ol>
 
-        
       
     </div>
 
@@ -339,452 +776,6 @@
 
       
       
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/09/04/OpenWrt/">
-                OpenWrt
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-09-04
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/09/04/OpenWrt/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/04/OpenWrt/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>Power consumption will be higher if a USB device is attached to its USB port!  </p>
-<p>scp command：  </p>
-<p>scp libmysqlclient_5.1.73-1_ar71xx.ipk root@192.168.1.1:  </p>
-<p><strong>scp error: Host key verification failed</strong></p>
-<p>cd ~/.ssh<br>rm known_hosts</p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/08/30/Android应用性能优化/">
-                Android应用性能优化
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-08-30
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Android/">Android</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/08/30/Android应用性能优化/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/30/Android应用性能优化/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>Android手机由于其本身的后台机制和硬件特点，性能上一直被诟病，所以软件开发者对软件本身的性能优化就显得尤为重要；本文将对Android开发过程中性能优化的各个方面做一个回顾与总结。</p>
-<h2 id="Cache优化">Cache优化</h2><ol>
-<li><p><strong>ListView缓存</strong>：</p>
-<ul>
-<li>ListView中有一个回收器，Item滑出界面的时候View会回收到这里，需要显示新的Item的时候，就尽量重用回收器里面的View；每次在getView函数中inflate新的item之前会先判断回收器中是否有缓存的view，即判断<strong>convertView</strong>是否为null，是则inflate一个新的item View，否则重用回收器中的item。</li>
-<li>此外，ListView还使用静态的<strong>ViewHolder减少findViewById的次数</strong></li>
-<li>ListView中有<strong>getViewTypeCount()函数用于获取列表有几种布局类型</strong>，<strong>getItemViewType(int position)用于获取在position位置上的布局类型</strong>; 我们可以利用ViewType来给不同类型的item创建不同的View，这样可以利于ListView的回收</li>
-<li>对Item中图片进行适当压缩, 并进行异步加载；如果快速滑动，不加载图片；实现数据的分页加载</li>
-</ul>
-</li>
-<li><p><strong>IO缓存</strong>：在文件和网络IO中使用具有缓存策略的输入流，BufferedInputStream替代InputStream，BufferedReader替代Reader，BufferedReader替代BufferedInputStream</p>
-</li>
-<li><p><strong>data缓存(空间换时间)</strong>：①缓存数据库的查询结果，比如缓存数据库表中的数据条数，这样就可以避免多次的select count查询 ②缓存磁盘文件中需要频繁访问的数据到内存中 ③缓存耗时计算的结果</p>
-</li>
-</ol>
-<h2 id="Battery优化">Battery优化</h2><ul>
-<li>cpu的使用率和使用频率将直接或间接的影响电量的分配和使用，<strong>cpu降频</strong>可以节约电量</li>
-<li><p><strong>service优化</strong>  </p>
-<ul>
-<li>service作为一个运行在主线程中的后台服务，应该尽量避免耗时动作，而应该尽量新开线程去处理耗时动作</li>
-<li><p>监听系统广播看service是否存活，否则kill掉；降低service优先级使得系统内存吃紧时会被自动kill掉</p>
-</li>
-<li><p>使用Android提供的IntentService代替service，因为IntentService会在运行完成之后自动停止，而service需要手动调用stopService()才能停止运行</p>
-</li>
-<li><p>定时执行任务的Alarm机制：<strong>Android的定时任务有两种实现方式，Timer类和Alarm机制</strong>；Timer不适合长期后台运行的定时任务。因为每种手机都会有自己的休眠策略，Android手机就会在长时间不操作的情况下自动让CPU进入到睡眠状态，这就有可能导致Timer中的定时任务无法正常运行。而Alarm机制则不存在这种情况，它具有唤醒CPU的功能，即可以保证每次需要执行定时任务的时候CPU能正常工作。然而从Android4.4之后，Alarm任务的触发时间将会变得不准确，有可能会延迟一段时间后任务才能得到执行。这不是bug，而是系统在耗电性方面进行的优化。系统会自动检测目前有多少Alarm任务存在，然后将触发时间将近的几个任务放在一起执行，这就可以大幅度的减少CPU被唤醒的次数，从而有效延长电池的使用时间</p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="渲染层优化">渲染层优化</h2><ol>
-<li><p><strong>Android 界面卡顿的原因？</strong></p>
-<ul>
-<li>UI线程中做耗时操作，比如进行网络请求,磁盘读取，位图修改，更新UI等耗时操作，从而导致UI线程卡顿</li>
-<li>布局Layout过于复杂，无法在16ms内完成渲染，或者嵌套层次过深</li>
-<li>View过度绘制或者频繁的触发measure、layout，同一时间动画执行的次数过多，导致CPU或GPU负载过重</li>
-<li>冗余资源及逻辑等导致加载和执行缓慢</li>
-</ul>
-</li>
-<li><p><strong>Android 界面卡顿怎么处理？</strong></p>
-<ul>
-<li><strong>xml布局优化</strong>：尽量使用include、merge、ViewStub标签，尽量不存在冗余嵌套及过于复杂布局（譬如10层就会直接异常），例如使用RelativeLayout代替LinearLayout可以减少布局层次和复杂性，View的嵌套层次不能过深，尽量使用GONE替换INVISIBLE，使用weight后尽量将width和heigh设置为0dp，减少运算，Item存在非常复杂的嵌套时考虑使用自定义Item View来取代，减少measure与layout次数等。</li>
-<li><strong>ListView及Adapter优化</strong>；尽量复用getView方法中的相关View，不重复获取实例导致卡顿，列表尽量在滑动过程中不进行UI元素刷新等。</li>
-<li><strong>背景和图片等内存分配优化</strong>；尽量减少不必要的背景设置，图片尽量压缩处理显示，尽量避免频繁内存抖动等问题出现；尽可能为不同分辨率创建资源，以减少不必要的硬件缩放</li>
-<li><strong>自定义View等绘图与布局优化</strong>；尽量避免在draw、measure、layout中做过于耗时及耗内存操作，尤其是draw方法中，尽量减少draw、measure、layout等执行次数，避免过度渲染和绘制；减少不必要的inflate，尽量使用全局变量缓存View</li>
-<li><strong>避免ANR</strong>，不要在UI线程中做耗时操作，譬如多次数据库操作等</li>
-</ul>
-</li>
-<li><p><strong>Layout常用的标签</strong></p>
-<ul>
-<li><p><strong>include标签</strong>：该标签可以用于将布局文件中的公共部分提取出来给其它布局文件复用，从而使得布局模块化，代码轻量化; <strong>注意点</strong>: ①如果<include>标签已经定义了id，而嵌入布局文件的root布局文件也定义了id，<include>标签的id会覆盖掉嵌入布局文件root的id，如果include标签没有定义id则会使用嵌入文件root的id ②如果想使用<include>标签覆盖嵌入布局root布局属性，必须同时覆盖layout_height和layout_width属性，否则会直接报编译时语法错误</include></include></include></p>
-</li>
-<li><p><strong>viewstub标签</strong>：该标签与include一样用于引入布局模块，只是引入的布局默认不会扩张，既不会占用显示也不会占用位置，从而在解析layout时节省cpu和内存，只有通过调用setVisibility函数或者Inflate函数才会将其要装载的目标布局给加载出来，从而达到延迟加载的效果；例如条目详情、进度条标识或者未读消息等，这些情况如果在一开始初始化，虽然设置可见性View.GONE,但是在Inflate的时候View仍然会被Inflate，仍然会创建对象。</p>
-</li>
-<li><p><strong>merge标签</strong>：该标签在layout中会被自动忽略，从而减少一层布局嵌套，其主要用处是当一个布局作为子布局被其他布局include时，使用merge当作该布局的顶节点来代替layout顶节点就可以减少一层嵌套</p>
-</li>
-<li><p><strong>hierarchy viewer</strong>：该工具可以方便的查看Activity的布局，各个View的属性、measure、layout、draw的时间，如果耗时较多会用红色标记，否则显示绿色</p>
-</li>
-</ul>
-</li>
-</ol>
-<h2 id="网络优化">网络优化</h2><ul>
-<li>异步请求网络数据，避免频繁请求数据（例如如果某个页面内请求过多，可以考虑做一定的请求合并），尽可能的减少网络请求次数和减小网络请求时间间隔</li>
-<li>网络应用传输中使用高效率的数据格式，譬如使用JSON代替XML，使用WebP代替其他图片格式,并对数据进行Gzip压缩数据，比如post请求的body和header内容</li>
-<li>及时缓存数据到内存/文件/数据库</li>
-<li><p>执行某些操作前尽量先进行网络状态判断，比如wifi传输数据比蜂窝数据更省电，所以尽量在wifi下进行数据的预加载</p>
-</li>
-<li><p><strong>httpClient和httpUrlConnection对比</strong>： </p>
-<ol>
-<li>httpClient是apache的开源实现，API数量多，非常稳定</li>
-<li>httpUrlConnection是java自带的模块: ①可以直接支持GZIP压缩,而HttpClient虽然也支持GZIP，但要自己写代码处理 ②httpUrlConnection直接在系统层面做了缓存策略处理，加快重复请求的速度 ③API简单，体积较小,而且直接支持系统级连接池，即打开的连接不会直接关闭，在一段时间内所有程序可共用</li>
-<li>HttpURLConnection在Android2.2之前有个重大Bug，调用close()函数会影响连接池，导致连接复用失效，需要关闭keepAlive;因此在2.2之前http请求都是用httpClient，2.2之后则是使用HttpURLConnection</li>
-<li>但是!!!现在!!!Android不再推荐这两种方式！二是直接使用OKHttp这种成熟方案！支持Android 2.3及其以上版本</li>
-</ol>
-</li>
-</ul>
-<h2 id="数据结构优化">数据结构优化</h2><ul>
-<li><p><strong>ArrayList和LinkedList的选择</strong>：ArrayList根据index取值更快，LinkedList更占内存、随机插入删除更快速、扩容效率更高</p>
-</li>
-<li><p><strong>ArrayList、HashMap、LinkedHashMap、HashSet的选择</strong>：hash系列数据结构查询速度更优，ArrayList存储有序元素，HashMap为键值对数据结构，LinkedHashMap可以记住加入次序的hashMap，HashSet不允许重复元素</p>
-</li>
-<li><p><strong>HashMap、WeakHashMap选择</strong>：WeakHashMap中元素可在适当时候被系统垃圾回收器自动回收，所以适合在内存紧张时使用</p>
-</li>
-<li><p><strong>Collections.synchronizedMap和ConcurrentHashMap的选择</strong>：ConcurrentHashMap为细分锁，锁粒度更小，并发性能更优；Collections.synchronizedMap为对象锁，自己添加函数进行锁控制更方便</p>
-</li>
-<li><p><strong>Android中性能更优的数据类型</strong>：如SparseArray、SparseBooleanArray、SparseIntArray、Pair；Sparse系列的数据结构是为key为int情况的特殊处理，采用二分查找及简单的数组存储，加上不需要泛型转换的开销，相对Map来说性能更优</p>
-</li>
-</ul>
-<h2 id="内存优化">内存优化</h2><ol>
-<li><strong>Android应用内存溢出OOM</strong><ul>
-<li><strong>内存溢出的主要导致原因有如下几类</strong>：①应用代码存在内存泄露，长时间积累无法释放导致OOM；②应用的某些逻辑操作疯狂的消耗掉大量内存（譬如加载一张不经过处理的超大超高清图片等）导致超过阈值OOM</li>
-<li><strong>解决思路</strong>①在内存引用上做些处理，常用的有软引用、弱引用 ②在内存中加载图片时直接在内存中做处理，如：边界压缩 ③动态回收内存，手动recyle bitmap，回收对象 ④优化Dalvik虚拟机的堆内存分配 ⑤自定义堆内存大小</li>
-</ul>
-</li>
-</ol>
-<p><a href="http://www.trinea.cn/android/android-performance-demo/" target="_blank" rel="external">参考链接1</a>   </p>
-<p><a href="http://blog.csdn.net/jdsjlzx/article/details/44600477" target="_blank" rel="external">参考链接2</a></p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/优化/"> #优化 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/08/29/浅谈MVC、MVP、MVVM三种框架模式/">
-                浅谈MVC、MVP、MVVM三种框架模式
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-08-29
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/框架模式/">框架模式</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/08/29/浅谈MVC、MVP、MVVM三种框架模式/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/29/浅谈MVC、MVP、MVVM三种框架模式/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p><strong>MVC模式</strong>是一种非常经典的复合型软件架构模式，它把用户界面交互分拆到不同的三种角色中，应用程序被分成三个核心部件：Model（模型）、View（视图）、Controller（控制器）, 它们各自处理自己的任务，这样就可以把业务逻辑和视图显示解耦，提高了应用程序的灵活性和复用性。MVC模式不管是在web开发还是Android开发中都被广泛应用，最典型的MVC应用就是JSP + servlet + javabean的模式，例如SpringMVC开发框架。</p>
-<ul>
-<li><p>Model模型：模型持有所有的数据、状态和程序逻辑，一个模型可以有不同的多个视图表现形式，复用性高。例如数据库记录以及相应增删查改操作；Android中对数据库的操作、网络请求、格式转换、文件下载、大数据处理等的耗时操作都在Model里面处理</p>
-</li>
-<li><p>View视图：视图是用户看到并与之交互的页面，通常直接从模型中取得它需要显示的状态与数据，一个视图往往有一个相应的控制器，理论上也可以同不同的模型相关联。例如html、xml页面；Android中主要是layout布局xml文件，webview等</p>
-</li>
-<li><p>Controller控制器：位于视图和模型中间，负责接受用户的输入，将输入进行解析并反馈给模型，例如Android开发中的Activity</p>
-</li>
-<li><p>MVC模式图解析：Event(事件)导致Controller改变Model或View，或者同时改变两者。只要Controller改变了Model的数据或者属性，所有依赖的View都会自动更新。类似的，只要Controller改变了View，View会从潜在的Model中获取数据来刷新自己。</p>
-</li>
-</ul>
-<p>　　<img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/MVC.jpeg" class="full-image">  </p>
-<p>　<strong>android中mvc的具体体现</strong>如下：<br>  1)视图层（view）：一般采用xml文件进行界面的描述，使用的时候可以非常方便的引入，当然，如何你对android了解的比较的多了话，就一定 可以想到在android中也可以使用javascript+html等的方式作为view层，当然这里需要进行java和javascript之间的通 信，幸运的是，android提供了它们之间非常方便的通信实现。</p>
-<p>　2)控制层（controller）：android的控制层的重 任通常落在了众多的acitvity的肩上，这句话也就暗含了不要在acitivity中写代码，要通过activity交割model业务逻辑层处理， 这样做的另外一个原因是android中的acitivity的响应时间是5s，如果耗时的操作放在这里，程序就很容易被回收掉。</p>
-<p>　3)模型层（model）：对数据库的操作、对网络等的操作都应该在model里面处理，当然对业务计算等操作也是必须放在的该层的。</p>
-<p><strong>MVP模式</strong><br>View不再与model交互，所有的交互通过presenter实现，双方之间的交互都是双向的，view层作为被动视图非常薄，没有任何的业务逻辑，业务逻辑都在presenter里边；Presenter与View的交互是通过接口来进行的</p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/MVP.png" class="full-image">  </p>
-<p><a href="http://blog.csdn.net/vector_yi/article/details/24719873?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="external">MVP模式在Android开发中的应用</a></p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/MVC/"> #MVC </a>
-          
-            <a href="../../tags/MVP/"> #MVP </a>
-          
-            <a href="../../tags/MVVM/"> #MVVM </a>
-          
-            <a href="../../tags/框架模式/"> #框架模式 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/">
-                Android开发adb无法识别MX手机和部分平板设备的解决方法
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-08-16
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="../../categories/Android开发/">Android开发</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="mac安装adb命令">mac安装adb命令</h3><p><code>brew install android-platform-tools</code></p>
-<h3 id="adb无法识别设备">adb无法识别设备</h3><p>在Android开发过程中，当我们把移动设备连接到计算机进行真机测试时经常会出现部分设备无法被计算机识别的情况，比如魅族系列手机和部分国产android平板电脑，这种异常情况在mac系统和win系统中都会出现，在此讲述一下解决步骤：</p>
-<p><strong>1. 将移动设备连接到计算机，确保连接无误</strong></p>
-<p><strong>2. 打开terminal窗口，在当前用户home目录下输入<code>system_profiler SPUSBDataType</code>；可以看到该计算机连接的所有usb设备信息</strong></p>
-<p><strong>3. 记录你希望计算机识别的usb设备的Vendor ID参数，例如我的mx3手机Vendor ID参数为0x18d1</strong></p>
-<p><strong>4. 在terminal中输入 <code>echo &quot;0x18d1&quot; &gt;&gt; ~/.android/adb_usb.ini</code>即可(该命令会在adb_usb.ini文件中添加一行0x18d1，使得该usb设备可以被计算机识别)</strong></p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/adb/"> #adb </a>
-          
-            <a href="../../tags/bug/"> #bug </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
     </div>
   </div>
 
@@ -794,7 +785,7 @@
 
   
   <div class="pagination">
-    <a class="extend prev" rel="prev" href="../11/">&laquo;</a><a class="page-number" href="../..//">1</a><span class="space">&hellip;</span><a class="page-number" href="../11/">11</a><span class="page-number current">12</span><a class="page-number" href="../13/">13</a><span class="space">&hellip;</span><a class="page-number" href="../16/">16</a><a class="extend next" rel="next" href="../13/">&raquo;</a>
+    <a class="extend prev" rel="prev" href="../11/">&laquo;</a><a class="page-number" href="../../">1</a><span class="space">&hellip;</span><a class="page-number" href="../11/">11</a><span class="page-number current">12</span><a class="page-number" href="../13/">13</a><span class="space">&hellip;</span><a class="page-number" href="../17/">17</a><a class="extend next" rel="next" href="../13/">&raquo;</a>
   </div>
 
 
@@ -821,28 +812,28 @@
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../..//categories">
+            <a href="../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="Linux,shell," />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="Linux,shell,">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../../../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../../favicon.ico?v=0.4.2">
 
 
 
@@ -69,7 +69,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -85,40 +85,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../../../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../../../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../../../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../../../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../../../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -163,7 +163,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="#comments" >
+            <a href="#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/19/Linux正则表达式:通配符揭秘/"></span>
             </a>
           </span>
@@ -178,7 +178,7 @@
       
 
       
-        <h4 id="正则表达式概念">正则表达式概念</h4><p><strong>正则表达式</strong>是你所定义的模式模板(pattern template)，Linux工具可以用它来过滤文本；如果数据匹配模式，它就会被接受并进一步处理;如果数据不匹配模式，它就会被滤掉。正则表达式模式利用通配符来描述数据流中的一个或多个字符，例如<figure class="highlight"><figcaption><span>da*```da*参数会让ls命令只列出名字以da开头的文件。文件名中da之后可以有任意多个字符(包括什么也没有)。  </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;&#27491;&#21017;&#34920;&#36798;&#24335;&#26159;&#36890;&#36807;&#27491;&#21017;&#34920;&#36798;&#24335;&#24341;&#25806;(regular expression engine)&#23454;&#29616;&#30340;&#12290;&#27491;&#21017;&#34920;&#36798;&#24335;&#24341;&#25806;&#26159;&#19968;&#22871;&#24213;&#23618;&#36719;&#20214;&#65292;&#36127;&#36131;&#35299;&#37322;&#27491;&#21017;&#34920;&#36798;&#24335;&#27169;&#24335;&#24182;&#20351;&#29992;&#36825;&#20123;&#27169;&#24335;&#36827;&#34892;&#25991;&#26412;&#21305;&#37197;&#12290;&#10;#### &#27491;&#21017;&#34920;&#36798;&#24335;&#31867;&#22411;&#10;Linux&#20013;&#30340;&#19981;&#21516;&#24212;&#29992;&#31243;&#24207;&#21487;&#33021;&#20250;&#29992;&#19981;&#21516;&#31867;&#22411;&#30340;&#27491;&#21017;&#34920;&#36798;&#24335;&#65307;&#32780;&#22312;Linux&#20013;&#65292;&#26377;&#20004;&#31181;&#27969;&#34892;&#30340;&#27491;&#21017;&#34920;&#36798;&#24335;&#24341;&#25806;&#65306;&#10;&#9;&#10;&#62; POSIX&#22522;&#30784;&#27491;&#21017;&#34920;&#36798;&#24335;(basic regular expression&#65292;BRE)&#24341;&#25806;&#65292;sed&#32534;&#36753;&#22120;&#21482;&#31526;&#21512;&#20102;BRE&#24341;&#25806;&#35268;&#33539;&#30340;&#23376;&#38598;&#10;&#10;&#62; POSIX&#25193;&#23637;&#27491;&#21017;&#34920;&#36798;&#24335;(extended regular expression&#65292;ERE)&#24341;&#25806;&#65292;gawk&#31243;&#24207;&#29992;ERE&#24341;&#25806;&#26469;&#22788;&#29702;&#23427;&#30340;&#27491;&#21017;&#34920;&#36798;&#24335;&#27169;&#24335;&#12290;&#10;&#10;#### &#22788;&#29702;&#29305;&#27530;&#23383;&#31526;&#10;&#27491;&#21017;&#34920;&#36798;&#24335;&#35782;&#21035;&#30340;&#29305;&#27530;&#23383;&#31526;&#21253;&#25324;:```.*[]^$&#123;&#125;\+?|()```,&#22914;&#26524;&#35201;&#29992;&#26576;&#20010;&#29305;&#27530;&#23383;&#31526;&#20316;&#20026;&#25991;&#26412;&#23383;&#31526;&#65292;&#23601;&#24517;&#39035;&#29992;```\```&#36716;&#20041;</span><br></pre></td></tr></table></figure></p>
+        <h4 id="正则表达式概念">正则表达式概念</h4><p><strong>正则表达式</strong>是你所定义的模式模板(pattern template)，Linux工具可以用它来过滤文本；如果数据匹配模式，它就会被接受并进一步处理;如果数据不匹配模式，它就会被滤掉。正则表达式模式利用通配符来描述数据流中的一个或多个字符，例如<figure class="highlight plain"><figcaption><span>da*```da*参数会让ls命令只列出名字以da开头的文件。文件名中da之后可以有任意多个字符(包括什么也没有)。  </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">正则表达式是通过正则表达式引擎(regular expression engine)实现的。正则表达式引擎是一套底层软件，负责解释正则表达式模式并使用这些模式进行文本匹配。</span><br><span class="line">#### 正则表达式类型</span><br><span class="line">Linux中的不同应用程序可能会用不同类型的正则表达式；而在Linux中，有两种流行的正则表达式引擎：</span><br><span class="line">	</span><br><span class="line">&gt; POSIX基础正则表达式(basic regular expression，BRE)引擎，sed编辑器只符合了BRE引擎规范的子集</span><br><span class="line"></span><br><span class="line">&gt; POSIX扩展正则表达式(extended regular expression，ERE)引擎，gawk程序用ERE引擎来处理它的正则表达式模式。</span><br><span class="line"></span><br><span class="line">#### 处理特殊字符</span><br><span class="line">正则表达式识别的特殊字符包括:```.*[]^$&#123;&#125;\+?|()```,如果要用某个特殊字符作为文本字符，就必须用```\```转义</span><br></pre></td></tr></table></figure></p>
 <h1 id="查找$或者正斜线">查找$或者正斜线</h1><p>sed -n ‘/\$/p’ data2<br>echo “3 / 2” | sed -n ‘/\//p’</p>
 <h1 id="^字符会在每个由换行符决定的新数据行的行首检查模式">^字符会在每个由换行符决定的新数据行的行首检查模式</h1><p>echo “Books are great” | sed -n ‘/^Book/p’</p>
 <h1 id="美元符($)定义了行尾锚点">美元符($)定义了行尾锚点</h1><p>echo “This book is good” | sed -n ‘/book$/p’</p>
@@ -196,6 +196,7 @@
 <h1 id="特殊字符组，可以用[[:digit:]]来代替区间[0-9]">特殊字符组，可以用[[:digit:]]来代替区间[0-9]</h1><h1 id="在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中">在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中</h1><p>echo “I’m getting a color TV” | sed -n ‘/colou*r/p’</p>
 <h1 id="将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。">将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。</h1><p>echo “bat” | sed -n ‘/b.*t/p’</p>
 <h1 id="星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)">星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)</h1><p>echo “bat” | sed -n ‘/b[ae]*t/p’</p>
+<h1 id="显示文件夹中文件绝对目录">显示文件夹中文件绝对目录</h1><p>ls | sed “s:^:<code>pwd</code>/:”</p>
 <p>扩展正则表达式：gawk程序能够识别ERE模式，但sed编辑器不能</p>
 <h1 id="问号表明前面的字符可以出现0次或1次">问号表明前面的字符可以出现0次或1次</h1><p>echo “bt” | gawk ‘/be?t/{print $0}’</p>
 <h1 id="加号表明前面的字符可以出现1次或多次，但必须至少出现1次">加号表明前面的字符可以出现1次或多次，但必须至少出现1次</h1><p>echo “bt” | gawk ‘/b[ae]+t/{print $0}’</p>
@@ -203,14 +204,14 @@
 <h1 id="字符e可以出现1次或2次，这样模式就能匹配">字符e可以出现1次或2次，这样模式就能匹配</h1><p>echo “beet” | gawk —re-interval ‘/be{1,2}t/{print $0}’</p>
 <h1 id="圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符">圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符</h1><h1 id="结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat">结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat</h1><p>echo “Sat” | gawk ‘/Sat(urday)?/{print $0}’</p>
 <h1 id="模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合">模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合</h1><p>echo “bab” | gawk ‘/(c|b)a(b|t)/{print $0}’</p>
-<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="title">#### 正则表达式应用</span><br><span class="line">1</span>. 验证电话号码</span><br><span class="line"><span class="number">2.</span> 解析邮件地址</span><br><span class="line">	```^<span class="comment">([a-zA-Z0-9_\-\.\+]+)</span>@<span class="comment">([a-zA-Z0-9_\-\.]+)</span>\.<span class="comment">([a-zA-Z]&#123;2,5&#125;)</span>$</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### 正则表达式应用</span><br><span class="line">1. 验证电话号码</span><br><span class="line">2. 解析邮件地址</span><br><span class="line">	```^([a-zA-Z0-9_\-\.\+]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]&#123;2,5&#125;)$</span><br></pre></td></tr></table></figure>
 <h4 id="Linux通配符">Linux通配符</h4><p>bash shell可以使用正则表达式中的一些元字符实现通配（Globbing）功能。通配是把一个包含通配符的非具体文件名扩展存储在计算机，服务器或者网络上的一批具体文件名的过程。（可以看出<strong>①通配主要应用匹配文件名上，而正则主要应用于字符串上；②通配符通常只能被shell自解释，正则表达式需要被正则引擎解析；③元字符不同</strong>）。最常用的通配符包括正则表达式元字符：</p>
 <ul>
 <li>？(匹配任意单个字符,不能匹配“/”字符)</li>
 <li>*（匹配任意位的任意字符，包括空字符串，不包含对“/”字符的匹配）</li>
 <li>[]（匹配一个单字符范围,如[a-z]；[0-9]；[a-zBE5-7]表示所有a到z之间的字符和 B、E、5、6、7相匹配；[!abc]匹配除了“a，b，c”这3个字符之外的任意一个字符)</li>
 <li>{}</li>
-<li>^(取反)，例如<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* !&#21462;&#21453;&#10;&#10;&#62; &#31034;&#20363;&#10;&#62;</span><br></pre></td></tr></table></figure></li>
+<li>^(取反)，例如<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* !取反</span><br><span class="line"></span><br><span class="line">&gt; 示例</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <p><em>.txt               # 匹配全部后缀为.txt的文件<br>file?.log           # 匹配file1.log, file2.log, …<br>[a-z]</em>.log          # 匹配a-z开头的.log文件<br>[^a-z]*.log         # 上面的反向匹配<br>```</p>
 <blockquote>
@@ -241,7 +242,7 @@
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="../Linux shell:目录基础知识/">Linux shell/目录基础知识</a>
+              <a href="../../05/Git使用指南/">Git使用指南</a>
             
           </div>
         </div>
@@ -257,8 +258,7 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2017/02/19/Linux正则表达式:通配符揭秘/"
-               data-title="Linux正则表达式/通配符揭秘" data-url="https://charles-xiao.github.io/2017/02/19/Linux正则表达式:通配符揭秘/">
+          <div class="ds-thread" data-thread-key="2017/02/19/Linux正则表达式:通配符揭秘/" data-title="Linux正则表达式/通配符揭秘" data-url="https://charles-xiao.github.io/2017/02/19/Linux正则表达式:通配符揭秘/">
           </div>
         
       </div>
@@ -302,28 +302,28 @@
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../../../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../../../..//categories">
+            <a href="../../../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../../../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -361,7 +361,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#正则表达式概念"><span class="nav-number">1.</span> <span class="nav-text">正则表达式概念</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查找$或者正斜线"><span class="nav-number"></span> <span class="nav-text">查找$或者正斜线</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#^字符会在每个由换行符决定的新数据行的行首检查模式"><span class="nav-number"></span> <span class="nav-text">^字符会在每个由换行符决定的新数据行的行首检查模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#美元符($)定义了行尾锚点"><span class="nav-number"></span> <span class="nav-text">美元符($)定义了行尾锚点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#^$组合删除所有空白行"><span class="nav-number"></span> <span class="nav-text">^$组合删除所有空白行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#点号字符-用来匹配除换行符之外的任意单个字符，如果在点号字符的位置没有字符，那么模式就不成立。在正则表达式中，空格也是字符，也会被-匹配"><span class="nav-number"></span> <span class="nav-text">点号字符.用来匹配除换行符之外的任意单个字符，如果在点号字符的位置没有字符，那么模式就不成立。在正则表达式中，空格也是字符，也会被.匹配</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#[]定义字符组，字符组中必须有个字符来匹配相应的位置，例如匹配cat和hat"><span class="nav-number"></span> <span class="nav-text">[]定义字符组，字符组中必须有个字符来匹配相应的位置，例如匹配cat和hat</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用3个字符组来涵盖3个字符位置含有大小写的情况"><span class="nav-number"></span> <span class="nav-text">使用3个字符组来涵盖3个字符位置含有大小写的情况</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#匹配了任意含有数字0、1、2或3的行"><span class="nav-number"></span> <span class="nav-text">匹配了任意含有数字0、1、2或3的行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#匹配c或h之外的任何字符以及文本模式"><span class="nav-number"></span> <span class="nav-text">匹配c或h之外的任何字符以及文本模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#每个字符组都会匹配0~9的任意数字"><span class="nav-number"></span> <span class="nav-text">每个字符组都会匹配0~9的任意数字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#新的模式[c-h]at匹配了首字母在字母c和字母h之间的单词"><span class="nav-number"></span> <span class="nav-text">新的模式[c-h]at匹配了首字母在字母c和字母h之间的单词</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#该字符组允许区间a~c、h~m中的字母出现在at文本前"><span class="nav-number"></span> <span class="nav-text">该字符组允许区间a~c、h~m中的字母出现在at文本前</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#特殊字符组，可以用[[:digit:]]来代替区间[0-9]"><span class="nav-number"></span> <span class="nav-text">特殊字符组，可以用[[:digit:]]来代替区间[0-9]</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中"><span class="nav-number"></span> <span class="nav-text">在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。"><span class="nav-number"></span> <span class="nav-text">将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)"><span class="nav-number"></span> <span class="nav-text">星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问号表明前面的字符可以出现0次或1次"><span class="nav-number"></span> <span class="nav-text">问号表明前面的字符可以出现0次或1次</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#加号表明前面的字符可以出现1次或多次，但必须至少出现1次"><span class="nav-number"></span> <span class="nav-text">加号表明前面的字符可以出现1次或多次，但必须至少出现1次</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#花括号{}允许你为可重复的正则表达式指定一个上限"><span class="nav-number"></span> <span class="nav-text">花括号{}允许你为可重复的正则表达式指定一个上限</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符e只能出现1次，模式才能匹配"><span class="nav-number"></span> <span class="nav-text">字符e只能出现1次，模式才能匹配</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符e可以出现1次或2次，这样模式就能匹配"><span class="nav-number"></span> <span class="nav-text">字符e可以出现1次或2次，这样模式就能匹配</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符"><span class="nav-number"></span> <span class="nav-text">圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat"><span class="nav-number"></span> <span class="nav-text">结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合"><span class="nav-number"></span> <span class="nav-text">模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux通配符"><span class="nav-number">1.</span> <span class="nav-text">Linux通配符</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#正则表达式概念"><span class="nav-number">1.</span> <span class="nav-text">正则表达式概念</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#查找$或者正斜线"><span class="nav-number"></span> <span class="nav-text">查找$或者正斜线</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#^字符会在每个由换行符决定的新数据行的行首检查模式"><span class="nav-number"></span> <span class="nav-text">^字符会在每个由换行符决定的新数据行的行首检查模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#美元符($)定义了行尾锚点"><span class="nav-number"></span> <span class="nav-text">美元符($)定义了行尾锚点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#^$组合删除所有空白行"><span class="nav-number"></span> <span class="nav-text">^$组合删除所有空白行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#点号字符-用来匹配除换行符之外的任意单个字符，如果在点号字符的位置没有字符，那么模式就不成立。在正则表达式中，空格也是字符，也会被-匹配"><span class="nav-number"></span> <span class="nav-text">点号字符.用来匹配除换行符之外的任意单个字符，如果在点号字符的位置没有字符，那么模式就不成立。在正则表达式中，空格也是字符，也会被.匹配</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#[]定义字符组，字符组中必须有个字符来匹配相应的位置，例如匹配cat和hat"><span class="nav-number"></span> <span class="nav-text">[]定义字符组，字符组中必须有个字符来匹配相应的位置，例如匹配cat和hat</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用3个字符组来涵盖3个字符位置含有大小写的情况"><span class="nav-number"></span> <span class="nav-text">使用3个字符组来涵盖3个字符位置含有大小写的情况</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#匹配了任意含有数字0、1、2或3的行"><span class="nav-number"></span> <span class="nav-text">匹配了任意含有数字0、1、2或3的行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#匹配c或h之外的任何字符以及文本模式"><span class="nav-number"></span> <span class="nav-text">匹配c或h之外的任何字符以及文本模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#每个字符组都会匹配0~9的任意数字"><span class="nav-number"></span> <span class="nav-text">每个字符组都会匹配0~9的任意数字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#新的模式[c-h]at匹配了首字母在字母c和字母h之间的单词"><span class="nav-number"></span> <span class="nav-text">新的模式[c-h]at匹配了首字母在字母c和字母h之间的单词</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#该字符组允许区间a~c、h~m中的字母出现在at文本前"><span class="nav-number"></span> <span class="nav-text">该字符组允许区间a~c、h~m中的字母出现在at文本前</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#特殊字符组，可以用[[:digit:]]来代替区间[0-9]"><span class="nav-number"></span> <span class="nav-text">特殊字符组，可以用[[:digit:]]来代替区间[0-9]</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中"><span class="nav-number"></span> <span class="nav-text">在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。"><span class="nav-number"></span> <span class="nav-text">将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)"><span class="nav-number"></span> <span class="nav-text">星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#显示文件夹中文件绝对目录"><span class="nav-number"></span> <span class="nav-text">显示文件夹中文件绝对目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问号表明前面的字符可以出现0次或1次"><span class="nav-number"></span> <span class="nav-text">问号表明前面的字符可以出现0次或1次</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#加号表明前面的字符可以出现1次或多次，但必须至少出现1次"><span class="nav-number"></span> <span class="nav-text">加号表明前面的字符可以出现1次或多次，但必须至少出现1次</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#花括号{}允许你为可重复的正则表达式指定一个上限"><span class="nav-number"></span> <span class="nav-text">花括号{}允许你为可重复的正则表达式指定一个上限</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符e只能出现1次，模式才能匹配"><span class="nav-number"></span> <span class="nav-text">字符e只能出现1次，模式才能匹配</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符e可以出现1次或2次，这样模式就能匹配"><span class="nav-number"></span> <span class="nav-text">字符e可以出现1次或2次，这样模式就能匹配</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符"><span class="nav-number"></span> <span class="nav-text">圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat"><span class="nav-number"></span> <span class="nav-text">结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合"><span class="nav-number"></span> <span class="nav-text">模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux通配符"><span class="nav-number">1.</span> <span class="nav-text">Linux通配符</span></a></li></ol></li></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

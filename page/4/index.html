@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="java,android,life,CharlesXiao" />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="java,android,life,CharlesXiao">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../favicon.ico?v=0.4.2">
 
 
 
@@ -49,7 +49,7 @@
 <body>
 <!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
   <div class="container one-column 
-   page-home 
+  
 ">
     <div class="headband"></div>
 
@@ -71,7 +71,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -87,40 +87,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -148,9 +148,494 @@
           
           
             
-              <a class="post-title-link" href="../../2017/12/07/Linux终端利器tmux指南/">
-                Linux终端利器tmux指南
-              </a>
+              从Raft到Paxos
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2018-01-04
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2018/01/04/从Paxos到Raft/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/01/04/从Paxos到Raft/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h2 id="分布式一致性算法">分布式一致性算法</h2><p>一致性算法解决分布式系统里的什么问题？分布式系统有两个point：Placement和Replication。基于Raft解决数据的Replication和Recovery问题，在其上构建一些分布式系统。比如分布式消息队列、分布式日志服务、分布式锁服务、分布式块系统、分布式文件系统、分布式表格系统等。例如：</p>
+<ul>
+<li>将rocksdb构建在raft之上，就是一个分布式KV系统</li>
+<li>使用rocksdb的kv和全局有序，可以实现类似zookeeper的全局锁服务器</li>
+<li>使用rocksdb的全局有序特性，可以实现文件系统目录树，也就是分布式文件系统的NameNode</li>
+<li>使用类似DI的引擎构建在raft之上，可以做一个分布式消息队列</li>
+<li>基于上面的分布式消息队列，如果提供类似zookeeper的临时节点功能，可以做一个分布式journal服务</li>
+</ul>
+<h2 id="Paxos">Paxos</h2><h2 id="Raft">Raft</h2><h2 id="BPFT">BPFT</h2><h2 id="POW/POS">POW/POS</h2>
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/分布式系统/"> #分布式系统 </a>
+          
+            <a href="../../tags/阅读/"> #阅读 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              常用Linux网络/内存/磁盘分析工具
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2018-01-04
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2018/01/04/常用Linux网络:内存:磁盘分析工具/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/01/04/常用Linux网络:内存:磁盘分析工具/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h3 id="网络IO">网络IO</h3><ol>
+<li>sar -n DEV 1 3 监控网卡IO</li>
+<li><code>ethtool 网卡名</code> 查看网卡的最大速率等参数信息</li>
+<li><code>netstat -nat | awk &#39;FNR&gt;2{print $NF}&#39; | sort | uniq -c</code> 查看系统TIME_WAIT状态连接数</li>
+<li>查看DND信息dig命令<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dig baidu.com # 输出host的cname记录与A记录，可以看到ip地址和使用的DNS服务器信息，添加` +short`可以简化输出</span><br><span class="line">dig -x 204.152.184.167 +short # 用 -x的选项查找IP地址的主机名</span><br><span class="line">dig @ns1.google.com www.google.com 指定查询的DNS server</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="tcpdump">tcpdump</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">   tcpdump -D # 显示可以抓取的所有网络接口</span><br><span class="line"># 抓取9100端口，网卡xgbe0的TCP网络包信息，保存到aaa.pcap</span><br><span class="line">tcpdump tcp port 9100 -i xgbe0 -nn -s 0 -XX -w aaa.pcap</span><br><span class="line"></span><br><span class="line"># 指定目的或者源ip，可以使用and，or</span><br><span class="line">tcpdump -i eth0 src and dst 172.16.11.1 and port 80 -nn -s 0 -XX -w aaa.pcap</span><br><span class="line"></span><br><span class="line"># 指定主机</span><br><span class="line">tcpdump -i eth0 host 172.16.11.1 and port 80 -nn -s 0 -XX -w aaa.pcap</span><br><span class="line"></span><br><span class="line"># 抓取http包，一般是eth0，xgbe0，可以加上port 80作为条件，这里是指本机接收http请求的80端口，发出端口为随机</span><br><span class="line">tcpdump -i xgbe0 -nn -s 0 -XX -w yq41.pcap</span><br></pre></td></tr></table></figure>
+<h4 id="wireshark分析网络包">wireshark分析网络包</h4><ol>
+<li>tcpdump保存的文件是二进制的文件，需要下载到本地用wireshark查看</li>
+<li>过滤器:tcp.stream</li>
+<li><a href="https://linux.cn/article-10191-1.html" target="_blank" rel="noopener">抓包参数和结果解析</a></li>
+</ol>
+<h3 id="CPU">CPU</h3><ol>
+<li><code>mpstat -P ALL 1 1</code> 查看cpu占用率波动情况；也可以<code>top</code>，然后1</li>
+<li><p>taskset绑定进程或者线程到指定CPU的核</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">taskset -cp pid   查看进程所属核</span><br><span class="line">taskset -acp pid   查看进程及所有线程的所属核</span><br><span class="line">taskset -pc 3 pid   表示将进程pid绑定到第3个核上</span><br><span class="line">taskset -a -pc 3 pid  表示将进程pid(包括所有线程)绑定到第3个核上</span><br><span class="line">taskset -cp 1,2,3 pid</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>pidstat 用于监控全部或指定进程的cpu、内存、线程、设备IO等系统资源的占用情况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 查看CPU</span><br><span class="line">pidstat -p pid 3 3</span><br><span class="line"># 查看进程内存状态，用ps效果一样，RSS单位为KB</span><br><span class="line">pidstat -r -p 26716 3 3</span><br><span class="line"># 查看进程磁盘IO</span><br><span class="line">pidstat -d -p 26716 3 3</span><br><span class="line"># 查看进程上下文切换</span><br><span class="line">pidstat -wt -p 26716 3 3</span><br><span class="line"># 查看进程中的线程信息</span><br><span class="line">pidstat -t -p 26716 3 3</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>vmstat 2 1 查看系统上下文切换</p>
+</li>
+</ol>
+<h3 id="内存">内存</h3><h4 id="top">top</h4><ol>
+<li><a href="http://blog.csdn.net/heizistudio/article/details/25125061" target="_blank" rel="noopener">top命令常用参数</a></li>
+<li>P，M分别是按cpu和内存排序；mac系统使用o + 列名</li>
+<li><code>sar -u 1 3</code> 监控CPU状态</li>
+<li><code>top -p 345</code> 查看指定pid=345的进程,在mac中用-pid代替-p</li>
+<li>%cpu参数不可靠，需要1查看每个CPU的使用率才可靠</li>
+</ol>
+<h4 id="free">free</h4><figure class="highlight plain"><figcaption><span>-g```：以GB为显示单位，也可以-m以MB为显示单位</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">name |    total   |    used    |   free  |   shared  |  buffers |cached </span><br><span class="line">--- | --- | --- | --- | --- | --- | ---   </span><br><span class="line">Mem: | 125 | 125 | 0 | 0 | 0 | 109 |</span><br><span class="line">-/+ buffers/cache: | | 15(上一行的used - buffers - cached) | 110(上一行的 free + buffers + cached)</span><br><span class="line">Swap: | 0 | 0 | 0</span><br><span class="line"></span><br><span class="line">对操作系统来讲，为了内存利用率最大化，会把剩余内存申请为cached，所以系统运行时间长了，cached就会比较大，对于频繁读写的系统就更加明显。used 和 free都是Mem的参数，所以 buffers/cached这两项对于操作系统来讲都是已经被使用的内存，所以呢 free的就比较少；</span><br><span class="line"></span><br><span class="line">而对于应用程序来说呢，buffers/cached等同于可用的内存，因为buffers/cached可提高程序执行的性能，当程序使用内存时，buffers/cached很快就会被使用。</span><br><span class="line"></span><br><span class="line">所以从应用程序的角度来看，应以（-/+ buffers/cached）的free 和 used为主，即我们主要与他相关的free和used就可以了  </span><br><span class="line"></span><br><span class="line">我们在观察Linux的内存使用情况时，只要没发现用swap的交换空间，就不必担心自己的内存太少。如果常常看到swap用了很多，那么你就要考虑加物理内存了，可以用`vmstat`查看swap IO状况。这也是在Linux服务器上看内存是否够用的标准。因为swap用的多，说明OS把本应该存在物理内存中的部分内存页调度到了磁盘，腾出空间给当前进程使用，等到其他进程运行时才会把这部分内存页再次调度到物理内存。</span><br><span class="line"></span><br><span class="line">#### buffer/cache/shared memory区别与联系</span><br><span class="line"></span><br><span class="line">#### pmap</span><br><span class="line">1. 查看进程内存分布状况，可以用来分析线程堆栈:`pmap -d 12345 # 12345 是进程号`</span><br><span class="line"></span><br><span class="line">#### 清理linux cache</span><br><span class="line">Kernels 2.6.16 and newer provide a mechanism to have the kernel drop the page cache and/or inode and dentry caches on command, which can help free up a lot of memory.  </span><br><span class="line"></span><br><span class="line">This is a non-destructive operation and will only free things that are completely unused. Dirty objects will continue to be in use until written out to disk and are not freeable. If you run &quot;sync&quot; first to flush them out to disk, these drop operations will tend to free more memory.</span><br><span class="line"></span><br><span class="line">	To free pagecache:</span><br><span class="line">	# echo 1 &gt; /proc/sys/vm/drop_caches</span><br><span class="line">	</span><br><span class="line">	To free dentries and inodes:</span><br><span class="line">	# echo 2 &gt; /proc/sys/vm/drop_caches</span><br><span class="line">	</span><br><span class="line">	To free pagecache, dentries and inodes:</span><br><span class="line">	echo 3 &gt; /proc/sys/vm/drop_caches</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt; 遇到报错： ```tcpdump: can&apos;t create rx ring on packet socket: cannot allocate memory```, 可以使用该命令清除cache</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 磁盘IO</span><br><span class="line"></span><br><span class="line">#### 磁盘IOPS和Throughput</span><br><span class="line"></span><br><span class="line">1. 磁盘的 IOPS，也就是在一秒内磁盘进行多少次 I/O 读写。磁盘的吞吐量，也就是每秒磁盘 I/O 的流量，即磁盘写入加上读出的数据的大小。每秒 I/O 吞吐量＝ IOPS* 平均 I/O SIZE</span><br><span class="line">2. 随机读写频繁的应用，如OLTP(Online Transaction Processing)，IOPS是关键衡量指标；对于大量顺序读写的应用，如VOD(Video On Demand)，则更关注吞吐量指标。</span><br><span class="line"></span><br><span class="line">#### 影响IOPS的因素</span><br><span class="line"></span><br><span class="line">1. 第一个**寻址时间**，考虑到被读写的数据可能在磁盘的任意一个磁道，既有可能在磁盘的最内圈(寻址时间最短)，也可能在磁盘的最外圈(寻址时间最长)，所以在计算中我们只考虑平均寻址时间，也就是磁盘参数中标明的那个平均寻址时间，这里就采用当前最多的10krmp硬盘的5ms。</span><br><span class="line">2. 第二个**旋转延时**，和寻址一样，当磁头定位到磁道之后有可能正好在要读写扇区之上，这时候是不需要额外额延时就可以立刻读写到数据，但是最坏的情况确实要磁盘旋转整整一圈之后磁头才能读取到数据，所以这里我们也考虑的是平均旋转延时，对于10krpm的磁盘就是(60s/10k)*(1/2) = 2ms。</span><br><span class="line">3. 第三个**传送时间**，磁盘参数提供我们的最大的传输速度，当然要达到这种速度是很有难度的，但是这个速度却是磁盘纯读写磁盘的速度，因此只要给定了单次 IO的大小，我们就知道磁盘需要花费多少时间在数据传送上，这个时间就是IO Chunk Size / Max Transfer Rate。</span><br><span class="line"></span><br><span class="line">#### I/O 读写的类型</span><br><span class="line"></span><br><span class="line">大体上讲，I/O 的类型可以分为：读 / 写 I/O、大 / 小块 I/O、连续 / 随机 I/O, 顺序 / 并发 I/O。在这几种类型中，我们主要讨论一下：大 / 小块 I/O、连续 / 随机 I/O, 顺序 / 并发 I/O。</span><br><span class="line"></span><br><span class="line">##### 大 / 小块 I/O</span><br><span class="line"></span><br><span class="line">这个数值指的是控制器指令中给出的连续读出扇区数目的多少。如果数目较多，如 64，128 等，我们可以认为是大块 I/O；反之，如果很小，比如 4，8，我们就会认为是小块 I/O，实际上，在大块和小块 I/O 之间，没有明确的界限。</span><br><span class="line"></span><br><span class="line">##### 连续 / 随机 I/O</span><br><span class="line"></span><br><span class="line">连续 I/O 指的是本次 I/O 给出的初始扇区地址和上一次 I/O 的结束扇区地址是完全连续或者相隔不多的。反之，如果相差很大，则算作一次随机 I/O</span><br><span class="line"></span><br><span class="line">连续 I/O 比随机 I/O 效率高的原因是：在做连续 I/O 的时候，磁头几乎不用换道，或者换道的时间很短；而对于随机 I/O，如果这个 I/O 很多的话，会导致磁头不停地换道，造成效率的极大降低。</span><br><span class="line"></span><br><span class="line">##### 顺序 / 并发 I/O</span><br><span class="line"></span><br><span class="line">从概念上讲，并发 I/O 就是指向一块磁盘发出一条 I/O 指令后，不必等待它回应，接着向另外一块磁盘发 I/O 指令。对于具有条带性的 RAID（LUN），对其进行的 I/O 操作是并发的，例如：raid 0+1(1+0),raid5 等。反之则为顺序 I/O。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### [磁盘I/O那些事](https://tech.meituan.com/about_desk_io.html)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### [Linux下的IO监控与分析](https://www.cnblogs.com/quixotic/p/3258730.html)</span><br><span class="line"></span><br><span class="line">1. `iostat -xdm 3`：磁盘IO状态</span><br><span class="line">2. `iostat -x 1 1`: 监控CPU和磁盘</span><br><span class="line">3. [iostat命令输出详解](http://www.cnblogs.com/peida/archive/2012/12/28/2837345.html)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 系统端口占用信息和进程信息</span><br><span class="line"></span><br><span class="line">- ```ps aux```只能看到pid等信息，不能看到端口号</span><br><span class="line">- ```lsof | grep pid/pname``` 查看进程信息</span><br><span class="line">- ```lsof -i:port```查看端口号port使用的进程号和连接情况</span><br><span class="line">- ```lsof -i@ip:port```使用@host:port来显示指定到指定主机的连接</span><br><span class="line">- ```lsof -iTCP```显示TCP连接</span><br><span class="line">- ```lsof -c abc``` 显示 abc 进程现在打开的文件</span><br><span class="line">- ```lsof -p 12``` 看进程号为 12 的进程打开了哪些文件</span><br><span class="line">- ```netstat -np/c/atux | grep pid/port/pname```查看进程号所占用的端口号和端口占用情况</span><br><span class="line">- `netstat -n | grep tcp | grep 侦听端口 | wc -l` : 监听端口连接数</span><br><span class="line">- `ps -eLf | grep java | wc -l`: 监控java进程的线程数</span><br><span class="line">- 远程登录 `telnet hostname`</span><br><span class="line"></span><br><span class="line">### sar命令查看网络、磁盘、CPU、内存信息</span><br><span class="line">sar - Collect, report, or save system activity information.</span><br></pre></td></tr></table></figure>
+<h1 id="参数说明">参数说明</h1><p>-A 汇总所有的报告<br>-a 报告文件读写使用情况<br>-B 报告附加的缓存的使用情况<br>-b 报告缓存的使用情况<br>-c 报告系统调用的使用情况<br>-d 报告磁盘的使用情况<br>-g 报告串口的使用情况<br>-h 报告关于buffer使用的统计数据<br>-m 报告IPC消息队列和信号量的使用情况<br>-n 报告命名cache的使用情况<br>-p 报告调页活动的使用情况<br>-q 报告运行队列和交换队列的平均长度<br>-R 报告进程的活动情况<br>-r 报告没有使用的内存页面和硬盘块<br>-u 报告CPU的利用率<br>-v 报告进程、i节点、文件和锁表状态<br>-w 报告系统交换活动状况<br>-y 报告TTY设备活动状况</p>
+<h1 id="系统平均load负载">系统平均load负载</h1><p>sar -q 2 2</p>
+<p>参数：<br>runq-sz：运行队列的长度（等待CPU时间片来运行的进程数）<br>plist-sz：进程列表中进程（processes）和线程（threads）的数量<br>ldavg-1：最后1分钟的系统平均负载 ldavg-5：过去5分钟的系统平均负载<br>ldavg-15：过去15分钟的系统平均负载</p>
+<h1 id="查看内存信息">查看内存信息</h1><p>sar -r 1 3</p>
+<p>参数解释：<br>kbmemfree：剩余可用内存、单位K<br>kbmemused：已用内存、以K 为单位、该值不考虑内核自身所使用的内存<br>%memused：已用内存百分比<br>kbbuffers：已用buffer(内核所用)、单位K<br>kbcached：已用cache（内核所用）、单位K<br>kbswpfree：剩余Swap、单位K<br>kbswpused：已用Swap、单位K<br>%swpused：已用Swap百分比<br>kbswpcad：被缓存的Swap、单位K</p>
+<h1 id="内存分页统计">内存分页统计</h1><p>sar -B 5 3</p>
+<p>参数解释：  </p>
+<p>pgpgin/s：表示每秒从磁盘或SWAP置换到内存的字节数(KB)<br>pgpgout/s：表示每秒从内存置换到磁盘或SWAP的字节数(KB)<br>fault/s：每秒钟系统产生的缺页数,即主缺页与次缺页之和(major + minor)<br>majflt/s：每秒钟产生的主缺页数. </p>
+<h1 id="系统交换活动状况">系统交换活动状况</h1><p>sar -w  1 3</p>
+<p>参数：<br>pswpin/s：每秒系统换入的交换页面（swap page）数量<br>pswpout/s：每秒系统换出的交换页面（swap page）数量</p>
+<h1 id="CPU信息">CPU信息</h1><p>sar -u 3 5</p>
+<p>参数解释：  </p>
+<p>%user：显示在用户级别(application)运行使用 CPU 总时间的百分比<br>%nice：显示在用户级别，通过nice改变了进程调度优先级的进程，在用户模式下消耗的CPU时间的比例<br>%system：在内核级别(kernel)运行所使用 CPU 总时间的百分比<br>%iowait：显示用于等待I/O操作占用 CPU 总时间的百分比<br>%idle：显示 CPU 空闲时间占用 CPU 总时间的百分比 </p>
+<p> 1）若 %iowait 的值过高(大于0的长时间值)，表示硬盘或者网络存在I/O瓶颈<br> 2）若 %idle 的值高但系统响应慢时，有可能是 CPU 等待分配内存，此时应加大内存容量<br> 3）若 %idle 的值持续低于1，则系统的 CPU 处理能力相对较低，表明系统中最需要解决的资源是 CPU</p>
+<h1 id="磁盘信息">磁盘信息</h1><p>sar -b 3 5 </p>
+<p>tps：每秒磁盘的 I/O 传输总量<br>rtps：每秒从磁盘读出的数据总量<br>wtps：每秒向磁盘写入的数据总量<br>bread/s：每秒从磁盘读出的数据量，单位为 块/s<br>bwrtn/s：每秒向磁盘写入的数据量，单位为 块/s </p>
+<h1 id="网络IO-1">网络IO</h1><p>sar -n DEV 2 3<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### Linux /proc目录</span><br><span class="line">在Linux系统“一切都是文件”的思想贯彻指导下，所有进程的运行状态都可以用文件来获取。系统根目录/proc中，每一个数字子目录的名字都是运行中的进程的PID，进入任一个进程目录，可通过其中文件或目录来观察进程的各项运行指标，例如task目录就是用来描述进程中线程的</span><br></pre></td></tr></table></figure></p>
+<h1 id="可以通过下面的方法获取某进程中运行中的线程数量（PID指的是进程ID)">可以通过下面的方法获取某进程中运行中的线程数量（PID指的是进程ID)</h1><p>ls /proc/PID/task | wc -l</p>
+<h1 id="获取进程相关信息">获取进程相关信息</h1><p>cat /proc/PID/status</p>
+<h1 id="获取内存信息">获取内存信息</h1><p>vmstat -s -S M<br>cat /proc/meminfo</p>
+<h1 id="CPU信息-1">CPU信息</h1><p>cat /proc/cpuinfo<br>```</p>
+<h3 id="Linux单机性能评估和优化">Linux单机性能评估和优化</h3><ol>
+<li><a href="https://blog.csdn.net/hguisu/article/details/39373311" target="_blank" rel="noopener">Linux服务器性能评估与优化(一)</a></li>
+<li><a href="https://blog.csdn.net/hguisu/article/details/39249775" target="_blank" rel="noopener">Linux服务器性能评估与优化(二)</a></li>
+</ol>
+<p>单机性能主要包括CPU、内存、网络IO、磁盘IO几个方面，互相依赖，互相影响。例如，网卡巨量吞吐或者磁盘频繁读写都可能导致CPU系统调用过高而占用率很高。CPU一般认为user%+sys%&lt;70%为良好状态，内存一般认为si和swap out都为0为良好状态，磁盘认为iowait%&lt;20%为良好状态</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Linux/"> #Linux </a>
+          
+            <a href="../../tags/阅读/"> #阅读 </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Mysql 长连接与短连接
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-12-09
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/12/09/Mysql 长连接与短连接/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/09/Mysql 长连接与短连接/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h4 id="概念说明">概念说明</h4><ol>
+<li><strong>短连接</strong>：是指程序和数据库通信时需要建立连接，执行操作后，连接关闭。短连接简单来说就是每一次操作数据库，都要打开和关闭数据库连接，基本步骤是：连接→数据传输→关闭连接。</li>
+<li><strong>长连接</strong>：是指程序之间的连接在建立之后，就一直打开，被后续程序重用，基本步骤是：连接→数据传输→保持连接→数据传输……。使用长连接的初衷是减少连接的开销，尽管MySQL的连接比其他数据库要快得多。长连接在没有数据通信时，定时发送数据包，以维持连接状态。</li>
+<li><strong>数据库连接池</strong>：是一些网络代理服务或应用服务器实现的特性，如J2EE服务器，它实现了一个持久连接的“池”，允许其他程序、客户端来连接，这个连接池将被所有连接的客户端共享使用，连接池可以节省打开数据库的时间，加速连接，也可以减少数据库连接，降低数据库服务器的负载；它是预先打开N个数据库连接，把它们缓存起来，当需要使用数据库的时候就直接使用这些已经打开的连接，节省时间</li>
+<li><strong>J2EE数据库连接池的原理</strong>：<ul>
+<li>J2EE服务器启动时会建立一定数量的池连接，并一直维持不少于此数目的池连接。</li>
+<li>客户端程序需要连接时，池驱动程序会返回一个未使用的池连接并将其表记为忙。</li>
+<li>如果当前没有空闲连接，池驱动程序就新建一定数量的连接，新建连接的数量由配置参数决定。</li>
+<li>当使用的池连接调用完成后，池驱动程序将此连接表记为空闲，其他调用就可以使用这个连接。</li>
+</ul>
+</li>
+</ol>
+<h4 id="适用场景">适用场景</h4><ol>
+<li><strong>长连接优劣势</strong><ul>
+<li>从客户端的角度来说，使用长连接可以不用每次创建新连接，若客户端对MySQL服务器的连接请求很频繁，永久连接将更加高效。</li>
+<li>从服务器的角度来看，情况则略有不同，它可以节省创建连接的开销，但维持连接也是需要内存的。如果滥用长连接的话，可能会使用过多的MySQL服务器连接。现代的操作系统可以拥有几千个MySQL连接，但很有可能绝大部分都是睡眠（sleep）状态的，这样的工作方式不够高效，而且连接占据内存，也会导致内存的浪费。</li>
+</ul>
+</li>
+<li><strong>长连接主要用于在少数客户端与服务端的频繁通信</strong>，因为这时候如果用短连接频繁通信常会发生Socket出错，并且频繁创建Socket连接也是对资源的浪费；但是对于服务端来说，长连接也会耗费一定的资源，需要专门的线程（unix下可以用进程管理）来负责维护连接状态。</li>
+<li><strong>长连接</strong>是一些驱动、驱动框架、ORM工具的特性，由驱动来保持连接句柄的打开，以便后续的数据库操作可以重用连接，从而减少数据库的连接开销。而<strong>连接池</strong>是应用服务器的组件，它可以通过参数来配置连接数、连接检测、连接的生命周期等。</li>
+</ol>
+<h4 id="注意事项">注意事项</h4><ol>
+<li>我们一般使用mysql -uroot -p只不过是使用了管理员的身份来创建一个connection，从而登录mysql，mysql的连接过程，内部实际上是经过tcp/ip协议的，当然mysql封装了tcp/ip有自己的一套协议。mysql是会创建一个线程来处理到来的连接的，我们可以在mysql中show status;然后在连接mysql，再次show status就可以看到Thread_connected的数量会增加1</li>
+<li>在生产繁忙的系统中，连接也可能会受到系统端口数的限制，如果要每秒建立几千个连接，那么连接断开后，端口不会被马上回收利用，必须经历一个“FIN”阶段的等待，直到可被回收利用为止，这样就可能会导致端口资源不够用。</li>
+<li>如果客户端和MySQL数据库之间有连接池或Proxy代理，一般在客户端推荐使用短连接。对于长连接的使用一定要慎重，不可滥用</li>
+<li>如果使用了长连接而长期没有对数据库进行任何操作，那么在timeout值(默认8小时)后，mysql server就会关闭此连接，而客户端在执行查询的时候就会得到一个类似于“MySQL server has gone away“这样的错误。在使用mysql_real_connect连接数据库之后，再使用mysql_options( &amp;mysql, MYSQL_OPT_RECONNECT, … ) 来设置为自动重连。</li>
+</ol>
+<h4 id="常用工具">常用工具</h4><ol>
+<li>查看mysql连接数：<code>mysqladmin -uroot -p  processlist</code></li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Mysql/"> #Mysql </a>
+          
+            <a href="../../tags/databse/"> #databse </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              如何实现多个数据库分片的list_objects操作
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-12-09
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/12/09/如何实现多个数据库分片的list_objects操作/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/09/如何实现多个数据库分片的list_objects操作/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h4 id="业务场景">业务场景</h4><p>我们需要实现一个类似于Linux中ls命令的功能，用户可以用该功能来查看的bucket里边object列表，这些object信息存储在mysql meta表和shard meta表中；正常情况下一个bucket中的所有object存储在一张meta表中；然而当一个bucket中的object数量十分庞大时，我们采用了水平分表的方式，将这些object通过哈希方式分散到了1024个shard meta表中，以避免单表行数过大带来的性能问题。  </p>
+<p>因此，ls功能的实现需要考虑以上两种情景，分别是单表和多表的list；list功能需要支持delimiter来折叠文件夹(类似于linux中ls命令，根据该参数来决定是否展开当前目录下的子目录)，marker来指定每次查询的起始位置，maxKeys来指定每次返回数目，prefix来筛选出以前缀开头的object。单表list我们可以直接采用mysql order来保证结果有序；如果object分散在了1024个shard meta表中，要每次拿出前n个就比较困难了，因为数据只是单表有序的，要想全局有序，就还得做一些处理。</p>
+<h4 id="分表hash方式">分表hash方式</h4><p>如何把很多object通过哈希方式分散到了1024个shard meta表中？如下代码所示，我们根据bucket和object构建一个url字符串，然后求MD5值，然后按4位做异或操作，最后对shard数目取模，就可以把object都随机分散到1024个表里了；MD5算法对原信息进行数学变换后得到的一个128位(bit)的特征码作为数据摘要，具有高度的离散性，原信息的一点点变化就会导致MD5的巨大变化。</p>
+<pre><code><span class="function"><span class="keyword">void</span> <span class="title">GenUrl</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; bucket, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; object, <span class="built_in">std</span>::<span class="built_in">string</span>&amp; url)</span> </span>{
+    url.append(<span class="string">"bs://"</span>);
+    url.append(bucket);
+    url.append(<span class="string">"/"</span>);
+    url.append(object);
+}
+
+<span class="function"><span class="keyword">int32_t</span> <span class="title">GetShardKey</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;bucket, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;object)</span> </span>{
+    <span class="built_in">std</span>::<span class="built_in">string</span> url = <span class="string">""</span>;
+    GenUrl(bucket, object, url);
+    <span class="built_in">std</span>::<span class="built_in">string</span> md5sum = MD5(url);
+    <span class="keyword">const</span> <span class="keyword">uint32_t</span> *p = <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">uint32_t</span>*&gt;(md5sum.data());
+    <span class="keyword">return</span> <span class="keyword">static_cast</span>&lt;<span class="keyword">int32_t</span>&gt;((p[<span class="number">0</span>]^p[<span class="number">1</span>]^p[<span class="number">2</span>]^p[<span class="number">3</span>]) % BUCKET_SHARD_NUM);
+}
+</code></pre><h4 id="单表list">单表list</h4><ul>
+<li><p><strong>解决方案</strong></p>
+<ul>
+<li>每次查询都是根据请求参数组装成一条SQL，查出需要的object  <code>select object, etag, size,…… from meta where bucket_id = * and shard_key = * order by object limit 0,1001</code></li>
+<li>针对子文件夹的折叠处理：<ul>
+<li>ls操作需要支持折叠文件夹操作，以免一个文件夹下边有很多子文件夹，而且子文件夹里有很多文件的时候，会导致多次ls也一直在一个子文件夹里边，支持折叠子文件夹，用户才可以ls出文件夹下边的所有子文件夹</li>
+<li>解决方案：当遇到子文件夹中文件多的时候，每次都能list出指定数目的objects，这些objects可能都是一个子文件中的文件；因为用户需要折叠子文件夹，因此我们进行跳过子文件夹的处理，极端情况下这批objects都在一个子文件夹中，此时我们需要根据最后一个object name来判断是否在子文件中，如果该批objects在子文件中，此时我们会对下次查询的起始位置做一个++操作，确保下次查询跳过这个已经获取了的子文件夹；如此进行三次重试，至少保证一次请求可以拿出3个子文件夹给用户</li>
+</ul>
+</li>
+<li>marker的处理：如果需要跳过文件夹，对marker++；例如正常情况下，object &gt; marker；如果要跳过文件夹，变成object &gt;= marker++</li>
+</ul>
+</li>
+<li><p><strong>核心代码</strong></p>
+<pre><code><span class="comment">// 需要跳过文件夹时对marker的处理</span>
+<span class="built_in">string</span> BucketModel::ProcessMarkerWithDelimiter(<span class="keyword">const</span> <span class="built_in">string</span>&amp; marker,
+                    <span class="keyword">const</span> <span class="built_in">string</span>&amp; prefix, <span class="keyword">char</span> delimiter) {
+    <span class="comment">//prefix empty, or prefix not empty and marker start with prefix</span>
+    <span class="keyword">if</span> (prefix.empty() || marker.compare(<span class="number">0</span>, prefix.length(), prefix) == <span class="number">0</span>) {
+        size_t pos = marker.find_first_of(delimiter, prefix.length());
+        <span class="built_in">string</span> new_marker;
+        <span class="keyword">if</span> (<span class="built_in">std</span>::<span class="built_in">string</span>::npos != pos) {
+            ++pos;
+            new_marker = marker.substr(<span class="number">0</span>, pos);
+            new_marker[new_marker.length()-<span class="number">1</span>]++;
+            <span class="keyword">return</span> new_marker;
+        } <span class="keyword">else</span> {
+            <span class="keyword">return</span> marker;
+        }
+    }
+    <span class="keyword">return</span> marker;
+}
+</code></pre></li>
+</ul>
+<h4 id="多表list">多表list</h4><ul>
+<li><p><strong>解决方案</strong></p>
+<ul>
+<li>利用Golang携程并发发送1024个shardMeta的list请求，也就是1024次SQL查询，拿到1024个请求结果之后，对结果做归并和提取处理，最终得出与单表listObject接口逻辑一致的结果。</li>
+</ul>
+</li>
+<li><p><strong>核心代码</strong></p>
+<pre><code>// merge two <span class="type">ObjectInfo</span> struct <span class="keyword">type</span> slice, max length <span class="keyword">is</span> maxKeys
+func merge(maxKeys <span class="type">int</span>, left, right []<span class="type">ObjectInfo</span>) []<span class="type">ObjectInfo</span> {
+    <span class="keyword">var</span> <span class="literal">result</span> []<span class="type">ObjectInfo</span>
+
+    <span class="keyword">for</span> len(left) &gt; <span class="number">0</span> || len(right) &gt; <span class="number">0</span> {
+        <span class="keyword">if</span> len(left) == <span class="number">0</span> {
+            <span class="literal">result</span> = append(<span class="literal">result</span>, right...)
+            <span class="keyword">break</span>
+        }
+        <span class="keyword">if</span> len(right) == <span class="number">0</span> {
+            <span class="literal">result</span> = append(<span class="literal">result</span>, left...)
+            <span class="keyword">break</span>
+        }
+        <span class="keyword">if</span> left[<span class="number">0</span>].<span class="type">Key</span> &lt;= right[<span class="number">0</span>].<span class="type">Key</span> {
+            <span class="literal">result</span> = append(<span class="literal">result</span>, left[<span class="number">0</span>])
+            left = left[<span class="number">1</span>:]
+        } <span class="keyword">else</span> {
+            <span class="literal">result</span> = append(<span class="literal">result</span>, right[<span class="number">0</span>])
+            right = right[<span class="number">1</span>:]
+        }
+        <span class="keyword">if</span> len(<span class="literal">result</span>) &gt;= maxKeys {
+            <span class="keyword">return</span> <span class="literal">result</span>[<span class="number">0</span>:maxKeys]
+        }
+    }
+    <span class="keyword">if</span> len(<span class="literal">result</span>) &gt;= maxKeys {
+        <span class="keyword">return</span> <span class="literal">result</span>[<span class="number">0</span>:maxKeys]
+    }
+    <span class="keyword">return</span> <span class="literal">result</span>
+}
+</code></pre></li>
+<li><p><strong>方案重难点</strong></p>
+<ul>
+<li><p><strong>Cache嗅探机制</strong>：<br>List ShardMeta每次会通过VIP从Bucket取回1024个表数据，为了提高请求响应速度，当请求频率达到阈值时，这1024个表的数据会分别以ApiType+Bucket+ShardKey为key保存到Cache中，如何在充分利用Cache降低请求响应速度和对数据库压力的同时，也尽量减少与Cache之间的通信显得尤为重要。  </p>
+<p>  在充分考虑了系统Cache的实现机制之后，设计了预读取方案来降低与Cache之间的通信次数，将1024个ShardMeta的请求任务队列切割出一小部分(10个)作为嗅探Cache的任务，多个goroutine并发去读Cache，如果嗅探Cache的ShardMeta都能读取到，说明Cache中能读到1024个表数据，可以继续读Cache，否则后续请求都直接请求数据库，不再读Cache，这样可以把每次List Shard请求<span style="color:red">读Cache的次数从1024次降低到10次</span>。  </p>
+</li>
+<li><p><strong>性能优化</strong>：<br>List ShardMeta是一个重请求，相当于所有操作开销都放大1024倍，然而又必须满足客户对耗时的要求，我主要从以下几个方面做了性能优化 </p>
+<p>  <strong>减少互斥锁粒度，充分利用Golang atomic函数</strong>：在归并1024个表数据时，只给归并过程和写最终结果的少量代码加锁，利用atomic变量做全局信号量，保证变量操作的原子性  </p>
+<p>  <strong>并发Goroutine发送请求和进行Json-Struct转换</strong>：利用Golang Goroutine给Bucket并发发请求，加快网络请求速度；归并结果时需要多次进行byte数组和Struct之间的转换，而Golang自带json库函数效率低，也将该过程利用Goroutine来并发完成，加快转换速度</p>
+<p>  <strong>通过VIP分发请求</strong>：1024个请求如果并发到本机Bucket服务，会对本机服务造成巨大压力，而且由于单进程资源有限，会导致响应速度很慢。因此采用了将1024个请求发送给VIP的方式，均衡地分散到服务集群数千台机器上，保证了处理速度，降低了单机压力 </p>
+</li>
+<li><p><strong>异常处理机制</strong>：<br>List ShardMeta每次1024个数据库请求，如果有一个请求遇到网络超时等错误，返回结果不正常，就会导致整个请求返回结果有误；因此我采用了标志量和超时机制来实现异常处理，一旦单个请求出现异常，标志量置位TRUE，其他请求不再继续；同时采用Goroutine等待超时信号量的方式来处理超时情况，如果工作任务出现错误，一旦从任务通道取不到任务超过50ms，Goroutine自动结束操作，给用户返回错误提示</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="json转换函数性能低的解决方案">json转换函数性能低的解决方案</h4><p>Golang自带json Unmarshal函数转化包含1000个obj的list object接口返回结果时，耗时10ms，效率很低；主要有<strong>两种解决方案</strong>：</p>
+<ul>
+<li>一种是减少转化次数以及缩小锁的范围，并发地去做转化</li>
+<li>另一种是使用开源库，性能能够提升2-4倍，例如easyjson，ffjson</li>
+</ul>
+<h4 id="并发等待是等goroutine还是Channel">并发等待是等goroutine还是Channel</h4><p>Goroutine一般会结合WaitGroup来使用，wg相当于一个同步信号量，等到wg减到0，才开始下一步的逻辑</p>
+<ul>
+<li>如果wg等待goroutine，也就是说先给wg.add(Goroutine数目)，然后使用<code>defer this.wg.Done()</code>和<code>return</code>来指定当函数结束(也意味着Goroutine结束)时就给wg减一，这样能确保最终协程都结束时，wg也不再等待，开始下一步的逻辑</li>
+<li>如果wg等待channel里边的任务，会存在一些异常问题，例如channel任务没被消费完，Goroutine都异常中止了，那么wg永远等不到减到0的那一刻，程序就会hang住了</li>
+</ul>
+<h4 id="耗时正比例增加因为多打了log">耗时正比例增加因为多打了log</h4><p>上线之后从某一天开始发现list请求耗时突增到上线时的6倍，非常奇怪，而且耗时随着每次请求数据量的增加而增加，经过git diff版本分析代码，发现是后续debug增加了几行日志打印，打印数据为每个shardMeta返回的数据，而且打印日志的代码被mutex互斥锁锁住，也就意味着每次要串行打印n个object数据，打印1024次，每次耗时10ms，从而导致耗时剧增；后来删除log之后耗时恢复到正常水平 </p>
+<h4 id="Golang相关技术和踩坑">Golang相关技术和踩坑</h4><h5 id="defer和WaitGroup">defer和WaitGroup</h5><ol>
+<li>在Golang中，defer表达式通常用来处理一些清理和释放资源的操作。defer后面的表达式会被放入一个列表中，在当前方法返回的时候，列表中的表达式就会被执行。一个方法中可以在一个或者多个地方使用defer表达式</li>
+<li>defer表达式中变量的值在defer表达式被定义时就已经明确</li>
+<li>defer表达式的调用顺序是按照先进后出的方式</li>
+<li>defer还可以用于在 return 之后修改函数的返回值</li>
+<li>Go语言中, panic用于抛出异常, recover用于捕获异常. </li>
+</ol>
+<h4 id="参考链接">参考链接</h4><p>1.<a href="https://xiaozhou.net/something-about-defer-2014-05-25.html" target="_blank" rel="noopener">Golang中defer的那些事</a></p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Golang/"> #Golang </a>
+          
+            <a href="../../tags/Mysql/"> #Mysql </a>
+          
+            <a href="../../tags/databse/"> #databse </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Linux终端利器tmux指南
             
           
         </h1>
@@ -167,7 +652,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2017/12/07/Linux终端利器tmux指南/#comments" >
+            <a href="../../2017/12/07/Linux终端利器tmux指南/#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/07/Linux终端利器tmux指南/"></span>
             </a>
           </span>
@@ -182,8 +667,7 @@
       
 
       
-        
-          <h4 id="tmux简介">tmux简介</h4><p>tmux是BSD实现的Screen替代品，相对于Screen，它更加先进：支持屏幕切分，而且具备丰富的命令行参数，使其可以灵活、动态的进行各种布局和操作。它可以做到一条命令就启动起来(强大的配置)</p>
+        <h4 id="tmux简介">tmux简介</h4><p>tmux是BSD实现的Screen替代品，相对于Screen，它更加先进：支持屏幕切分，而且具备丰富的命令行参数，使其可以灵活、动态的进行各种布局和操作。它可以做到一条命令就启动起来(强大的配置)</p>
 <h5 id="安装方法">安装方法</h5><table>
 <thead>
 <tr>
@@ -361,11 +845,10 @@ fi
 </code></pre></li>
 </ol>
 <h4 id="参考链接">参考链接</h4><ol>
-<li><a href="http://wdxtub.com/2016/03/30/tmux-guide/" target="_blank" rel="external">tmux指南</a></li>
+<li><a href="http://wdxtub.com/2016/03/30/tmux-guide/" target="_blank" rel="noopener">tmux指南</a></li>
 <li><strong> tmux如何将内容复制到系统clipboard ? </strong> Mac下如果用 iterm2 可以在 preference 下选择 Applications in terminal may access  clipboard</li>
 </ol>
 
-        
       
     </div>
 
@@ -384,524 +867,6 @@ fi
 
       
       
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2017/12/02/Mysql Init线程不安全问题/">
-                Mysql初次Init线程不安全问题
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2017-12-02
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2017/12/02/Mysql Init线程不安全问题/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/02/Mysql Init线程不安全问题/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h4 id="现象描述">现象描述</h4><p>沙盒测试时发现的这个问题，在程序启动时偶发core，而且不稳定复现，查看core信息会发现core在了mysql连接上；而且最后发现的规律是每次程序启动时，如果多线程获取数据库连接，就可能出现core。core信息如图所示:</p>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/mysql_core.png" class="full-image"></p>
-<h4 id="代码复现">代码复现</h4><p>在主线程内初始化mysql，在子线程内调用mysql_real_connect,就会导致coredump</p>
-<pre><code><span class="variable">#include</span> <span class="subst">&lt;</span>mysql<span class="built_in">.</span>h<span class="subst">&gt;</span>
-<span class="variable">#include</span> <span class="subst">&lt;</span>pthread<span class="built_in">.</span>h<span class="subst">&gt;</span>
-<span class="literal">void</span><span class="subst">*</span> func(<span class="literal">void</span><span class="subst">*</span> arg)
-{
-    MYSQL<span class="subst">*</span> mysql <span class="subst">=</span> (MYSQL <span class="subst">*</span>)arg;
-    mysql_real_connect(mysql, “<span class="number">127.0</span><span class="built_in">.0</span><span class="built_in">.1</span>″, “root”, “<span class="number">123456</span>″, “chen”, <span class="number">1234</span>, <span class="built_in">NULL</span>, <span class="number">0</span>);
-    mysql_close(mysql);
-    <span class="keyword">return</span> (<span class="literal">void</span> <span class="subst">*</span>)<span class="number">0</span>;
-}
-
-int main()
-{
-    MYSQL mysql;
-    <span class="keyword">if</span> (<span class="built_in">NULL</span> <span class="subst">==</span> mysql_init(<span class="subst">&amp;</span>mysql))
-    {
-        <span class="keyword">return</span> <span class="subst">-</span><span class="number">1</span>;
-    }
-    pthread_t <span class="keyword">thread</span>;
-    pthread_create(<span class="subst">&amp;</span><span class="keyword">thread</span>, <span class="built_in">NULL</span>, func, <span class="subst">&amp;</span>mysql);
-    pthread_join(<span class="keyword">thread</span>, <span class="built_in">NULL</span>);
-    <span class="keyword">return</span> <span class="number">0</span>;
-}
-</code></pre><h4 id="出现原因">出现原因</h4><p>如官网文档所说，当我们调用<code>mysql_real_connect()</code>函数去获取数据库连接时，需要先调用<code>mysql_init(MYSQL *mysql)函数</code>去获取一个MYSQL connection handler，然而mysql_init()不是完全线程安全的，但是只要成功调用一次后就线程安全了，如果有多线程并发调用mysql_init()，第一次init时如果刚好多线程并发调用，就会出core；为啥第一次调用mysql_init时线程不安全？我们可以来看看mysql源码:</p>
-<ol>
-<li><p>mysql.h文件预定义<code>mysql_library_init</code>函数</p>
-<pre><code><span class="hexcolor">#def</span>ine mysql_library_init mysql_server_init
-</code></pre></li>
-<li><p>client.c文件定义<code>mysql_init</code>函数,并调用<code>mysql_server_init</code>函数</p>
-<pre><code><span class="comment">// Init MySQL structure or allocate one</span>
-
-MYSQL <span class="subst">*</span> STDCALL
-mysql_init(MYSQL <span class="subst">*</span>mysql)
-{
-  <span class="keyword">if</span> (mysql_server_init(<span class="number">0</span>, <span class="built_in">NULL</span>, <span class="built_in">NULL</span>))
-    <span class="keyword">return</span> <span class="number">0</span>;
-  <span class="keyword">if</span> (<span class="subst">!</span>mysql)
-  {
-    <span class="keyword">if</span> (<span class="subst">!</span>(mysql<span class="subst">=</span>(MYSQL<span class="subst">*</span>) my_malloc(sizeof(<span class="subst">*</span>mysql),MYF(MY_WME <span class="subst">|</span> MY_ZEROFILL))))
-    {
-      set_mysql_error(<span class="built_in">NULL</span>, CR_OUT_OF_MEMORY, unknown_sqlstate);
-      <span class="keyword">return</span> <span class="number">0</span>;
-    }
-    mysql<span class="subst">-&gt;</span>free_me<span class="subst">=</span><span class="number">1</span>;
-  }
-  <span class="keyword">else</span>
-    memset(mysql, <span class="number">0</span>, sizeof(<span class="subst">*</span>(mysql)));
-  mysql<span class="subst">-&gt;</span>charset<span class="subst">=</span>default_client_charset_info;
-  strmov(mysql<span class="subst">-&gt;</span>net<span class="built_in">.</span>sqlstate, not_error_sqlstate);
-
-  <span class="comment">/*
-    Only enable LOAD DATA INFILE by default if configured with option
-    ENABLED_LOCAL_INFILE
-  */</span>
-
-<span class="variable">#if</span> defined(ENABLED_LOCAL_INFILE) <span class="subst">&amp;&amp;</span> <span class="subst">!</span>defined(MYSQL_SERVER)
-  mysql<span class="subst">-&gt;</span>options<span class="built_in">.</span>client_flag<span class="subst">|=</span> CLIENT_LOCAL_FILES;
-<span class="variable">#endif</span>
-
-<span class="variable">#ifdef</span> HAVE_SMEM
-  mysql<span class="subst">-&gt;</span>options<span class="built_in">.</span>shared_memory_base_name<span class="subst">=</span> (char<span class="subst">*</span>) def_shared_memory_base_name;
-<span class="variable">#endif</span>
-
-  mysql<span class="subst">-&gt;</span>options<span class="built_in">.</span>methods_to_use<span class="subst">=</span> MYSQL_OPT_GUESS_CONNECTION;
-  mysql<span class="subst">-&gt;</span>options<span class="built_in">.</span>report_data_truncation<span class="subst">=</span> <span class="literal">TRUE</span>;  <span class="comment">/* default */</span>
-
-  mysql<span class="subst">-&gt;</span>reconnect<span class="subst">=</span> <span class="number">0</span>;
-
-  mysql<span class="subst">-&gt;</span>options<span class="built_in">.</span>secure_auth<span class="subst">=</span> <span class="literal">TRUE</span>;
-
-  <span class="keyword">return</span> mysql;
-}
-</code></pre></li>
-<li><p>libmysql.c文件定义<code>mysql_server_init</code>函数, 问题就出在这个函数,用了<code>mysql_client_init</code>这个标记量来判断是否需要调用<code>my_thread_init</code>函数，如果<code>mysql_client_init==1</code>就直接为每个线程初始化私有变量，否则会先去初始化一些全局性的系统函数，资源和变量; 所以如果第一次init时出现多线程并发情景，线程A将<code>mysql_client_init</code>变量置为1，紧接着初始化全局资源，与此同时线程B走了else分支，直接开始调用<code>my_thread_init</code>函数，此时就会报错了，core由此产生。</p>
-<pre><code><span class="type">int</span> <span class="type">STDCALL</span> mysql_server_init(<span class="type">int</span> argc __attribute__((unused)),
-                  <span class="type">char</span> **argv __attribute__((unused)),
-                  <span class="type">char</span> **groups __attribute__((unused)))
-{
-  <span class="type">int</span> <span class="literal">result</span>= <span class="number">0</span>;
-  <span class="keyword">if</span> (!mysql_client_init)
-  {
-    mysql_client_init=<span class="number">1</span>;
-    org_my_init_done=my_init_done;
-    <span class="keyword">if</span> (my_init())                /* <span class="type">Will</span> init threads */
-      <span class="keyword">return</span> <span class="number">1</span>;
-    init_client_errs();
-    <span class="keyword">if</span> (mysql_client_plugin_init())
-      <span class="keyword">return</span> <span class="number">1</span>;
-    <span class="keyword">if</span> (!mysql_port)
-    {
-      <span class="type">char</span> *env;
-      struct servent *serv_ptr __attribute__((unused));
-
-      mysql_port = <span class="type">MYSQL_PORT</span>;
-
-      /*
-        <span class="keyword">if</span> builder specifically requested a default port, use that
-        (even <span class="keyword">if</span> it coincides <span class="keyword">with</span> our factory default).
-        only <span class="keyword">if</span> they didn't <span class="keyword">do</span> we check /etc/services (<span class="keyword">and</span>, failing
-        on that, fall back to the factory default <span class="keyword">of</span> <span class="number">3306</span>).
-        either default can be overridden by the environment variable
-        <span class="type">MYSQL_TCP_PORT</span>, which <span class="keyword">in</span> turn can be overridden <span class="keyword">with</span> command
-        line options.
-      */
-
-<span class="comment">#if MYSQL_PORT_DEFAULT == 0</span>
-      <span class="keyword">if</span> ((serv_ptr= getservbyname(<span class="string">"mysql"</span>, <span class="string">"tcp"</span>)))
-        mysql_port= (<span class="type">uint</span>) ntohs((ushort) serv_ptr-&gt;s_port);
-<span class="comment">#endif</span>
-      <span class="keyword">if</span> ((env= getenv(<span class="string">"MYSQL_TCP_PORT"</span>)))
-        mysql_port=(<span class="type">uint</span>) atoi(env);
-    }
-
-    <span class="keyword">if</span> (!mysql_unix_port)
-    {
-      <span class="type">char</span> *env;
-<span class="comment">#ifdef __WIN__</span>
-      mysql_unix_port = (<span class="type">char</span>*) <span class="type">MYSQL_NAMEDPIPE</span>;
-<span class="comment">#else</span>
-      mysql_unix_port = (<span class="type">char</span>*) <span class="type">MYSQL_UNIX_ADDR</span>;
-<span class="comment">#endif</span>
-      <span class="keyword">if</span> ((env = getenv(<span class="string">"MYSQL_UNIX_PORT"</span>)))
-    mysql_unix_port = env;
-    }
-    mysql_debug(<span class="type">NullS</span>);
-<span class="comment">#if defined(SIGPIPE) &amp;&amp; !defined(__WIN__)</span>
-    (<span class="type">void</span>) signal(<span class="type">SIGPIPE</span>, <span class="type">SIG_IGN</span>);
-<span class="comment">#endif</span>
-<span class="comment">#ifdef EMBEDDED_LIBRARY</span>
-    <span class="keyword">if</span> (argc &gt; -<span class="number">1</span>)
-       <span class="literal">result</span>= init_embedded_server(argc, argv, groups);
-<span class="comment">#endif</span>
-  }
-  <span class="keyword">else</span>
-    <span class="literal">result</span>= (<span class="type">int</span>)my_thread_init();         /* <span class="type">Init</span> <span class="keyword">if</span> new thread */
-  <span class="keyword">return</span> <span class="literal">result</span>;
-}
-</code></pre></li>
-<li><p>官方文档</p>
-<ul>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/mysql-real-connect.html" target="_blank" rel="external"><code>mysql_real_connect()</code></a> attempts to establish a connection to a MySQL database engine running on host. mysql_real_connect() must complete successfully before you can execute any other API functions that require a valid MYSQL connection handler structure.  </p>
-</li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/mysql-init.html" target="_blank" rel="external"><code>MYSQL *mysql_init(MYSQL *mysql)</code></a>  </p>
-<p>  Allocates or initializes a MYSQL object suitable for <code>mysql_real_connect()</code>. If mysql is a NULL pointer, the function allocates, initializes, and returns a new object. Otherwise, the object is initialized and the address of the object is returned. If <code>mysql_init()</code> allocates a new object, it is freed when <code>mysql_close()</code> is called to close the connection.  </p>
-<p>  In a nonmulti-threaded environment, <code>mysql_init()</code> invokes <code>mysql_library_init()</code> automatically as necessary. However, <code>mysql_library_init()</code> is not thread-safe in a multi-threaded environment, and thus neither is <code>mysql_init()</code>. Before calling <code>mysql_init()</code>, either call <code>mysql_library_init()</code> prior to spawning any threads, or use a mutex to protect the <code>mysql_library_init()</code> call. This should be done prior to any other client library call.</p>
-</li>
-</ul>
-</li>
-</ol>
-<h4 id="解决方案">解决方案</h4><ol>
-<li>每一次连接数据库时都先后加锁调用mysql_init()和mysql_real_connect()，确保init先于connect函数被调用过，而且不会被其他线程并发调用，以免初次连接数据库时多线程并发导致core</li>
-<li>在程序启动时先全局调用一次mysql_init()函数，确保初次调用mysql_init时是线程安全的，之后的调用mysql_real_connect函数就不会出core</li>
-<li>MySQL提供了线程安全的库libmysql_r，可以考虑替换原来的线程不安全的libmysql库</li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Mysql/"> #Mysql </a>
-          
-            <a href="../../tags/bug/"> #bug </a>
-          
-            <a href="../../tags/databse/"> #databse </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2017/11/11/C++常用数据结构/">
-                C++常用数据结构
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2017-11-11
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2017/11/11/C++常用数据结构/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/C++常用数据结构/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="C++常用std集合—map/set">C++常用std集合—map/set</h3><ol>
-<li>unordered_map在C++11的时候被引入标准库了，而hash_map没有，所以建议还是使用unordered_map比较好。查询平均时间是O(1)，无序，类似于Java中HashMap。</li>
-<li>map的内部结构是R-B-tree来实现的，所以保证了一个稳定的动态操作时间，查询、插入、删除都是O（logN），最坏和平均都是。而unordered_map如前所述，是哈希表。顺便提一下，哈希表的查询时间虽然是O（1），但是并不是unordered_map查询时间一定比map短，因为实际情况中还要考虑到数据量，而且unordered_map的hash函数的构造速度也没那么快，所以不能一概而论，应该具体情况具体分析。最坏会是O(n)，额外空间复杂度则要高出许多。map中的元素是按照二叉搜索树存储，进行中序遍历会得到有序遍历，默认遍历顺序为以key从小到大。</li>
-<li>无序集合（Unordered Set）容器是一个存储唯一（Unique，即无重复）元素的关联容器（Associative container），容器中的元素无特别的次序关系。该容器允许基于值地快速元素检索。类似于HashSet。</li>
-<li><a href="https://zcheng.ren/2016/09/09/STLSetAndMap/#set" target="_blank" rel="external">set/multiset/map/multimap的内部实现和常用函数</a></li>
-<li><a href="https://github.com/julycoding/The-Art-Of-Programming-By-July/blob/master/ebook/zh/03.01.md" target="_blank" rel="external">红黑树原理</a></li>
-</ol>
-<h3 id="BloomFilter布隆过滤器">BloomFilter布隆过滤器</h3><ol>
-<li><p>核心实现是一个很长的二进制向量 （位数组）再加上一系列随机函数 (哈希)，空间效率和查询效率高，不会漏判，但是有一定的误判率（哈希表是精确匹配）。</p>
-</li>
-<li><p><a href="https://blog.csdn.net/tianyaleixiaowu/article/details/74721877" target="_blank" rel="external">布隆过滤器解决缓存击穿、垃圾邮件识别、集合判重</a></p>
-</li>
-</ol>
-<h3 id="SkipList跳跃表">SkipList跳跃表</h3><h3 id="参考链接">参考链接</h3>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/C/"> #C++ </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2017/11/11/计算机体系结构学习札记/">
-                计算机体系结构学习札记
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2017-11-11
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2017/11/11/计算机体系结构学习札记/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/计算机体系结构学习札记/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>计算机系统是由硬件和系统软件组成的，它们共同工作来运行应用程序。</p>
-<h3 id="操作系统">操作系统</h3><p>操作系统处于中间位置，它的一边是应用程序、实用程序和用户，另一边是计算机系统的硬件。</p>
-<h3 id="计算机硬件">计算机硬件</h3>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/操作系统/"> #操作系统 </a>
-          
-            <a href="../../tags/计算机体系结构/"> #计算机体系结构 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="../../2017/11/11/分布式系统基础知识/">
-                分布式存储系统基础
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2017-11-11
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2017/11/11/分布式系统基础知识/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/分布式系统基础知识/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="块存储/对象存储/文件系统">块存储/对象存储/文件系统</h3><ol>
-<li><strong>块存储</strong>：访问时延是10ms级，常用于跟虚机搭配使用，与普通硬盘无异，读写速度由于并发所以非常快。既要能应付大文件读写，也能处理好小文件读写。但是硬盘的特点是容量大，热点明显。因此块存储主要可以应付热点问题。另外，块存储要求的延迟是最低的。通常以QEMU Driver或者Kernel Module的方式存在，这种接口需要实现Linux的Block Device的接口或者QEMU提供的Block Driver接口，如Sheepdog，AWS的EBS，ceph的RBD；分布式块存储系统通常提供快照功能，方便在故障或者是业务需要的时候，将块设备上的数据恢复到期望的一个时间点。每次快照并不是全量快照，而是增量快照，仅对修改过的区间进行备份。</li>
-<li><strong>对象存储</strong>：访问时延是100ms-1s级，通常以大文件为主，要求足够的IO带宽。接口就是简单的GET、PUT、DEL和其他扩展，如七牛、又拍、Swift、S3</li>
-<li><strong>文件存储</strong>：通常意义是支持POSIX接口，它跟传统的文件系统如Ext4是一个类型的，需要考虑目录、文件属性等支持；但区别在于分布式存储提供了并行化的能力，如Ceph的CephFS；分布式文件系统通常需要有一个或一组namenode节点维护目录树，一个或一组metaserver节点来维护文件元信息</li>
-<li>块存储和文件存储在形态上虽然不同，但实际使用基本一致，块存储扩展性好、兼容性更好，但使用略麻烦；文件存储使用方便，且故障隔离性好，但扩展性不好。</li>
-<li><strong>表格存储</strong></li>
-<li><strong>归档存储</strong></li>
-</ol>
-<h3 id="OLAP与OLTP">OLAP与OLTP</h3><p>当今的数据处理大致可以分成两大类：<strong>联机事务处理OLTP（on-line transaction processing）、联机分析处理OLAP（On-Line Analytical Processing）</strong>。OLTP是传统的关系型数据库的主要应用，主要是基本的、日常的事务处理，例如银行交易，关注实时性，数据量较少。OLAP是数据仓库系统的主要应用，支持复杂的分析操作，侧重决策支持，并且提供直观易懂的查询结果。</p>
-<ul>
-<li><strong>数据库OLTP</strong>：传统的关系型数据库的主要应用，主要是基本的、日常的事务处理，例如银行交易。</li>
-<li><strong>数据仓库</strong>：数据仓库系统的主要应用主要是OLAP（On-Line Analytical Processing），支持复杂的分析操作，侧重决策支持，并且提供直观易懂的查询结果。</li>
-<li>举个最常见的例子，拿电商行业来说好了。基本每家电商公司都会经历，从只需要业务数据库到要数据仓库的阶段。<ol>
-<li>电商早期启动非常容易，入行门槛低。找个外包团队，做了一个可以下单的网页前端 + 几台服务器 + 一个MySQL，就能开门迎客了。这好比手工作坊时期。</li>
-<li>第二阶段，流量来了，客户和订单都多起来了，普通查询已经有压力了，这个时候就需要升级架构变成多台服务器和多个业务数据库（量大+分库分表），这个阶段的业务数字和指标还可以勉强从业务数据库里查询。初步进入工业化。</li>
-<li>第三个阶段，一般需要 3-5 年左右的时间，随着业务指数级的增长，数据量的会陡增，公司角色也开始多了起来，开始有了 CEO、CMO、CIO，大家需要面临的问题越来越复杂，越来越深入。高管们关心的问题，从最初非常粗放的：“昨天的收入是多少”、“上个月的 PV、UV 是多少”，逐渐演化到非常精细化和具体的用户的集群分析，特定用户在某种使用场景中，例如“20~30岁女性用户在过去五年的第一季度化妆品类商品的购买行为与公司进行的促销活动方案之间的关系”。</li>
-<li>这类非常具体，且能够对公司决策起到关键性作用的问题，基本很难从业务数据库从调取出来。原因在于：业务数据库中的数据结构是为了完成交易而设计的，不是为了而查询和分析的便利设计的。业务数据库大多是读写优化的，即又要读（查看商品信息），也要写（产生订单，完成支付）。因此对于大量数据的读（查询指标，一般是复杂的只读类型查询）是支持不足的。</li>
-<li>而怎么解决这个问题，此时我们就需要建立一个数据仓库了，公司也算开始进入信息化阶段了。数据仓库的作用在于：数据结构为了分析和查询的便利；只读优化的数据库，即不需要它写入速度多么快，只要做大量数据的复杂查询的速度足够快就行了。那么在这里前一种业务数据库（读写都优化）的是业务性数据库，后一种是分析性数据库，即数据仓库。</li>
-</ol>
-</li>
-<li>最后总结一下：数据库比较流行的有：MySQL, Oracle, SqlServer等。数据仓库比较流行的有：AWS Redshift, Greenplum, Hive等。这样把数据从业务性的数据库中提取、加工、导入分析性的数据库就是传统的 ETL 工作。</li>
-</ul>
-<h3 id="CAP理论">CAP理论</h3><p>2000年7月，加州大学伯克利分校的Eric Brewer教授在ACM PODC会议上提出CAP猜想。2年后，麻省理工学院的Seth Gilbert和Nancy Lynch从理论上证明了CAP；也就是：<strong>一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项</strong>。  </p>
-<ol>
-<li><strong>一致性</strong>：<code>all nodes see the same data at the same time</code>；根据业务场景可以分为强一致性，弱一致性和最终一致性。对于关系型数据库，要求更新过的数据能被后续的访问都能看到，这是<strong>强一致性</strong>。如果能容忍后续的部分或者全部访问不到，则是<strong>弱一致性</strong>。如果经过一段时间后要求能访问到更新后的数据，则是<strong>最终一致性</strong>。</li>
-<li><strong>可用性</strong>：<code>Reads and writes always succeed</code>，即服务一直可用，而且是正常响应时间。</li>
-<li><strong>分区容错性</strong>：<code>the system continues to operate despite arbitrary message loss or failure of part of the system</code>，即分布式系统在遇到某节点或网络分区故障的时候，仍然能够对外提供满足一致性和可用性的服务。</li>
-<li><strong>CAP权衡</strong>：</li>
-</ol>
-<blockquote>
-<p>CA without P：如果不要求P（不允许分区），则C（强一致性）和A（可用性）是可以保证的。但其实分区不是你想不想的问题，而是始终会存在，因此CA的系统更多的是允许分区后各子系统依然保持CA。</p>
-<p>CP without A：如果不要求A（可用），相当于每个请求都需要在Server之间强一致，而P（分区）会导致同步时间无限延长，如此CP也是可以保证的。很多传统的数据库分布式事务都属于这种模式。</p>
-<p>AP wihtout C：要高可用并允许分区，则需放弃一致性。一旦分区发生，节点之间可能会失去联系，为了高可用，每个节点只能用本地数据提供服务，而这样会导致全局数据的不一致性。现在众多的NoSQL都属于此类。</p>
-<p>对于多数大型互联网应用，集群规模庞大、主机众多、部署分散，节点故障、网络故障是常态，而且要保证服务可用性达到N个9，往往采用AP without C，只保证最终一致性即可。</p>
-<p>对于银行业场景，C必须保证。网络发生故障宁可停止服务，这是保证CA，舍弃P；还有一种是保证CP，舍弃A，例如网络故障事只读不写。</p>
-</blockquote>
-<h3 id="分布式存储常见概念名词">分布式存储常见概念名词</h3><ol>
-<li><strong>RAID(Redundant Array of Independent Disk 独立冗余磁盘阵列)</strong>是加州大学伯克利分校1987年提出，最初是为了组合小的廉价磁盘来代替大的昂贵磁盘，同时希望磁盘失效时不会使对数据的访问受损失而开发出一定水平的数据保护技术。<strong>RAID就是一种由多块廉价磁盘构成的冗余阵列，在操作系统下是作为一个独立的大型存储设备出现。RAID可以充分发挥出多块硬盘的优势，可以提升硬盘速度，增大容量，提供容错功能够确保数据安全性，易于管理的优点</strong>，在任何一块硬盘出现问题的情况下都可以继续工作，不会受到损坏硬盘的影响。</li>
-<li><strong>RAID卡</strong>就是用来实现RAID功能的板卡，通常是由I/O<a href="http://baike.baidu.com/view/50152.htm" target="_blank" rel="external">处理器</a>、SCSI控制器、SCSI连接器和缓存等一系列零组件构成的。不同的RAID卡支持的RAID功能不同。支持RADI0、RAID1、RAID3、RAID4、RAID5、RAID10不等。RAID卡可以让很多磁盘驱动器同时传输数据，而这些磁盘驱动器在逻辑上又是一个磁盘驱动器，所以使用RAID可以达到单个的磁盘驱动器几倍、几十倍甚至上百倍的速率。这也是RAID卡最初想要解决的问题。可以提供容错功能，这是RAID卡的第二个重要功能。</li>
-<li><strong>MVCC</strong></li>
-<li><strong>EC编码与各级RAID</strong></li>
-</ol>
-<h3 id="轮询调度算法">轮询调度算法</h3><ol>
-<li>轮询调度算法的原理是每一次把来自用户的请求轮流分配给内部中的服务器，从1开始，直到N(内部服务器个数)，然后重新开始循环；即每次调度执行<code>i = N-1; i = (i+1) mod N</code>，并选出第i台服务器</li>
-<li>适合于服务器组中的所有服务器都有相同的软硬件配置并且平均服务请求相对均衡的情况, 它无需记录当前所有连接的状态，是一种无状态调度。</li>
-</ol>
-<h3 id="Learned_Indexes_VS_Traditional_Indexes">Learned Indexes VS Traditional Indexes</h3><blockquote>
-<p>目前存在多种索引的选择来解决各种访问模式的需求。例如 B-Trees 是范围请求最好的选择（例如在特定时间线上索引所有的数据记录），哈希表（Hash-Maps）在性能上很难打败基于键值的搜索方法，而布隆过滤器 (Bloom Filter) 通常用于检测是否存在某条记录。由于索引对于数据库系统和其它一些应用的重要性，过去几十年来，它们已经广泛地发展为更高的内存、缓存和 CPU 效率的方法</p>
-<p>本论文的核心思想是一个模型可以学习排序顺序或查找键的结构，并使用这一信号有效地预测记录的位置或存在。我们从理论上分析了学习索引在什么条件下表现优于传统索引结构，并描述了设计学习索引结构的主要挑战。我们的初步结果表明，借助神经网络，我们能够超过缓存优化的 B-Trees 高达 70％的速度，同时为若干个真实数据集节省一个数量级的内存。</p>
-</blockquote>
-<h3 id="常见分布式一致性算法">常见分布式一致性算法</h3><h4 id="Paxos">Paxos</h4><h4 id="Raft">Raft</h4><h4 id="异同点">异同点</h4><h4 id="应用场景">应用场景</h4><ol>
-<li><strong>2PC和Paxos区别</strong>：2PC用于保证多个数据分片上分布式事务的原子性，Paxos协议用于保证同一个数据分片在多个副本的分布式一致性，所以两者可以是互补的关系，绝不是替代关系。对于2PC协调者单点问题，可以利用Paxos协议解决，当协调者出问题时，选一个新的协调者继续提供服务。</li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/分布式系统/"> #分布式系统 </a>
-          
-            <a href="../../tags/存储/"> #存储 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
     </div>
   </div>
 
@@ -911,7 +876,7 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
 
   
   <div class="pagination">
-    <a class="extend prev" rel="prev" href="../3/">&laquo;</a><a class="page-number" href="../..//">1</a><span class="space">&hellip;</span><a class="page-number" href="../3/">3</a><span class="page-number current">4</span><a class="page-number" href="../5/">5</a><span class="space">&hellip;</span><a class="page-number" href="../16/">16</a><a class="extend next" rel="next" href="../5/">&raquo;</a>
+    <a class="extend prev" rel="prev" href="../3/">&laquo;</a><a class="page-number" href="../../">1</a><span class="space">&hellip;</span><a class="page-number" href="../3/">3</a><span class="page-number current">4</span><a class="page-number" href="../5/">5</a><span class="space">&hellip;</span><a class="page-number" href="../17/">17</a><a class="extend next" rel="next" href="../5/">&raquo;</a>
   </div>
 
 
@@ -938,28 +903,28 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../..//categories">
+            <a href="../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

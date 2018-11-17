@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="Leetcode," />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="Leetcode,">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../../../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../../favicon.ico?v=0.4.2">
 
 
 
@@ -69,7 +69,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -85,40 +85,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../../../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../../../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../../../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../../../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../../../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -174,7 +174,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="#comments" >
+            <a href="#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/14/Palindrome-Reverse-Integer问题/"></span>
             </a>
           </span>
@@ -189,7 +189,7 @@
       
 
       
-        <h3 id="Palindrome_Number问题">Palindrome Number问题</h3><p><a href="https://leetcode.com/problems/palindrome-number/" target="_blank" rel="external">题目链接</a></p>
+        <h3 id="Palindrome_Number问题">Palindrome Number问题</h3><p><a href="https://leetcode.com/problems/palindrome-number/" target="_blank" rel="noopener">题目链接</a></p>
 <p>解题思路：首先需要注意两点,①负数和小数都不是回文数 ②Integer有32位的范围限制，所以反转之后可能溢出. 对该整数循环除以10,取余数和商,余数则为从尾到头依次的digit number,并利用该digit number计算反转之后的结果，直到商为0结束循环；最终判断反转结构是否与原数相等。</p>
 <pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
     <span class="keyword">public</span> <span class="keyword">boolean</span> isPalindrome(<span class="keyword">int</span> x) {
@@ -208,7 +208,7 @@
     }
 }
 </code></pre><p>优化解法: 分别从整数的首尾开始比对，第一位和最后一位比较，第二位和倒数第二位比较，一直比较到中间位置，如果发现全部都相等则说明是回文数,此方法可以避免溢出，例如对于:121,第一次比较1和1，剩下2；再比较2和2，发现它是回文数.</p>
-<h3 id="Reverse_Integer问题">Reverse Integer问题</h3><p><a href="https://leetcode.com/problems/reverse-integer/" target="_blank" rel="external">题目链接</a></p>
+<h3 id="Reverse_Integer问题">Reverse Integer问题</h3><p><a href="https://leetcode.com/problems/reverse-integer/" target="_blank" rel="noopener">题目链接</a></p>
 <p>解题思路：这道题与上一题类似,也是个反转整数的题,在java中Integer占据4个bytes, 有32位的范围限制，对于正数,它的最高位是0,所以它最大能表示的数是01111….(后面共31个1),数化成十进制即是2147483647，Integer.MAX_VALUE = 2147483647[0x7fffffff]; 负数能表示的最小数的二进制数为1000..(后面共31个0),化为十进制数即为-int 类型的范围是 -2147483648,即为Integer.MIN_VALUE.当一个整数溢出时，变成一个与原数不相等的在int范围内的数，所以可以通过reverse/10 != tmp来判断是否溢出.</p>
 <pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
     <span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">reverse</span>(<span class="keyword">int</span> x) {
@@ -270,8 +270,7 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2016/01/14/Palindrome-Reverse-Integer问题/"
-               data-title="Palindrome && Reverse Integer问题" data-url="https://charles-xiao.github.io/2016/01/14/Palindrome-Reverse-Integer问题/">
+          <div class="ds-thread" data-thread-key="2016/01/14/Palindrome-Reverse-Integer问题/" data-title="Palindrome && Reverse Integer问题" data-url="https://charles-xiao.github.io/2016/01/14/Palindrome-Reverse-Integer问题/">
           </div>
         
       </div>
@@ -315,28 +314,28 @@
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../../../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../../../..//categories">
+            <a href="../../../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../../../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

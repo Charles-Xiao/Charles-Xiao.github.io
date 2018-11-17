@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="java,android,life,CharlesXiao" />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="java,android,life,CharlesXiao">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.2">
 
 
 
@@ -49,7 +49,7 @@
 <body>
 <!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
   <div class="container one-column 
-   page-home 
+  
 ">
     <div class="headband"></div>
 
@@ -71,7 +71,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -87,40 +87,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="/">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="/categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="/about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="/archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="/tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -148,9 +148,246 @@
           
           
             
-              <a class="post-title-link" href="2018/08/25/分布式系统常见问题和解决方案/">
-                分布式系统常见问题和解决方案
-              </a>
+              NewSQL数据库探秘
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2018-11-11
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2018/11/11/NewSQL数据库探秘/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/11/11/NewSQL数据库探秘/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h2 id="SQL关系型数据库">SQL关系型数据库</h2><p><a href="https://charles-xiao.github.io/2015/05/19/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%87%8D%E9%9A%BE%E7%82%B9%E9%9B%86%E9%94%A6/">数据库重难点集锦</a></p>
+<h2 id="NoSQL">NoSQL</h2><h3 id="键值型">键值型</h3><p>键值数据库的代表是Redis，面对通过主键查询的场景，Redis的效率非常高，但对于内容的查询，则无能为力。分布式只能靠根据主键进行分片，不支持ACID事务。</p>
+<h3 id="文档型">文档型</h3><p>文档数据库的代表是MongoDB，查询灵活，拥有自由度极高的Schema模型，可以方便的与JSON数据映射，不支持ACID事务。</p>
+<h3 id="列式存储型">列式存储型</h3><p>HBase用于处理海量数据，不支持ACID事务，并且只能通过行键来查询数据。</p>
+<h2 id="NewSQL">NewSQL</h2><p>NewSQL is a class of modern relational database management systems that seek to provide the same scalable performance of NoSQL systems for online transaction processing (OLTP) read-write workloads while still maintaining the ACID guarantees of a traditional database system.</p>
+<p>一种新式的关系型数据库管理系统，具有以下特性：</p>
+<ol>
+<li>针对OLTP（读-写）工作负载，追求提供和NoSQL系统相同的扩展性能</li>
+<li>保持ACID和SQL查询等关系数据库特性</li>
+</ol>
+<p>目前业界最流行的分布式数据库有三类：新架构（New Architecture）、透明化分片中间件（Transparent Sharding Middleware）和云数据库（Database-as-a-Service）, 2016年Andrew Pavlo与Matthew Aslett发布了一篇论文专门讲述NewSQL，<a href="https://db.cs.cmu.edu/papers/2016/pavlo-newsql-sigmodrec2016.pdf" target="_blank" rel="noopener">What’s Really New with NewSQL?</a>；<strong>新架构</strong>以Google Spanner为代表(Share-Nothing)，<strong>云数据库</strong>以AWS Auraro为代表(Shard-Disk)，<strong>透明化中间件</strong>以Sharding-Proxy为代表，下文我们一一阐述。</p>
+<h3 id="新架构">新架构</h3><ol>
+<li>主要产品代表为Spanner、TiDB、CockroachDB、OceanBase、TafDB。</li>
+<li>主要特点包括弹性扩展、分布式事务、基于Raft/Paxos的多副本复制技术保证一致性、故障容灾高可用；一般会包括master主备节点管理集群元信息、调度数据、负载均衡、分配全局事务ID，SQL节点负责接受用户的SQL并解析以及其它计算工作、访问master元信息去找到存储数据的节点，KV节点负责存储一致性多副本数据(像OB还会把存储节点分为基准数据节点和增量数据节点, 增量数据节点和master共用)。</li>
+</ol>
+<h3 id="透明化分片中间件">透明化分片中间件</h3><p>增加一层proxy，隐藏分库分表的细节，包括MyCat等中间件系统。其实后端还是单机节点中一个MySQL实例内核同时负责存储和计算。</p>
+<h3 id="云数据库">云数据库</h3><ol>
+<li>主要产品代表为Auraro、PolarDB、X-DB</li>
+<li>主要特点为计算和存储分离：计算节点基于MySQL内核，并提供主计算节点和多个只读节点来进行容错，计算节点通过RDMA与存储节点连通解决IO性能问题，存储节点基于Raft或者Quorum来做多副本存储，存储其实是共享的(多个数据库实例共享一个分布式存储层)。</li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/分布式系统/"> #分布式系统 </a>
+          
+            <a href="tags/NewSQL/"> #NewSQL </a>
+          
+            <a href="tags/数据库/"> #数据库 </a>
+          
+            <a href="tags/MySQL/"> #MySQL </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Golang实现读写缓冲池
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2018-10-29
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2018/10/29/Golang实现读写缓冲池/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/10/29/Golang实现读写缓冲池/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>所谓读写缓冲池的本质是生产者消费者模型的实际应用。目的是为了避免频繁分配和释放内存，复用最初new出来的固定数目缓冲slice，减少GC压力。</p>
+<h3 id="Channel+WaitGroup">Channel+WaitGroup</h3><p>Golang并发基本都是这两者搭配使用，通过for+select循环监听发布事件、订阅事件、取消事件。</p>
+<h3 id="AsyncReader">AsyncReader</h3><h4 id="数据结构">数据结构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">// 接口核心方法Begin和Next, Begin用于写数据到blockBuf，Next从blockBuf读取出来数据</span><br><span class="line">type AsyncReader interface &#123;</span><br><span class="line">	Begin() error</span><br><span class="line">	Stop()</span><br><span class="line">	Next() ([]byte, error)</span><br><span class="line">	SetTimeoutMs(t uint32)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type asyncReader struct &#123;</span><br><span class="line">	// 数据来源</span><br><span class="line">	reader io.Reader</span><br><span class="line"></span><br><span class="line">	// buffer配置信息</span><br><span class="line">	blockNum       uint32</span><br><span class="line">	bufferBlockNum uint32 /* blockNum-1 */</span><br><span class="line">	blockSize      uint32</span><br><span class="line">	firstBlockSize uint32</span><br><span class="line">	clientTimeout  time.Duration</span><br><span class="line">	innerTimeout   time.Duration</span><br><span class="line"></span><br><span class="line">	// buffer</span><br><span class="line">	blocks []blockBuf</span><br><span class="line"></span><br><span class="line">	// channal and event</span><br><span class="line">    // struct&#123;&#125;不消耗内存空间，一般用来做信号</span><br><span class="line">	chRecieve   chan struct&#123;&#125; // 读reader数据写到buffer</span><br><span class="line">	chStop      chan struct&#123;&#125;</span><br><span class="line">	chReadEvent chan event // 从buffer读数据</span><br><span class="line">	isEof       bool</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 缓存block</span><br><span class="line">type blockBuf struct &#123;</span><br><span class="line">	data []byte</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type event struct &#123;</span><br><span class="line">	/* 在err != nil的时候，readBlockIdx,readLen,isEof的值都是undefined */</span><br><span class="line">	readBlockIdx uint32</span><br><span class="line">	readLen      uint32</span><br><span class="line">	isEof        bool</span><br><span class="line">	err          error</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="核心函数">核心函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line">func NewAsyncReader(reader io.Reader, blockSize uint32, blockNum uint32, logId uint32) *asyncReader &#123;</span><br><span class="line">	this := &amp;asyncReader&#123;&#125;</span><br><span class="line"></span><br><span class="line">	/* asyncReader 有多个block作为异步读取数据的缓冲池,</span><br><span class="line">	 * 当用户调用next读取数据时，会把底层内存块以slice的方式交给调用方读取，</span><br><span class="line">	 * 所以需要多开辟1块block，避免正在缓冲的block同时被用户读取，产生竞态</span><br><span class="line">	 * this.blockNum 是asyncReader里实际开辟的block数</span><br><span class="line">	 * this.bufferBlockNum 是asyncReader 里用来异步缓冲的block数</span><br><span class="line">	 */</span><br><span class="line">	this.blockNum = blockNum + 1</span><br><span class="line">	this.bufferBlockNum = this.blockNum - 1</span><br><span class="line"></span><br><span class="line">    // 开辟缓存空间</span><br><span class="line">	this.blocks = make([]blockBuf, this.blockNum)</span><br><span class="line">	for i := uint32(0); i &lt; this.blockNum; i++ &#123;</span><br><span class="line">		this.blocks[i].data = nil</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	this.chRecieve = make(chan struct&#123;&#125;, this.bufferBlockNum)</span><br><span class="line">	this.chStop = make(chan struct&#123;&#125;, 1)</span><br><span class="line">	this.chReadEvent = make(chan event, this.blockNum)</span><br><span class="line"></span><br><span class="line">	// default:</span><br><span class="line">	this.firstBlockSize = this.blockSize</span><br><span class="line">	this.SetTimeoutMs(1000)</span><br><span class="line">	this.isEof = false</span><br><span class="line">	return this</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/* 异步读取数据 */</span><br><span class="line">func (this *asyncReader) Begin() error &#123;</span><br><span class="line"></span><br><span class="line">	for i := uint32(0); i &lt; this.bufferBlockNum; i++ &#123;</span><br><span class="line">		this.chRecieve &lt;- struct&#123;&#125;&#123;&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	go func() &#123;</span><br><span class="line">		isFirstBlock := true</span><br><span class="line">		blockIdx := uint32(0)</span><br><span class="line">		for &#123;</span><br><span class="line">			select &#123;</span><br><span class="line">			case &lt;-this.chStop: // 终止信号</span><br><span class="line">				return</span><br><span class="line">			case &lt;-time.After(this.innerTimeout):</span><br><span class="line">				// 默认协程异步读数据等待客户端读毕的超时时间，是客户端超时的2倍</span><br><span class="line">				this.chReadEvent &lt;- NewEvent(fmt.Errorf(&quot;asyncReader begin() timeout&quot;))</span><br><span class="line">				return</span><br><span class="line">			case &lt;-this.chRecieve: // 监听receive信号</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			toReadLen := this.blockSize</span><br><span class="line"></span><br><span class="line">			len, isEof, err := this.ReadOneBlock(blockIdx, toReadLen)</span><br><span class="line">			if err != nil &#123;</span><br><span class="line">				this.chReadEvent &lt;- NewEvent(err)</span><br><span class="line">				return</span><br><span class="line">			&#125;</span><br><span class="line">            // 读取成功一个block，就发送一个read event到通道，后续Next函数会主动获取</span><br><span class="line">			if len &gt; 0 &#123;</span><br><span class="line">				this.chReadEvent &lt;- event&#123;blockIdx, len, isEof, nil&#125;</span><br><span class="line">				blockIdx = (blockIdx + 1) % this.blockNum // 接着写下一个block</span><br><span class="line">			&#125;</span><br><span class="line">			if isEof &#123;</span><br><span class="line">				this.chReadEvent &lt;- event&#123;0, 0, true, nil&#125;</span><br><span class="line">				break</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	return nil</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/* 读取toReadLen长度的数据，直到满足长度或者EOF */</span><br><span class="line">/* 返回参数 readLen,isEof,error */</span><br><span class="line">func (this *asyncReader) ReadOneBlock(blockIdx uint32, toReadLen uint32) (uint32, bool, error) &#123;</span><br><span class="line">	var haveReadLen uint32</span><br><span class="line">	for haveReadLen = 0; haveReadLen &lt; toReadLen; &#123;</span><br><span class="line">		if this.blocks[blockIdx].data == nil &#123;</span><br><span class="line">			this.blocks[blockIdx].data = make([]byte, this.blockSize)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		readLen, err := this.reader.Read(this.blocks[blockIdx].data[haveReadLen:toReadLen])</span><br><span class="line">		if readLen &gt; 0 &#123;</span><br><span class="line">			haveReadLen += uint32(readLen)</span><br><span class="line">		&#125;</span><br><span class="line">		if err == io.EOF &#123;</span><br><span class="line">			return haveReadLen, true, nil</span><br><span class="line">		&#125; else if err != nil &#123;</span><br><span class="line">			log.Logger.Warn(&quot;[logid:%d] async reader readLen:%d, error:%s&quot;,</span><br><span class="line">				this.logId, haveReadLen, err)</span><br><span class="line">			return haveReadLen, true, err</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return haveReadLen, false, nil</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/*   1. asyncReader只支持一个协程读取数据</span><br><span class="line"> *   2. 返回的slice是asyncReader底层的buffer，数据有效期到下次调用next之前，</span><br><span class="line"> *      返回的slice不允许做写操作，如果有写需求，请copy</span><br><span class="line"> *   3. Next一般放在for循环中调用, 直到返回数据为nil</span><br><span class="line"> */</span><br><span class="line">func (this *asyncReader) Next() ([]byte, error) &#123;</span><br><span class="line">	if this.isEof &#123;</span><br><span class="line">		return nil, nil</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	select &#123;</span><br><span class="line">	case &lt;-time.After(this.clientTimeout):</span><br><span class="line">		return nil, TimeOutError</span><br><span class="line">	case event := &lt;-this.chReadEvent:</span><br><span class="line">		if event.err != nil &#123;</span><br><span class="line">			return nil, fmt.Errorf(&quot;asyncReaderAll.next error. %s&quot;, event.err)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		if event.isEof &#123;</span><br><span class="line">			this.isEof = true</span><br><span class="line">			if event.readLen &gt; 0 &#123;</span><br><span class="line">				return this.blocks[event.readBlockIdx].data[0:event.readLen], nil</span><br><span class="line">			&#125; else &#123;</span><br><span class="line">				return nil, nil</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; else &#123;</span><br><span class="line">            // 发送继续写buffer的信号，Begin函数里边的协程继续从reader读取下一个block写到缓存; 如果blockNum==bufferBlockNum，此处会出现竞态</span><br><span class="line">			this.chRecieve &lt;- struct&#123;&#125;&#123;&#125;</span><br><span class="line">			return this.blocks[event.readBlockIdx].data[0:event.readLen], nil</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="BufferPool">BufferPool</h3><p>读写缓冲池,Bodybufs是缓冲区，多个slice</p>
+<h4 id="数据结构-1">数据结构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">type BufferPool interface &#123;</span><br><span class="line">	Write(start []byte, length int, err error) BosErrorCodeType</span><br><span class="line">	Read() ([]byte, int, error)</span><br><span class="line">	SendCanWriteSignal(signal int) BosErrorCodeType</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type BufferPoolImp struct &#123;</span><br><span class="line">	Bodybufs         []BodyBuf</span><br><span class="line">	bufWraps         chan BufWrap // 读写通道，buffer内容指针</span><br><span class="line">	writeSignals     chan int // 决定是否可写</span><br><span class="line">	currentIndex     int // 写入当前的Bodybufs[index]</span><br><span class="line">	maxBufferSize    int</span><br><span class="line">	timeout          int</span><br><span class="line">	needMallocMemory bool //pre malloc memory or not</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type BodyBuf struct &#123;</span><br><span class="line">	data []byte</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type BufWrap struct &#123;</span><br><span class="line">	index int //index of bodyBufs</span><br><span class="line">	n     int //size has read from r.Body</span><br><span class="line">	err   error</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="核心函数-1">核心函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">func (bp *BufferPoolImp) Write(start []byte, length int, err error) BosErrorCodeType &#123;</span><br><span class="line">	select &#123;</span><br><span class="line">	case writeSignal := &lt;-bp.writeSignals:</span><br><span class="line">		log.Logger.Debug(&quot;[logid:%d] read can write signal ok: %d&quot;, bp.logId, writeSignal)</span><br><span class="line">		if writeSignal != 0 &#123;</span><br><span class="line">			return BosErrorCodeType(writeSignal)</span><br><span class="line">		&#125;</span><br><span class="line">	case &lt;-time.After(time.Duration(bp.timeout) * time.Second * 2):</span><br><span class="line">		log.Logger.Error(&quot;[logid:%d] wait writeSignal timeout&quot;, bp.logId)</span><br><span class="line">		return CODE_INTERNAL_ERROR</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    // start数据写入到BodyBufs, 并往bufWraps chan写内容指针，read函数会监听该通道</span><br><span class="line">	bp.Bodybufs[bp.currentIndex] = BodyBuf&#123;start&#125;</span><br><span class="line">	bufWrap := BufWrap&#123;bp.currentIndex, length, err&#125;</span><br><span class="line"></span><br><span class="line">	select &#123;</span><br><span class="line">	case bp.bufWraps &lt;- bufWrap:</span><br><span class="line">		log.Logger.Debug(&quot;[logid:%d] write buffers, index[%d]&quot;, bp.logId, bp.currentIndex)</span><br><span class="line">		bp.currentIndex = (bp.currentIndex + 1) % bp.maxBufferSize</span><br><span class="line">	case &lt;-time.After(time.Duration(bp.timeout) * time.Second):</span><br><span class="line">		log.Logger.Error(&quot;[logid:%d] write buffers timeout&quot;, bp.logId)</span><br><span class="line">		return CODE_INTERNAL_ERROR</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return CODE_OK</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// read一般放在for循环中调用, 直到返回数据为nil</span><br><span class="line">func (bp *BufferPoolImp) Read() ([]byte, int, error) &#123;</span><br><span class="line">	select &#123;</span><br><span class="line">	case bufWrap := &lt;-bp.bufWraps: // 获取写的内容</span><br><span class="line">		log.Logger.Debug(&quot;[logid:%d] read buffers, index[%d], len[%d]&quot;,</span><br><span class="line">			bp.logId, bufWrap.index, bufWrap.n)</span><br><span class="line">		if bufWrap.index &lt; 0 || bufWrap.index &gt; bp.maxBufferSize-1 &#123;</span><br><span class="line">			return nil, -1, bufWrap.err</span><br><span class="line">		&#125;</span><br><span class="line">		return bp.Bodybufs[bufWrap.index].data, bufWrap.n, bufWrap.err</span><br><span class="line">	case &lt;-time.After(time.Duration(bp.timeout) * time.Second):</span><br><span class="line">		log.Logger.Error(&quot;[logid:%d] read buffers timeout&quot;, bp.logId)</span><br><span class="line">		return nil, -1, ReadTimeOutError</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 调用read函数时需要同时调用这个函数，以确保write函数可以继续写buffer</span><br><span class="line">// read之后再调用该函数，所以不像async_reader可能出现竞争状态</span><br><span class="line">func (bp *BufferPoolImp) SendCanWriteSignal(signal int) BosErrorCodeType &#123;</span><br><span class="line">	select &#123;</span><br><span class="line">	case bp.writeSignals &lt;- signal:</span><br><span class="line">		log.Logger.Debug(&quot;[logid:%d] send can write signal ok&quot;, bp.logId)</span><br><span class="line">	case &lt;-time.After(time.Duration(bp.timeout) * time.Second * 2):</span><br><span class="line">		log.Logger.Error(&quot;[logid:%d] write writeSignal timeout&quot;, bp.logId)</span><br><span class="line">		return CODE_INTERNAL_ERROR</span><br><span class="line">	&#125;</span><br><span class="line">	return CODE_OK</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/Golang/"> #Golang </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              C++并发编程揭秘
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2018-10-20
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="2018/10/20/C++并发编程揭秘/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/10/20/C++并发编程揭秘/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h3 id="并发级别">并发级别</h3><p>蓝色是阻塞的算法，绿色是非阻塞算法，金字塔越上方，并发级别越高，性能越好，右边的金字塔是实现工具（原子操作、锁、互斥体等）</p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/concurrency.png" class="full-image"></p>
+<h4 id="Wait-freedom_无等待并发">Wait-freedom 无等待并发</h4><p>每一个线程都一直运行下去而无须等待外部条件，整个流程中任何操作都能在一个有限的步骤内完成，这是最高的并发级别，没有任何阻塞。可以简单认为能够直接调用一个原子操作实现的算法或程序就属于Wait-free，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 多个线程可以同时调用这个函数对同一个内存变量进行自增，而无须任何阻塞</span><br><span class="line">//（其实也是有阻塞的，是总线锁级别）</span><br><span class="line">void increment_reference_counter(rc_base* obj) &#123; </span><br><span class="line">atomic_increment(obj-&gt;rc);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Lock-freedom_无锁并发">Lock-freedom 无锁并发</h4><p>整个系统作为一个整体一直运行下去，系统内部单个线程某段时间内可能会饥饿，这是比wait-freedom弱的并发级别，但系统整体上看依然是没有阻塞的。所有wait-free的算法显然都满足lock-free的要求。通常可以通过同步原语CAS实现, 例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">void stack_push(stack* s, node* n)</span><br><span class="line">&#123;</span><br><span class="line">    node* head;</span><br><span class="line">    do</span><br><span class="line">    &#123;</span><br><span class="line">        head = s-&gt;head;</span><br><span class="line">        n-&gt;next = head;</span><br><span class="line">    &#125;</span><br><span class="line">    while (!atomic_compare_exchange(s-&gt;head, head, n)); </span><br><span class="line">    // atomic_compare_exchange如果内存位置的s-&gt;head值和head相等则s-&gt;head的值设置成n</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// increment_reference_counter的lock-free实现，某些线程可能会因为CAS失败而回绕若干次循环</span><br><span class="line">void increment_reference_counter(rc_base* obj)</span><br><span class="line">&#123;</span><br><span class="line">       Int rc;</span><br><span class="line">       do &#123;</span><br><span class="line">       	rc = obj-&gt;rc;</span><br><span class="line">		&#125; while(!atomic_compare_exchange(obj-&gt;rc,rc,rc+1));</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Obstruction-freedom_无阻塞并发">Obstruction-freedom 无阻塞并发</h4><p>指在任何时间点，一个孤立运行线程的每一个操作可以在有限步之内结束。只要没有竞争，线程就可以持续运行，一旦共享数据被修改，Obstruction-free 要求中止已经完成的部分操作，并进行回滚，obstruction-free 是并发级别更低的非阻塞并发，该算法在不出现冲突性操作的情况下提供单线程式的执行进度保证，所有 Lock-Free 的算法都是 Obstruction-free 的。</p>
+<h4 id="Blocking_algoithms_阻塞并发">Blocking algoithms 阻塞并发</h4><p>可以简单认为基于锁的实现是blocking的算法。Lock-based 和 Lockless-based 两者之间的区别仅仅是加锁粒度的不同。Lock-based方案就是大家经常使用的 mutex 和 semaphore 等方案，代码复杂度低，但运行效率也最低。</p>
+<h4 id="CAS原语">CAS原语</h4><p>CAS原语负责将某处内存地址的值（1 个字节）与一个期望值进行比较，如果相等，则将该内存地址处的值替换为新值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">do&#123; </span><br><span class="line">       备份旧数据；</span><br><span class="line">       基于旧数据构造新数据；</span><br><span class="line">&#125;while(!CAS( 内存地址，备份的旧数据，新数据 ))</span><br></pre></td></tr></table></figure>
+<p>当两者进行比较时，如果相等，则证明共享数据没有被修改，替换成新值，然后继续往下运行；如果不相等，说明共享数据已经被修改，放弃已经所做的操作，然后重新执行刚才的操作。容易看出 CAS 操作是基于共享数据不会被修改的假设，采用了类似于数据库的 commit-retry 的模式。当同步冲突出现的机会很少时，这种假设能带来较大的性能提升。</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="tags/C/"> #C++ </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              分布式系统常见问题和解决方案
             
           
         </h1>
@@ -167,7 +404,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="2018/08/25/分布式系统常见问题和解决方案/#comments" >
+            <a href="2018/08/25/分布式系统常见问题和解决方案/#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2018/08/25/分布式系统常见问题和解决方案/"></span>
             </a>
           </span>
@@ -182,9 +419,8 @@
       
 
       
-        
-          <h4 id="如何从零开始造个云存储系统？"><a href="https://levy.at/blog/19" target="_blank" rel="external">如何从零开始造个云存储系统？</a></h4><p>单硬盘扩展成RAID磁盘阵列，再从单机RAID扩展到集群多机器，再到引入副本存储提高可靠性，再到引入一致性哈希进行动态扩展，再到跨机房多AZ备份和CDN区域加速。</p>
-<h4 id="如何实现靠谱的分布式锁？"><a href="https://mp.weixin.qq.com/s/emEuhftLbAQmdn1LQYOSBw" target="_blank" rel="external">如何实现靠谱的分布式锁？</a></h4><p>分布式锁是用来控制分布式系统中互斥访问共享资源的一种手段(进程之间共享资源)，避免多线程并行访问导致结果不可控。基本的实现原理和单进程锁是一致的，通过一个共享标识来确定唯一性，对共享标识进行修改时能够保证原子性和和对锁服务调用方的可见性。由于分布式环境需要考虑各种异常因素，为实现一个靠谱的分布式锁服务引入了一定的复杂度。</p>
+        <h4 id="如何从零开始造个云存储系统？"><a href="https://levy.at/blog/19" target="_blank" rel="noopener">如何从零开始造个云存储系统？</a></h4><p>单硬盘扩展成RAID磁盘阵列，再从单机RAID扩展到集群多机器，再到引入副本存储提高可靠性，再到引入一致性哈希进行动态扩展，再到跨机房多AZ备份和CDN区域加速。</p>
+<h4 id="如何实现靠谱的分布式锁？"><a href="https://mp.weixin.qq.com/s/emEuhftLbAQmdn1LQYOSBw" target="_blank" rel="noopener">如何实现靠谱的分布式锁？</a></h4><p>分布式锁是用来控制分布式系统中互斥访问共享资源的一种手段(进程之间共享资源)，避免多线程并行访问导致结果不可控。基本的实现原理和单进程锁是一致的，通过一个共享标识来确定唯一性，对共享标识进行修改时能够保证原子性和和对锁服务调用方的可见性。由于分布式环境需要考虑各种异常因素，为实现一个靠谱的分布式锁服务引入了一定的复杂度。</p>
 <p><strong>分布式锁一般需要能够保证以下几点：</strong></p>
 <ol>
 <li><p>同一时刻只能有一个线程持有锁</p>
@@ -215,7 +451,7 @@
 <li>乐观锁机制：表中每条记录添加version字段，每次更新操作需要CAS</li>
 <li>悲观锁机制：在Mysql中是基于 for update 来实现加锁的</li>
 </ol>
-<h4 id="如何实现分布式文件系？"><a href="https://mp.weixin.qq.com/s/uGx-rq0-P1xxgt4CVW7pVg" target="_blank" rel="external">如何实现分布式文件系？</a></h4><p>分布式文件系统是分布式领域的一个基础应用，其中最著名的毫无疑问是 HDFS/GFS。</p>
+<h4 id="如何实现分布式文件系？"><a href="https://mp.weixin.qq.com/s/uGx-rq0-P1xxgt4CVW7pVg" target="_blank" rel="noopener">如何实现分布式文件系？</a></h4><p>分布式文件系统是分布式领域的一个基础应用，其中最著名的毫无疑问是 HDFS/GFS。</p>
 <h5 id="DFS特性要求">DFS特性要求</h5><ul>
 <li>符合 POSIX 的文件接口标准，兼容易用</li>
 <li>对用户透明，能够像使用本地文件系统那样直接使用</li>
@@ -237,7 +473,7 @@
 <li>接口组件：提供接口服务给应用使用，形态包括 SDK(Java/C/C++ 等)、CLI 命令行终端、以及支持 FUSE 挂载机制。</li>
 </ul>
 <h5 id="GFS_—-_有中心节点">GFS —- 有中心节点</h5><p>中心节点负责文件定位、维护文件 meta 信息、故障检测、数据迁移等管理控制的职能。一般中心节点并不参与真正的数据读写，而是将文件 meta 信息返回给 Client 之后，即由 Client 与数据节点直接通信。其主要目的是降低中心节点的负载，防止其成为瓶颈。这种有中心节点的方案，在各种存储类系统中得到了广泛应用，因为中心节点易控制、功能强大。</p>
-<h5 id="Ceph_—-_无中心节点">Ceph —- 无中心节点</h5><p>每个节点都是自治的、自管理的，整个 ceph 集群只包含一类节点 —-  RADOS 就是 ceph 定义的“同时包含 meta 数据和文件数据”的节点。无中心化的最大优点是解决了中心节点自身的瓶颈，这也就是 ceph 号称可以无限向上扩容的原因。<a href="http://www.xuxiaopang.com/2016/11/08/easy-ceph-CRUSH/" target="_blank" rel="external">CRUSH算法解决meta查找数据位置的问题</a></p>
+<h5 id="Ceph_—-_无中心节点">Ceph —- 无中心节点</h5><p>每个节点都是自治的、自管理的，整个 ceph 集群只包含一类节点 —-  RADOS 就是 ceph 定义的“同时包含 meta 数据和文件数据”的节点。无中心化的最大优点是解决了中心节点自身的瓶颈，这也就是 ceph 号称可以无限向上扩容的原因。<a href="http://www.xuxiaopang.com/2016/11/08/easy-ceph-CRUSH/" target="_blank" rel="noopener">CRUSH算法解决meta查找数据位置的问题</a></p>
 <h5 id="内部DFS">内部DFS</h5><p>原来大量使用SAS磁盘和Raid卡。SAS盘+Raid的成本直逼SSD，但性能比SSD有数量级的落后。如果这些业务 把状态从本地磁盘转移到分布式文件系统，则不再依赖本地磁盘的可靠性，不再需要SAS盘和Raid卡。因此诞生了NFS。</p>
 <p>NFS提供Posix接口，支持随机写操作，并针对这种访问模式做了大量的 优化工作；而AFS提供API访问接口，不支持文件的随机写操作。因此两者没有替代关系。<strong>从长远来看，NFS和AFS会长期并存，独立发展，不存在谁取代谁的关系</strong>。不仅如此，在实现上，NFS是AFS的底层，AFS自身的元信息，是存储在下层的NFS集群的。因此NFS除了继续提供Posix访问接口，取代本地硬盘这一目标外，还会进一步优化可用性。</p>
 <h5 id="持久化数据">持久化数据</h5><ul>
@@ -263,7 +499,6 @@
 <h5 id="面向小文件的分布式文件系统">面向小文件的分布式文件系统</h5><p>主流的实现方式是仍然是以大数据块的形式存储，小文件以逻辑存储的方式存在，即文件 meta 信息记录其是在哪个大数据块上，以及在该数据块上的 offset 和 length 是多少，形成一个逻辑上的独立文件。这样既复用了大数据块系统的优势和技术积累，又减少了 meta 信息。</p>
 <h5 id="文件指纹和去重">文件指纹和去重</h5><p>文件指纹就是根据文件内容，经过算法，计算出文件的唯一标识。如果两个文件的指纹相同，则文件内容相同。在使用网络云盘的时候，发现有时候上传文件非常地快，就是文件指纹发挥作用。云盘服务商通过判断该文件的指纹，发现之前已经有人上传过了，则不需要真的上传该文件，只要增加一个引用即可。在文件系统中，通过文件指纹可以用来去重、也可以用来判断文件内容是否损坏、或者对比文件副本内容是否一致，是一个基础组件。指纹算法有md5、sha256、simhash 和 minhash</p>
 
-        
       
     </div>
 
@@ -271,9 +506,9 @@
       
         <div class="post-tags">
           
-            <a href="tags/分布式系统/"> #分布式系统 </a>
-          
             <a href="tags/存储/"> #存储 </a>
+          
+            <a href="tags/分布式系统/"> #分布式系统 </a>
           
             <a href="tags/数据库/"> #数据库 </a>
           
@@ -283,8 +518,6 @@
       
 
       
-      
-        <div class="post-eof"></div>
       
     </div>
   </div>
@@ -302,9 +535,7 @@
           
           
             
-              <a class="post-title-link" href="2018/08/25/HDFS入门/">
-                HDFS入门
-              </a>
+              HDFS入门
             
           
         </h1>
@@ -321,7 +552,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="2018/08/25/HDFS入门/#comments" >
+            <a href="2018/08/25/HDFS入门/#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2018/08/25/HDFS入门/"></span>
             </a>
           </span>
@@ -336,8 +567,7 @@
       
 
       
-        
-          <h5 id=""> </h5><h4 id="HDFS">HDFS</h4><p>HDFS 从设计上来说，主要考虑以下的特征：<strong>超大文件</strong>，最大能支持 PB 级别的数据；<strong>流式数据访问</strong>，一次写入，多次读取；在不可靠的文件，<strong>故障率高的商用硬件上能运行</strong>。Hadoop 的不利之处，是不适应低时间延迟的数据访问，不适应大量的小文件，也不适应多用户写入任意修改文件的情况。</p>
+        <h5 id=""> </h5><h4 id="HDFS">HDFS</h4><p>HDFS 从设计上来说，主要考虑以下的特征：<strong>超大文件</strong>，最大能支持 PB 级别的数据；<strong>流式数据访问</strong>，一次写入，多次读取；在不可靠的文件，<strong>故障率高的商用硬件上能运行</strong>。Hadoop 的不利之处，是不适应低时间延迟的数据访问，不适应大量的小文件，也不适应多用户写入任意修改文件的情况。</p>
 <p>NameNode 是 HDFS 的管理者。HDFS 将大文件分割成数据块，每个数据块是 64M，也可以设置成 128M或者 256M，然后将这些数据块以普通文件的形式存放到数据节点上，为了防止 DataNode 意外失效，HDFS 会将每个数据块复制若干份放到不同的数据节点。</p>
 <h4 id="HDFS-Client">HDFS-Client</h4><h4 id="HDFS-VFS">HDFS-VFS</h4><p>VFS 是Linux 内核和真正文件系统之间的抽象层，它提供统一的接口，真正的文件系统和 Linxu 内核必须通过 VFS 的接口进行沟通。内核的 I\O 路径是这样的：user space -&gt; VFS -&gt; FS -&gt; I\O layer -&gt; I\O scheduler(optional) -&gt; block_driver -&gt; block_device, 一个 I\O 经过了这些才真正到达了对应的存储上。一个用户态的系统调用先通过 VFS 找到对应的文件系统再向下传递 I\O，这是 I\O 的一般路径。对于用户来说，一切都是操作文件。</p>
 <p>Hadoop VFS兼容层，可以把HDFS当作一个标准的文件系统mount到本地的Linux文件系统上。这样用户便可以使用标准Unix命令，例如“ls”、“cd”、“cp”、“mkdir”、“find”、“grep”等，来操作一个hdfs的实例；也可以使用标准POSIX的开发库，例如C、C++、Python、Perl、JAVA、bash等的打开、写、读、关闭方法来操作一个hdfs的实例。</p>
@@ -347,7 +577,6 @@
 <li>不要在HDFS挂载点目录下执行scp、wget等会在当前路径下创建临时文件的操作</li>
 </ul>
 
-        
       
     </div>
 
@@ -357,164 +586,9 @@
           
             <a href="tags/HDFS/"> #HDFS </a>
           
-            <a href="tags/分布式系统/"> #分布式系统 </a>
-          
             <a href="tags/存储/"> #存储 </a>
           
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="2018/05/10/Ruby net http库默认重试一次请求问题/">
-                Ruby net::http库默认重试一次请求问题
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2018-05-10
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2018/05/10/Ruby net http库默认重试一次请求问题/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/10/Ruby net http库默认重试一次请求问题/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <ol>
-<li><strong>问题描述</strong>：并发20个线程，每个线程使用一个单独的BosClient去执行5G文件的PUT/GET操作，并比较下载文件和原文件的MD5，发现偶尔出现文件MD5对不上，文件大小大于5G的情况的情况，出现几率大概1%；</li>
-<li><strong>问题定位</strong>：<ul>
-<li>查看sdk日志和BOS日志，发现该情况下client发送了2次GET请求，第一次返回200但是err msg是PartialContentError</li>
-<li>进一步查看nginx error log发现是客户端主动关闭了连接，可能是因为TCP连接超时等原因导致client主动关闭连接</li>
-<li>但是从client日只看并没有触发重试机制，那么多出来的GET请求可能就是sdk用到的http库主动发起的</li>
-</ul>
-</li>
-<li><strong>问题原因</strong>：<ul>
-<li>定位发现sdk引用了第三方库rest-client，rest-client又引用了ruby语言自带的net::http库来发起http请求</li>
-<li>查看net::http库源码发现，默认自带了一次重试机制；重试时不会对重置读取到的body stream，而是会继续追加写，导致文件大小大于5G</li>
-<li><a href="https://github.com/ankane/the-ultimate-guide-to-ruby-timeouts/issues/8" target="_blank" rel="external">Net::HTTP read_timeout causes double requests</a></li>
-</ul>
-</li>
-<li><p><strong>解决方案</strong>：<br>net::http库默认重试一次的机制不合理，因此有用户提出了bug，建议retry次数可配置<a href="https://bugs.ruby-lang.org/issues/10674" target="_blank" rel="external">Net::HTTP retries idempotent requests once after a timeout, but its not configurable</a>；AWS ruby sdk也发现了这一问题，提交了<a href="">PR</a>，不过要到ruby 2.5版本才支持直接设置重试次数。考虑到版本向下兼容问题，我们采取monkey patching的方式来解决这一问题，两个思路：</p>
-<ul>
-<li><p><strong>方案一</strong>：第二次重试的时候将body stream重置到起始位置</p>
-<pre><code>module Net
-class HTTP
-def transport_request(req)
-      count = <span class="number">0</span>
-      begin
-        begin_transport req
-        res = <span class="keyword">catch</span>(:response) {
-          req.exec @<span class="built_in">socket</span>, @curr_http_version, edit_path(req.path)
-          begin
-            res = HTTPResponse.read_new(@<span class="built_in">socket</span>)
-            res.decode_content = req.decode_content
-          <span class="function"><span class="keyword">end</span> <span class="title">while</span> <span class="title">res</span>.<span class="title">kind_of</span>?(<span class="title">HTTPContinue</span>)</span>
-          res.uri = req.uri
-          res
-        }
-        res.reading_body(@<span class="built_in">socket</span>, req.response_body_permitted?) {
-          yield res <span class="keyword">if</span> block_given?
-        }
-      rescue Net::OpenTimeout
-        raise
-      rescue Net::ReadTimeout, IOError, EOFError,
-             Errno::ECONNRESET, Errno::ECONNABORTED, Errno::EPIPE,
-             <span class="comment"># avoid a dependency on OpenSSL</span>
-             defined?(OpenSSL::SSL) ? OpenSSL::SSL::SSLError : IOError,
-             Timeout::Error =&gt; exception
-        <span class="keyword">if</span> count == <span class="number">0</span> &amp;&amp; IDEMPOTENT_METHODS_.<span class="built_in">include</span>?(req.method)
-          count += <span class="number">1</span>
-          @<span class="built_in">socket</span>.<span class="built_in">close</span> <span class="keyword">if</span> @<span class="built_in">socket</span> <span class="operator">and</span> <span class="operator">not</span> @<span class="built_in">socket</span>.closed?
-          D <span class="string">"Conn close because of error #{exception}, and retry"</span>
-         <span class="comment"> // 添加重置body_stream操作</span>
-          <span class="keyword">if</span> req.body_stream
-            <span class="keyword">if</span> req.body_stream.respond_to?(:rewind)
-              req.body_stream.rewind
-            <span class="keyword">else</span>
-              raise
-            <span class="function"><span class="keyword">end</span></span>
-          <span class="function"><span class="keyword">end</span></span>
-          retry
-        <span class="function"><span class="keyword">end</span></span>
-        D <span class="string">"Conn close because of error #{exception}"</span>
-        @<span class="built_in">socket</span>.<span class="built_in">close</span> <span class="keyword">if</span> @<span class="built_in">socket</span> <span class="operator">and</span> <span class="operator">not</span> @<span class="built_in">socket</span>.closed?
-        raise
-      <span class="function"><span class="keyword">end</span></span>
-      end_transport req, res
-      res
-    rescue =&gt; exception
-      D <span class="string">"Conn close because of error #{exception}"</span>
-      @<span class="built_in">socket</span>.<span class="built_in">close</span> <span class="keyword">if</span> @<span class="built_in">socket</span> <span class="operator">and</span> <span class="operator">not</span> @<span class="built_in">socket</span>.closed?
-      raise exception
-    <span class="function"><span class="keyword">end</span></span>
-<span class="function"><span class="keyword">end</span></span>
-<span class="function"><span class="keyword">end</span></span>
-</code></pre></li>
-<li><strong>方案二</strong>：去除重试机制，删掉retry语句 </li>
-</ul>
-</li>
-<li><p><strong>参考链接</strong></p>
-<ul>
-<li><a href="https://github.com/aws/aws-sdk-ruby/issues/1167" target="_blank" rel="external">What is the purpose of monkey patching global HTTP stack?</a></li>
-<li><a href="https://github.com/aws/aws-sdk-ruby/pull/1756" target="_blank" rel="external">Update Net::HTTP patching for Ruby 2.5 #1756</a></li>
-<li><a href="https://github.com/aws/aws-sdk-ruby/blob/master/gems/aws-sdk-core/lib/seahorse/client/net_http/patches.rb" target="_blank" rel="external">AWS猴子补丁</a></li>
-<li><a href="https://github.com/ruby/ruby/blob/v2_5_0/lib/net/http.rb" target="_blank" rel="external">各版本Ruby http.rb源码</a></li>
-</ul>
-</li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/Ruby/"> #Ruby </a>
-          
-            <a href="tags/http/"> #http </a>
+            <a href="tags/分布式系统/"> #分布式系统 </a>
           
         </div>
       
@@ -522,220 +596,6 @@ def transport_request(req)
       
 
       
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="2018/04/04/初探Golang内存管理和垃圾回收机制/">
-                初探Golang内存管理和垃圾回收机制
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2018-04-04
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2018/04/04/初探Golang内存管理和垃圾回收机制/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/04/04/初探Golang内存管理和垃圾回收机制/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="内存管理">内存管理</h3><h4 id="堆与栈">堆与栈</h4><p>Go语言与CPP类似，也有栈和堆的概念，栈就是函数使用的栈，函数局部变量都在栈里，而new出来的变量大部分在堆上，当然这还取决于变量是会在作用域外被使用(注：编译器通过静态分析技术Escape Analysis来确定变量的作用范围)。</p>
-<h4 id="堆内存管理机制">堆内存管理机制</h4><p>Go的内存管理是基于<a href="http://legendtkl.com/2015/12/11/go-memory/" target="_blank" rel="external">tcmalloc</a>实现的，tcmalloc核心思想是多级缓存、定长分配和管理.</p>
-<h4 id="参考文章">参考文章</h4><p><a href="http://legendtkl.com/2017/04/02/golang-alloc/" target="_blank" rel="external">Golang内存管理</a></p>
-<h3 id="垃圾回收GC">垃圾回收GC</h3><h4 id="常用GC算法">常用GC算法</h4><h4 id="Golang的三色标注-清除法">Golang的三色标注-清除法</h4><h4 id="Golang_垃圾回收剖析"><a href="http://legendtkl.com/2017/04/28/golang-gc/" target="_blank" rel="external">Golang 垃圾回收剖析</a></h4><blockquote>
-<p>Unlike GHC’s stop-the-world collector, Go’s collector runs concurrently with the program to achieve short GC pauses.it means that the pause times become a scheduling problem.</p>
-<p>In practice, the pause times of these phases to be &lt;1ms with very large heaps. With a concurrent GC, there is also potential for running the GC in parallel on multiple processors.</p>
-<p>Low latency has costs. The most important cost is reduced throughput. Concurrency requires extra work for synchronization and duplication, which eats into the time the program can be doing useful work. GHC’s garbage collector is optimized for throughput, but Go’s is optimized for latency. At Pusher, we care about latency, so this is an excellent tradeoff for us.</p>
-<p>A second cost of concurrent garbage collection is unpredictable heap growth. The program can allocate arbitrary amounts of memory while the GC is running. This means the GC must be run before the heap reaches the target maximum size.</p>
-<p>GC times tend to be proportional to the number of pointers rather than the number of bytes. we would expect pauses of around 1ms for our heap size of 200MB, according to the go team. The heap size is kept large, which is important because the heap must be traversed in order to detect which objects are still referenced. This is why GC running time is proportional to the number of live objects/pointers between them.</p>
-<p><code>go tool trace</code> observe gc phase state.</p>
-</blockquote>
-<h3 id="参考链接">参考链接</h3><ol>
-<li><a href="https://www.jianshu.com/p/91d2956f22c1" target="_blank" rel="external">ptmalloc/tcmalloc/jemalloc内存分配策略</a></li>
-<li><a href="https://making.pusher.com/golangs-real-time-gc-in-theory-and-practice/" target="_blank" rel="external">Golang’s Real-time GC in Theory and Practice</a></li>
-<li><a href="https://blog.cloudflare.com/recycling-memory-buffers-in-go/" target="_blank" rel="external">Recycling memory buffers in Go</a></li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/Golang/"> #Golang </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="2018/03/26/初探Goroutine调度机制/">
-                初探Goroutine调度机制
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2018-03-26
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2018/03/26/初探Goroutine调度机制/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/03/26/初探Goroutine调度机制/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h3 id="何为Goroutine调度">何为Goroutine调度</h3><p>Goroutine是Go语言原生支持并发的具体实现，所有代码都跑在goroutine里，我们可以启动许多goroutine，多个goroutine对应一个os thread，不过最多只能允许创建10000个os线程, 如果超过10000个会抛异常。  </p>
-<p><strong>Goroutine调度</strong>就是决定何时哪个goroutine将获得资源开始执行、哪个goroutine应该停止执行让出资源、哪个goroutine应该被唤醒恢复执行等。</p>
-<h3 id="Goroutine调度器">Goroutine调度器</h3><p>传统语言中往往是代码负责创建线程，然后交给OS来进行线程调度。操作系统调度器会将系统中的多个线程or进程按照一定算法调度到物理CPU上去运行。这样会带来一些问题，例如</p>
-<ul>
-<li>线程创建容易退出难，因为退出时要判断线程状态</li>
-<li>并发单元间通信困难，易错，一旦涉及到shared memory，就会用到各种lock，死锁便成为家常便饭</li>
-<li>相对于协程而言，线程开销依然很大，OS切换线程上下文的代价不小</li>
-</ul>
-<p>在Golang中，goroutine可以认为是一种”轻量级线程” —- 协程，占用资源少。一个Go程序中可以创建成千上万个并发的goroutine，包括golang runtime在内的所有代码都跑在goroutine中，不涉及OS内核态。OS完全不知道goroutine的存在，go代码运行在一个或多个操作系统线程上。因此golang需要有<strong>调度器</strong>来负责调度这些goroutine，go scheduler负责将程序内的goroutines按照一定算法调度到不同的线程中去执行。</p>
-<h3 id="Go调度模型">Go调度模型</h3><h4 id="G-M模型">G-M模型</h4><p>Go 1.0版本的简单调度模型，G指代goroutine，对应于runtime中的一个抽象结构；M指machine，代表一个操作系统线程。该模型存在一些问题。例如单一全局互斥锁(Sched.Lock)，意味着每个协程创建和调度都要加锁；M会做内存缓存，而且goroutine在M之间传递，造成调度延迟、、内存消耗、性能损耗。</p>
-<h4 id="G-P-M模型">G-P-M模型</h4><ul>
-<li><p>1.1版本之后沿用至今的调度模型，内部采用work stealing算法。模型图如下：<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/goroutine-scheduler-model.png" class="full-image"></p>
-</li>
-<li><blockquote>
-<p>M represents an OS thread. It’s the thread of execution managed by the OS and works pretty much like your standard POSIX thread. In the runtime code, it’s called M for machine.</p>
-<p>G represents a goroutine. It includes the stack, the instruction pointer and other information important for scheduling goroutines, like any channel it might be blocked on. In the runtime code, it’s called a G.</p>
-<p>P represents a context for scheduling. You can look at it as a localized version of the scheduler which runs Go code on a single thread. It’s the important part that lets us go from a N:1 scheduler to a M:N scheduler. In the runtime code, it’s called P for processor.     </p>
-</blockquote>
-</li>
-<li>可以看到G和M之间加了个中间层P—-逻辑Processor，对于G而言，它只与P打交道，多个G会被平均分配到多个P上执行，一旦一部分G被分派到某个P上边执行，它就会存在于P的本地队列中等待被执行；而P与M的关系，可以认为是每个P绑定唯一一个M的关系，启动时的P默认数目为系统物理处理器个数。</li>
-</ul>
-<h4 id="G-P-M调度机制">G-P-M调度机制</h4><ul>
-<li><strong>抢占式调度</strong>：<ul>
-<li>当一个G中出现死循环或永久循环的代码逻辑，那么G将永久占用分配给它的P和M，位于同一个P中的其他G将得不到调度，出现“饿死”的情况；因此Go 1.2实现了抢占式调度机制，在每个函数或方法的入口，加上一段额外的代码，让runtime有机会检查是否需要执行抢占调；然而对于没有函数调用，纯循环计算的G，无法抢占调度。Go的具体实现是启动一个sysmon的监控线程，不绑定P，每20us~10ms启动一次，向长时间运行的G任务发出抢占调度。  </li>
-<li>如果一个G任务运行10ms，sysmon就会认为其运行时间太久而发出抢占式调度的请求。一旦G的抢占标志位被设为true，那么待这个G下一次调用函数或方法时，runtime便可以将G抢占，并移出运行状态，放入P的local runq中，等待下一次被调度。</li>
-</ul>
-</li>
-<li><strong>网络IO/channel阻塞调度</strong>：<ul>
-<li>Go runtime通过实现netpoller机制来实现当goroutine发起网络I/O操作也不会导致M被阻塞（仅阻塞G），从而不会导致大量M被创建出来。</li>
-<li>对于G被网络IO/channel阻塞，调度器会将当前G放入等待队列，等到阻塞操作完成之后再次被分配给某个P执行，而此时的M会去执行下一个runnable的G；如果此时没有runnable的G供M运行，那么M将解绑P，并进入sleep状态。</li>
-</ul>
-</li>
-<li><p><strong>系统调用阻塞</strong>：</p>
-<ul>
-<li>当G去执行一个文件IO类似的系统调用时会导致系统G和线程M都被阻塞，P就会与M分离，去寻找其他的idle的M，没有就去创建，从而可能导致大量创建新的M的问题</li>
-<li>Go 1.9增加了Poller for os package来实现在G操作支持pollable的fd时，仅阻塞G，而不阻塞M，不过对regular file无效</li>
-</ul>
-</li>
-<li><p><strong>Tips</strong>：Go提供了调度器当前状态的查看方法, 使用Go运行时环境变量GODEBUG，例如<code>GODEBUG=schedtrace=1000 godoc -http=:6060</code></p>
-</li>
-</ul>
-<blockquote>
-<p>Go programs run with multiple threads, even when GOMAXPROCS is 1. The runtime uses goroutines that call syscalls, leaving threads behind.</p>
-<p>In order to run goroutines, a thread must hold a context.</p>
-<p>There are 3 usual models for threading. One is N:1 where several userspace threads are run on one OS thread. This has the advantage of being very quick to context switch but cannot take advantage of multi-core systems. Another is 1:1 where one thread of execution matches one OS thread. It takes advantage of all of the cores on the machine, but context switching is slow because it has to trap through the OS.</p>
-<p>Go tries to get the best of both worlds by using a M:N scheduler. It schedules an arbitrary number of goroutines onto an arbitrary number of OS threads. You get quick context switches and you take advantage of all the cores in your system. The main disadvantage of this approach is the complexity it adds to the scheduler. </p>
-</blockquote>
-<h3 id="netpooler">netpooler</h3><p>当系统出现高并发的IO访问时，如一个网络服务器通常要并发处理成百上千的链接，每个链接可能都是由一个用户任务执行的，那么将会出现大量阻塞的IO操作，如果为每个阻塞操作都单独分配一个OS线程，那么将会增加系统的负载。因此在Golang中针对网络IO实现了netpooler来做特别的优化，只阻塞G，不阻塞M。</p>
-<p>当goroutine读或写阻塞时会被放到等待队列，goroutine失去运行权，而M继续执行其它的G。后台的poller不停地poll，所有的文件描述符都被添加到了这个poller中，当某个时刻一个文件描述符准备好了，poller就会唤醒之前因它而阻塞的goroutine，于是goroutine重新被分配给某个P执行。</p>
-<p>和使用Unix系统中的select或是poll方法不同地是，Golang的netpoller查询的是能被调度的goroutine而不是那些函数指针、包含了各种状态变量的struct等，这样你就不用管理这些状态，也不用重新检查函数指针等，这些都是你在传统Unix网络I/O需要操心的问题。</p>
-<h3 id="参考链接">参考链接</h3><ol>
-<li><a href="https://morsmachine.dk/go-scheduler" target="_blank" rel="external">The Go scheduler</a></li>
-<li><a href="https://morsmachine.dk/netpoller" target="_blank" rel="external">The Go netpoller</a></li>
-</ol>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/Golang/"> #Golang </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </div>
   </div>
@@ -746,7 +606,7 @@ def transport_request(req)
 
   
   <div class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="page/16/">16</a><a class="extend next" rel="next" href="page/2/">&raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="page/17/">17</a><a class="extend next" rel="next" href="page/2/">&raquo;</a>
   </div>
 
 
@@ -773,14 +633,14 @@ def transport_request(req)
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">80</span>
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -794,7 +654,7 @@ def transport_request(req)
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">75</span>
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

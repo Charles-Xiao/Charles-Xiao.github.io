@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="Android," />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="Android,">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../../../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../../favicon.ico?v=0.4.2">
 
 
 
@@ -69,7 +69,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -85,40 +85,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../../../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../../../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../../../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../../../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../../../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -174,7 +174,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="#comments" >
+            <a href="#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/09/Android基础知识总结/"></span>
             </a>
           </span>
@@ -203,7 +203,7 @@
 <li>解决方法: 不在主线程进行网络请求,磁盘读取，位图修改，更新UI等耗时操作，而应该采用子线程来完成，完成之后通过Handler通知主线程</li>
 <li><strong>如何定位ANR</strong>：①检查log文件并分析LogCat输出，查看CPU使用量等信息; ②从/data/anr/目录下的trace.txt文件查看app调用栈信息; ③代码检查</li>
 </ol>
-<h3 id="Android_界面卡顿怎么处理？Link">Android 界面卡顿怎么处理？<a href="http://charles-xiao.github.io/2015/08/30/Android%E5%BA%94%E7%94%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" target="_blank" rel="external">Link</a></h3><h3 id="Android子线程和UI线程交互的5种方式">Android子线程和UI线程交互的5种方式</h3><ol>
+<h3 id="Android_界面卡顿怎么处理？Link">Android 界面卡顿怎么处理？<a href="http://charles-xiao.github.io/2015/08/30/Android%E5%BA%94%E7%94%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">Link</a></h3><h3 id="Android子线程和UI线程交互的5种方式">Android子线程和UI线程交互的5种方式</h3><ol>
 <li><p><strong>handler</strong>: 参考“实习项目总结”</p>
 </li>
 <li><p><strong>AsyncTask</strong>: 参考“实习项目总结”</p>
@@ -269,7 +269,7 @@
 <li>因此，我们在两个activities中传递数据，或者共享资源时（如数据库连接），需要在前一个activity的onPause()方法而不是onStop()方法中进行</li>
 </ul>
 </li>
-<li><p><strong>onSaveInstanceState() 和 onRestoreInstanceState()</strong>： <a href="http://www.cnblogs.com/hanyonglu/archive/2012/03/28/2420515.html" target="_blank" rel="external">Link</a><br> ①当某个activity变得”容易”被系统销毁时，该activity的<strong>onSaveInstanceState()</strong>就会被执行，除非该activity是被用户主动销毁的，例如当用户按BACK键的时候；他的调用有<strong>5种情况</strong>：(1)、<strong>当用户按下HOME键时</strong>：这是显而易见的，系统不知道你按下HOME后要运行多少其他的程序，自然也不知道activity A是否会被销毁，因此系统会调用onSaveInstanceState()，让用户有机会保存某些非永久性的数据。以下几种情况的分析都遵循该原则 (2)、<strong>长按HOME键，选择运行其他的程序时</strong>。(3)、<strong>按下电源按键（关闭屏幕显示）时</strong>。(4)、<strong>从activity A中启动一个新的activity时</strong>。(5)、<strong>屏幕方向切换时，例如从竖屏切换到横屏时</strong>。在屏幕切换之前，系统会销毁activity A，在屏幕切换之后系统又会自动地创建activity A，所以onSaveInstanceState()一定会被执行，且也一定会执行onRestoreInstanceState()。<br> ②<strong>onRestoreInstanceState()</strong>被调用的前提是，activity A“确实”被系统销毁了，而如果仅仅是停留在有这种可能性的情况下，则该方法不会被调用，例如，当正在显示activity A的时候，用户按下HOME键回到主界面，然后用户紧接着又返回到activity A，这种情况下activity A一般不会因为内存的原因被系统销毁，故activity A的onRestoreInstanceState方法不会被执行 此也说明上二者，大多数情况下不成对被使用。</p>
+<li><p><strong>onSaveInstanceState() 和 onRestoreInstanceState()</strong>： <a href="http://www.cnblogs.com/hanyonglu/archive/2012/03/28/2420515.html" target="_blank" rel="noopener">Link</a><br> ①当某个activity变得”容易”被系统销毁时，该activity的<strong>onSaveInstanceState()</strong>就会被执行，除非该activity是被用户主动销毁的，例如当用户按BACK键的时候；他的调用有<strong>5种情况</strong>：(1)、<strong>当用户按下HOME键时</strong>：这是显而易见的，系统不知道你按下HOME后要运行多少其他的程序，自然也不知道activity A是否会被销毁，因此系统会调用onSaveInstanceState()，让用户有机会保存某些非永久性的数据。以下几种情况的分析都遵循该原则 (2)、<strong>长按HOME键，选择运行其他的程序时</strong>。(3)、<strong>按下电源按键（关闭屏幕显示）时</strong>。(4)、<strong>从activity A中启动一个新的activity时</strong>。(5)、<strong>屏幕方向切换时，例如从竖屏切换到横屏时</strong>。在屏幕切换之前，系统会销毁activity A，在屏幕切换之后系统又会自动地创建activity A，所以onSaveInstanceState()一定会被执行，且也一定会执行onRestoreInstanceState()。<br> ②<strong>onRestoreInstanceState()</strong>被调用的前提是，activity A“确实”被系统销毁了，而如果仅仅是停留在有这种可能性的情况下，则该方法不会被调用，例如，当正在显示activity A的时候，用户按下HOME键回到主界面，然后用户紧接着又返回到activity A，这种情况下activity A一般不会因为内存的原因被系统销毁，故activity A的onRestoreInstanceState方法不会被执行 此也说明上二者，大多数情况下不成对被使用。</p>
 </li>
 <li><p><strong>如果一个以SingleTask启动的的Activity实例，再新建一个该实例，Activity的执行流程？？？</strong>singleTask保证了在栈中Activity的唯一性，如果被SingleTask标记的Activity处于栈底，上面的Activity都会被pop出栈，这个时候被标记过SingleTask的Activity生命周期会做出调整：onNewIntent-&gt;onStart-&gt;onResume, 不再调用onCreate函数</p>
 </li>
@@ -282,7 +282,7 @@
 <li><strong>远程服务</strong>运行于独立进程的主线程,不受其他进程影响，有利于为多个进程提供服务;但是会占用一定资源，并且使用AIDL进行IPC通信;对应的独立进程的名字格式为所在包名加上指定android:process字符串。</li>
 </ul>
 </li>
-<li><strong>两种启动模式</strong>: <a href="http://www.jianshu.com/p/2fb6eb14fdec" target="_blank" rel="external">具体区别Link</a><ul>
+<li><strong>两种启动模式</strong>: <a href="http://www.jianshu.com/p/2fb6eb14fdec" target="_blank" rel="noopener">具体区别Link</a><ul>
 <li><strong>startService</strong>方法一旦服务开启跟开启者就没有任何关系了;开启者退出了，服务还在后台长期的运行;开启者不能调用服务里面的方法</li>
 <li>多次调用startService，该Service只能被创建一次，即该Service的onCreate方法只会被调用一次。但是每次调用startService，onStartCommand方法都会被调用;通过只能调用Context.stopService()方法结束服务</li>
 <li><strong>bindService</strong>的方式开启并绑定服务，绑定者挂了，服务也会跟着挂掉.绑定者可以调用服务里面的方法</li>
@@ -315,7 +315,7 @@
 <li><strong>提高Service的优先级或者提高Service所在进程的优先级</strong>：这个，也只能说在系统内存不足需要回收资源的时候，优先级较高，不容易被回收；实现方法有<br>①startForeground()方法来设置 Service为前台服务，优先级和正在运行的 Activity类似<br>②在AndroidManifest.xml文件中对于intent-filter可以通过android:priority = “1000”这个属性设置最高优先级，1000是最高值，如果数字越小则优先级越低</li>
 <li><strong>在onDestroy方法里重启service</strong>：这个倒还算挺有效的一个方法，但是，直接干掉进程的时候，onDestroy方法都进不来，更别想重启了</li>
 <li><strong>broadcast广播</strong>：和第3种一样，没进入onDestroy，就不知道什么时候发广播了，另外，在Android4.4以上，程序完全退出后，就不好接收广播了，需要在发广播的地方特定处理</li>
-<li><strong>Service的onStartCommand方法返回START_STICKY</strong>，这个也主要是针对系统资源不足而导致的服务被关闭。四个返回值<a href="http://www.jianshu.com/p/a9360c282ef0" target="_blank" rel="external">参考link</a>：start_sticky、start_no_sticky、START_REDELIVER_INTENT、START_STICKY_COMPATIBILITY</li>
+<li><strong>Service的onStartCommand方法返回START_STICKY</strong>，这个也主要是针对系统资源不足而导致的服务被关闭。四个返回值<a href="http://www.jianshu.com/p/a9360c282ef0" target="_blank" rel="noopener">参考link</a>：start_sticky、start_no_sticky、START_REDELIVER_INTENT、START_STICKY_COMPATIBILITY</li>
 <li><strong>App进程之间互相唤醒</strong></li>
 <li><strong>通过JNI的方式（NDK编程），fork()出一个子线程作为守护进程，轮询监听服务状态</strong>。守护进程（Daemon）是运行在后台的一种特殊进程。它独立于控制终端并且周期性地执行某种任务或等待处理某些发生的事件。而守护进程的会话组和当前目录，文件描述符都是独立的。后台运行只是终端进行了一次fork，让程序在后台执行，这些都没有改变。</li>
 </ul>
@@ -348,9 +348,9 @@
 <li><strong>使用ContentProvider存储数据</strong></li>
 <li><strong>网络存储数据</strong></li>
 </ol>
-<h3 id="Android_屏幕适配方法总结"><a href="http://www.jianshu.com/p/ec5a1a30694b" target="_blank" rel="external">Android 屏幕适配方法总结</a></h3><h3 id="Android进程间通信方法">Android进程间通信方法</h3><ol>
+<h3 id="Android_屏幕适配方法总结"><a href="http://www.jianshu.com/p/ec5a1a30694b" target="_blank" rel="noopener">Android 屏幕适配方法总结</a></h3><h3 id="Android进程间通信方法">Android进程间通信方法</h3><ol>
 <li><strong>AIDL+Binder机制</strong><ul>
-<li><strong>AIDL</strong>：即Android接口定义语言，一种帮助实现Binder通信的工具。由于<strong>Android不同的进程不能共享内存</strong>，所以为了解决进程间通讯的问题，Android使用一种接口定义语言来公开服务的接口，本质上，AIDL非常像一个接口，通过公开接口，让别的进程调用该接口，从而实现进程间的通讯。<strong>具体用法</strong>: 只要用几条简单的函数声明，AIDL就会帮忙生成一个JAVA文件，包括了一个Proxy和Stub的访问接口，以及用于它们之间通信的Parcel，并保证Parcel的输入输出的顺序一致性，其中Proxy用于客户端进程，Stub用于Service端进程.<a href="http://www.jianshu.com/p/b9b15252b3d6" target="_blank" rel="external">AIDL基本用法</a></li>
+<li><strong>AIDL</strong>：即Android接口定义语言，一种帮助实现Binder通信的工具。由于<strong>Android不同的进程不能共享内存</strong>，所以为了解决进程间通讯的问题，Android使用一种接口定义语言来公开服务的接口，本质上，AIDL非常像一个接口，通过公开接口，让别的进程调用该接口，从而实现进程间的通讯。<strong>具体用法</strong>: 只要用几条简单的函数声明，AIDL就会帮忙生成一个JAVA文件，包括了一个Proxy和Stub的访问接口，以及用于它们之间通信的Parcel，并保证Parcel的输入输出的顺序一致性，其中Proxy用于客户端进程，Stub用于Service端进程.<a href="http://www.jianshu.com/p/b9b15252b3d6" target="_blank" rel="noopener">AIDL基本用法</a></li>
 <li><strong>Binder机制</strong>：Android进程间通信是通过Binder来实现的，Binder机制使本地对象能够调用远程对象的方法，在不同进程中传递单向/双向消息。远程Service在Client绑定服务时，会在onBind()的回调中返回一个Binder，当Client调用bindService()与远程Service建立连接成功时，会拿到远程Binder实例，从而使用远程Service提供的服务。<strong>Binder优点</strong>是基于C/S通信模式，传输过程只需要一次拷贝，且为Client添加UID/PID身份，性能和安全性更好，并且Binder可以建立私有通道，这是linux的通信机制所无法实现的,因此Android进程间通信使用了Binder。</li>
 <li><strong>Binder通信模型</strong>: Android系统Binder机制中的四个组件Client、Server、Service Manager和Binder驱动程序的关系如下图<ol>
 <li>Client、Server和Service Manager实现在用户空间中，Binder驱动程序实现在内核空间中<ol>
@@ -380,7 +380,7 @@
 SharedPreferences sharedPreferences = otherAppContext.getSharedPreferences(<span class="string">"preferences"</span>,<span class="keyword">Context</span>.MODE_WORLD_READABLE|<span class="keyword">Context</span>.MODE_MULTI_PROCESS)
 </code></pre></li>
 </ol>
-<h3 id="Json_VS_XML">Json VS XML</h3><p><a href="http://blog.csdn.net/wei78008023/article/details/44940579" target="_blank" rel="external">XML解析和Json解析简介以及两者的区别</a></p>
+<h3 id="Json_VS_XML">Json VS XML</h3><p><a href="http://blog.csdn.net/wei78008023/article/details/44940579" target="_blank" rel="noopener">XML解析和Json解析简介以及两者的区别</a></p>
 <h3 id="Android安全">Android安全</h3><ol>
 <li>错误导出组件 </li>
 <li>参数校验不严 </li>
@@ -468,7 +468,7 @@ SharedPreferences sharedPreferences = otherAppContext.getSharedPreferences(<span
 </li>
 </ul>
 <ol>
-<li><p><strong>Handler+Looper+MessageQueue异步信息处理系统模型</strong> <a href="http://m.blog.csdn.net/article/details?id=38377229" target="_blank" rel="external">Link</a></p>
+<li><p><strong>Handler+Looper+MessageQueue异步信息处理系统模型</strong> <a href="http://m.blog.csdn.net/article/details?id=38377229" target="_blank" rel="noopener">Link</a></p>
 <ul>
 <li><strong>Handler+Looper+MessageQueue概念</strong> <strong>Looper</strong>本质是一个ThreadLocal变量，它持有一个MessageQueue消息队列，负责实现消息循环和消息派发; <strong>Handler</strong>通过post和sendMessage方法去负责收发Message,包括push新消息到MessageQueue或者接收Looper从其持有的MessageQueue中取出来的消息; MessageQueue是一个FIFO消息队列</li>
 <li><p><strong>异步通信流程</strong>：<br>  ① <strong>消息分发和处理</strong>: 首先一个线程通过调用Looper.prepare()，为自己创建一个唯一的Looper对象，在该Looper对象的构造函数中会执行<strong>mQueue = new MessageQueue(quitAllowed);</strong>去创建一个消息队列；然后我们新建一个或者多个Handler并重载他们的handleMessage回调函数，用于处理其他线程中发送过来的消息；接下来我们调用<strong>Looper.loop</strong>方法，在该方法中会建立一个无限循环体，通过调用<strong>msg.target.dispatchMessage(msg);</strong>函数(其内部调用Handler的handleMessage回调函数)不断地从消息队列中取出message，分发给不同的Handler target.<br>  (注：在主线程中默认新建Looper对象不需要显示调用prepare和loop函数，Looper、MessageQueue和Handler都是在同一个线程中)  </p>
@@ -607,8 +607,7 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/04/09/Android基础知识总结/"
-               data-title="Android基础知识总结" data-url="https://charles-xiao.github.io/2015/04/09/Android基础知识总结/">
+          <div class="ds-thread" data-thread-key="2015/04/09/Android基础知识总结/" data-title="Android基础知识总结" data-url="https://charles-xiao.github.io/2015/04/09/Android基础知识总结/">
           </div>
         
       </div>
@@ -652,28 +651,28 @@ Runnable runnable = <span class="keyword">new</span> Runnable() {
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../../../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../../../..//categories">
+            <a href="../../../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../../../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

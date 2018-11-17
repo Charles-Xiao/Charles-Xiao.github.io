@@ -1,34 +1,34 @@
 <!doctype html>
 <html class="theme-next use-motion theme-next-mist">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   
 
-<meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="../../../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
 
-<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="../../../../css/main.css?v=0.4.2">
 
 
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……" />
-
-
-
-  <meta name="keywords" content="Golang," />
+    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 
 
 
+  <meta name="keywords" content="Golang,">
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../../../..//favicon.ico?v=0.4.2" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="../../../../favicon.ico?v=0.4.2">
 
 
 
@@ -69,7 +69,7 @@
      
     <!--增加swiftype搜索功能-->
     <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
     </form>
     
     <script type="text/javascript">
@@ -85,40 +85,40 @@
     
       
       <li class="menu-item menu-item-home">
-        <a href="../../../..//">
-          <i class="menu-item-icon icon-home"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-home"></i> <br>
           首页
         </a>
       </li>
     
       
       <li class="menu-item menu-item-categories">
-        <a href="../../../..//categories">
-          <i class="menu-item-icon icon-categories"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-categories"></i> <br>
           分类
         </a>
       </li>
     
       
       <li class="menu-item menu-item-about">
-        <a href="../../../..//about">
-          <i class="menu-item-icon icon-about"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-about"></i> <br>
           关于
         </a>
       </li>
     
       
       <li class="menu-item menu-item-archives">
-        <a href="../../../..//archives">
-          <i class="menu-item-icon icon-archives"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-archives"></i> <br>
           归档
         </a>
       </li>
     
       
       <li class="menu-item menu-item-tags">
-        <a href="../../../..//tags">
-          <i class="menu-item-icon icon-tags"></i> <br />
+        <a href="">
+          <i class="menu-item-icon icon-tags"></i> <br>
           标签
         </a>
       </li>
@@ -163,7 +163,7 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="#comments" >
+            <a href="#comments">
               <span class="post-comments-count ds-thread-count" data-thread-key="2018/04/04/初探Golang内存管理和垃圾回收机制/"></span>
             </a>
           </span>
@@ -179,9 +179,9 @@
 
       
         <h3 id="内存管理">内存管理</h3><h4 id="堆与栈">堆与栈</h4><p>Go语言与CPP类似，也有栈和堆的概念，栈就是函数使用的栈，函数局部变量都在栈里，而new出来的变量大部分在堆上，当然这还取决于变量是会在作用域外被使用(注：编译器通过静态分析技术Escape Analysis来确定变量的作用范围)。</p>
-<h4 id="堆内存管理机制">堆内存管理机制</h4><p>Go的内存管理是基于<a href="http://legendtkl.com/2015/12/11/go-memory/" target="_blank" rel="external">tcmalloc</a>实现的，tcmalloc核心思想是多级缓存、定长分配和管理.</p>
-<h4 id="参考文章">参考文章</h4><p><a href="http://legendtkl.com/2017/04/02/golang-alloc/" target="_blank" rel="external">Golang内存管理</a></p>
-<h3 id="垃圾回收GC">垃圾回收GC</h3><h4 id="常用GC算法">常用GC算法</h4><h4 id="Golang的三色标注-清除法">Golang的三色标注-清除法</h4><h4 id="Golang_垃圾回收剖析"><a href="http://legendtkl.com/2017/04/28/golang-gc/" target="_blank" rel="external">Golang 垃圾回收剖析</a></h4><blockquote>
+<h4 id="堆内存管理机制">堆内存管理机制</h4><p>Go的内存管理是基于<a href="http://legendtkl.com/2015/12/11/go-memory/" target="_blank" rel="noopener">tcmalloc</a>实现的，tcmalloc核心思想是多级缓存、定长分配和管理.</p>
+<h4 id="参考文章">参考文章</h4><p><a href="http://legendtkl.com/2017/04/02/golang-alloc/" target="_blank" rel="noopener">Golang内存管理</a></p>
+<h3 id="垃圾回收GC">垃圾回收GC</h3><h4 id="常用GC算法">常用GC算法</h4><h4 id="Golang的三色标注-清除法">Golang的三色标注-清除法</h4><h4 id="Golang_垃圾回收剖析"><a href="http://legendtkl.com/2017/04/28/golang-gc/" target="_blank" rel="noopener">Golang 垃圾回收剖析</a></h4><blockquote>
 <p>Unlike GHC’s stop-the-world collector, Go’s collector runs concurrently with the program to achieve short GC pauses.it means that the pause times become a scheduling problem.</p>
 <p>In practice, the pause times of these phases to be &lt;1ms with very large heaps. With a concurrent GC, there is also potential for running the GC in parallel on multiple processors.</p>
 <p>Low latency has costs. The most important cost is reduced throughput. Concurrency requires extra work for synchronization and duplication, which eats into the time the program can be doing useful work. GHC’s garbage collector is optimized for throughput, but Go’s is optimized for latency. At Pusher, we care about latency, so this is an excellent tradeoff for us.</p>
@@ -190,9 +190,9 @@
 <p><code>go tool trace</code> observe gc phase state.</p>
 </blockquote>
 <h3 id="参考链接">参考链接</h3><ol>
-<li><a href="https://www.jianshu.com/p/91d2956f22c1" target="_blank" rel="external">ptmalloc/tcmalloc/jemalloc内存分配策略</a></li>
-<li><a href="https://making.pusher.com/golangs-real-time-gc-in-theory-and-practice/" target="_blank" rel="external">Golang’s Real-time GC in Theory and Practice</a></li>
-<li><a href="https://blog.cloudflare.com/recycling-memory-buffers-in-go/" target="_blank" rel="external">Recycling memory buffers in Go</a></li>
+<li><a href="https://www.jianshu.com/p/91d2956f22c1" target="_blank" rel="noopener">ptmalloc/tcmalloc/jemalloc内存分配策略</a></li>
+<li><a href="https://making.pusher.com/golangs-real-time-gc-in-theory-and-practice/" target="_blank" rel="noopener">Golang’s Real-time GC in Theory and Practice</a></li>
+<li><a href="https://blog.cloudflare.com/recycling-memory-buffers-in-go/" target="_blank" rel="noopener">Recycling memory buffers in Go</a></li>
 </ol>
 
       
@@ -233,8 +233,7 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2018/04/04/初探Golang内存管理和垃圾回收机制/"
-               data-title="初探Golang内存管理和垃圾回收机制" data-url="https://charles-xiao.github.io/2018/04/04/初探Golang内存管理和垃圾回收机制/">
+          <div class="ds-thread" data-thread-key="2018/04/04/初探Golang内存管理和垃圾回收机制/" data-title="初探Golang内存管理和垃圾回收机制" data-url="https://charles-xiao.github.io/2018/04/04/初探Golang内存管理和垃圾回收机制/">
           </div>
         
       </div>
@@ -278,28 +277,28 @@
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao" />
+          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
           <p class="site-author-name">CharlesXiao</p>
         </div>
         <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
-            <a href="../../../..//archives">
-              <span class="site-state-item-count">80</span>
+            <a href="../../../../archives">
+              <span class="site-state-item-count">84</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            <a href="../../../..//categories">
+            <a href="../../../../categories">
               <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
-            <a href="../../../..//tags">
-              <span class="site-state-item-count">75</span>
+            <a href="../../../../tags">
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
