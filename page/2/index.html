@@ -511,6 +511,102 @@ def transport_request(req)
           
           
             
+              Effective C++ 札记
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2018-03-22
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2018/03/22/Effective C++ 札记/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2018/03/22/Effective C++ 札记/"></span>
+            </a>
+          </span>
+          
+        
+
+        <span class="post-count">字数统计606字</span>
+        <span class="post-comments-count">
+        <span class="post-count">阅读时长2分钟</span>
+      </span></div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h3 id="变量常量">变量常量</h3><ol>
+<li>避免使用#define，而使用常量、枚举和内联函数，enum比const好用</li>
+<li>出于效率原因，C++不保证内置类型(int等基本类型)数据成员的初始化。对于成员变量(class A)的内置类型， 会在构造函数进入之前进行初始化; 在构造函数前给出初始化列表来确保初始化，例如：<code>C():b(), i(){}</code></li>
+<li>静态变量的生命周期不同于栈或者堆中的对象，从它被构造开始一直存在，直到程序结束。 包括全局变量、命名空间下的变量、类中和函数中定义的static对象。 其中，定义在函数中的称为 local static，其他的称为 non-local static。</li>
+</ol>
+<h3 id="函数">函数</h3><ol>
+<li><p>编译器默认定义函数调用时机：</p>
+<ul>
+<li>构造函数：对象定义；使用其他兼容的类型初始化对象时（可使用 explicit 来避免这种情况）</li>
+<li>复制构造函数：用一个对象来初始化另一对象时；传入对象参数时；返回对象时；</li>
+<li>析构函数：作用域结束（包括函数返回）时；delete</li>
+<li>=运算符：一个对象赋值给另一对象</li>
+<li><p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Empty e1;               // 默认构造函数</span><br><span class="line">Empty e2(e1);           // 拷贝构造函数</span><br><span class="line">Empty e3 = e1;          // 拷贝构造函数</span><br><span class="line">e2 = e1;                // = 运算符</span><br><span class="line"></span><br><span class="line">void func(Empty e)&#123;     // 拷贝构造函数，拷贝一份参数对象</span><br><span class="line">   	return e;           // 拷贝构造函数，拷贝一份返回对象</span><br><span class="line">                       // 析构函数，拷贝得到的参数对象被析构</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">e2 = func(e1);          // = 运算符</span><br><span class="line">                       // 析构函数，返回值被析构</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>通过把默认定义函数声明成private而且不实现它，可以禁用这些函数被调用，可以用于实现单例；也可以用base class的方式来禁用</p>
+</li>
+<li><p>析构函数声明为虚函数的目的在于以基类指针调用析构函数时能够正确地析构子类部分的内存。 否则子类部分的内存将会泄漏。示例：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 基类</span><br><span class="line">class TimeKeeper&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual ~TimeKeeper();</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line">TimeKeeper *ptk = getTimeKeeper():  // 可能返回任何一种子类</span><br><span class="line">...</span><br><span class="line">delete ptk;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>由于析构函数常常被自动调用，在析构函数中抛出的异常往往会难以捕获，引发程序非正常退出或未定义行为，所以析构函数不要抛出异常</p>
+</li>
+<li>使用对象来管理资源，类似智能指针</li>
+<li></li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/C/"> #C++ </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               C++手稿集锦
             
           
@@ -648,102 +744,6 @@ def transport_request(req)
 <li>weak_ptr是用来解决shared_ptr相互引用时的死锁问题,如果说两个shared_ptr相互引用,那么这两个指针的引用计数永远不可能下降为0,资源永远不会释放。它是对对象的一种弱引用，不会增加对象的引用计数，和shared_ptr之间可以相互转化，shared_ptr可以直接赋值给它，它可以通过调用lock函数来获得shared_ptr。不能通过weak_ptr直接访问对象的方法，应该先把它转化为shared_ptr</li>
 </ul>
 </li>
-</ol>
-
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/C/"> #C++ </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              Effective C++ 札记
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2018-03-22
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2018/03/22/Effective C++ 札记/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/03/22/Effective C++ 札记/"></span>
-            </a>
-          </span>
-          
-        
-
-        <span class="post-count">字数统计606字</span>
-        <span class="post-comments-count">
-        <span class="post-count">阅读时长2分钟</span>
-      </span></div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        <h3 id="变量常量">变量常量</h3><ol>
-<li>避免使用#define，而使用常量、枚举和内联函数，enum比const好用</li>
-<li>出于效率原因，C++不保证内置类型(int等基本类型)数据成员的初始化。对于成员变量(class A)的内置类型， 会在构造函数进入之前进行初始化; 在构造函数前给出初始化列表来确保初始化，例如：<code>C():b(), i(){}</code></li>
-<li>静态变量的生命周期不同于栈或者堆中的对象，从它被构造开始一直存在，直到程序结束。 包括全局变量、命名空间下的变量、类中和函数中定义的static对象。 其中，定义在函数中的称为 local static，其他的称为 non-local static。</li>
-</ol>
-<h3 id="函数">函数</h3><ol>
-<li><p>编译器默认定义函数调用时机：</p>
-<ul>
-<li>构造函数：对象定义；使用其他兼容的类型初始化对象时（可使用 explicit 来避免这种情况）</li>
-<li>复制构造函数：用一个对象来初始化另一对象时；传入对象参数时；返回对象时；</li>
-<li>析构函数：作用域结束（包括函数返回）时；delete</li>
-<li>=运算符：一个对象赋值给另一对象</li>
-<li><p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Empty e1;               // 默认构造函数</span><br><span class="line">Empty e2(e1);           // 拷贝构造函数</span><br><span class="line">Empty e3 = e1;          // 拷贝构造函数</span><br><span class="line">e2 = e1;                // = 运算符</span><br><span class="line"></span><br><span class="line">void func(Empty e)&#123;     // 拷贝构造函数，拷贝一份参数对象</span><br><span class="line">   	return e;           // 拷贝构造函数，拷贝一份返回对象</span><br><span class="line">                       // 析构函数，拷贝得到的参数对象被析构</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">e2 = func(e1);          // = 运算符</span><br><span class="line">                       // 析构函数，返回值被析构</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>通过把默认定义函数声明成private而且不实现它，可以禁用这些函数被调用，可以用于实现单例；也可以用base class的方式来禁用</p>
-</li>
-<li><p>析构函数声明为虚函数的目的在于以基类指针调用析构函数时能够正确地析构子类部分的内存。 否则子类部分的内存将会泄漏。示例：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 基类</span><br><span class="line">class TimeKeeper&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual ~TimeKeeper();</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line">TimeKeeper *ptk = getTimeKeeper():  // 可能返回任何一种子类</span><br><span class="line">...</span><br><span class="line">delete ptk;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>由于析构函数常常被自动调用，在析构函数中抛出的异常往往会难以捕获，引发程序非正常退出或未定义行为，所以析构函数不要抛出异常</p>
-</li>
-<li>使用对象来管理资源，类似智能指针</li>
-<li></li>
 </ol>
 
       

@@ -379,7 +379,7 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
           
           
             
-              计算机体系结构学习札记
+              C++常用数据结构
             
           
         </h1>
@@ -396,14 +396,14 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="../../2017/11/11/计算机体系结构学习札记/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/计算机体系结构学习札记/"></span>
+            <a href="../../2017/11/11/C++常用数据结构/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/C++常用数据结构/"></span>
             </a>
           </span>
           
         
 
-        <span class="post-count">字数统计77字</span>
+        <span class="post-count">字数统计427字</span>
         <span class="post-comments-count">
         <span class="post-count">阅读时长1分钟</span>
       </span></div>
@@ -415,105 +415,20 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
       
 
       
-        <p>计算机系统是由硬件和系统软件组成的，它们共同工作来运行应用程序。</p>
-<h3 id="操作系统">操作系统</h3><p>操作系统处于中间位置，它的一边是应用程序、实用程序和用户，另一边是计算机系统的硬件。</p>
-<h3 id="计算机硬件">计算机硬件</h3>
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/计算机体系结构/"> #计算机体系结构 </a>
-          
-            <a href="../../tags/操作系统/"> #操作系统 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              C++编译之CMake工具
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2017-11-11
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2017/11/11/C++编译之CMake工具/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/C++编译之CMake工具/"></span>
-            </a>
-          </span>
-          
-        
-
-        <span class="post-count">字数统计412字</span>
-        <span class="post-comments-count">
-        <span class="post-count">阅读时长1分钟</span>
-      </span></div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        <h4 id="什么是CMake">什么是CMake</h4><ol>
-<li>CMake 是一个比make 更高级的编译配置工具，允许开发者编写一种平台无关的 CMakeList.txt 文件来定制整个编译流程，然后再根据目标用户的平台进一步生成所需的本地化 Makefile 和工程文件，如 Unix 的 Makefile 或 Windows 的 Visual Studio 工程，从而做到“Write once, run everywhere”。</li>
-<li>linux 平台下使用 CMake 生成 Makefile 并编译的流程：<ol>
-<li>编写 CMake 配置文件 CMakeLists.txt</li>
-<li>执行命令 <code>cmake PATH</code>，<code>PATH</code>是CMakeLists.txt 所在的目录，cmake命令会生成Makefile文件</li>
-<li>再使用 <code>make</code> 命令进行编译，make命令会编译链接生成可执行文件</li>
+        <h3 id="C++常用std集合—map/set">C++常用std集合—map/set</h3><ol>
+<li>unordered_map在C++11的时候被引入标准库了，而hash_map没有，所以建议还是使用unordered_map比较好。查询平均时间是O(1)，无序，类似于Java中HashMap。</li>
+<li>map的内部结构是R-B-tree来实现的，所以保证了一个稳定的动态操作时间，查询、插入、删除都是O（logN），最坏和平均都是。而unordered_map如前所述，是哈希表。顺便提一下，哈希表的查询时间虽然是O（1），但是并不是unordered_map查询时间一定比map短，因为实际情况中还要考虑到数据量，而且unordered_map的hash函数的构造速度也没那么快，所以不能一概而论，应该具体情况具体分析。最坏会是O(n)，额外空间复杂度则要高出许多。map中的元素是按照二叉搜索树存储，进行中序遍历会得到有序遍历，默认遍历顺序为以key从小到大。</li>
+<li>无序集合（Unordered Set）容器是一个存储唯一（Unique，即无重复）元素的关联容器（Associative container），容器中的元素无特别的次序关系。该容器允许基于值地快速元素检索。类似于HashSet。</li>
+<li><a href="https://zcheng.ren/2016/09/09/STLSetAndMap/#set" target="_blank" rel="noopener">set/multiset/map/multimap的内部实现和常用函数</a></li>
+<li><a href="https://github.com/julycoding/The-Art-Of-Programming-By-July/blob/master/ebook/zh/03.01.md" target="_blank" rel="noopener">红黑树原理</a></li>
 </ol>
+<h3 id="BloomFilter布隆过滤器">BloomFilter布隆过滤器</h3><ol>
+<li><p>核心实现是一个很长的二进制向量 （位数组）再加上一系列随机函数 (哈希)，空间效率和查询效率高，不会漏判，但是有一定的误判率（哈希表是精确匹配）。</p>
+</li>
+<li><p><a href="https://blog.csdn.net/tianyaleixiaowu/article/details/74721877" target="_blank" rel="noopener">布隆过滤器解决缓存击穿、垃圾邮件识别、集合判重</a></p>
 </li>
 </ol>
-<h4 id="编译的四个阶段">编译的四个阶段</h4><p>执行 make 命令默认执行的是 make all，make all 有四个阶段: prepare test compile package。我们也可以只执行某一个阶段的命令。下面是针对每个命令的说明:</p>
-<ul>
-<li><strong>make prepare</strong>    :  只会执行prepare阶段，这个阶段主要是下载编译依赖</li>
-<li><strong>make test</strong>          :  只会执行test阶段，这个阶段主要是做单元测试</li>
-<li><strong>make compile</strong>   :  只会执行compile阶段，这个阶段主要是进行编译</li>
-<li><strong>make  package</strong> : 只会执行packege阶段，这个阶段会把编译产出都copy到output目录中</li>
-<li><strong>make install</strong>      :  只会执行install阶段，这个阶段是把编译产出放到$GOPATH/bin目录下，这个不是必须的</li>
-<li><strong>make clean</strong>       : 只会执行clean阶段，这个阶段把编译输出的一些文件删除，恢复到编译之前的状态</li>
-</ul>
-<h4 id="实例分析">实例分析</h4><p>leveldb CMakeLists.txt文件</p>
-<blockquote>
-<p><a href="https://blog.csdn.net/hebbely/article/details/79169965" target="_blank" rel="noopener">CMakeLists.txt文件编译C/C++示例小程序</a></p>
-</blockquote>
-<h4 id="参考链接">参考链接</h4><ol>
-<li><a href="http://www.hahack.com/codes/cmake/" target="_blank" rel="noopener">CMake实战入门</a></li>
-</ol>
-
+<h3 id="SkipList跳跃表">SkipList跳跃表</h3><h3 id="参考链接">参考链接</h3>
       
     </div>
 
@@ -522,107 +437,6 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
         <div class="post-tags">
           
             <a href="../../tags/C/"> #C++ </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              投资随笔
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2017-11-11
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2017/11/11/投资随笔/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/投资随笔/"></span>
-            </a>
-          </span>
-          
-        
-
-        <span class="post-count">字数统计1.6k字</span>
-        <span class="post-comments-count">
-        <span class="post-count">阅读时长5分钟</span>
-      </span></div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        <h3 id="实战经验">实战经验</h3><ol>
-<li>在大盘整体上涨的情况下，一定要等行情回调形势明朗时再买入，因为回调往往会连续几天，这几天里始终是会有上车机会的，不要着急，急于下手往往导致被套住。例如迅速买入京东亏损150刀</li>
-<li>每天的曲线，最低点到最高点的振幅其实已经够大，果断抓住也是非常重要的。但是短线的前提是重仓，否则你往往会因为收益不够多而恋战，从而导致最终盈变成亏，重仓时不要跟大盘趋势作对。</li>
-<li>在面对盈亏变化时心态和自制力非常重要，一定要有耐性。</li>
-<li>从阿里和好未来的股价变化来看，在股价创新高时抛售是极不明智的，长期持有带来的收益会达到3倍左右，不要做“弱水三千只取一瓢”的愚蠢举动。例如对阿里，好未来，百度没有长期持有</li>
-<li>不要跟趋势作对！参考第一条，下跌时买入往往会导致你止损割肉，从而亏损，例如短线操作微博亏损150刀</li>
-<li>尽量不买入不熟悉的股票，如果需要买入尽量先观察一段时间。因为买入一只不熟悉的股票，往往会因为没有信心，而在回调时割肉退场，得不偿失。</li>
-<li>相信自己的观察和股票的周期性，果断地买入被低估的公司，周期之后必会达到期望的价值例如低点的网易(250-310)，微博(95-110)</li>
-<li>迅雷日内交易严重失误！不应该被情绪左右，短线操作最好在下单之前有相应的计划，包括止损和止盈点，否则的人性的贪婪和恐惧心理影响下，很难果断作出决定，从15%止损，一直到拖到30%止损</li>
-<li>日内交易成交数过多导致杠杆太大，比如阿里日内交易只想下单20，却成交了40，如何处理？趋势不对，5%以内建议迅速果断立马减仓至20，不要有侥幸心理。</li>
-<li>类似于迅雷，人人网这种没有基本面支撑的暴涨暴跌型股票，很难拿得住；如果暴涨，赌对了方向，尽量设好止损点退场，不要被贪婪驱使死守住，因为它既然会暴涨，也就能暴跌给你看。</li>
-<li>及时止盈和做好计划，收割利润；近期10%以上的标的都考虑卖出，等等下一轮回调买入，目标3500</li>
-<li>不论股价如何变化，行情只有两种，一是趋势行情，一是横盘整理行情。趋势行情和横盘整理行情通常是连在一起的，一波趋势行情后跟着一段横盘整理行情，一段横盘整理行情被突破后又跟着一波趋势行情。在上涨趋势行情中，每次回调都可以加仓，但一般这种行情回调很少且幅度有限，抓住就一定不能放过，技术指标上可以参考均线，股价回踩5日或10日均线时加仓。如果在牛市行情中，不建议在区间震荡时减仓，应尽量避免过多买入卖出的操作。如果是在熊市行情中，则每次反弹都是减仓的好时机，熊市中不用等，越早平仓越好。<a href="https://mp.weixin.qq.com/s/c2CxG4QYtqsaBQxSOO_6eA" target="_blank" rel="noopener">如何选择加仓和减仓时机</a></li>
-<li>大盘回调风险以及黑天鹅事件的规避，例如中美贸易战等。整体回调可能持续上周；本次采用了去杠杆形式避险，导致利润回吐50%，如果及时补仓，利润则翻倍</li>
-<li>回顾之前持有过的亏损标的，发现都是高买，然后顶不住回调风险才割肉；教训就是一定要提前了解，对买入标的要有信心，如果回调，应该以月为单位考虑割肉，设置一个止损比例，才能理性投资，避免割肉</li>
-</ol>
-<h4 id="近期关注和交易计划">近期关注和交易计划</h4><ol>
-<li>从目前来看可以买入的低点股有特斯拉(300)，百度(240)，AMD(10)</li>
-<li>网易300即可买入；微博125可买入；如果大盘有大幅回调，可以考虑等到回转再买入；华住考虑120左右；好未来等回调到35左右；阿里巴巴继续观望，包括百度在内，预估会分别到210和275的价格，如果分别回调到195和260，考虑割肉.</li>
-</ol>
-<h3 id="学习研究">学习研究</h3><ol>
-<li><strong>二级市场里只有两种赚钱方式</strong>：一种是赚企业成长带来的收益，股价涨幅基本与企业利润涨幅保持正比；二种是通过博弈从交易对手身上赚来的钱，作为一名散户，想通过博傻来赚其他人的钱往往不太现实，但是可以赚市场犯错带来的收益，包括市场情绪以及理解偏差。</li>
-<li><strong>猿猴心态</strong>让人看到K线图里的新高就理所当然地认为会下跌或者风险高，然而盛极而衰并不科学，股价创新高从来不是停止上涨的理由，创新低也不是停止下跌的理由。</li>
-<li><strong>铆钉偏见</strong>让你以过去的数字作为参照，会让你在错过一只股票50块的买入时间，当他涨到100块时，理所当然地认为太贵，然后你就错过了将来涨到150的机会，一定要向未来价格看。一个股票便宜与否，看估值比看近期涨跌更可靠。</li>
-<li>不要低估<strong>复利</strong>的威力，如果你在7年前买入腾讯，意味着每年回报率为38%，等于7年翻了10倍</li>
-</ol>
-<h3 id="基础知识">基础知识</h3><ol>
-<li>限价单：最大程度获取利润，下跌到N就买入，上涨到N就卖出，低买高卖</li>
-<li>止损单：最大程度避免损失，下跌到N就卖出，上涨到N就买入，低卖高买</li>
-<li>止损限价单：到达止损价格就触发，接着要以限价价格交易，可能出现交易不成功</li>
-<li>跟踪止损单：</li>
-</ol>
-<h4 id="期权交易的4种基本类型"><a href="http://finance.china.com.cn/stock/usstock/20170817/4355475.shtml" target="_blank" rel="noopener">期权交易的4种基本类型</a></h4>
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/投资理财/"> #投资理财 </a>
           
         </div>
       
@@ -808,6 +622,235 @@ mysql_init(MYSQL <span class="subst">*</span>mysql)
         <div class="post-tags">
           
             <a href="../../tags/C/"> #C++ </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              C++编译之CMake工具
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-11-11
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/11/11/C++编译之CMake工具/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/C++编译之CMake工具/"></span>
+            </a>
+          </span>
+          
+        
+
+        <span class="post-count">字数统计412字</span>
+        <span class="post-comments-count">
+        <span class="post-count">阅读时长1分钟</span>
+      </span></div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h4 id="什么是CMake">什么是CMake</h4><ol>
+<li>CMake 是一个比make 更高级的编译配置工具，允许开发者编写一种平台无关的 CMakeList.txt 文件来定制整个编译流程，然后再根据目标用户的平台进一步生成所需的本地化 Makefile 和工程文件，如 Unix 的 Makefile 或 Windows 的 Visual Studio 工程，从而做到“Write once, run everywhere”。</li>
+<li>linux 平台下使用 CMake 生成 Makefile 并编译的流程：<ol>
+<li>编写 CMake 配置文件 CMakeLists.txt</li>
+<li>执行命令 <code>cmake PATH</code>，<code>PATH</code>是CMakeLists.txt 所在的目录，cmake命令会生成Makefile文件</li>
+<li>再使用 <code>make</code> 命令进行编译，make命令会编译链接生成可执行文件</li>
+</ol>
+</li>
+</ol>
+<h4 id="编译的四个阶段">编译的四个阶段</h4><p>执行 make 命令默认执行的是 make all，make all 有四个阶段: prepare test compile package。我们也可以只执行某一个阶段的命令。下面是针对每个命令的说明:</p>
+<ul>
+<li><strong>make prepare</strong>    :  只会执行prepare阶段，这个阶段主要是下载编译依赖</li>
+<li><strong>make test</strong>          :  只会执行test阶段，这个阶段主要是做单元测试</li>
+<li><strong>make compile</strong>   :  只会执行compile阶段，这个阶段主要是进行编译</li>
+<li><strong>make  package</strong> : 只会执行packege阶段，这个阶段会把编译产出都copy到output目录中</li>
+<li><strong>make install</strong>      :  只会执行install阶段，这个阶段是把编译产出放到$GOPATH/bin目录下，这个不是必须的</li>
+<li><strong>make clean</strong>       : 只会执行clean阶段，这个阶段把编译输出的一些文件删除，恢复到编译之前的状态</li>
+</ul>
+<h4 id="实例分析">实例分析</h4><p>leveldb CMakeLists.txt文件</p>
+<blockquote>
+<p><a href="https://blog.csdn.net/hebbely/article/details/79169965" target="_blank" rel="noopener">CMakeLists.txt文件编译C/C++示例小程序</a></p>
+</blockquote>
+<h4 id="参考链接">参考链接</h4><ol>
+<li><a href="http://www.hahack.com/codes/cmake/" target="_blank" rel="noopener">CMake实战入门</a></li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/C/"> #C++ </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              分布式存储系统基础
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-11-11
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/11/11/分布式系统基础知识/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/11/分布式系统基础知识/"></span>
+            </a>
+          </span>
+          
+        
+
+        <span class="post-count">字数统计3.4k字</span>
+        <span class="post-comments-count">
+        <span class="post-count">阅读时长12分钟</span>
+      </span></div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h3 id="块存储/对象存储/文件系统">块存储/对象存储/文件系统</h3><ol>
+<li><strong>块存储</strong>：访问时延是10ms级，常用于跟虚机搭配使用，与普通硬盘无异，读写速度由于并发所以非常快。既要能应付大文件读写，也能处理好小文件读写。但是硬盘的特点是容量大，热点明显。因此块存储主要可以应付热点问题。另外，块存储要求的延迟是最低的。通常以QEMU Driver或者Kernel Module的方式存在，这种接口需要实现Linux的Block Device的接口或者QEMU提供的Block Driver接口，如Sheepdog，AWS的EBS，ceph的RBD；分布式块存储系统通常提供快照功能，方便在故障或者是业务需要的时候，将块设备上的数据恢复到期望的一个时间点。每次快照并不是全量快照，而是增量快照，仅对修改过的区间进行备份。</li>
+<li><strong>对象存储</strong>：访问时延是100ms-1s级，通常以大文件为主，要求足够的IO带宽。接口就是简单的GET、PUT、DEL和其他扩展，如七牛、又拍、Swift、S3</li>
+<li><strong>文件存储</strong>：通常意义是支持POSIX接口，它跟传统的文件系统如Ext4是一个类型的，需要考虑目录、文件属性等支持；但区别在于分布式存储提供了并行化的能力，如Ceph的CephFS；分布式文件系统通常需要有一个或一组namenode节点维护目录树，一个或一组metaserver节点来维护文件元信息</li>
+<li>块存储和文件存储在形态上虽然不同，但实际使用基本一致，块存储扩展性好、兼容性更好，但使用略麻烦；文件存储使用方便，且故障隔离性好，但扩展性不好。</li>
+<li><strong>表格存储</strong></li>
+<li><strong>归档存储</strong></li>
+</ol>
+<h3 id="OLAP与OLTP">OLAP与OLTP</h3><p>当今的数据处理大致可以分成两大类：<strong>联机事务处理OLTP（on-line transaction processing）、联机分析处理OLAP（On-Line Analytical Processing）</strong>。OLTP是传统的关系型数据库的主要应用，主要是基本的、日常的事务处理，例如银行交易，关注实时性，数据量较少。OLAP是数据仓库系统的主要应用，支持复杂的分析操作，侧重决策支持，并且提供直观易懂的查询结果。</p>
+<ul>
+<li><strong>数据库OLTP</strong>：传统的关系型数据库的主要应用，主要是基本的、日常的事务处理，例如银行交易。</li>
+<li><strong>数据仓库</strong>：数据仓库系统的主要应用主要是OLAP（On-Line Analytical Processing），支持复杂的分析操作，侧重决策支持，并且提供直观易懂的查询结果。</li>
+<li>举个最常见的例子，拿电商行业来说好了。基本每家电商公司都会经历，从只需要业务数据库到要数据仓库的阶段。<ol>
+<li>电商早期启动非常容易，入行门槛低。找个外包团队，做了一个可以下单的网页前端 + 几台服务器 + 一个MySQL，就能开门迎客了。这好比手工作坊时期。</li>
+<li>第二阶段，流量来了，客户和订单都多起来了，普通查询已经有压力了，这个时候就需要升级架构变成多台服务器和多个业务数据库（量大+分库分表），这个阶段的业务数字和指标还可以勉强从业务数据库里查询。初步进入工业化。</li>
+<li>第三个阶段，一般需要 3-5 年左右的时间，随着业务指数级的增长，数据量的会陡增，公司角色也开始多了起来，开始有了 CEO、CMO、CIO，大家需要面临的问题越来越复杂，越来越深入。高管们关心的问题，从最初非常粗放的：“昨天的收入是多少”、“上个月的 PV、UV 是多少”，逐渐演化到非常精细化和具体的用户的集群分析，特定用户在某种使用场景中，例如“20~30岁女性用户在过去五年的第一季度化妆品类商品的购买行为与公司进行的促销活动方案之间的关系”。</li>
+<li>这类非常具体，且能够对公司决策起到关键性作用的问题，基本很难从业务数据库从调取出来。原因在于：业务数据库中的数据结构是为了完成交易而设计的，不是为了而查询和分析的便利设计的。业务数据库大多是读写优化的，即又要读（查看商品信息），也要写（产生订单，完成支付）。因此对于大量数据的读（查询指标，一般是复杂的只读类型查询）是支持不足的。</li>
+<li>而怎么解决这个问题，此时我们就需要建立一个数据仓库了，公司也算开始进入信息化阶段了。数据仓库的作用在于：数据结构为了分析和查询的便利；只读优化的数据库，即不需要它写入速度多么快，只要做大量数据的复杂查询的速度足够快就行了。那么在这里前一种业务数据库（读写都优化）的是业务性数据库，后一种是分析性数据库，即数据仓库。</li>
+</ol>
+</li>
+<li>最后总结一下：数据库比较流行的有：MySQL, Oracle, SqlServer等。数据仓库比较流行的有：AWS Redshift, Greenplum, Hive等。这样把数据从业务性的数据库中提取、加工、导入分析性的数据库就是传统的 ETL 工作。</li>
+</ul>
+<h3 id="CAP理论">CAP理论</h3><p>2000年7月，加州大学伯克利分校的Eric Brewer教授在ACM PODC会议上提出CAP猜想。2年后，麻省理工学院的Seth Gilbert和Nancy Lynch从理论上证明了CAP；也就是：<strong>一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项</strong>。  </p>
+<ol>
+<li><strong>一致性</strong>：<code>all nodes see the same data at the same time</code>；根据业务场景可以分为强一致性，弱一致性和最终一致性。对于关系型数据库，要求更新过的数据能被后续的访问都能看到，这是<strong>强一致性</strong>。如果能容忍后续的部分或者全部访问不到，则是<strong>弱一致性</strong>。如果经过一段时间后要求能访问到更新后的数据，则是<strong>最终一致性</strong>。</li>
+<li><strong>可用性</strong>：<code>Reads and writes always succeed</code>，即服务一直可用，而且是正常响应时间。如果系统每运行100个时间单位，会有1个时间单位无法提供服务，则说系统的可用性是99%。</li>
+<li><strong>分区容错性</strong>：<code>the system continues to operate despite arbitrary message loss or failure of part of the system</code>，即分布式系统在遇到某节点或网络分区故障的时候，仍然能够对外提供满足一致性和可用性的服务。</li>
+<li><strong>CAP权衡</strong>：</li>
+</ol>
+<blockquote>
+<p>CA without P：如果不要求P（不允许分区），则C（强一致性）和A（可用性）是可以保证的。但其实分区不是你想不想的问题，而是始终会存在，因此CA的系统更多的是允许分区后各子系统依然保持CA。</p>
+<p>CP without A：如果不要求A（可用），相当于每个请求都需要在Server之间强一致，而P（分区）会导致同步时间无限延长，如此CP也是可以保证的。很多传统的数据库分布式事务都属于这种模式。</p>
+<p>AP wihtout C：要高可用并允许分区，则需放弃一致性。一旦分区发生，节点之间可能会失去联系，为了高可用，每个节点只能用本地数据提供服务，而这样会导致全局数据的不一致性。现在众多的NoSQL都属于此类。</p>
+<p>对于多数大型互联网应用，集群规模庞大、主机众多、部署分散，节点故障、网络故障是常态，而且要保证服务可用性达到N个9，往往采用AP without C，只保证最终一致性即可。</p>
+<p>对于银行业场景，C必须保证。网络发生故障宁可停止服务，这是保证CA，舍弃P；还有一种是保证CP，舍弃A，例如网络故障事只读不写。</p>
+<p>保证P的前提下，选择一致性C，举例：传统单库水平切分，就是这类选型的典型</p>
+<p>保证P的前提下，选择可用性A，举例：双主库同步高可用，就是这类选型的典型</p>
+</blockquote>
+<h3 id="分布式存储常见概念名词">分布式存储常见概念名词</h3><ol>
+<li><strong>RAID(Redundant Array of Independent Disk 独立冗余磁盘阵列)</strong>是加州大学伯克利分校1987年提出，最初是为了组合小的廉价磁盘来代替大的昂贵磁盘，同时希望磁盘失效时不会使对数据的访问受损失而开发出一定水平的数据保护技术。<strong>RAID就是一种由多块廉价磁盘构成的冗余阵列，在操作系统下是作为一个独立的大型存储设备出现。RAID可以充分发挥出多块硬盘的优势，可以提升硬盘速度，增大容量，提供容错功能够确保数据安全性，易于管理的优点</strong>，在任何一块硬盘出现问题的情况下都可以继续工作，不会受到损坏硬盘的影响。</li>
+<li><strong>RAID卡</strong>就是用来实现RAID功能的板卡，通常是由I/O<a href="http://baike.baidu.com/view/50152.htm" target="_blank" rel="noopener">处理器</a>、SCSI控制器、SCSI连接器和缓存等一系列零组件构成的。不同的RAID卡支持的RAID功能不同。支持RADI0、RAID1、RAID3、RAID4、RAID5、RAID10不等。RAID卡可以让很多磁盘驱动器同时传输数据，而这些磁盘驱动器在逻辑上又是一个磁盘驱动器，所以使用RAID可以达到单个的磁盘驱动器几倍、几十倍甚至上百倍的速率。这也是RAID卡最初想要解决的问题。可以提供容错功能，这是RAID卡的第二个重要功能。</li>
+<li><strong>MVCC</strong></li>
+<li><strong>EC编码与各级RAID</strong></li>
+</ol>
+<h3 id="轮询调度算法">轮询调度算法</h3><ol>
+<li>轮询调度算法的原理是每一次把来自用户的请求轮流分配给内部中的服务器，从1开始，直到N(内部服务器个数)，然后重新开始循环；即每次调度执行<code>i = N-1; i = (i+1) mod N</code>，并选出第i台服务器</li>
+<li>适合于服务器组中的所有服务器都有相同的软硬件配置并且平均服务请求相对均衡的情况, 它无需记录当前所有连接的状态，是一种无状态调度。</li>
+</ol>
+<h3 id="Learned_Indexes_VS_Traditional_Indexes">Learned Indexes VS Traditional Indexes</h3><blockquote>
+<p>目前存在多种索引的选择来解决各种访问模式的需求。例如 B-Trees 是范围请求最好的选择（例如在特定时间线上索引所有的数据记录），哈希表（Hash-Maps）在性能上很难打败基于键值的搜索方法，而布隆过滤器 (Bloom Filter) 通常用于检测是否存在某条记录。由于索引对于数据库系统和其它一些应用的重要性，过去几十年来，它们已经广泛地发展为更高的内存、缓存和 CPU 效率的方法</p>
+<p>本论文的核心思想是一个模型可以学习排序顺序或查找键的结构，并使用这一信号有效地预测记录的位置或存在。我们从理论上分析了学习索引在什么条件下表现优于传统索引结构，并描述了设计学习索引结构的主要挑战。我们的初步结果表明，借助神经网络，我们能够超过缓存优化的 B-Trees 高达 70％的速度，同时为若干个真实数据集节省一个数量级的内存。</p>
+</blockquote>
+<h3 id="分布式事务">分布式事务</h3><h4 id="两阶段提交2PC">两阶段提交2PC</h4><ol>
+<li>二阶段提交2PC（Two phase Commit）是一种在分布式环境下所有节点进行事务提交保持一致性的算法。它通过引入一个协调者（Coordinator）来统一掌控所有参与者（Participant）的操作结果，并指示它们是否要把操作结果进行真正的提交（commit）或者回滚（rollback）。</li>
+<li>两个阶段：<ul>
+<li>投票阶段（voting phase）：参与者通知协调者，协调者反馈结果；</li>
+<li>提交阶段（commit phase）：收到参与者的反馈后，协调者再向参与者发出通知，根据反馈情况决定各参与者是否要提交还是回滚</li>
+</ul>
+</li>
+<li>2PC在执行过程中，所有节点都处于阻塞状态，所有节点所持有的资源（例如数据库数据，本地文件等）都处于封锁状态。例如，某一个参与者回复消息之前，所有参与者以及协调者都处于阻塞状态；在协调者发出消息之前，所有参与者都处于阻塞状态。要打破完全阻塞状态需要引入超时机制。</li>
+</ol>
+<h3 id="常见分布式一致性算法">常见分布式一致性算法</h3><h4 id="Paxos">Paxos</h4><h4 id="Raft">Raft</h4><h4 id="异同点">异同点</h4><h4 id="应用场景">应用场景</h4><ol>
+<li><strong>2PC和Paxos区别</strong>：2PC用于保证多个数据分片上分布式事务的原子性，Paxos协议用于保证同一个数据分片在多个副本的分布式一致性，所以两者可以是互补的关系，绝不是替代关系。对于2PC协调者单点问题，可以利用Paxos协议解决，当协调者出问题时，选一个新的协调者继续提供服务。</li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/存储/"> #存储 </a>
+          
+            <a href="../../tags/分布式系统/"> #分布式系统 </a>
           
         </div>
       

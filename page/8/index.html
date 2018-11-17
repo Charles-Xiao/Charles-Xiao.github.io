@@ -338,6 +338,85 @@
           
           
             
+              Redis基础知识
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-12-23
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2016/12/23/Redis基础知识/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/23/Redis基础知识/"></span>
+            </a>
+          </span>
+          
+        
+
+        <span class="post-count">字数统计572字</span>
+        <span class="post-comments-count">
+        <span class="post-count">阅读时长1分钟</span>
+      </span></div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h4 id="Redis事务">Redis事务</h4><ol>
+<li>Redis中的事务(transaction)是一组命令的集合。事务同命令一样都是Redis最小的执行单位，一个事务中的命令要么都执行，要么都不执行。但是<strong>Redis只能保证一个client发起的事务中的命令可以连续的执行，而中间不会插入其他client的命令</strong></li>
+<li>Redis是单线程来处理所有client的请求的。一般情况下redis在接受到一个client发来的命令后会立即处理并返回处理结果</li>
+<li><strong>如果使用事务</strong>：client发出multi命令，进入事务上下文，client后续发出的所有命令都被放到一个队列中，直到redis接收到exec命令，redis开始顺序执行队列中的命令，并将执行结果一起返回给client，该事务结束</li>
+</ol>
+<h4 id="Redis管道pipeline">Redis管道pipeline</h4><ol>
+<li>Redis是一个cs模式的tcp server，使用和http类似的请求响应协议。一个client可以通过一个socket连接发起多个请求命令。每个请求命令发出后client通常会阻塞并等待redis服务处理，redis处理完后请求命令后会将结果通过响应报文返回给client。</li>
+<li>除了可以利用mget,mset 之类的单条命令处理多个key的命令外我们还可以利用pipeline的方式从client打包多条命令一起发出，不需要等待单条命令的响应返回，而redis服务端会处理完多条命令后会将多条命令的处理结果打包到一起返回给客户端。当一组命令中每条命令都不依赖于之前命令的执行结果时就可以将这组命令一起通过管道发出。管道通过减少客户端与Redis的通信次数来实现降低往返时延累计值的目的(因为通信延迟往往比较久, 将多个命令打包到一条TCP报文，然后让redis并行处理，然后一次性返回结果)</li>
+<li>用pipeline方式打包命令发送，redis必须在处理完所有命令前先缓存起所有命令的处理结果。打包的命令越多，缓存消耗内存也越多。所以并是不是打包的命令越多越好。</li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Redis/"> #Redis </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               Mac安装配置mySQL/mongodb/Redis开发环境及开机自启动
             
           
@@ -428,85 +507,6 @@ brew cask install launchrocket
         <div class="post-tags">
           
             <a href="../../tags/Mac/"> #Mac </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              Redis基础知识
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2016-12-23
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2016/12/23/Redis基础知识/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/23/Redis基础知识/"></span>
-            </a>
-          </span>
-          
-        
-
-        <span class="post-count">字数统计572字</span>
-        <span class="post-comments-count">
-        <span class="post-count">阅读时长1分钟</span>
-      </span></div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        <h4 id="Redis事务">Redis事务</h4><ol>
-<li>Redis中的事务(transaction)是一组命令的集合。事务同命令一样都是Redis最小的执行单位，一个事务中的命令要么都执行，要么都不执行。但是<strong>Redis只能保证一个client发起的事务中的命令可以连续的执行，而中间不会插入其他client的命令</strong></li>
-<li>Redis是单线程来处理所有client的请求的。一般情况下redis在接受到一个client发来的命令后会立即处理并返回处理结果</li>
-<li><strong>如果使用事务</strong>：client发出multi命令，进入事务上下文，client后续发出的所有命令都被放到一个队列中，直到redis接收到exec命令，redis开始顺序执行队列中的命令，并将执行结果一起返回给client，该事务结束</li>
-</ol>
-<h4 id="Redis管道pipeline">Redis管道pipeline</h4><ol>
-<li>Redis是一个cs模式的tcp server，使用和http类似的请求响应协议。一个client可以通过一个socket连接发起多个请求命令。每个请求命令发出后client通常会阻塞并等待redis服务处理，redis处理完后请求命令后会将结果通过响应报文返回给client。</li>
-<li>除了可以利用mget,mset 之类的单条命令处理多个key的命令外我们还可以利用pipeline的方式从client打包多条命令一起发出，不需要等待单条命令的响应返回，而redis服务端会处理完多条命令后会将多条命令的处理结果打包到一起返回给客户端。当一组命令中每条命令都不依赖于之前命令的执行结果时就可以将这组命令一起通过管道发出。管道通过减少客户端与Redis的通信次数来实现降低往返时延累计值的目的(因为通信延迟往往比较久, 将多个命令打包到一条TCP报文，然后让redis并行处理，然后一次性返回结果)</li>
-<li>用pipeline方式打包命令发送，redis必须在处理完所有命令前先缓存起所有命令的处理结果。打包的命令越多，缓存消耗内存也越多。所以并是不是打包的命令越多越好。</li>
-</ol>
-
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Redis/"> #Redis </a>
           
         </div>
       
