@@ -703,116 +703,6 @@ rsync -v rsync://<span class="number">172.16</span>.<span class="number">78.192<
           
           
             
-              Linux正则表达式/通配符揭秘
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2017-02-19
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2017/02/19/Linux正则表达式:通配符揭秘/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/19/Linux正则表达式:通配符揭秘/"></span>
-            </a>
-          </span>
-          
-        
-
-        <span class="post-count">字数统计1.5k字</span>
-        <span class="post-comments-count">
-        <span class="post-count">阅读时长5分钟</span>
-      </span></div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        <h4 id="正则表达式概念">正则表达式概念</h4><p><strong>正则表达式</strong>是你所定义的模式模板(pattern template)，Linux工具可以用它来过滤文本；如果数据匹配模式，它就会被接受并进一步处理;如果数据不匹配模式，它就会被滤掉。正则表达式模式利用通配符来描述数据流中的一个或多个字符，例如<figure class="highlight plain"><figcaption><span>da*```da*参数会让ls命令只列出名字以da开头的文件。文件名中da之后可以有任意多个字符(包括什么也没有)。  </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">正则表达式是通过正则表达式引擎(regular expression engine)实现的。正则表达式引擎是一套底层软件，负责解释正则表达式模式并使用这些模式进行文本匹配。</span><br><span class="line">#### 正则表达式类型</span><br><span class="line">Linux中的不同应用程序可能会用不同类型的正则表达式；而在Linux中，有两种流行的正则表达式引擎：</span><br><span class="line">	</span><br><span class="line">&gt; POSIX基础正则表达式(basic regular expression，BRE)引擎，sed编辑器只符合了BRE引擎规范的子集</span><br><span class="line"></span><br><span class="line">&gt; POSIX扩展正则表达式(extended regular expression，ERE)引擎，gawk程序用ERE引擎来处理它的正则表达式模式。</span><br><span class="line"></span><br><span class="line">#### 处理特殊字符</span><br><span class="line">正则表达式识别的特殊字符包括:```.*[]^$&#123;&#125;\+?|()```,如果要用某个特殊字符作为文本字符，就必须用```\```转义</span><br></pre></td></tr></table></figure></p>
-<h1 id="查找$或者正斜线">查找$或者正斜线</h1><p>sed -n ‘/\$/p’ data2<br>echo “3 / 2” | sed -n ‘/\//p’</p>
-<h1 id="^字符会在每个由换行符决定的新数据行的行首检查模式">^字符会在每个由换行符决定的新数据行的行首检查模式</h1><p>echo “Books are great” | sed -n ‘/^Book/p’</p>
-<h1 id="美元符($)定义了行尾锚点">美元符($)定义了行尾锚点</h1><p>echo “This book is good” | sed -n ‘/book$/p’</p>
-<h1 id="^$组合删除所有空白行">^$组合删除所有空白行</h1><p>sed ‘/^$/d’ data5</p>
-<h1 id="点号字符-用来匹配除换行符之外的任意单个字符，如果在点号字符的位置没有字符，那么模式就不成立。在正则表达式中，空格也是字符，也会被-匹配">点号字符.用来匹配除换行符之外的任意单个字符，如果在点号字符的位置没有字符，那么模式就不成立。在正则表达式中，空格也是字符，也会被.匹配</h1><p>sed -n ‘/.at/p’ data6</p>
-<h1 id="[]定义字符组，字符组中必须有个字符来匹配相应的位置，例如匹配cat和hat">[]定义字符组，字符组中必须有个字符来匹配相应的位置，例如匹配cat和hat</h1><p>sed -n ‘/[ch]at/p’ data6</p>
-<h1 id="使用3个字符组来涵盖3个字符位置含有大小写的情况">使用3个字符组来涵盖3个字符位置含有大小写的情况</h1><p>echo “yeS” | sed -n ‘/[Yy][Ee][Ss]/p’</p>
-<h1 id="匹配了任意含有数字0、1、2或3的行">匹配了任意含有数字0、1、2或3的行</h1><p>sed -n ‘/[0123]/p’ data7</p>
-<p>排除匹配</p>
-<h1 id="匹配c或h之外的任何字符以及文本模式">匹配c或h之外的任何字符以及文本模式</h1><p>sed -n ‘/[^ch]at/p’ data6</p>
-<p>区间匹配</p>
-<h1 id="每个字符组都会匹配0~9的任意数字">每个字符组都会匹配0~9的任意数字</h1><p>sed -n ‘/^[0-9][0-9][0-9][0-9][0-9]$/p’ data8</p>
-<h1 id="新的模式[c-h]at匹配了首字母在字母c和字母h之间的单词">新的模式[c-h]at匹配了首字母在字母c和字母h之间的单词</h1><p>sed -n ‘/[c-h]at/p’ data6</p>
-<h1 id="该字符组允许区间a~c、h~m中的字母出现在at文本前">该字符组允许区间a~c、h~m中的字母出现在at文本前</h1><p>sed -n ‘/[a-ch-m]at/p’ data6</p>
-<h1 id="特殊字符组，可以用[[:digit:]]来代替区间[0-9]">特殊字符组，可以用[[:digit:]]来代替区间[0-9]</h1><h1 id="在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中">在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中</h1><p>echo “I’m getting a color TV” | sed -n ‘/colou*r/p’</p>
-<h1 id="将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。">将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。</h1><p>echo “bat” | sed -n ‘/b.*t/p’</p>
-<h1 id="星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)">星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)</h1><p>echo “bat” | sed -n ‘/b[ae]*t/p’</p>
-<h1 id="显示文件夹中文件绝对目录">显示文件夹中文件绝对目录</h1><p>ls | sed “s:^:<code>pwd</code>/:”</p>
-<p>扩展正则表达式：gawk程序能够识别ERE模式，但sed编辑器不能</p>
-<h1 id="问号表明前面的字符可以出现0次或1次">问号表明前面的字符可以出现0次或1次</h1><p>echo “bt” | gawk ‘/be?t/{print $0}’</p>
-<h1 id="加号表明前面的字符可以出现1次或多次，但必须至少出现1次">加号表明前面的字符可以出现1次或多次，但必须至少出现1次</h1><p>echo “bt” | gawk ‘/b[ae]+t/{print $0}’</p>
-<h1 id="花括号{}允许你为可重复的正则表达式指定一个上限">花括号{}允许你为可重复的正则表达式指定一个上限</h1><h1 id="字符e只能出现1次，模式才能匹配">字符e只能出现1次，模式才能匹配</h1><p>echo “bet” | gawk —re-interval ‘/be{1}t/{print $0}’</p>
-<h1 id="字符e可以出现1次或2次，这样模式就能匹配">字符e可以出现1次或2次，这样模式就能匹配</h1><p>echo “beet” | gawk —re-interval ‘/be{1,2}t/{print $0}’</p>
-<h1 id="圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符">圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符</h1><h1 id="结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat">结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat</h1><p>echo “Sat” | gawk ‘/Sat(urday)?/{print $0}’</p>
-<h1 id="模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合">模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合</h1><p>echo “bab” | gawk ‘/(c|b)a(b|t)/{print $0}’</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### 正则表达式应用</span><br><span class="line">1. 验证电话号码</span><br><span class="line">2. 解析邮件地址</span><br><span class="line">	```^([a-zA-Z0-9_\-\.\+]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]&#123;2,5&#125;)$</span><br></pre></td></tr></table></figure>
-<h4 id="Linux通配符">Linux通配符</h4><p>bash shell可以使用正则表达式中的一些元字符实现通配（Globbing）功能。通配是把一个包含通配符的非具体文件名扩展存储在计算机，服务器或者网络上的一批具体文件名的过程。（可以看出<strong>①通配主要应用匹配文件名上，而正则主要应用于字符串上；②通配符通常只能被shell自解释，正则表达式需要被正则引擎解析；③元字符不同</strong>）。最常用的通配符包括正则表达式元字符：</p>
-<ul>
-<li>？(匹配任意单个字符,不能匹配“/”字符)</li>
-<li>*（匹配任意位的任意字符，包括空字符串，不包含对“/”字符的匹配）</li>
-<li>[]（匹配一个单字符范围,如[a-z]；[0-9]；[a-zBE5-7]表示所有a到z之间的字符和 B、E、5、6、7相匹配；[!abc]匹配除了“a，b，c”这3个字符之外的任意一个字符)</li>
-<li>{}</li>
-<li>^(取反)，例如<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* !取反</span><br><span class="line"></span><br><span class="line">&gt; 示例</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><em>.txt               # 匹配全部后缀为.txt的文件<br>file?.log           # 匹配file1.log, file2.log, …<br>[a-z]</em>.log          # 匹配a-z开头的.log文件<br>[^a-z]*.log         # 上面的反向匹配<br>```</p>
-<blockquote>
-<p>备注：反斜杠()或引号(‘, “)都会使通配符失效，例如如: <code>\*</code>, <code>&quot;*&quot;</code>, <code>&#39;*&#39;</code>都表示<code>*</code>本身，不通配任何文件</p>
-</blockquote>
-
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Linux/"> #Linux </a>
-          
-            <a href="../../tags/shell/"> #shell </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
               Linux expect自动交互脚本入门
             
           
@@ -910,6 +800,116 @@ expect {
 <li><a href="https://www.jianshu.com/p/70556b1ce932" target="_blank" rel="noopener">Linux Expect 简介和使用实例</a></li>
 </ol>
 <h4 id="开发机登陆脚本示例">开发机登陆脚本示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/expect</span><br><span class="line"></span><br><span class="line"># 登录relay</span><br><span class="line">spawn ssh relay01.baidu.com</span><br><span class="line"></span><br><span class="line"># 定义变量</span><br><span class="line">set PIN &quot;123321&quot;</span><br><span class="line">set HOST &quot;hz01-bos-dev-r15-01-005.hz01&quot;</span><br><span class="line">set PASSWORD &quot;&quot;</span><br><span class="line"></span><br><span class="line"># 执行脚本时带上参数,以空格分开</span><br><span class="line"># set TOKEN [lindex $argv 0]</span><br><span class="line"></span><br><span class="line"># 打开调试模式</span><br><span class="line">#exp_internal 1</span><br><span class="line"># relay PIN码 + Token(Token需手动输入)</span><br><span class="line">expect &#123;</span><br><span class="line">    -re &quot;password:*&quot; &#123;</span><br><span class="line">        send_user &quot;PIN:****** + Token:&quot;</span><br><span class="line">        expect_user &#123;</span><br><span class="line">            -timeout -1</span><br><span class="line">            -re &quot;(.*)\n&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        set TOKEN $expect_out(buffer)</span><br><span class="line">        send &quot;$PIN$TOKEN\r&quot;</span><br><span class="line">        exp_continue</span><br><span class="line">    &#125;</span><br><span class="line">   # 自动登录开发机</span><br><span class="line">    -re &quot;-bash-baidu-ssl*&quot; &#123;</span><br><span class="line">        if &#123; &quot;$HOST&quot; != &quot;&quot; &#125; &#123;</span><br><span class="line">            send &quot;ssh --silent $HOST\r&quot;</span><br><span class="line">            # [可选]自动开发机输入密码</span><br><span class="line">            if &#123; &quot;$PASSWORD&quot; != &quot;&quot; &#125; &#123;</span><br><span class="line">                expect -re &quot;password:&quot; &#123; send &quot;$PASSWORD\r&quot; &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"># 关闭调试模式</span><br><span class="line">#exp_internal 0</span><br><span class="line">interact</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="../../tags/Linux/"> #Linux </a>
+          
+            <a href="../../tags/shell/"> #shell </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Linux正则表达式/通配符揭秘
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2017-02-19
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="../../2017/02/19/Linux正则表达式:通配符揭秘/#comments">
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/19/Linux正则表达式:通配符揭秘/"></span>
+            </a>
+          </span>
+          
+        
+
+        <span class="post-count">字数统计1.5k字</span>
+        <span class="post-comments-count">
+        <span class="post-count">阅读时长5分钟</span>
+      </span></div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h4 id="正则表达式概念">正则表达式概念</h4><p><strong>正则表达式</strong>是你所定义的模式模板(pattern template)，Linux工具可以用它来过滤文本；如果数据匹配模式，它就会被接受并进一步处理;如果数据不匹配模式，它就会被滤掉。正则表达式模式利用通配符来描述数据流中的一个或多个字符，例如<figure class="highlight plain"><figcaption><span>da*```da*参数会让ls命令只列出名字以da开头的文件。文件名中da之后可以有任意多个字符(包括什么也没有)。  </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">正则表达式是通过正则表达式引擎(regular expression engine)实现的。正则表达式引擎是一套底层软件，负责解释正则表达式模式并使用这些模式进行文本匹配。</span><br><span class="line">#### 正则表达式类型</span><br><span class="line">Linux中的不同应用程序可能会用不同类型的正则表达式；而在Linux中，有两种流行的正则表达式引擎：</span><br><span class="line">	</span><br><span class="line">&gt; POSIX基础正则表达式(basic regular expression，BRE)引擎，sed编辑器只符合了BRE引擎规范的子集</span><br><span class="line"></span><br><span class="line">&gt; POSIX扩展正则表达式(extended regular expression，ERE)引擎，gawk程序用ERE引擎来处理它的正则表达式模式。</span><br><span class="line"></span><br><span class="line">#### 处理特殊字符</span><br><span class="line">正则表达式识别的特殊字符包括:```.*[]^$&#123;&#125;\+?|()```,如果要用某个特殊字符作为文本字符，就必须用```\```转义</span><br></pre></td></tr></table></figure></p>
+<h1 id="查找$或者正斜线">查找$或者正斜线</h1><p>sed -n ‘/\$/p’ data2<br>echo “3 / 2” | sed -n ‘/\//p’</p>
+<h1 id="^字符会在每个由换行符决定的新数据行的行首检查模式">^字符会在每个由换行符决定的新数据行的行首检查模式</h1><p>echo “Books are great” | sed -n ‘/^Book/p’</p>
+<h1 id="美元符($)定义了行尾锚点">美元符($)定义了行尾锚点</h1><p>echo “This book is good” | sed -n ‘/book$/p’</p>
+<h1 id="^$组合删除所有空白行">^$组合删除所有空白行</h1><p>sed ‘/^$/d’ data5</p>
+<h1 id="点号字符-用来匹配除换行符之外的任意单个字符，如果在点号字符的位置没有字符，那么模式就不成立。在正则表达式中，空格也是字符，也会被-匹配">点号字符.用来匹配除换行符之外的任意单个字符，如果在点号字符的位置没有字符，那么模式就不成立。在正则表达式中，空格也是字符，也会被.匹配</h1><p>sed -n ‘/.at/p’ data6</p>
+<h1 id="[]定义字符组，字符组中必须有个字符来匹配相应的位置，例如匹配cat和hat">[]定义字符组，字符组中必须有个字符来匹配相应的位置，例如匹配cat和hat</h1><p>sed -n ‘/[ch]at/p’ data6</p>
+<h1 id="使用3个字符组来涵盖3个字符位置含有大小写的情况">使用3个字符组来涵盖3个字符位置含有大小写的情况</h1><p>echo “yeS” | sed -n ‘/[Yy][Ee][Ss]/p’</p>
+<h1 id="匹配了任意含有数字0、1、2或3的行">匹配了任意含有数字0、1、2或3的行</h1><p>sed -n ‘/[0123]/p’ data7</p>
+<p>排除匹配</p>
+<h1 id="匹配c或h之外的任何字符以及文本模式">匹配c或h之外的任何字符以及文本模式</h1><p>sed -n ‘/[^ch]at/p’ data6</p>
+<p>区间匹配</p>
+<h1 id="每个字符组都会匹配0~9的任意数字">每个字符组都会匹配0~9的任意数字</h1><p>sed -n ‘/^[0-9][0-9][0-9][0-9][0-9]$/p’ data8</p>
+<h1 id="新的模式[c-h]at匹配了首字母在字母c和字母h之间的单词">新的模式[c-h]at匹配了首字母在字母c和字母h之间的单词</h1><p>sed -n ‘/[c-h]at/p’ data6</p>
+<h1 id="该字符组允许区间a~c、h~m中的字母出现在at文本前">该字符组允许区间a~c、h~m中的字母出现在at文本前</h1><p>sed -n ‘/[a-ch-m]at/p’ data6</p>
+<h1 id="特殊字符组，可以用[[:digit:]]来代替区间[0-9]">特殊字符组，可以用[[:digit:]]来代替区间[0-9]</h1><h1 id="在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中">在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中</h1><p>echo “I’m getting a color TV” | sed -n ‘/colou*r/p’</p>
+<h1 id="将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。">将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。</h1><p>echo “bat” | sed -n ‘/b.*t/p’</p>
+<h1 id="星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)">星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)</h1><p>echo “bat” | sed -n ‘/b[ae]*t/p’</p>
+<h1 id="显示文件夹中文件绝对目录">显示文件夹中文件绝对目录</h1><p>ls | sed “s:^:<code>pwd</code>/:”</p>
+<p>扩展正则表达式：gawk程序能够识别ERE模式，但sed编辑器不能</p>
+<h1 id="问号表明前面的字符可以出现0次或1次">问号表明前面的字符可以出现0次或1次</h1><p>echo “bt” | gawk ‘/be?t/{print $0}’</p>
+<h1 id="加号表明前面的字符可以出现1次或多次，但必须至少出现1次">加号表明前面的字符可以出现1次或多次，但必须至少出现1次</h1><p>echo “bt” | gawk ‘/b[ae]+t/{print $0}’</p>
+<h1 id="花括号{}允许你为可重复的正则表达式指定一个上限">花括号{}允许你为可重复的正则表达式指定一个上限</h1><h1 id="字符e只能出现1次，模式才能匹配">字符e只能出现1次，模式才能匹配</h1><p>echo “bet” | gawk —re-interval ‘/be{1}t/{print $0}’</p>
+<h1 id="字符e可以出现1次或2次，这样模式就能匹配">字符e可以出现1次或2次，这样模式就能匹配</h1><p>echo “beet” | gawk —re-interval ‘/be{1,2}t/{print $0}’</p>
+<h1 id="圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符">圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符</h1><h1 id="结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat">结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat</h1><p>echo “Sat” | gawk ‘/Sat(urday)?/{print $0}’</p>
+<h1 id="模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合">模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合</h1><p>echo “bab” | gawk ‘/(c|b)a(b|t)/{print $0}’</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### 正则表达式应用</span><br><span class="line">1. 验证电话号码</span><br><span class="line">2. 解析邮件地址</span><br><span class="line">	```^([a-zA-Z0-9_\-\.\+]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]&#123;2,5&#125;)$</span><br></pre></td></tr></table></figure>
+<h4 id="Linux通配符">Linux通配符</h4><p>bash shell可以使用正则表达式中的一些元字符实现通配（Globbing）功能。通配是把一个包含通配符的非具体文件名扩展存储在计算机，服务器或者网络上的一批具体文件名的过程。（可以看出<strong>①通配主要应用匹配文件名上，而正则主要应用于字符串上；②通配符通常只能被shell自解释，正则表达式需要被正则引擎解析；③元字符不同</strong>）。最常用的通配符包括正则表达式元字符：</p>
+<ul>
+<li>？(匹配任意单个字符,不能匹配“/”字符)</li>
+<li>*（匹配任意位的任意字符，包括空字符串，不包含对“/”字符的匹配）</li>
+<li>[]（匹配一个单字符范围,如[a-z]；[0-9]；[a-zBE5-7]表示所有a到z之间的字符和 B、E、5、6、7相匹配；[!abc]匹配除了“a，b，c”这3个字符之外的任意一个字符)</li>
+<li>{}</li>
+<li>^(取反)，例如<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* !取反</span><br><span class="line"></span><br><span class="line">&gt; 示例</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><em>.txt               # 匹配全部后缀为.txt的文件<br>file?.log           # 匹配file1.log, file2.log, …<br>[a-z]</em>.log          # 匹配a-z开头的.log文件<br>[^a-z]*.log         # 上面的反向匹配<br>```</p>
+<blockquote>
+<p>备注：反斜杠()或引号(‘, “)都会使通配符失效，例如如: <code>\*</code>, <code>&quot;*&quot;</code>, <code>&#39;*&#39;</code>都表示<code>*</code>本身，不通配任何文件</p>
+</blockquote>
 
       
     </div>
