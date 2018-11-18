@@ -377,7 +377,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2017/11/11/分布式系统基础知识/">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2017/11/11/C++基础/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CharlesXiao">
@@ -396,8 +396,8 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="../../2017/11/11/分布式系统基础知识/" itemprop="url">
-                  分布式存储系统基础
+                <a class="post-title-link" href="../../2017/11/11/C++基础/" itemprop="url">
+                  C++基础
                 </a>
               
             
@@ -440,15 +440,15 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-03 17:38:46" itemprop="dateModified" datetime="2018-11-03T17:38:46+08:00">2018-11-03</time>
+                <time title="修改时间：2018-11-02 08:11:57" itemprop="dateModified" datetime="2018-11-02T08:11:57+08:00">2018-11-02</time>
               
             
           </span>
 
         <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计3.4k字</span>
+        <span class="post-count">字数统计5.4k字</span>
         <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长12分钟</span>
+        <span class="post-count">阅读时长19分钟</span>
 
           
 
@@ -480,69 +480,93 @@
       
         
           
-            <h3 id="块存储/对象存储/文件系统">块存储/对象存储/文件系统</h3><ol>
-<li><strong>块存储</strong>：访问时延是10ms级，常用于跟虚机搭配使用，与普通硬盘无异，读写速度由于并发所以非常快。既要能应付大文件读写，也能处理好小文件读写。但是硬盘的特点是容量大，热点明显。因此块存储主要可以应付热点问题。另外，块存储要求的延迟是最低的。通常以QEMU Driver或者Kernel Module的方式存在，这种接口需要实现Linux的Block Device的接口或者QEMU提供的Block Driver接口，如Sheepdog，AWS的EBS，ceph的RBD；分布式块存储系统通常提供快照功能，方便在故障或者是业务需要的时候，将块设备上的数据恢复到期望的一个时间点。每次快照并不是全量快照，而是增量快照，仅对修改过的区间进行备份。</li>
-<li><strong>对象存储</strong>：访问时延是100ms-1s级，通常以大文件为主，要求足够的IO带宽。接口就是简单的GET、PUT、DEL和其他扩展，如七牛、又拍、Swift、S3</li>
-<li><strong>文件存储</strong>：通常意义是支持POSIX接口，它跟传统的文件系统如Ext4是一个类型的，需要考虑目录、文件属性等支持；但区别在于分布式存储提供了并行化的能力，如Ceph的CephFS；分布式文件系统通常需要有一个或一组namenode节点维护目录树，一个或一组metaserver节点来维护文件元信息</li>
-<li>块存储和文件存储在形态上虽然不同，但实际使用基本一致，块存储扩展性好、兼容性更好，但使用略麻烦；文件存储使用方便，且故障隔离性好，但扩展性不好。</li>
-<li><strong>表格存储</strong></li>
-<li><strong>归档存储</strong></li>
-</ol>
-<h3 id="OLAP与OLTP">OLAP与OLTP</h3><p>当今的数据处理大致可以分成两大类：<strong>联机事务处理OLTP（on-line transaction processing）、联机分析处理OLAP（On-Line Analytical Processing）</strong>。OLTP是传统的关系型数据库的主要应用，主要是基本的、日常的事务处理，例如银行交易，关注实时性，数据量较少。OLAP是数据仓库系统的主要应用，支持复杂的分析操作，侧重决策支持，并且提供直观易懂的查询结果。</p>
-<ul>
-<li><strong>数据库OLTP</strong>：传统的关系型数据库的主要应用，主要是基本的、日常的事务处理，例如银行交易。</li>
-<li><strong>数据仓库</strong>：数据仓库系统的主要应用主要是OLAP（On-Line Analytical Processing），支持复杂的分析操作，侧重决策支持，并且提供直观易懂的查询结果。</li>
-<li>举个最常见的例子，拿电商行业来说好了。基本每家电商公司都会经历，从只需要业务数据库到要数据仓库的阶段。<ol>
-<li>电商早期启动非常容易，入行门槛低。找个外包团队，做了一个可以下单的网页前端 + 几台服务器 + 一个MySQL，就能开门迎客了。这好比手工作坊时期。</li>
-<li>第二阶段，流量来了，客户和订单都多起来了，普通查询已经有压力了，这个时候就需要升级架构变成多台服务器和多个业务数据库（量大+分库分表），这个阶段的业务数字和指标还可以勉强从业务数据库里查询。初步进入工业化。</li>
-<li>第三个阶段，一般需要 3-5 年左右的时间，随着业务指数级的增长，数据量的会陡增，公司角色也开始多了起来，开始有了 CEO、CMO、CIO，大家需要面临的问题越来越复杂，越来越深入。高管们关心的问题，从最初非常粗放的：“昨天的收入是多少”、“上个月的 PV、UV 是多少”，逐渐演化到非常精细化和具体的用户的集群分析，特定用户在某种使用场景中，例如“20~30岁女性用户在过去五年的第一季度化妆品类商品的购买行为与公司进行的促销活动方案之间的关系”。</li>
-<li>这类非常具体，且能够对公司决策起到关键性作用的问题，基本很难从业务数据库从调取出来。原因在于：业务数据库中的数据结构是为了完成交易而设计的，不是为了而查询和分析的便利设计的。业务数据库大多是读写优化的，即又要读（查看商品信息），也要写（产生订单，完成支付）。因此对于大量数据的读（查询指标，一般是复杂的只读类型查询）是支持不足的。</li>
-<li>而怎么解决这个问题，此时我们就需要建立一个数据仓库了，公司也算开始进入信息化阶段了。数据仓库的作用在于：数据结构为了分析和查询的便利；只读优化的数据库，即不需要它写入速度多么快，只要做大量数据的复杂查询的速度足够快就行了。那么在这里前一种业务数据库（读写都优化）的是业务性数据库，后一种是分析性数据库，即数据仓库。</li>
-</ol>
+            <h3 id="基础语法">基础语法</h3><ol>
+<li><p>在C和C++语言中的全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值。 C++保证了所有对象与对象成员都会初始化，但其中基本数据类型的初始化还得依赖于构造函数。</p>
 </li>
-<li>最后总结一下：数据库比较流行的有：MySQL, Oracle, SqlServer等。数据仓库比较流行的有：AWS Redshift, Greenplum, Hive等。这样把数据从业务性的数据库中提取、加工、导入分析性的数据库就是传统的 ETL 工作。</li>
+<li><p>在C语言中int a;表示声明了整型a但未初始化，而C++中的对象总是会被初始化的，无论是否写了圆括号或者是否写了参数列表；定义基本数据类型变量（单个值、数组）的同时可以指定初始值，如果未指定C++会去执行默认初始化(default-initialization)。<a href="http://harttle.land/2015/10/05/cpp-variable-init.html" target="_blank" rel="noopener">变量初始化</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/bzhxuexi/article/details/19899803" target="_blank" rel="noopener">size_t,ssize_t,int和long的区别</a></p>
+</li>
+<li><p><code>gcc test.c -o test</code>编译指令分为四个阶段进行，即预处理(也称预编译，Preprocessing, 把头文件内容真正引入cpp文件中)、编译(Compilation生成汇编代码.s文件)、汇编 (Assembly编译为目标文件.o)和连接(Linking包括静态连接库中需要的库文件)。</p>
+</li>
+<li>函数库分为<strong>静态库和动态库</strong>两种。静态库在程序编译时会被连接到目标代码中，程序运行时将不再需要该静态库。动态库在程序编译时并不会被连接到目标代码中，而是在程序运行是才被载入，因此在程序运行时还需要动态库存在。无论静态库，还是动态库，都是由.o文件创建的。<ul>
+<li>.o 一个.c或.cpp文件对应一个.o文件, 也就是编译器编译cpp源代码文件生成的目标文件</li>
+<li>.a是静态库，是好多个.o合在一起，多个.a可以链接生成一个可执行文件；静态库文件名的命名规范是以lib为前缀，紧接着跟静态库名，扩展名为.a</li>
+<li>.so是动态库，文件名命名规范和静态库文件名命名规范类似，也是在动态库名增加前缀lib，但其文件扩展名为.so</li>
+<li>默认情况下， GCC在链接时优先使用动态链接库，只有当动态链接库不存在时才考虑使用静态链接库，如果需要的话可以在编译时加上-static选项，强制使用静态链接库。</li>
 </ul>
-<h3 id="CAP理论">CAP理论</h3><p>2000年7月，加州大学伯克利分校的Eric Brewer教授在ACM PODC会议上提出CAP猜想。2年后，麻省理工学院的Seth Gilbert和Nancy Lynch从理论上证明了CAP；也就是：<strong>一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项</strong>。  </p>
+</li>
+</ol>
+<h3 id="智能指针boost::scoped_ptr/std::auto_ptr">智能指针boost::scoped_ptr/std::auto_ptr</h3><p>boost::scoped_ptr和std::auto_ptr（已被C++11废弃）非常类似，是一个简单的智能指针，它能够保证在离开作用域后对象被自动释放，避免由于忘记手动调用delete而造成内存泄漏。实现原理都是利用了一个栈上的对象去管理一个堆上的对象，从而使得堆上的对象随着栈上的对象销毁时自动删除。  </p>
+<h4 id="两者区别">两者区别</h4><ol>
+<li><strong>不能转换所有权</strong>：boost::scoped_ptr所管理的对象生命周期仅仅局限于一个区间（该指针所在的”{}”之间），无法传到区间之外，无法拷贝。这就意味着boost::scoped_ptr对象是不能作为函数的返回值的（std::auto_ptr可以）。</li>
+<li><strong>不能共享所有权</strong>：这点和std::auto_ptr类似。这个特点一方面使得该指针简单易用。另一方面也造成了功能的薄弱——不能用于stl的容器中。</li>
+<li><strong>不能用于管理数组对象</strong>：由于boost::scoped_ptr是通过delete来删除所管理对象的，而数组对象必须通过deletep[]来删除，因此boost::scoped_ptr是不能管理数组对象的，如果要管理数组对象需要使用boost::scoped_array类。</li>
+<li>如何在他们之间取舍取决于是否需要转移所管理的对象的所有权（如是否需要作为函数的返回值）。如果没有这个需要的话，大可以使用boost::scoped_ptr，让编译器来进行更严格的检查，来发现一些不正确的赋值操作。</li>
+</ol>
+<h3 id="C++_显式类型转换">C++ 显式类型转换</h3><blockquote>
+<figure class="highlight plain"><figcaption><span>分别为转换方式，目标类型，被转换的值。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">1. ```static_cast&lt;type&gt;(expression)```: 不提供运行时的检查的类型转换方式</span><br><span class="line">	* 主要用于父类和子类之间指针和引用的转换；进行上行转换，把子类对象的指针/引用转换为父类指针/引用，这种转换是安全的；进行下行转换，把父类对象的指针/引用转换成子类指针/引用，这种转换是不安全的</span><br><span class="line">	* 用于基本数据类型之间的转换，例如把int转char，int转enum等，需要编写程序时来确认安全性</span><br><span class="line">	* 把void指针转换成目标类型的指针（这是极其不安全的）</span><br><span class="line"></span><br><span class="line">2. ```dynamic_cast&lt;type&gt;(expression)```: 在运行时检查类型转换是否合法，具有一定的安全性，额外消耗一些性能；仅适用于指针或引用转换，若指针转换失败，则返回空指针，若引用转换失败，则抛出异常。经常用于将指针转换为void*: ```A *pA = new A; void *pV = dynamic_cast&lt;void *&gt;(pA);</span><br></pre></td></tr></table></figure>
+</blockquote>
 <ol>
-<li><strong>一致性</strong>：<code>all nodes see the same data at the same time</code>；根据业务场景可以分为强一致性，弱一致性和最终一致性。对于关系型数据库，要求更新过的数据能被后续的访问都能看到，这是<strong>强一致性</strong>。如果能容忍后续的部分或者全部访问不到，则是<strong>弱一致性</strong>。如果经过一段时间后要求能访问到更新后的数据，则是<strong>最终一致性</strong>。</li>
-<li><strong>可用性</strong>：<code>Reads and writes always succeed</code>，即服务一直可用，而且是正常响应时间。如果系统每运行100个时间单位，会有1个时间单位无法提供服务，则说系统的可用性是99%。</li>
-<li><strong>分区容错性</strong>：<code>the system continues to operate despite arbitrary message loss or failure of part of the system</code>，即分布式系统在遇到某节点或网络分区故障的时候，仍然能够对外提供满足一致性和可用性的服务。</li>
-<li><strong>CAP权衡</strong>：</li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">4. ```reinterpret_cast```非常激进的指针类型转换，在编译期完成，可以转换任何类型的指针，所以极不安全。非极端情况不要使用。</span><br><span class="line"></span><br><span class="line">### 守护进程</span><br><span class="line">#### Supervisor</span><br><span class="line">1. Supervisor是一个C/S系统， 允许用户监控和管理一系列运行于类Unix系统上的进程。通常，我们使用Supervisor将一个普通的命令行进程变为后台daemon，并监控这一些进程，以便这些进程在意外退出后能够重新启动。</span><br><span class="line">2. Supervisor有以下优点：</span><br><span class="line">	* 简单， ini风格的配置文件，容易阅读，对每个进程都提供了许多选项以便失败重启和日志轮替。</span><br><span class="line">	* 集中，一站式的进程启动，停止，监控平台。进程可以单独管理或分组管理，更提供了Web管理界面。</span><br><span class="line">	* 高效，通过fork/exec启动子进程且子进程不会进入守护模式，当子进程意外终止时，操作系统会立即发送信号给Supervisor，而不像其他方案那样，需要通过PID轮询。</span><br><span class="line">	* 可扩展，拥有非常简单的事件通知协议，任何编程语言程序都能监控它，也提供了XML-RPC管理接口，也为Python开发者预留了扩展空间。</span><br><span class="line">兼容性，除了Windows，几乎可以运行于任何操作系统，已经测试过的包括Linux, Mac OS X, Solaris, 和 FreeBSD。</span><br><span class="line">	* 久经考验，虽然开发非常活跃，但Supervisor并不是新软件，它已经存在多年，广泛运行于许多服务器上。</span><br><span class="line"></span><br><span class="line">#### systemd</span><br><span class="line">1. Systemd是一个Linux操作系统下的系统和服务管理器。它被设计成向后兼容SysV启动脚本，并提供了大量的特性，如开机时平行启动系统服务，按需启动守护进程，支持系统状态快照，或者基于依赖的服务控制逻辑,已成为大多数发行版的标准配置。可以通过 systemctl --version 命令来查看使用的版本</span><br><span class="line">3. systemd 和 supervisord 各有长短，不存在哪一方绝对的碾压。systemd 跟 Linux 紧密结合，所需的依赖少，其提供的保障自然比 supervisord 更可靠。然而在强大的能力背后，也有配置复杂、不易上手等问题。</span><br><span class="line"></span><br><span class="line">### 常用测试工具</span><br><span class="line">1. Apache自带ApacheBench程序对Apache或其它类型的服务器进行网站访问压力测试。</span><br><span class="line"></span><br><span class="line">&gt; ApacheBench命令原理：ab命令会创建很多的并发访问线程，模拟多个访问者同时对某一URL地址进行访问。它的测试目标是基于URL的，因此，既可以用来测试Apache的负载压力，也可以测试nginx、lighthttp、tomcat、IIS等其它Web服务器的压力。</span><br><span class="line"></span><br><span class="line">&gt; ab命令对发出负载的计算机要求很低，既不会占用很高CPU，也不会占用很多内存，但却会给目标服务器造成巨大的负载，其原理类似CC攻击。自己测试使用也须注意，否则一次上太多的负载，可能造成目标服务器因资源耗完，严重时甚至导致死机。</span><br><span class="line"></span><br><span class="line">2. [服务器性能评估相关指标QPS](https://ruby-china.org/topics/26221)</span><br><span class="line"></span><br><span class="line">### C++常用错误调试工具</span><br><span class="line"></span><br><span class="line">#### core dump</span><br><span class="line">core dump是大多数UNIX系统实现的一种特性，当进程运行的过程中异常终止或崩溃时，操作系统会将进程当前的内存映像和一部分相关的调试信息写入core文件，例如寄存器信息（包括程序指针、栈指针等）、内存管理信息、其他处理器和操作系统状态和信息。我们可以使用```ulimit -c unlimited```命令来开启core dump。  </span><br><span class="line"></span><br><span class="line">Linux中信号是一种异步事件处理的机制，每种信号对应有其默认的操作，默认操作主要包括忽略该信号（Ingore）、暂停进程（Stop）、终止进程（Terminate）、终止并发生core dump（core）等；```kill -l```可以看到linux里边的信号种类，默认动作中可能产生core文件的信号包括以下种类：</span><br><span class="line"></span><br><span class="line">信号名字 | 说明 | 默认动作</span><br><span class="line">--- | --- | ---</span><br><span class="line">SIGABRT(6) | 异常终止（调用abort函数产生此信号）| 终止+core</span><br><span class="line">SIGBUS(7) | 硬件故障，比如出现某些内存故障 | 终止+core</span><br><span class="line">SIGEMT | 硬件故障 | 终止+core</span><br><span class="line">SIGFPE(8) | 算术异常，比如除以0，浮点溢出等 | 终止+core</span><br><span class="line">SIGILL(4) | 非法硬件指令	| 终止+core</span><br><span class="line">SIGIOT(29) | 硬件故障	| 终止+core</span><br><span class="line">SIGQUIT(3) | 终端退出符，比如Ctrl+C	| 终止+core</span><br><span class="line">SIGSEGV(11) | 无效内存引用 | 终止+core</span><br><span class="line">SIGSYS(31) | 无效系统调用	| 终止+core</span><br><span class="line">SIGXCPU(24) | 超过CPU限制（setrlimit）| 终止+core/忽略</span><br><span class="line">SIGXFSZ(25) | 超过文件长度限制（setrlimit）| 终止+core/忽略</span><br><span class="line"></span><br><span class="line">这就是为什么我们使用```ctrl+z```来挂起一个进程或者```Ctrl+C```结束一个进程均不会产生 core dump，因为前者会向进程发出SIGTSTP信号，该信号的默认操作为暂停进程（Stop Process）；后者会向进程发出SIGINT信号，该信号默认操作为终止进程（Terminate Process）。同样上面提到的 kill -9 命令会发出 SIGKILL 命令，该命令默认为终止进程。而如果我们使用 Ctrl+\ 来终止一个进程，会向进程发出 SIGQUIT 信号，默认是会产生 core dump 的。还有其它情景会产生core dump， 如：程序调用 abort() 函数、访存错误、非法指令等等。</span><br><span class="line"></span><br><span class="line">#### dmesg</span><br><span class="line">**段错误**是指访问的内存超出了系统给这个程序所设定的内存空间， 例如访问了不存在的内存地址，访问了系统保护的内存地址，访问了只读的内存地址等等情况。```dmesg```命令显示linux内核的环形缓冲区信息，我们可以从中获得诸如系统架构、cpu、挂载的硬件，RAM等多个运行级别的大量的系统信息。通过dmesg命令可以查看发生段错误的程序名称、引起段错误发生的内存地址、指令指针地址、堆栈指针地址、错误代码、错误原因等。</span><br><span class="line"></span><br><span class="line">1. dmesg信息解读: 如下是bucket bin文件段错误信息，ip信息会用到后续objdump反编译分析</span><br><span class="line"></span><br><span class="line">```bucket[14306]: segfault at b8c6000 ip 0000000000c3dece sp 00007ffd2c96ae80 error 6 in bucket[400000+eea000]</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
 <blockquote>
-<p>CA without P：如果不要求P（不允许分区），则C（强一致性）和A（可用性）是可以保证的。但其实分区不是你想不想的问题，而是始终会存在，因此CA的系统更多的是允许分区后各子系统依然保持CA。</p>
-<p>CP without A：如果不要求A（可用），相当于每个请求都需要在Server之间强一致，而P（分区）会导致同步时间无限延长，如此CP也是可以保证的。很多传统的数据库分布式事务都属于这种模式。</p>
-<p>AP wihtout C：要高可用并允许分区，则需放弃一致性。一旦分区发生，节点之间可能会失去联系，为了高可用，每个节点只能用本地数据提供服务，而这样会导致全局数据的不一致性。现在众多的NoSQL都属于此类。</p>
-<p>对于多数大型互联网应用，集群规模庞大、主机众多、部署分散，节点故障、网络故障是常态，而且要保证服务可用性达到N个9，往往采用AP without C，只保证最终一致性即可。</p>
-<p>对于银行业场景，C必须保证。网络发生故障宁可停止服务，这是保证CA，舍弃P；还有一种是保证CP，舍弃A，例如网络故障事只读不写。</p>
-<p>保证P的前提下，选择一致性C，举例：传统单库水平切分，就是这类选型的典型</p>
-<p>保证P的前提下，选择可用性A，举例：双主库同步高可用，就是这类选型的典型</p>
+<p>error number是6, 转成二进制就是110, 即bit2=1, bit1=1, bit0=0, 按照上面的解释，我们可以得出这条信息是由于用户态程序写操作访问越界，访问的是无效地址造成的。</p>
+<p>error number是由三个字位组成的，从高到底分别为bit2 bit1和bit0,所以它的取值范围是0~7.</p>
+<blockquote>
+<ul>
+<li>bit2: 值为1表示是用户态程序内存访问越界，值为0表示是内核态程序内存访问越界</li>
+<li>bit1: 值为1表示是写操作导致内存访问越界，值为0表示是读操作导致内存访问越界</li>
+<li>bit0: 值为1表示没有足够的权限访问非法地址的内容，值为0表示访问的非法地址根本没有对应的页面，也就是无效地址</li>
+</ul>
 </blockquote>
-<h3 id="分布式存储常见概念名词">分布式存储常见概念名词</h3><ol>
-<li><strong>RAID(Redundant Array of Independent Disk 独立冗余磁盘阵列)</strong>是加州大学伯克利分校1987年提出，最初是为了组合小的廉价磁盘来代替大的昂贵磁盘，同时希望磁盘失效时不会使对数据的访问受损失而开发出一定水平的数据保护技术。<strong>RAID就是一种由多块廉价磁盘构成的冗余阵列，在操作系统下是作为一个独立的大型存储设备出现。RAID可以充分发挥出多块硬盘的优势，可以提升硬盘速度，增大容量，提供容错功能够确保数据安全性，易于管理的优点</strong>，在任何一块硬盘出现问题的情况下都可以继续工作，不会受到损坏硬盘的影响。</li>
-<li><strong>RAID卡</strong>就是用来实现RAID功能的板卡，通常是由I/O<a href="http://baike.baidu.com/view/50152.htm" target="_blank" rel="noopener">处理器</a>、SCSI控制器、SCSI连接器和缓存等一系列零组件构成的。不同的RAID卡支持的RAID功能不同。支持RADI0、RAID1、RAID3、RAID4、RAID5、RAID10不等。RAID卡可以让很多磁盘驱动器同时传输数据，而这些磁盘驱动器在逻辑上又是一个磁盘驱动器，所以使用RAID可以达到单个的磁盘驱动器几倍、几十倍甚至上百倍的速率。这也是RAID卡最初想要解决的问题。可以提供容错功能，这是RAID卡的第二个重要功能。</li>
-<li><strong>MVCC</strong></li>
-<li><strong>EC编码与各级RAID</strong></li>
-</ol>
-<h3 id="轮询调度算法">轮询调度算法</h3><ol>
-<li>轮询调度算法的原理是每一次把来自用户的请求轮流分配给内部中的服务器，从1开始，直到N(内部服务器个数)，然后重新开始循环；即每次调度执行<code>i = N-1; i = (i+1) mod N</code>，并选出第i台服务器</li>
-<li>适合于服务器组中的所有服务器都有相同的软硬件配置并且平均服务请求相对均衡的情况, 它无需记录当前所有连接的状态，是一种无状态调度。</li>
-</ol>
-<h3 id="Learned_Indexes_VS_Traditional_Indexes">Learned Indexes VS Traditional Indexes</h3><blockquote>
-<p>目前存在多种索引的选择来解决各种访问模式的需求。例如 B-Trees 是范围请求最好的选择（例如在特定时间线上索引所有的数据记录），哈希表（Hash-Maps）在性能上很难打败基于键值的搜索方法，而布隆过滤器 (Bloom Filter) 通常用于检测是否存在某条记录。由于索引对于数据库系统和其它一些应用的重要性，过去几十年来，它们已经广泛地发展为更高的内存、缓存和 CPU 效率的方法</p>
-<p>本论文的核心思想是一个模型可以学习排序顺序或查找键的结构，并使用这一信号有效地预测记录的位置或存在。我们从理论上分析了学习索引在什么条件下表现优于传统索引结构，并描述了设计学习索引结构的主要挑战。我们的初步结果表明，借助神经网络，我们能够超过缓存优化的 B-Trees 高达 70％的速度，同时为若干个真实数据集节省一个数量级的内存。</p>
 </blockquote>
-<h3 id="分布式事务">分布式事务</h3><h4 id="两阶段提交2PC">两阶段提交2PC</h4><ol>
-<li>二阶段提交2PC（Two phase Commit）是一种在分布式环境下所有节点进行事务提交保持一致性的算法。它通过引入一个协调者（Coordinator）来统一掌控所有参与者（Participant）的操作结果，并指示它们是否要把操作结果进行真正的提交（commit）或者回滚（rollback）。</li>
-<li>两个阶段：<ul>
-<li>投票阶段（voting phase）：参与者通知协调者，协调者反馈结果；</li>
-<li>提交阶段（commit phase）：收到参与者的反馈后，协调者再向参与者发出通知，根据反馈情况决定各参与者是否要提交还是回滚</li>
+<h4 id="objdump">objdump</h4><p>objdump命令是Linux下的反汇编目标文件或者可执行文件的命令，使用objdump生成二进制的相关信息，并重定向到文件中</p>
+<figure class="highlight plain"><figcaption><span>-d(-S尽可能完全反编译) bin/bucket > segfaultDump```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```grep -n -A 10 -B 10 &quot;c3dece&quot; ./segfaultDump</span><br></pre></td></tr></table></figure>
+<h4 id="pstack和strace">pstack和strace</h4><p>strace跟踪程序使用的底层系统调用，可输出系统调用被执行的时间点以及各个调用耗时；pstack工具对指定PID的进程输出函数调用栈。一般两者配合调用，先用strace查看耗时的系统调用，然后用pstack看函数调用栈信息，找到出问题的函数。</p>
+<ol>
+<li><p>在Linux世界，进程不能直接访问硬件设备，当进程需要访问硬件设备(比如读取磁盘文件，接收网络数据等等)时，必须由用户态模式切换至内核态模式，通过系统调用访问硬件设备。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">	</span><br><span class="line">		# -f -F选项设置同时跟踪fork和vfork出来的进程，输出到~/straceout.txt，myserver是要启动和调试的程序</span><br><span class="line">		strace -f -F -o ~/straceout.txt myserver</span><br><span class="line">		</span><br><span class="line">		# 跟踪28979进程的所有系统调用（-e trace=all），并统计系统调用的花费时间，以及开始时间（并以可视化的时分秒格式显示）</span><br><span class="line">		strace -o output.txt -T -tt -e trace=all -p 28979</span><br><span class="line">2. ```pstack pid```: print a stack trace of a running process</span><br><span class="line">3. [实例讲解如何使用strace+pstack利器分析程序性能](https://blog.csdn.net/jiang1013nan/article/details/17558165)</span><br><span class="line"></span><br><span class="line">#### 其它</span><br><span class="line">1. ldd：使用ldd命令查看二进制程序的共享链接库依赖，包括库的名称、起始地址，这样可以确定段错误到底是发生在了自己的程序中还是依赖的共享库中。例如```ldd bin/bucket</span><br></pre></td></tr></table></figure></p>
+</li>
+<li><p>nm：使用nm命令列出二进制文件中的符号表，包括符号地址、符号类型、符号名等，这样可以帮助定位在哪里发生了段错误。<figure class="highlight plain"><figcaption><span>bin/bucket```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">#### 参考链接</span><br><span class="line">1. [Linux工具](http://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/objdump.html)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### condition_variable/mutex/thread_pool</span><br><span class="line"></span><br><span class="line">1. **条件变量(Condtion Variable)是在多线程程序中用来实现“等待-&gt;唤醒”逻辑常用的方法，条件变量能使一个或多个线程进入阻塞状态,直到接到另一个线程的通知(notify),或者发生超时或虚假唤醒时,才退出阻塞**。例如，应用程序A中包含两个线程t1和t2。t1需要在bool变量test_cond为true时才能继续执行，而test_cond的值是由t2来改变的，这种情况下可供选择的方案有两种：</span><br><span class="line"></span><br><span class="line">   * t1定时的去轮询变量test_cond，如果test_cond为false，则继续休眠；如果test_cond为true，则开始执行。</span><br><span class="line">   * 利用条件变量，t1在test_cond为false时调用cond_wait进行等待，t2在改变test_cond的值后，调用cond_signal，唤醒在等待中的t1，告诉t1 test_cond的值变了，这样t1便可继续往下执行。</span><br><span class="line">   * Wait_for: 在条件变量收到信号或者指定的超时发生前，线程一直处于阻塞状态；</span><br><span class="line">   * Wait_until:在条件变量收到信号或者指定的时刻到达之前，线程一直处于阻塞状态。</span><br><span class="line"></span><br><span class="line">2. **Thread相关的函数**：</span><br><span class="line"></span><br><span class="line">   * t.join()：使调用线程（本例是指主线程）一直处于阻塞状态，直到正在执行的线程t执行结束。如果线程函数返回某个值，该值也将被忽略。不过，该函数可以接收任意数量的参数，尽管可以向线程函数传递任意数量的参数，但是所有的参数应当按值传递。如果需要将参数按引用传递，那要向下例所示那样，必须将参数用std::ref 或者std::cref进行封装。</span><br><span class="line"></span><br><span class="line">     ```cpp</span><br><span class="line">     void func(int i, double d, const std::string&amp; s)</span><br><span class="line">     &#123;</span><br><span class="line">         std::cout &lt;&lt; i &lt;&lt; &quot;, &quot; &lt;&lt; d &lt;&lt; &quot;, &quot; &lt;&lt; s &lt;&lt; std::endl;</span><br><span class="line">     &#125;</span><br><span class="line">      </span><br><span class="line">     void func1(int&amp; a)</span><br><span class="line">     &#123;</span><br><span class="line">        a++;</span><br><span class="line">     &#125;</span><br><span class="line">     </span><br><span class="line">     int main()</span><br><span class="line">     &#123;</span><br><span class="line">        std::thread t(func, 1, 12.50, &quot;sample&quot;);</span><br><span class="line">        t.join();</span><br><span class="line">      </span><br><span class="line">        int a = 42;</span><br><span class="line">        std::thread t1(func, std::ref(a));</span><br><span class="line">        t1.join();</span><br><span class="line">        </span><br><span class="line">        return 0;</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>Detach: 允许执行该方法的线程脱离其线程对象而继续独立执行。脱离后的线程不再是可结合线程（你不能等待它们执行结束）。</p>
+</li>
+<li><p>get_id: 返回当前线程的id</p>
+</li>
+<li><p>yield:在处于等待状态时，可以让调度器先运行其他可用的线程。</p>
+</li>
+<li><p>sleep_for:阻塞当前线程，时间不少于其参数指定的时间。</p>
+</li>
+<li><p>sleep_util:在参数指定的时间到达之前，使当前线程一直处于阻塞状态。</p>
+</li>
 </ul>
 </li>
-<li>2PC在执行过程中，所有节点都处于阻塞状态，所有节点所持有的资源（例如数据库数据，本地文件等）都处于封锁状态。例如，某一个参与者回复消息之前，所有参与者以及协调者都处于阻塞状态；在协调者发出消息之前，所有参与者都处于阻塞状态。要打破完全阻塞状态需要引入超时机制。</li>
+<li><p><strong>std::recursive_mutex：</strong>允许同一个线程多次获取同一个互斥量，可获取的互斥量的最大次数并没有具体说明。但是一旦超过最大次数，再对lock进行调用就会抛出std::system_error错误异常。</p>
+</li>
+<li><p><strong>Timed_mutex和Recursive_timed_mutex</strong>：try_lock_for() 和 try_lock_until()，分别用于在某个时间段里或者某个时刻到达之间获取该互斥量</p>
+</li>
+<li><p><strong>Lock_guard</strong>: 在构造对象时，它试图去获取互斥量的所有权（通过调用lock()），在析构对象时，自动释放互斥量（通过调用unlock()）.这是一个不可复制的类。</p>
+</li>
+<li><p><strong>Unique_lock</strong>: 这个一通用的互斥量封装类，不同于lock_guard，它还支持延迟加锁，时间加锁和递归加锁以及锁所有权的转移和条件变量的使用。这也是一个不可复制的类，但它是可移动类。</p>
+</li>
+<li><p><a href="http://blog.jobbole.com/44409/" target="_blank" rel="noopener">C++11 中的线程、锁和条件变量</a></p>
+</li>
 </ol>
-<h3 id="常见分布式一致性算法">常见分布式一致性算法</h3><h4 id="Paxos">Paxos</h4><h4 id="Raft">Raft</h4><h4 id="异同点">异同点</h4><h4 id="应用场景">应用场景</h4><ol>
-<li><strong>2PC和Paxos区别</strong>：2PC用于保证多个数据分片上分布式事务的原子性，Paxos协议用于保证同一个数据分片在多个副本的分布式一致性，所以两者可以是互补的关系，绝不是替代关系。对于2PC协调者单点问题，可以利用Paxos协议解决，当协调者出问题时，选一个新的协调者继续提供服务。</li>
+<h3 id="Linux中的线程同步机制-Futex/Mutexes/Condition_Variables/POSIX_Semaphores">Linux中的线程同步机制-Futex/Mutexes/Condition Variables/POSIX Semaphores</h3><p>Futex是一种用户态和内核态混合的同步机制。首先，同步的进程间通过mmap共享一段内存，futex变量就位于这段共享 的内存中且操作是原子的，当进程尝试进入互斥区或者退出互斥区的时候，先去查看共享内存中的futex变量，如果没有竞争发生，则只修改futex,而不 用再执行系统调用了。当通过访问futex变量告诉进程有竞争发生，则还是得执行系统调用去完成相应的处理(wait 或者 wake up)。简单的说，futex就是通过在用户态的检查，（motivation）如果了解到没有竞争就不用陷入内核了，大大提高了low-contention时候的效率。<br><a href="http://ju.outofmemory.cn/entry/38941" target="_blank" rel="noopener">Linux多线程同步机制参考链接</a></p>
+<h3 id="C++的RAII_—-_资源获取即初始化">C++的RAII —- 资源获取即初始化</h3><p>C++的一种利用C++构造的对象最终会被销毁的原则来管理资源避免泄露的用法。具体做法是使用一个对象，在其构造时获取对应的资源，在对象生命期内控制对资源的访问，使之始终保持有效，最后在对象析构的时候，释放构造时获取的资源。</p>
+<p><strong>如何使用RAII ？</strong><br>把资源用类进行封装起来，对资源操作都封装在类的内部，在析构函数中进行释放资源。当定义的局部变量的生命结束时，它的析构函数就会自动的被调用，如此，就不用程序员显示的去调用释放资源的操作了。例如对socket、互斥锁、文件句柄和内存的申请和释放。</p>
+<h3 id="其它">其它</h3><ol>
+<li>C++ 11 auto关键字编译时类型推断。</li>
+<li>std::map::emplace_hint 暗示指定位置前插入元素；make_shared构造类型对象和make_pair构造pair</li>
+<li>常用第三方库：boost，gflag，glog，folly，chromium，bazel代码构建</li>
+<li>性能分析和内存泄漏：gperftools</li>
+<li>C++单例：std::atomic + DCLP, std::once_flag</li>
+<li>线程池：rocksdb/util/thread_pool_imp.h</li>
+<li>C++智能指针：boost::smart_ptr, std::shared_ptr, std::unique_ptr</li>
+<li>boost::shared_ptr 主要的功能是，管理动态创建的对象的销毁。它的基本原理就是记录对象被引用的次数，当引用次数为 0 的时候，也就是最后一个指向某对象的共享指针析构的时候，共享指针的析构函数就把指向的内存区域释放掉。共享指针对象重载了 operator* 和 operator-&gt; , 所以你可以像通常的指针一样使用它. <a href="https://blog.csdn.net/codestinity/article/details/6898613" target="_blank" rel="noopener">shared_ptr</a></li>
+<li><strong><a href="https://www.ibm.com/developerworks/cn/aix/library/1307_lisl_c11/index.html" target="_blank" rel="noopener">C++左值与右值引用</a></strong>: C++( 包括 C) 中所有的表达式和变量要么是左值，要么是右值。通俗的左值的定义就是非临时对象，那些可以在多条语句中使用的对象。所有的变量都满足这个定义，在多条代码中都可以使用，都是左值。右值是指临时的对象，它们只在当前的语句中有效。左值的声明符号为”&amp;”， 为了和左值区分，右值的声明符号为”&amp;&amp;”。右值引用是用来支持转移语义的。转移语义可以将资源 ( 堆，系统对象等 ) 从一个对象转移到另一个对象，这样能够减少不必要的临时对象的创建、拷贝以及销毁，能够大幅度提高 C++ 应用程序的性能。要实现转移语义，需要定义转移构造函数，还可以定义转移赋值操作符。标准库提供了函数 std::move，这个函数以非常简单的方式将左值引用转换为右值引用。</li>
+<li>C++11之后支持lamda语法：std::function可调用实体，std::bind返回可调用实体，用于后续作为回调函数</li>
 </ol>
 
           

@@ -377,7 +377,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2018/02/07/大数据分析相关工具/">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2018/02/07/高并发系统的限流策略/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CharlesXiao">
@@ -396,8 +396,8 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="../../2018/02/07/大数据分析相关工具/" itemprop="url">
-                  大数据分析相关工具
+                <a class="post-title-link" href="../../2018/02/07/高并发系统的限流策略/" itemprop="url">
+                  高并发系统的限流策略
                 </a>
               
             
@@ -440,15 +440,15 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-02-12 14:08:03" itemprop="dateModified" datetime="2018-02-12T14:08:03+08:00">2018-02-12</time>
+                <time title="修改时间：2018-08-20 19:24:26" itemprop="dateModified" datetime="2018-08-20T19:24:26+08:00">2018-08-20</time>
               
             
           </span>
 
         <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计100字</span>
+        <span class="post-count">字数统计653字</span>
         <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长1分钟</span>
+        <span class="post-count">阅读时长2分钟</span>
 
           
 
@@ -480,13 +480,31 @@
       
         
           
-            <h3 id="基础组件">基础组件</h3><ol>
-<li>Hadoop = HDFS + YARN + MapReduce；HDFS负责存储，YARN负责资源调度，依然发挥重要作用，MapReduce计算框架</li>
-<li>Hbase主要解决实时数据查询问题;Hive和Pig主要解决数据处理和计算问题，分别以SQL形式和脚本形式</li>
-<li><a href="https://www.zhihu.com/question/27974418/answer/156227565" target="_blank" rel="noopener">如何用形象的比喻描述大数据的技术生态？Hadoop、Hive、Spark 之间是什么关系？</a></li>
+            <p>一个高并发的系统，保护系统的方法一般有三种：<strong>缓存、降级和限流</strong>，本文主要讲一讲常见的限流策略。限流的目的是通过对并发访问进行限速或者一个时间窗口内的的请求进行限速来保护系统，一旦达到限制速率则可以拒绝服务（定向到错误页或告知资源没有了）、排队或等待（比如秒杀、评论、下单）、降级（返回兜底数据或默认数据，如商品详情页库存默认有货）</p>
+<h4 id="单机限流">单机限流</h4><h5 id="常见限流措施">常见限流措施</h5><ul>
+<li>限制总并发数（比如数据库连接池、线程池）</li>
+<li>限制瞬时并发数（如nginx的limit_conn模块，用来限制瞬时并发连接数）</li>
+<li>限制时间窗口内的平均速率（如Guava的RateLimiter、nginx的limit_req模块，限制每秒的平均速率）</li>
+<li>限制远程接口调用速率</li>
+<li>限制消息队列的消费速率</li>
+<li>根据网络连接数、网络流量、CPU或内存负载等来限流</li>
+</ul>
+<h5 id="限流算法">限流算法</h5><ol>
+<li><p><strong>令牌桶算法</strong>：令牌桶是按照固定速率往桶中添加令牌，请求是否被处理需要看桶中令牌是否足够，当令牌数减为零时则拒绝新的请求（Nginx限速模块的实现/Guava RateLimiter SmoothBursty）</p>
+</li>
+<li><p><strong>漏桶算法</strong>：漏桶则是按照常量固定速率流出请求，流入请求速率任意，当流入的请求数累积到漏桶容量时，则新流入的请求被拒绝(Guava RateLimiter SmoothWarmingUp)</p>
+</li>
+<li><p><strong>计数器限流：</strong>主要用来限制总并发数，比如数据库连接池、线程池、秒杀的并发数；只要全局总请求数或者一定时间段的总请求数设定的阀值则进行限流，是简单粗暴的总数量限流，而不是平均速率限流（atomic.incrementAndGet() + atomic.decrementAndGet()）</p>
+</li>
 </ol>
-<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/bigdata.jpg" class="full-image" width="100%"></p>
-<h4 id=""> </h4>
+<h4 id="分布式系统限流">分布式系统限流</h4><h5 id="分布式限流_—_redis技术/一致性hash流量分片">分布式限流 — redis技术/一致性hash流量分片</h5><ol>
+<li><strong>分布式系统</strong>：基于 REDIS 实现，存储两个 KEY，一个用于计时，一个用于计数。请求每调用一次，计数器增加 1，若在计时器时间内计数器未超过阈值，则可以处理任务。</li>
+<li><strong>单机</strong>：使用Guava的Cache来存储计数器，过期时间设置为2秒（保证1秒内的计数器是有的），然后我们获取当前时间戳然后取秒数来作为KEY进行计数统计和限流</li>
+</ol>
+<h5 id="接入层限流_—_nginx限速模块">接入层限流 — nginx限速模块</h5><h4 id="参考链接">参考链接</h4><ol>
+<li><a href="https://www.jianshu.com/p/2596e559db5c" target="_blank" rel="noopener">聊聊高并发系统之限流特技</a></li>
+</ol>
+
           
         
       
@@ -716,7 +734,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2018/02/07/高并发系统的限流策略/">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2018/02/07/大数据分析相关工具/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CharlesXiao">
@@ -735,8 +753,8 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="../../2018/02/07/高并发系统的限流策略/" itemprop="url">
-                  高并发系统的限流策略
+                <a class="post-title-link" href="../../2018/02/07/大数据分析相关工具/" itemprop="url">
+                  大数据分析相关工具
                 </a>
               
             
@@ -779,15 +797,15 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-08-20 19:24:26" itemprop="dateModified" datetime="2018-08-20T19:24:26+08:00">2018-08-20</time>
+                <time title="修改时间：2018-02-12 14:08:03" itemprop="dateModified" datetime="2018-02-12T14:08:03+08:00">2018-02-12</time>
               
             
           </span>
 
         <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计653字</span>
+        <span class="post-count">字数统计100字</span>
         <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长2分钟</span>
+        <span class="post-count">阅读时长1分钟</span>
 
           
 
@@ -819,31 +837,13 @@
       
         
           
-            <p>一个高并发的系统，保护系统的方法一般有三种：<strong>缓存、降级和限流</strong>，本文主要讲一讲常见的限流策略。限流的目的是通过对并发访问进行限速或者一个时间窗口内的的请求进行限速来保护系统，一旦达到限制速率则可以拒绝服务（定向到错误页或告知资源没有了）、排队或等待（比如秒杀、评论、下单）、降级（返回兜底数据或默认数据，如商品详情页库存默认有货）</p>
-<h4 id="单机限流">单机限流</h4><h5 id="常见限流措施">常见限流措施</h5><ul>
-<li>限制总并发数（比如数据库连接池、线程池）</li>
-<li>限制瞬时并发数（如nginx的limit_conn模块，用来限制瞬时并发连接数）</li>
-<li>限制时间窗口内的平均速率（如Guava的RateLimiter、nginx的limit_req模块，限制每秒的平均速率）</li>
-<li>限制远程接口调用速率</li>
-<li>限制消息队列的消费速率</li>
-<li>根据网络连接数、网络流量、CPU或内存负载等来限流</li>
-</ul>
-<h5 id="限流算法">限流算法</h5><ol>
-<li><p><strong>令牌桶算法</strong>：令牌桶是按照固定速率往桶中添加令牌，请求是否被处理需要看桶中令牌是否足够，当令牌数减为零时则拒绝新的请求（Nginx限速模块的实现/Guava RateLimiter SmoothBursty）</p>
-</li>
-<li><p><strong>漏桶算法</strong>：漏桶则是按照常量固定速率流出请求，流入请求速率任意，当流入的请求数累积到漏桶容量时，则新流入的请求被拒绝(Guava RateLimiter SmoothWarmingUp)</p>
-</li>
-<li><p><strong>计数器限流：</strong>主要用来限制总并发数，比如数据库连接池、线程池、秒杀的并发数；只要全局总请求数或者一定时间段的总请求数设定的阀值则进行限流，是简单粗暴的总数量限流，而不是平均速率限流（atomic.incrementAndGet() + atomic.decrementAndGet()）</p>
-</li>
+            <h3 id="基础组件">基础组件</h3><ol>
+<li>Hadoop = HDFS + YARN + MapReduce；HDFS负责存储，YARN负责资源调度，依然发挥重要作用，MapReduce计算框架</li>
+<li>Hbase主要解决实时数据查询问题;Hive和Pig主要解决数据处理和计算问题，分别以SQL形式和脚本形式</li>
+<li><a href="https://www.zhihu.com/question/27974418/answer/156227565" target="_blank" rel="noopener">如何用形象的比喻描述大数据的技术生态？Hadoop、Hive、Spark 之间是什么关系？</a></li>
 </ol>
-<h4 id="分布式系统限流">分布式系统限流</h4><h5 id="分布式限流_—_redis技术/一致性hash流量分片">分布式限流 — redis技术/一致性hash流量分片</h5><ol>
-<li><strong>分布式系统</strong>：基于 REDIS 实现，存储两个 KEY，一个用于计时，一个用于计数。请求每调用一次，计数器增加 1，若在计时器时间内计数器未超过阈值，则可以处理任务。</li>
-<li><strong>单机</strong>：使用Guava的Cache来存储计数器，过期时间设置为2秒（保证1秒内的计数器是有的），然后我们获取当前时间戳然后取秒数来作为KEY进行计数统计和限流</li>
-</ol>
-<h5 id="接入层限流_—_nginx限速模块">接入层限流 — nginx限速模块</h5><h4 id="参考链接">参考链接</h4><ol>
-<li><a href="https://www.jianshu.com/p/2596e559db5c" target="_blank" rel="noopener">聊聊高并发系统之限流特技</a></li>
-</ol>
-
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/bigdata.jpg" class="full-image" width="100%"></p>
+<h4 id=""> </h4>
           
         
       
@@ -1127,7 +1127,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2018/01/04/常用Linux网络:内存:磁盘分析工具/">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2018/01/04/大型分布式网站架构设计与实践/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CharlesXiao">
@@ -1146,8 +1146,8 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="../../2018/01/04/常用Linux网络:内存:磁盘分析工具/" itemprop="url">
-                  常用Linux网络/内存/磁盘分析工具
+                <a class="post-title-link" href="../../2018/01/04/大型分布式网站架构设计与实践/" itemprop="url">
+                  大型分布式网站架构设计与实践
                 </a>
               
             
@@ -1190,15 +1190,15 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-18 15:21:57" itemprop="dateModified" datetime="2018-11-18T15:21:57+08:00">2018-11-18</time>
+                <time title="修改时间：2018-09-14 10:13:38" itemprop="dateModified" datetime="2018-09-14T10:13:38+08:00">2018-09-14</time>
               
             
           </span>
 
         <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计3.6k字</span>
+        <span class="post-count">字数统计8.6k字</span>
         <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长14分钟</span>
+        <span class="post-count">阅读时长30分钟</span>
 
           
 
@@ -1230,66 +1230,270 @@
       
         
           
-            <h3 id="网络IO">网络IO</h3><ol>
-<li>sar -n DEV 1 3 监控网卡IO</li>
-<li><code>ethtool 网卡名</code> 查看网卡的最大速率等参数信息</li>
-<li><code>netstat -nat | awk &#39;FNR&gt;2{print $NF}&#39; | sort | uniq -c</code> 查看系统TIME_WAIT状态连接数</li>
-<li>查看DND信息dig命令<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dig baidu.com # 输出host的cname记录与A记录，可以看到ip地址和使用的DNS服务器信息，添加` +short`可以简化输出</span><br><span class="line">dig -x 204.152.184.167 +short # 用 -x的选项查找IP地址的主机名</span><br><span class="line">dig @ns1.google.com www.google.com 指定查询的DNS server</span><br></pre></td></tr></table></figure>
+            <h3 id="SOA和RPC">SOA和RPC</h3><p>随着互联网规模发展，面向服务的体系架构(SOA)成为主流的架构方式，各个系统之间通过服务的方式进行交互，这样保证了交互的标准性，这对于一个复杂的大规模系统来说显得尤为重要，子系统之间能够标准清晰地互相配合与沟通。同时，随着数据规模的飞速发展，从单一应用架构，再到拆分成多个子系统，演变成垂直应用架构，最后演变成分布式应用架构。此时，在一个分布式系统中，如何实现节点之间的RPC调用方式？如何实现服务的动态发现与路由？如何实现软件层面的负载均衡(4层还是7层更优)？这些都将成为我们要解决的问题。</p>
+<h4 id="体系化认识RPC">体系化认识RPC</h4><p>远程过程调用(Remote Process Call): 简单地来说，就是client通过网络来调用server的地址空间上的函数/方法，就跟调本地方法一样简单便捷，这样就相当于扩展了client的能力。一个RPC框架的实现必须考虑的几个核心组件如下：  </p>
+<h4 id="RPC组成部分">RPC组成部分</h4><ul>
+<li><strong>传输协议</strong>：我们知道，七层网络协议栈中，从http到tcp，不过只是层层嵌套header而已，RPC传输的message可以只是TCP的body内容(也叫payload)，也可以是header+body，那么基于TCP还是基于HTTP来实现RPC呢？它们各有优劣：<ul>
+<li>基于TCP可以更便于定制协议字段，减少网络传输字节数，降低网络开销，提高性能，增加并发数和吞吐量；这也带来实现代价高的问题</li>
+<li>有利于跨平台的调用，因为json，xml这些传输标准是通用的，成熟的http框架也多，不比过于关心底层细节；不过由于是上层协议，传输需要占用的字节数多，导致传输效率低，往往通过使用Gzip压缩来优化</li>
+</ul>
+</li>
+<li><strong>序列化和反序列化</strong>：也就是对象与二进制流(byte数组)之间的相互转化，如何高效稳定且能够跨平台地完成这个过程？也将成为设计中的考量，目前可选的有ProtoBuff，Hessian，bson等</li>
+<li><strong>IO模型</strong>：选择一个合适的IO模型可以让server在更短时间内响应更多的请求，linux里的IO分为等待数据准备和把数据从内核拷贝到进程的两个阶段，严格意义上在《UNIX网络编程》中提到了5种，除了基于信号驱动的IO之外，还有以下几种：<ul>
+<li><strong>Blocking IO</strong>：IO调用无响应时，CPU就也挂起等待，也就导致线程或者进程被IO阻塞</li>
+<li><strong>Non-blocking IO</strong>：通过设置socket使其变为non-blocking，当用户进程发出read操作时，如果kernel中的数据还没有准备好，那么它并不会block用户进程，而是立刻返回一个error。用户进程其实是需要不断的主动询问kernel数据好了没</li>
+<li><strong>IO-multiplexing</strong>：基于内核的epoll或者kqueue实现，引入一个代理线程来监听所有的TCP连接(IO请求)，有任何事件发生就通知用户态进行处理，避免用户态的CPU被IO阻塞；基本原理就是select/epoll这个function会不断的轮询所负责的所有socket，当某个socket有数据到达了，就通知用户进程。</li>
+<li><strong>Async IO</strong>：理论上前3种都属于同步IO，异步IO是当进程发起IO请求之后，就直接返回，直到kernel IO操作完成之后发送一个信号告诉进程说IO完成，一般通过回调函数进行通知。</li>
+<li><strong>阻塞与非阻塞区别</strong>：调用blocking IO会一直block住对应的进程直到操作完成，而non-blocking IO在kernel还在准备数据的情况下会立刻返回，然后不断轮询，不过拷贝数据过程是阻塞的。</li>
+</ul>
+</li>
+<li><strong>进程/线程模型</strong>：</li>
+<li><strong>协议结构</strong>：固定长度的header+playload</li>
+<li><strong>可靠性和易用性</strong>：网络闪断时如何保持心跳？</li>
+</ul>
+<h5 id="基于TCP的RPC">基于TCP的RPC</h5><p>最简单的方式，例如基于Java Socket API实现RPC，一种非常典型的CS架构，client携带参数和调用方法名请求server，server使用一个while循环来监听客户端请求并予以处理；再往下延伸就涉及到当client请求并发数很大时，是用阻塞IO还是非阻塞IO？如何做服务路由以及负载均衡来将请求分发到多个server？轮询法？</p>
+<h5 id="基于HTTP的RPC">基于HTTP的RPC</h5><p>基于HTTP一定程度上就是为了节省在底层细节上的关注，而可以去利用更高层的协议和现有的开源库去实现RPC，例如基于HttpClient库去实现RPC，基于json或者xml作为序列化之后的传输格式，当然这也会带来效率低，定制化程度低等弊端。</p>
+<h5 id="RESTFul和RPC形式url">RESTFul和RPC形式url</h5><p>RESTFul把所有网络上的实体作为资源，具体的资源通过不同的格式作为表现层，例如图片的表现层可能是jpg，也可能是png；然后通过http协议的常用操作方式(例如GET、POST等)来改变和转换资源状态，也就是表现层转换  </p>
+<p>而传统的RPC形式url会把操作类型、需要远程调用的服务接口名、参数都通过queryString携带到服务端，RESTFul则把操作类型放到了http请求方式中，使得url更加简洁，只留下一部分参数在url中</p>
+<h5 id="RPC相关">RPC相关</h5><ol>
+<li><a href="">RPC和HTTP之间区别</a>：HTTP 调用其实也可以看成是一种特殊的 RPC，只不过传统意义上的 RPC 是指长连接数据交互，而 HTTP(1.x) 一般是指即用即走的短链接; 当 HTTP 协议进化到 2.0 之后，Google 开源了一个建立在 HTTP2.0 协议之上的通信框架直接取名为 gRPC，也就是 Google RPC，这时 HTTP 和 RPC 之间已经没有非常明显的界限了</li>
+</ol>
+<h4 id="服务路由和负载均衡">服务路由和负载均衡</h4><p>所谓SOA，也就是把共用组件和共用逻辑提取成为可以复用的服务，这样一来，一个大型系统中的服务就会越来越多，如何通过服务路由来找到需要的服务以及通过负载均衡算法来均匀地将请求分配到一个服务集群下面对应的某台机器，就显得尤为重要。现在陆续使用zookeeper来做服务配置中心，取代原来的硬件负载均衡F5或者LVS/Nginx软件方案，避免单点故障，动态注册和下线服务。</p>
+<h5 id="常用负载均衡算法">常用负载均衡算法</h5><ol>
+<li><strong>轮询法与加权轮询</strong></li>
+<li><strong>随机法与加权随机</strong></li>
+<li><strong>源地址Hash法</strong>：对来源IP % Server数目，将同源IP请求分发到了同一台Server，有利于保持CS之间的Session会话，但是如果存在缓存，服务器上下线带来的雪崩需要考虑引进一致性哈希算法</li>
+<li><strong>服务端最小连接数法</strong></li>
+<li><strong>动态策略配置</strong>：服务端Groovy脚本动态加载或者Zookeeper Watch机制</li>
+</ol>
+<h5 id="Zookeeper">Zookeeper</h5><p>类似于一个精简版的文件系统，一种分布式集群中的协调系统，包括配置维护，名字服务，一致性与同步状态，动态服务注册，服务发现等；内部使用Zab协议提供一致性，leader与follower之间同步状态；基于Watcher机制，zookeeper维护的节点状态发生变化时，client会收到通知。</p>
+<h5 id="Http服务网关">Http服务网关</h5><p>由于Http协议明文带来的不安全性，再加上随着互联网发展，多个client端需要复用同一套后端服务，需要考虑引入Http网关来作为安全权限校验模块，请求先到达网关，网关再去查询服务配置中心，找到对应的服务并调用，取出需要的数据返回给多个client；这样一来，服务就被隐藏，不再对外直接提供服务，网关就成为所有服务的所依赖的核心节点，流量相当于所有服务节点之和，那么网关集群的可扩展性和监控系统就显得尤为重要，一般我们可以选择网关与服务机器一对一的架构方式。</p>
+<h3 id="分布式系统基础设施">分布式系统基础设施</h3><p>一个大型、稳健、成熟的分布式系统，包括许多部分。</p>
+<h5 id="分布式缓存">分布式缓存</h5><ol>
+<li>redis或者memcache，分布式对象缓存系统</li>
+<li>一致性哈希引入虚拟节点，解决缓存雪崩和不均衡问题</li>
+<li><strong>分布式session应用</strong>：在分布式系统中要保存session会话，传统做法会考虑用cookie来做同步，存在安全性和数据大小有限的问题；也可以考虑持久化到DB中，显然这会极大地影响到系统吞吐量；此时，我们考虑引入分布是缓存作为同步session的集群，它既可以放在web server集群之后，也可以放在之前，也就是sticky和non-sticky两种模式，达到多台server之间session共享与同步的效果，还能增加系统的容错性。</li>
+</ol>
+<h5 id="去IOE的持久化存储">去IOE的持久化存储</h5><ol>
+<li><p><strong>MySQL拓展</strong>：传统关系型数据库在查询方式上非常完善，支持group，join，order等复杂方式，但是并不支持高并发访问和海量数据存储，为了应对规模扩展，在扩容上要做以下考虑与规划</p>
+<ul>
+<li>业务拆分：比如将表迁移到库</li>
+<li>复制策略：常见的Dual-master架构，单个master可写，多个slave和stand by master只可读(提高并发读能力)，实现读写分离以及避免master单点故障，减少停机维护时间，也就是减少不可写时间</li>
+<li>分表：水平切表，例如uid%256这种方式，将一张大表切成256张表，每张表记录数下降，可以提高查询效率</li>
+<li>分库：然而以上方式都没法解决数据库并发写效率低的问题，此时就需要分库，同样采用Hash方式把数据拆分到多个库中</li>
+<li>分库分表：带来查询性能和并发访问能力的提高，却要求必须指定路由字段进行查询，而且对于关联查询，分布式事务的支持都将成为新的问题</li>
+</ul>
+</li>
+<li><p><strong>HBase</strong>：并发写入能力出色，因为具有多个region server；可用于处理海量数据存储，可扩展性和伸缩能力强；放弃关联查询，一致性，事务等复杂特性，可以通过ES等搜索引擎来实现组合查询</p>
+<ul>
+<li>构建在HDFS之上的一种列式存储数据库，数据以表的形式组织，每个表由行列组成，行列确定存储单元，每一列属于一个列族，并支持时间戳来标识多版本；表支持自动分裂成多个region</li>
+</ul>
+</li>
+<li><p><strong>Redis</strong>：更好的读写吞吐能力，支持高并发，以及丰富的数据类型，可以提高高性能缓存服务</p>
 </li>
 </ol>
-<h4 id="tcpdump">tcpdump</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">   tcpdump -D # 显示可以抓取的所有网络接口</span><br><span class="line"># 抓取9100端口，网卡xgbe0的TCP网络包信息，保存到aaa.pcap</span><br><span class="line">tcpdump tcp port 9100 -i xgbe0 -nn -s 0 -XX -w aaa.pcap</span><br><span class="line"></span><br><span class="line"># 指定目的或者源ip，可以使用and，or</span><br><span class="line">tcpdump -i eth0 src and dst 172.16.11.1 and port 80 -nn -s 0 -XX -w aaa.pcap</span><br><span class="line"></span><br><span class="line"># 指定主机</span><br><span class="line">tcpdump -i eth0 host 172.16.11.1 and port 80 -nn -s 0 -XX -w aaa.pcap</span><br><span class="line"></span><br><span class="line"># 抓取http包，一般是eth0，xgbe0，可以加上port 80作为条件，这里是指本机接收http请求的80端口，发出端口为随机</span><br><span class="line">tcpdump -i xgbe0 -nn -s 0 -XX -w yq41.pcap</span><br></pre></td></tr></table></figure>
-<h4 id="wireshark分析网络包">wireshark分析网络包</h4><ol>
-<li>tcpdump保存的文件是二进制的文件，需要下载到本地用wireshark查看</li>
-<li>过滤器:tcp.stream</li>
-<li><a href="https://linux.cn/article-10191-1.html" target="_blank" rel="noopener">抓包参数和结果解析</a></li>
-</ol>
-<h3 id="CPU">CPU</h3><ol>
-<li><code>mpstat -P ALL 1 1</code> 查看cpu占用率波动情况；也可以<code>top</code>，然后1</li>
-<li><p>taskset绑定进程或者线程到指定CPU的核</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">taskset -cp pid   查看进程所属核</span><br><span class="line">taskset -acp pid   查看进程及所有线程的所属核</span><br><span class="line">taskset -pc 3 pid   表示将进程pid绑定到第3个核上</span><br><span class="line">taskset -a -pc 3 pid  表示将进程pid(包括所有线程)绑定到第3个核上</span><br><span class="line">taskset -cp 1,2,3 pid</span><br></pre></td></tr></table></figure>
+<h5 id="分布式消息队列">分布式消息队列</h5><p>主要用于系统之间的通信与解耦，异步通信机制可以提高系统的吞吐能力，而且在高峰期可以作为系统的缓冲存在。包括Kafka，ActiveMQ等。  </p>
+<p>ActiveMQ(JMS)：JMS两种消息发送接收模型，一种是点对点之间的P2P模型，另一种是一对多广播时的发布订阅模型  </p>
+<p>业务规模与并发请求数的提高，一方面需要我们进行垂直扩展，例如提升机器性能，优化内存配置，阻塞IO变NIO等。水平扩展方法包括水平拆分topic到多个broker中等方式。</p>
+<h5 id="垂直化搜索引擎">垂直化搜索引擎</h5><ol>
+<li><strong>Lucene</strong>：<ul>
+<li>倒排索引：建立词和文档之间的映射关系</li>
+<li>分词：中文分词包括CJKAnalyzer、MM分词、庖丁分词</li>
+<li>相关性排序：</li>
+<li>关键概念：</li>
+</ul>
 </li>
-<li><p>pidstat 用于监控全部或指定进程的cpu、内存、线程、设备IO等系统资源的占用情况</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 查看CPU</span><br><span class="line">pidstat -p pid 3 3</span><br><span class="line"># 查看进程内存状态，用ps效果一样，RSS单位为KB</span><br><span class="line">pidstat -r -p 26716 3 3</span><br><span class="line"># 查看进程磁盘IO</span><br><span class="line">pidstat -d -p 26716 3 3</span><br><span class="line"># 查看进程上下文切换</span><br><span class="line">pidstat -wt -p 26716 3 3</span><br><span class="line"># 查看进程中的线程信息</span><br><span class="line">pidstat -t -p 26716 3 3</span><br></pre></td></tr></table></figure>
+<li><strong>ElasticSearch</strong>：Elasticsearch是一个建立在全文搜索引擎 Apache Lucene™ 基础上的搜索引擎，可以说Lucene是当今最先进，最高效的全功能开源搜索引擎框架。Elasticsearch使用Lucene作为内部引擎，还提供以下功能：<ul>
+<li>分布式实时文件存储，并将每一个字段都编入索引，使其可以被搜索。</li>
+<li>实时分析的分布式搜索引擎。</li>
+<li>可以扩展到上百台服务器，处理PB级别的结构化或非结构化数据。</li>
+</ul>
 </li>
-<li><p>vmstat 2 1 查看系统上下文切换</p>
+</ol>
+<h3 id="互联网安全架构">互联网安全架构</h3><h4 id="常见Web攻击手段和防御方法">常见Web攻击手段和防御方法</h4><h5 id="XSS跨站脚本攻击">XSS跨站脚本攻击</h5><p>没有对用户在表单输入的html代码做转义，把代码当做了数据保存，那么在页面重定向或者加载数据时就出现执行脚本的情况，从而盗取用户cookie，密码。  </p>
+<p>可以通过urlEncode予以特殊字符串的处理来防止该攻击</p>
+<h5 id="CRSF跨站请求伪造攻击">CRSF跨站请求伪造攻击</h5><p>攻击者盗用受信任用户的账号，伪装成受信任的请求访问网站，一般通过利用浏览器cookie实现。  </p>
+<p>解决方法：把cookie设置成httpOnly，避免被脚本读取cookie；服务端生成定时过期的Token，每次请求都需要携带token，会话过期时token失效；设置请求的referer字段，标明该http请求的来源地址</p>
+<h5 id="SQL注入攻击">SQL注入攻击</h5><p>把SQL命令伪装成请求参数传入到Server端，从而对数据库内容进行修改或者删库操作；例如传一个参数为’or ‘1’=’1，这样可以空密码登录。  </p>
+<p>解决方法：使用预编译语句或者ORM框架，预先对特殊字符进行转义；哈希加盐法来避免密码明文存放，DB中保存Hash值和Salt值，每次对Key+Salt做指定摘要处理之后再合Server保存的值比对，避免彩虹表和穷举攻击；处理好异常信息和重定向页面，不暴露数据库等版本信息。</p>
+<h5 id="文件上传漏洞">文件上传漏洞</h5><p>攻击者利用服务器不检测文件类型的漏洞，上传脚本或者木马文件进行攻击，或者上传大型文件把server当做免费存储使用，</p>
+<p>解决方法：对文件类型进行白名单校验，通过比较文件开头几个字节内容(魔数)来判断；文件重命名防止找到文件路径；文件大小限制</p>
+<h5 id="DDos分布式拒绝服务攻击">DDos分布式拒绝服务攻击</h5><ol>
+<li>SYN Flood：TCP作为一个面向连接的协议，三次握手环节中的第二步，通过伪造IP发送大量的SYN报文给服务端，服务端处于SYN_RECV状态，不断重试轮询、分配资源，导致正常请求不能得到处理。</li>
+<li>DNS Query Flood(UDP Flood)：向服务器发送大量的域名解析请求，随机生成域名，导致服务器不能读取缓存，而是层层往上读取，最终导致域名解析超时</li>
+<li>CC攻击(Http Flood)：利用肉鸡或者http代理向服务器发送海量http请求，避开缓存或者需要大量的DB请求，从而拖垮业务处理系统，甚至DB</li>
+<li>DNS域名劫持，CDN回源攻击，服务器权限提升，缓冲区溢出等其他攻击</li>
+</ol>
+<h4 id="常用安全算法">常用安全算法</h4><h5 id="数字摘要">数字摘要</h5><ol>
+<li>MD5：为输入生成一个128位的摘要，作为数字指纹，利用它来验证消息的完整性；相似消息的摘要差异巨大，可逆性很小</li>
+<li>SHA256：Secure Hash Algorithm，生成256位摘要</li>
+</ol>
+<p><strong>对摘要信息编码</strong>：因为摘要中可能存在无法显示的特殊字符穿，需要编码</p>
+<ol>
+<li>十六进制编码：把二进制数组转化成十六进制来表示</li>
+<li>Base64：用64个可打印字符来表示二进制数据，64个字符分别是A-Z、a-z、0-9，还有2个因为系统不同而不一样</li>
+</ol>
+<h5 id="对称加密">对称加密</h5><p>加解密使用同一个密钥，计算量较小，速度较快，存在密码泄露风险。</p>
+<ol>
+<li>DES、3DES：64位密钥长度，从56位参与DES运算到扩大成3*56</li>
+<li>AES：最低128位密钥长度</li>
+</ol>
+<h5 id="非对称加密">非对称加密</h5><p>使用私钥加密，然后对方用公钥解密，避免私钥在传输过程中泄露，往往用于保证数据完整性；或者先生成一对公钥私钥，然后广播公钥，对方用公钥加密之后发给自己，然后自己用私钥解密。</p>
+<p>由于非对称加密速度慢，两种方式结合来达到更好的效果：先用对称加密对大文件进行加密，然后再对文件密钥使用非对称加密，也就是用公钥加密，然后发送给对方，对方再使用私钥解密，这样就防止了密钥泄露。</p>
+<ol>
+<li>RSA：基于数论事实，将两个大素数相乘十分容易，但是想要对其乘积进行因式分解却极其困难，因此可以将乘积公开作为加密密钥</li>
+</ol>
+<h5 id="数字签名(MD5withRSA_or_SHA256withRSA)">数字签名(MD5withRSA or SHA256withRSA)</h5><p>发送方将原文的MD5等摘要信息，用私钥进行加密得到密文，然后将原文和密文一起发送给对方，对方用公钥解密密文，得到摘要，判断其和原文的摘要(使用同样的摘要计算方法)是否一致；其中对摘要加密得到的就是数字签名，可以用于确保传输数据的完整性，防止被第三方篡改</p>
+<h5 id="数字证书">数字证书</h5><p>类似于身份证书，用于标识网络中的身份；数字证书会携带公钥信息，数字签名等内容，一般由CA负责签发(也就是进行数字签名)，使用keytool、OpenSSL进行证书管理</p>
+<h4 id="摘要认证">摘要认证</h4><p>为了防止通信过程中数据被篡改或者客户端伪造请求，因此利用摘要认证来对客户端身份，以及客户端请求参数等内容进行认证；之所以不采用https是因为性能成本以及需要额外申请CA证书；摘要认证本质上采用了对称加密手段，实现方式为：client和server采用同样的秘钥和摘要算法，将参数排序之后生成摘要，然后每次交互都带上内容和利用秘钥生成的摘要，每次对方都会进行摘要校验，确保内容未被篡改。</p>
+<h4 id="签名认证">签名认证</h4><p>摘要认证存在secret泄露的安全问题，因为client和server使用同样的密钥；因此我们引入签名认证，也就是利用数字签名做认证，采用非对称加密手段，client采用密钥加密，然后server采用公钥解密，防止私钥泄露问题</p>
+<h4 id="HTTPS协议(基于SSL的http协议)">HTTPS协议(基于SSL的http协议)</h4><p>尽管摘要认证和签名认证可以解决client和server之间身份认证问题和内容防篡改问题，但是由于http明文传输，如果进行抓包或者中途拦截，内容很容易被监听和暴露，因此我们需要https。  </p>
+<p>https作为一种数字证书，包含公钥，数字签名，拥有者信息等内容。本质上就是在http和TCP之间加了一层安全层，采用SSL(安全套接层)或者TLS，来将内容加密。https支持单向认证和双向认证两种方式。一般像银行网银，支付宝这种都是双向认证。</p>
+<p>SSL/TLS本身又包括两层，记录协议和握手协议，分别负责不同的工作。握手过程生成对称加密的密钥，并交换密钥。</p>
+<h5 id="http和https区别">http和https区别</h5><ol>
+<li>https = http + tls协议(从SSL演变到TLS, 都是一种传输层加密协议，位于应用层和传输层之间) + 传输加密 + 身份认证  —-&gt; 保证传输过程中的安全性，因为http传输的是明文内容，也不对传输双方进行身份验证<br>2.https保证以下三点:<ul>
+<li>内容加密。浏览器到百度服务器的内容都是以加密形式传输，中间者无法直接查看原始内容。非对称密钥交换算法。建议优先使用 ECDHE，禁用 DHE，次优先选择 RSA；证书签名算法默认都是使用 RSA 签名；对称加解密算法。优先使用 AES-GCM 算法，针对 1.0 以上协议禁用 RC4；</li>
+<li>身份认证。保证用户访问的是百度服务，即使被 DNS 劫持到了第三方站点，也会提醒用户没有访问百度服务，有可能被劫持。主要涉及到 PKI（公钥基础设施）和数字证书</li>
+<li>数据完整性。防止内容被第三方冒充或者篡改。openssl 现在使用的完整性校验算法有两种：MD5或者SHA，由于 MD5 在实际应用中存在冲突的可能性比较大，尽量别用MD5来验证内容一致性。SHA 也不能使用 SHA0 和 SHA1，已被破解，建议使用 sha2 以上的安全哈希函数。</li>
+</ul>
+</li>
+<li><strong>中间劫持</strong>：用户数据在浏览器和百度服务器中间传输必须要经过的节点。比如WIFI热点，路由器，防火墙，反向代理，缓存服务器等，都可能出现劫持。例如，运营商的内容劫持是如何进行的，运营商会分析你的网络请求，它可以先于网站回包，也能修改数据包的内容。所以它可以让你跳转一次，在网址上加上小尾巴，也能在你访问的页面弹出小广告</li>
+</ol>
+<h5 id="图解https"><a href="http://www.cnblogs.com/zhuqil/archive/2012/07/23/2604572.html" target="_blank" rel="noopener">图解https</a></h5><h5 id="https对性能的影响">https对性能的影响</h5><ol>
+<li>HTTPS会降低用户访问速度(协议交互所增加的网络RTT(round trip time+加解密相关的计算耗时30ms)，增加网站服务器的计算资源消耗；非对称密钥交换很安全，但同时也是HTTPS性能和速度严重降低的“罪魁祸首”。</li>
+</ol>
+<h5 id="优化策略">优化策略</h5><h6 id="HTTPS_访问速度优化">HTTPS 访问速度优化</h6><ol>
+<li><strong>Tcp fast open</strong>：HTTPS和HTTP使用TCP协议进行传输，也就意味着必须通过三次握手建立TCP连接，但一个RTT的时间内只传输一个 syn 包是不是太浪费？能不能在syn包发出的同时捎上应用层的数据？其实是可以的，这也是tcpfastopen的思路，简称TFO。遗憾的是 TFO需要高版本内核的支持，linux从3.7以后支持TFO，但是目前的windows系统还不支持TFO，所以只能在公司内部服务器之间发挥作用。</li>
+<li><strong>Session resume</strong>：顾名思义就是复用session，实现简化握手<ul>
+<li><strong>Session cache</strong> 的原理是使用 client hello 中的session id 查询服务端的sessioncache,如果服务端有对应的缓存，则直接使用已有的session信息提前完成握手，称为简化握手</li>
+<li><strong>Session ticket</strong>的原理参考RFC4507。简述如下：server将session信息加密成ticket发送给浏览器，浏览器后续握手请求时会发送 ticket，server 端如果能成功解密和处理 ticket，就能完成简化握手。显然，session ticket 的优点是不需要服务端消耗大量资源来存储 session 内容。</li>
+</ul>
+</li>
+<li><strong>HSTS(HTTP Strict Transport Security)</strong>。服务端返回一个HSTS的http header，浏览器获取到HSTS头部之后，在一段时间内，不管用户输入www.baidu.com还是<a href="http://www.baidu.com，都会默认将请求内部跳转成https://www.baidu.com。" target="_blank" rel="noopener">http://www.baidu.com，都会默认将请求内部跳转成https://www.baidu.com。</a></li>
+<li>Ocsp stapling</li>
+<li>False start:原理就是在 client_key_exchange 发出时将应用层数据一起发出来，能够节省一个 RTT</li>
+<li>使用 SPDY 或者 HTTP2: SPDY 最大的特性就是多路复用，能将多个 HTTP 请求在同一个连接上一起发出去，不像目前的 HTTP 协议一样，只能串行地逐个发送请求。Pipeline 虽然支持多个请求一起发送，但是接收时依然得按照顺序接收，本质上无法解决并发的问题。</li>
+</ol>
+<h6 id="HTTPS_计算性能优化">HTTPS 计算性能优化</h6><ol>
+<li>优先使用ECC椭圆加密算术相比普通的离散对数计算速度性能要强很多；对于 RSA 算法来讲，目前至少使用 2048 位以上的密钥长度才能保证安全性。ECC 只需要使用 224 位长度的密钥就能实现 RSA2048 位长度的安全强度。在进行相同的模指数运算时速度显然要快很多。</li>
+<li>使用最新版的 openssl</li>
+<li>TLS 硬件加速方案主要有两种：SSL 专用加速卡+ GPU SSL 加速。</li>
+<li>TLS 远程代理计算</li>
+</ol>
+<h4 id="OAuth第三方授权—-开放资源授权的标准协议">OAuth第三方授权—-开放资源授权的标准协议</h4><p>旨在为用户资源的授权访问提供一个安全开放的标准，核心场景就是第三方登录。平台通过OAuth协议，提示用户对第三方授权使用部分用户数据，不需要触及用户名密码，就能给出授权。核心思想都是对用户资源做权限分级和隔离，ISV引导用户在平台端登录，完成授权，然后ISV就可以用用户的私有数据，且授权可取消。具体授权过程</p>
+<h3 id="系统稳定性">系统稳定性</h3><p>一个系统要保持稳定，上线之前就需要有充分的压力测试，并做好容量预估，准备好应急预案，并且具备一定的日志分析和错误定位能力，以便于遇到线上各种问题时快速定位解决。</p>
+<h4 id="在线日志分析">在线日志分析</h4><p>常用shell命令</p>
+<h4 id="集群监控">集群监控</h4><ol>
+<li><p>监控指标</p>
+<ul>
+<li><strong>load</strong>：特定时间间隔内CPU运行队列中的线程数，一般正常为3以内，到达5以上认为负载过高。可以使用top和uptime来查看average load。</li>
+<li><strong>CPU利用率</strong>：各种时间占CPU总时间的比例。通过<code>top|grep cpu</code>查看各种状态占比，1查看不同核的CPU状态，<code>top -p pid</code>查看指定进程的CPU利用率，<code>shift+H</code>查看线程的cpu利用率。</li>
+<li><strong>磁盘剩余空间</strong>：<code>df -h</code>, <code>du -sh</code></li>
+<li><strong>网络traffic</strong>：<code>sar -n DEV 1 1</code> 抽样查看各个网卡的网络流量</li>
+<li><strong>磁盘IO</strong>：IO密集型应用的瓶颈(例如数据库和文件系统)，<code>iostat -d -k</code>查看磁盘IO状况。</li>
+<li><strong>内存使用</strong>：<code>free -m</code>，<code>vmstat</code></li>
+<li><strong>QPS</strong>：每秒query数。根据压测和运维经验评估得到，代表了系统的业务繁忙程度。</li>
+<li><strong>RT</strong>：请求响应时间。可以用缓存、CDN节点、内容压缩等方法来降低RT</li>
+<li><strong>数据库相关参数</strong>：select/ps、update/ps、delete/ps来衡量不同类型的数据库操作指标，因为数据库读写耗费资源不同。</li>
+<li><strong>JVM GC</strong>：Java stop the world引起的工作线程暂停响应问题，包括发生在老生带的缓慢major GC和新生代的快而频繁的Minor GC</li>
+</ul>
+</li>
+<li><p>心跳检测: 分布式系统中机器规模大，从而导致故障概率增大，所以需要集群心跳检测机制来实时处理slave、master宕机等各种状况。当然也包括业务系统的心跳检测。</p>
+<ul>
+<li><strong>ping</strong>：使用的ICMP协议，检查网络链路是否畅通</li>
+<li><strong>应用层检测</strong>：预留自检页面，监控系统用脚本执行<code>curl</code>命令看返回结果是不是可以访问；或者<code>curl -I</code>检查不同页面的返回header是否正常</li>
+</ul>
+</li>
+<li>容量评估：总体PV分散到多个具体页面，评估需要的机器数量，带宽，然后用CDN缓存，网页静态化等措施降低访问延迟。根据八二原则，<code>峰值QPS=(总PV*80%) / (60*60*24*20%)</code>，需要的机器数等于峰值QPS除以单台机器极限QPS，而单台机器极限QPS需要根据RT要求和机器是否出现瓶颈来确定，一般是一个曲线；系统水位图作为实时监控指标。</li>
+</ol>
+<h4 id="流量控制">流量控制</h4><p>限制系统QPS，限制系统总并发请求数，引入白名单机制，引入分布式消息队列来将用户请求异步化，削峰填谷，这些都是流量控制的具体措施。</p>
+<p>分布式系统的复杂导致互相依赖，引入依赖管理来分析依赖关系和各个部分的压力，采取降级措施来避免故障传递。区分服务的优先级，引入白名单和开关，必要时舍弃非核心服务。不同情况有不同的处理方案。</p>
+<h4 id="高并发系统设计">高并发系统设计</h4><ol>
+<li>原子操作：数据库事务，CAS操作，原子变量</li>
+<li>多线程同步：synchronized和锁、可重入锁</li>
+<li>数据一致性：CAP理论导致的三种程度的一致性</li>
+<li>系统可扩展性：很方便地增加机器来水平扩展集群，来使得系统处理能力线性增长。</li>
+<li>并发减库存案例：活动时瞬时QPS爆炸式增长，由于分布式缓存，数据库分库技术的引进，导致缓存和数据库之间难以实现事务，很容易出现缓存和数据库数据不一致导致的超卖和少卖现象，那么如何解决呢？将实际库存和浏览库存分离，一个在DB，一个在Cache，及时同步就行。DB采用innodb引擎，线程并发更新DB只需要行锁，进一步优化将行拆分，请求过来通过hash方式分发到不同的子行。</li>
+</ol>
+<h4 id="性能优化—-更少资源更快地服务更多用户">性能优化—-更少资源更快地服务更多用户</h4><ol>
+<li>前端优化：YSlow分析网页性能，Firebug查看页面加载时间和请求响应时间，Java Btrace工具追踪耗时方法。<ul>
+<li>优化页面http请求数量，包括合并样式和脚本文件</li>
+<li>变化较少文件存储到CDN</li>
+<li>启用Gzip压缩</li>
+</ul>
+</li>
+<li>代码优化：单例模式减少系统开销，多线程和线程池，同步改异步，减少上下文切换，降低锁竞争</li>
+<li>压缩与缓存：</li>
+<li>GC日志分析：<ul>
+<li>减少Full GC，-Xms等参数的配置，jmap定位代码错误</li>
+</ul>
+</li>
+<li><p>数据库查询：MySQL慢SQL日志功能—-log_slow_queries。</p>
+<ul>
+<li>数据库索引优化，避免全表扫描</li>
+<li>反范式设计，允许数据冗余，避免关联查询和全表扫描</li>
+<li>使用查询缓存</li>
+<li>换用搜索引擎来解决跨表查询和分组操作，引入KV存储来支持高并发读写</li>
+</ul>
+</li>
+<li><p>系统资源状况：</p>
+<ul>
+<li>硬件性能提升，SSD盘，高内存，高吞吐网卡，多核和超线程技术</li>
+</ul>
+</li>
+<li><p>性能测试工具：①ApacheBench可以模拟并发请求来测试服务器在高负载情况下支持的QPS和RT。②Apache JMeter不止于http测试。③反向代理引流来调节权重，灰度发布测试性能。④TCPCopy工具可以将线上真实请求复制到测试机器。</p>
+</li>
+<li>Java应用故障排查工具：<ul>
+<li>jps查看JVM进程信息，例如进程主类对应的PID</li>
+<li>jstat监控虚拟机运行状态，包括类加载、内存使用、垃圾回收等方面</li>
+<li>jinfo查看程序的配置参数，查看和修改JVM运行时参数</li>
+<li>jstack查看当前JVM所有线程的堆栈信息</li>
+<li>jmap查看等待回收对象队列以及堆的概要信息、转储快照</li>
+<li>BTrace用于在不改代码，不重启应用情况下动态查看程序运行细节</li>
+<li>Jconsole连接本地或远程JVM，监视应用的性能和资源消耗情况</li>
+<li>MAT分析Java对信息，Eclipse插件</li>
+<li>VisualVM，啥也能干的JDK工具</li>
+<li>案例分析：①内存OOM，利用VisualVM dump堆信息。②线程死锁或者信号量没释放，表现症状为CPU load低，但是请求响应超时，可以线程dump分析 ③类加载冲突</li>
+</ul>
 </li>
 </ol>
-<h3 id="内存">内存</h3><h4 id="top">top</h4><ol>
-<li><a href="http://blog.csdn.net/heizistudio/article/details/25125061" target="_blank" rel="noopener">top命令常用参数</a></li>
-<li>P，M分别是按cpu和内存排序；mac系统使用o + 列名</li>
-<li><code>sar -u 1 3</code> 监控CPU状态</li>
-<li><code>top -p 345</code> 查看指定pid=345的进程,在mac中用-pid代替-p</li>
-<li>%cpu参数不可靠，需要1查看每个CPU的使用率才可靠</li>
+<h3 id="大数据分析">大数据分析</h3><h4 id="分布式系统的日志收集(ELK等)">分布式系统的日志收集(ELK等)</h4><p>几种常用的日志收集方式：</p>
+<ol>
+<li>文件轮询机制定时读取整个日志文件</li>
+<li>inotify机制读取日志修改事件，通过CMS写入消息队列，然后各种服务订阅收集，用作分析用途</li>
 </ol>
-<h4 id="free">free</h4><figure class="highlight plain"><figcaption><span>-g```：以GB为显示单位，也可以-m以MB为显示单位</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">name |    total   |    used    |   free  |   shared  |  buffers |cached </span><br><span class="line">--- | --- | --- | --- | --- | --- | ---   </span><br><span class="line">Mem: | 125 | 125 | 0 | 0 | 0 | 109 |</span><br><span class="line">-/+ buffers/cache: | | 15(上一行的used - buffers - cached) | 110(上一行的 free + buffers + cached)</span><br><span class="line">Swap: | 0 | 0 | 0</span><br><span class="line"></span><br><span class="line">对操作系统来讲，为了内存利用率最大化，会把剩余内存申请为cached，所以系统运行时间长了，cached就会比较大，对于频繁读写的系统就更加明显。used 和 free都是Mem的参数，所以 buffers/cached这两项对于操作系统来讲都是已经被使用的内存，所以呢 free的就比较少；</span><br><span class="line"></span><br><span class="line">而对于应用程序来说呢，buffers/cached等同于可用的内存，因为buffers/cached可提高程序执行的性能，当程序使用内存时，buffers/cached很快就会被使用。</span><br><span class="line"></span><br><span class="line">所以从应用程序的角度来看，应以（-/+ buffers/cached）的free 和 used为主，即我们主要与他相关的free和used就可以了  </span><br><span class="line"></span><br><span class="line">我们在观察Linux的内存使用情况时，只要没发现用swap的交换空间，就不必担心自己的内存太少。如果常常看到swap用了很多，那么你就要考虑加物理内存了，可以用`vmstat`查看swap IO状况。这也是在Linux服务器上看内存是否够用的标准。因为swap用的多，说明OS把本应该存在物理内存中的部分内存页调度到了磁盘，腾出空间给当前进程使用，等到其他进程运行时才会把这部分内存页再次调度到物理内存。</span><br><span class="line"></span><br><span class="line">#### buffer/cache/shared memory区别与联系</span><br><span class="line"></span><br><span class="line">#### pmap</span><br><span class="line">1. 查看进程内存分布状况，可以用来分析线程堆栈:`pmap -d 12345 # 12345 是进程号`</span><br><span class="line"></span><br><span class="line">#### 清理linux cache</span><br><span class="line">Kernels 2.6.16 and newer provide a mechanism to have the kernel drop the page cache and/or inode and dentry caches on command, which can help free up a lot of memory.  </span><br><span class="line"></span><br><span class="line">This is a non-destructive operation and will only free things that are completely unused. Dirty objects will continue to be in use until written out to disk and are not freeable. If you run &quot;sync&quot; first to flush them out to disk, these drop operations will tend to free more memory.</span><br><span class="line"></span><br><span class="line">	To free pagecache:</span><br><span class="line">	# echo 1 &gt; /proc/sys/vm/drop_caches</span><br><span class="line">	</span><br><span class="line">	To free dentries and inodes:</span><br><span class="line">	# echo 2 &gt; /proc/sys/vm/drop_caches</span><br><span class="line">	</span><br><span class="line">	To free pagecache, dentries and inodes:</span><br><span class="line">	echo 3 &gt; /proc/sys/vm/drop_caches</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt; 遇到报错： ```tcpdump: can&apos;t create rx ring on packet socket: cannot allocate memory```, 可以使用该命令清除cache</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 磁盘IO</span><br><span class="line"></span><br><span class="line">#### 磁盘IOPS和Throughput</span><br><span class="line"></span><br><span class="line">1. 磁盘的 IOPS，也就是在一秒内磁盘进行多少次 I/O 读写。磁盘的吞吐量，也就是每秒磁盘 I/O 的流量，即磁盘写入加上读出的数据的大小。每秒 I/O 吞吐量＝ IOPS* 平均 I/O SIZE</span><br><span class="line">2. 随机读写频繁的应用，如OLTP(Online Transaction Processing)，IOPS是关键衡量指标；对于大量顺序读写的应用，如VOD(Video On Demand)，则更关注吞吐量指标。</span><br><span class="line"></span><br><span class="line">#### 影响IOPS的因素</span><br><span class="line"></span><br><span class="line">1. 第一个**寻址时间**，考虑到被读写的数据可能在磁盘的任意一个磁道，既有可能在磁盘的最内圈(寻址时间最短)，也可能在磁盘的最外圈(寻址时间最长)，所以在计算中我们只考虑平均寻址时间，也就是磁盘参数中标明的那个平均寻址时间，这里就采用当前最多的10krmp硬盘的5ms。</span><br><span class="line">2. 第二个**旋转延时**，和寻址一样，当磁头定位到磁道之后有可能正好在要读写扇区之上，这时候是不需要额外额延时就可以立刻读写到数据，但是最坏的情况确实要磁盘旋转整整一圈之后磁头才能读取到数据，所以这里我们也考虑的是平均旋转延时，对于10krpm的磁盘就是(60s/10k)*(1/2) = 2ms。</span><br><span class="line">3. 第三个**传送时间**，磁盘参数提供我们的最大的传输速度，当然要达到这种速度是很有难度的，但是这个速度却是磁盘纯读写磁盘的速度，因此只要给定了单次 IO的大小，我们就知道磁盘需要花费多少时间在数据传送上，这个时间就是IO Chunk Size / Max Transfer Rate。</span><br><span class="line"></span><br><span class="line">#### I/O 读写的类型</span><br><span class="line"></span><br><span class="line">大体上讲，I/O 的类型可以分为：读 / 写 I/O、大 / 小块 I/O、连续 / 随机 I/O, 顺序 / 并发 I/O。在这几种类型中，我们主要讨论一下：大 / 小块 I/O、连续 / 随机 I/O, 顺序 / 并发 I/O。</span><br><span class="line"></span><br><span class="line">##### 大 / 小块 I/O</span><br><span class="line"></span><br><span class="line">这个数值指的是控制器指令中给出的连续读出扇区数目的多少。如果数目较多，如 64，128 等，我们可以认为是大块 I/O；反之，如果很小，比如 4，8，我们就会认为是小块 I/O，实际上，在大块和小块 I/O 之间，没有明确的界限。</span><br><span class="line"></span><br><span class="line">##### 连续 / 随机 I/O</span><br><span class="line"></span><br><span class="line">连续 I/O 指的是本次 I/O 给出的初始扇区地址和上一次 I/O 的结束扇区地址是完全连续或者相隔不多的。反之，如果相差很大，则算作一次随机 I/O</span><br><span class="line"></span><br><span class="line">连续 I/O 比随机 I/O 效率高的原因是：在做连续 I/O 的时候，磁头几乎不用换道，或者换道的时间很短；而对于随机 I/O，如果这个 I/O 很多的话，会导致磁头不停地换道，造成效率的极大降低。</span><br><span class="line"></span><br><span class="line">##### 顺序 / 并发 I/O</span><br><span class="line"></span><br><span class="line">从概念上讲，并发 I/O 就是指向一块磁盘发出一条 I/O 指令后，不必等待它回应，接着向另外一块磁盘发 I/O 指令。对于具有条带性的 RAID（LUN），对其进行的 I/O 操作是并发的，例如：raid 0+1(1+0),raid5 等。反之则为顺序 I/O。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### [磁盘I/O那些事](https://tech.meituan.com/about_desk_io.html)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### [Linux下的IO监控与分析](https://www.cnblogs.com/quixotic/p/3258730.html)</span><br><span class="line"></span><br><span class="line">1. `iostat -xdm 3`：磁盘IO状态</span><br><span class="line">2. `iostat -x 1 1`: 监控CPU和磁盘</span><br><span class="line">3. [iostat命令输出详解](http://www.cnblogs.com/peida/archive/2012/12/28/2837345.html)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 系统端口占用信息和进程信息</span><br><span class="line"></span><br><span class="line">- ```ps aux```只能看到pid等信息，不能看到端口号</span><br><span class="line">- ```lsof | grep pid/pname``` 查看进程信息</span><br><span class="line">- ```lsof -i:port```查看端口号port使用的进程号和连接情况</span><br><span class="line">- ```lsof -i@ip:port```使用@host:port来显示指定到指定主机的连接</span><br><span class="line">- ```lsof -iTCP```显示TCP连接</span><br><span class="line">- ```lsof -c abc``` 显示 abc 进程现在打开的文件</span><br><span class="line">- ```lsof -p 12``` 看进程号为 12 的进程打开了哪些文件</span><br><span class="line">- ```netstat -np/c/atux | grep pid/port/pname```查看进程号所占用的端口号和端口占用情况</span><br><span class="line">- `netstat -n | grep tcp | grep 侦听端口 | wc -l` : 监听端口连接数</span><br><span class="line">- `ps -eLf | grep java | wc -l`: 监控java进程的线程数</span><br><span class="line">- 远程登录 `telnet hostname`</span><br><span class="line"></span><br><span class="line">### sar命令查看网络、磁盘、CPU、内存信息</span><br><span class="line">sar - Collect, report, or save system activity information.</span><br></pre></td></tr></table></figure>
-<h1 id="参数说明">参数说明</h1><p>-A 汇总所有的报告<br>-a 报告文件读写使用情况<br>-B 报告附加的缓存的使用情况<br>-b 报告缓存的使用情况<br>-c 报告系统调用的使用情况<br>-d 报告磁盘的使用情况<br>-g 报告串口的使用情况<br>-h 报告关于buffer使用的统计数据<br>-m 报告IPC消息队列和信号量的使用情况<br>-n 报告命名cache的使用情况<br>-p 报告调页活动的使用情况<br>-q 报告运行队列和交换队列的平均长度<br>-R 报告进程的活动情况<br>-r 报告没有使用的内存页面和硬盘块<br>-u 报告CPU的利用率<br>-v 报告进程、i节点、文件和锁表状态<br>-w 报告系统交换活动状况<br>-y 报告TTY设备活动状况</p>
-<h1 id="系统平均load负载">系统平均load负载</h1><p>sar -q 2 2</p>
-<p>参数：<br>runq-sz：运行队列的长度（等待CPU时间片来运行的进程数）<br>plist-sz：进程列表中进程（processes）和线程（threads）的数量<br>ldavg-1：最后1分钟的系统平均负载 ldavg-5：过去5分钟的系统平均负载<br>ldavg-15：过去15分钟的系统平均负载</p>
-<h1 id="查看内存信息">查看内存信息</h1><p>sar -r 1 3</p>
-<p>参数解释：<br>kbmemfree：剩余可用内存、单位K<br>kbmemused：已用内存、以K 为单位、该值不考虑内核自身所使用的内存<br>%memused：已用内存百分比<br>kbbuffers：已用buffer(内核所用)、单位K<br>kbcached：已用cache（内核所用）、单位K<br>kbswpfree：剩余Swap、单位K<br>kbswpused：已用Swap、单位K<br>%swpused：已用Swap百分比<br>kbswpcad：被缓存的Swap、单位K</p>
-<h1 id="内存分页统计">内存分页统计</h1><p>sar -B 5 3</p>
-<p>参数解释：  </p>
-<p>pgpgin/s：表示每秒从磁盘或SWAP置换到内存的字节数(KB)<br>pgpgout/s：表示每秒从内存置换到磁盘或SWAP的字节数(KB)<br>fault/s：每秒钟系统产生的缺页数,即主缺页与次缺页之和(major + minor)<br>majflt/s：每秒钟产生的主缺页数. </p>
-<h1 id="系统交换活动状况">系统交换活动状况</h1><p>sar -w  1 3</p>
-<p>参数：<br>pswpin/s：每秒系统换入的交换页面（swap page）数量<br>pswpout/s：每秒系统换出的交换页面（swap page）数量</p>
-<h1 id="CPU信息">CPU信息</h1><p>sar -u 3 5</p>
-<p>参数解释：  </p>
-<p>%user：显示在用户级别(application)运行使用 CPU 总时间的百分比<br>%nice：显示在用户级别，通过nice改变了进程调度优先级的进程，在用户模式下消耗的CPU时间的比例<br>%system：在内核级别(kernel)运行所使用 CPU 总时间的百分比<br>%iowait：显示用于等待I/O操作占用 CPU 总时间的百分比<br>%idle：显示 CPU 空闲时间占用 CPU 总时间的百分比 </p>
-<p> 1）若 %iowait 的值过高(大于0的长时间值)，表示硬盘或者网络存在I/O瓶颈<br> 2）若 %idle 的值高但系统响应慢时，有可能是 CPU 等待分配内存，此时应加大内存容量<br> 3）若 %idle 的值持续低于1，则系统的 CPU 处理能力相对较低，表明系统中最需要解决的资源是 CPU</p>
-<h1 id="磁盘信息">磁盘信息</h1><p>sar -b 3 5 </p>
-<p>tps：每秒磁盘的 I/O 传输总量<br>rtps：每秒从磁盘读出的数据总量<br>wtps：每秒向磁盘写入的数据总量<br>bread/s：每秒从磁盘读出的数据量，单位为 块/s<br>bwrtn/s：每秒向磁盘写入的数据量，单位为 块/s </p>
-<h1 id="网络IO-1">网络IO</h1><p>sar -n DEV 2 3 </p>
-<h1 id="监控TCP连接状态">监控TCP连接状态</h1><p>sar -n TCP/ETCP 1</p>
-<p>active/s: 每秒本地发起的TCP连接数，即服务器通过connect调用创建的TCP连接数<br>passive/s: 每秒远程发起的TCP连接数，即服务器通过accept调用创建的连接数<br>retrans/s: 每秒重传数量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### Linux /proc目录</span><br><span class="line">在Linux系统“一切都是文件”的思想贯彻指导下，所有进程的运行状态都可以用文件来获取。系统根目录/proc中，每一个数字子目录的名字都是运行中的进程的PID，进入任一个进程目录，可通过其中文件或目录来观察进程的各项运行指标，例如task目录就是用来描述进程中线程的</span><br></pre></td></tr></table></figure></p>
-<h1 id="可以通过下面的方法获取某进程中运行中的线程数量（PID指的是进程ID)">可以通过下面的方法获取某进程中运行中的线程数量（PID指的是进程ID)</h1><p>ls /proc/PID/task | wc -l</p>
-<h1 id="获取进程相关信息">获取进程相关信息</h1><p>cat /proc/PID/status</p>
-<h1 id="获取内存信息">获取内存信息</h1><p>vmstat -s -S M<br>cat /proc/meminfo</p>
-<h1 id="CPU信息-1">CPU信息</h1><p>cat /proc/cpuinfo<br>```</p>
-<h3 id="Linux单机性能评估和优化">Linux单机性能评估和优化</h3><ol>
-<li><a href="https://blog.csdn.net/hguisu/article/details/39373311" target="_blank" rel="noopener">Linux服务器性能评估与优化(一)</a></li>
-<li><a href="https://blog.csdn.net/hguisu/article/details/39249775" target="_blank" rel="noopener">Linux服务器性能评估与优化(二)</a></li>
+<p>日志分发机制—-分布式消息队列，既可以解耦，也可以起到削峰填谷的缓冲效果</p>
+<p>日志收集分析架构：inotify—&gt;消息队列—&gt;流式处理系统—&gt;存储—&gt;分析展现系统。参考框架Chukwa</p>
+<h4 id="离线数据分析">离线数据分析</h4><p>对时间要求不高，分析完之后可以数据回流到DB提供实时在线查询服务。Hadoop的主要场景就是离线批处理数据。</p>
+<h4 id="流式数据分析">流式数据分析</h4><p>storm是一种分布式实时计算系统，主要用来实时处理流式数据</p>
+<h4 id="数据同步与报表">数据同步与报表</h4><ol>
+<li>每天在OLTP系统负载最低时定时全量或者增量将数据从OLTP同步到OLAP系统，用于离线分析。</li>
+<li>离线数据同步：sqoop开源数据同步工具，利用MR来完成DB和HDFS之间的数据同步和转换，效率很高。</li>
+<li><p>实时数据同步：</p>
+<ul>
+<li>利用消息系统进行实时增量数据同步，其他系统订阅topic就行</li>
+<li>类似mysql主从同步，通过binary log重放，变更同步</li>
+</ul>
+</li>
+<li><p>数据报表：Highcharts</p>
+</li>
 </ol>
-<p>单机性能主要包括CPU、内存、网络IO、磁盘IO几个方面，互相依赖，互相影响。例如，网卡巨量吞吐或者磁盘频繁读写都可能导致CPU系统调用过高而占用率很高。CPU一般认为user%+sys%&lt;70%为良好状态，内存一般认为si和swap out都为0为良好状态，磁盘认为iowait%&lt;20%为良好状态</p>
+<h4 id="大数据生态系统">大数据生态系统</h4><ol>
+<li>Hadoop = HDFS + YARN + MapReduce<ul>
+<li>HDFS负责大数据存储，高可靠、高容错、高扩展、低成本、高吞吐的分布式文件系统</li>
+<li>YARN负责资源调度，依然发挥重要作用</li>
+<li>MapReduce并行编程模型和计算框架</li>
+<li>Hbase主要解决实时海量数据查询问题</li>
+<li>Hive和Pig主要解决数据处理和计算问题，分别以SQL形式和脚本形式，例如通过HiveSQL写SQL查询语句，会转化成MR操作，不实时，主要用于离线分析。</li>
+<li><a href="https://www.zhihu.com/question/27974418/answer/156227565" target="_blank" rel="noopener">如何用形象的比喻描述大数据的技术生态？Hadoop、Hive、Spark 之间是什么关系？</a></li>
+</ul>
+</li>
+</ol>
+<h3 id="参考链接">参考链接</h3><ol>
+<li><a href="http://blog.csdn.net/historyasamirror/article/details/5778378" target="_blank" rel="noopener">IO - 同步，异步，阻塞，非阻塞</a></li>
+<li><a href="https://segmentfault.com/a/1190000003063859#articleHeader13" target="_blank" rel="noopener">四种IO与epoll</a></li>
+<li><a href="">大数据分析相关工具</a></li>
+</ol>
 
           
         
