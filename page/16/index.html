@@ -1,34 +1,154 @@
-<!doctype html>
-<html class="theme-next use-motion theme-next-mist">
-<head><meta name="generator" content="Hexo 3.8.0">
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
   
 
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+  
+  
+  <link rel="stylesheet" href="../lib/needsharebutton/needsharebutton.css">
+
+
+
+
+  
+  
+    
+    
+  <script src="../lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="../lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="../../vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
-
-<link rel="stylesheet" type="text/css" href="../../css/main.css?v=0.4.2">
-
-
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
-
-
-
-  <meta name="keywords" content="java,android,life,CharlesXiao">
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="../../favicon.ico?v=0.4.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="../lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="../css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="../images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CharlesXiao‘s Blog">
+<meta property="og:url" content="https://charles-xiao.github.io/page/16/index.html">
+<meta property="og:site_name" content="CharlesXiao‘s Blog">
+<meta property="og:description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CharlesXiao‘s Blog">
+<meta name="twitter:description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+
+
+
+
+
+
+  <link rel="canonical" href="https://charles-xiao.github.io/page/16/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>CharlesXiao‘s Blog</title>
+  
+
+
+
 
 
 
@@ -36,168 +156,349 @@
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?6749450";
+      hm.src = "https://hm.baidu.com/hm.js?6749450";
       var s = document.getElementsByTagName("script")[0];
       s.parentNode.insertBefore(hm, s);
     })();
   </script>
 
 
-  <title> CharlesXiao‘s Blog </title>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
 </head>
 
-<body>
-<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
-  <div class="container one-column 
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
   
-">
+  
+    
+  
+
+  <div class="container sidebar-position-left 
+  ">
     <div class="headband"></div>
-    <!-- fork me github icon  -->
+<!-- fork me github icon  -->
     <a href="https://github.com/Charles-Xiao" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
 
-    <div id="header" class="header">
-      <div class="header-inner">
-        <h1 class="site-meta">
-  <span class="logo-line-before"><i></i></span>
-  <a href="/" class="brand">
-      <span class="logo">
-        <i class="icon-logo"></i>
-      </span>
-      <span class="site-title">CharlesXiao‘s Blog</span>
-  </a>
-  <span class="logo-line-after"><i></i></span>
-</h1>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
 
-
-  <ul id="menu" class="menu">
-     
-    <!--增加swiftype搜索功能-->
-    <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
-    </form>
-    
-    <script type="text/javascript">
-      (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
-      (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
-      e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
-      })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
-
-      _st('install','yxUhPQ2aHyszT_1btxX9','2.0.0');
-    </script>
-    <!--增加swiftype搜索功能end-->
-    
-    
-      
-      <li class="menu-item menu-item-home">
-        <a href="/">
-          <i class="menu-item-icon icon-home"></i> <br>
-          首页
-        </a>
-      </li>
-    
-      
-      <li class="menu-item menu-item-categories">
-        <a href="/categories">
-          <i class="menu-item-icon icon-categories"></i> <br>
-          分类
-        </a>
-      </li>
-    
-      
-      <li class="menu-item menu-item-about">
-        <a href="/about">
-          <i class="menu-item-icon icon-about"></i> <br>
-          关于
-        </a>
-      </li>
-    
-      
-      <li class="menu-item menu-item-archives">
-        <a href="/archives">
-          <i class="menu-item-icon icon-archives"></i> <br>
-          归档
-        </a>
-      </li>
-    
-      
-      <li class="menu-item menu-item-tags">
-        <a href="/tags">
-          <i class="menu-item-icon icon-tags"></i> <br>
-          标签
-        </a>
-      </li>
-    
-  </ul>
-
-
-      </div>
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CharlesXiao‘s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
+    
+  </div>
 
-    <div id="main" class="main">
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+    
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+
+  
+
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'yxUhPQ2aHyszT_1btxX9','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
       <div class="main-inner">
-        <div id="content" class="content">
+        <div class="content-wrap">
           
-  <div id="posts" class="posts-expand">
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
     
       
 
-  <div class="post post-type-normal ">
-    <div class="post-header">
+  
 
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              Mac常用快捷键和Tips
-            
-          
-        </h1>
-      
+  
+  
+  
 
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-15
-        </span>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2015/05/15/Mac常用快捷键和Tips/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="../../images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
 
         
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="../../2015/05/15/Mac常用快捷键和Tips/" itemprop="url">
+                  Mac常用快捷键和Tips
+                </a>
+              
             
-              <a href="../../categories/Mac系统/">Mac系统</a>
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
 
               
+                
               
 
+              <time title="创建时间：2015-05-15 22:28:32" itemprop="dateCreated datePublished" datetime="2015-05-15T22:28:32+08:00">2015-05-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2015-09-02 12:26:40" itemprop="dateModified" datetime="2015-09-02T12:26:40+08:00">2015-09-02</time>
+              
             
           </span>
-        
 
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/15/Mac常用快捷键和Tips/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/15/Mac常用快捷键和Tips/"></span>
-            </a>
-          </span>
-          
-        
-
+        <span class="post-meta-divider">|</span>
         <span class="post-count">字数统计249字</span>
-        <span class="post-comments-count">
+        <span class="post-meta-divider">|</span>
         <span class="post-count">阅读时长1分钟</span>
-      </span></div>
-    </div>
 
-    <div class="post-body">
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="../../categories/Mac系统/" itemprop="url" rel="index"><span itemprop="name">Mac系统</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <p>在Mac系统中学会使用常用快捷键可以大大提高效率，以下为Mac系统中常用的快捷键和在Elipse开发中的常用快捷键(包含Mac和Win两个版本)。</p>
+        
+          
+            <p>在Mac系统中学会使用常用快捷键可以大大提高效率，以下为Mac系统中常用的快捷键和在Elipse开发中的常用快捷键(包含Mac和Win两个版本)。</p>
 <h3 id="Mac系统中常用快捷键">Mac系统中常用快捷键</h3><pre><code>cmd+alt+<span class="number">1</span>  <span class="comment">--- 自动整理当前文件夹中文件</span>
 ctrl+<span class="constant">space</span> <span class="comment">---  启动spotlight全局搜索</span>
 cmd+<span class="constant">space</span> <span class="comment">--- 切换输入法</span>
@@ -217,86 +518,180 @@ cmd+option+esc <span class="comment">--- 打开进程管理窗口</span>
 </li>
 </ul>
 
+          
+        
       
     </div>
 
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Mac/"> #Mac </a>
-          
-        </div>
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
       
 
       
 
       
+
       
-    </div>
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
+  
+  
+  
+  </article>
 
 
     
       
 
-  <div class="post post-type-normal ">
-    <div class="post-header">
+  
 
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              Mac设置环境变量(adb+NDK+sdk)
-            
-          
-        </h1>
-      
+  
+  
+  
 
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-15
-        </span>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="../../images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
 
         
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="../../2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/" itemprop="url">
+                  Mac设置环境变量(adb+NDK+sdk)
+                </a>
+              
             
-              <a href="../../categories/Mac系统/">Mac系统</a>
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
 
               
+                
               
 
+              <time title="创建时间：2015-05-15 18:16:57" itemprop="dateCreated datePublished" datetime="2015-05-15T18:16:57+08:00">2015-05-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2015-05-16 01:09:36" itemprop="dateModified" datetime="2015-05-16T01:09:36+08:00">2015-05-16</time>
+              
             
           </span>
-        
 
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/15/Mac设置Path环境变量(adb+NDK+sdk)/"></span>
-            </a>
-          </span>
-          
-        
-
+        <span class="post-meta-divider">|</span>
         <span class="post-count">字数统计305字</span>
-        <span class="post-comments-count">
+        <span class="post-meta-divider">|</span>
         <span class="post-count">阅读时长1分钟</span>
-      </span></div>
-    </div>
 
-    <div class="post-body">
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="../../categories/Mac系统/" itemprop="url" rel="index"><span itemprop="name">Mac系统</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <p>无论是在windows还是mac系统下，对于程序猿而言，在terminal中输入命令进行一些常用操作是比用鼠标更为快捷的方式。那么为了能够打开terminal就可以直接输入并执行命令，就需要进行环境变量的设置，这样就不必进入命令文件所在目录下执行该命令了。windows下配置环境变量较为简单，在此讲一下mac下配置环境变量的方法和注意事项。</p>
+        
+          
+            <p>无论是在windows还是mac系统下，对于程序猿而言，在terminal中输入命令进行一些常用操作是比用鼠标更为快捷的方式。那么为了能够打开terminal就可以直接输入并执行命令，就需要进行环境变量的设置，这样就不必进入命令文件所在目录下执行该命令了。windows下配置环境变量较为简单，在此讲一下mac下配置环境变量的方法和注意事项。</p>
 <p><strong>1. 打开terminal，输入<code>cd ~</code>, 进入当前用户home目录</strong></p>
 <p><strong>2. 输入<code>touch .bash_profile</code>, 创建bash_profile文件(如果该文件已经存在则可以直接进入第3步)</strong></p>
 <p><strong>3. 打开记事本编辑bash_profile文件，示例如下</strong></p>
@@ -312,174 +707,361 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 </code></pre><p><strong>4. 保存修改，输入更新命令<code>source .bash_profile</code>,PATH变量配置完成</strong></p>
 <p><a href="http://blog.csdn.net/zf135792468/article/details/11926995" target="_blank" rel="noopener">参考链接</a></p>
 
+          
+        
       
     </div>
 
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Android/"> #Android </a>
-          
-            <a href="../../tags/Mac/"> #Mac </a>
-          
-        </div>
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
       
 
       
 
       
+
       
-    </div>
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
+  
+  
+  
+  </article>
 
 
     
       
 
-  <div class="post post-type-normal ">
-    <div class="post-header">
+  
 
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              如何阅读一本书
-            
-          
-        </h1>
-      
+  
+  
+  
 
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-05-12
-        </span>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2015/05/12/如何阅读一本书/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="../../images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
 
         
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="../../2015/05/12/如何阅读一本书/" itemprop="url">
+                  如何阅读一本书
+                </a>
+              
             
-              <a href="../../categories/读书札记/">读书札记</a>
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
 
               
+                
               
 
+              <time title="创建时间：2015-05-12 12:44:49" itemprop="dateCreated datePublished" datetime="2015-05-12T12:44:49+08:00">2015-05-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2015-06-12 22:14:40" itemprop="dateModified" datetime="2015-06-12T22:14:40+08:00">2015-06-12</time>
+              
             
           </span>
-        
 
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/05/12/如何阅读一本书/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/12/如何阅读一本书/"></span>
-            </a>
-          </span>
-          
-        
-
+        <span class="post-meta-divider">|</span>
         <span class="post-count">字数统计1k字</span>
-        <span class="post-comments-count">
+        <span class="post-meta-divider">|</span>
         <span class="post-count">阅读时长3分钟</span>
-      </span></div>
-    </div>
 
-    <div class="post-body">
-
-      
-      
-
-      
-        <p>书籍使人进步！阅读使人明智！如何阅读一本书也是一门学问，读懂不同类型的书也是一件不容易的事情。美国教育家查尔斯-范多伦还特地写了一本《如何阅读一本书》来讲述读书的“方法论”，此文为部分书摘，闲来无事翻书，翻到哪儿写到哪儿，未完待续…… <a id="more"></a></p>
-<h3 id="阅读一本书的两种层次">阅读一本书的两种层次</h3><p>你是为了获得资讯而读还是说为了提高自己的理解力而读；后者其实是一种不同理解水平的双方之间的对话，如何缩小理解上的差距是在阅读过程中很重要的一件事，即如何从粗浅的了解推进到深入理解的层次，如何把一个模糊的概念具体化成清晰的模型！</p>
-<h3 id="读书是一种自我发现型的学习">读书是一种自我发现型的学习</h3><p>读书是一种自我发现型的学习，不需要第三方（如老师）的辅助；在读一本较为高深的书时，建议一路读下去不做停顿，读你能领会的一部分即可，难理解之处可以留到下次读的时候在注意领会，包括查找资料，请教他人等等。<strong>检索阅读</strong>可以了解书的大致构架（注意书目、说明、注释），<strong>略读</strong>的目的是了解是否需要进一步读下去！</p>
-<h3 id="如何做一个自我要求的读者？">如何做一个自我要求的读者？</h3><p>保持清醒，在阅读过程中，不断提出问题，并通过自己的阅读来加以解决这些问题；那么如何来保持清醒呢？那就是在书上做笔记，写下来你的感想或者作者观点的精彩部分，既可以开动自己的大脑，记录自己的思想，也可以帮助你记录作者的思想，表达你与作者之间相同或者相异的观点；主动的阅读本身便是一种思考，而思考倾向于用语言或文字表达出来。由许多规则中才可以养成一个习惯，清楚了解规则并加以高强度练习，才可以真正意义上地掌握一种技能，因为对初学者而言：任何一个复杂的活动，都必须从单一的方面入手，先熟悉基本步骤，最后加以组合，忘却步骤，和谐地进行某一活动，也就是说到后期就不能再拘泥于单一动作，而是一种习惯和感觉的驱使！</p>
-<h3 id="一本书的分类">一本书的分类</h3><p>首先你的有一个标准，那么你如何来寻找这样一个标准呢？如果你想简单明白地运用一个规则，那么你必须先使这个规则更加简单明白一些！书有理论性和实用性、小说类和论说类之分，那么区别在哪里呢？那就是：我们不应该只是满足于只知道这是怎么回事，而应该明白这个东西应该怎么运用？再举例，如：你质疑某件事的合理性与有效性，这是理论；而你质疑任何事的目的都可以称之为实用。如何判断一本理论书的具体类别呢？它到底是科学or哲学？这就的看它所强调的是否是超现实的！哲学家利用人类共通经验来思考，以便于向他人论证以及灌输自己的观点；而科学家则是利用个人特殊的经验，研究调查得出观点。他们的不同之处在于依托的经验&amp;&amp;思考方式&amp;&amp;论证问题的方式</p>
-<h3 id="透视一本书">透视一本书</h3><p>从架构的寻找到间短归纳主要内容，达到你可以清晰地向他人讲述一本书在讲些什么；再到你可以按照一种顺序来把握意思一本书的重要部分、列出纲要，串联起来；最后一步就是如何提出作者以及你自己的问题，并加以解决！</p>
-<h3 id="To_be_continued……">To be continued……</h3>
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
           
-            <a href="../../tags/阅读/"> #阅读 </a>
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="../../categories/读书札记/" itemprop="url" rel="index"><span itemprop="name">读书札记</span></a></span>
+
+                
+                
+              
+            </span>
           
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
         </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>书籍使人进步！阅读使人明智！如何阅读一本书也是一门学问，读懂不同类型的书也是一件不容易的事情。美国教育家查尔斯-范多伦还特地写了一本《如何阅读一本书》来讲述读书的“方法论”，此文为部分书摘，闲来无事翻书，翻到哪儿写到哪儿，未完待续……
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="../../2015/05/12/如何阅读一本书/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+         
+          <!--/noindex-->
+        
+      
+    </p></div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
       
 
       
 
       
+
       
-    </div>
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
+  
+  
+  
+  </article>
 
 
     
       
 
-  <div class="post post-type-normal ">
-    <div class="post-header">
+  
 
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              Java语言基础知识点
-            
-          
-        </h1>
-      
+  
+  
+  
 
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-04-23
-        </span>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2015/04/23/Java语言基础知识点/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="../../images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
 
         
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="../../2015/04/23/Java语言基础知识点/" itemprop="url">
+                  Java语言基础知识点
+                </a>
+              
             
-              <a href="../../categories/java学习笔记/">java学习笔记</a>
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
 
               
+                
               
 
+              <time title="创建时间：2015-04-23 20:29:08" itemprop="dateCreated datePublished" datetime="2015-04-23T20:29:08+08:00">2015-04-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2016-10-07 23:10:28" itemprop="dateModified" datetime="2016-10-07T23:10:28+08:00">2016-10-07</time>
+              
             
           </span>
-        
 
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/04/23/Java语言基础知识点/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/23/Java语言基础知识点/"></span>
-            </a>
-          </span>
-          
-        
-
+        <span class="post-meta-divider">|</span>
         <span class="post-count">字数统计2.5k字</span>
-        <span class="post-comments-count">
+        <span class="post-meta-divider">|</span>
         <span class="post-count">阅读时长8分钟</span>
-      </span></div>
-    </div>
 
-    <div class="post-body">
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="../../categories/java学习笔记/" itemprop="url" rel="index"><span itemprop="name">java学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <ol>
+        
+          
+            <ol>
 <li><strong>Switch语句参数</strong>: JDK7之前，switch 只能支持 byte、short、char、int 这几个基本数据类型和其对应的封装类型;如果想用String，需要将String包装成枚举类型作为参数；JDK7之后支持String类型直接作为参数<a href="http://blog.csdn.net/amazing7/article/details/51219315" target="_blank" rel="noopener">参考</a></li>
 <li><strong>for循环和foreach的区别</strong>: for循环效率高于foreach; for循环可以间隔遍历，步伐可以自由设置，但是foreach只能用于遍历读取每一个元素，还不能进行修改</li>
 <li><strong>Java和C++区别</strong>：①Java有接口，有垃圾回收机制②C++有引用，有多重继承，有操作符重载</li>
@@ -527,86 +1109,180 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 <li><a href="http://www.importnew.com/16436.html" target="_blank" rel="noopener">Java8 lambda表达式10个示例</a></li>
 </ol>
 
+          
+        
       
     </div>
 
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Java/"> #Java </a>
-          
-        </div>
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
       
 
       
 
       
+
       
-    </div>
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
+  
+  
+  
+  </article>
 
 
     
       
 
-  <div class="post post-type-normal ">
-    <div class="post-header">
+  
 
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              Java多线程同步方法
-            
-          
-        </h1>
-      
+  
+  
+  
 
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-04-13
-        </span>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2015/04/13/Java多线程同步方法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="../../images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
 
         
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="../../2015/04/13/Java多线程同步方法/" itemprop="url">
+                  Java多线程同步方法
+                </a>
+              
             
-              <a href="../../categories/java学习笔记/">java学习笔记</a>
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
 
               
+                
               
 
+              <time title="创建时间：2015-04-13 22:09:12" itemprop="dateCreated datePublished" datetime="2015-04-13T22:09:12+08:00">2015-04-13</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2016-09-27 19:44:32" itemprop="dateModified" datetime="2016-09-27T19:44:32+08:00">2016-09-27</time>
+              
             
           </span>
-        
 
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="../../2015/04/13/Java多线程同步方法/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/13/Java多线程同步方法/"></span>
-            </a>
-          </span>
-          
-        
-
+        <span class="post-meta-divider">|</span>
         <span class="post-count">字数统计5.3k字</span>
-        <span class="post-comments-count">
+        <span class="post-meta-divider">|</span>
         <span class="post-count">阅读时长19分钟</span>
-      </span></div>
-    </div>
 
-    <div class="post-body">
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="../../categories/java学习笔记/" itemprop="url" rel="index"><span itemprop="name">java学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <h3 id="同步VS异步_and_阻塞VS非阻塞_Link">同步VS异步 and 阻塞VS非阻塞 <a href="http://elf8848.iteye.com/blog/1739611" target="_blank" rel="noopener">Link</a></h3><ol>
+        
+          
+            <h3 id="同步VS异步_and_阻塞VS非阻塞_Link">同步VS异步 and 阻塞VS非阻塞 <a href="http://elf8848.iteye.com/blog/1739611" target="_blank" rel="noopener">Link</a></h3><ol>
 <li><strong>同步/异步与阻塞/非阻塞是两组不同的概念,它们可以共存组合,同步和异步与消息的通知机制有关,阻塞和非阻塞与程序等待消息(无所谓同步或者异步)时的状态有关</strong> <strong>同步</strong>：就是在发出一个功能调用时，在没有得到结果之前，该调用就不返回(<strong>与阻塞的区别</strong>很多时候当前线程还是激活的，只是从逻辑上当前函数没有返回而已)。<strong>异步</strong>：当一个异步过程调用发出后，调用者不能立刻得到结果；这个调用的部件在处理完成后，通过状态、通知和回调来通知调用者。<strong>阻塞</strong>：是指调用结果返回之前，当前线程会被挂起，函数只有在得到结果之后才会返回。<strong>非阻塞</strong>指在不能立刻得到结果之前，该函数不会阻塞当前线程，而会立刻返回。</li>
 <li>举例: 我去买一本书，立即买到了，这就是<strong>非阻塞</strong>；如果恰好书店没有，我就等一直等到书店有了这本书买到了才走，这就是<strong>阻塞</strong>；这两种情况，非阻塞和阻塞都可以称为<strong>同步</strong>。如果书店恰好没有，我就告诉书店老板，书来了告诉我一声让我来取或者直接送到我家，然后我就走了，这就是<strong>异步</strong>。</li>
 </ol>
@@ -898,44 +1574,58 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 <li><a href="http://www.itdadao.com/articles/c15a210800p0.html" target="_blank" rel="noopener">Concurrent并发包</a></li>
 </ol>
 
+          
+        
       
     </div>
 
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="../../tags/Java/"> #Java </a>
-          
-            <a href="../../tags/多线程/"> #多线程 </a>
-          
-        </div>
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
       
 
       
 
       
+
       
-    </div>
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
+  
+  
+  
+  </article>
 
 
     
-  </div>
+  </section>
 
   
-  <div class="pagination">
-    <a class="extend prev" rel="prev" href="../15/">&laquo;</a><a class="page-number" href="../../">1</a><span class="space">&hellip;</span><a class="page-number" href="../15/">15</a><span class="page-number current">16</span><a class="page-number" href="../17/">17</a><a class="extend next" rel="next" href="../17/">&raquo;</a>
-  </div>
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="../15/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="../../">1</a><span class="space">&hellip;</span><a class="page-number" href="../15/">15</a><span class="page-number current">16</span><a class="page-number" href="../17/">17</a><a class="extend next" rel="next" href="../17/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
 
+
+
+          </div>
+          
 
         </div>
-
         
-      </div>
-
-
-      
+          
   
   <div class="sidebar-toggle">
     <div class="sidebar-toggle-line-wrap">
@@ -945,86 +1635,338 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
     </div>
   </div>
 
-  <div id="sidebar" class="sidebar">
+  <aside id="sidebar" class="sidebar">
+    
     <div class="sidebar-inner">
 
       
 
-      <div class="site-overview">
-        <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
-          <p class="site-author-name">CharlesXiao</p>
-        </div>
-        <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
-        <div class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="../../archives">
-              <span class="site-state-item-count">84</span>
-              <span class="site-state-item-name">日志</span>
-            </a>
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="../../images/avatar.jpg" alt="CharlesXiao">
+            
+              <p class="site-author-name" itemprop="name">CharlesXiao</p>
+              <p class="site-description motion-element" itemprop="description">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
           </div>
 
-          <div class="site-state-item site-state-categories">
-            <a href="../../categories">
-              <span class="site-state-item-count">17</span>
-              <span class="site-state-item-name">分类</span>
-              </a>
-          </div>
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="../../archives/">
+                
+                    <span class="site-state-item-count">84</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
 
-          <div class="site-state-item site-state-tags">
-            <a href="../../tags">
-              <span class="site-state-item-count">76</span>
-              <span class="site-state-item-name">标签</span>
-              </a>
-          </div>
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="../../categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
 
-        </div>
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="../../tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
 
-        
+          
 
-        <div class="links-of-author motion-element">
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Charles-Xiao" target="_blank" title="github" rel="external nofollow"><i class="fa fa-fw fa-github"></i>github</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/2262300105/profile?topnav=1&wvr=6" target="_blank" title="weibo" rel="external nofollow"><i class="fa fa-fw fa-weibo"></i>weibo</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://daijiale.github.io/" target="_blank" title="Daijiale的个人站点" rel="external nofollow"><i class="fa fa-fw fa-github"></i>Daijiale的个人站点</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                推荐阅读
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://rocksdb.org/" title="RocksDB" target="_blank">RocksDB</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://wf.uisdc.com/cn/" title="Google FE" target="_blank">Google FE</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
           
             
-              <span class="links-of-author-item">
-              <a href="https://github.com/Charles-Xiao" target="_blank">github</a>
-            </span>
-            
-              <span class="links-of-author-item">
-              <a href="http://weibo.com/2262300105/profile?topnav=1&wvr=6" target="_blank">weibo</a>
-            </span>
-            
-              <span class="links-of-author-item">
-              <a href="http://daijiale.github.io/" target="_blank">Daijiale的个人站点</a>
-            </span>
-            
           
+          
+
         </div>
+      </section>
 
-        
-        
-
-      </div>
+      
 
       
 
     </div>
-  </div>
+  </aside>
 
 
-    </div>
+        
+      </div>
+    </main>
 
-    <div id="footer" class="footer">
+    <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">
-  
-  &copy; &nbsp;  2015.05.16 - 
-  2018
-  <span class="with-love">
-    <i class="icon-heart"></i>
+
+<div class="copyright"><a target="_blank" rel="external nofollow" href="http://www.miitbeian.gov.cn/">  </a> &copy; 2015.05.16 – <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
   </span>
-  <span class="author">CharlesXiao</span>
+  <span class="author" itemprop="copyrightHolder">CharlesXiao</span>
+
+  
+
+  
 </div>
+
+
+  
+
+
+
 
 <div class="powered-by">
 <i class="fa fa-user-md"></i><span id="busuanzi_container_site_pv">
@@ -1032,253 +1974,223 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 </span>
 </div>
 
+
+
 <div class="theme-info">
+  <div class="powered-by"></div>
   <span class="post-count">博客全站共165.6k字</span>
 </div>
-<!--
-<div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
-</div>
 
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
--->
+
+        
 
 
 
+
+
+
+
+
+        
       </div>
-    </div>
+    </footer>
 
-    <div class="back-to-top"></div>
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+	
+    
+
+    
   </div>
 
-  <script type="text/javascript" src="../../vendors/jquery/index.js?v=2.1.3"></script>
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+      
+  
+  <script type="text/javascript" color="0,0,255" opacity="0.5" zindex="-1" count="99" src="../../lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="../../lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="../../lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="../../lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="../../lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="../../lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="../../lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="../../js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="../../js/src/motion.js?v=6.5.0"></script>
+
+
 
   
   
 
   
-  <script type="text/javascript" src="../../vendors/fancybox/source/jquery.fancybox.pack.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $('.content img').each(function () {
-        var $image = $(this);
-        var $imageWrapLink = $image.parent('a');
 
-        if ($imageWrapLink.size() < 1) {
-          $imageWrapLink = $image.wrap('<a href="' + this.getAttribute('src') + '"></a>').parent('a');
-        }
-        $imageWrapLink.addClass('fancybox');
-      });
-    });
-    $('.fancybox').fancybox({
-      helpers: {
-        overlay: {
-          locked: false
-        }
-      }
-    });
+  
+
+
+  <script type="text/javascript" src="../../js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="../../lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
   </script>
 
-
-  <script type="text/javascript">
-  function hasMobileUA () {
-    var nav = window.navigator;
-    var ua = nav.userAgent;
-    var pa = /iPad|iPhone|Android|Opera Mini|BlackBerry|webOS|UCWEB|Blazer|PSP|IEMobile|Symbian/g;
-
-    return pa.test(ua);
-  }
-
-  function isDesktop () {
-    return screen.width > 991 && !hasMobileUA();
-  }
-
-  function isTablet () {
-    return screen.width < 992 && screen.width > 767 && hasMobileUA();
-  }
-
-  function isMobile () {
-    return screen.width < 767 && hasMobileUA();
-  }
-
-  function escapeSelector (selector) {
-    return selector.replace(/[!"$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")
-  }
-</script>
-
   
 
-  <script type="text/javascript" src="../../vendors/velocity/velocity.min.js"></script>
-  <script type="text/javascript" src="../../vendors/velocity/velocity.ui.min.js"></script>
-
-  <script type="text/javascript" id="motion.global">
-  $(document).ready(function () {
-    var body = $('body');
-    var isSidebarVisible = false;
-    var sidebarToggle = $('.sidebar-toggle');
-    var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
-    var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
-    var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
-    var sidebar = $('.sidebar');
-
-    var SIDEBAR_WIDTH = '320px';
-    var SIDEBAR_DISPLAY_DURATION = 300;
-
-    var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
-
-    var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
-    var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
-    var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
-
-    var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
-    var sidebarToggleLine2ndStatusArrow = {width: '90%'};
-    var sidebarToogleLine2ndStatusClose = {opacity: 0};
-
-    var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
-    var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
-    var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
-
-    LogoAndMenuMotion();
-    sidebatToggleMotion();
-    postsListMotion();
-    backToTopMotion();
-
-
-    $(document)
-      .on('sidebar.isShowing', function () {
-        isDesktop() && body.velocity(
-          {paddingRight: SIDEBAR_WIDTH},
-          SIDEBAR_DISPLAY_DURATION
-        );
-        sidebarContentMotion();
-      })
-      .on('sidebar.isHiding', function () {});
-
-    function LogoAndMenuMotion() {
-      $.Velocity.RunSequence([
-        { e: $('.brand'), p: { opacity: 1 }, o: { duration: 100 } },
-        { e: $('.logo'), p: { opacity: 1, top: 0 }, o: { duration: 50} },
-        
-        { e: $('.logo-line-before i'), p: { translateX: "100%" }, o: { duration: 500, sequenceQueue: false } },
-        { e: $('.logo-line-after i'), p: { translateX: "-100%" }, o: { duration: 500, sequenceQueue: false } },
-        
-        { e: $('.site-title'), p: { opacity: 1, top: 0 }, o: { duration: 200 } }
-      ]);
-      $('.menu-item').velocity('transition.slideDownIn', {display: null});
-    }
-
-
-    function backToTopMotion () {
-      var b2top = $('.back-to-top');
-      b2top.on('click', function () {
-        body.velocity('scroll');
-      });
-    }
-
-    function sidebarShowMotion () {
-
-      sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
-      sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
-      sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
-
-      sidebar.velocity({width: SIDEBAR_WIDTH}, {
-        display: 'block',
-        duration: SIDEBAR_DISPLAY_DURATION,
-        complete: function () {
-          sidebar.addClass('sidebar-active');
-          sidebar.trigger('sidebar.didShow');
-        }
-      });
-      sidebar.trigger('sidebar.isShowing');
-    }
-
-    function sidebarHideMotion () {
-      isDesktop() && body.velocity({paddingRight: 0});
-      sidebar.velocity('reverse');
-
-      sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
-      sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
-      sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
-
-      sidebar.removeClass('sidebar-active');
-      sidebar.trigger('sidebar.isHiding');
-    };
-
-    function sidebarContentMotion () {
-      $('.sidebar .motion-element').velocity(
-        'transition.slideRightIn',
-        {stagger: 50, drag: true}
-      );
-    }
-
-    function postsListMotion () {
-      var postMotionOptions = window.postMotionOptions || {stagger: 300, drag: true};
-      $('.post').velocity('transition.slideDownIn', postMotionOptions);
-    }
-
-    function sidebatToggleMotion () {
-      sidebarToggle.on('click', function () {
-        isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
-        isSidebarVisible = !isSidebarVisible;
-      });
-
-      sidebarToggle.hover(function () {
-        if (isSidebarVisible) {return}
-        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
-        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
-        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
-      }, function () {
-        if (isSidebarVisible) {return}
-        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
-        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
-        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
-      });
-    }
-  });
-
-</script>
-
-
-
-
+  
 
   
 
   
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    }
-  });
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for (i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
 
   
-  
+
   
 
 
   
-
+  <script type="text/javascript" color="55,55,55" opacity="0.7" zindex="-2" count="100" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
   
 
 </body>
