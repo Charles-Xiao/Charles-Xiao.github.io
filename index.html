@@ -1,34 +1,158 @@
-<!doctype html>
-<html class="theme-next use-motion theme-next-mist">
-<head><meta name="generator" content="Hexo 3.8.0">
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
   
 
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+  
+  
+  <link rel="stylesheet" href="../lib/needsharebutton/needsharebutton.css">
+
+
+
+
+  
+  
+    
+    
+  <script src="../lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="../lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
 
 
 
 
 
 
-  <link rel="stylesheet" type="text/css" href="vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
 
-
-<link rel="stylesheet" type="text/css" href="css/main.css?v=0.4.2">
-
-
-    <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
-
-
-
-  <meta name="keywords" content="java,cs,life,CharlesXiao">
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.2">
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="../lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="../lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="../css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="../images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CharlesXiao‘s Blog">
+<meta property="og:url" content="https://charles-xiao.github.io/index.html">
+<meta property="og:site_name" content="CharlesXiao‘s Blog">
+<meta property="og:description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CharlesXiao‘s Blog">
+<meta name="twitter:description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+
+
+
+
+
+
+  <link rel="canonical" href="https://charles-xiao.github.io/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>CharlesXiao‘s Blog</title>
+  
+
+
+
 
 
 
@@ -36,157 +160,331 @@
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?6749450";
+      hm.src = "https://hm.baidu.com/hm.js?6749450";
       var s = document.getElementsByTagName("script")[0];
       s.parentNode.insertBefore(hm, s);
     })();
   </script>
 
 
-  <title> CharlesXiao‘s Blog </title>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
 </head>
 
-<body>
-<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
-  <div class="container one-column 
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
   
-">
+  
+    
+  
+
+  <div class="container sidebar-position-left 
+  ">
     <div class="headband"></div>
-    <!-- fork me github icon  -->
+<!-- fork me github icon  -->
     <a href="https://github.com/Charles-Xiao" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
 
-    <div id="header" class="header">
-      <div class="header-inner">
-        <h1 class="site-meta">
-  <span class="logo-line-before"><i></i></span>
-  <a href="/" class="brand">
-      <span class="logo">
-        <i class="icon-logo"></i>
-      </span>
-      <span class="site-title">CharlesXiao‘s Blog</span>
-  </a>
-  <span class="logo-line-after"><i></i></span>
-</h1>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
 
-
-  <ul id="menu" class="menu">
-     
-    <!--增加swiftype搜索功能-->
-    <form class="menu-item menu-item-search">
-      <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
-    </form>
-    
-    <script type="text/javascript">
-      (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
-      (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
-      e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
-      })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
-
-      _st('install','yxUhPQ2aHyszT_1btxX9','2.0.0');
-    </script>
-    <!--增加swiftype搜索功能end-->
-    
-    
-      
-      <li class="menu-item menu-item-home">
-        <a href="/">
-          <i class="menu-item-icon icon-home"></i> <br>
-          Home
-        </a>
-      </li>
-    
-      
-      <li class="menu-item menu-item-categories">
-        <a href="/categories">
-          <i class="menu-item-icon icon-categories"></i> <br>
-          Categories
-        </a>
-      </li>
-    
-      
-      <li class="menu-item menu-item-about">
-        <a href="/about">
-          <i class="menu-item-icon icon-about"></i> <br>
-          About
-        </a>
-      </li>
-    
-      
-      <li class="menu-item menu-item-archives">
-        <a href="/archives">
-          <i class="menu-item-icon icon-archives"></i> <br>
-          Archives
-        </a>
-      </li>
-    
-      
-      <li class="menu-item menu-item-tags">
-        <a href="/tags">
-          <i class="menu-item-icon icon-tags"></i> <br>
-          Tags
-        </a>
-      </li>
-    
-  </ul>
-
-
-      </div>
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CharlesXiao‘s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
+    
+  </div>
 
-    <div id="main" class="main">
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+    
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+
+  
+
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'yxUhPQ2aHyszT_1btxX9','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
       <div class="main-inner">
-        <div id="content" class="content">
+        <div class="content-wrap">
           
-  <div id="posts" class="posts-expand">
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
     
       
 
-  <div class="post post-type-normal ">
-    <div class="post-header">
+  
 
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              NewSQL数据库探秘
-            
-          
-        </h1>
-      
+  
+  
+  
 
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2018-11-11
-        </span>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io2018/11/11/NewSQL数据库探秘/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
 
         
-
         
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2018/11/11/NewSQL数据库探秘/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/11/11/NewSQL数据库探秘/"></span>
-            </a>
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="2018/11/11/NewSQL数据库探秘/" itemprop="url">
+                  NewSQL数据库探秘
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-11 11:36:53" itemprop="dateCreated datePublished" datetime="2018-11-11T11:36:53+08:00">2018-11-11</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-19 11:17:01" itemprop="dateModified" datetime="2018-11-19T11:17:01+08:00">2018-11-19</time>
+              
+            
           </span>
-          
-        
 
+        <span class="post-meta-divider">|</span>
         <span class="post-count">字数统计989字</span>
-        <span class="post-comments-count">
+        <span class="post-meta-divider">|</span>
         <span class="post-count">阅读时长3分钟</span>
-      </span></div>
-    </div>
 
-    <div class="post-body">
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <h2 id="SQL关系型数据库">SQL关系型数据库</h2><p><a href="https://charles-xiao.github.io/2015/05/19/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%87%8D%E9%9A%BE%E7%82%B9%E9%9B%86%E9%94%A6/">数据库重难点集锦</a></p>
+        
+          
+            <h2 id="SQL关系型数据库">SQL关系型数据库</h2><p><a href="https://charles-xiao.github.io/2015/05/19/%E6%95%B0%E6%8D%AE%E5%BA%93%E9%87%8D%E9%9A%BE%E7%82%B9%E9%9B%86%E9%94%A6/">数据库重难点集锦</a></p>
 <h2 id="NoSQL">NoSQL</h2><h3 id="键值型">键值型</h3><p>键值数据库的代表是Redis，面对通过主键查询的场景，Redis的效率非常高，但对于内容的查询，则无能为力。分布式只能靠根据主键进行分片，不支持ACID事务。</p>
 <h3 id="文档型">文档型</h3><p>文档数据库的代表是MongoDB，查询灵活，拥有自由度极高的Schema模型，可以方便的与JSON数据映射，不支持ACID事务。</p>
 <h3 id="列式存储型">列式存储型</h3><p>HBase用于处理海量数据，不支持ACID事务，并且只能通过行键来查询数据。</p>
@@ -210,81 +508,162 @@
 <h3 id="Shared_Nothing">Shared Nothing</h3><p>各个处理单元都有自己私有的CPU/内存/硬盘等，不存在共享资源，类似于MPP（大规模并行处理）模式，各处理单元之间通过协议通信，并行处理和扩展能力更好。典型代表Hadoop ，各节点相互独立，各自处理自己的数据，处理后的结果可能向上层汇总或在节点间流转。MySQL Proxy和Google Spanner也是Shared Nothing，只需增加服务器数就可以增加处理能力和容量。</p>
 <h3 id="Shared_Disk">Shared Disk</h3><p>各个处理单元使用自己的私有CPU和Memory，共享磁盘系统，它是数据共享，可通过增加节点来提高并行处理的能力，扩展能力较好。当存储器接口达到饱和的时候，增加节点并不能获得更高的性能。</p>
 
+          
+        
       
     </div>
 
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/分布式系统/"> #分布式系统 </a>
-          
-            <a href="tags/NewSQL/"> #NewSQL </a>
-          
-            <a href="tags/数据库/"> #数据库 </a>
-          
-            <a href="tags/MySQL/"> #MySQL </a>
-          
-        </div>
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
       
 
       
 
       
+
       
-    </div>
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
+  
+  
+  
+  </article>
 
 
     
       
 
-  <div class="post post-type-normal ">
-    <div class="post-header">
+  
 
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              Golang实现读写缓冲池
-            
-          
-        </h1>
-      
+  
+  
+  
 
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2018-10-29
-        </span>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io2018/10/29/Golang实现读写缓冲池/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
 
         
-
         
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2018/10/29/Golang实现读写缓冲池/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/10/29/Golang实现读写缓冲池/"></span>
-            </a>
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="2018/10/29/Golang实现读写缓冲池/" itemprop="url">
+                  Golang实现读写缓冲池
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-29 11:36:53" itemprop="dateCreated datePublished" datetime="2018-10-29T11:36:53+08:00">2018-10-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-30 19:03:47" itemprop="dateModified" datetime="2018-10-30T19:03:47+08:00">2018-10-30</time>
+              
+            
           </span>
-          
-        
 
+        <span class="post-meta-divider">|</span>
         <span class="post-count">字数统计1.5k字</span>
-        <span class="post-comments-count">
+        <span class="post-meta-divider">|</span>
         <span class="post-count">阅读时长7分钟</span>
-      </span></div>
-    </div>
 
-    <div class="post-body">
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <p>所谓读写缓冲池的本质是生产者消费者模型的实际应用。目的是为了避免频繁分配和释放内存，复用最初new出来的固定数目缓冲slice，减少GC压力。</p>
+        
+          
+            <p>所谓读写缓冲池的本质是生产者消费者模型的实际应用。目的是为了避免频繁分配和释放内存，复用最初new出来的固定数目缓冲slice，减少GC压力。</p>
 <h3 id="Channel+WaitGroup">Channel+WaitGroup</h3><p>Golang并发基本都是这两者搭配使用，通过for+select循环监听发布事件、订阅事件、取消事件。</p>
 <h3 id="AsyncReader">AsyncReader</h3><h4 id="数据结构">数据结构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">// 接口核心方法Begin和Next, Begin用于写数据到blockBuf，Next从blockBuf读取出来数据</span><br><span class="line">type AsyncReader interface &#123;</span><br><span class="line">	Begin() error</span><br><span class="line">	Stop()</span><br><span class="line">	Next() ([]byte, error)</span><br><span class="line">	SetTimeoutMs(t uint32)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type asyncReader struct &#123;</span><br><span class="line">	// 数据来源</span><br><span class="line">	reader io.Reader</span><br><span class="line"></span><br><span class="line">	// buffer配置信息</span><br><span class="line">	blockNum       uint32</span><br><span class="line">	bufferBlockNum uint32 /* blockNum-1 */</span><br><span class="line">	blockSize      uint32</span><br><span class="line">	firstBlockSize uint32</span><br><span class="line">	clientTimeout  time.Duration</span><br><span class="line">	innerTimeout   time.Duration</span><br><span class="line"></span><br><span class="line">	// buffer</span><br><span class="line">	blocks []blockBuf</span><br><span class="line"></span><br><span class="line">	// channal and event</span><br><span class="line">    // struct&#123;&#125;不消耗内存空间，一般用来做信号</span><br><span class="line">	chRecieve   chan struct&#123;&#125; // 读reader数据写到buffer</span><br><span class="line">	chStop      chan struct&#123;&#125;</span><br><span class="line">	chReadEvent chan event // 从buffer读数据</span><br><span class="line">	isEof       bool</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 缓存block</span><br><span class="line">type blockBuf struct &#123;</span><br><span class="line">	data []byte</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type event struct &#123;</span><br><span class="line">	/* 在err != nil的时候，readBlockIdx,readLen,isEof的值都是undefined */</span><br><span class="line">	readBlockIdx uint32</span><br><span class="line">	readLen      uint32</span><br><span class="line">	isEof        bool</span><br><span class="line">	err          error</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="核心函数">核心函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line">func NewAsyncReader(reader io.Reader, blockSize uint32, blockNum uint32, logId uint32) *asyncReader &#123;</span><br><span class="line">	this := &amp;asyncReader&#123;&#125;</span><br><span class="line"></span><br><span class="line">	/* asyncReader 有多个block作为异步读取数据的缓冲池,</span><br><span class="line">	 * 当用户调用next读取数据时，会把底层内存块以slice的方式交给调用方读取，</span><br><span class="line">	 * 所以需要多开辟1块block，避免正在缓冲的block同时被用户读取，产生竞态</span><br><span class="line">	 * this.blockNum 是asyncReader里实际开辟的block数</span><br><span class="line">	 * this.bufferBlockNum 是asyncReader 里用来异步缓冲的block数</span><br><span class="line">	 */</span><br><span class="line">	this.blockNum = blockNum + 1</span><br><span class="line">	this.bufferBlockNum = this.blockNum - 1</span><br><span class="line"></span><br><span class="line">    // 开辟缓存空间</span><br><span class="line">	this.blocks = make([]blockBuf, this.blockNum)</span><br><span class="line">	for i := uint32(0); i &lt; this.blockNum; i++ &#123;</span><br><span class="line">		this.blocks[i].data = nil</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	this.chRecieve = make(chan struct&#123;&#125;, this.bufferBlockNum)</span><br><span class="line">	this.chStop = make(chan struct&#123;&#125;, 1)</span><br><span class="line">	this.chReadEvent = make(chan event, this.blockNum)</span><br><span class="line"></span><br><span class="line">	// default:</span><br><span class="line">	this.firstBlockSize = this.blockSize</span><br><span class="line">	this.SetTimeoutMs(1000)</span><br><span class="line">	this.isEof = false</span><br><span class="line">	return this</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/* 异步读取数据 */</span><br><span class="line">func (this *asyncReader) Begin() error &#123;</span><br><span class="line"></span><br><span class="line">	for i := uint32(0); i &lt; this.bufferBlockNum; i++ &#123;</span><br><span class="line">		this.chRecieve &lt;- struct&#123;&#125;&#123;&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	go func() &#123;</span><br><span class="line">		isFirstBlock := true</span><br><span class="line">		blockIdx := uint32(0)</span><br><span class="line">		for &#123;</span><br><span class="line">			select &#123;</span><br><span class="line">			case &lt;-this.chStop: // 终止信号</span><br><span class="line">				return</span><br><span class="line">			case &lt;-time.After(this.innerTimeout):</span><br><span class="line">				// 默认协程异步读数据等待客户端读毕的超时时间，是客户端超时的2倍</span><br><span class="line">				this.chReadEvent &lt;- NewEvent(fmt.Errorf(&quot;asyncReader begin() timeout&quot;))</span><br><span class="line">				return</span><br><span class="line">			case &lt;-this.chRecieve: // 监听receive信号</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			toReadLen := this.blockSize</span><br><span class="line"></span><br><span class="line">			len, isEof, err := this.ReadOneBlock(blockIdx, toReadLen)</span><br><span class="line">			if err != nil &#123;</span><br><span class="line">				this.chReadEvent &lt;- NewEvent(err)</span><br><span class="line">				return</span><br><span class="line">			&#125;</span><br><span class="line">            // 读取成功一个block，就发送一个read event到通道，后续Next函数会主动获取</span><br><span class="line">			if len &gt; 0 &#123;</span><br><span class="line">				this.chReadEvent &lt;- event&#123;blockIdx, len, isEof, nil&#125;</span><br><span class="line">				blockIdx = (blockIdx + 1) % this.blockNum // 接着写下一个block</span><br><span class="line">			&#125;</span><br><span class="line">			if isEof &#123;</span><br><span class="line">				this.chReadEvent &lt;- event&#123;0, 0, true, nil&#125;</span><br><span class="line">				break</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	return nil</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/* 读取toReadLen长度的数据，直到满足长度或者EOF */</span><br><span class="line">/* 返回参数 readLen,isEof,error */</span><br><span class="line">func (this *asyncReader) ReadOneBlock(blockIdx uint32, toReadLen uint32) (uint32, bool, error) &#123;</span><br><span class="line">	var haveReadLen uint32</span><br><span class="line">	for haveReadLen = 0; haveReadLen &lt; toReadLen; &#123;</span><br><span class="line">		if this.blocks[blockIdx].data == nil &#123;</span><br><span class="line">			this.blocks[blockIdx].data = make([]byte, this.blockSize)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		readLen, err := this.reader.Read(this.blocks[blockIdx].data[haveReadLen:toReadLen])</span><br><span class="line">		if readLen &gt; 0 &#123;</span><br><span class="line">			haveReadLen += uint32(readLen)</span><br><span class="line">		&#125;</span><br><span class="line">		if err == io.EOF &#123;</span><br><span class="line">			return haveReadLen, true, nil</span><br><span class="line">		&#125; else if err != nil &#123;</span><br><span class="line">			log.Logger.Warn(&quot;[logid:%d] async reader readLen:%d, error:%s&quot;,</span><br><span class="line">				this.logId, haveReadLen, err)</span><br><span class="line">			return haveReadLen, true, err</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return haveReadLen, false, nil</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/*   1. asyncReader只支持一个协程读取数据</span><br><span class="line"> *   2. 返回的slice是asyncReader底层的buffer，数据有效期到下次调用next之前，</span><br><span class="line"> *      返回的slice不允许做写操作，如果有写需求，请copy</span><br><span class="line"> *   3. Next一般放在for循环中调用, 直到返回数据为nil</span><br><span class="line"> */</span><br><span class="line">func (this *asyncReader) Next() ([]byte, error) &#123;</span><br><span class="line">	if this.isEof &#123;</span><br><span class="line">		return nil, nil</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	select &#123;</span><br><span class="line">	case &lt;-time.After(this.clientTimeout):</span><br><span class="line">		return nil, TimeOutError</span><br><span class="line">	case event := &lt;-this.chReadEvent:</span><br><span class="line">		if event.err != nil &#123;</span><br><span class="line">			return nil, fmt.Errorf(&quot;asyncReaderAll.next error. %s&quot;, event.err)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		if event.isEof &#123;</span><br><span class="line">			this.isEof = true</span><br><span class="line">			if event.readLen &gt; 0 &#123;</span><br><span class="line">				return this.blocks[event.readBlockIdx].data[0:event.readLen], nil</span><br><span class="line">			&#125; else &#123;</span><br><span class="line">				return nil, nil</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; else &#123;</span><br><span class="line">            // 发送继续写buffer的信号，Begin函数里边的协程继续从reader读取下一个block写到缓存; 如果blockNum==bufferBlockNum，此处会出现竞态</span><br><span class="line">			this.chRecieve &lt;- struct&#123;&#125;&#123;&#125;</span><br><span class="line">			return this.blocks[event.readBlockIdx].data[0:event.readLen], nil</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -292,75 +671,162 @@
 <h4 id="数据结构-1">数据结构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">type BufferPool interface &#123;</span><br><span class="line">	Write(start []byte, length int, err error) BosErrorCodeType</span><br><span class="line">	Read() ([]byte, int, error)</span><br><span class="line">	SendCanWriteSignal(signal int) BosErrorCodeType</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type BufferPoolImp struct &#123;</span><br><span class="line">	Bodybufs         []BodyBuf</span><br><span class="line">	bufWraps         chan BufWrap // 读写通道，buffer内容指针</span><br><span class="line">	writeSignals     chan int // 决定是否可写</span><br><span class="line">	currentIndex     int // 写入当前的Bodybufs[index]</span><br><span class="line">	maxBufferSize    int</span><br><span class="line">	timeout          int</span><br><span class="line">	needMallocMemory bool //pre malloc memory or not</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type BodyBuf struct &#123;</span><br><span class="line">	data []byte</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type BufWrap struct &#123;</span><br><span class="line">	index int //index of bodyBufs</span><br><span class="line">	n     int //size has read from r.Body</span><br><span class="line">	err   error</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="核心函数-1">核心函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">func (bp *BufferPoolImp) Write(start []byte, length int, err error) BosErrorCodeType &#123;</span><br><span class="line">	select &#123;</span><br><span class="line">	case writeSignal := &lt;-bp.writeSignals:</span><br><span class="line">		log.Logger.Debug(&quot;[logid:%d] read can write signal ok: %d&quot;, bp.logId, writeSignal)</span><br><span class="line">		if writeSignal != 0 &#123;</span><br><span class="line">			return BosErrorCodeType(writeSignal)</span><br><span class="line">		&#125;</span><br><span class="line">	case &lt;-time.After(time.Duration(bp.timeout) * time.Second * 2):</span><br><span class="line">		log.Logger.Error(&quot;[logid:%d] wait writeSignal timeout&quot;, bp.logId)</span><br><span class="line">		return CODE_INTERNAL_ERROR</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    // start数据写入到BodyBufs, 并往bufWraps chan写内容指针，read函数会监听该通道</span><br><span class="line">	bp.Bodybufs[bp.currentIndex] = BodyBuf&#123;start&#125;</span><br><span class="line">	bufWrap := BufWrap&#123;bp.currentIndex, length, err&#125;</span><br><span class="line"></span><br><span class="line">	select &#123;</span><br><span class="line">	case bp.bufWraps &lt;- bufWrap:</span><br><span class="line">		log.Logger.Debug(&quot;[logid:%d] write buffers, index[%d]&quot;, bp.logId, bp.currentIndex)</span><br><span class="line">		bp.currentIndex = (bp.currentIndex + 1) % bp.maxBufferSize</span><br><span class="line">	case &lt;-time.After(time.Duration(bp.timeout) * time.Second):</span><br><span class="line">		log.Logger.Error(&quot;[logid:%d] write buffers timeout&quot;, bp.logId)</span><br><span class="line">		return CODE_INTERNAL_ERROR</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return CODE_OK</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// read一般放在for循环中调用, 直到返回数据为nil</span><br><span class="line">func (bp *BufferPoolImp) Read() ([]byte, int, error) &#123;</span><br><span class="line">	select &#123;</span><br><span class="line">	case bufWrap := &lt;-bp.bufWraps: // 获取写的内容</span><br><span class="line">		log.Logger.Debug(&quot;[logid:%d] read buffers, index[%d], len[%d]&quot;,</span><br><span class="line">			bp.logId, bufWrap.index, bufWrap.n)</span><br><span class="line">		if bufWrap.index &lt; 0 || bufWrap.index &gt; bp.maxBufferSize-1 &#123;</span><br><span class="line">			return nil, -1, bufWrap.err</span><br><span class="line">		&#125;</span><br><span class="line">		return bp.Bodybufs[bufWrap.index].data, bufWrap.n, bufWrap.err</span><br><span class="line">	case &lt;-time.After(time.Duration(bp.timeout) * time.Second):</span><br><span class="line">		log.Logger.Error(&quot;[logid:%d] read buffers timeout&quot;, bp.logId)</span><br><span class="line">		return nil, -1, ReadTimeOutError</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 调用read函数时需要同时调用这个函数，以确保write函数可以继续写buffer</span><br><span class="line">// read之后再调用该函数，所以不像async_reader可能出现竞争状态</span><br><span class="line">func (bp *BufferPoolImp) SendCanWriteSignal(signal int) BosErrorCodeType &#123;</span><br><span class="line">	select &#123;</span><br><span class="line">	case bp.writeSignals &lt;- signal:</span><br><span class="line">		log.Logger.Debug(&quot;[logid:%d] send can write signal ok&quot;, bp.logId)</span><br><span class="line">	case &lt;-time.After(time.Duration(bp.timeout) * time.Second * 2):</span><br><span class="line">		log.Logger.Error(&quot;[logid:%d] write writeSignal timeout&quot;, bp.logId)</span><br><span class="line">		return CODE_INTERNAL_ERROR</span><br><span class="line">	&#125;</span><br><span class="line">	return CODE_OK</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+          
+        
       
     </div>
 
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/Golang/"> #Golang </a>
-          
-        </div>
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
       
 
       
 
       
+
       
-    </div>
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
+  
+  
+  
+  </article>
 
 
     
       
 
-  <div class="post post-type-normal ">
-    <div class="post-header">
+  
 
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              C++并发编程揭秘
-            
-          
-        </h1>
-      
+  
+  
+  
 
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2018-10-20
-        </span>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io2018/10/20/C++并发编程揭秘/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
 
         
-
         
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2018/10/20/C++并发编程揭秘/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/10/20/C++并发编程揭秘/"></span>
-            </a>
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="2018/10/20/C++并发编程揭秘/" itemprop="url">
+                  C++并发编程揭秘
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-20 23:21:23" itemprop="dateCreated datePublished" datetime="2018-10-20T23:21:23+08:00">2018-10-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-21 17:39:11" itemprop="dateModified" datetime="2018-10-21T17:39:11+08:00">2018-10-21</time>
+              
+            
           </span>
-          
-        
 
+        <span class="post-meta-divider">|</span>
         <span class="post-count">字数统计841字</span>
-        <span class="post-comments-count">
+        <span class="post-meta-divider">|</span>
         <span class="post-count">阅读时长3分钟</span>
-      </span></div>
-    </div>
 
-    <div class="post-body">
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <h3 id="并发级别">并发级别</h3><p>蓝色是阻塞的算法，绿色是非阻塞算法，金字塔越上方，并发级别越高，性能越好，右边的金字塔是实现工具（原子操作、锁、互斥体等）</p>
+        
+          
+            <h3 id="并发级别">并发级别</h3><p>蓝色是阻塞的算法，绿色是非阻塞算法，金字塔越上方，并发级别越高，性能越好，右边的金字塔是实现工具（原子操作、锁、互斥体等）</p>
 <p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/concurrency.png" class="full-image"></p>
 <h4 id="Wait-freedom_无等待并发">Wait-freedom 无等待并发</h4><p>每一个线程都一直运行下去而无须等待外部条件，整个流程中任何操作都能在一个有限的步骤内完成，这是最高的并发级别，没有任何阻塞。可以简单认为能够直接调用一个原子操作实现的算法或程序就属于Wait-free，例如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 多个线程可以同时调用这个函数对同一个内存变量进行自增，而无须任何阻塞</span><br><span class="line">//（其实也是有阻塞的，是总线锁级别）</span><br><span class="line">void increment_reference_counter(rc_base* obj) &#123; </span><br><span class="line">atomic_increment(obj-&gt;rc);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -372,75 +838,162 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">do&#123; </span><br><span class="line">       备份旧数据；</span><br><span class="line">       基于旧数据构造新数据；</span><br><span class="line">&#125;while(!CAS( 内存地址，备份的旧数据，新数据 ))</span><br></pre></td></tr></table></figure>
 <p>当两者进行比较时，如果相等，则证明共享数据没有被修改，替换成新值，然后继续往下运行；如果不相等，说明共享数据已经被修改，放弃已经所做的操作，然后重新执行刚才的操作。容易看出 CAS 操作是基于共享数据不会被修改的假设，采用了类似于数据库的 commit-retry 的模式。当同步冲突出现的机会很少时，这种假设能带来较大的性能提升。</p>
 
+          
+        
       
     </div>
 
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/C/"> #C++ </a>
-          
-        </div>
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
       
 
       
 
       
+
       
-    </div>
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
+  
+  
+  
+  </article>
 
 
     
       
 
-  <div class="post post-type-normal ">
-    <div class="post-header">
+  
 
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              分布式系统常见问题和解决方案
-            
-          
-        </h1>
-      
+  
+  
+  
 
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2018-08-25
-        </span>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io2018/08/25/分布式系统常见问题和解决方案/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
 
         
-
         
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2018/08/25/分布式系统常见问题和解决方案/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/08/25/分布式系统常见问题和解决方案/"></span>
-            </a>
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="2018/08/25/分布式系统常见问题和解决方案/" itemprop="url">
+                  分布式系统常见问题和解决方案
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-25 11:36:53" itemprop="dateCreated datePublished" datetime="2018-08-25T11:36:53+08:00">2018-08-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-14 16:25:56" itemprop="dateModified" datetime="2018-09-14T16:25:56+08:00">2018-09-14</time>
+              
+            
           </span>
-          
-        
 
+        <span class="post-meta-divider">|</span>
         <span class="post-count">字数统计2.5k字</span>
-        <span class="post-comments-count">
+        <span class="post-meta-divider">|</span>
         <span class="post-count">阅读时长8分钟</span>
-      </span></div>
-    </div>
 
-    <div class="post-body">
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <h4 id="如何从零开始造个云存储系统？"><a href="https://levy.at/blog/19" target="_blank" rel="noopener">如何从零开始造个云存储系统？</a></h4><p>单硬盘扩展成RAID磁盘阵列，再从单机RAID扩展到集群多机器，再到引入副本存储提高可靠性，再到引入一致性哈希进行动态扩展，再到跨机房多AZ备份和CDN区域加速。</p>
+        
+          
+            <h4 id="如何从零开始造个云存储系统？"><a href="https://levy.at/blog/19" target="_blank" rel="noopener">如何从零开始造个云存储系统？</a></h4><p>单硬盘扩展成RAID磁盘阵列，再从单机RAID扩展到集群多机器，再到引入副本存储提高可靠性，再到引入一致性哈希进行动态扩展，再到跨机房多AZ备份和CDN区域加速。</p>
 <h4 id="如何实现靠谱的分布式锁？"><a href="https://mp.weixin.qq.com/s/emEuhftLbAQmdn1LQYOSBw" target="_blank" rel="noopener">如何实现靠谱的分布式锁？</a></h4><p>分布式锁是用来控制分布式系统中互斥访问共享资源的一种手段(进程之间共享资源)，避免多线程并行访问导致结果不可控。基本的实现原理和单进程锁是一致的，通过一个共享标识来确定唯一性，对共享标识进行修改时能够保证原子性和和对锁服务调用方的可见性。由于分布式环境需要考虑各种异常因素，为实现一个靠谱的分布式锁服务引入了一定的复杂度。</p>
 <p><strong>分布式锁一般需要能够保证以下几点：</strong></p>
 <ol>
@@ -520,79 +1073,162 @@
 <h5 id="面向小文件的分布式文件系统">面向小文件的分布式文件系统</h5><p>主流的实现方式是仍然是以大数据块的形式存储，小文件以逻辑存储的方式存在，即文件 meta 信息记录其是在哪个大数据块上，以及在该数据块上的 offset 和 length 是多少，形成一个逻辑上的独立文件。这样既复用了大数据块系统的优势和技术积累，又减少了 meta 信息。</p>
 <h5 id="文件指纹和去重">文件指纹和去重</h5><p>文件指纹就是根据文件内容，经过算法，计算出文件的唯一标识。如果两个文件的指纹相同，则文件内容相同。在使用网络云盘的时候，发现有时候上传文件非常地快，就是文件指纹发挥作用。云盘服务商通过判断该文件的指纹，发现之前已经有人上传过了，则不需要真的上传该文件，只要增加一个引用即可。在文件系统中，通过文件指纹可以用来去重、也可以用来判断文件内容是否损坏、或者对比文件副本内容是否一致，是一个基础组件。指纹算法有md5、sha256、simhash 和 minhash</p>
 
+          
+        
       
     </div>
 
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/存储/"> #存储 </a>
-          
-            <a href="tags/分布式系统/"> #分布式系统 </a>
-          
-            <a href="tags/数据库/"> #数据库 </a>
-          
-        </div>
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
       
 
       
 
       
+
       
-    </div>
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
+  
+  
+  
+  </article>
 
 
     
       
 
-  <div class="post post-type-normal ">
-    <div class="post-header">
+  
 
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              HDFS入门
-            
-          
-        </h1>
-      
+  
+  
+  
 
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2018-08-25
-        </span>
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io2018/08/25/HDFS入门/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
 
         
-
         
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="2018/08/25/HDFS入门/#comments">
-              <span class="post-comments-count ds-thread-count" data-thread-key="2018/08/25/HDFS入门/"></span>
-            </a>
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="2018/08/25/HDFS入门/" itemprop="url">
+                  HDFS入门
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-25 11:36:53" itemprop="dateCreated datePublished" datetime="2018-08-25T11:36:53+08:00">2018-08-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-12 10:07:38" itemprop="dateModified" datetime="2018-09-12T10:07:38+08:00">2018-09-12</time>
+              
+            
           </span>
-          
-        
 
+        <span class="post-meta-divider">|</span>
         <span class="post-count">字数统计534字</span>
-        <span class="post-comments-count">
+        <span class="post-meta-divider">|</span>
         <span class="post-count">阅读时长2分钟</span>
-      </span></div>
-    </div>
 
-    <div class="post-body">
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <h5 id=""> </h5><h4 id="HDFS">HDFS</h4><p>HDFS 从设计上来说，主要考虑以下的特征：<strong>超大文件</strong>，最大能支持 PB 级别的数据；<strong>流式数据访问</strong>，一次写入，多次读取；在不可靠的文件，<strong>故障率高的商用硬件上能运行</strong>。Hadoop 的不利之处，是不适应低时间延迟的数据访问，不适应大量的小文件，也不适应多用户写入任意修改文件的情况。</p>
+        
+          
+            <h5 id=""> </h5><h4 id="HDFS">HDFS</h4><p>HDFS 从设计上来说，主要考虑以下的特征：<strong>超大文件</strong>，最大能支持 PB 级别的数据；<strong>流式数据访问</strong>，一次写入，多次读取；在不可靠的文件，<strong>故障率高的商用硬件上能运行</strong>。Hadoop 的不利之处，是不适应低时间延迟的数据访问，不适应大量的小文件，也不适应多用户写入任意修改文件的情况。</p>
 <p>NameNode 是 HDFS 的管理者。HDFS 将大文件分割成数据块，每个数据块是 64M，也可以设置成 128M或者 256M，然后将这些数据块以普通文件的形式存放到数据节点上，为了防止 DataNode 意外失效，HDFS 会将每个数据块复制若干份放到不同的数据节点。</p>
 <h4 id="HDFS-Client">HDFS-Client</h4><h4 id="HDFS-VFS">HDFS-VFS</h4><p>VFS 是Linux 内核和真正文件系统之间的抽象层，它提供统一的接口，真正的文件系统和 Linxu 内核必须通过 VFS 的接口进行沟通。内核的 I\O 路径是这样的：user space -&gt; VFS -&gt; FS -&gt; I\O layer -&gt; I\O scheduler(optional) -&gt; block_driver -&gt; block_device, 一个 I\O 经过了这些才真正到达了对应的存储上。一个用户态的系统调用先通过 VFS 找到对应的文件系统再向下传递 I\O，这是 I\O 的一般路径。对于用户来说，一切都是操作文件。</p>
 <p>Hadoop VFS兼容层，可以把HDFS当作一个标准的文件系统mount到本地的Linux文件系统上。这样用户便可以使用标准Unix命令，例如“ls”、“cd”、“cp”、“mkdir”、“find”、“grep”等，来操作一个hdfs的实例；也可以使用标准POSIX的开发库，例如C、C++、Python、Perl、JAVA、bash等的打开、写、读、关闭方法来操作一个hdfs的实例。</p>
@@ -602,46 +1238,58 @@
 <li>不要在HDFS挂载点目录下执行scp、wget等会在当前路径下创建临时文件的操作</li>
 </ul>
 
+          
+        
       
     </div>
 
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="tags/HDFS/"> #HDFS </a>
-          
-            <a href="tags/存储/"> #存储 </a>
-          
-            <a href="tags/分布式系统/"> #分布式系统 </a>
-          
-        </div>
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
       
 
       
 
       
+
       
-    </div>
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
+  
+  
+  
+  </article>
 
 
     
-  </div>
+  </section>
 
   
-  <div class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="page/17/">17</a><a class="extend next" rel="next" href="page/2/">&raquo;</a>
-  </div>
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="page/17/">17</a><a class="extend next" rel="next" href="page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
 
+
+
+          </div>
+          
 
         </div>
-
         
-      </div>
-
-
-      
+          
   
   <div class="sidebar-toggle">
     <div class="sidebar-toggle-line-wrap">
@@ -651,86 +1299,338 @@
     </div>
   </div>
 
-  <div id="sidebar" class="sidebar">
+  <aside id="sidebar" class="sidebar">
+    
     <div class="sidebar-inner">
 
       
 
-      <div class="site-overview">
-        <div class="site-author motion-element">
-          <img class="site-author-image" src="/images/avatar.jpg" alt="CharlesXiao">
-          <p class="site-author-name">CharlesXiao</p>
-        </div>
-        <p class="site-description motion-element">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
-        <div class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">84</span>
-              <span class="site-state-item-name">posts</span>
-            </a>
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="CharlesXiao">
+            
+              <p class="site-author-name" itemprop="name">CharlesXiao</p>
+              <p class="site-description motion-element" itemprop="description">在码农炼成之路不断挣扎……stay hungry……keep learning……</p>
           </div>
 
-          <div class="site-state-item site-state-categories">
-            <a href="/categories">
-              <span class="site-state-item-count">17</span>
-              <span class="site-state-item-name">categories</span>
-              </a>
-          </div>
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">84</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
 
-          <div class="site-state-item site-state-tags">
-            <a href="/tags">
-              <span class="site-state-item-count">76</span>
-              <span class="site-state-item-name">tags</span>
-              </a>
-          </div>
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
 
-        </div>
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
 
-        
+          
 
-        <div class="links-of-author motion-element">
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Charles-Xiao" target="_blank" title="github" rel="external nofollow"><i class="fa fa-fw fa-github"></i>github</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/2262300105/profile?topnav=1&wvr=6" target="_blank" title="weibo" rel="external nofollow"><i class="fa fa-fw fa-weibo"></i>weibo</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://daijiale.github.io/" target="_blank" title="Daijiale的个人站点" rel="external nofollow"><i class="fa fa-fw fa-github"></i>Daijiale的个人站点</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                推荐阅读
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://rocksdb.org/" title="RocksDB" target="_blank">RocksDB</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://wf.uisdc.com/cn/" title="Google FE" target="_blank">Google FE</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
           
             
-              <span class="links-of-author-item">
-              <a href="https://github.com/Charles-Xiao" target="_blank">github</a>
-            </span>
-            
-              <span class="links-of-author-item">
-              <a href="http://weibo.com/2262300105/profile?topnav=1&wvr=6" target="_blank">weibo</a>
-            </span>
-            
-              <span class="links-of-author-item">
-              <a href="http://daijiale.github.io/" target="_blank">Daijiale的个人站点</a>
-            </span>
-            
           
+          
+
         </div>
+      </section>
 
-        
-        
-
-      </div>
+      
 
       
 
     </div>
-  </div>
+  </aside>
 
 
-    </div>
+        
+      </div>
+    </main>
 
-    <div id="footer" class="footer">
+    <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<div class="copyright">
-  
-  &copy; &nbsp;  2015.05.16 - 
-  2018
-  <span class="with-love">
-    <i class="icon-heart"></i>
+
+<div class="copyright"><a target="_blank" rel="external nofollow" href="http://www.miitbeian.gov.cn/">  </a> &copy; 2015.05.16 – <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
   </span>
-  <span class="author">CharlesXiao</span>
+  <span class="author" itemprop="copyrightHolder">CharlesXiao</span>
+
+  
+
+  
 </div>
+
+
+  
+
+
+
 
 <div class="powered-by">
 <i class="fa fa-user-md"></i><span id="busuanzi_container_site_pv">
@@ -738,254 +1638,221 @@
 </span>
 </div>
 
+
+
 <div class="theme-info">
+  <div class="powered-by"></div>
   <span class="post-count">博客全站共165.9k字</span>
 </div>
-<!--
-<div class="powered-by">
-  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
-</div>
 
-<div class="theme-info">
-  Theme -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
--->
+
+        
 
 
 
+
+
+
+
+
+        
       </div>
-    </div>
+    </footer>
 
-    <div class="back-to-top"></div>
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+	
+    
+
+    
   </div>
 
-  <script type="text/javascript" src="vendors/jquery/index.js?v=2.1.3"></script>
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="js/src/motion.js?v=6.5.0"></script>
+
+
 
   
   
 
   
-  <script type="text/javascript" src="vendors/fancybox/source/jquery.fancybox.pack.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $('.content img').each(function () {
-        var $image = $(this);
-        var $imageWrapLink = $image.parent('a');
 
-        if ($imageWrapLink.size() < 1) {
-          $imageWrapLink = $image.wrap('<a href="' + this.getAttribute('src') + '"></a>').parent('a');
-        }
-        $imageWrapLink.addClass('fancybox');
-      });
-    });
-    $('.fancybox').fancybox({
-      helpers: {
-        overlay: {
-          locked: false
-        }
-      }
-    });
+  
+
+
+  <script type="text/javascript" src="js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <script src="lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
   </script>
 
-
-  <script type="text/javascript">
-  function hasMobileUA () {
-    var nav = window.navigator;
-    var ua = nav.userAgent;
-    var pa = /iPad|iPhone|Android|Opera Mini|BlackBerry|webOS|UCWEB|Blazer|PSP|IEMobile|Symbian/g;
-
-    return pa.test(ua);
-  }
-
-  function isDesktop () {
-    return screen.width > 991 && !hasMobileUA();
-  }
-
-  function isTablet () {
-    return screen.width < 992 && screen.width > 767 && hasMobileUA();
-  }
-
-  function isMobile () {
-    return screen.width < 767 && hasMobileUA();
-  }
-
-  function escapeSelector (selector) {
-    return selector.replace(/[!"$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")
-  }
-</script>
-
   
 
-  <script type="text/javascript" src="vendors/velocity/velocity.min.js"></script>
-  <script type="text/javascript" src="vendors/velocity/velocity.ui.min.js"></script>
-
-  <script type="text/javascript" id="motion.global">
-  $(document).ready(function () {
-    var body = $('body');
-    var isSidebarVisible = false;
-    var sidebarToggle = $('.sidebar-toggle');
-    var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
-    var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
-    var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
-    var sidebar = $('.sidebar');
-
-    var SIDEBAR_WIDTH = '320px';
-    var SIDEBAR_DISPLAY_DURATION = 300;
-
-    var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
-
-    var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
-    var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
-    var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
-
-    var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
-    var sidebarToggleLine2ndStatusArrow = {width: '90%'};
-    var sidebarToogleLine2ndStatusClose = {opacity: 0};
-
-    var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
-    var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
-    var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
-
-    LogoAndMenuMotion();
-    sidebatToggleMotion();
-    postsListMotion();
-    backToTopMotion();
-
-
-    $(document)
-      .on('sidebar.isShowing', function () {
-        isDesktop() && body.velocity(
-          {paddingRight: SIDEBAR_WIDTH},
-          SIDEBAR_DISPLAY_DURATION
-        );
-        sidebarContentMotion();
-      })
-      .on('sidebar.isHiding', function () {});
-
-    function LogoAndMenuMotion() {
-      $.Velocity.RunSequence([
-        { e: $('.brand'), p: { opacity: 1 }, o: { duration: 100 } },
-        { e: $('.logo'), p: { opacity: 1, top: 0 }, o: { duration: 50} },
-        
-        { e: $('.logo-line-before i'), p: { translateX: "100%" }, o: { duration: 500, sequenceQueue: false } },
-        { e: $('.logo-line-after i'), p: { translateX: "-100%" }, o: { duration: 500, sequenceQueue: false } },
-        
-        { e: $('.site-title'), p: { opacity: 1, top: 0 }, o: { duration: 200 } }
-      ]);
-      $('.menu-item').velocity('transition.slideDownIn', {display: null});
-    }
-
-
-    function backToTopMotion () {
-      var b2top = $('.back-to-top');
-      b2top.on('click', function () {
-        body.velocity('scroll');
-      });
-    }
-
-    function sidebarShowMotion () {
-
-      sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
-      sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
-      sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
-
-      sidebar.velocity({width: SIDEBAR_WIDTH}, {
-        display: 'block',
-        duration: SIDEBAR_DISPLAY_DURATION,
-        complete: function () {
-          sidebar.addClass('sidebar-active');
-          sidebar.trigger('sidebar.didShow');
-        }
-      });
-      sidebar.trigger('sidebar.isShowing');
-    }
-
-    function sidebarHideMotion () {
-      isDesktop() && body.velocity({paddingRight: 0});
-      sidebar.velocity('reverse');
-
-      sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
-      sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
-      sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
-
-      sidebar.removeClass('sidebar-active');
-      sidebar.trigger('sidebar.isHiding');
-    };
-
-    function sidebarContentMotion () {
-      $('.sidebar .motion-element').velocity(
-        'transition.slideRightIn',
-        {stagger: 50, drag: true}
-      );
-    }
-
-    function postsListMotion () {
-      var postMotionOptions = window.postMotionOptions || {stagger: 300, drag: true};
-      $('.post').velocity('transition.slideDownIn', postMotionOptions);
-    }
-
-    function sidebatToggleMotion () {
-      sidebarToggle.on('click', function () {
-        isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
-        isSidebarVisible = !isSidebarVisible;
-      });
-
-      sidebarToggle.hover(function () {
-        if (isSidebarVisible) {return}
-        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
-        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
-        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
-      }, function () {
-        if (isSidebarVisible) {return}
-        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
-        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
-        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
-      });
-    }
-  });
-
-</script>
-
-
-
-
+  
 
   
 
   
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    }
-  });
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for (i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-
-  
-  
-  
-
 
   
 
   
+
 
 </body>
 </html>
