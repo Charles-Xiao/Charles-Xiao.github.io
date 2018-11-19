@@ -440,15 +440,15 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-17 18:35:18" itemprop="dateModified" datetime="2018-11-17T18:35:18+08:00">2018-11-17</time>
+                <time title="修改时间：2018-11-19 11:17:01" itemprop="dateModified" datetime="2018-11-19T11:17:01+08:00">2018-11-19</time>
               
             
           </span>
 
         <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计710字</span>
+        <span class="post-count">字数统计989字</span>
         <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长2分钟</span>
+        <span class="post-count">阅读时长3分钟</span>
 
           
 
@@ -490,16 +490,19 @@
 <li>针对OLTP（读-写）工作负载，追求提供和NoSQL系统相同的扩展性能</li>
 <li>保持ACID和SQL查询等关系数据库特性</li>
 </ol>
-<p>目前业界最流行的分布式数据库有三类：新架构（New Architecture）、透明化分片中间件（Transparent Sharding Middleware）和云数据库（Database-as-a-Service）, 2016年Andrew Pavlo与Matthew Aslett发布了一篇论文专门讲述NewSQL，<a href="https://db.cs.cmu.edu/papers/2016/pavlo-newsql-sigmodrec2016.pdf" target="_blank" rel="noopener">What’s Really New with NewSQL?</a>；<strong>新架构</strong>以Google Spanner为代表(Share-Nothing)，<strong>云数据库</strong>以AWS Auraro为代表(Shard-Disk)，<strong>透明化中间件</strong>以Sharding-Proxy为代表，下文我们一一阐述。</p>
+<p>目前业界最流行的分布式数据库有三类：新架构（New Architecture）、透明化分片中间件（Transparent Sharding Middleware）和云数据库（Database-as-a-Service）, 2016年Andrew Pavlo与Matthew Aslett发布了一篇论文专门讲述NewSQL，<a href="https://db.cs.cmu.edu/papers/2016/pavlo-newsql-sigmodrec2016.pdf" target="_blank" rel="noopener">What’s Really New with NewSQL?</a>；<strong>新架构</strong>以Google Spanner为代表(Shared-Nothing)，<strong>云数据库</strong>以AWS Auraro为代表(Shard-Disk)，<strong>透明化中间件</strong>以Sharding-Proxy(Shared-Nothing)为代表，下文我们一一阐述。</p>
 <h3 id="新架构">新架构</h3><ol>
-<li>主要产品代表为Spanner、TiDB、CockroachDB、OceanBase、TafDB。</li>
+<li>主要产品代表为Spanner、TiDB、CockroachDB、OceanBase、TafDB、<a href="http://crad.ict.ac.cn/CN/10.7544/issn1000-1239.2018.20170868" target="_blank" rel="noopener">X-DB</a>。</li>
 <li>主要特点包括弹性扩展、分布式事务、基于Raft/Paxos的多副本复制技术保证一致性、故障容灾高可用；一般会包括master主备节点管理集群元信息、调度数据、负载均衡、分配全局事务ID，SQL节点负责接受用户的SQL并解析以及其它计算工作、访问master元信息去找到存储数据的节点，KV节点负责存储一致性多副本数据(像OB还会把存储节点分为基准数据节点和增量数据节点, 增量数据节点和master共用)。</li>
 </ol>
-<h3 id="透明化分片中间件">透明化分片中间件</h3><p>增加一层proxy，隐藏分库分表的细节，包括MyCat等中间件系统。其实后端还是单机节点中一个MySQL实例内核同时负责存储和计算。</p>
+<h3 id="透明化分片中间件">透明化分片中间件</h3><p>增加一层proxy，隐藏分库分表的细节，包括MyCat等中间件系统。其实后端还是单机节点中一个MySQL实例内核同时负责存储和计算(Shared-Nothing)。</p>
 <h3 id="云数据库">云数据库</h3><ol>
-<li>主要产品代表为Auraro、PolarDB、X-DB</li>
+<li>主要产品代表为Auraro、PolarDB。</li>
 <li>主要特点为计算和存储分离：计算节点基于MySQL内核，并提供主计算节点和多个只读节点来进行容错，计算节点通过RDMA与存储节点连通解决IO性能问题，存储节点基于Raft或者Quorum来做多副本存储，存储其实是共享的(多个数据库实例共享一个分布式存储层)。</li>
 </ol>
+<h2 id="数据库构架三种设计模式"><a href="https://kuaibao.qq.com/s/20180813G1SBRA00?refer=spider" target="_blank" rel="noopener">数据库构架三种设计模式</a></h2><h3 id="Shared_Everthting">Shared Everthting</h3><p>就是指单机所有资源全部共享，一般是针对单个主机，对外完全透明共享本机的CPU/MEMORY/IO，并行处理能力是最差的，典型的代表SQLServer。</p>
+<h3 id="Shared_Nothing">Shared Nothing</h3><p>各个处理单元都有自己私有的CPU/内存/硬盘等，不存在共享资源，类似于MPP（大规模并行处理）模式，各处理单元之间通过协议通信，并行处理和扩展能力更好。典型代表Hadoop ，各节点相互独立，各自处理自己的数据，处理后的结果可能向上层汇总或在节点间流转。MySQL Proxy和Google Spanner也是Shared Nothing，只需增加服务器数就可以增加处理能力和容量。</p>
+<h3 id="Shared_Disk">Shared Disk</h3><p>各个处理单元使用自己的私有CPU和Memory，共享磁盘系统，它是数据共享，可通过增加节点来提高并行处理的能力，扩展能力较好。当存储器接口达到饱和的时候，增加节点并不能获得更高的性能。</p>
 
           
         
@@ -1635,7 +1638,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共165.6k字</span>
+  <span class="post-count">博客全站共165.9k字</span>
 </div>
 
 
