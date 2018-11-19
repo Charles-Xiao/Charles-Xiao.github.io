@@ -60,6 +60,10 @@
 
 
 
+  
+  
+  <link href="../lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
 
 
 
@@ -97,7 +101,7 @@
     scheme: 'Mist',
     version: '6.5.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: false,
+    fancybox: true,
     fastclick: false,
     lazyload: false,
     tabs: true,
@@ -121,7 +125,7 @@
   <meta name="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 <meta property="og:type" content="website">
 <meta property="og:title" content="CharlesXiao‘s Blog">
-<meta property="og:url" content="https://charles-xiao.github.io/tags/Mysql/index.html">
+<meta property="og:url" content="https://charles-xiao.github.io/tags/MySQL/index.html">
 <meta property="og:site_name" content="CharlesXiao‘s Blog">
 <meta property="og:description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
 <meta property="og:locale" content="zh-CN">
@@ -134,7 +138,7 @@
 
 
 
-  <link rel="canonical" href="https://charles-xiao.github.io/tags/Mysql/">
+  <link rel="canonical" href="https://charles-xiao.github.io/tags/MySQL/">
 
 
 
@@ -144,7 +148,7 @@
   };
 </script>
 
-  <title>标签: Mysql | CharlesXiao‘s Blog</title>
+  <title>标签: MySQL | CharlesXiao‘s Blog</title>
   
 
 
@@ -367,7 +371,7 @@
 
     <div id="posts" class="posts-collapse">
       <div class="collection-title">
-        <h2>Mysql<small>标签</small>
+        <h2>MySQL<small>标签</small>
         </h2>
       </div>
 
@@ -379,17 +383,17 @@
 
       <h3 class="post-title">
         
-            <a class="post-title-link" href="../../2017/12/09/Mysql 长连接与短连接/" itemprop="url">
+            <a class="post-title-link" href="../../2018/11/11/NewSQL数据库探秘/" itemprop="url">
               
-                <span itemprop="name">Mysql 长连接与短连接</span>
+                <span itemprop="name">NewSQL数据库探秘</span>
               
             </a>
         
       </h3>
 
       <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-12-09T16:36:53+08:00" content="2017-12-09">
-          12-09
+        <time class="post-time" itemprop="dateCreated" datetime="2018-11-11T11:36:53+08:00" content="2018-11-11">
+          11-11
         </time>
       </div>
 
@@ -405,43 +409,17 @@
 
       <h3 class="post-title">
         
-            <a class="post-title-link" href="../../2017/12/09/如何实现多个数据库分片的list_objects操作/" itemprop="url">
+            <a class="post-title-link" href="../../2016/12/23/MySQL基础知识/" itemprop="url">
               
-                <span itemprop="name">如何实现多个数据库分片的list_objects操作</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-12-09T16:36:53+08:00" content="2017-12-09">
-          12-09
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="../../2017/12/02/Mysql Init线程不安全问题/" itemprop="url">
-              
-                <span itemprop="name">Mysql初次Init线程不安全问题</span>
+                <span itemprop="name">MySQL基础知识</span>
               
             </a>
         
       </h3>
 
       <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-12-02T11:36:53+08:00" content="2017-12-02">
-          12-02
+        <time class="post-time" itemprop="dateCreated" datetime="2016-12-23T11:36:53+08:00" content="2016-12-23">
+          12-23
         </time>
       </div>
 
@@ -874,13 +852,9 @@
 
 
 
+  
 
 
-  
-    
-      
-  
-  <script type="text/javascript" color="0,0,255" opacity="0.5" zindex="-1" count="99" src="../../lib/canvas-nest/canvas-nest.min.js"></script>
 
 
 
@@ -889,7 +863,13 @@
 
 
 
+  
+  
 
+
+
+  
+  
 
 
 
@@ -916,12 +896,27 @@
 
   
   
+    <script type="text/javascript" src="../../lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
     <script type="text/javascript" src="../../lib/three/three.min.js"></script>
   
 
   
   
     <script type="text/javascript" src="../../lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="../../lib/three/canvas_lines.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="../../lib/three/canvas_sphere.min.js"></script>
   
 
   
@@ -996,6 +991,46 @@
           pbOptions.boxForm = "horizontal";
       
           pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+  <script type="text/javascript" color="55,55,55" opacity="0.7" zindex="-2" count="100" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+</body>
+</html>
+tion = "bottomCenter";
       
           pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
       

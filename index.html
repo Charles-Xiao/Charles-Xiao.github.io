@@ -60,6 +60,10 @@
 
 
 
+  
+  
+  <link href="../lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
 
 
 
@@ -97,7 +101,7 @@
     scheme: 'Mist',
     version: '6.5.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: false,
+    fancybox: true,
     fastclick: false,
     lazyload: false,
     tabs: true,
@@ -886,171 +890,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io2018/08/25/HDFS入门/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="CharlesXiao">
-      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CharlesXiao‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="2018/08/25/HDFS入门/" itemprop="url">
-                  HDFS入门
-                </a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-08-25 11:36:53" itemprop="dateCreated datePublished" datetime="2018-08-25T11:36:53+08:00">2018-08-25</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-09-12 10:07:38" itemprop="dateModified" datetime="2018-09-12T10:07:38+08:00">2018-09-12</time>
-              
-            
-          </span>
-
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计534字</span>
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长2分钟</span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h5 id=""> </h5><h4 id="HDFS">HDFS</h4><p>HDFS 从设计上来说，主要考虑以下的特征：<strong>超大文件</strong>，最大能支持 PB 级别的数据；<strong>流式数据访问</strong>，一次写入，多次读取；在不可靠的文件，<strong>故障率高的商用硬件上能运行</strong>。Hadoop 的不利之处，是不适应低时间延迟的数据访问，不适应大量的小文件，也不适应多用户写入任意修改文件的情况。</p>
-<p>NameNode 是 HDFS 的管理者。HDFS 将大文件分割成数据块，每个数据块是 64M，也可以设置成 128M或者 256M，然后将这些数据块以普通文件的形式存放到数据节点上，为了防止 DataNode 意外失效，HDFS 会将每个数据块复制若干份放到不同的数据节点。</p>
-<h4 id="HDFS-Client">HDFS-Client</h4><h4 id="HDFS-VFS">HDFS-VFS</h4><p>VFS 是Linux 内核和真正文件系统之间的抽象层，它提供统一的接口，真正的文件系统和 Linxu 内核必须通过 VFS 的接口进行沟通。内核的 I\O 路径是这样的：user space -&gt; VFS -&gt; FS -&gt; I\O layer -&gt; I\O scheduler(optional) -&gt; block_driver -&gt; block_device, 一个 I\O 经过了这些才真正到达了对应的存储上。一个用户态的系统调用先通过 VFS 找到对应的文件系统再向下传递 I\O，这是 I\O 的一般路径。对于用户来说，一切都是操作文件。</p>
-<p>Hadoop VFS兼容层，可以把HDFS当作一个标准的文件系统mount到本地的Linux文件系统上。这样用户便可以使用标准Unix命令，例如“ls”、“cd”、“cp”、“mkdir”、“find”、“grep”等，来操作一个hdfs的实例；也可以使用标准POSIX的开发库，例如C、C++、Python、Perl、JAVA、bash等的打开、写、读、关闭方法来操作一个hdfs的实例。</p>
-<h5 id="HDFS-VFS特性">HDFS-VFS特性</h5><ul>
-<li>最好情况下，单线程读速度能达100MB/s，写速度能达70MB/s</li>
-<li>不支持tail –f、chown、chgrp、make、link、mmap命令，以及pwrite等随机写函数</li>
-<li>不要在HDFS挂载点目录下执行scp、wget等会在当前路径下创建临时文件的操作</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io2018/08/25/分布式系统常见问题和解决方案/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1233,6 +1072,171 @@
 <h5 id="安全性">安全性</h5><p>主流文件系统的权限模型：DAC、MAC、RBAC</p>
 <h5 id="面向小文件的分布式文件系统">面向小文件的分布式文件系统</h5><p>主流的实现方式是仍然是以大数据块的形式存储，小文件以逻辑存储的方式存在，即文件 meta 信息记录其是在哪个大数据块上，以及在该数据块上的 offset 和 length 是多少，形成一个逻辑上的独立文件。这样既复用了大数据块系统的优势和技术积累，又减少了 meta 信息。</p>
 <h5 id="文件指纹和去重">文件指纹和去重</h5><p>文件指纹就是根据文件内容，经过算法，计算出文件的唯一标识。如果两个文件的指纹相同，则文件内容相同。在使用网络云盘的时候，发现有时候上传文件非常地快，就是文件指纹发挥作用。云盘服务商通过判断该文件的指纹，发现之前已经有人上传过了，则不需要真的上传该文件，只要增加一个引用即可。在文件系统中，通过文件指纹可以用来去重、也可以用来判断文件内容是否损坏、或者对比文件副本内容是否一致，是一个基础组件。指纹算法有md5、sha256、simhash 和 minhash</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io2018/08/25/HDFS入门/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="2018/08/25/HDFS入门/" itemprop="url">
+                  HDFS入门
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-25 11:36:53" itemprop="dateCreated datePublished" datetime="2018-08-25T11:36:53+08:00">2018-08-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-12 10:07:38" itemprop="dateModified" datetime="2018-09-12T10:07:38+08:00">2018-09-12</time>
+              
+            
+          </span>
+
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">字数统计534字</span>
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">阅读时长2分钟</span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h5 id=""> </h5><h4 id="HDFS">HDFS</h4><p>HDFS 从设计上来说，主要考虑以下的特征：<strong>超大文件</strong>，最大能支持 PB 级别的数据；<strong>流式数据访问</strong>，一次写入，多次读取；在不可靠的文件，<strong>故障率高的商用硬件上能运行</strong>。Hadoop 的不利之处，是不适应低时间延迟的数据访问，不适应大量的小文件，也不适应多用户写入任意修改文件的情况。</p>
+<p>NameNode 是 HDFS 的管理者。HDFS 将大文件分割成数据块，每个数据块是 64M，也可以设置成 128M或者 256M，然后将这些数据块以普通文件的形式存放到数据节点上，为了防止 DataNode 意外失效，HDFS 会将每个数据块复制若干份放到不同的数据节点。</p>
+<h4 id="HDFS-Client">HDFS-Client</h4><h4 id="HDFS-VFS">HDFS-VFS</h4><p>VFS 是Linux 内核和真正文件系统之间的抽象层，它提供统一的接口，真正的文件系统和 Linxu 内核必须通过 VFS 的接口进行沟通。内核的 I\O 路径是这样的：user space -&gt; VFS -&gt; FS -&gt; I\O layer -&gt; I\O scheduler(optional) -&gt; block_driver -&gt; block_device, 一个 I\O 经过了这些才真正到达了对应的存储上。一个用户态的系统调用先通过 VFS 找到对应的文件系统再向下传递 I\O，这是 I\O 的一般路径。对于用户来说，一切都是操作文件。</p>
+<p>Hadoop VFS兼容层，可以把HDFS当作一个标准的文件系统mount到本地的Linux文件系统上。这样用户便可以使用标准Unix命令，例如“ls”、“cd”、“cp”、“mkdir”、“find”、“grep”等，来操作一个hdfs的实例；也可以使用标准POSIX的开发库，例如C、C++、Python、Perl、JAVA、bash等的打开、写、读、关闭方法来操作一个hdfs的实例。</p>
+<h5 id="HDFS-VFS特性">HDFS-VFS特性</h5><ul>
+<li>最好情况下，单线程读速度能达100MB/s，写速度能达70MB/s</li>
+<li>不支持tail –f、chown、chgrp、make、link、mmap命令，以及pwrite等随机写函数</li>
+<li>不要在HDFS挂载点目录下执行scp、wget等会在当前路径下创建临时文件的操作</li>
+</ul>
 
           
         
@@ -1694,13 +1698,9 @@
 
 
 
+  
 
 
-  
-    
-      
-  
-  <script type="text/javascript" color="0,0,255" opacity="0.5" zindex="-1" count="99" src="lib/canvas-nest/canvas-nest.min.js"></script>
 
 
 
@@ -1709,7 +1709,13 @@
 
 
 
+  
+  
 
+
+
+  
+  
 
 
 
@@ -1736,12 +1742,27 @@
 
   
   
+    <script type="text/javascript" src="lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
     <script type="text/javascript" src="lib/three/three.min.js"></script>
   
 
   
   
     <script type="text/javascript" src="lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/three/canvas_lines.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="lib/three/canvas_sphere.min.js"></script>
   
 
   
