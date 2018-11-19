@@ -381,7 +381,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2017/11/11/2018/">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2017/11/11/C++常用数据结构/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CharlesXiao">
@@ -400,8 +400,8 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="../../2017/11/11/2018/" itemprop="url">
-                  2018
+                <a class="post-title-link" href="../../2017/11/11/C++常用数据结构/" itemprop="url">
+                  C++常用数据结构
                 </a>
               
             
@@ -444,13 +444,13 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-22 23:00:30" itemprop="dateModified" datetime="2018-09-22T23:00:30+08:00">2018-09-22</time>
+                <time title="修改时间：2018-08-29 15:47:48" itemprop="dateModified" datetime="2018-08-29T15:47:48+08:00">2018-08-29</time>
               
             
           </span>
 
         <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计448字</span>
+        <span class="post-count">字数统计427字</span>
         <span class="post-meta-divider">|</span>
         <span class="post-count">阅读时长1分钟</span>
 
@@ -484,41 +484,431 @@
       
         
           
-            <h3 id="投资理财">投资理财</h3><ul>
-<li>美股和港股</li>
-<li>基金和P2P理财类(懒投资，网贷之家，行业收紧需慎重) — 不再碰</li>
-<li>百度钱包等固定收益类 — 稳定收益</li>
-<li>少量虚拟货币 — 自媒体扩大业务，50%进入投资</li>
-<li>股票技术面分析理论与实践</li>
-<li>阅读5本相关书籍：格林皮特的两本，技术面分析2本，宏微观经济 — doing</li>
+            <h3 id="C++常用std集合—map/set">C++常用std集合—map/set</h3><ol>
+<li>unordered_map在C++11的时候被引入标准库了，而hash_map没有，所以建议还是使用unordered_map比较好。查询平均时间是O(1)，无序，类似于Java中HashMap。</li>
+<li>map的内部结构是R-B-tree来实现的，所以保证了一个稳定的动态操作时间，查询、插入、删除都是O（logN），最坏和平均都是。而unordered_map如前所述，是哈希表。顺便提一下，哈希表的查询时间虽然是O（1），但是并不是unordered_map查询时间一定比map短，因为实际情况中还要考虑到数据量，而且unordered_map的hash函数的构造速度也没那么快，所以不能一概而论，应该具体情况具体分析。最坏会是O(n)，额外空间复杂度则要高出许多。map中的元素是按照二叉搜索树存储，进行中序遍历会得到有序遍历，默认遍历顺序为以key从小到大。</li>
+<li>无序集合（Unordered Set）容器是一个存储唯一（Unique，即无重复）元素的关联容器（Associative container），容器中的元素无特别的次序关系。该容器允许基于值地快速元素检索。类似于HashSet。</li>
+<li><a href="https://zcheng.ren/2016/09/09/STLSetAndMap/#set" target="_blank" rel="noopener">set/multiset/map/multimap的内部实现和常用函数</a></li>
+<li><a href="https://github.com/julycoding/The-Art-Of-Programming-By-July/blob/master/ebook/zh/03.01.md" target="_blank" rel="noopener">红黑树原理</a></li>
+</ol>
+<h3 id="BloomFilter布隆过滤器">BloomFilter布隆过滤器</h3><ol>
+<li><p>核心实现是一个很长的二进制向量 （位数组）再加上一系列随机函数 (哈希)，空间效率和查询效率高，不会漏判，但是有一定的误判率（哈希表是精确匹配）。</p>
+</li>
+<li><p><a href="https://blog.csdn.net/tianyaleixiaowu/article/details/74721877" target="_blank" rel="noopener">布隆过滤器解决缓存击穿、垃圾邮件识别、集合判重</a></p>
+</li>
+</ol>
+<h3 id="SkipList跳跃表">SkipList跳跃表</h3><h3 id="参考链接">参考链接</h3>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2017/02/19/Linux expect自动交互脚本入门/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="../../images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="../../2017/02/19/Linux expect自动交互脚本入门/" itemprop="url">
+                  Linux expect自动交互脚本入门
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-19 11:36:53" itemprop="dateCreated datePublished" datetime="2017-02-19T11:36:53+08:00">2017-02-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-11 20:33:40" itemprop="dateModified" datetime="2018-09-11T20:33:40+08:00">2018-09-11</time>
+              
+            
+          </span>
+
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">字数统计1k字</span>
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">阅读时长4分钟</span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>Expect</strong> is a program that “talks” to other interactive programs according to a script. Following the script, Expect knows what can be expected from a program and what the correct response should be. An interpreted language provides branching and high-level control structures to direct the dialogue. In addition, the user can take control and interact directly when desired, afterward returning control to the script.</p>
+<h4 id="expect基础语法">expect基础语法</h4><p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># 命令行参数 </span><br><span class="line"># $argv，参数数组，使用[lindex $argv n]获取，$argv 0初始化为脚本名字</span><br><span class="line"># $argc，参数个数</span><br><span class="line">set username [lindex $argv 0]  # 获取第0个参数</span><br><span class="line">set passwd [lindex $argv 1]    # 获取第1个参数</span><br><span class="line">set TOKEN $expect_out(buffer): 获取上一个键盘输入保存到TOKEN变量中</span><br><span class="line"></span><br><span class="line">set timeout 30 # 设置超时30s</span><br><span class="line"> </span><br><span class="line"># spawn是expect内部命令，开启ssh连接</span><br><span class="line">spawn ssh -l username 192.168.1.1</span><br><span class="line"> </span><br><span class="line"># 判断上次输出结果里是否包含以“password:”开头的字符串，如果有则立即返回，否则就等待一段时间(timeout)后返回</span><br><span class="line">expect &quot;password:*&quot;</span><br><span class="line"> </span><br><span class="line"># 发送内容ispass(密码)，与手工输入密码ispass的动作等效</span><br><span class="line">send &quot;ispass\r&quot;</span><br><span class="line"> </span><br><span class="line"># 发送内容给用户</span><br><span class="line">send_user &quot;$argv0 [lrange $argv 0 2]\n&quot;</span><br><span class="line">send_user &quot;It&apos;s OK\r&quot;</span><br><span class="line"># 执行完成后保持交互状态，控制权交给控制台(可以继续手工输入等操作)。否则会完成后会退出。</span><br><span class="line">interact</span><br></pre></td></tr></table></figure>
+<h5 id="spwan命令">spwan命令</h5><p>spawn命令用于启动一个进程, 后边接上你要执行的命令，例如<code>spawn ssh relay01.baidu.com</code></p>
+<h5 id="interact命令">interact命令</h5><p>interact命令用于脚本执行完简单的命令后人手动介入,只在所属的spawn进程空间有效</p>
+<h5 id="expect的三种使用格式">expect的三种使用格式</h5><ul>
+<li><p>并行：只要其中的任何一个pattern能够匹配，那么这个expect就算是完成了一次匹配</p>
+<pre><code>expect {
+    pattern1 {
+        command2 }
+    pattern2 {
+        command2 }
+}
+
+<span class="comment"># 示例</span>
+expect {
+   <span class="string">"hi"</span>    { <span class="built_in">send</span> <span class="string">"You said hi\r"</span> }
+   <span class="string">"hello"</span> { <span class="built_in">send</span> <span class="string">"Hello yourself\r"</span> }
+   <span class="string">"bye"</span>   { <span class="built_in">send</span> <span class="string">"That was unexpected\r"</span> }
+}
+</code></pre></li>
 </ul>
-<h3 id="被动收入">被动收入</h3><ul>
-<li>内容号，包括博客，百家号等 — done，微博+头条+微信</li>
-<li>小程序，招聘信息类爬虫等开发类产品 — 红利期还没爆发？百度小程序？</li>
+<ul>
+<li><p>串行：所有的匹配被依次满足了之后才算整个语句完成</p>
+<pre><code>expect pattern command
+expect pattern2 command2
+
+<span class="comment"># 串行示例</span>
+expect <span class="string">"username:"</span>
+<span class="keyword">send</span> <span class="string">"<span class="variable">$userid</span>\r"</span>
+expect <span class="string">"password:"</span> { <span class="keyword">send</span> <span class="string">"<span class="variable">$mypassword</span>\r"</span> }
+
+<span class="comment"># 利用exp_continue并行实现串行，continue执行下一个pattern</span>
+expect {   
+    <span class="string">"*yes/no"</span> { <span class="keyword">send</span> <span class="string">"yes\r"</span>; exp_continue }
+     <span class="string">"*password:"</span> { <span class="keyword">send</span> <span class="string">"<span class="variable">$mypassword</span>\r"</span> }   
+}
+</code></pre></li>
 </ul>
-<h3 id="技术成长">技术成长</h3><ul>
-<li>有一个系统全面的roadmap和framework</li>
-<li>基础技术方面：语言，操作系统，网络</li>
-<li>专业技能：分布式系统，存储，云计算相关新技术栈</li>
-<li>算法和数据结构：leetcode到达300道，以C++，Go，Java三种语言</li>
-<li>阅读5本相关书籍：深入理解计算机系统、effective C++、Golang一本、系统架构</li>
-<li>阅读2-3份源码：Nginx、Leveldb、raft or brpc、redis、mysql、golang</li>
-<li>熟悉3个周边系统：BlobStorage、proxy、tafDB、Mola</li>
+<h5 id="shell脚本接收多个参数">shell脚本接收多个参数</h5><ol>
+<li>expect脚本可以接受从bash传递过来的参数.可以使用[lindex $argv n]获得，n从0开始，分别表示第一个,第二个,第三个….参数</li>
+<li>$argc为命令行参数的个数，$argv0为脚本名字本身，$argv为命令行参数。[lrange $argv 0 0]表示第1个参数，[lrange $argv 0 4]为第一个到第五个参数。</li>
+<li>执行<code>./test.sh 1 2 3</code>,脚本内容如下：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/expect -d</span><br><span class="line">set username [lindex $argv 0]</span><br><span class="line">set password [lindex $argv 1]</span><br><span class="line">set server [lindex $argv 2]</span><br><span class="line">send_user  &quot;UserName is $username\n&quot;</span><br><span class="line">send_user  &quot;PassWord is $password\n&quot;</span><br><span class="line">send_user  &quot;Server is $server\n&quot;</span><br><span class="line">send_user &quot;Total arg num is $argc\n&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="bash脚本直接调用expect进行交互">bash脚本直接调用expect进行交互</h4><ul>
+<li>Here document实现, expect脚本可以使用bash中定义的变量</li>
 </ul>
-<h3 id="外部机遇">外部机遇</h3><ul>
-<li>涨薪机会</li>
-<li>晋升机会</li>
-<li>技术转管理或金融机会</li>
-<li>跳槽机会</li>
-<li>面试技巧训练</li>
-<li>找准3次定位</li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">host=&quot;USER@HOST&quot;</span><br><span class="line">password=&quot;PASSWORD&quot;</span><br><span class="line">cmd=&quot;command_list&quot;</span><br><span class="line"></span><br><span class="line">expect &lt;&lt;EOF </span><br><span class="line">spawn ssh $host &quot;$cmd&quot;</span><br><span class="line">expect &#123;</span><br><span class="line">&quot;*(yes/no)?&quot; &#123; send &quot;yes\r&quot;;exp_continue &#125;</span><br><span class="line">&quot;*assword:&quot; &#123; send &quot;$password\r&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line">expect eof</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<ul>
+<li>直接使用set来定义变量并在expect脚本中使用</li>
 </ul>
-<h3 id="行业新风口">行业新风口</h3><ul>
-<li>机器学习与AI算法</li>
-<li>区块链和虚拟货币</li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">expect -c &apos;</span><br><span class="line">set $PASSWORD=&quot;123qwe&quot;</span><br><span class="line">spawn ssh USER@HOST &quot;commands&quot;</span><br><span class="line">expect &#123;</span><br><span class="line">&quot;*(yes/no)?&quot; &#123; send &quot;yes\r&quot;;exp_continue &#125;</span><br><span class="line">&quot;*assword:&quot; &#123; send &quot;$PASSWORD\r&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line">expect eof</span><br><span class="line">&apos;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果希望保持登录，去掉上面代码的ssh后的命令列表并且将expect eof改成interact即可</p>
+</blockquote>
+<h4 id="更多示例">更多示例</h4><ol>
+<li><a href="http://xstarcd.github.io/wiki/shell/expect.html" target="_blank" rel="noopener">expect交互脚本示例</a></li>
+<li><a href="https://www.jianshu.com/p/70556b1ce932" target="_blank" rel="noopener">Linux Expect 简介和使用实例</a></li>
+</ol>
+<h4 id="开发机登陆脚本示例">开发机登陆脚本示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/expect</span><br><span class="line"></span><br><span class="line"># 登录relay</span><br><span class="line">spawn ssh relay01.baidu.com</span><br><span class="line"></span><br><span class="line"># 定义变量</span><br><span class="line">set PIN &quot;123321&quot;</span><br><span class="line">set HOST &quot;hz01-bos-dev-r15-01-005.hz01&quot;</span><br><span class="line">set PASSWORD &quot;&quot;</span><br><span class="line"></span><br><span class="line"># 执行脚本时带上参数,以空格分开</span><br><span class="line"># set TOKEN [lindex $argv 0]</span><br><span class="line"></span><br><span class="line"># 打开调试模式</span><br><span class="line">#exp_internal 1</span><br><span class="line"># relay PIN码 + Token(Token需手动输入)</span><br><span class="line">expect &#123;</span><br><span class="line">    -re &quot;password:*&quot; &#123;</span><br><span class="line">        send_user &quot;PIN:****** + Token:&quot;</span><br><span class="line">        expect_user &#123;</span><br><span class="line">            -timeout -1</span><br><span class="line">            -re &quot;(.*)\n&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        set TOKEN $expect_out(buffer)</span><br><span class="line">        send &quot;$PIN$TOKEN\r&quot;</span><br><span class="line">        exp_continue</span><br><span class="line">    &#125;</span><br><span class="line">   # 自动登录开发机</span><br><span class="line">    -re &quot;-bash-baidu-ssl*&quot; &#123;</span><br><span class="line">        if &#123; &quot;$HOST&quot; != &quot;&quot; &#125; &#123;</span><br><span class="line">            send &quot;ssh --silent $HOST\r&quot;</span><br><span class="line">            # [可选]自动开发机输入密码</span><br><span class="line">            if &#123; &quot;$PASSWORD&quot; != &quot;&quot; &#125; &#123;</span><br><span class="line">                expect -re &quot;password:&quot; &#123; send &quot;$PASSWORD\r&quot; &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"># 关闭调试模式</span><br><span class="line">#exp_internal 0</span><br><span class="line">interact</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2017/02/19/Linux正则表达式:通配符揭秘/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="../../images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="../../2017/02/19/Linux正则表达式:通配符揭秘/" itemprop="url">
+                  Linux正则表达式/通配符揭秘
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-19 11:36:53" itemprop="dateCreated datePublished" datetime="2017-02-19T11:36:53+08:00">2017-02-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-25 20:51:38" itemprop="dateModified" datetime="2018-10-25T20:51:38+08:00">2018-10-25</time>
+              
+            
+          </span>
+
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">字数统计1.5k字</span>
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">阅读时长5分钟</span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="正则表达式概念">正则表达式概念</h4><p><strong>正则表达式</strong>是你所定义的模式模板(pattern template)，Linux工具可以用它来过滤文本；如果数据匹配模式，它就会被接受并进一步处理;如果数据不匹配模式，它就会被滤掉。正则表达式模式利用通配符来描述数据流中的一个或多个字符，例如<figure class="highlight plain"><figcaption><span>da*```da*参数会让ls命令只列出名字以da开头的文件。文件名中da之后可以有任意多个字符(包括什么也没有)。  </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">正则表达式是通过正则表达式引擎(regular expression engine)实现的。正则表达式引擎是一套底层软件，负责解释正则表达式模式并使用这些模式进行文本匹配。</span><br><span class="line">#### 正则表达式类型</span><br><span class="line">Linux中的不同应用程序可能会用不同类型的正则表达式；而在Linux中，有两种流行的正则表达式引擎：</span><br><span class="line">	</span><br><span class="line">&gt; POSIX基础正则表达式(basic regular expression，BRE)引擎，sed编辑器只符合了BRE引擎规范的子集</span><br><span class="line"></span><br><span class="line">&gt; POSIX扩展正则表达式(extended regular expression，ERE)引擎，gawk程序用ERE引擎来处理它的正则表达式模式。</span><br><span class="line"></span><br><span class="line">#### 处理特殊字符</span><br><span class="line">正则表达式识别的特殊字符包括:```.*[]^$&#123;&#125;\+?|()```,如果要用某个特殊字符作为文本字符，就必须用```\```转义</span><br></pre></td></tr></table></figure></p>
+<h1 id="查找$或者正斜线">查找$或者正斜线</h1><p>sed -n ‘/\$/p’ data2<br>echo “3 / 2” | sed -n ‘/\//p’</p>
+<h1 id="^字符会在每个由换行符决定的新数据行的行首检查模式">^字符会在每个由换行符决定的新数据行的行首检查模式</h1><p>echo “Books are great” | sed -n ‘/^Book/p’</p>
+<h1 id="美元符($)定义了行尾锚点">美元符($)定义了行尾锚点</h1><p>echo “This book is good” | sed -n ‘/book$/p’</p>
+<h1 id="^$组合删除所有空白行">^$组合删除所有空白行</h1><p>sed ‘/^$/d’ data5</p>
+<h1 id="点号字符-用来匹配除换行符之外的任意单个字符，如果在点号字符的位置没有字符，那么模式就不成立。在正则表达式中，空格也是字符，也会被-匹配">点号字符.用来匹配除换行符之外的任意单个字符，如果在点号字符的位置没有字符，那么模式就不成立。在正则表达式中，空格也是字符，也会被.匹配</h1><p>sed -n ‘/.at/p’ data6</p>
+<h1 id="[]定义字符组，字符组中必须有个字符来匹配相应的位置，例如匹配cat和hat">[]定义字符组，字符组中必须有个字符来匹配相应的位置，例如匹配cat和hat</h1><p>sed -n ‘/[ch]at/p’ data6</p>
+<h1 id="使用3个字符组来涵盖3个字符位置含有大小写的情况">使用3个字符组来涵盖3个字符位置含有大小写的情况</h1><p>echo “yeS” | sed -n ‘/[Yy][Ee][Ss]/p’</p>
+<h1 id="匹配了任意含有数字0、1、2或3的行">匹配了任意含有数字0、1、2或3的行</h1><p>sed -n ‘/[0123]/p’ data7</p>
+<p>排除匹配</p>
+<h1 id="匹配c或h之外的任何字符以及文本模式">匹配c或h之外的任何字符以及文本模式</h1><p>sed -n ‘/[^ch]at/p’ data6</p>
+<p>区间匹配</p>
+<h1 id="每个字符组都会匹配0~9的任意数字">每个字符组都会匹配0~9的任意数字</h1><p>sed -n ‘/^[0-9][0-9][0-9][0-9][0-9]$/p’ data8</p>
+<h1 id="新的模式[c-h]at匹配了首字母在字母c和字母h之间的单词">新的模式[c-h]at匹配了首字母在字母c和字母h之间的单词</h1><p>sed -n ‘/[c-h]at/p’ data6</p>
+<h1 id="该字符组允许区间a~c、h~m中的字母出现在at文本前">该字符组允许区间a~c、h~m中的字母出现在at文本前</h1><p>sed -n ‘/[a-ch-m]at/p’ data6</p>
+<h1 id="特殊字符组，可以用[[:digit:]]来代替区间[0-9]">特殊字符组，可以用[[:digit:]]来代替区间[0-9]</h1><h1 id="在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中">在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中</h1><p>echo “I’m getting a color TV” | sed -n ‘/colou*r/p’</p>
+<h1 id="将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。">将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。</h1><p>echo “bat” | sed -n ‘/b.*t/p’</p>
+<h1 id="星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)">星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)</h1><p>echo “bat” | sed -n ‘/b[ae]*t/p’</p>
+<h1 id="显示文件夹中文件绝对目录">显示文件夹中文件绝对目录</h1><p>ls | sed “s:^:<code>pwd</code>/:”</p>
+<p>扩展正则表达式：gawk程序能够识别ERE模式，但sed编辑器不能</p>
+<h1 id="问号表明前面的字符可以出现0次或1次">问号表明前面的字符可以出现0次或1次</h1><p>echo “bt” | gawk ‘/be?t/{print $0}’</p>
+<h1 id="加号表明前面的字符可以出现1次或多次，但必须至少出现1次">加号表明前面的字符可以出现1次或多次，但必须至少出现1次</h1><p>echo “bt” | gawk ‘/b[ae]+t/{print $0}’</p>
+<h1 id="花括号{}允许你为可重复的正则表达式指定一个上限">花括号{}允许你为可重复的正则表达式指定一个上限</h1><h1 id="字符e只能出现1次，模式才能匹配">字符e只能出现1次，模式才能匹配</h1><p>echo “bet” | gawk —re-interval ‘/be{1}t/{print $0}’</p>
+<h1 id="字符e可以出现1次或2次，这样模式就能匹配">字符e可以出现1次或2次，这样模式就能匹配</h1><p>echo “beet” | gawk —re-interval ‘/be{1,2}t/{print $0}’</p>
+<h1 id="圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符">圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符</h1><h1 id="结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat">结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat</h1><p>echo “Sat” | gawk ‘/Sat(urday)?/{print $0}’</p>
+<h1 id="模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合">模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合</h1><p>echo “bab” | gawk ‘/(c|b)a(b|t)/{print $0}’</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### 正则表达式应用</span><br><span class="line">1. 验证电话号码</span><br><span class="line">2. 解析邮件地址</span><br><span class="line">	```^([a-zA-Z0-9_\-\.\+]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]&#123;2,5&#125;)$</span><br></pre></td></tr></table></figure>
+<h4 id="Linux通配符">Linux通配符</h4><p>bash shell可以使用正则表达式中的一些元字符实现通配（Globbing）功能。通配是把一个包含通配符的非具体文件名扩展存储在计算机，服务器或者网络上的一批具体文件名的过程。（可以看出<strong>①通配主要应用匹配文件名上，而正则主要应用于字符串上；②通配符通常只能被shell自解释，正则表达式需要被正则引擎解析；③元字符不同</strong>）。最常用的通配符包括正则表达式元字符：</p>
+<ul>
+<li>？(匹配任意单个字符,不能匹配“/”字符)</li>
+<li>*（匹配任意位的任意字符，包括空字符串，不包含对“/”字符的匹配）</li>
+<li>[]（匹配一个单字符范围,如[a-z]；[0-9]；[a-zBE5-7]表示所有a到z之间的字符和 B、E、5、6、7相匹配；[!abc]匹配除了“a，b，c”这3个字符之外的任意一个字符)</li>
+<li>{}</li>
+<li>^(取反)，例如<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* !取反</span><br><span class="line"></span><br><span class="line">&gt; 示例</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h3 id="随笔札记">随笔札记</h3><p>区块链技术的发展很有可能带来技术革新，类似于PC互联网、移动互联网、自媒体内容创业这样同等重要的机遇，如何抓住并且变现，值得思考！  </p>
-<p>房产市场的变化，从买房到租房，可能会引发下一个投资机遇，这个跟政策有很大关系，应该多加关注房地产政策的走向和解读  </p>
+<p><em>.txt               # 匹配全部后缀为.txt的文件<br>file?.log           # 匹配file1.log, file2.log, …<br>[a-z]</em>.log          # 匹配a-z开头的.log文件<br>[^a-z]*.log         # 上面的反向匹配<br>```</p>
+<blockquote>
+<p>备注：反斜杠()或引号(‘, “)都会使通配符失效，例如如: <code>\*</code>, <code>&quot;*&quot;</code>, <code>&#39;*&#39;</code>都表示<code>*</code>本身，不通配任何文件</p>
+</blockquote>
 
           
         
@@ -1084,418 +1474,6 @@ rsync -v rsync://<span class="number">172.16</span>.<span class="number">78.192<
 <li><code>mv /usr/cbu/ * .</code>  将/usr/cbu中的所有文件移到当前目录（用“.”表示）中</li>
 <li><code>at －f data 15:30 +2 days</code>  让系统在两天后的17：30执行文件data中指明的作业</li>
 </ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2017/02/19/Linux expect自动交互脚本入门/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="CharlesXiao">
-      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
-      <meta itemprop="image" content="../../images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CharlesXiao‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="../../2017/02/19/Linux expect自动交互脚本入门/" itemprop="url">
-                  Linux expect自动交互脚本入门
-                </a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-02-19 11:36:53" itemprop="dateCreated datePublished" datetime="2017-02-19T11:36:53+08:00">2017-02-19</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-09-11 20:33:40" itemprop="dateModified" datetime="2018-09-11T20:33:40+08:00">2018-09-11</time>
-              
-            
-          </span>
-
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计1k字</span>
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长4分钟</span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>Expect</strong> is a program that “talks” to other interactive programs according to a script. Following the script, Expect knows what can be expected from a program and what the correct response should be. An interpreted language provides branching and high-level control structures to direct the dialogue. In addition, the user can take control and interact directly when desired, afterward returning control to the script.</p>
-<h4 id="expect基础语法">expect基础语法</h4><p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># 命令行参数 </span><br><span class="line"># $argv，参数数组，使用[lindex $argv n]获取，$argv 0初始化为脚本名字</span><br><span class="line"># $argc，参数个数</span><br><span class="line">set username [lindex $argv 0]  # 获取第0个参数</span><br><span class="line">set passwd [lindex $argv 1]    # 获取第1个参数</span><br><span class="line">set TOKEN $expect_out(buffer): 获取上一个键盘输入保存到TOKEN变量中</span><br><span class="line"></span><br><span class="line">set timeout 30 # 设置超时30s</span><br><span class="line"> </span><br><span class="line"># spawn是expect内部命令，开启ssh连接</span><br><span class="line">spawn ssh -l username 192.168.1.1</span><br><span class="line"> </span><br><span class="line"># 判断上次输出结果里是否包含以“password:”开头的字符串，如果有则立即返回，否则就等待一段时间(timeout)后返回</span><br><span class="line">expect &quot;password:*&quot;</span><br><span class="line"> </span><br><span class="line"># 发送内容ispass(密码)，与手工输入密码ispass的动作等效</span><br><span class="line">send &quot;ispass\r&quot;</span><br><span class="line"> </span><br><span class="line"># 发送内容给用户</span><br><span class="line">send_user &quot;$argv0 [lrange $argv 0 2]\n&quot;</span><br><span class="line">send_user &quot;It&apos;s OK\r&quot;</span><br><span class="line"># 执行完成后保持交互状态，控制权交给控制台(可以继续手工输入等操作)。否则会完成后会退出。</span><br><span class="line">interact</span><br></pre></td></tr></table></figure>
-<h5 id="spwan命令">spwan命令</h5><p>spawn命令用于启动一个进程, 后边接上你要执行的命令，例如<code>spawn ssh relay01.baidu.com</code></p>
-<h5 id="interact命令">interact命令</h5><p>interact命令用于脚本执行完简单的命令后人手动介入,只在所属的spawn进程空间有效</p>
-<h5 id="expect的三种使用格式">expect的三种使用格式</h5><ul>
-<li><p>并行：只要其中的任何一个pattern能够匹配，那么这个expect就算是完成了一次匹配</p>
-<pre><code>expect {
-    pattern1 {
-        command2 }
-    pattern2 {
-        command2 }
-}
-
-<span class="comment"># 示例</span>
-expect {
-   <span class="string">"hi"</span>    { <span class="built_in">send</span> <span class="string">"You said hi\r"</span> }
-   <span class="string">"hello"</span> { <span class="built_in">send</span> <span class="string">"Hello yourself\r"</span> }
-   <span class="string">"bye"</span>   { <span class="built_in">send</span> <span class="string">"That was unexpected\r"</span> }
-}
-</code></pre></li>
-</ul>
-<ul>
-<li><p>串行：所有的匹配被依次满足了之后才算整个语句完成</p>
-<pre><code>expect pattern command
-expect pattern2 command2
-
-<span class="comment"># 串行示例</span>
-expect <span class="string">"username:"</span>
-<span class="keyword">send</span> <span class="string">"<span class="variable">$userid</span>\r"</span>
-expect <span class="string">"password:"</span> { <span class="keyword">send</span> <span class="string">"<span class="variable">$mypassword</span>\r"</span> }
-
-<span class="comment"># 利用exp_continue并行实现串行，continue执行下一个pattern</span>
-expect {   
-    <span class="string">"*yes/no"</span> { <span class="keyword">send</span> <span class="string">"yes\r"</span>; exp_continue }
-     <span class="string">"*password:"</span> { <span class="keyword">send</span> <span class="string">"<span class="variable">$mypassword</span>\r"</span> }   
-}
-</code></pre></li>
-</ul>
-<h5 id="shell脚本接收多个参数">shell脚本接收多个参数</h5><ol>
-<li>expect脚本可以接受从bash传递过来的参数.可以使用[lindex $argv n]获得，n从0开始，分别表示第一个,第二个,第三个….参数</li>
-<li>$argc为命令行参数的个数，$argv0为脚本名字本身，$argv为命令行参数。[lrange $argv 0 0]表示第1个参数，[lrange $argv 0 4]为第一个到第五个参数。</li>
-<li>执行<code>./test.sh 1 2 3</code>,脚本内容如下：</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/expect -d</span><br><span class="line">set username [lindex $argv 0]</span><br><span class="line">set password [lindex $argv 1]</span><br><span class="line">set server [lindex $argv 2]</span><br><span class="line">send_user  &quot;UserName is $username\n&quot;</span><br><span class="line">send_user  &quot;PassWord is $password\n&quot;</span><br><span class="line">send_user  &quot;Server is $server\n&quot;</span><br><span class="line">send_user &quot;Total arg num is $argc\n&quot;</span><br></pre></td></tr></table></figure>
-<h4 id="bash脚本直接调用expect进行交互">bash脚本直接调用expect进行交互</h4><ul>
-<li>Here document实现, expect脚本可以使用bash中定义的变量</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">host=&quot;USER@HOST&quot;</span><br><span class="line">password=&quot;PASSWORD&quot;</span><br><span class="line">cmd=&quot;command_list&quot;</span><br><span class="line"></span><br><span class="line">expect &lt;&lt;EOF </span><br><span class="line">spawn ssh $host &quot;$cmd&quot;</span><br><span class="line">expect &#123;</span><br><span class="line">&quot;*(yes/no)?&quot; &#123; send &quot;yes\r&quot;;exp_continue &#125;</span><br><span class="line">&quot;*assword:&quot; &#123; send &quot;$password\r&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line">expect eof</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<ul>
-<li>直接使用set来定义变量并在expect脚本中使用</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">expect -c &apos;</span><br><span class="line">set $PASSWORD=&quot;123qwe&quot;</span><br><span class="line">spawn ssh USER@HOST &quot;commands&quot;</span><br><span class="line">expect &#123;</span><br><span class="line">&quot;*(yes/no)?&quot; &#123; send &quot;yes\r&quot;;exp_continue &#125;</span><br><span class="line">&quot;*assword:&quot; &#123; send &quot;$PASSWORD\r&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line">expect eof</span><br><span class="line">&apos;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>如果希望保持登录，去掉上面代码的ssh后的命令列表并且将expect eof改成interact即可</p>
-</blockquote>
-<h4 id="更多示例">更多示例</h4><ol>
-<li><a href="http://xstarcd.github.io/wiki/shell/expect.html" target="_blank" rel="noopener">expect交互脚本示例</a></li>
-<li><a href="https://www.jianshu.com/p/70556b1ce932" target="_blank" rel="noopener">Linux Expect 简介和使用实例</a></li>
-</ol>
-<h4 id="开发机登陆脚本示例">开发机登陆脚本示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/expect</span><br><span class="line"></span><br><span class="line"># 登录relay</span><br><span class="line">spawn ssh relay01.baidu.com</span><br><span class="line"></span><br><span class="line"># 定义变量</span><br><span class="line">set PIN &quot;123321&quot;</span><br><span class="line">set HOST &quot;hz01-bos-dev-r15-01-005.hz01&quot;</span><br><span class="line">set PASSWORD &quot;&quot;</span><br><span class="line"></span><br><span class="line"># 执行脚本时带上参数,以空格分开</span><br><span class="line"># set TOKEN [lindex $argv 0]</span><br><span class="line"></span><br><span class="line"># 打开调试模式</span><br><span class="line">#exp_internal 1</span><br><span class="line"># relay PIN码 + Token(Token需手动输入)</span><br><span class="line">expect &#123;</span><br><span class="line">    -re &quot;password:*&quot; &#123;</span><br><span class="line">        send_user &quot;PIN:****** + Token:&quot;</span><br><span class="line">        expect_user &#123;</span><br><span class="line">            -timeout -1</span><br><span class="line">            -re &quot;(.*)\n&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        set TOKEN $expect_out(buffer)</span><br><span class="line">        send &quot;$PIN$TOKEN\r&quot;</span><br><span class="line">        exp_continue</span><br><span class="line">    &#125;</span><br><span class="line">   # 自动登录开发机</span><br><span class="line">    -re &quot;-bash-baidu-ssl*&quot; &#123;</span><br><span class="line">        if &#123; &quot;$HOST&quot; != &quot;&quot; &#125; &#123;</span><br><span class="line">            send &quot;ssh --silent $HOST\r&quot;</span><br><span class="line">            # [可选]自动开发机输入密码</span><br><span class="line">            if &#123; &quot;$PASSWORD&quot; != &quot;&quot; &#125; &#123;</span><br><span class="line">                expect -re &quot;password:&quot; &#123; send &quot;$PASSWORD\r&quot; &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"># 关闭调试模式</span><br><span class="line">#exp_internal 0</span><br><span class="line">interact</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2017/02/19/Linux正则表达式:通配符揭秘/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="CharlesXiao">
-      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
-      <meta itemprop="image" content="../../images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CharlesXiao‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="../../2017/02/19/Linux正则表达式:通配符揭秘/" itemprop="url">
-                  Linux正则表达式/通配符揭秘
-                </a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-02-19 11:36:53" itemprop="dateCreated datePublished" datetime="2017-02-19T11:36:53+08:00">2017-02-19</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-10-25 20:51:38" itemprop="dateModified" datetime="2018-10-25T20:51:38+08:00">2018-10-25</time>
-              
-            
-          </span>
-
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计1.5k字</span>
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长5分钟</span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="正则表达式概念">正则表达式概念</h4><p><strong>正则表达式</strong>是你所定义的模式模板(pattern template)，Linux工具可以用它来过滤文本；如果数据匹配模式，它就会被接受并进一步处理;如果数据不匹配模式，它就会被滤掉。正则表达式模式利用通配符来描述数据流中的一个或多个字符，例如<figure class="highlight plain"><figcaption><span>da*```da*参数会让ls命令只列出名字以da开头的文件。文件名中da之后可以有任意多个字符(包括什么也没有)。  </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">正则表达式是通过正则表达式引擎(regular expression engine)实现的。正则表达式引擎是一套底层软件，负责解释正则表达式模式并使用这些模式进行文本匹配。</span><br><span class="line">#### 正则表达式类型</span><br><span class="line">Linux中的不同应用程序可能会用不同类型的正则表达式；而在Linux中，有两种流行的正则表达式引擎：</span><br><span class="line">	</span><br><span class="line">&gt; POSIX基础正则表达式(basic regular expression，BRE)引擎，sed编辑器只符合了BRE引擎规范的子集</span><br><span class="line"></span><br><span class="line">&gt; POSIX扩展正则表达式(extended regular expression，ERE)引擎，gawk程序用ERE引擎来处理它的正则表达式模式。</span><br><span class="line"></span><br><span class="line">#### 处理特殊字符</span><br><span class="line">正则表达式识别的特殊字符包括:```.*[]^$&#123;&#125;\+?|()```,如果要用某个特殊字符作为文本字符，就必须用```\```转义</span><br></pre></td></tr></table></figure></p>
-<h1 id="查找$或者正斜线">查找$或者正斜线</h1><p>sed -n ‘/\$/p’ data2<br>echo “3 / 2” | sed -n ‘/\//p’</p>
-<h1 id="^字符会在每个由换行符决定的新数据行的行首检查模式">^字符会在每个由换行符决定的新数据行的行首检查模式</h1><p>echo “Books are great” | sed -n ‘/^Book/p’</p>
-<h1 id="美元符($)定义了行尾锚点">美元符($)定义了行尾锚点</h1><p>echo “This book is good” | sed -n ‘/book$/p’</p>
-<h1 id="^$组合删除所有空白行">^$组合删除所有空白行</h1><p>sed ‘/^$/d’ data5</p>
-<h1 id="点号字符-用来匹配除换行符之外的任意单个字符，如果在点号字符的位置没有字符，那么模式就不成立。在正则表达式中，空格也是字符，也会被-匹配">点号字符.用来匹配除换行符之外的任意单个字符，如果在点号字符的位置没有字符，那么模式就不成立。在正则表达式中，空格也是字符，也会被.匹配</h1><p>sed -n ‘/.at/p’ data6</p>
-<h1 id="[]定义字符组，字符组中必须有个字符来匹配相应的位置，例如匹配cat和hat">[]定义字符组，字符组中必须有个字符来匹配相应的位置，例如匹配cat和hat</h1><p>sed -n ‘/[ch]at/p’ data6</p>
-<h1 id="使用3个字符组来涵盖3个字符位置含有大小写的情况">使用3个字符组来涵盖3个字符位置含有大小写的情况</h1><p>echo “yeS” | sed -n ‘/[Yy][Ee][Ss]/p’</p>
-<h1 id="匹配了任意含有数字0、1、2或3的行">匹配了任意含有数字0、1、2或3的行</h1><p>sed -n ‘/[0123]/p’ data7</p>
-<p>排除匹配</p>
-<h1 id="匹配c或h之外的任何字符以及文本模式">匹配c或h之外的任何字符以及文本模式</h1><p>sed -n ‘/[^ch]at/p’ data6</p>
-<p>区间匹配</p>
-<h1 id="每个字符组都会匹配0~9的任意数字">每个字符组都会匹配0~9的任意数字</h1><p>sed -n ‘/^[0-9][0-9][0-9][0-9][0-9]$/p’ data8</p>
-<h1 id="新的模式[c-h]at匹配了首字母在字母c和字母h之间的单词">新的模式[c-h]at匹配了首字母在字母c和字母h之间的单词</h1><p>sed -n ‘/[c-h]at/p’ data6</p>
-<h1 id="该字符组允许区间a~c、h~m中的字母出现在at文本前">该字符组允许区间a~c、h~m中的字母出现在at文本前</h1><p>sed -n ‘/[a-ch-m]at/p’ data6</p>
-<h1 id="特殊字符组，可以用[[:digit:]]来代替区间[0-9]">特殊字符组，可以用[[:digit:]]来代替区间[0-9]</h1><h1 id="在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中">在字符后面放置星号表明该字符必须在匹配模式的文本中出现0次或多次，例如u*表明字母u可能出现或不出现在匹配模式的文本中</h1><p>echo “I’m getting a color TV” | sed -n ‘/colou*r/p’</p>
-<h1 id="将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。">将点号特殊字符和星号特殊字符组合起来。这个组合能够匹配任意数量的任意字符。</h1><p>echo “bat” | sed -n ‘/b.*t/p’</p>
-<h1 id="星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)">星号还能用在字符组上,例如只要a和e字符以任何组合形式出现在b和t字符之间(就算完全不出现也行)</h1><p>echo “bat” | sed -n ‘/b[ae]*t/p’</p>
-<h1 id="显示文件夹中文件绝对目录">显示文件夹中文件绝对目录</h1><p>ls | sed “s:^:<code>pwd</code>/:”</p>
-<p>扩展正则表达式：gawk程序能够识别ERE模式，但sed编辑器不能</p>
-<h1 id="问号表明前面的字符可以出现0次或1次">问号表明前面的字符可以出现0次或1次</h1><p>echo “bt” | gawk ‘/be?t/{print $0}’</p>
-<h1 id="加号表明前面的字符可以出现1次或多次，但必须至少出现1次">加号表明前面的字符可以出现1次或多次，但必须至少出现1次</h1><p>echo “bt” | gawk ‘/b[ae]+t/{print $0}’</p>
-<h1 id="花括号{}允许你为可重复的正则表达式指定一个上限">花括号{}允许你为可重复的正则表达式指定一个上限</h1><h1 id="字符e只能出现1次，模式才能匹配">字符e只能出现1次，模式才能匹配</h1><p>echo “bet” | gawk —re-interval ‘/be{1}t/{print $0}’</p>
-<h1 id="字符e可以出现1次或2次，这样模式就能匹配">字符e可以出现1次或2次，这样模式就能匹配</h1><p>echo “beet” | gawk —re-interval ‘/be{1,2}t/{print $0}’</p>
-<h1 id="圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符">圆括号进行表达式分组，当你将正则表达式模式分组时，该组会被视为一个标准字符</h1><h1 id="结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat">结尾的urday分组以及问号，使得模式能够匹配完整的Saturday或缩写Sat</h1><p>echo “Sat” | gawk ‘/Sat(urday)?/{print $0}’</p>
-<h1 id="模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合">模式(c|b)a(b|t)会匹配第一组中字母的任意组合以及第二组中字母的任意组合</h1><p>echo “bab” | gawk ‘/(c|b)a(b|t)/{print $0}’</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### 正则表达式应用</span><br><span class="line">1. 验证电话号码</span><br><span class="line">2. 解析邮件地址</span><br><span class="line">	```^([a-zA-Z0-9_\-\.\+]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]&#123;2,5&#125;)$</span><br></pre></td></tr></table></figure>
-<h4 id="Linux通配符">Linux通配符</h4><p>bash shell可以使用正则表达式中的一些元字符实现通配（Globbing）功能。通配是把一个包含通配符的非具体文件名扩展存储在计算机，服务器或者网络上的一批具体文件名的过程。（可以看出<strong>①通配主要应用匹配文件名上，而正则主要应用于字符串上；②通配符通常只能被shell自解释，正则表达式需要被正则引擎解析；③元字符不同</strong>）。最常用的通配符包括正则表达式元字符：</p>
-<ul>
-<li>？(匹配任意单个字符,不能匹配“/”字符)</li>
-<li>*（匹配任意位的任意字符，包括空字符串，不包含对“/”字符的匹配）</li>
-<li>[]（匹配一个单字符范围,如[a-z]；[0-9]；[a-zBE5-7]表示所有a到z之间的字符和 B、E、5、6、7相匹配；[!abc]匹配除了“a，b，c”这3个字符之外的任意一个字符)</li>
-<li>{}</li>
-<li>^(取反)，例如<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* !取反</span><br><span class="line"></span><br><span class="line">&gt; 示例</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><em>.txt               # 匹配全部后缀为.txt的文件<br>file?.log           # 匹配file1.log, file2.log, …<br>[a-z]</em>.log          # 匹配a-z开头的.log文件<br>[^a-z]*.log         # 上面的反向匹配<br>```</p>
-<blockquote>
-<p>备注：反斜杠()或引号(‘, “)都会使通配符失效，例如如: <code>\*</code>, <code>&quot;*&quot;</code>, <code>&#39;*&#39;</code>都表示<code>*</code>本身，不通配任何文件</p>
-</blockquote>
 
           
         
