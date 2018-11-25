@@ -381,6 +381,171 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2018/08/25/HDFS入门/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="../../images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="../../2018/08/25/HDFS入门/" itemprop="url">
+                  HDFS入门
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-25 11:36:53" itemprop="dateCreated datePublished" datetime="2018-08-25T11:36:53+08:00">2018-08-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-12 10:07:38" itemprop="dateModified" datetime="2018-09-12T10:07:38+08:00">2018-09-12</time>
+              
+            
+          </span>
+
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">字数统计534字</span>
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">阅读时长2分钟</span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h5 id=""> </h5><h4 id="HDFS">HDFS</h4><p>HDFS 从设计上来说，主要考虑以下的特征：<strong>超大文件</strong>，最大能支持 PB 级别的数据；<strong>流式数据访问</strong>，一次写入，多次读取；在不可靠的文件，<strong>故障率高的商用硬件上能运行</strong>。Hadoop 的不利之处，是不适应低时间延迟的数据访问，不适应大量的小文件，也不适应多用户写入任意修改文件的情况。</p>
+<p>NameNode 是 HDFS 的管理者。HDFS 将大文件分割成数据块，每个数据块是 64M，也可以设置成 128M或者 256M，然后将这些数据块以普通文件的形式存放到数据节点上，为了防止 DataNode 意外失效，HDFS 会将每个数据块复制若干份放到不同的数据节点。</p>
+<h4 id="HDFS-Client">HDFS-Client</h4><h4 id="HDFS-VFS">HDFS-VFS</h4><p>VFS 是Linux 内核和真正文件系统之间的抽象层，它提供统一的接口，真正的文件系统和 Linxu 内核必须通过 VFS 的接口进行沟通。内核的 I\O 路径是这样的：user space -&gt; VFS -&gt; FS -&gt; I\O layer -&gt; I\O scheduler(optional) -&gt; block_driver -&gt; block_device, 一个 I\O 经过了这些才真正到达了对应的存储上。一个用户态的系统调用先通过 VFS 找到对应的文件系统再向下传递 I\O，这是 I\O 的一般路径。对于用户来说，一切都是操作文件。</p>
+<p>Hadoop VFS兼容层，可以把HDFS当作一个标准的文件系统mount到本地的Linux文件系统上。这样用户便可以使用标准Unix命令，例如“ls”、“cd”、“cp”、“mkdir”、“find”、“grep”等，来操作一个hdfs的实例；也可以使用标准POSIX的开发库，例如C、C++、Python、Perl、JAVA、bash等的打开、写、读、关闭方法来操作一个hdfs的实例。</p>
+<h5 id="HDFS-VFS特性">HDFS-VFS特性</h5><ul>
+<li>最好情况下，单线程读速度能达100MB/s，写速度能达70MB/s</li>
+<li>不支持tail –f、chown、chgrp、make、link、mmap命令，以及pwrite等随机写函数</li>
+<li>不要在HDFS挂载点目录下执行scp、wget等会在当前路径下创建临时文件的操作</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2018/05/10/Ruby net http库默认重试一次请求问题/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -989,264 +1154,6 @@ def transport_request(req)
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2018/03/22/C-手稿集锦/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="CharlesXiao">
-      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
-      <meta itemprop="image" content="../../images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CharlesXiao‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="../../2018/03/22/C-手稿集锦/" itemprop="url">
-                  C++手稿集锦
-                </a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-03-22 23:21:23" itemprop="dateCreated datePublished" datetime="2018-03-22T23:21:23+08:00">2018-03-22</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-10-21 23:41:13" itemprop="dateModified" datetime="2018-10-21T23:41:13+08:00">2018-10-21</time>
-              
-            
-          </span>
-
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计3.6k字</span>
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长13分钟</span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="哪些变量会自动初始化？">哪些变量会自动初始化？</h3><p>在C语言中的<strong>全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值（C++默认初始化策略也是如此）。 C++保证了所有对象与对象成员都会初始化</strong>，无论是否写了圆括号或者是否写了参数列表，但其中基本数据类型的初始化还得依赖于构造函数中手动初始化。</p>
-<p>成员变量分为成员对象和内置类型成员，其中成员对象总是会被初始化的。我们通常会在构造函数中手动初始化所有内置类型的成员。例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class A&#123;</span><br><span class="line">public:</span><br><span class="line">    int v;</span><br><span class="line">    A(): v(0);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><a href="https://harttle.land/2015/10/05/cpp-variable-init.html" target="_blank" rel="noopener">参考链接</a></p>
-</blockquote>
-<h4 id="静态变量实现单例模式">静态变量实现单例模式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 将构造函数私有化，并提供获取单例的方法。 此后还需禁止复制构造函数、禁止赋值运算符。</span><br><span class="line">class CPerson&#123;</span><br><span class="line">private:</span><br><span class="line">    static CPerson* p;</span><br><span class="line">    CPerson()&#123;&#125;;</span><br><span class="line">    CPerson(CPerson&amp;);</span><br><span class="line">    const CPerson&amp; operator= (const CPerson&amp;);</span><br><span class="line">public:</span><br><span class="line">    static Person* instance()&#123;</span><br><span class="line">        return p ? p : (p = new P());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">CPerson* CPerson::p = NULL; // 静态成员必须在声明类的文件中进行声明（通常会初始化），否则链接错。</span><br></pre></td></tr></table></figure>
-<h3 id="对象的生命周期，构造与析构">对象的生命周期，构造与析构</h3><h4 id="对象实例化">对象实例化</h4><p>可以直接定义对象变量，在栈中分配并初始化对象；也可以定义对象指针，从堆中分配空间并初始化对象。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CPerson p1;</span><br><span class="line">CPerson p2(2);</span><br><span class="line">CPerson* p3 = new CPerson(3);</span><br></pre></td></tr></table></figure>
-<h4 id="析构函数">析构函数</h4><p>类的声明中，签名为<code>~CPerson()</code>的方法称为析构函数。析构函数没有参数和返回值。当对象生命周期结束时被调用，通常用来释放资源。一个类只能由一个析构函数。析构函数与构造函数类似，用户不指定时编译器会生成一个缺省的析构（构造）函数， 缺省的析构（构造）函数是空函数。</p>
-<h4 id="构造析构顺序">构造析构顺序</h4><p>对象的构造过程中，首先完成父类的构造函数，再完成成员对象的构造，最后调用当前类的构造函数：</p>
-<ol>
-<li>构造父类的对象。在此过程中对象的动态类型是仍然是父类。</li>
-<li>构造对象属性。它们实例化的顺序只取决于在类中声明的顺序，与初始化列表中的顺序无关。</li>
-<li>调用构造函数。在这里完成当前类指定的构造过程。</li>
-</ol>
-<p>对象的析构过程恰好相反，首先调用当前类的析构函数，然后析构对象属性，最后析构父类对象。</p>
-<h4 id="对象指针数组">对象指针数组</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CPerson *p[3] = &#123;new CPerson(1), new CPerson(2)&#125;;</span><br></pre></td></tr></table></figure>
-<h4 id="复制构造函数">复制构造函数</h4><p>类的声明中，签名为<code>CPerson(CPerson&amp;)</code>的方法称为复制构造函数，用来从一个已存在的对象复制生成一个新的对象。 在如下三种情况下会被调用：</p>
-<ol>
-<li><p>用一个对象初始化另一个对象时。例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CPerson p2(p1);</span><br><span class="line">CPerson p2 = p1;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>对象作为参数传递时。例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void func(A a)&#123;&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>对象作为返回值时。例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A func()&#123; A a; return a;&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>只有一个参数的复制构造函数可以被称为<strong>转换构造函数</strong>。当需要类型转换时，会被调用：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CPerson = 2;    // CPerson(int) called</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意区分赋值和初始化：<strong>对象变量间赋值不会调用复制构造函数</strong>。赋值只会按位拷贝对象所在的内存。当然你也可以重载<code>operator=</code>来改变它的行为。</p>
-</blockquote>
-<h4 id="对象生命周期">对象生命周期</h4><p>如下程序解释了对象的声明周期何时开始，以及何时结束。涉及到了：全局对象、静态对象、栈中的对象、堆中的对象。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">CPerson p1;             // main执行前，构造函数被调用</span><br><span class="line">void func()&#123;</span><br><span class="line">    static CPerson p2;  // func第一次执行前，构造函数被调用</span><br><span class="line">    CPerson p3;         // p3的构造函数被调用</span><br><span class="line">                        // func结束时，p3的析构函数被调用</span><br><span class="line">&#125;  </span><br><span class="line">int main()&#123;</span><br><span class="line">    CPerson p4, *p5;    // 调用p4的构造函数</span><br><span class="line">    func();</span><br><span class="line">    p5 = new CPerson;   // 调用p5的构造函数</span><br><span class="line">    delete p5;          // 调用p5的析构函数</span><br><span class="line">                        // main结束时，p4的析构函数被调用</span><br><span class="line">&#125;</span><br><span class="line">                        // 程序结束前，p1, p2的析构函数被调用</span><br></pre></td></tr></table></figure>
-<h3 id="栈对象和堆对象的创建方式">栈对象和堆对象的创建方式</h3><p>C++中，内存划分为三个逻辑区域：堆、栈和静态存储区，对象分为堆对象，栈对象以及<strong>静态对象</strong>(构造之后直到main程序结束才调用析构函数将其销毁，不管是local还是非local static对象)。而类的对象建立分为两种，一种是静态建立，如A a；另一种是动态建立，如A* ptr=new A；两者都要执行构造函数。</p>
-<ol>
-<li><p><strong>静态建立类对象</strong>：是由编译器为对象在栈空间中分配内存，是通过直接移动栈顶指针，挪出适当的空间，然后在这片内存空间上调用构造函数形成一个栈对象。使用这种方法，<strong>直接调用类的构造函数</strong>，内存空间自动释放</p>
-<p>。</p>
-</li>
-<li><p><strong>动态建立类对象</strong>：是使用new运算符将对象建立在堆空间中。这个过程分为两步，第一步是执行operator new()函数，在堆空间中搜索合适的内存并进行分配；第二步是调用构造函数构造对象，初始化这片内存空间。这种方法，<strong>间接调用类的构造函数</strong>，内存空间需要手动释放。</p>
-</li>
-<li><p><strong>注意点</strong>：</p>
-</li>
-</ol>
-<blockquote>
-<ol>
-<li><p><a href="https://blog.csdn.net/hbtj_1216/article/details/65934865" target="_blank" rel="noopener">栈对象和堆对象区别和优劣</a> : 栈对象的创建速度一般较堆对象快，它仅仅需要移动栈顶指针就可以被创建，递归函数中最好不要使用栈对象以避免栈溢出；程序员对堆对象的生命具有完全的控制权。比如，我们需要创建一个对象，能够被多个函数所访问，但是又不想使其成为全局的，那么这个时候创建一个堆对象无疑是良好的选择，然后在各个函数之间传递这个堆对象的指针，便可以实现对该对象的共享。</p>
-</li>
-<li><p><strong>如何限制类对象只能在堆上建立? </strong>编译器在为类对象分配栈空间时，会先检查类的析构函数的访问性，其实不光是析构函数，只要是非静态的函数，编译器都会进行检查。如果类的析构函数是私有的，则编译器不会在栈空间上为类对象分配内存（如果我们将构造函数设置为私有，那么我们也就不能用new来直接产生堆对象了，因为new在为对象分配空间后也会调用它的构造函数）。为了统一，可以将构造函数设为protected，然后提供一个public的static函数来完成构造，这样不使用new，而是使用一个函数来构造，使用一个函数来析构。</p>
-</li>
-<li><p>构造函数设置为私有会限制继承。如果一个类不打算作为基类，可以将其析构函数声明为private。为了限制栈对象，却不限制继承，我们可以将析构函数声明为protected，这样就两全其美。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&gt;    class NoStackObject &#123; </span><br><span class="line">&gt;    protected: </span><br><span class="line">&gt;        NoStackObject() &#123; &#125; </span><br><span class="line">&gt;        ~NoStackObject() &#123; &#125; </span><br><span class="line">&gt;    public: </span><br><span class="line">&gt;        static NoStackObject* creatInstance() &#123;</span><br><span class="line">&gt;        return new NoStackObject() ;//调用保护的构造函数 </span><br><span class="line">&gt;    &#125; </span><br><span class="line">&gt;        void destroy() &#123;</span><br><span class="line">&gt;            delete this ;//调用保护的析构函数 </span><br><span class="line">&gt;        &#125; </span><br><span class="line">&gt;    &#125;;</span><br><span class="line">&gt;    NoStackObject* hash_ptr = NoStackObject::creatInstance() ;  </span><br><span class="line">&gt;    hash_ptr-&gt;destroy() ; </span><br><span class="line">&gt;    hash_ptr = NULL ; //防止使用悬挂指针</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-</blockquote>
-<p>&gt;</p>
-<blockquote>
-<ol>
-<li><p><strong>只要禁用new运算符就可以实现类对象只能建立在栈上</strong>: 你不能影响new operator的能力（因为那是C++语言内建的），但是new operator 总是先调用 operator new,而后者我们是可以自行声明重写的。因此，将operator new()设为私有即可禁止对象被new在堆上；如果也想禁止堆对象数组，可以把operator new[]和operator delete[]也声明为private。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt;    class A    </span><br><span class="line">&gt;    &#123;    </span><br><span class="line">&gt;    private:    </span><br><span class="line">&gt;        void* operator new(size_t t)&#123;&#125;     // 注意函数的第一个参数和返回值都是固定的    </span><br><span class="line">&gt;        void operator delete(void* ptr)&#123;&#125; // 重载了new就需要重载delete    </span><br><span class="line">&gt;    public:    </span><br><span class="line">&gt;        A()&#123;&#125;    </span><br><span class="line">&gt;        ~A()&#123;&#125;    </span><br><span class="line">&gt;    &#125;; </span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-</blockquote>
-<p>&gt;</p>
-<blockquote>
-<ol>
-<li><a href="https://harttle.land/2015/07/22/memory-segment.html" target="_blank" rel="noopener">CPP进程的地址空间分配-堆栈空间</a></li>
-</ol>
-</blockquote>
-<h3 id="引用和指针">引用和指针</h3><ol>
-<li>引用定义一个变量的别名，是一种隐式的指针，对它的操作都会被解释为对它引用的对象的操作。 引用不占用栈空间，因为编译器知道它的地址。但作为参数传递引用时，会把指针放在参数栈中。为了在函数中修改传入的参数，可以把函数参数声明为引用。引用作为函数的返回值，一般是为了在函数外部修改内部变量。</li>
-</ol>
-<h4 id="常量指针与指针常量">常量指针与指针常量</h4><p>常量指针指向地方的内容不可改变，指针常量指向的地方不可改变</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 定义整数</span><br><span class="line">int n = 1, m=2;</span><br><span class="line"></span><br><span class="line">// 常量指针</span><br><span class="line">const int * p = &amp;n;</span><br><span class="line">*p = 5;   // 编译错，内容不可变</span><br><span class="line"></span><br><span class="line">// 指针常量</span><br><span class="line">int * const p = &amp;n;</span><br><span class="line">p = &amp;m;   // 编译错，地址不可变</span><br><span class="line"></span><br><span class="line">// 指针和指向的对象都是常量</span><br><span class="line">const int * const p = &amp;n;</span><br></pre></td></tr></table></figure>
-<h4 id="指针数组vs数组指针">指针数组vs数组指针</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 指针数组：数组的长度为8，数组的每一项都是类型为int*的指针</span><br><span class="line">int* arr[8];</span><br><span class="line"></span><br><span class="line">// 数组指针：一个指向长度为8的数组的指针</span><br><span class="line">int (*arr)[8];</span><br></pre></td></tr></table></figure>
-<h4 id="函数指针">函数指针</h4><p>函数指针通常用来进行传参，借此实现动态的策略。传参时可以用函数名，也可以用函数指针。而函数指针需要用函数名来初始化。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">int sum(int a, int b)j&#123;</span><br><span class="line">    return a+b;</span><br><span class="line">&#125;</span><br><span class="line">void wrapper(int a, int b, int (*p)(int, int))&#123;</span><br><span class="line">    cout&lt;&lt;p(a, b)&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    wrapper(2, 3, sum);</span><br><span class="line">    int (*p)(int, int) = sum;</span><br><span class="line">    wrapper(2, 3, p);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="C++_智能指针与裸指针">C++ 智能指针与裸指针</h4><p>我们知道c++的内存管理是让很多人头疼的事，当我们写一个new语句时，一般就会立即把delete语句直接也写了，但是我们不能避免程序还未执行到delete时就跳转了或者在函数中没有执行到最后的delete语句就返回了，如果我们不在每一个可能跳转或者返回的语句前释放资源，就会造成内存泄露。<strong>智能指针就是一个类，当超出了类的作用域，类会自动调用析构函数，析构函数会自动释放资源。</strong></p>
-<h4 id="为什么要用智能指针？">为什么要用智能指针？</h4><ol>
-<li>难以区分裸指针指向的是单个对象还是一个数组，也无法确定到底是用delete(销毁单个对象)还是delete[]销毁一个数组；</li>
-<li>使用完指针之后无法判断是否应该销毁指针，因为无法判断指针是否“拥有”指向的对象，也无法确定销毁指针的方式；</li>
-<li>遗漏销毁指正可能导致内存泄露，而销毁多次则会导致未定义行为。</li>
-</ol>
-<h4 id="四种智能指针">四种智能指针</h4><ol>
-<li><strong>std::auto_ptr和std::unique_ptr</strong>：auto_ptr是c++ 98遗留的关键字，已经不建议使用，auto_ptr的功能都可以由unique_ptr更加高效的做到。<ul>
-<li>auto_ptr智能指针可以像类的原始指针一样访问类的public成员，成员函数get()返回一个原始的指针，成员函数reset()重新绑定指向的对象，而原来的对象则会被释放。注意我们访问auto_ptr的成员函数时用的是“.”，访问指向对象的成员时用的是“-&gt;”。</li>
-<li>auto_ptr指针当我们对智能指针进行赋值时，如ptest2 = ptest，ptest2会接管ptest原来的内存管理权，ptest会变为空指针，如果ptest2原来不为空，则它会释放原来的资源，基于这个原因，应该避免把auto_ptr放到容器中，因为算法对容器操作时，很难避免STL内部对容器实现了赋值传递操作，这样会使容器中很多元素被置为NULL。判断一个智能指针是否为空不能使用if(ptest == NULL)，应该使用if(ptest.get() == NULL)。</li>
-<li>unique_ptr指针永远“拥有”其指向的对象，unique_ptr是一个move-only类型，一个unique_ptr指针无法被复制，只能将“所有权”在两个unique_ptr指针之间转移，转移完成后源unique_ptr将被设为null。unique_ptr默认的销毁方式是通过对unique_ptr中的裸指针进行delete操作，它可以无缝地转换成shared_ptr。不能使用两个unique_ptr智能指针赋值操作，应该使用std::move，例如foo(std::move(ptest))</li>
-</ul>
-</li>
-<li><strong><a href="https://segmentfault.com/a/1190000006860811" target="_blank" rel="noopener">std::shared_ptr</a>和std::weak_ptr</strong>：<ul>
-<li>shared_ptr使用计数机制来表明资源被几个指针共享，可以自动管理对象的生命周期和GC，shared_ptr的引用计数增减是原子操作</li>
-<li>一个对象可以被多个shared_ptr指向和访问，这些shared_ptr类型的指针共同享有该对象的所有权，当最后一个指向该对象的shared_ptr生命周期结束的时候，对象被销毁</li>
-<li>shared_ptr的构造将引用计数加1，销毁的时候引用计数减1，而赋值则将源指针引用计数加1，目标指针引用计数减1，例如P1=P2，P1指向对象的引用计数减1，P2指向对象的引用计数加1。当引用计数减1之后为0的时候，shared_ptr将会销毁指向的对象。</li>
-<li>由于control_block的存在，shared_ptr的size通常是2倍裸指针或unique_ptr的大小</li>
-<li>weak_ptr是用来解决shared_ptr相互引用时的死锁问题,如果说两个shared_ptr相互引用,那么这两个指针的引用计数永远不可能下降为0,资源永远不会释放。它是对对象的一种弱引用，不会增加对象的引用计数，和shared_ptr之间可以相互转化，shared_ptr可以直接赋值给它，它可以通过调用lock函数来获得shared_ptr。不能通过weak_ptr直接访问对象的方法，应该先把它转化为shared_ptr</li>
-</ul>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2018/03/22/Effective C++ 札记/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1464,7 +1371,7 @@ def transport_request(req)
                 
                   <a href="../../archives/">
                 
-                    <span class="site-state-item-count">84</span>
+                    <span class="site-state-item-count">85</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1676,7 +1583,9 @@ def transport_request(req)
                     
                       
                     
-                    <span class="site-state-item-count">76</span>
+                      
+                    
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1789,7 +1698,7 @@ def transport_request(req)
 
 
 <div class="powered-by"></div>
-<span class="post-count">博客全站共165.9k字</span>
+<span class="post-count">博客全站共167.4k字</span>
 
 
         

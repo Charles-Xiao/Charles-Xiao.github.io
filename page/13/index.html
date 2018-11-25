@@ -381,6 +381,307 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2015/10/20/Java容器类库的学习研究/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="../../images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="../../2015/10/20/Java容器类库的学习研究/" itemprop="url">
+                  Java容器类库的学习研究
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2015-10-20 21:13:21" itemprop="dateCreated datePublished" datetime="2015-10-20T21:13:21+08:00">2015-10-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2016-08-17 23:54:00" itemprop="dateModified" datetime="2016-08-17T23:54:00+08:00">2016-08-17</time>
+              
+            
+          </span>
+
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">字数统计3.6k字</span>
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">阅读时长13分钟</span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="../../categories/java学习笔记/" itemprop="url" rel="index"><span itemprop="name">java学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Comparable和Comparator接口区别"><a href="http://fuxueliang.com/tech/2013/05/26/java-sorting-comparator-vs-comparable-tutorial/" target="_blank" rel="noopener">Comparable和Comparator接口区别</a></h3><ol>
+<li>Comparable &amp; Comparator 都是用来实现集合中元素的比较、排序的，只是 Comparable 是在集合内部定义的方法实现的排序，Comparator 是在集合外部实现的排序，所以，如想实现排序，就需要在集合外定义 Comparator 接口的方法或在集合内实现 Comparable 接口的方法</li>
+<li><p><strong>Comparable</strong>:一个实现了comparable接口的对象的实例可以被用于和相同类的不同实例做对比。它本身必须实现java.lang.Comparable的接口，这样它就拥有了对比的能力;java.util.Collections.sort(List) 和 java.util.Arrays.sort(Object[]) 方法被用来排列使用内在排序（natural ordering）方式的对象.</p>
+</li>
+<li><p><strong>Comparator</strong>:一个实现了comparator接口的对象能够对比不同的对象。它不能用于同一个类的不同实例的对比，但是可以用于其他的类的实例做对比。它必须实现java.util.Comparator的接口;java.util.Collections.sort(List, Comparator) 和 java.util.Arrays.sort(Object[], Comparator)方法在Comparator如果可供比较的时候会被用到.</p>
+</li>
+<li><p>两者的接口实现差异:<br> <strong>java.lang.Comparable: int compareTo(Object o1)</strong></p>
+<p> 当前对象与o1对象做对比，返回int值：  </p>
+<p> positive – 当前对象大于o1  </p>
+<p> zero – 当前对象等于o1  </p>
+<p> negative – 当前对象小于o1  </p>
+<p> <strong>java.util.Comparator: int compare(Object o1, Objecto2)</strong></p>
+<p> 用于o1与o2对象做对比，返回int值：</p>
+<p> positive – o1大于o2  </p>
+<p> zero – o1等于o2  </p>
+<p> negative – o1小于o2</p>
+</li>
+<li><p>实例:<br> 内在ID顺序排序</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Employee</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Employee</span>&gt; </span>{
+    <span class="keyword">private</span> <span class="keyword">int</span> empId;
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> <span class="keyword">int</span> age;
+
+    <span class="comment">/**
+    * Compare a given Employee with this object.
+    * If employee id of this object is 
+    * greater than the received object,
+    * then this object is greater than the other.
+    */</span>
+    <span class="keyword">public</span> <span class="keyword">int</span> compareTo(Employee o) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.empId - o.empId ;
+    }
+….
+}
+</code></pre></li>
+</ol>
+<pre><code>按照name排序
+
+    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EmpSortByName</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Employee</span>&gt;</span>{
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Employee o1, Employee o2)</span> </span>{
+            <span class="keyword">return</span> o1.getName().compareTo(o2.getName());
+        }
+    }     
+</code></pre><h3 id="Collections-sort()与Arrays-sort()">Collections.sort()与Arrays.sort()</h3><ol>
+<li><p>Arrays.sort()在其内部实现上针对数组元素的不同类型采用不同的排序方式: ①基本类型数据(int, short, long, float, double等)采用QuickSort， 而对对象类型采取MergeSort. Why? 我们知道QuickSort在统计意义上效率比MergeSort高，为何不都采用 QuickSort ？<br> Answer: 概括的说，一个是稳定性，一个是移动次数。使用不同类型的排序算法主要是由于 quick sort 是不稳定的，而 merge sort 是 stable 的。这里的 stable 是指比较相等的数据在排序之后仍然按照排序之前的前后顺序排列（保序性）。对于基本数据类型，稳定性没有意义。而<strong>对于对象类型，稳定性是比较重要的</strong>，因为对象相等的判断可能只是判断关键属性，最好保持相等对象的非关键属性的顺序与排序前一直；另外一个原因是由于<strong>合并排序相对而言比较次数比快速排序少，移动（对象引用的移动）次数比快速排序多</strong>，而对于对象来说，比较一般比移动耗时。  </p>
+<p> MergeSort:（）1）最坏时间复杂度是 O(nlgn)；（2）平均时间复杂度是 O(nlgn)；（3）空间复杂度是 O(n)。  </p>
+<p> QuickSort: （1）最坏时间复杂度是 O(n^2)；（2）平均时间复杂度是 O(nlgn)；（3）空间复杂度最坏是 O(n)，均匀就是O(logn)。</p>
+</li>
+</ol>
+<ol>
+<li><p>Collections.sort()主要是针对集合的排序,比如List, 其内部实现如下:</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Comparable&lt;? super T&gt;&gt; <span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(List&lt;T&gt; <span class="built_in">list</span>)</span> </span>{
+    Object[] a = <span class="built_in">list</span>.toArray();
+    Arrays.sort(a);
+    ListIterator&lt;T&gt; i = <span class="built_in">list</span>.listIterator();
+    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;a.length; j++) {
+        i.next();
+        i.<span class="built_in">set</span>((T)a[j]);
+    }
+}
+</code></pre><p> 可以看出其内部实际采用的就是Arrays.sort()</p>
+</li>
+</ol>
+<h3 id="HashMap与LinkedHashMap，TreeMap">HashMap与LinkedHashMap，TreeMap</h3><ol>
+<li><p><strong>HashMap实现原理</strong>内部对键值对的存储结构使用的是数组+链表+红黑树的形式（JDK1.8增加了红黑树部分,当一个链表长度&gt;8就转换为红黑树，利用红黑树快速增删改查的特点提高HashMap的性能),每一个数组元素都是一个键值对，分别都对应着一个链表结构</p>
+<ul>
+<li><strong>put存储元素</strong>HashMap在存储Entry对象的时候，首先根据Key的hashCode()方法得到其hashCode值，然后根据高位运算和取模运算来判定将存储到Entry[]数组的哪一个位置对应的链表上O(1),然后调用key的Equals方法去遍历链表比较key值，如果找到则更新value并返回旧址，否则将新的Entry加入到该链表头部</li>
+<li><strong>内部结构图</strong>：<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/HashMap.jpg" class="full-image" width="100%"></li>
+<li><strong>遍历顺序</strong>也就是说Entry<key,value>对象随机地分配到某个Entry[] table数组的元素表示的链表上, HashMap内部Entry<k,v>的遍历顺序是对Entry[] table 数组，从index=0开始，依次遍历table[i]上的链表上的Entry对象;所以对HashMap遍历Entry对象的顺序和Entry对象的存储顺序之间没有任何关系.</k,v></key,value></li>
+<li><strong>重新hash调节大小</strong>HashMap允许null键插入，其内部会将null存到table[0]中进行处理. 内部有负载因子和数组长度、size等参数，当map中元素达到16*0.75=12时，因为链表长度可能很长导致查找效率降低，hashmap会对原来的所有元素重新进行hash,数组容量变为原来的2倍，当然Java里的数组是无法自动扩容的，方法是使用一个新的数组代替已有的容量小的数组；重新hash时链表顺序会被反转，可以避免尾部遍历(1.8中不会倒置，也不会重新计算哈希).<a href="http://www.xuebuyuan.com/2231227.html" target="_blank" rel="noopener">HashMap</a>; 在HashMap调整大小时会出现条件竞争，也就是多个线程同时来调整大小，出现死循环.如果内存空间很多而又对时间效率要求很高，可以降低负载因子Load factor的值；相反，如果内存空间紧张而对时间效率要求不高，可以增加负载因子loadFactor的值，这个值可以大于1。</li>
+<li><strong>key不可变</strong>Map的key值应该使用不可变对象，以防put和get的时候对象发生变化从而导致hashcode变化，取不到正确的对象；HashMap也可以声明为同步的，使用Map m = Collections.synchronizeMap(hashMap);</li>
+<li><strong>Fail-Fast机制</strong>:在使用迭代器的过程中有其他线程修改了map结构，那么将抛出ConcurrentModificationException，这就是所谓fail-fast机制。这一机制在源码中的实现是通过modCount域，modCount顾名思义就是修改次数，对HashMap元素个数的修改都将增加这个值;在迭代器初始化过程中会将这个值赋给迭代器的expectedModCount。在迭代过程中，判断modCount跟expectedModCount是否相等，如果不相等就表示已经有其他线程修改了Map中元素个数.例如：HashMap在foreach迭代器循环遍历时如果其他线程对该map进行结构上的更改(比如进行add和map.remove元素操作,而不是简单的修改集合元素的内容)会导致ConcurrrentModificationEaception</li>
+<li><strong>遍历区别</strong>①for循环遍历时删除或者增加某个元素只会导致数组越界(rangeCheck函数)，或者一直add生成无穷序列以及遍历不完整 ②使用Iterator遍历或者foreach遍历时如果采用iterator.remove()不会报错，因为他会重新设置expectedModCount=modCount，如果采用list.remove()则会出现ConcurrrentModificationException</li>
+</ul>
+</li>
+<li><p><strong>LinkedHashMap</strong>是HashMap的子类，它可以实现对容器内Entry的存储顺序和对Entry的遍历顺序保持一致; LinkedHashMap内部使用了一个Entry类型的双向链表，用这个双向链表记录Entry的存储顺序。当需要对该Map进行遍历的时候，实际上是遍历的是这个双向链表。</p>
+<p>内部结构图：<br><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/LinkedHashMap.png" class="full-image" width="100%"></p>
+<p>遍历方式:  </p>
+<pre><code>//构造函数的默认值为<span class="literal">false</span>，按照插入顺序排序，先进先出；
+//<span class="literal">true</span>代表按照访问顺序排序，那么调用get方法后，内部会调用recordAccess方法记录访问顺序，将最新访问的元素添加到双向链表的表头，并从原来的位置删除，不断访问可以形成按访问顺序排序的链表;可以重写removeEldestEntry方法返回<span class="literal">true</span>值指定插入元素时移除最老的元素。 
+<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; linkedHashMap = new <span class="type">LinkedHashMap</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt;(<span class="number">16</span>,<span class="number">0</span>.<span class="number">75</span>f,<span class="literal">true</span>);
+
+<span class="type">Iterator</span>&lt;<span class="type">Map</span>.<span class="type">Entry</span>&gt; <span class="keyword">iterator</span>= linkedHashMap.entrySet().<span class="keyword">iterator</span>();  
+
+<span class="keyword">while</span>(<span class="keyword">iterator</span>.hasNext())  
+{  
+    <span class="type">Map</span>.<span class="type">Entry</span> entry = <span class="keyword">iterator</span>.next();  
+    <span class="type">System</span>.<span class="keyword">out</span>.println(entry.getKey()+<span class="string">":"</span>+entry.getValue());  
+} 
+
+<span class="keyword">for</span>(<span class="type">Entry</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; entry : linkedHashMap.entrySet()) {
+    <span class="type">System</span>.<span class="keyword">out</span>.println(entry.getKey() + <span class="string">": "</span> + entry.getValue());
+}
+</code></pre></li>
+<li><p><strong>TreeMap</strong>实现SortedMap接口，可以保证元素的排列以key值有序，默认是按键值的升序排序，也可以指定排序的比较器，当用Iterator遍历TreeMap时，得到的记录是排过序的。内部实现采用红黑树(一种平衡排序二叉树)，循环遍历时直接中序遍历树输出。在使用TreeMap时，key必须实现Comparable接口或者在构造TreeMap传入自定义的Comparator，否则会在运行时抛出java.lang.ClassCastException类型的异常。</p>
+</li>
+</ol>
+<h3 id="HashTable，Hashset和ConcurrentHashMap">HashTable，Hashset和ConcurrentHashMap</h3><ol>
+<li><strong>HashTable</strong>实现Map接口(和HashMap一样)不允许null键的存在，他是一个synchronized的map,因为内部的put,get方法进行了同步所以导致效率降低,线程安全性强于ConcurrentHashMap</li>
+<li><strong>HashSet</strong>实现set接口，不允许重复元素的存在，但是允许null存在；每次add之前会先调用hashcode和equals方法去判断该对象是否已经存在，已存在则返回false,不会更改set中任何内容;存取速度没有HashMap快；但是其内部实现就是一个HashMap,只是每一个<key,value>中的value都是PRESET</key,value></li>
+<li><strong>HashMap和 HashTable 的区别</strong>：<ul>
+<li>两者都实现Map接口，但是HashTable继承Dictionary类，HashMap则是继承AbstractMap接口;</li>
+<li>HashTable是线程安全的(通过直接对get,put等方法加Synchronized锁来实现),HashMap则是线程不安全的;</li>
+<li>HashMap可以让你将空值作为一个表的条目的key或value，但是HashTable不可以；</li>
+<li>哈希值的使用不同，HashTable直接使用对象的hashCode。而HashMap重新计算hash值；</li>
+<li>两个遍历方式的内部实现上不同，Hashtable、HashMap都使用了 Iterator。而由于历史原因，Hashtable还使用了Enumeration的方式</li>
+</ul>
+</li>
+<li><strong>ConcurrentHashMap</strong>是一个Java5以后才提供的同步容器,其内部实现采用二次hash,分区同步的方式，内部默认维护一个包含16个segment对象的数组,每个数组对象又对应一个桶数组(相当于一个HashMap)，每个桶数组对象又维护着一个HashEntry链表;对于put的hashcode相同的key会出现同步阻塞，因为它会将当前hashcode对应的segment锁住，但是hashcode不相同的key插入时是不会出现同步阻塞的，这样相对于HashTable(同一时间点，只能有一个线程持有锁，也就是说在同一时间点，只能有一个线程能访问容器)就可以大大提高效率，提高了并发性，相当于16个线程同时操作。  <ul>
+<li>ConcurrentHashMap 针对读操作做了大量的优化。通过 HashEntry 对象的不变性和用 volatile 型变量协调线程间的内存可见性，使得大多数时候，<strong>读操作不需要加锁就可以正确获得值</strong></li>
+<li>其内部的结构可以让其在进行<strong>写操作的时候能够将锁的粒度保持地尽量地小</strong>，不用对整个ConcurrentHashMap加锁，而是分段加锁</li>
+<li><strong>源码中containsValue和size操作实现原理</strong>: ConcurrentHashMap的size操作是在多个Segment中进行,但是也采用了一种比较巧的方式，来尽量避免对所有的Segment都加锁。具体怎么做的呢？？？Segment中的有一个modCount变量，代表的是对Segment中元素的数量造成影响的操作的次数，这个值只增不减，size操作就是遍历了两次Segment，每次记录Segment的modCount值，然后将两次的modCount进行比较，如果相同，则表示期间没有发生过写入操作，就将原先遍历的结果返回，如果不相同，则把这个过程再重复做一次，如果再不相同，则就需要将所有的Segment都锁住，然后一个一个遍历了</li>
+<li><strong>hash函数</strong>: 用到了Wang/Jenkins hash算法的变种，主要的目的是为了减少哈希冲突，使元素能够均匀的分布在不同的Segment上，从而提高容器的存取效率。假如哈希的质量差到极点，那么所有的元素都在一个Segment中，不仅存取元素缓慢，分段锁也会失去意义  </li>
+</ul>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/ConcurrentHashMap.jpg" class="full-image" width="100%"></p>
+<h3 id="ArrayList，CopyOnWriteArrayList和LinkedList">ArrayList，CopyOnWriteArrayList和LinkedList</h3><ol>
+<li><strong>ArrayList、LinkedList、Vector的区别</strong>：ArrayList 和Vector底层是采用数组方式存储数据，ArrayList可以通过<code>List list = Collections.synchronizeList(arrayList);</code>实现同步；Vector由于使用了synchronized方法（线程安全）所以性能上比ArrayList要差，LinkedList使用双向链表实现存储，随机存取比较慢，但是增删非常快，LinkedList中包含了 first 和 last 两个指针(Node)。Node 中包含了上一个节点和下一个节点的引用，这样就构成了双向的链表</li>
+<li><strong>CopyOnWriteArrayList</strong>: CopyOnWriteArrayList的核心思想是利用高并发往往是读多写少的特性，对读操作不加锁，对写操作加锁，进行写操作时先复制一份新的集合，在新的集合上面修改，然后将新集合赋值给旧的引用，并通过volatile 保证其可见性。这种“写入时复制”策略，对容器的写操作将导致的容器中基本数组的复制，性能开销较大。所以在有写操作的情况下CopyOnWriteArrayList性能不佳，而且如果容器容量较大的话容易造成溢出</li>
+<li><strong>LinkedBlockingQueue</strong>: 它是线程安全的阻塞队列，是<strong>作为生产者消费者的首选</strong>，LinkedBlockingQueue 可以指定容量，也可以不指定，不指定的话，默认最大是Integer.MAX_VALUE，其中主要用到put和take方法，put方法在队列满的时候会阻塞直到有队列成员被消费，take方法在队列空的时候会阻塞，直到有队列成员被放进来</li>
+<li><strong>ConcurrentLinkedQueue</strong>: ConcurrentLinkedQueue是一个无锁的并发线程安全的非阻塞队列；Queue中元素按FIFO原则进行排序．采用CAS操作，来保证元素的一致性</li>
+</ol>
+<h3 id="参考链接">参考链接</h3><ol>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MjM5NzMyMjAwMA==&amp;mid=2651477291&amp;idx=1&amp;sn=68fd7ee467eb60bb984b3c6136cea039&amp;scene=0#wechat_redirect" target="_blank" rel="noopener">Java8系列之重新认识HashMap</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2015/09/04/OpenWrt/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1157,471 +1458,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2015/08/01/Python基础知识实例讲解/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="CharlesXiao">
-      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
-      <meta itemprop="image" content="../../images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CharlesXiao‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="../../2015/08/01/Python基础知识实例讲解/" itemprop="url">
-                  Python基础知识实例讲解
-                </a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2015-08-01 10:58:41" itemprop="dateCreated datePublished" datetime="2015-08-01T10:58:41+08:00">2015-08-01</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2015-08-19 16:14:20" itemprop="dateModified" datetime="2015-08-19T16:14:20+08:00">2015-08-19</time>
-              
-            
-          </span>
-
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计1.4k字</span>
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长6分钟</span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="../../categories/Python开发/" itemprop="url" rel="index"><span itemprop="name">Python开发</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Python作为一种面向对象、解释型计算机程序设计语言，语法简洁而清晰，具有丰富和强大的类库，在网站开发，数据处理，网络编程，图形处理，网络爬虫、机器学习、科学计算、自动化测试、系统运维等方面应用广泛。也正是由于Python开发简洁、优雅、开发效率高，它能够在很多地方替代java、C++等语言从而提高程序猿编程效率。作为程序猿，掌握这样一门便捷的编程语言来作为工具显得十分必要。本文主要参考了“极客学院”相关Python入门视频教程，对Python基础入门知识进行了整合，采用代码实例展现的方式，语法知识全部体现在代码中，简洁明了易于理解；本文主要包括三个Python module，分别是hellopython.py、mylib.py、stackqueue.py，涵盖了Python数据类型，常量变量，判断循环，函数，类和对象，模块，数据结构等知识(Python开发编辑器为PyCharm)</p>
-<h3 id="hellopython-py">hellopython.py</h3><p>该模块为主模块，负责实现大部分Python基础语法及其测试，从该模块我们看到几乎所有的Python基础句法的使用方法  </p>
-<p>代码：  </p>
-<pre><code><span class="comment"># coding=UTF-8</span>
-__author__ = <span class="string">'xiaoyong'</span>
-
-<span class="keyword">from</span> math <span class="keyword">import</span> *
-<span class="keyword">from</span> stackqueue <span class="keyword">import</span> *
-<span class="keyword">from</span> mylib <span class="keyword">import</span> Hi
-<span class="keyword">from</span> collections <span class="keyword">import</span> Counter
-<span class="keyword">from</span> itertools <span class="keyword">import</span> combinations
-
-<span class="keyword">import</span> mylib
-<span class="keyword">import</span> sys
-
-<span class="class"><span class="keyword">class</span> <span class="title">HelloPy</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">helloPy</span><span class="params">(self, param)</span>:</span>
-        <span class="string">'''文档字符串：该函数用于测试变量定义，判断语句
-
-        循环语句'''</span>
-        <span class="comment"># 定义变量</span>
-        <span class="keyword">global</span> globalVar
-        globalVar = <span class="number">10</span>
-        var1 = <span class="number">10</span>
-        var2 = <span class="number">20</span>
-        var3 = var1 + var2
-        print(var3)
-
-        <span class="comment"># 判断语句</span>
-        <span class="keyword">if</span> param &gt;= <span class="number">60</span>:
-            print(<span class="string">"{0} &gt; 60"</span>.format(param))
-        <span class="keyword">elif</span> param &gt; <span class="number">0</span>:
-            print(<span class="string">"{0} &gt; 0"</span>.format(param))
-        <span class="keyword">else</span>:
-            print(<span class="string">"{0} &lt; 60 &amp;&amp; 0 &gt; {1}"</span>).format(param, <span class="string">"param"</span>)
-
-        <span class="comment"># 循环语句</span>
-        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>):
-            print(i)
-
-        var4 = <span class="number">0</span>
-        <span class="keyword">while</span> var4 &lt; <span class="number">3</span>:
-            print(var4)
-            var4 += <span class="number">1</span>
-        <span class="keyword">else</span>:
-            print(<span class="string">"else var4={0}"</span>.format(var4))
-
-
-<span class="comment"># 形参设置默认初始值</span>
-<span class="function"><span class="keyword">def</span> <span class="title">fuc1</span><span class="params">(a, b=<span class="number">1</span>, c=<span class="number">2</span>)</span>:</span>
-    print(a);print(b);print(c)
-
-
-<span class="function"><span class="keyword">def</span> <span class="title">fuc2</span><span class="params">(a, b=<span class="number">1</span>)</span>:</span>
-    print(a)
-    <span class="keyword">return</span> b
-
-
-<span class="function"><span class="keyword">def</span> <span class="title">fuc3</span><span class="params">()</span>:</span>
-    <span class="keyword">return</span> (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)
-
-<span class="comment"># Python常用tips </span>
-<span class="function"><span class="keyword">def</span> <span class="title">fuc_python_tips</span><span class="params">()</span>:</span>
-    print(<span class="string">'\nPython常用tips: '</span>)
-    <span class="comment"># 交换变量</span>
-    var1 = <span class="number">0</span>
-    var2 = <span class="number">1</span>
-    var1, var2 = var2, var1
-    <span class="keyword">print</span> var1, var2
-    <span class="comment"># if语句在行内</span>
-    print(<span class="string">'hello'</span>) <span class="keyword">if</span> <span class="number">1</span> != <span class="number">1</span> <span class="keyword">else</span> <span class="string">'world'</span>
-    print(<span class="string">'hello'</span> + str(var1))
-    <span class="comment"># 数字技巧</span>
-    <span class="keyword">print</span> <span class="number">5.0</span> // <span class="number">2</span>, <span class="number">5.0</span> / <span class="number">2</span>, <span class="number">2</span> ** <span class="number">5</span>, .<span class="number">3</span> / .<span class="number">1</span>, .<span class="number">3</span> // .<span class="number">1</span>
-    var3 = <span class="number">2</span>
-    <span class="keyword">if</span> <span class="number">1</span> &lt; var3 &lt; <span class="number">3</span>:
-        print(var3)
-    <span class="comment"># 列表迭代</span>
-    list1 = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]
-    list2 = [<span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>]
-    <span class="keyword">for</span> a, b <span class="keyword">in</span> zip(list1, list2):
-        <span class="keyword">print</span> a + <span class="string">" vs "</span> + b
-    <span class="keyword">for</span> index, a <span class="keyword">in</span> enumerate(list1):
-        <span class="keyword">print</span> index, a
-    list3 = [<span class="number">0</span>] * <span class="number">3</span>
-    list3.append(<span class="number">2</span>)
-    print(list3)
-    <span class="comment"># 列表--&gt;字符串</span>
-    print(<span class="string">','</span>.join(list1))
-    <span class="comment"># 获取列表子集</span>
-    x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]
-    <span class="comment"># 前3个</span>
-    <span class="keyword">print</span> x[:<span class="number">3</span>]
-    <span class="comment"># 中间4个</span>
-    <span class="keyword">print</span> x[<span class="number">1</span>:<span class="number">5</span>]
-    <span class="comment"># 最后3个</span>
-    <span class="keyword">print</span> x[-<span class="number">3</span>:]
-    <span class="comment"># 奇数项</span>
-    <span class="keyword">print</span> x[::<span class="number">2</span>]
-    <span class="comment"># 偶数项</span>
-    <span class="keyword">print</span> x[<span class="number">1</span>::<span class="number">2</span>]
-    <span class="comment"># 统计单个字母数目</span>
-    <span class="keyword">print</span> Counter(<span class="string">'hello'</span>)
-    <span class="comment"># 列出所有组合方式</span>
-    <span class="keyword">for</span> t <span class="keyword">in</span> combinations(x, <span class="number">2</span>):
-        print(t)
-
-<span class="comment"># python标识符首字符只能是下划线或者字母，其他部分可以是下划线、字母、数字；标识符对大小写敏感</span>
-
-print(sys.version);
-<span class="keyword">print</span> (<span class="string">"模块名：{0}"</span>).format(__name__)
-print(pi)
-help(HelloPy.helloPy)
-<span class="comment"># 列出模块定义的标识符,标识符有函数、类和变量</span>
-<span class="keyword">print</span> dir(sys)
-print(HelloPy.helloPy.__doc__)
-
-<span class="comment"># 引用mylib.py模块调用函数</span>
-h = mylib.Hello(<span class="string">"mylib"</span>)
-h.sayHello()
-
-h1 = Hi(<span class="string">"mylib"</span>)
-h1.sayHi()
-
-h2 = HelloPy()
-h2.helloPy(<span class="number">15</span>)
-<span class="comment"># 全局变量</span>
-print(globalVar)
-
-fuc1(b=<span class="number">2</span>, a=<span class="number">3</span>)
-var1 = fuc2(<span class="number">2</span>, <span class="number">3</span>)
-print(var1)
-var2 = fuc3()
-print(var2)
-m1, m2, m3 = fuc3()
-print(<span class="string">"{0} {1} {2}"</span>.format(m1, m2, m3))
-
-fuc_python_tips()
-
-<span class="comment"># 引号</span>
-str1 = <span class="string">'It is a "dog"'</span>
-str2 = <span class="string">"It's a dog"</span>
-str3 = <span class="string">'''she
-I
-you'''</span>
-print(<span class="string">"{0}  {1}"</span>.format(str1, str2))
-
-<span class="comment"># 字符串重复输出</span>
-print(str3) * <span class="number">3</span>
-
-<span class="comment"># 转义符</span>
-print(<span class="string">'It\'s a dog\nyou are not'</span>)
-<span class="keyword">print</span><span class="string">"women\
-doushihaohaizi"</span>
-
-<span class="comment"># 自然字符串</span>
-print(<span class="string">r"It's a dog \n you are not"</span>)
-
-<span class="comment"># 子字符串,索引和切片两种方式</span>
-print(str1[<span class="number">1</span>]);print(str1[<span class="number">0</span>:<span class="number">3</span>]);print(str1[:<span class="number">3</span>]);print(str1[<span class="number">3</span>:]);
-
-<span class="comment"># set,求两个set的&amp; | - 重复元素</span>
-print(<span class="string">"\n集合 列表 元组 字典测试:"</span>)
-var3 = set(<span class="string">'aaabbc'</span>)
-<span class="comment"># 集合中不能有重复元素</span>
-newVar = set(var3)
-print(newVar)
-<span class="comment"># 列表，数据可以修改</span>
-students = [<span class="string">"a"</span>, <span class="string">'b'</span>, <span class="string">"c"</span>]
-print(students[<span class="number">1</span>])
-
-<span class="comment"># 元组,数据不可修改</span>
-students = (<span class="string">"a"</span>, <span class="string">'b'</span>, <span class="string">"c"</span>)
-print(students[<span class="number">1</span>])
-
-<span class="comment"># 字典</span>
-dic = {<span class="string">'姓名'</span>: <span class="string">'xiaoyong'</span>, <span class="string">"性别"</span>: <span class="string">"男"</span>}
-dic[<span class="string">'兴趣'</span>] = <span class="string">'音乐'</span>
-print(dic[<span class="string">'兴趣'</span>])
-print(dic.get(<span class="string">'姓名'</span>))
-
-<span class="comment"># 栈测试</span>
-print(<span class="string">"\n栈测试:"</span>)
-stack = Stack()
-stack.push(<span class="number">1</span>)
-stack.push(<span class="number">2</span>)
-stack.push(<span class="number">3</span>)
-print(stack.length())
-print(stack.isEmpty())
-print(stack.top())
-stack.pop()
-print(stack.top())
-
-<span class="comment"># 队列测试</span>
-print(<span class="string">"\n队列测试:"</span>)
-queue = Queue()
-queue.enQueue(<span class="number">1</span>)
-queue.enQueue(<span class="number">2</span>)
-queue.enQueue(<span class="number">3</span>)
-print(queue.length())
-print(queue.isEmpty())
-print(queue.head())
-print(queue.tail())
-queue.deQueue()
-print(queue.head())
-print(queue.tail())
-</code></pre><h3 id="mylib-py">mylib.py</h3><p>该模块为引用模块，实现两个类，Hello为父类，Hi为子类  </p>
-<p>代码：</p>
-<pre><code><span class="comment"># coding=UTF-8</span>
-__author__ = <span class="string">'xiaoyong'</span>
-
-<span class="class"><span class="keyword">class</span> <span class="title">Hello</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span>
-        self._name = name
-
-    <span class="function"><span class="keyword">def</span> <span class="title">sayHello</span><span class="params">(self)</span>:</span>
-        print(<span class="string">"class Hello: sayHello"</span>)
-        <span class="keyword">print</span> (<span class="string">"模块名：{0}"</span>).format(__name__)
-
-<span class="comment"># 类的继承</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Hi</span><span class="params">(Hello)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span>
-        Hello.__init__(self, name)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">sayHi</span><span class="params">(self)</span>:</span>
-        print(<span class="string">"class Hi: sayHi"</span>)
-</code></pre><h3 id="stackqueue-py">stackqueue.py</h3><p>该模块为引用模块，Stack和Queue类分别实现栈和队列两种数据结构  </p>
-<p>代码：</p>
-<pre><code><span class="comment"># coding= utf-8</span>
-__author__ = <span class="string">'xiaoyong'</span>
-
-
-<span class="comment"># 栈实现</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Stack</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
-        self.stack = []
-
-    <span class="function"><span class="keyword">def</span> <span class="title">push</span><span class="params">(self, item)</span>:</span>
-        self.stack.append(item)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">pop</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.stack != []:
-            <span class="keyword">return</span> self.stack.pop(-<span class="number">1</span>)
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">top</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.stack != []:
-            <span class="keyword">return</span> self.stack[-<span class="number">1</span>]
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">length</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> len(self.stack)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">isEmpty</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.stack == []
-
-
-<span class="comment"># 队列实现</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Queue</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
-        self.queue = []
-
-    <span class="function"><span class="keyword">def</span> <span class="title">enQueue</span><span class="params">(self, item)</span>:</span>
-        self.queue.append(item)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">deQueue</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.queue != []:
-            <span class="keyword">return</span> self.queue.pop(<span class="number">0</span>)
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">head</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.queue != []:
-            <span class="keyword">return</span> self.queue[<span class="number">0</span>]
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">tail</span><span class="params">(self)</span>:</span>
-        <span class="keyword">if</span> self.queue != []:
-            <span class="keyword">return</span> self.queue[-<span class="number">1</span>]
-        <span class="keyword">else</span>:
-            <span class="keyword">return</span> <span class="keyword">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">length</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> len(self.queue)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">isEmpty</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.queue == []
-</code></pre><h3 id="结语">结语</h3><p>以上三个模块基本涵盖了Python所有基本语法的使用，仅作参考查询之用；如需深入学习Python相关知识，比如RESTful API开发，web2Py，Flask等框架使用，请Google之或参考相关官网。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1671,7 +1507,7 @@ __author__ = <span class="string">'xiaoyong'</span>
                 
                   <a href="../../archives/">
                 
-                    <span class="site-state-item-count">84</span>
+                    <span class="site-state-item-count">85</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1883,7 +1719,9 @@ __author__ = <span class="string">'xiaoyong'</span>
                     
                       
                     
-                    <span class="site-state-item-count">76</span>
+                      
+                    
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1996,7 +1834,7 @@ __author__ = <span class="string">'xiaoyong'</span>
 
 
 <div class="powered-by"></div>
-<span class="post-count">博客全站共165.9k字</span>
+<span class="post-count">博客全站共167.4k字</span>
 
 
         
