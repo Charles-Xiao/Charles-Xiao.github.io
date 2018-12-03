@@ -381,6 +381,388 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2015/05/21/常见设计模式实例讲解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="../../images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="../../2015/05/21/常见设计模式实例讲解/" itemprop="url">
+                  常见设计模式实例讲解
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2015-05-21 20:23:15" itemprop="dateCreated datePublished" datetime="2015-05-21T20:23:15+08:00">2015-05-21</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2016-08-19 00:13:20" itemprop="dateModified" datetime="2016-08-19T00:13:20+08:00">2016-08-19</time>
+              
+            
+          </span>
+
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">字数统计1.4k字</span>
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">阅读时长5分钟</span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="../../categories/设计模式/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="单例模式的三种实现方式及其优缺点">单例模式的三种实现方式及其优缺点</h3><pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDemo</span> </span>{
+
+    <span class="javadoc">/**
+     *<span class="javadoctag"> @param</span> args
+     */</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+        SingletonEnum.INSTANCE.setmName(<span class="string">"enum"</span>);
+        SingletonInner.getInstance().setmName(<span class="string">"inner"</span>);
+        SingletonDoubleCheck.getInstance().setmName(<span class="string">"doubleCheck"</span>);
+    }
+
+    <span class="comment">/*
+     * 单例模式考虑点： 
+     * 1. 线程安全：Synchronized关键字，Enum，静态内部类 
+     * 2. 延迟加载：减少负载和消耗 
+     * 3. 自动序列化(Serializable和transient) 
+     * 4. 防止反射强行调用构造器
+     * 3、4点只有枚举可以实现
+     */</span>
+
+    <span class="comment">/*
+     * 枚举实现单例
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">enum</span> SingletonEnum {
+        INSTANCE;
+        <span class="keyword">private</span> String mName;
+
+        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> mName;
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
+            <span class="keyword">this</span>.mName = mName;
+        }
+
+    }
+    <span class="comment">/*
+     * 双重检查锁：单例模式中需要new的情况非常少,第一层锁可以减少锁的次数
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonDoubleCheck</span> </span>{
+        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingletonDoubleCheck singleton = <span class="keyword">null</span>;
+
+        <span class="function"><span class="keyword">private</span> <span class="title">SingletonDoubleCheck</span><span class="params">()</span> </span>{
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonDoubleCheck <span class="title">getInstance</span><span class="params">()</span> </span>{
+            <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) {
+                <span class="keyword">synchronized</span> (SingletonDoubleCheck.class) {
+                    <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) {
+                        singleton = <span class="keyword">new</span> SingletonDoubleCheck();
+                    }
+                }
+            }
+            <span class="keyword">return</span> singleton;
+        }
+
+        <span class="keyword">private</span> String mName;
+
+        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> mName;
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
+            <span class="keyword">this</span>.mName = mName;
+        }
+    }
+
+    <span class="comment">/*
+     * 内部类方式实现
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonInner</span> </span>{
+
+        <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Holder</span> </span>{
+            <span class="keyword">private</span> <span class="keyword">static</span> SingletonInner singleton = <span class="keyword">new</span> SingletonInner();
+        }
+
+        <span class="function"><span class="keyword">private</span> <span class="title">SingletonInner</span><span class="params">()</span> </span>{
+
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonInner <span class="title">getInstance</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> Holder.singleton;
+        }
+
+        <span class="keyword">private</span> String mName;
+
+        <span class="function"><span class="keyword">public</span> String <span class="title">getmName</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> mName;
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setmName</span><span class="params">(String mName)</span> </span>{
+            <span class="keyword">this</span>.mName = mName;
+        }
+    }
+
+}
+</code></pre><h3 id="工厂模式实例">工厂模式实例</h3><h3 id="观察者模式">观察者模式</h3><ol>
+<li>在Java中通过Observable类和Observer接口实现了观察者模式，Observer对象监视着Observable对象的变化，当Observable对象发生变化时，Observer得到通知，就可以进行相应的工作。</li>
+<li><strong>Observable类</strong>—-程序中的被观察者类需要继承这个类</li>
+<li><strong>Observer接口</strong>—-观察者接口，观察者需要实现这个接口并重写其中的update()方法</li>
+<li>可以在main函数中通过调用被观察者的addObserver方法添加观察者，当被观察者发生变化时要调用<strong>setChanged()方法</strong>标记此Observable对象已改变，并调用<strong>notifyObservers()</strong>通知所有观察者</li>
+<li><p><strong>自定义代码实现观察者模式</strong>:</p>
+<pre><code><span class="comment">// 被观察者接口</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Subject</span> </span>{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerObserver</span><span class="params">(Observer o)</span></span>;
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer o)</span></span>;
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyAllObservers</span><span class="params">()</span></span>;
+}
+
+<span class="comment">// 观察者接口</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Observer</span> </span>{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Subject s)</span></span>;
+}
+
+    <span class="comment">// 猎头类</span>
+     <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HeadHunter</span> <span class="keyword">implements</span> <span class="title">Subject</span> </span>{
+        <span class="keyword">private</span> ArrayList&lt;Observer&gt; userList;
+        <span class="keyword">private</span> ArrayList&lt;String&gt; jobs;
+
+        <span class="function"><span class="keyword">public</span> <span class="title">HeadHunter</span><span class="params">()</span></span>{
+            userList = <span class="keyword">new</span> ArrayList&lt;Observer&gt;();
+            jobs = <span class="keyword">new</span> ArrayList&lt;String&gt;();
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerObserver</span><span class="params">(Observer o)</span> </span>{
+            userList.add(o);
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer o)</span> </span>{}
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyAllObservers</span><span class="params">()</span> </span>{
+            <span class="keyword">for</span>(Observer o: userList){
+                o.update(<span class="keyword">this</span>);
+            }
+        }
+
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addJob</span><span class="params">(String job)</span> </span>{
+            <span class="keyword">this</span>.jobs.add(job);
+            notifyAllObservers();
+        }
+
+        <span class="function"><span class="keyword">public</span> ArrayList&lt;String&gt; <span class="title">getJobs</span><span class="params">()</span> </span>{
+            <span class="keyword">return</span> jobs;
+        }
+
+        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>{
+            <span class="keyword">return</span> jobs.toString();
+        }
+    }
+
+<span class="comment">// 求职者类    </span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JobSeeker</span> <span class="keyword">implements</span> <span class="title">Observer</span> </span>{
+
+    <span class="keyword">private</span> String name;
+
+    <span class="function"><span class="keyword">public</span> <span class="title">JobSeeker</span><span class="params">(String name)</span></span>{
+        <span class="keyword">this</span>.name = name;
+    }
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Subject s)</span> </span>{
+        System.out.println(<span class="keyword">this</span>.name + <span class="string">" got notified!"</span>);
+        <span class="comment">//print job list</span>
+        System.out.println(s);
+    }
+}
+
+<span class="comment">// 主函数</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+        HeadHunter hh = <span class="keyword">new</span> HeadHunter();
+        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Mike"</span>));
+        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Chris"</span>));
+        hh.registerObserver(<span class="keyword">new</span> JobSeeker(<span class="string">"Jeff"</span>));
+
+        <span class="comment">//每次添加一个个job，所有找工作人都可以得到通知。</span>
+        hh.addJob(<span class="string">"Google Job"</span>);
+        hh.addJob(<span class="string">"Yahoo Job"</span>);
+    }
+}
+</code></pre></li>
+</ol>
+<h3 id="代理模式">代理模式</h3><ol>
+<li><strong>代理模式</strong>就是为某个对象提供一个代理，以控制对这个对象的访问。 代理类和委托类有共同的父类或父接口，这样在任何使用委托类对象的地方都可以用代理对象替代。代理类负责请求的预处理、过滤、将请求分派给委托类处理、以及委托类执行完请求后的后续处理。</li>
+<li><strong>静态代理</strong> 由程序员创建或工具生成代理类的源码，再编译代理类。所谓静态也就是在程序运行前就已经存在代理类的字节码文件，代理类和委托类的关系在运行前就确定了。</li>
+<li><strong>动态代理</strong> 动态代理类的源码是在程序运行期间由JVM根据反射等机制动态的生成，所以不存在代理类的字节码文件。代理类和委托类的关系是在程序运行时确定。<ul>
+<li><strong>java.lang.reflect.Proxy</strong> ：Java 动态代理机制生成的所有动态代理类的父类，它提供了一组静态方法来为一组接口动态地生成代理类及其对象, 其中newProxyInstance方法用于为指定类装载器、一组接口及调用处理器生成动态代理类实例</li>
+<li><strong>java.lang.reflect.InvocationHandler</strong>：这是调用处理器接口，它自定义了一个 invoke 方法，用于集中处理在动态代理类对象上的方法调用，通常在该方法中实现对委托类的代理访问。每次生成动态代理类对象时都要指定一个对应的调用处理器对象。 </li>
+</ul>
+</li>
+</ol>
+<h3 id="适配器模式">适配器模式</h3><ol>
+<li><strong>适配器模式</strong>：将一个类的接口，转换成客户期望的另外一个接口。适配器让原本接口不兼容的类可以很好的合作;<br>两种方式：①类的适配器模式（采用继承实现）②对象适配器（采用对象组合方式实现）；</li>
+<li><strong>使用场景</strong><ul>
+<li>系统需要使用现有的类，而这些类的接口不符合系统的接口。</li>
+<li>想要建立一个可以重用的类，用于与一些彼此之间没有太大关联的一些类，包括一些可能在将来引进的类一起工作</li>
+<li>使用第三方组件，组件接口定义和自己定义的不同，不希望修改自己的接口，但是要使用第三方组件接口的功能。</li>
+</ul>
+</li>
+</ol>
+<h3 id="装饰器模式VS代理模式">装饰器模式VS代理模式</h3><ol>
+<li><strong>装饰器模式</strong>关注于在一个对象上动态的添加方法，是继承关系的一个替代方案；然而<strong>代理模式</strong>关注于控制对对象的访问，并不提供对象本身的增强功能。</li>
+<li>对<strong>装饰器模式</strong>来说，装饰者和被装饰者都实现同一个接口; 对<strong>代理模式</strong>来说，代理类和真实处理的类都实现同一个接口</li>
+<li><h3 id="参考链接">参考链接</h3></li>
+<li><a href="http://layznet.iteye.com/blog/1182924" target="_blank" rel="noopener">Java动态代理</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2015/05/19/数据库重难点集锦/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1254,232 +1636,11 @@ export <span class="constant">PATH=</span><span class="variable">${</span><span 
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2015/04/23/Java语言基础知识点/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="CharlesXiao">
-      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
-      <meta itemprop="image" content="../../images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CharlesXiao‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="../../2015/04/23/Java语言基础知识点/" itemprop="url">
-                  Java语言基础知识点
-                </a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2015-04-23 20:29:08" itemprop="dateCreated datePublished" datetime="2015-04-23T20:29:08+08:00">2015-04-23</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2016-10-07 23:10:28" itemprop="dateModified" datetime="2016-10-07T23:10:28+08:00">2016-10-07</time>
-              
-            
-          </span>
-
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计2.5k字</span>
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长8分钟</span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="../../categories/java学习笔记/" itemprop="url" rel="index"><span itemprop="name">java学习笔记</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><strong>Switch语句参数</strong>: JDK7之前，switch 只能支持 byte、short、char、int 这几个基本数据类型和其对应的封装类型;如果想用String，需要将String包装成枚举类型作为参数；JDK7之后支持String类型直接作为参数<a href="http://blog.csdn.net/amazing7/article/details/51219315" target="_blank" rel="noopener">参考</a></li>
-<li><strong>for循环和foreach的区别</strong>: for循环效率高于foreach; for循环可以间隔遍历，步伐可以自由设置，但是foreach只能用于遍历读取每一个元素，还不能进行修改</li>
-<li><strong>Java和C++区别</strong>：①Java有接口，有垃圾回收机制②C++有引用，有多重继承，有操作符重载</li>
-<li><strong>JNI</strong><br> <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/JNI.png" class="full-image" width="100%"></li>
-<li><strong>Java泛型</strong>：泛型是指在定义接口或者类时可以使用类型参数，泛型提供了编译期的类型安全检查，确保你只能把正确类型的对象放入集合中，避免了在运行时出现ClassCastException。Java中的泛型基本上都是在编译器这个层次来实现的。在生成的Java字节代码中是不包含泛型中的类型信息的。使用泛型的时候加上的类型参数，会被编译器在编译的时候去掉，JVM看到的只是List，而由泛型附加的类型信息对JVM来说是不可见的。这个过程就称为<strong>类型擦除</strong>。比如一个方法如果接收List<object>作为形式参数，那么如果尝试将一个List<string>的对象作为实际参数传进去，却发现无法通过编译；因为这会产生隐含的类型转换问题，编译器直接就禁止这样的行为；Array不支持泛型，所以不能保证编译期的类型安全保证。</string></object></li>
-<li><p><strong>BIO、NIO、AIO</strong>：三者之间的区别，类似于resin、apache、nginx在IO处理上的区别，从多线程互不干扰的阻塞式执行(resin)，到轮询式的同步非阻塞式（apache），再到异步非阻塞式（nginx）,现在这三种IO都在JDK中予以了支持</p>
-<ul>
-<li><strong>BIO</strong>是面向流的同步阻塞式IO方式，<strong>对于每一个客户端Socket连接，服务端都会新开一个线程处理</strong>,在此期间线程一直被占用,直到socket关闭,其中tcp的连接、数据的读取read、数据的返回都是被阻塞的。也就是说这期间会大量的浪费cpu的时间片和线程占用的内存资源。<strong>优缺点和适应情景</strong>BIO方式具有很高的响应速度，并且控制起来简单，在连接数较少且固定的架构非常有效，但是如果对每一个连接都产生一个线程的无疑是对系统资源的一种浪费，如果连接数较多将会出现资源不足的情况。</li>
-<li><strong>NIO(new IO从JDK1.4开始)</strong>是面向缓冲区的同步非阻塞式IO方式, <strong>对于每一个客户端请求，服务端新开一个线程处理</strong>；即客户端发送的连接请求都会注册到多路复用器上，多路复用器轮询到连接有I/O请求时才启动一个线程进行处理,当连接没有数据时，是没有工作线程来处理的; 它的非阻塞模式使用一个专用的reactor来处理分发IO事件，数据处理采用双通道模式，client和server各自维护一个选择器用于检测通道上的事件，通过访问选择器来处理感兴趣事件。<strong>优缺点和适应情景</strong>NIO方式适用于连接数目多且连接比较短（轻操作）的架构，比如聊天服务器，并发局限于应用中，编程比较复杂</li>
-<li><strong>AIO(Asynchronous IO从JDK1.7开始)</strong>是一种异步非阻塞的IO方式;<strong>对于每一个客户端的有效请求，服务端新开一个线程处理</strong>;即客户端的I/O请求都是由OS先完成了再通知服务器应用去启动线程进行处理，每个线程不必亲自处理IO，而是委派OS来处理，并且也不需要等待IO完成了，如果完成后，OS会通知的;<strong>优缺点和适应情景</strong>AIO方式使用于连接数目多且连接比较长（重操作）的架构，比如相册服务器，充分调用OS参与并发操作，编程比较复杂</li>
-</ul>
-</li>
-<li><p><strong>为什么匿名内部类和局部内部类只能访问final变量？</strong>：因为虽然匿名内部类在方法的内部，但实际编译的时候，内部类编译成Outer.Inner,这说明内部类所处的位置和外部类中的方法处在同一个等级上，外部类中的方法中的变量或参数只是方法的局部变量，这些变量或参数的作用域只在这个方法内部有效。因为编译的时候内部类和方法在同一级别上，所以方法中的变量或参数只有为final，内部类才可以引用，因为Java采用了一种copy local variable的方式来实现，也就是说把定义为final的局部变量拷贝过来用，而引用的也可以拿过来用，只是不能重新赋值。</p>
-</li>
-<li><strong>JDK8的新特性</strong>:<ul>
-<li><strong>新增函数接口</strong>，引入注解@FunctionalInterface，函数式接口就是只有一个方法的普通接口</li>
-<li><strong>接口可以有默认方法和实现以及静态方法</strong></li>
-<li>取消方法区/永久代，采用元空间取代</li>
-<li>新的Date-Time API</li>
-<li>引入Optional类来防止空指针异常，它可以保存类型T的值，或者保存null。使用Optional类我们就不用显式进行空指针检查，主要是利用orElseGet(),flatMap()等函数</li>
-<li>Process类现在增加了两个新的方法用于<strong>终止进程</strong>；第一个是isAlive()方法，有了它你可以判断进程是否还活着。第二个方法则更加强大，它叫destroyForcibly()，你可以用它来强制的杀掉一个已经超时或者不再需要的进程</li>
-<li>Java8引入了一个<strong>新的读写锁StampedLock</strong>。它不仅更快，同时还提供了一系列强大的API来实现乐观锁，这样如果没有写操作在访问临界区域的话，你只需很低的开销就能获取到一个读锁。访问结束后你可以查询锁来判断这期间是否发生了写操作，如果有的话再选择进行重试，升级锁，或者放弃这个操作</li>
-<li><strong>新的增强的随机数生成方法SecureRandom.getinstanceStrong()</strong>，它能自动选择出当前JVM可用的最佳的随机数生成器。这样减少了获取失败的机率，同时也避免了默认的弱随机数生成器可能会导致密钥或者加密值容易被黑客攻破的问题</li>
-</ul>
-</li>
-<li><p><strong>Java 8 中的 Stream</strong> 是对集合（Collection）对象功能的增强，它专注于对集合对象进行各种非常便利、高效的聚合操作（aggregate operation），或者大批量数据操作 (bulk data operation)。Stream API 借助于同样新出现的 Lambda 表达式，极大的提高编程效率和程序可读性。同时它提供串行和并行两种模式进行汇聚操作，并发模式能够充分利用多核处理器的优势。通常编写并行代码很难而且容易出错, 但使用 Stream API 无需编写一行多线程的代码，就可以很方便地写出高性能的并发程序；Stream 可以并行化遍历操作，使用并行去遍历时，数据会被分成多个段，其中每一个都在不同的线程中处理，然后将结果一起输出; Stream 的并行操作依赖于 Java7 中引入的 Fork/Join 框架（JSR166y）来拆分任务和加速处理过程</p>
-<pre><code><span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> nums <span class="subst">=</span> Lists<span class="built_in">.</span>newArrayList(<span class="number">1</span>,<span class="built_in">null</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="built_in">null</span>,<span class="number">6</span>);
-<span class="comment">// 创建stream --&gt; map转换stream --&gt; reduce聚合函数</span>
-<span class="comment">// 含义：给定一个Integer类型的List，获取其对应的Stream对象，然后进行过滤掉null，再去重，再每个元素乘以2，再每个元素被消费的时候打印自身，在跳过前两个元素，最后取前四个元素进行加和运算</span>
-nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter(num <span class="subst">-&gt; </span>num <span class="subst">!=</span> <span class="built_in">null</span>)<span class="built_in">.
-               </span>distinct()<span class="built_in">.</span>mapToInt(num <span class="subst">-&gt; </span>num <span class="subst">*</span> <span class="number">2</span>)<span class="built_in">.
-               </span>peek(System<span class="built_in">.</span>out<span class="tag">::println</span>)<span class="built_in">.</span><span class="keyword">skip</span>(<span class="number">2</span>)<span class="built_in">.</span>limit(<span class="number">4</span>)<span class="built_in">.</span><span class="keyword">sum</span>();
-</code></pre></li>
-<li><p><strong>Java 8 中的 Lambda</strong> : 一段带有输入参数的可执行语句块,Lambda表达式取代了匿名类，取消了模板，允许用函数式风格编写代码。这样有时可读性更好，表达更清晰。书写形式：</p>
-<pre><code><span class="function"><span class="params">(params)</span> -&gt;</span> expression
-<span class="function"><span class="params">(params)</span> -&gt;</span> statement
-<span class="function"><span class="params">(params)</span> -&gt;</span> { statements }                      
-</code></pre></li>
-<li><strong>自动装箱</strong>就是Java自动将原始类型值转换成对应的对象，比如将int的变量转换成Integer对象，这个过程叫做装箱，反之将Integer对象转换成int类型值，这个过程叫做<strong>拆箱</strong>。自动装箱时编译器调用valueOf将原始类型值转换成对象，同时自动拆箱时，编译器通过调用类似intValue(),doubleValue()这类的方法将对象转换成原始类型值。原始类型byte,short,char,int,long,float,double和boolean对应的封装类为Byte,Short,Character,Integer,Long,Float,Double,Boolean。<strong><a href="http://www.importnew.com/15712.html" target="_blank" rel="noopener">存在问题</a></strong>: ①自动装箱会隐式地创建对象，如果在一个循环体中，会创建无用的中间对象，这样会增加GC压力，拉低程序的性能 ② 缓存对象，在Java中，会对-128到127的Integer对象进行缓存，当创建新的Integer对象时，如果符合这个这个范围，并且已有存在的相同值的对象，则返回这个对象，否则创建新的Integer对象。</li>
-<li>JDK             </li>
-</ol>
-<h3 id="参考链接">参考链接</h3><ol>
-<li><a href="http://ifeve.com/lambda/" target="_blank" rel="noopener">Java8初体验（一）lambda表达式语法</a></li>
-<li><a href="http://ifeve.com/stream/" target="_blank" rel="noopener">Java8初体验（二）Stream语法详解</a></li>
-<li><a href="http://www.importnew.com/16436.html" target="_blank" rel="noopener">Java8 lambda表达式10个示例</a></li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="../15/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="../../">1</a><span class="space">&hellip;</span><a class="page-number" href="../15/">15</a><span class="page-number current">16</span><a class="page-number" href="../17/">17</a><a class="extend next" rel="next" href="../17/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="../15/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="../../">1</a><span class="space">&hellip;</span><a class="page-number" href="../15/">15</a><span class="page-number current">16</span><a class="page-number" href="../17/">17</a><a class="page-number" href="../18/">18</a><a class="extend next" rel="next" href="../17/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1524,7 +1685,7 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
                 
                   <a href="../../archives/">
                 
-                    <span class="site-state-item-count">85</span>
+                    <span class="site-state-item-count">86</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1571,7 +1732,9 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1738,7 +1901,9 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
                     
                       
                     
-                    <span class="site-state-item-count">77</span>
+                      
+                    
+                    <span class="site-state-item-count">78</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1851,7 +2016,7 @@ nums<span class="built_in">.</span>stream()<span class="built_in">.</span>filter
 
 
 <div class="powered-by"></div>
-<span class="post-count">博客全站共167.4k字</span>
+<span class="post-count">博客全站共168.3k字</span>
 
 
         

@@ -130,7 +130,7 @@
 <meta property="og:site_name" content="CharlesXiao‘s Blog">
 <meta property="og:description" content="SOA和RPC随着互联网规模发展，面向服务的体系架构(SOA)成为主流的架构方式，SOA的本质思想是高内聚、低耦合地实现分治，各个系统之间通过服务的方式进行交互，这样保证了交互的标准性，这对于一个复杂的大规模系统来说显得尤为重要，子系统之间能够标准清晰地互相配合与沟通。同时，随着数据规模的飞速发展，从单一应用架构，再到拆分成多个子系统，演变成垂直应用架构，最后演变成分布式应用架构。此时，在一个分布">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-20T05:24:12.714Z">
+<meta property="og:updated_time" content="2018-12-01T06:43:40.118Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="大型分布式网站架构设计与实践">
 <meta name="twitter:description" content="SOA和RPC随着互联网规模发展，面向服务的体系架构(SOA)成为主流的架构方式，SOA的本质思想是高内聚、低耦合地实现分治，各个系统之间通过服务的方式进行交互，这样保证了交互的标准性，这对于一个复杂的大规模系统来说显得尤为重要，子系统之间能够标准清晰地互相配合与沟通。同时，随着数据规模的飞速发展，从单一应用架构，再到拆分成多个子系统，演变成垂直应用架构，最后演变成分布式应用架构。此时，在一个分布">
@@ -421,13 +421,13 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-20 13:24:12" itemprop="dateModified" datetime="2018-11-20T13:24:12+08:00">2018-11-20</time>
+                <time title="修改时间：2018-12-01 14:43:40" itemprop="dateModified" datetime="2018-12-01T14:43:40+08:00">2018-12-01</time>
               
             
           </span>
 
         <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计8.6k字</span>
+        <span class="post-count">字数统计8.8k字</span>
         <span class="post-meta-divider">|</span>
         <span class="post-count">阅读时长30分钟</span>
 
@@ -556,16 +556,18 @@
 <h4 id="常用安全算法">常用安全算法</h4><h5 id="数字摘要">数字摘要</h5><ol>
 <li>MD5：为输入生成一个128位的摘要，作为数字指纹，利用它来验证消息的完整性；相似消息的摘要差异巨大，可逆性很小</li>
 <li>SHA256：Secure Hash Algorithm，生成256位摘要</li>
+<li>HMAC: 利用MD5或SHA1等哈希算法, 增加一个随机数来生成摘要，避免被彩虹表反解</li>
 </ol>
-<p><strong>对摘要信息编码</strong>：因为摘要中可能存在无法显示的特殊字符穿，需要编码</p>
+<p><strong>对摘要信息编码</strong>：因为摘要中可能存在无法显示的特殊字符串，需要编码(base编码原理)[<a href="https://blog.csdn.net/wangjianno2/article/details/52464208" target="_blank" rel="noopener">https://blog.csdn.net/wangjianno2/article/details/52464208</a>]</p>
 <ol>
-<li>十六进制编码：把二进制数组转化成十六进制来表示</li>
-<li>Base64：用64个可打印字符来表示二进制数据，64个字符分别是A-Z、a-z、0-9，还有2个因为系统不同而不一样</li>
+<li>十六进制编码：把二进制数组转化成十六进制来表示, 也叫Base16编码，一共16个字符0-F表示byte数组内容，一个字节8bit需要2个十六进制字符(一个字符占用1byte)来表示，空间扩大一倍</li>
+<li>Base32: 类似Base64，用32个可见字符表示二进制数组(ASCII字符)，一个字节转化成Base32之后会在前边补3个0，因为32是2的5次方</li>
+<li>Base64：用64个可打印字符来表示二进制数据，64个字符分别是A-Z、a-z、0-9，还有2个因为系统不同而不一样；3个字节24位数据需要4个字节来表示</li>
 </ol>
 <h5 id="对称加密">对称加密</h5><p>加解密使用同一个密钥，计算量较小，速度较快，存在密码泄露风险。</p>
 <ol>
 <li>DES、3DES：64位密钥长度，从56位参与DES运算到扩大成3*56</li>
-<li>AES：最低128位密钥长度</li>
+<li>AES：最低128位密钥长度。可以指定IV（Initial Vector），不同的系统只要IV不同，用相同的密钥加密相同的数据得到的加密结果也是不同的</li>
 </ol>
 <h5 id="非对称加密">非对称加密</h5><p>使用私钥加密，然后对方用公钥解密，避免私钥在传输过程中泄露，往往用于保证数据完整性；或者先生成一对公钥私钥，然后广播公钥，对方用公钥加密之后发给自己，然后自己用私钥解密。</p>
 <p>由于非对称加密速度慢，两种方式结合来达到更好的效果：先用对称加密对大文件进行加密，然后再对文件密钥使用非对称加密，也就是用公钥加密，然后发送给对方，对方再使用私钥解密，这样就防止了密钥泄露。</p>
@@ -588,7 +590,7 @@
 </li>
 <li><strong>中间劫持</strong>：用户数据在浏览器和百度服务器中间传输必须要经过的节点。比如WIFI热点，路由器，防火墙，反向代理，缓存服务器等，都可能出现劫持。例如，运营商的内容劫持是如何进行的，运营商会分析你的网络请求，它可以先于网站回包，也能修改数据包的内容。所以它可以让你跳转一次，在网址上加上小尾巴，也能在你访问的页面弹出小广告</li>
 </ol>
-<h5 id="图解https"><a href="http://www.cnblogs.com/zhuqil/archive/2012/07/23/2604572.html" target="_blank" rel="noopener">图解https</a></h5><h5 id="https对性能的影响">https对性能的影响</h5><ol>
+<h5 id="图解https"><a href="http://www.cnblogs.com/zhuqil/archive/2012/07/23/2604572.html" target="_blank" rel="noopener">图解https</a></h5><h5 id="Go和https"><a href="https://www.tuicool.com/articles/aymYbmM" target="_blank" rel="noopener">Go和https</a></h5><h5 id="https对性能的影响">https对性能的影响</h5><ol>
 <li>HTTPS会降低用户访问速度(协议交互所增加的网络RTT(round trip time+加解密相关的计算耗时30ms)，增加网站服务器的计算资源消耗；非对称密钥交换很安全，但同时也是HTTPS性能和速度严重降低的“罪魁祸首”。</li>
 </ol>
 <h5 id="优化策略">优化策略</h5><h6 id="HTTPS_访问速度优化">HTTPS 访问速度优化</h6><ol>
@@ -778,8 +780,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="../从Paxos到Raft/" rel="next" title="从Raft到Paxos">
-                <i class="fa fa-chevron-left"></i> 从Raft到Paxos
+              <a href="../常用Linux网络:内存:磁盘分析工具/" rel="next" title="常用Linux网络/内存/磁盘分析工具">
+                <i class="fa fa-chevron-left"></i> 常用Linux网络/内存/磁盘分析工具
               </a>
             
           </div>
@@ -788,8 +790,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="../../11/投资中最简单的事---读后随记/" rel="prev" title="投资中最简单的事---读后随记">
-                投资中最简单的事---读后随记 <i class="fa fa-chevron-right"></i>
+              <a href="../从Paxos到Raft/" rel="prev" title="从Raft到Paxos">
+                从Raft到Paxos <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -862,7 +864,7 @@
                 
                   <a href="../../../../archives/">
                 
-                    <span class="site-state-item-count">85</span>
+                    <span class="site-state-item-count">86</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -909,7 +911,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1076,7 +1080,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">77</span>
+                      
+                    
+                    <span class="site-state-item-count">78</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1149,7 +1155,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SOA和RPC"><span class="nav-number">1.</span> <span class="nav-text">SOA和RPC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#体系化认识RPC"><span class="nav-number">1.1.</span> <span class="nav-text">体系化认识RPC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RPC组成部分"><span class="nav-number">1.2.</span> <span class="nav-text">RPC组成部分</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#基于TCP的RPC"><span class="nav-number">1.2.1.</span> <span class="nav-text">基于TCP的RPC</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#基于HTTP的RPC"><span class="nav-number">1.2.2.</span> <span class="nav-text">基于HTTP的RPC</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#RESTFul和RPC形式url"><span class="nav-number">1.2.3.</span> <span class="nav-text">RESTFul和RPC形式url</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#RPC相关"><span class="nav-number">1.2.4.</span> <span class="nav-text">RPC相关</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#服务路由和负载均衡"><span class="nav-number">1.3.</span> <span class="nav-text">服务路由和负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常用负载均衡算法"><span class="nav-number">1.3.1.</span> <span class="nav-text">常用负载均衡算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Zookeeper"><span class="nav-number">1.3.2.</span> <span class="nav-text">Zookeeper</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Http服务网关"><span class="nav-number">1.3.3.</span> <span class="nav-text">Http服务网关</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式系统基础设施"><span class="nav-number">2.</span> <span class="nav-text">分布式系统基础设施</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#分布式缓存"><span class="nav-number">2.0.1.</span> <span class="nav-text">分布式缓存</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#去IOE的持久化存储"><span class="nav-number">2.0.2.</span> <span class="nav-text">去IOE的持久化存储</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#分布式消息队列"><span class="nav-number">2.0.3.</span> <span class="nav-text">分布式消息队列</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#垂直化搜索引擎"><span class="nav-number">2.0.4.</span> <span class="nav-text">垂直化搜索引擎</span></a></li></ol></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#互联网安全架构"><span class="nav-number">3.</span> <span class="nav-text">互联网安全架构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常见Web攻击手段和防御方法"><span class="nav-number">3.1.</span> <span class="nav-text">常见Web攻击手段和防御方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#XSS跨站脚本攻击"><span class="nav-number">3.1.1.</span> <span class="nav-text">XSS跨站脚本攻击</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CRSF跨站请求伪造攻击"><span class="nav-number">3.1.2.</span> <span class="nav-text">CRSF跨站请求伪造攻击</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#SQL注入攻击"><span class="nav-number">3.1.3.</span> <span class="nav-text">SQL注入攻击</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#文件上传漏洞"><span class="nav-number">3.1.4.</span> <span class="nav-text">文件上传漏洞</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#DDos分布式拒绝服务攻击"><span class="nav-number">3.1.5.</span> <span class="nav-text">DDos分布式拒绝服务攻击</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用安全算法"><span class="nav-number">3.2.</span> <span class="nav-text">常用安全算法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#数字摘要"><span class="nav-number">3.2.1.</span> <span class="nav-text">数字摘要</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#对称加密"><span class="nav-number">3.2.2.</span> <span class="nav-text">对称加密</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#非对称加密"><span class="nav-number">3.2.3.</span> <span class="nav-text">非对称加密</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数字签名(MD5withRSA_or_SHA256withRSA)"><span class="nav-number">3.2.4.</span> <span class="nav-text">数字签名(MD5withRSA or SHA256withRSA)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数字证书"><span class="nav-number">3.2.5.</span> <span class="nav-text">数字证书</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#摘要认证"><span class="nav-number">3.3.</span> <span class="nav-text">摘要认证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#签名认证"><span class="nav-number">3.4.</span> <span class="nav-text">签名认证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTPS协议(基于SSL的http协议)"><span class="nav-number">3.5.</span> <span class="nav-text">HTTPS协议(基于SSL的http协议)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#http和https区别"><span class="nav-number">3.5.1.</span> <span class="nav-text">http和https区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#图解https"><span class="nav-number">3.5.2.</span> <span class="nav-text">图解https</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#https对性能的影响"><span class="nav-number">3.5.3.</span> <span class="nav-text">https对性能的影响</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#优化策略"><span class="nav-number">3.5.4.</span> <span class="nav-text">优化策略</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#HTTPS_访问速度优化"><span class="nav-number">3.5.4.1.</span> <span class="nav-text">HTTPS 访问速度优化</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#HTTPS_计算性能优化"><span class="nav-number">3.5.4.2.</span> <span class="nav-text">HTTPS 计算性能优化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OAuth第三方授权—-开放资源授权的标准协议"><span class="nav-number">3.6.</span> <span class="nav-text">OAuth第三方授权—-开放资源授权的标准协议</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统稳定性"><span class="nav-number">4.</span> <span class="nav-text">系统稳定性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#在线日志分析"><span class="nav-number">4.1.</span> <span class="nav-text">在线日志分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集群监控"><span class="nav-number">4.2.</span> <span class="nav-text">集群监控</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#流量控制"><span class="nav-number">4.3.</span> <span class="nav-text">流量控制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高并发系统设计"><span class="nav-number">4.4.</span> <span class="nav-text">高并发系统设计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#性能优化—-更少资源更快地服务更多用户"><span class="nav-number">4.5.</span> <span class="nav-text">性能优化—-更少资源更快地服务更多用户</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大数据分析"><span class="nav-number">5.</span> <span class="nav-text">大数据分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式系统的日志收集(ELK等)"><span class="nav-number">5.1.</span> <span class="nav-text">分布式系统的日志收集(ELK等)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#离线数据分析"><span class="nav-number">5.2.</span> <span class="nav-text">离线数据分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#流式数据分析"><span class="nav-number">5.3.</span> <span class="nav-text">流式数据分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据同步与报表"><span class="nav-number">5.4.</span> <span class="nav-text">数据同步与报表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#大数据生态系统"><span class="nav-number">5.5.</span> <span class="nav-text">大数据生态系统</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">6.</span> <span class="nav-text">参考链接</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SOA和RPC"><span class="nav-number">1.</span> <span class="nav-text">SOA和RPC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#体系化认识RPC"><span class="nav-number">1.1.</span> <span class="nav-text">体系化认识RPC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RPC组成部分"><span class="nav-number">1.2.</span> <span class="nav-text">RPC组成部分</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#基于TCP的RPC"><span class="nav-number">1.2.1.</span> <span class="nav-text">基于TCP的RPC</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#基于HTTP的RPC"><span class="nav-number">1.2.2.</span> <span class="nav-text">基于HTTP的RPC</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#RESTFul和RPC形式url"><span class="nav-number">1.2.3.</span> <span class="nav-text">RESTFul和RPC形式url</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#RPC相关"><span class="nav-number">1.2.4.</span> <span class="nav-text">RPC相关</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#服务路由和负载均衡"><span class="nav-number">1.3.</span> <span class="nav-text">服务路由和负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常用负载均衡算法"><span class="nav-number">1.3.1.</span> <span class="nav-text">常用负载均衡算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Zookeeper"><span class="nav-number">1.3.2.</span> <span class="nav-text">Zookeeper</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Http服务网关"><span class="nav-number">1.3.3.</span> <span class="nav-text">Http服务网关</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式系统基础设施"><span class="nav-number">2.</span> <span class="nav-text">分布式系统基础设施</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#分布式缓存"><span class="nav-number">2.0.1.</span> <span class="nav-text">分布式缓存</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#去IOE的持久化存储"><span class="nav-number">2.0.2.</span> <span class="nav-text">去IOE的持久化存储</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#分布式消息队列"><span class="nav-number">2.0.3.</span> <span class="nav-text">分布式消息队列</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#垂直化搜索引擎"><span class="nav-number">2.0.4.</span> <span class="nav-text">垂直化搜索引擎</span></a></li></ol></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#互联网安全架构"><span class="nav-number">3.</span> <span class="nav-text">互联网安全架构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常见Web攻击手段和防御方法"><span class="nav-number">3.1.</span> <span class="nav-text">常见Web攻击手段和防御方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#XSS跨站脚本攻击"><span class="nav-number">3.1.1.</span> <span class="nav-text">XSS跨站脚本攻击</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CRSF跨站请求伪造攻击"><span class="nav-number">3.1.2.</span> <span class="nav-text">CRSF跨站请求伪造攻击</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#SQL注入攻击"><span class="nav-number">3.1.3.</span> <span class="nav-text">SQL注入攻击</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#文件上传漏洞"><span class="nav-number">3.1.4.</span> <span class="nav-text">文件上传漏洞</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#DDos分布式拒绝服务攻击"><span class="nav-number">3.1.5.</span> <span class="nav-text">DDos分布式拒绝服务攻击</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用安全算法"><span class="nav-number">3.2.</span> <span class="nav-text">常用安全算法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#数字摘要"><span class="nav-number">3.2.1.</span> <span class="nav-text">数字摘要</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#对称加密"><span class="nav-number">3.2.2.</span> <span class="nav-text">对称加密</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#非对称加密"><span class="nav-number">3.2.3.</span> <span class="nav-text">非对称加密</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数字签名(MD5withRSA_or_SHA256withRSA)"><span class="nav-number">3.2.4.</span> <span class="nav-text">数字签名(MD5withRSA or SHA256withRSA)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数字证书"><span class="nav-number">3.2.5.</span> <span class="nav-text">数字证书</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#摘要认证"><span class="nav-number">3.3.</span> <span class="nav-text">摘要认证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#签名认证"><span class="nav-number">3.4.</span> <span class="nav-text">签名认证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTPS协议(基于SSL的http协议)"><span class="nav-number">3.5.</span> <span class="nav-text">HTTPS协议(基于SSL的http协议)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#http和https区别"><span class="nav-number">3.5.1.</span> <span class="nav-text">http和https区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#图解https"><span class="nav-number">3.5.2.</span> <span class="nav-text">图解https</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Go和https"><span class="nav-number">3.5.3.</span> <span class="nav-text">Go和https</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#https对性能的影响"><span class="nav-number">3.5.4.</span> <span class="nav-text">https对性能的影响</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#优化策略"><span class="nav-number">3.5.5.</span> <span class="nav-text">优化策略</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#HTTPS_访问速度优化"><span class="nav-number">3.5.5.1.</span> <span class="nav-text">HTTPS 访问速度优化</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#HTTPS_计算性能优化"><span class="nav-number">3.5.5.2.</span> <span class="nav-text">HTTPS 计算性能优化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OAuth第三方授权—-开放资源授权的标准协议"><span class="nav-number">3.6.</span> <span class="nav-text">OAuth第三方授权—-开放资源授权的标准协议</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统稳定性"><span class="nav-number">4.</span> <span class="nav-text">系统稳定性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#在线日志分析"><span class="nav-number">4.1.</span> <span class="nav-text">在线日志分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集群监控"><span class="nav-number">4.2.</span> <span class="nav-text">集群监控</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#流量控制"><span class="nav-number">4.3.</span> <span class="nav-text">流量控制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高并发系统设计"><span class="nav-number">4.4.</span> <span class="nav-text">高并发系统设计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#性能优化—-更少资源更快地服务更多用户"><span class="nav-number">4.5.</span> <span class="nav-text">性能优化—-更少资源更快地服务更多用户</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大数据分析"><span class="nav-number">5.</span> <span class="nav-text">大数据分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式系统的日志收集(ELK等)"><span class="nav-number">5.1.</span> <span class="nav-text">分布式系统的日志收集(ELK等)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#离线数据分析"><span class="nav-number">5.2.</span> <span class="nav-text">离线数据分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#流式数据分析"><span class="nav-number">5.3.</span> <span class="nav-text">流式数据分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据同步与报表"><span class="nav-number">5.4.</span> <span class="nav-text">数据同步与报表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#大数据生态系统"><span class="nav-number">5.5.</span> <span class="nav-text">大数据生态系统</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">6.</span> <span class="nav-text">参考链接</span></a></li></div>
             
 
           </div>
@@ -1205,7 +1211,7 @@
 
 
 <div class="powered-by"></div>
-<span class="post-count">博客全站共167.4k字</span>
+<span class="post-count">博客全站共168.3k字</span>
 
 
         

@@ -131,7 +131,9 @@
 <meta property="og:description" content="Linux程序/进程/文件 程序是存在文件中的机器指令及其数据的序列，编译器将高级语言编写的源代码编译成CPU可执行的二进制可执行文件。 进程存在于用户空间，用户空间是存放运行中程序和他们的数据的一部分内存空间。 进程运行在内存中，内存实际是一个很大的字节数组，对应着内存条上的所有二进制内存位置，进程并不占用连续的内存位置，内核帮进程找到可用的空闲内存页来保存它的机器指令和数据，并建立数据结构来保">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Linux_process.png">
-<meta property="og:updated_time" content="2018-11-11T03:12:58.967Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/kernel.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/kernel-user-space.png">
+<meta property="og:updated_time" content="2018-12-03T03:49:45.324Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux操作系统基础知识">
 <meta name="twitter:description" content="Linux程序/进程/文件 程序是存在文件中的机器指令及其数据的序列，编译器将高级语言编写的源代码编译成CPU可执行的二进制可执行文件。 进程存在于用户空间，用户空间是存放运行中程序和他们的数据的一部分内存空间。 进程运行在内存中，内存实际是一个很大的字节数组，对应着内存条上的所有二进制内存位置，进程并不占用连续的内存位置，内核帮进程找到可用的空闲内存页来保存它的机器指令和数据，并建立数据结构来保">
@@ -423,15 +425,15 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-11 11:12:58" itemprop="dateModified" datetime="2018-11-11T11:12:58+08:00">2018-11-11</time>
+                <time title="修改时间：2018-12-03 11:49:45" itemprop="dateModified" datetime="2018-12-03T11:49:45+08:00">2018-12-03</time>
               
             
           </span>
 
         <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计4.1k字</span>
+        <span class="post-count">字数统计4.7k字</span>
         <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长14分钟</span>
+        <span class="post-count">阅读时长16分钟</span>
 
           
             <span class="post-category">
@@ -519,6 +521,22 @@
 <p>ext3 文件系统的 Linux 内核中实现了三个级别的日志记录方式来解决数据不一致问题：日记journal、顺序ordered和回写writeback。</p>
 <p>ext4 特地设计为尽可能地向后兼容 ext3。这不仅允许 ext3 文件系统原地升级到 ext4；也允许 ext4 驱动程序以 ext3 模式自动挂载 ext3 文件系统，因此使它无需单独维护两个代码库</p>
 <h3 id="Linux_/proc_文件系统">Linux /proc 文件系统</h3><p>Linux 内核提供了一种通过 /proc 文件系统，在运行时访问内核内部数据结构、改变内核设置的机制。proc文件系统是一个伪文件系统，它只存在内存当中，而不占用外存空间。它以文件系统的方式为访问系统内核数据的操作提供接口。<br>用户和应用程序可以通过proc得到系统的信息，并可以改变内核的某些参数。由于系统的信息，如进程，是动态改变的，所以用户或应用程序读取proc文件时，proc文件系统是动态从系统内核读出所需信息并提交的。另外，在/proc下还有三个很重要的目录：net，scsi和sys。 Sys目录是可写的，可以通过它来访问或修改内核的参数，而net和scsi则依赖于内核配置。例如，如果系统不支持scsi，则scsi 目录不存在</p>
+<h3 id="Linux_内核态和用户态的模式切换">Linux 内核态和用户态的模式切换</h3><ul>
+<li><p>关系图：<br>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/kernel.png" class="full-image" width="60%"><br>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/kernel-user-space.png" class="full-image" width="60%"></p>
+</li>
+<li><p>用户态的应用程序可以通过三种方式来访问内核态的资源：系统调用, 库函数, Shell脚本</p>
+</li>
+<li>内核负责向下控制硬件资源，向内管理操作系统资源：包括进程的调度和管理、内存的管理、文件系统的管理、设备驱动程序的管理以及网络资源的管理，向上则向应用程序提供系统调用的接口</li>
+<li>进程从用户态到内核态的切换，一般存在以下三种情况, 进程在用户态和内核态之间的切换会消耗一定资源：<ul>
+<li>系统调用(其实也是中断，相对于外围设备的硬中断，这种中断称为软中断)：比如C函数库中的内存分配函数malloc()，它具体是使用sbrk()系统调用来分配内存，当malloc调用sbrk()的时候就涉及一次从用户态到内核态的切换，类似的函数还有printf()，调用的是wirte()系统调用来输出字符串。</li>
+<li>异常事件： 当CPU正在执行运行在用户态的程序时，突然发生某些预先不可知的异常事件，这个时候就会触发从当前用户态执行的进程转向内核态执行相关的异常事件，典型的如缺页异常。</li>
+<li>外围设备的中断：当外围设备完成用户的请求操作后，会像CPU发出中断信号，此时，CPU就会暂停执行下一条即将要执行的指令，转而去执行中断信号对应的处理程序，如果先前执行的指令是在用户态下，则自然就发生从用户态到内核态的转换。系统调用是进程主动请求切换的，而异常和硬中断则是被动的。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>“操作系统的进程切换和CPU的模式切换并没有什么关系，发生模式切换可以不改变正处于运行态的进程状态，主要是寄存器上下文的切换，这种情况下，保存上下文环境和以后恢复上下文环境只需要很少的开销。但是，如果改变正处于运行态的进程状态到另一个状态（就绪、阻塞等），则操作系统必须使其环境产生实质性的变化，包括寄存器，堆栈信息，数据等”</p>
+</blockquote>
 <h3 id="Linux磁盘挂载/卸载/格式化操作">Linux磁盘挂载/卸载/格式化操作</h3><p>linux系统中只能在root权限用户下挂载设备。</p>
 <h5 id="BIOS_vs_UEFI">BIOS vs UEFI</h5><p>BIOS（Basic Input/Output System）和 UEFI（Unified Extensible Firmware Interface ）是不同的计算机启动固件（Fireware），需要硬件（通常为主板）支持，相互代替，其中 UEFI 是比较新的方式。</p>
 <ul>
@@ -674,7 +692,7 @@
                 
                   <a href="../../../../archives/">
                 
-                    <span class="site-state-item-count">85</span>
+                    <span class="site-state-item-count">86</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -721,7 +739,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -888,7 +908,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">77</span>
+                      
+                    
+                    <span class="site-state-item-count">78</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -961,7 +983,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux程序/进程/文件"><span class="nav-number">1.</span> <span class="nav-text">Linux程序/进程/文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux进程调度机制"><span class="nav-number">2.</span> <span class="nav-text">Linux进程调度机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux内存管理机制"><span class="nav-number">3.</span> <span class="nav-text">Linux内存管理机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Unix文件系统的内部结构"><span class="nav-number">4.</span> <span class="nav-text">Unix文件系统的内部结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux通用文件系统"><span class="nav-number">5.</span> <span class="nav-text">Linux通用文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux_/proc_文件系统"><span class="nav-number">6.</span> <span class="nav-text">Linux /proc 文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux磁盘挂载/卸载/格式化操作"><span class="nav-number">7.</span> <span class="nav-text">Linux磁盘挂载/卸载/格式化操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#BIOS_vs_UEFI"><span class="nav-number">7.0.1.</span> <span class="nav-text">BIOS vs UEFI</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MBR_vs_GPT"><span class="nav-number">7.0.2.</span> <span class="nav-text">MBR vs GPT</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#File_System（文件系统）是存储媒介中文件存储的组织方式。"><span class="nav-number">7.0.3.</span> <span class="nav-text">File System（文件系统）是存储媒介中文件存储的组织方式。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GRUB（Grand_Unified_Boot_loader）"><span class="nav-number">7.0.4.</span> <span class="nav-text">GRUB（Grand Unified Boot loader）</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux程序/进程/文件"><span class="nav-number">1.</span> <span class="nav-text">Linux程序/进程/文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux进程调度机制"><span class="nav-number">2.</span> <span class="nav-text">Linux进程调度机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux内存管理机制"><span class="nav-number">3.</span> <span class="nav-text">Linux内存管理机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Unix文件系统的内部结构"><span class="nav-number">4.</span> <span class="nav-text">Unix文件系统的内部结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux通用文件系统"><span class="nav-number">5.</span> <span class="nav-text">Linux通用文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux_/proc_文件系统"><span class="nav-number">6.</span> <span class="nav-text">Linux /proc 文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux_内核态和用户态的模式切换"><span class="nav-number">7.</span> <span class="nav-text">Linux 内核态和用户态的模式切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux磁盘挂载/卸载/格式化操作"><span class="nav-number">8.</span> <span class="nav-text">Linux磁盘挂载/卸载/格式化操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#BIOS_vs_UEFI"><span class="nav-number">8.0.1.</span> <span class="nav-text">BIOS vs UEFI</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MBR_vs_GPT"><span class="nav-number">8.0.2.</span> <span class="nav-text">MBR vs GPT</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#File_System（文件系统）是存储媒介中文件存储的组织方式。"><span class="nav-number">8.0.3.</span> <span class="nav-text">File System（文件系统）是存储媒介中文件存储的组织方式。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GRUB（Grand_Unified_Boot_loader）"><span class="nav-number">8.0.4.</span> <span class="nav-text">GRUB（Grand Unified Boot loader）</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -1017,7 +1039,7 @@
 
 
 <div class="powered-by"></div>
-<span class="post-count">博客全站共167.4k字</span>
+<span class="post-count">博客全站共168.3k字</span>
 
 
         

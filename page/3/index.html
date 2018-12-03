@@ -381,6 +381,189 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2018/03/22/Effective C++ 札记/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="../../images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="../../2018/03/22/Effective C++ 札记/" itemprop="url">
+                  Effective C++ 札记
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-03-22 23:21:23" itemprop="dateCreated datePublished" datetime="2018-03-22T23:21:23+08:00">2018-03-22</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-23 00:09:48" itemprop="dateModified" datetime="2018-10-23T00:09:48+08:00">2018-10-23</time>
+              
+            
+          </span>
+
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">字数统计606字</span>
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">阅读时长2分钟</span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="变量常量">变量常量</h3><ol>
+<li>避免使用#define，而使用常量、枚举和内联函数，enum比const好用</li>
+<li>出于效率原因，C++不保证内置类型(int等基本类型)数据成员的初始化。对于成员变量(class A)的内置类型， 会在构造函数进入之前进行初始化; 在构造函数前给出初始化列表来确保初始化，例如：<code>C():b(), i(){}</code></li>
+<li>静态变量的生命周期不同于栈或者堆中的对象，从它被构造开始一直存在，直到程序结束。 包括全局变量、命名空间下的变量、类中和函数中定义的static对象。 其中，定义在函数中的称为 local static，其他的称为 non-local static。</li>
+</ol>
+<h3 id="函数">函数</h3><ol>
+<li><p>编译器默认定义函数调用时机：</p>
+<ul>
+<li>构造函数：对象定义；使用其他兼容的类型初始化对象时（可使用 explicit 来避免这种情况）</li>
+<li>复制构造函数：用一个对象来初始化另一对象时；传入对象参数时；返回对象时；</li>
+<li>析构函数：作用域结束（包括函数返回）时；delete</li>
+<li>=运算符：一个对象赋值给另一对象</li>
+<li><p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Empty e1;               // 默认构造函数</span><br><span class="line">Empty e2(e1);           // 拷贝构造函数</span><br><span class="line">Empty e3 = e1;          // 拷贝构造函数</span><br><span class="line">e2 = e1;                // = 运算符</span><br><span class="line"></span><br><span class="line">void func(Empty e)&#123;     // 拷贝构造函数，拷贝一份参数对象</span><br><span class="line">   	return e;           // 拷贝构造函数，拷贝一份返回对象</span><br><span class="line">                       // 析构函数，拷贝得到的参数对象被析构</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">e2 = func(e1);          // = 运算符</span><br><span class="line">                       // 析构函数，返回值被析构</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>通过把默认定义函数声明成private而且不实现它，可以禁用这些函数被调用，可以用于实现单例；也可以用base class的方式来禁用</p>
+</li>
+<li><p>析构函数声明为虚函数的目的在于以基类指针调用析构函数时能够正确地析构子类部分的内存。 否则子类部分的内存将会泄漏。示例：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 基类</span><br><span class="line">class TimeKeeper&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual ~TimeKeeper();</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line">TimeKeeper *ptk = getTimeKeeper():  // 可能返回任何一种子类</span><br><span class="line">...</span><br><span class="line">delete ptk;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>由于析构函数常常被自动调用，在析构函数中抛出的异常往往会难以捕获，引发程序非正常退出或未定义行为，所以析构函数不要抛出异常</p>
+</li>
+<li>使用对象来管理资源，类似智能指针</li>
+<li></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2018/03/22/C-手稿集锦/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1143,242 +1326,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2018/01/11/投资中最简单的事---读后随记/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="CharlesXiao">
-      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
-      <meta itemprop="image" content="../../images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CharlesXiao‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="../../2018/01/11/投资中最简单的事---读后随记/" itemprop="url">
-                  投资中最简单的事---读后随记
-                </a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-01-11 11:36:53" itemprop="dateCreated datePublished" datetime="2018-01-11T11:36:53+08:00">2018-01-11</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-03-05 00:17:44" itemprop="dateModified" datetime="2018-03-05T00:17:44+08:00">2018-03-05</time>
-              
-            
-          </span>
-
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计1.2k字</span>
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长4分钟</span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="序言">序言</h3><blockquote>
-<p>很多人都醉心于即时满足，却不懂得用延时满足去做交易  </p>
-</blockquote>
-<ul>
-<li><strong>Note</strong>: 面对眼前利益和诱惑隐忍的重要性，不然很难获得多倍收益,所谓的挥泪割肉和过早止盈往往由此产生</li>
-</ul>
-<blockquote>
-<p>理性只会迟到，不会缺席</p>
-<p>别人恐惧时我贪婪，别人贪婪时我恐惧</p>
-<p>贪婪有两种，一种是6000点明知贵了的时候还想等再涨点再卖，还有一种是在2000点的时候明知已经很便宜了还想等多跌一会儿再买入；从而造成不及时止盈和不及时建仓的情况，永远没有最好的买入和卖出点</p>
-<p>人多的地方不去</p>
-<p>最一致的时候就是最危险的时候</p>
-<p>一般只有在趋势的初期和末期，才是真理掌握在少数人手里的时候</p>
-<p>业余炒股者到职业投资者的几个必经阶段：<br>    跟庄炒作 —&gt; 定量投资+程序化交易 —&gt; 技术分析+财报分析基本面 —&gt; 个股到行业配置 —&gt; 成长性投资+价值低估投资</p>
-<p>成长投资关注公司未来价值远大于公司现在价值，着眼于未来收入和利润的高增长，需要的是远见；价值投资关注企业现在的资产、现金流，看公司现在价格是否远小于公司现在的价值，寻找便宜的好公司为重中之重。</p>
-<ol>
-<li><p>好公司的2个标准：</p>
-<ul>
-<li>定价权</li>
-<li>要么在做自己可以不断复制和规模化的事情，决定销售增速</li>
-<li>要么在做别人不可能复制的事情，决定利润率的高低和趋势</li>
-<li>也就是可规模化+门槛高(可持续性)</li>
-</ul>
-</li>
-<li><p>客观看待股价波动，只反映看客们的情绪波动，与企业价值无关。</p>
-</li>
-<li>买股票之前问问自己下跌之后敢不敢加仓，因为价格波动在所难免。</li>
-<li>股价的波动本质上只跟估值和流动性有关系。</li>
-<li>投资的两种风险，一种是丧失本金的风险，另一种是波动风险。</li>
-</ol>
-</blockquote>
-<h3 id="价值投资">价值投资</h3><blockquote>
-<ol>
-<li><p>食品安全事件是行业投资较好的买入点，特别是那些没有涉事的行业龙头，被波及的企业。</p>
-</li>
-<li><p>当市场上大幅出逃，大家都忙着斩仓的时候，一定会有被低估的好公司出现。只不过此时往往有钱的没胆了，有胆的没钱了。</p>
-</li>
-<li><p>进入有积累的行业</p>
-</li>
-<li><p>股票价格等于市盈率乘以利润</p>
-</li>
-<li><p>牛市里听到的都是好消息，熊市里听到的都是坏消息，你只听到你想听到的消息，所以一定要保持独立性</p>
-</li>
-<li><p>遛狗理论：价格围绕着价值波动，最终回归价值</p>
-</li>
-<li><p>高估值股票的平均回报率远不如低估值股票</p>
-</li>
-<li><p>一个东西只有足够的便宜，赚钱的概率就会高很多</p>
-</li>
-<li><p>买入一个好公司永远不会太迟，即使局势明朗之后还是会有空间</p>
-</li>
-<li><p>股市市场长期来看是均值回归的，低估值时高仓位，高估值时低仓位，一般当公募基金平均仓位达到88%以上，市场就是阶段性见顶；不要追涨杀跌，抄底和逃顶的概率极低，最好是以区间来做决断。</p>
-</li>
-<li><p>德州扑克与炒股的相似点：理解概率只是；注意风险控制；牌好下重注，牌差不下注；避免贪婪和恐惧；读懂对手心理。</p>
-</li>
-<li><p>股票大跌时意味着未来预期收益率上升，反之下降。</p>
-</li>
-<li><p>高估值股票往往还在财报出现前后出现巨大风险。因为期望越大，失望越大。</p>
-</li>
-<li><p>股市风险有两种，一种是感受到的风险，一种是真实的风险。股票暴涨时真实风险增大，但是大家感受到的风险反而小；股市下跌时感受到的风险大，但是实际风险小。</p>
-</li>
-<li><p>什么时候卖出股票？基本面恶化，价格达到目标价，有更好的其他投资；与目前是否亏损没有必然关系，忘掉你的买入成本，不要有心理账户，因为它根本不会影响股价未来走势。</p>
-</li>
-<li><p>一个好的荐股逻辑包括三点：估值、品质、时机</p>
-</li>
-<li><p>熬得住和跑得快是市场生存的两种方式</p>
-</li>
-<li><p>锚固偏见</p>
-</li>
-<li><p>互联网赢家通吃，买龙头股；差异化产品买品牌；同质化产品买成本低的。</p>
-</li>
-<li><p>经济和市场都一定是有周期的。股票能跌多深是由最恐慌的人决定的。</p>
-</li>
-</ol>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="../2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="../../">1</a><a class="page-number" href="../2/">2</a><span class="page-number current">3</span><a class="page-number" href="../4/">4</a><span class="space">&hellip;</span><a class="page-number" href="../17/">17</a><a class="extend next" rel="next" href="../4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="../2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="../../">1</a><a class="page-number" href="../2/">2</a><span class="page-number current">3</span><a class="page-number" href="../4/">4</a><span class="space">&hellip;</span><a class="page-number" href="../18/">18</a><a class="extend next" rel="next" href="../4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1423,7 +1375,7 @@
                 
                   <a href="../../archives/">
                 
-                    <span class="site-state-item-count">85</span>
+                    <span class="site-state-item-count">86</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1470,7 +1422,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1637,7 +1591,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">77</span>
+                      
+                    
+                    <span class="site-state-item-count">78</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1750,7 +1706,7 @@
 
 
 <div class="powered-by"></div>
-<span class="post-count">博客全站共167.4k字</span>
+<span class="post-count">博客全站共168.3k字</span>
 
 
         
