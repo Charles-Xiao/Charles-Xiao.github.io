@@ -135,7 +135,7 @@
 <meta property="og:image" content="https://i.imgur.com/cQsPnGa.png">
 <meta property="og:image" content="https://charles-xiao.github.io/Users/xiaoyong/Desktop/个人资料/hexo-CharlesXiao/themes/next/source/images/skiplist-insert.png">
 <meta property="og:image" content="https://charles-xiao.github.io/Users/xiaoyong/Library/Application%20Support/typora-user-images/image-20181018145345754.png">
-<meta property="og:updated_time" content="2018-10-18T08:42:04.694Z">
+<meta property="og:updated_time" content="2018-12-12T15:38:17.821Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++源码之LevelDB">
 <meta name="twitter:description" content="什么是LevelDB—-LevelDB日知录一种单机持久化 K/V 数据库。其基于 LSM(LOG Structured Merge Tree) 实现，将所有的 Key/Value 按照 Key 的词法序有序地储存在文件中，具有很高的随机/顺序写性能，非常适用于写多读少的环境。 LevelDB 不是一个 SQL 数据库，它不支持关系数据模型，不支持 SQL 语言，也不支持索引。在同一时刻只允许单个">
@@ -427,13 +427,13 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-10-18 16:42:04" itemprop="dateModified" datetime="2018-10-18T16:42:04+08:00">2018-10-18</time>
+                <time title="修改时间：2018-12-12 23:38:17" itemprop="dateModified" datetime="2018-12-12T23:38:17+08:00">2018-12-12</time>
               
             
           </span>
 
         <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计1.9k字</span>
+        <span class="post-count">字数统计2k字</span>
         <span class="post-meta-divider">|</span>
         <span class="post-count">阅读时长7分钟</span>
 
@@ -498,10 +498,11 @@
 <p>delete操作</p>
 </blockquote>
 <h4 id="读取流程">读取流程</h4><p>leveldb读取数据总是先读取最新的数据,因为有可能插入键值一样的键值对,但是我们查询时是想获取最近插入的数据,所以读取数据时的顺序为：memtable-&gt;immemtable-&gt;sstable</p>
-<h4 id="compaction">compaction</h4><h5 id="minor_compaction">minor compaction</h5><p>就是将immemtable数据写回到磁盘的过程</p>
-<h5 id="major_compaction">major compaction</h5><p>即将某一层某个文件和上一层的几个sst文件合并的过程</p>
+<h4 id="compaction">compaction</h4><h5 id="minor_compaction">minor compaction</h5><p>就是将immemtable数据写回到磁盘的过程, 也就是L0层sst文件，L0 层的文件个数一般有一个限制</p>
+<h5 id="major_compaction">major compaction</h5><p>即将某一层Ln某个文件和上一层Ln+1的几个sst文件合并的过程,合并时究竟应该选择哪个SSTable与上一层sst文件进行合并以及每层的SSTable空间上限是多大，不同的系统有不同的实现</p>
 <h5 id="源码分析">源码分析</h5><p>Put函数调用Write函数，触发后台合并操作，DoCompactionWork之前会先调用MakeRoomForWrite函数判断空间是否足够</p>
-<h4 id="LSM_Tree存储引擎">LSM Tree存储引擎</h4><h5 id="MemTable">MemTable</h5><p>核心是Get和Add函数实现对SkipList的操作</p>
+<h4 id="LSM_Tree存储引擎">LSM Tree存储引擎</h4><p>LSM Tree 的写性能高于 B+ Tree，读性能低于 B+ Tree。原理就是磁盘的顺序访问速度远大于随机访问深度，甚至于磁盘的顺序访问速度大于内存的随机访问速度。</p>
+<h5 id="MemTable">MemTable</h5><p>核心是Get和Add函数实现对SkipList的操作</p>
 <h5 id="Skiplist跳跃表">Skiplist跳跃表</h5><ul>
 <li><p>构建</p>
 <p><img src="/Users/xiaoyong/Desktop/个人资料/hexo-CharlesXiao/themes/next/source/images/skiplist-construct.png" alt="skiplist-insert"></p>
@@ -1065,7 +1066,7 @@
 
 
 <div class="powered-by"></div>
-<span class="post-count">博客全站共168.3k字</span>
+<span class="post-count">博客全站共168.8k字</span>
 
 
         
