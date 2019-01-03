@@ -122,18 +122,18 @@
 
 
 
-  <meta name="description" content="基础语法 在C和C++语言中的全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值。 C++保证了所有对象与对象成员都会初始化，但其中基本数据类型的初始化还得依赖于构造函数。  在C语言中int a;表示声明了整型a但未初始化，而C++中的对象总是会被初始化的，无论是否写了圆括号或者是否写了参数列表；定义基本数据类型变量（单个值、数组）的同时可以指定初始值，如果未">
+  <meta name="description" content="基础语法 在C和C++语言中的全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值。 C++保证了所有对象与对象成员都会初始化，但其中基本数据类型的初始化还得依赖于构造函数。 在C语言中int a;表示声明了整型a但未初始化，而C++中的对象总是会被初始化的，无论是否写了圆括号或者是否写了参数列表；定义基本数据类型变量（单个值、数组）的同时可以指定初始值，如果未指">
 <meta name="keywords" content="C++">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++基础">
 <meta property="og:url" content="https://charles-xiao.github.io/2017/11/11/C++基础/index.html">
 <meta property="og:site_name" content="CharlesXiao‘s Blog">
-<meta property="og:description" content="基础语法 在C和C++语言中的全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值。 C++保证了所有对象与对象成员都会初始化，但其中基本数据类型的初始化还得依赖于构造函数。  在C语言中int a;表示声明了整型a但未初始化，而C++中的对象总是会被初始化的，无论是否写了圆括号或者是否写了参数列表；定义基本数据类型变量（单个值、数组）的同时可以指定初始值，如果未">
+<meta property="og:description" content="基础语法 在C和C++语言中的全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值。 C++保证了所有对象与对象成员都会初始化，但其中基本数据类型的初始化还得依赖于构造函数。 在C语言中int a;表示声明了整型a但未初始化，而C++中的对象总是会被初始化的，无论是否写了圆括号或者是否写了参数列表；定义基本数据类型变量（单个值、数组）的同时可以指定初始值，如果未指">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-02T00:11:57.855Z">
+<meta property="og:updated_time" content="2019-01-03T08:39:45.811Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++基础">
-<meta name="twitter:description" content="基础语法 在C和C++语言中的全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值。 C++保证了所有对象与对象成员都会初始化，但其中基本数据类型的初始化还得依赖于构造函数。  在C语言中int a;表示声明了整型a但未初始化，而C++中的对象总是会被初始化的，无论是否写了圆括号或者是否写了参数列表；定义基本数据类型变量（单个值、数组）的同时可以指定初始值，如果未">
+<meta name="twitter:description" content="基础语法 在C和C++语言中的全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值。 C++保证了所有对象与对象成员都会初始化，但其中基本数据类型的初始化还得依赖于构造函数。 在C语言中int a;表示声明了整型a但未初始化，而C++中的对象总是会被初始化的，无论是否写了圆括号或者是否写了参数列表；定义基本数据类型变量（单个值、数组）的同时可以指定初始值，如果未指">
 
 
 
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-02 08:11:57" itemprop="dateModified" datetime="2018-11-02T08:11:57+08:00">2018-11-02</time>
+                <time title="修改时间：2019-01-03 16:39:45" itemprop="dateModified" datetime="2019-01-03T16:39:45+08:00">2019-01-03</time>
               
             
           </span>
@@ -460,14 +460,10 @@
 
       
         <h3 id="基础语法">基础语法</h3><ol>
-<li><p>在C和C++语言中的全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值。 C++保证了所有对象与对象成员都会初始化，但其中基本数据类型的初始化还得依赖于构造函数。</p>
-</li>
-<li><p>在C语言中int a;表示声明了整型a但未初始化，而C++中的对象总是会被初始化的，无论是否写了圆括号或者是否写了参数列表；定义基本数据类型变量（单个值、数组）的同时可以指定初始值，如果未指定C++会去执行默认初始化(default-initialization)。<a href="http://harttle.land/2015/10/05/cpp-variable-init.html" target="_blank" rel="noopener">变量初始化</a></p>
-</li>
-<li><p><a href="https://blog.csdn.net/bzhxuexi/article/details/19899803" target="_blank" rel="noopener">size_t,ssize_t,int和long的区别</a></p>
-</li>
-<li><p><code>gcc test.c -o test</code>编译指令分为四个阶段进行，即预处理(也称预编译，Preprocessing, 把头文件内容真正引入cpp文件中)、编译(Compilation生成汇编代码.s文件)、汇编 (Assembly编译为目标文件.o)和连接(Linking包括静态连接库中需要的库文件)。</p>
-</li>
+<li>在C和C++语言中的全局变量和静态变量都是会自动初始化为0，堆和栈中的局部变量不会初始化而拥有不可预测的值。 C++保证了所有对象与对象成员都会初始化，但其中基本数据类型的初始化还得依赖于构造函数。</li>
+<li>在C语言中int a;表示声明了整型a但未初始化，而C++中的对象总是会被初始化的，无论是否写了圆括号或者是否写了参数列表；定义基本数据类型变量（单个值、数组）的同时可以指定初始值，如果未指定C++会去执行默认初始化(default-initialization)。<a href="http://harttle.land/2015/10/05/cpp-variable-init.html" target="_blank" rel="noopener">变量初始化</a></li>
+<li><a href="https://blog.csdn.net/bzhxuexi/article/details/19899803" target="_blank" rel="noopener">size_t,ssize_t,int和long的区别</a></li>
+<li><code>gcc test.c -o test</code>编译指令分为四个阶段进行，即预处理(也称预编译，Preprocessing, 把头文件内容真正引入cpp文件中)、编译(Compilation生成汇编代码.s文件)、汇编 (Assembly编译为目标文件.o)和连接(Linking包括静态连接库中需要的库文件)。<a href="http://www.ruanyifeng.com/blog/2018/01/assembly-language-primer.html" target="_blank" rel="noopener">汇编语言入门教程</a></li>
 <li>函数库分为<strong>静态库和动态库</strong>两种。静态库在程序编译时会被连接到目标代码中，程序运行时将不再需要该静态库。动态库在程序编译时并不会被连接到目标代码中，而是在程序运行是才被载入，因此在程序运行时还需要动态库存在。无论静态库，还是动态库，都是由.o文件创建的。<ul>
 <li>.o 一个.c或.cpp文件对应一个.o文件, 也就是编译器编译cpp源代码文件生成的目标文件</li>
 <li>.a是静态库，是好多个.o合在一起，多个.a可以链接生成一个可执行文件；静态库文件名的命名规范是以lib为前缀，紧接着跟静态库名，扩展名为.a</li>
@@ -501,6 +497,9 @@
 </ul>
 </blockquote>
 </blockquote>
+<ol>
+<li>addr2line -e 进程名 c3dece; <a href="https://mp.weixin.qq.com/s/Dgh3P5ZJDcJdhdSG5t-tlw" target="_blank" rel="noopener">使用addr2line命令获取出错具体行号</a></li>
+</ol>
 <h4 id="objdump">objdump</h4><p>objdump命令是Linux下的反汇编目标文件或者可执行文件的命令，使用objdump生成二进制的相关信息，并重定向到文件中</p>
 <figure class="highlight plain"><figcaption><span>-d(-S尽可能完全反编译) bin/bucket > segfaultDump```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```grep -n -A 10 -B 10 &quot;c3dece&quot; ./segfaultDump</span><br></pre></td></tr></table></figure>
 <h4 id="pstack和strace">pstack和strace</h4><p>strace跟踪程序使用的底层系统调用，可输出系统调用被执行的时间点以及各个调用耗时；pstack工具对指定PID的进程输出函数调用栈。一般两者配合调用，先用strace查看耗时的系统调用，然后用pstack看函数调用栈信息，找到出问题的函数。</p>
@@ -600,8 +599,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="../2018/" rel="next" title="2018">
-                <i class="fa fa-chevron-left"></i> 2018
+              <a href="../C++源码之LevelDB:RocksDB/" rel="next" title="C++源码之LevelDB">
+                <i class="fa fa-chevron-left"></i> C++源码之LevelDB
               </a>
             
           </div>
@@ -610,8 +609,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="../分布式系统基础知识/" rel="prev" title="分布式存储系统基础">
-                分布式存储系统基础 <i class="fa fa-chevron-right"></i>
+              <a href="../../../12/02/Mysql Init线程不安全问题/" rel="prev" title="Mysql初次Init线程不安全问题">
+                Mysql初次Init线程不安全问题 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -684,7 +683,7 @@
                 
                   <a href="../../../../archives/">
                 
-                    <span class="site-state-item-count">86</span>
+                    <span class="site-state-item-count">87</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -997,7 +996,7 @@
       <div class="footer-inner">
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<div class="copyright"><a target="_blank" rel="external nofollow" href="http://www.miitbeian.gov.cn/">  </a> &copy; 2015.05.16 – <span itemprop="copyrightYear">2018</span>
+<div class="copyright"><a target="_blank" rel="external nofollow" href="http://www.miitbeian.gov.cn/">  </a> &copy; 2015.05.16 – <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -1031,7 +1030,7 @@
 
 
 <div class="powered-by"></div>
-<span class="post-count">博客全站共168.8k字</span>
+<span class="post-count">博客全站共169.6k字</span>
 
 
         

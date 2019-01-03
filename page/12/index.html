@@ -381,6 +381,212 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2016/02/19/Nginx配置教程/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="../../images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="../../2016/02/19/Nginx配置教程/" itemprop="url">
+                  Nginx配置教程
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-02-19 22:36:53" itemprop="dateCreated datePublished" datetime="2016-02-19T22:36:53+08:00">2016-02-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2017-12-21 15:20:30" itemprop="dateModified" datetime="2017-12-21T15:20:30+08:00">2017-12-21</time>
+              
+            
+          </span>
+
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">字数统计975字</span>
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">阅读时长3分钟</span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="nginx反向代理/负载均衡">nginx反向代理/负载均衡</h4><p>nginx是一个网页服务器，它能反向代理HTTP, HTTPS, SMTP, POP3, IMAP的协议链接，以及负载均衡和HTTP缓存  </p>
+<ol>
+<li><strong>代理</strong>，就是在客户端和服务端之间强行添加了一层，用来实现流量转发的功能  </li>
+<li><strong>正向代理</strong>，是用于代理客户端的。举个很简单的例子：你直接在大陆地区访问google.com肯定是访问不了的，但是现在假如你有一台在美国的主机A，并且能够正常访问，那么你可以将浏览器对google.com的请求先转发给服务器A，服务器A收到请求后，扮演客户端的角色，发起对google.com的请求，服务器A收到响应后，又扮演服务端，将此响应原封不动的返回给你，自此，一次正向代理顺利完成。  </li>
+<li><strong>反向代理</strong>顾名思义是用来代理服务端的多台机器，访问同一个域名可以分流到不同的服务器。也就是<strong>负载均衡</strong>，用来分流流量压力到不同的服务器</li>
+</ol>
+<h4 id="nginx的多进程并发模型">nginx的多进程并发模型</h4><h4 id="nginx配置文件">nginx配置文件</h4><ol>
+<li><p>配置文件所在的常见目录: (可用nginx -t 测试配置文件是否正确)</p>
+<pre><code>/etc/nginx/nginx<span class="class">.conf</span>
+/opt/nginx/conf/nginx<span class="class">.conf</span>
+/usr/local/nginx/nginx<span class="class">.conf</span>
+/usr/local/etc/nginx/nginx.<span class="function"><span class="title">cnf</span><span class="params">(Mac系统)</span></span>
+</code></pre></li>
+<li><p>Nginx配置文件主要分成6部分：<strong>main（全局设置）、server（主机设置/指定虚拟主机域名、IP和端口）、upstream（上游服务器设置，主要为反向代理、负载均衡相关配置）和 location（URL匹配特定位置后的设置/用于匹配网页位置）、events(nginx工作模式)、http(http设置)</strong>  </p>
+</li>
+<li>他们之间的关系式：server继承main，location继承server,upstream既不会继承指令也不会被继承,它有自己的特殊指令，不需要在其他地方的应用</li>
+<li><a href="https://www.zybuluo.com/phper/note/89391" target="_blank" rel="noopener">参考链接</a></li>
+</ol>
+<h5 id="Nginx限速和超时配置">Nginx限速和超时配置</h5><ol>
+<li>nginx可以通过<figure class="highlight plain"><figcaption><span>两个模块都能够对客户端访问进行限制。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">2. [nginx访问限制模块limit_conn_zone 和limit_req_zone配置使用详解](http://blog.51cto.com/michaelkang/1257476)</span><br><span class="line">3. [nginx超时设置](http://blog.csdn.net/liujiyong7/article/details/18228915)</span><br><span class="line">4. **限速配置实例**</span><br><span class="line">	</span><br><span class="line">	&gt; * ```limit_req_log_level```: 设置日志级别，默认值为error级别，当服务器因为频率过高拒绝或者延迟处理请求时可以记下相应级别的日志。延迟记录的日志级别比拒绝的低一个级别，如果设置“limit_req_log_level notice”， 则延迟的日志就是info级别</span><br><span class="line">	</span><br><span class="line">	&gt; * ```limit_req_status```: 设置拒绝请求的响应状态码,例如```limit_req_status 503</span><br></pre></td></tr></table></figure></li>
+</ol>
+<pre><code><span class="xml">&gt; * <span class="comment"><figure class="highlight plain"><figcaption><span>zone</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; 设置内存限制域为10M(1M存储区可以保存32000个32字节或16000个64字节的状态。如果存储区满，服务器将对其他请求相应503状态码)，限制平均每秒不超过1个请求，同时允许超过频率限制的请求数不多于5个</span><br></pre></td></tr></table></figure></span>
+
+            limit_req_zone $binary_remote_addr zone=ttlsa_com:10m rate=1r/s;
+        server </span><span class="expression">{
+            <span class="variable">location</span> <span class="end-block">/www.ttlsa.com</span><span class="end-block">/ </span>{
+                <span class="variable">limit</span>_<span class="variable">req</span> <span class="variable">zone</span>=<span class="variable">ttlsa</span>_<span class="variable">com</span> <span class="variable">burst</span>=5;
+            }</span><span class="xml">
+        }
+        ```</span>
+</code></pre><h5 id="Nginx日志配置">Nginx日志配置</h5><ol>
+<li><p>error.log日志配置，主要用于排查错误。</p>
+<blockquote>
+<p>配置语法：error_log /path/file level;</p>
+<p>默认配置：error_log logs/error.log error;</p>
+<blockquote>
+<ul>
+<li><p>level是日志的输出等级，取值范围从小到大为(debug,info,notice,warn,error,crit,alert,emerg)。当设定为一个级别时，大于或者等于该级别的日志都会被输出到/path/file文件中，小于该级别的日志则不会输出。例如：当设定为error级别时，error，crit，alert，emerg级别的日志都会输出;如果设定的日志级别是debug，则会输出所有的日志。</p>
+</li>
+<li><p>/path/file也可以是/dev/null，这样就不会输出任何日志，这也是关闭error日志的唯一手段。</p>
+</li>
+<li><p>/path/file也可以是stderr，这样日志会输出到标准错误文件中。</p>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+</li>
+<li><p>access.log: nginx请求日志</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2016/02/18/依道-wifi室内定位的实现原理/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1156,254 +1362,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2016/01/13/Roman与Integer之间的相互转换/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="CharlesXiao">
-      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
-      <meta itemprop="image" content="../../images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CharlesXiao‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="../../2016/01/13/Roman与Integer之间的相互转换/" itemprop="url">
-                  Roman与Integer之间的相互转换
-                </a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2016-01-13 11:08:42" itemprop="dateCreated datePublished" datetime="2016-01-13T11:08:42+08:00">2016-01-13</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2016-01-15 17:03:20" itemprop="dateModified" datetime="2016-01-15T17:03:20+08:00">2016-01-15</time>
-              
-            
-          </span>
-
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计604字</span>
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长2分钟</span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="../../categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>罗马数字与阿拉伯数字之间的简单转换方法,首先需要了解罗马数字计数法，在这两道转换题里我们只用到了前三项规则</p>
-<ol>
-<li><p>罗马数字共有7个，即I（1）、V（5）、X（10）、L（50）、C（100）、D（500）和M（1000）</p>
-</li>
-<li><p>右加左减: 较大的罗马数字的右边记上较小的罗马数字，表示大数字加小数字; 较大的罗马数字的左边记上较小的罗马数字，表示大数字减小数字</p>
-</li>
-<li>左减有一定限制: 只有I, X, C可以放到左边当做减数使用,而且左减不能越位,I的右边只能是VX, X右边只能是LC, C的右边只能是DM; 左减数字必须为一位</li>
-<li>其他规则: 加线乘千、重复数次、右加数字不可连续超过三位、同一数码最多只能连续出现三次</li>
-</ol>
-<h3 id="Roman_to_Integer">Roman to Integer</h3><p>解题思路:  对于每一个roman字符,除了I，X，C三种情况会出现减去对应数值，其他情况都是加上该字符对应的数值; 针对I、X、C，我们可以总结发现只需要考察他们的下一位是否满足减的条件,是则减，否则加。</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
-    <span class="keyword">public</span> <span class="function"><span class="keyword">int</span> <span class="title">romanToInt</span><span class="params">(String s)</span> </span>{
-        <span class="keyword">int</span> res = <span class="number">0</span>;
-        <span class="keyword">int</span> len = s.length();
-        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++) {
-            <span class="keyword">char</span> tmp = s.charAt(i);
-            <span class="keyword">switch</span> (tmp) {
-                <span class="keyword">case</span> <span class="string">'I'</span>:
-                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'V' || s.charAt(i+1) == 'X')) {
-                        res -= <span class="number">1</span>;
-                        <span class="keyword">break</span>;
-                    }
-                    res += <span class="number">1</span>;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'V'</span>:
-                    res += 5;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'X'</span>:
-                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'L' || s.charAt(i+1) == 'C')) {
-                        res -= <span class="number">10</span>;
-                        <span class="keyword">break</span>;
-                    }
-                    res += <span class="number">10</span>;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'L'</span>:
-                    res += 50;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'C'</span>:
-                    <span class="keyword">if</span> (i+1 &lt;len &amp;&amp; (s.charAt(i+1) == 'D' || s.charAt(i+1) == 'M')) {
-                        res -= <span class="number">100</span>;
-                        <span class="keyword">break</span>;
-                    }
-                    res += <span class="number">100</span>;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'D'</span>:
-                    res += 500;
-                    <span class="keyword">break</span>;
-                <span class="keyword">case</span> <span class="string">'M'</span>:
-                    res += 1000;
-                    <span class="keyword">break</span>;
-                <span class="keyword">default</span>:
-                    <span class="keyword">break</span>;
-            }
-        }
-        <span class="keyword">return</span> res;
-    }
-}
-</code></pre><h3 id="Integer_To_Roman">Integer To Roman</h3><p>解题思路: 对于输入的数值进行取商处理，从大的计数单位到小的计数单位依次取商, 商则是该计数单位对应的roman字符的个数。</p>
-<pre><code>public <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>{
-    public <span class="built_in">String</span> intToRoman(<span class="built_in">int</span> <span class="built_in">num</span>) {
-        <span class="comment">// igr存储的是从大到小每一个基本计数单位,与roman一一对应</span>
-        <span class="built_in">String</span>[] roman = {<span class="string">"M"</span>, <span class="string">"CM"</span>, <span class="string">"D"</span>, <span class="string">"CD"</span>, <span class="string">"C"</span>, <span class="string">"XC"</span>, <span class="string">"L"</span>, <span class="string">"XL"</span>, <span class="string">"X"</span>, <span class="string">"IX"</span>, <span class="string">"V"</span>, <span class="string">"IV"</span>, <span class="string">"I"</span>};
-        <span class="built_in">int</span>[] igr = {<span class="number">1000</span>, <span class="number">900</span>, <span class="number">500</span>, <span class="number">400</span>, <span class="number">100</span>, <span class="number">90</span>, <span class="number">50</span>, <span class="number">40</span>, <span class="number">10</span>, <span class="number">9</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">1</span>};
-        StringBuilder res = <span class="keyword">new</span> StringBuilder();
-        <span class="keyword">for</span> (<span class="built_in">int</span> i=<span class="number">0</span>; i&lt;roman.length; i++) {
-            <span class="built_in">int</span> quotient = <span class="built_in">num</span> / igr[i];
-            <span class="keyword">for</span> (<span class="built_in">int</span> j=<span class="number">0</span>; j&lt;quotient; j++) {
-                res.append(roman[i]);
-            }
-            <span class="built_in">num</span> -= quotient * igr[i];
-        }
-        <span class="keyword">return</span> res.toString();
-    }
-}
-</code></pre>
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1453,7 +1411,7 @@
                 
                   <a href="../../archives/">
                 
-                    <span class="site-state-item-count">86</span>
+                    <span class="site-state-item-count">87</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1750,7 +1708,7 @@
       <div class="footer-inner">
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<div class="copyright"><a target="_blank" rel="external nofollow" href="http://www.miitbeian.gov.cn/">  </a> &copy; 2015.05.16 – <span itemprop="copyrightYear">2018</span>
+<div class="copyright"><a target="_blank" rel="external nofollow" href="http://www.miitbeian.gov.cn/">  </a> &copy; 2015.05.16 – <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -1784,7 +1742,7 @@
 
 
 <div class="powered-by"></div>
-<span class="post-count">博客全站共168.8k字</span>
+<span class="post-count">博客全站共169.6k字</span>
 
 
         

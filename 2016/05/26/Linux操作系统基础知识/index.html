@@ -133,7 +133,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/Linux_process.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/kernel.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/kernel-user-space.png">
-<meta property="og:updated_time" content="2018-12-03T03:49:45.324Z">
+<meta property="og:updated_time" content="2019-01-02T03:36:51.987Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux操作系统基础知识">
 <meta name="twitter:description" content="Linux程序/进程/文件 程序是存在文件中的机器指令及其数据的序列，编译器将高级语言编写的源代码编译成CPU可执行的二进制可执行文件。 进程存在于用户空间，用户空间是存放运行中程序和他们的数据的一部分内存空间。 进程运行在内存中，内存实际是一个很大的字节数组，对应着内存条上的所有二进制内存位置，进程并不占用连续的内存位置，内核帮进程找到可用的空闲内存页来保存它的机器指令和数据，并建立数据结构来保">
@@ -425,15 +425,15 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-03 11:49:45" itemprop="dateModified" datetime="2018-12-03T11:49:45+08:00">2018-12-03</time>
+                <time title="修改时间：2019-01-02 11:36:51" itemprop="dateModified" datetime="2019-01-02T11:36:51+08:00">2019-01-02</time>
               
             
           </span>
 
         <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计4.7k字</span>
+        <span class="post-count">字数统计5.1k字</span>
         <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长16分钟</span>
+        <span class="post-count">阅读时长17分钟</span>
 
           
             <span class="post-category">
@@ -516,10 +516,18 @@
 <li>一个文件可以有多个链接，链接数也被记录在inode中。rm命令当inode的链接数减到0时才会真正删除数据块和inode。磁盘上每个分区都包含一棵独立的目录树，linux会有个根文件系统来把多个分区的目录树关联到一起，某一个文件系统的目录树会被附加在子目录上。linux拒绝跨设备的链接，也就是说磁盘1和2上都有个叫做402的inode，但是指向不同的文件。</li>
 <li>FD文件描述符：Linux中一个进程会打开一组文件，它们保存在一个数组中，FD是指某个文件在数组中的索引，0、1、2分别表示标准输入，标准输出，标准错误输出。</li>
 </ol>
-<h3 id="Linux通用文件系统">Linux通用文件系统</h3><p>大部分 Linux 文件系统都默认采用 ext4 文件系统。在有 ext 之前，使用的是 MINIX 文件系统。如果你不熟悉 Linux 历史，那么可以理解为 MINIX 是用于 IBM PC/AT 微型计算机的一个非常小的类 Unix 系统。年轻的 Linus Torvalds 使用 MINIX 来开发原始 Linux 内核，并于 1991 年首次公布。</p>
+<h3 id="Linux通用文件系统">Linux通用文件系统</h3><p>所谓文件系统，就是文件的储存方式。简单说，它就是一个门牌系统，为储存设备划分门牌号，每个文件分配一个门牌，然后就能按照门牌找到文件。</p>
+<p>储存设备都需要指定文件系统，计算机才能读写。所谓”格式化”，就是为硬盘安装文件系统。不同的操作系统有不同的文件系统，Linux 使用 ext4，OSX使用 HFS +，Windows 使用 NTFS(Mac可以读，但是默认不能写入, 移动硬盘一般也是NTFS格式；win还支持FAT32，exFAT文件系统, FAT32中文件不能超过4GB，分区不能超过8TB, exFAT支持mac和win读写)，Solaris 和 Unix 使用ZFS。</p>
+<p>大部分 Linux 文件系统都默认采用 ext4 文件系统。在有 ext 之前，使用的是 MINIX 文件系统。如果你不熟悉 Linux 历史，那么可以理解为 MINIX 是用于 IBM PC/AT 微型计算机的一个非常小的类 Unix 系统。年轻的 Linus Torvalds 使用 MINIX 来开发原始 Linux 内核，并于 1991 年首次公布。</p>
 <p><strong>ext2的问题</strong>：在大部分情况下，ext2 在 Linux 发行版中工作得很好，但像 FAT、FAT32、HFS 和当时的其它文件系统一样 —— 在断电时容易发生灾难性的破坏。如果在将数据写入文件系统时候发生断电，则可能会将其留在所谓 不一致 的状态 —— 事情只完成一半而另一半未完成。这可能导致大量文件丢失或损坏，这些文件与正在保存的文件无关甚至导致整个文件系统无法卸载。</p>
 <p>ext3 文件系统的 Linux 内核中实现了三个级别的日志记录方式来解决数据不一致问题：日记journal、顺序ordered和回写writeback。</p>
 <p>ext4 特地设计为尽可能地向后兼容 ext3。这不仅允许 ext3 文件系统原地升级到 ext4；也允许 ext4 驱动程序以 ext3 模式自动挂载 ext3 文件系统，因此使它无需单独维护两个代码库</p>
+<blockquote>
+<ol>
+<li><a href="https://www.howtoing.com/find-linux-filesystem-type" target="_blank" rel="noopener">7种确定Linux中文件系统类型的方法</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2018/10/exfat.html" target="_blank" rel="noopener">exFAT 文件系统指南</a></li>
+</ol>
+</blockquote>
 <h3 id="Linux_/proc_文件系统">Linux /proc 文件系统</h3><p>Linux 内核提供了一种通过 /proc 文件系统，在运行时访问内核内部数据结构、改变内核设置的机制。proc文件系统是一个伪文件系统，它只存在内存当中，而不占用外存空间。它以文件系统的方式为访问系统内核数据的操作提供接口。<br>用户和应用程序可以通过proc得到系统的信息，并可以改变内核的某些参数。由于系统的信息，如进程，是动态改变的，所以用户或应用程序读取proc文件时，proc文件系统是动态从系统内核读出所需信息并提交的。另外，在/proc下还有三个很重要的目录：net，scsi和sys。 Sys目录是可写的，可以通过它来访问或修改内核的参数，而net和scsi则依赖于内核配置。例如，如果系统不支持scsi，则scsi 目录不存在</p>
 <h3 id="Linux_内核态和用户态的模式切换">Linux 内核态和用户态的模式切换</h3><ul>
 <li><p>关系图：<br>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/kernel.png" class="full-image" width="60%"><br>  <img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/kernel-user-space.png" class="full-image" width="60%"></p>
@@ -547,7 +555,11 @@
 <li>MBR 与 GPT 用于存储硬盘的分区信息，是不同的硬盘分区表类型。MBR支持最大约2T的硬盘，最多能划分4个主分区，更多分区需要使用拓展分区实现。</li>
 <li>GPT 表示 GUID（Globally Unique Identifier） 分区表，是 UEFI 规范的一部分，用于替换 MBR 的分区方式。GPT 没有分区数和分区大小限制。</li>
 <li>BIOS/UEFI 跟 MBR/GPT 是不同层级的，BIOS/UEFI 是 Fireware，MBR/GPT 是分区表。</li>
+<li>分区表的两种格式：MBR 和 GPT。前者是传统格式，兼容性好；后者更现代，功能更强大。一般来说，都推荐使用 GPT。gdisk命令用于分区操作。</li>
 </ul>
+<blockquote>
+<p>所谓硬盘分区，就是指一块硬盘上面，同时存在多个文件系统。每个文件系统管理的区域，就称为一个分区（partition）。比如，一块 100 GB 的硬盘，可以一半是 NTFS 分区，另一半是 exFAT 分区。<br>硬盘必须先分区，才能指定每个区的文件系统。分区大小、起始位置、结束位置、文件系统等信息，都储存在分区表里面。</p>
+</blockquote>
 <h5 id="File_System（文件系统）是存储媒介中文件存储的组织方式。">File System（文件系统）是存储媒介中文件存储的组织方式。</h5><p>不同的文件系统类型有不同的速度，灵活性，安全性和占用空间。不同操作系统只支持特定的文件系统类型。常见的文件系统类型有 FAT16，FAT32，NTFS，EXT3，EXT4，HFS 等。</p>
 <ul>
 <li><strong>磁盘文件系统</strong>包括硬盘、U盘、磁盘阵列、CDROM、DVD等。常见文件系统有autofs、coda、Ext2、Ext3、Ext4、VFAT、ISO9660（光盘或者光盘镜像）、UFS（Unix File System，Unix文件系统）、FAT（File Allocation Table，文件分配表）、FAT16、FAT32、NTFS（New TechnologyFile System）等。</li>
@@ -692,7 +704,7 @@
                 
                   <a href="../../../../archives/">
                 
-                    <span class="site-state-item-count">86</span>
+                    <span class="site-state-item-count">87</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1005,7 +1017,7 @@
       <div class="footer-inner">
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<div class="copyright"><a target="_blank" rel="external nofollow" href="http://www.miitbeian.gov.cn/">  </a> &copy; 2015.05.16 – <span itemprop="copyrightYear">2018</span>
+<div class="copyright"><a target="_blank" rel="external nofollow" href="http://www.miitbeian.gov.cn/">  </a> &copy; 2015.05.16 – <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -1039,7 +1051,7 @@
 
 
 <div class="powered-by"></div>
-<span class="post-count">博客全站共168.8k字</span>
+<span class="post-count">博客全站共169.6k字</span>
 
 
         

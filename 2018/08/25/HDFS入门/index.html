@@ -122,18 +122,18 @@
 
 
 
-  <meta name="description" content="HDFSHDFS 从设计上来说，主要考虑以下的特征：超大文件，最大能支持 PB 级别的数据；流式数据访问，一次写入，多次读取；在不可靠的文件，故障率高的商用硬件上能运行。Hadoop 的不利之处，是不适应低时间延迟的数据访问，不适应大量的小文件，也不适应多用户写入任意修改文件的情况。 NameNode 是 HDFS 的管理者。HDFS 将大文件分割成数据块，每个数据块是 64M，也可以设置成 1">
+  <meta name="description" content="HDFSHDFS 从设计上来说，主要考虑以下的特征：超大文件，最大能支持 PB 级别的数据；流式数据访问，一次写入，多次读取；在不可靠的文件，故障率高的商用硬件上能运行。Hadoop 的不利之处，是不适应低时间延迟的数据访问，不适应大量的小文件，也不适应多用户写入任意修改文件的情况。 NameNode 是 HDFS 的管理者, 存储着整个集群的元数据信息，比如所有文件和目录信息等。HDFS 将大文">
 <meta name="keywords" content="HDFS,存储,分布式系统">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HDFS入门">
 <meta property="og:url" content="https://charles-xiao.github.io/2018/08/25/HDFS入门/index.html">
 <meta property="og:site_name" content="CharlesXiao‘s Blog">
-<meta property="og:description" content="HDFSHDFS 从设计上来说，主要考虑以下的特征：超大文件，最大能支持 PB 级别的数据；流式数据访问，一次写入，多次读取；在不可靠的文件，故障率高的商用硬件上能运行。Hadoop 的不利之处，是不适应低时间延迟的数据访问，不适应大量的小文件，也不适应多用户写入任意修改文件的情况。 NameNode 是 HDFS 的管理者。HDFS 将大文件分割成数据块，每个数据块是 64M，也可以设置成 1">
+<meta property="og:description" content="HDFSHDFS 从设计上来说，主要考虑以下的特征：超大文件，最大能支持 PB 级别的数据；流式数据访问，一次写入，多次读取；在不可靠的文件，故障率高的商用硬件上能运行。Hadoop 的不利之处，是不适应低时间延迟的数据访问，不适应大量的小文件，也不适应多用户写入任意修改文件的情况。 NameNode 是 HDFS 的管理者, 存储着整个集群的元数据信息，比如所有文件和目录信息等。HDFS 将大文">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-12T02:07:38.786Z">
+<meta property="og:updated_time" content="2018-12-29T07:53:31.897Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HDFS入门">
-<meta name="twitter:description" content="HDFSHDFS 从设计上来说，主要考虑以下的特征：超大文件，最大能支持 PB 级别的数据；流式数据访问，一次写入，多次读取；在不可靠的文件，故障率高的商用硬件上能运行。Hadoop 的不利之处，是不适应低时间延迟的数据访问，不适应大量的小文件，也不适应多用户写入任意修改文件的情况。 NameNode 是 HDFS 的管理者。HDFS 将大文件分割成数据块，每个数据块是 64M，也可以设置成 1">
+<meta name="twitter:description" content="HDFSHDFS 从设计上来说，主要考虑以下的特征：超大文件，最大能支持 PB 级别的数据；流式数据访问，一次写入，多次读取；在不可靠的文件，故障率高的商用硬件上能运行。Hadoop 的不利之处，是不适应低时间延迟的数据访问，不适应大量的小文件，也不适应多用户写入任意修改文件的情况。 NameNode 是 HDFS 的管理者, 存储着整个集群的元数据信息，比如所有文件和目录信息等。HDFS 将大文">
 
 
 
@@ -421,13 +421,13 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-12 10:07:38" itemprop="dateModified" datetime="2018-09-12T10:07:38+08:00">2018-09-12</time>
+                <time title="修改时间：2018-12-29 15:53:31" itemprop="dateModified" datetime="2018-12-29T15:53:31+08:00">2018-12-29</time>
               
             
           </span>
 
         <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计534字</span>
+        <span class="post-count">字数统计698字</span>
         <span class="post-meta-divider">|</span>
         <span class="post-count">阅读时长2分钟</span>
 
@@ -459,8 +459,9 @@
       
 
       
-        <h5 id=""> </h5><h4 id="HDFS">HDFS</h4><p>HDFS 从设计上来说，主要考虑以下的特征：<strong>超大文件</strong>，最大能支持 PB 级别的数据；<strong>流式数据访问</strong>，一次写入，多次读取；在不可靠的文件，<strong>故障率高的商用硬件上能运行</strong>。Hadoop 的不利之处，是不适应低时间延迟的数据访问，不适应大量的小文件，也不适应多用户写入任意修改文件的情况。</p>
-<p>NameNode 是 HDFS 的管理者。HDFS 将大文件分割成数据块，每个数据块是 64M，也可以设置成 128M或者 256M，然后将这些数据块以普通文件的形式存放到数据节点上，为了防止 DataNode 意外失效，HDFS 会将每个数据块复制若干份放到不同的数据节点。</p>
+        <h4 id="HDFS">HDFS</h4><p>HDFS 从设计上来说，主要考虑以下的特征：<strong>超大文件</strong>，最大能支持 PB 级别的数据；<strong>流式数据访问</strong>，一次写入，多次读取；在不可靠的文件，<strong>故障率高的商用硬件上能运行</strong>。Hadoop 的不利之处，是不适应低时间延迟的数据访问，不适应大量的小文件，也不适应多用户写入任意修改文件的情况。</p>
+<p>NameNode 是 HDFS 的管理者, 存储着整个集群的元数据信息，比如所有文件和目录信息等。HDFS 将大文件分割成数据块，每个数据块是 64M，也可以设置成 128M或者 256M，然后将这些数据块以普通文件的形式存放到数据节点上，为了防止 DataNode 意外失效，HDFS 会将每个数据块复制若干份放到不同的数据节点。</p>
+<p>HDFS能够存储TB甚至PB规模的数据是有前提的，首先数据要以大文件为主，其次NameNode的内存要足够大。当元数据信息较多时，NameNode的启动会变得很慢，也比较容易触发GC操作。显然当数据到了一定的量级，元数据管理会成为HDFS的一个瓶颈，其实这也是为什么说它适合存储大文件的原因。如果解决了元数据管理的问题，其实HDFS是可以支撑海量小文件的。</p>
 <h4 id="HDFS-Client">HDFS-Client</h4><h4 id="HDFS-VFS">HDFS-VFS</h4><p>VFS 是Linux 内核和真正文件系统之间的抽象层，它提供统一的接口，真正的文件系统和 Linxu 内核必须通过 VFS 的接口进行沟通。内核的 I\O 路径是这样的：user space -&gt; VFS -&gt; FS -&gt; I\O layer -&gt; I\O scheduler(optional) -&gt; block_driver -&gt; block_device, 一个 I\O 经过了这些才真正到达了对应的存储上。一个用户态的系统调用先通过 VFS 找到对应的文件系统再向下传递 I\O，这是 I\O 的一般路径。对于用户来说，一切都是操作文件。</p>
 <p>Hadoop VFS兼容层，可以把HDFS当作一个标准的文件系统mount到本地的Linux文件系统上。这样用户便可以使用标准Unix命令，例如“ls”、“cd”、“cp”、“mkdir”、“find”、“grep”等，来操作一个hdfs的实例；也可以使用标准POSIX的开发库，例如C、C++、Python、Perl、JAVA、bash等的打开、写、读、关闭方法来操作一个hdfs的实例。</p>
 <h5 id="HDFS-VFS特性">HDFS-VFS特性</h5><ul>
@@ -525,8 +526,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="../../../05/10/Ruby net http库默认重试一次请求问题/" rel="next" title="Ruby net::http库默认重试一次请求问题">
-                <i class="fa fa-chevron-left"></i> Ruby net::http库默认重试一次请求问题
+              <a href="../分布式系统常见问题和解决方案/" rel="next" title="分布式系统常见问题和解决方案">
+                <i class="fa fa-chevron-left"></i> 分布式系统常见问题和解决方案
               </a>
             
           </div>
@@ -535,8 +536,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="../分布式系统常见问题和解决方案/" rel="prev" title="分布式系统常见问题和解决方案">
-                分布式系统常见问题和解决方案 <i class="fa fa-chevron-right"></i>
+              <a href="../../../10/20/C++并发编程揭秘/" rel="prev" title="C++并发编程揭秘">
+                C++并发编程揭秘 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -609,7 +610,7 @@
                 
                   <a href="../../../../archives/">
                 
-                    <span class="site-state-item-count">86</span>
+                    <span class="site-state-item-count">87</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -900,7 +901,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#"><span class="nav-number">1.</span> <span class="nav-text"> </span></a></li></ol><li class="nav-item nav-level-4"><a class="nav-link" href="#HDFS"><span class="nav-number"></span> <span class="nav-text">HDFS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HDFS-Client"><span class="nav-number"></span> <span class="nav-text">HDFS-Client</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HDFS-VFS"><span class="nav-number"></span> <span class="nav-text">HDFS-VFS</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#HDFS-VFS特性"><span class="nav-number">1.</span> <span class="nav-text">HDFS-VFS特性</span></a></li></ol></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#HDFS"><span class="nav-number">1.</span> <span class="nav-text">HDFS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HDFS-Client"><span class="nav-number">2.</span> <span class="nav-text">HDFS-Client</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HDFS-VFS"><span class="nav-number">3.</span> <span class="nav-text">HDFS-VFS</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#HDFS-VFS特性"><span class="nav-number">3.1.</span> <span class="nav-text">HDFS-VFS特性</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -922,7 +923,7 @@
       <div class="footer-inner">
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<div class="copyright"><a target="_blank" rel="external nofollow" href="http://www.miitbeian.gov.cn/">  </a> &copy; 2015.05.16 – <span itemprop="copyrightYear">2018</span>
+<div class="copyright"><a target="_blank" rel="external nofollow" href="http://www.miitbeian.gov.cn/">  </a> &copy; 2015.05.16 – <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -956,7 +957,7 @@
 
 
 <div class="powered-by"></div>
-<span class="post-count">博客全站共168.8k字</span>
+<span class="post-count">博客全站共169.6k字</span>
 
 
         

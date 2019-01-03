@@ -381,6 +381,198 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2015/08/29/浅谈MVC、MVP、MVVM三种框架模式/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CharlesXiao">
+      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
+      <meta itemprop="image" content="../../images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CharlesXiao‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="../../2015/08/29/浅谈MVC、MVP、MVVM三种框架模式/" itemprop="url">
+                  浅谈MVC、MVP、MVVM三种框架模式
+                </a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2015-08-29 14:52:55" itemprop="dateCreated datePublished" datetime="2015-08-29T14:52:55+08:00">2015-08-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2016-07-07 17:48:02" itemprop="dateModified" datetime="2016-07-07T17:48:02+08:00">2016-07-07</time>
+              
+            
+          </span>
+
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">字数统计787字</span>
+        <span class="post-meta-divider">|</span>
+        <span class="post-count">阅读时长2分钟</span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="../../categories/框架模式/" itemprop="url" rel="index"><span itemprop="name">框架模式</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>MVC模式</strong>是一种非常经典的复合型软件架构模式，它把用户界面交互分拆到不同的三种角色中，应用程序被分成三个核心部件：Model（模型）、View（视图）、Controller（控制器）, 它们各自处理自己的任务，这样就可以把业务逻辑和视图显示解耦，提高了应用程序的灵活性和复用性。MVC模式不管是在web开发还是Android开发中都被广泛应用，最典型的MVC应用就是JSP + servlet + javabean的模式，例如SpringMVC开发框架。</p>
+<ul>
+<li><p>Model模型：模型持有所有的数据、状态和程序逻辑，一个模型可以有不同的多个视图表现形式，复用性高。例如数据库记录以及相应增删查改操作；Android中对数据库的操作、网络请求、格式转换、文件下载、大数据处理等的耗时操作都在Model里面处理</p>
+</li>
+<li><p>View视图：视图是用户看到并与之交互的页面，通常直接从模型中取得它需要显示的状态与数据，一个视图往往有一个相应的控制器，理论上也可以同不同的模型相关联。例如html、xml页面；Android中主要是layout布局xml文件，webview等</p>
+</li>
+<li><p>Controller控制器：位于视图和模型中间，负责接受用户的输入，将输入进行解析并反馈给模型，例如Android开发中的Activity</p>
+</li>
+<li><p>MVC模式图解析：Event(事件)导致Controller改变Model或View，或者同时改变两者。只要Controller改变了Model的数据或者属性，所有依赖的View都会自动更新。类似的，只要Controller改变了View，View会从潜在的Model中获取数据来刷新自己。</p>
+</li>
+</ul>
+<p>　　<img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/MVC.jpeg" class="full-image">  </p>
+<p>　<strong>android中mvc的具体体现</strong>如下：<br>  1)视图层（view）：一般采用xml文件进行界面的描述，使用的时候可以非常方便的引入，当然，如何你对android了解的比较的多了话，就一定 可以想到在android中也可以使用javascript+html等的方式作为view层，当然这里需要进行java和javascript之间的通 信，幸运的是，android提供了它们之间非常方便的通信实现。</p>
+<p>　2)控制层（controller）：android的控制层的重 任通常落在了众多的acitvity的肩上，这句话也就暗含了不要在acitivity中写代码，要通过activity交割model业务逻辑层处理， 这样做的另外一个原因是android中的acitivity的响应时间是5s，如果耗时的操作放在这里，程序就很容易被回收掉。</p>
+<p>　3)模型层（model）：对数据库的操作、对网络等的操作都应该在model里面处理，当然对业务计算等操作也是必须放在的该层的。</p>
+<p><strong>MVP模式</strong><br>View不再与model交互，所有的交互通过presenter实现，双方之间的交互都是双向的，view层作为被动视图非常薄，没有任何的业务逻辑，业务逻辑都在presenter里边；Presenter与View的交互是通过接口来进行的</p>
+<p><img src="https://raw.githubusercontent.com/Charles-Xiao/Charles-Xiao.github.io/master/images/MVP.png" class="full-image">  </p>
+<p><a href="http://blog.csdn.net/vector_yi/article/details/24719873?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="noopener">MVP模式在Android开发中的应用</a></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2015/08/16/Android开发adb无法识别MX手机和部分平板设备的解决方法/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1665,181 +1857,6 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://charles-xiao.github.io../../2015/06/12/五代十国史/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="CharlesXiao">
-      <meta itemprop="description" content="在码农炼成之路不断挣扎……stay hungry……keep learning……">
-      <meta itemprop="image" content="../../images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CharlesXiao‘s Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="../../2015/06/12/五代十国史/" itemprop="url">
-                  五代十国史
-                </a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2015-06-12 23:50:34" itemprop="dateCreated datePublished" datetime="2015-06-12T23:50:34+08:00">2015-06-12</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2015-06-13 20:22:06" itemprop="dateModified" datetime="2015-06-13T20:22:06+08:00">2015-06-13</time>
-              
-            
-          </span>
-
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">字数统计96字</span>
-        <span class="post-meta-divider">|</span>
-        <span class="post-count">阅读时长1分钟</span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="../../categories/读书札记/" itemprop="url" rel="index"><span itemprop="name">读书札记</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在分分合合的中国历史上，除了耳熟能详的三国鼎立之外，五代十国绝对可以称得上是一段动乱不堪的战乱史。在这介于唐宋之间的五十多年里，政权更替，藩镇割据，骄兵悍将，自立弑主，层出不穷；几乎每个政权都逃脱不了短命的轮回。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1889,7 +1906,7 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
                 
                   <a href="../../archives/">
                 
-                    <span class="site-state-item-count">86</span>
+                    <span class="site-state-item-count">87</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2186,7 +2203,7 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
       <div class="footer-inner">
         <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<div class="copyright"><a target="_blank" rel="external nofollow" href="http://www.miitbeian.gov.cn/">  </a> &copy; 2015.05.16 – <span itemprop="copyrightYear">2018</span>
+<div class="copyright"><a target="_blank" rel="external nofollow" href="http://www.miitbeian.gov.cn/">  </a> &copy; 2015.05.16 – <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -2220,7 +2237,7 @@ api.add_resource(restfulTest, <span class="string">'/restful'</span>)
 
 
 <div class="powered-by"></div>
-<span class="post-count">博客全站共168.8k字</span>
+<span class="post-count">博客全站共169.6k字</span>
 
 
         
